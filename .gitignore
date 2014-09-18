@@ -1,10 +1,9 @@
-mi-drivers.log.?
+mi-drivers*log*
 *.kpf
 *.pyc
 *.swp
 *.*.swp
 .*.*.swo
-*.log
 *.pid
 *.komodo*
 docs
