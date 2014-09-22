@@ -578,9 +578,6 @@ class AdcpPd0DataParticle(DataParticle):
                                                     reference_layer_stop, int))
         self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.FALSE_TARGET_THRESHOLD,
                                                     false_target_threshold, int))
-        self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.LOW_LATENCY_TRIGGER,
-                                                    low_latency_trigger, int))
-        #this is "SPARE" byte in vendor doc, see comments
         self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.TRANSMIT_LAG_DISTANCE,
                                                     transmit_lag_distance, int))
         self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.SYSTEM_BANDWIDTH,
@@ -590,6 +587,10 @@ class AdcpPd0DataParticle(DataParticle):
 
         #following parameters only exist in ADCPS_JLN_INSTRUMENT particles
         if self._file_type == AdcpFileType.ADCPS_File:
+            self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.LOW_LATENCY_TRIGGER,
+                                                        low_latency_trigger, int))
+            #this is "SPARE" byte in vendor doc, see comments in IDD Record Structure section
+
             self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.CPU_SERIAL_NUM,
                                                         cpu_serial_num, int))
             self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.SYSTEM_POWER,
@@ -644,14 +645,6 @@ class AdcpPd0DataParticle(DataParticle):
         self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.ENSEMBLE_NUMBER_INCREMENT,
                                                     ensemble_number_increment, int))
 
-        #decode the BIT test byte
-        self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.BIT_RESULT_DEMOD_1,
-                                                    1 if error_bit_field & 0b00010000 else 0, int))
-        self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.BIT_RESULT_DEMOD_0,
-                                                    1 if error_bit_field & 0b00001000 else 0, int))
-        self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.BIT_RESULT_TIMING,
-                                                    1 if error_bit_field & 0b00000010 else 0, int))
-
         self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.SPEED_OF_SOUND,
                                                     speed_of_sound, int))
         self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.TRANSDUCER_DEPTH,
@@ -679,64 +672,79 @@ class AdcpPd0DataParticle(DataParticle):
                                                     pitch_stdev, int))
         self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.ROLL_STDEV,
                                                     roll_stdev, int))
-        self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.ADC_TRANSMIT_CURRENT,
-                                                    adc_transmit_current, int))
+
+        # ADC_TRANSMIT_VOLTAGE is the only parameter in the ADC Channel group
+        #that is used in all variants of PD0 based parsers & particles
         self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.ADC_TRANSMIT_VOLTAGE,
                                                     adc_transmit_voltage, int))
-        self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.ADC_AMBIENT_TEMP,
-                                                    adc_ambient_temp, int))
-        self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.ADC_PRESSURE_PLUS,
-                                                    adc_pressure_plus, int))
-        self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.ADC_PRESSURE_MINUS,
-                                                    adc_pressure_minus, int))
-        self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.ADC_ATTITUDE_TEMP,
-                                                    adc_attitude_temp, int))
-        self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.ADC_ATTITUDE,
-                                                    adc_attitiude, int))
-        self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.ADC_CONTAMINATION_SENSOR,
-                                                    adc_contamination_sensor, int))
 
-        #decode the error status bytes
-        self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.BUS_ERROR_EXCEPTION,
-                                                    1 if error_status_word_1 & 0b00000001 else 0, int))
-        self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.ADDRESS_ERROR_EXCEPTION,
-                                                    1 if error_status_word_1 & 0b00000010 else 0, int))
-        self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.ILLEGAL_INSTRUCTION_EXCEPTION,
-                                                    1 if error_status_word_1 & 0b00000100 else 0, int))
-        self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.ZERO_DIVIDE_INSTRUCTION,
-                                                    1 if error_status_word_1 & 0b00001000 else 0, int))
-        self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.EMULATOR_EXCEPTION,
-                                                    1 if error_status_word_1 & 0b00010000 else 0, int))
-        self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.UNASSIGNED_EXCEPTION,
-                                                    1 if error_status_word_1 & 0b00100000 else 0, int))
-        self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.WATCHDOG_RESTART_OCCURRED,
-                                                    1 if error_status_word_1 & 0b01000000 else 0, int))
-        self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.BATTERY_SAVER_POWER,
-                                                    1 if error_status_word_1 & 0b10000000 else 0, int))
-        self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.PINGING,
-                                                    1 if error_status_word_2 & 0b00000001 else 0, int))
-        self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.COLD_WAKEUP_OCCURRED,
-                                                    1 if error_status_word_2 & 0b01000000 else 0, int))
-        self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.UNKNOWN_WAKEUP_OCCURRED,
-                                                    1 if error_status_word_2 & 0b10000000 else 0, int))
-        self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.CLOCK_READ_ERROR,
-                                                    1 if error_status_word_3 & 0b00000001 else 0, int))
-        self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.UNEXPECTED_ALARM,
-                                                    1 if error_status_word_3 & 0b00000010 else 0, int))
-        self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.CLOCK_JUMP_FORWARD,
-                                                    1 if error_status_word_3 & 0b00000100 else 0, int))
-        self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.CLOCK_JUMP_BACKWARD,
-                                                    1 if error_status_word_3 & 0b00001000 else 0, int))
-        self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.POWER_FAIL,
-                                                    1 if error_status_word_4 & 0b00001000 else 0, int))
-        self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.SPURIOUS_DSP_INTERRUPT,
-                                                    1 if error_status_word_4 & 0b00010000 else 0, int))
-        self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.SPURIOUS_UART_INTERRUPT,
-                                                    1 if error_status_word_4 & 0b00100000 else 0, int))
-        self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.SPURIOUS_CLOCK_INTERRUPT,
-                                                    1 if error_status_word_4 & 0b01000000 else 0, int))
-        self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.LEVEL_7_INTERRUPT,
-                                                    1 if error_status_word_4 & 0b10000000 else 0, int))
+        # the remaining ADC Channels and the individual parts of the error status words
+        # are only published for ADPCS file types
+        if self._file_type == AdcpFileType.ADCPS_File:
+            self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.ADC_TRANSMIT_CURRENT,
+                                                        adc_transmit_current, int))
+            self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.ADC_AMBIENT_TEMP,
+                                                        adc_ambient_temp, int))
+            self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.ADC_PRESSURE_PLUS,
+                                                        adc_pressure_plus, int))
+            self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.ADC_PRESSURE_MINUS,
+                                                        adc_pressure_minus, int))
+            self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.ADC_ATTITUDE_TEMP,
+                                                        adc_attitude_temp, int))
+            self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.ADC_ATTITUDE,
+                                                        adc_attitiude, int))
+            self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.ADC_CONTAMINATION_SENSOR,
+                                                        adc_contamination_sensor, int))
+
+            #decode the BIT test byte
+            self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.BIT_RESULT_DEMOD_1,
+                                                        1 if error_bit_field & 0b00010000 else 0, int))
+            self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.BIT_RESULT_DEMOD_0,
+                                                        1 if error_bit_field & 0b00001000 else 0, int))
+            self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.BIT_RESULT_TIMING,
+                                                        1 if error_bit_field & 0b00000010 else 0, int))
+
+            #decode the error status bytes
+            self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.BUS_ERROR_EXCEPTION,
+                                                        1 if error_status_word_1 & 0b00000001 else 0, int))
+            self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.ADDRESS_ERROR_EXCEPTION,
+                                                        1 if error_status_word_1 & 0b00000010 else 0, int))
+            self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.ILLEGAL_INSTRUCTION_EXCEPTION,
+                                                        1 if error_status_word_1 & 0b00000100 else 0, int))
+            self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.ZERO_DIVIDE_INSTRUCTION,
+                                                        1 if error_status_word_1 & 0b00001000 else 0, int))
+            self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.EMULATOR_EXCEPTION,
+                                                        1 if error_status_word_1 & 0b00010000 else 0, int))
+            self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.UNASSIGNED_EXCEPTION,
+                                                        1 if error_status_word_1 & 0b00100000 else 0, int))
+            self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.WATCHDOG_RESTART_OCCURRED,
+                                                        1 if error_status_word_1 & 0b01000000 else 0, int))
+            self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.BATTERY_SAVER_POWER,
+                                                        1 if error_status_word_1 & 0b10000000 else 0, int))
+            self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.PINGING,
+                                                        1 if error_status_word_2 & 0b00000001 else 0, int))
+            self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.COLD_WAKEUP_OCCURRED,
+                                                        1 if error_status_word_2 & 0b01000000 else 0, int))
+            self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.UNKNOWN_WAKEUP_OCCURRED,
+                                                        1 if error_status_word_2 & 0b10000000 else 0, int))
+            self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.CLOCK_READ_ERROR,
+                                                        1 if error_status_word_3 & 0b00000001 else 0, int))
+            self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.UNEXPECTED_ALARM,
+                                                        1 if error_status_word_3 & 0b00000010 else 0, int))
+            self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.CLOCK_JUMP_FORWARD,
+                                                        1 if error_status_word_3 & 0b00000100 else 0, int))
+            self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.CLOCK_JUMP_BACKWARD,
+                                                        1 if error_status_word_3 & 0b00001000 else 0, int))
+            self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.POWER_FAIL,
+                                                        1 if error_status_word_4 & 0b00001000 else 0, int))
+            self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.SPURIOUS_DSP_INTERRUPT,
+                                                        1 if error_status_word_4 & 0b00010000 else 0, int))
+            self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.SPURIOUS_UART_INTERRUPT,
+                                                        1 if error_status_word_4 & 0b00100000 else 0, int))
+            self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.SPURIOUS_CLOCK_INTERRUPT,
+                                                        1 if error_status_word_4 & 0b01000000 else 0, int))
+            self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.LEVEL_7_INTERRUPT,
+                                                        1 if error_status_word_4 & 0b10000000 else 0, int))
 
         self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.PRESSURE,
                                                     pressure, int))
