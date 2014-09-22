@@ -54,20 +54,17 @@ data:
     reference_layer_start: 1
     reference_layer_stop: 5
     false_target_threshold: 50
-    low_latency_trigger: 0
     transmit_lag_distance: 163
-    cpu_board_serial_number: 681103138035335206
     system_bandwidth: 1
-    system_power: 255
     serial_number: 17231
+    low_latency_trigger: 0
+    cpu_board_serial_number: 681103138035335206
+    system_power: 255
     beam_angle: 20
     ensemble_number: 21
     real_time_clock: [12, 9, 21, 20, 0, 0, 0]
     ensemble_start_time: 3557246400.0000000000000000
     ensemble_number_increment: 0
-    bit_result_demod_1: 0
-    bit_result_demod_0: 0
-    bit_result_timing: 0
     speed_of_sound: 1511
     transducer_depth: 5
     heading: 237
@@ -80,14 +77,17 @@ data:
     heading_stdev: 23
     pitch_stdev: 34
     roll_stdev: 33
-    adc_transmit_current: 115
     adc_transmit_voltage: 161
+    adc_transmit_current: 115
     adc_ambient_temp: 95
     adc_pressure_plus: 73
     adc_pressure_minus: 73
     adc_attitude_temp: 94
     adc_attitude: 130
     adc_contamination_sensor: 159
+    bit_result_demod_1: 0
+    bit_result_demod_0: 0
+    bit_result_timing: 0
     bus_error_exception: 0
     address_error_exception: 0
     illegal_instruction_exception: 0
@@ -180,20 +180,17 @@ data:
     reference_layer_start: 1
     reference_layer_stop: 5
     false_target_threshold: 50
-    low_latency_trigger: 0
     transmit_lag_distance: 163
-    cpu_board_serial_number: 681103138035335206
     system_bandwidth: 1
-    system_power: 255
     serial_number: 17231
+    low_latency_trigger: 0
+    cpu_board_serial_number: 681103138035335206
+    system_power: 255
     beam_angle: 20
     ensemble_number: 22
     real_time_clock: [12, 9, 21, 21, 0, 0, 0]
     ensemble_start_time: 3557250000.0000000000000000
     ensemble_number_increment: 0
-    bit_result_demod_1: 0
-    bit_result_demod_0: 0
-    bit_result_timing: 0
     speed_of_sound: 1511
     transducer_depth: 5
     heading: 35958
@@ -206,14 +203,17 @@ data:
     heading_stdev: 11
     pitch_stdev: 40
     roll_stdev: 32
-    adc_transmit_current: 115
     adc_transmit_voltage: 161
+    adc_transmit_current: 115
     adc_ambient_temp: 95
     adc_pressure_plus: 73
     adc_pressure_minus: 73
     adc_attitude_temp: 94
     adc_attitude: 130
     adc_contamination_sensor: 159
+    bit_result_demod_1: 0
+    bit_result_demod_0: 0
+    bit_result_timing: 0
     bus_error_exception: 0
     address_error_exception: 0
     illegal_instruction_exception: 0
@@ -306,20 +306,17 @@ data:
     reference_layer_start: 1
     reference_layer_stop: 5
     false_target_threshold: 50
-    low_latency_trigger: 0
     transmit_lag_distance: 163
-    cpu_board_serial_number: 681103138035335206
     system_bandwidth: 1
-    system_power: 255
     serial_number: 17231
+    low_latency_trigger: 0
+    cpu_board_serial_number: 681103138035335206
+    system_power: 255
     beam_angle: 20
     ensemble_number: 23
     real_time_clock: [12, 9, 21, 22, 0, 0, 0]
     ensemble_start_time: 3557253600.0000000000000000
     ensemble_number_increment: 0
-    bit_result_demod_1: 0
-    bit_result_demod_0: 0
-    bit_result_timing: 0
     speed_of_sound: 1511
     transducer_depth: 4
     heading: 34502
@@ -332,14 +329,17 @@ data:
     heading_stdev: 16
     pitch_stdev: 26
     roll_stdev: 35
-    adc_transmit_current: 115
     adc_transmit_voltage: 161
+    adc_transmit_current: 115
     adc_ambient_temp: 95
     adc_pressure_plus: 73
     adc_pressure_minus: 73
     adc_attitude_temp: 94
     adc_attitude: 130
     adc_contamination_sensor: 159
+    bit_result_demod_1: 0
+    bit_result_demod_0: 0
+    bit_result_timing: 0
     bus_error_exception: 0
     address_error_exception: 0
     illegal_instruction_exception: 0
@@ -432,20 +432,17 @@ data:
     reference_layer_start: 1
     reference_layer_stop: 5
     false_target_threshold: 50
-    low_latency_trigger: 0
     transmit_lag_distance: 163
-    cpu_board_serial_number: 681103138035335206
     system_bandwidth: 1
-    system_power: 255
     serial_number: 17231
+    low_latency_trigger: 0
+    cpu_board_serial_number: 681103138035335206
+    system_power: 255
     beam_angle: 20
     ensemble_number: 24
     real_time_clock: [12, 9, 21, 23, 0, 0, 0]
     ensemble_start_time: 3557257200.0000000000000000
     ensemble_number_increment: 0
-    bit_result_demod_1: 0
-    bit_result_demod_0: 0
-    bit_result_timing: 0
     speed_of_sound: 1511
     transducer_depth: 6
     heading: 34952
@@ -458,14 +455,17 @@ data:
     heading_stdev: 31
     pitch_stdev: 40
     roll_stdev: 47
-    adc_transmit_current: 115
     adc_transmit_voltage: 161
+    adc_transmit_current: 115
     adc_ambient_temp: 95
     adc_pressure_plus: 73
     adc_pressure_minus: 73
     adc_attitude_temp: 94
     adc_attitude: 130
     adc_contamination_sensor: 159
+    bit_result_demod_1: 0
+    bit_result_demod_0: 0
+    bit_result_timing: 0
     bus_error_exception: 0
     address_error_exception: 0
     illegal_instruction_exception: 0
@@ -558,20 +558,17 @@ data:
     reference_layer_start: 1
     reference_layer_stop: 5
     false_target_threshold: 50
-    low_latency_trigger: 0
     transmit_lag_distance: 163
-    cpu_board_serial_number: 681103138035335206
     system_bandwidth: 1
-    system_power: 255
     serial_number: 17231
+    low_latency_trigger: 0
+    cpu_board_serial_number: 681103138035335206
+    system_power: 255
     beam_angle: 20
     ensemble_number: 25
     real_time_clock: [12, 9, 22, 0, 0, 0, 0]
     ensemble_start_time: 3557260800.0000000000000000
     ensemble_number_increment: 0
-    bit_result_demod_1: 0
-    bit_result_demod_0: 0
-    bit_result_timing: 0
     speed_of_sound: 1511
     transducer_depth: 6
     heading: 34481
@@ -584,14 +581,17 @@ data:
     heading_stdev: 30
     pitch_stdev: 29
     roll_stdev: 26
-    adc_transmit_current: 114
     adc_transmit_voltage: 160
+    adc_transmit_current: 114
     adc_ambient_temp: 95
     adc_pressure_plus: 73
     adc_pressure_minus: 73
     adc_attitude_temp: 94
     adc_attitude: 130
     adc_contamination_sensor: 160
+    bit_result_demod_1: 0
+    bit_result_demod_0: 0
+    bit_result_timing: 0
     bus_error_exception: 0
     address_error_exception: 0
     illegal_instruction_exception: 0
@@ -684,20 +684,17 @@ data:
     reference_layer_start: 1
     reference_layer_stop: 5
     false_target_threshold: 50
-    low_latency_trigger: 0
     transmit_lag_distance: 163
-    cpu_board_serial_number: 681103138035335206
     system_bandwidth: 1
-    system_power: 255
     serial_number: 17231
+    low_latency_trigger: 0
+    cpu_board_serial_number: 681103138035335206
+    system_power: 255
     beam_angle: 20
     ensemble_number: 26
     real_time_clock: [12, 9, 22, 1, 0, 0, 0]
     ensemble_start_time: 3557264400.0000000000000000
     ensemble_number_increment: 0
-    bit_result_demod_1: 0
-    bit_result_demod_0: 0
-    bit_result_timing: 0
     speed_of_sound: 1511
     transducer_depth: 7
     heading: 35829
@@ -710,14 +707,17 @@ data:
     heading_stdev: 21
     pitch_stdev: 33
     roll_stdev: 37
-    adc_transmit_current: 114
     adc_transmit_voltage: 160
+    adc_transmit_current: 114
     adc_ambient_temp: 95
     adc_pressure_plus: 73
     adc_pressure_minus: 73
     adc_attitude_temp: 94
     adc_attitude: 130
     adc_contamination_sensor: 160
+    bit_result_demod_1: 0
+    bit_result_demod_0: 0
+    bit_result_timing: 0
     bus_error_exception: 0
     address_error_exception: 0
     illegal_instruction_exception: 0
@@ -810,20 +810,17 @@ data:
     reference_layer_start: 1
     reference_layer_stop: 5
     false_target_threshold: 50
-    low_latency_trigger: 0
     transmit_lag_distance: 163
-    cpu_board_serial_number: 681103138035335206
     system_bandwidth: 1
-    system_power: 255
     serial_number: 17231
+    low_latency_trigger: 0
+    cpu_board_serial_number: 681103138035335206
+    system_power: 255
     beam_angle: 20
     ensemble_number: 27
     real_time_clock: [12, 9, 22, 2, 0, 0, 0]
     ensemble_start_time: 3557268000.0000000000000000
     ensemble_number_increment: 0
-    bit_result_demod_1: 0
-    bit_result_demod_0: 0
-    bit_result_timing: 0
     speed_of_sound: 1511
     transducer_depth: 6
     heading: 89
@@ -836,14 +833,17 @@ data:
     heading_stdev: 15
     pitch_stdev: 31
     roll_stdev: 32
-    adc_transmit_current: 115
     adc_transmit_voltage: 160
+    adc_transmit_current: 115
     adc_ambient_temp: 96
     adc_pressure_plus: 73
     adc_pressure_minus: 73
     adc_attitude_temp: 94
     adc_attitude: 130
     adc_contamination_sensor: 159
+    bit_result_demod_1: 0
+    bit_result_demod_0: 0
+    bit_result_timing: 0
     bus_error_exception: 0
     address_error_exception: 0
     illegal_instruction_exception: 0
@@ -936,20 +936,17 @@ data:
     reference_layer_start: 1
     reference_layer_stop: 5
     false_target_threshold: 50
-    low_latency_trigger: 0
     transmit_lag_distance: 163
-    cpu_board_serial_number: 681103138035335206
     system_bandwidth: 1
-    system_power: 255
     serial_number: 17231
+    low_latency_trigger: 0
+    cpu_board_serial_number: 681103138035335206
+    system_power: 255
     beam_angle: 20
     ensemble_number: 28
     real_time_clock: [12, 9, 22, 3, 0, 0, 0]
     ensemble_start_time: 3557271600.0000000000000000
     ensemble_number_increment: 0
-    bit_result_demod_1: 0
-    bit_result_demod_0: 0
-    bit_result_timing: 0
     speed_of_sound: 1511
     transducer_depth: 5
     heading: 33984
@@ -962,14 +959,17 @@ data:
     heading_stdev: 33
     pitch_stdev: 42
     roll_stdev: 32
-    adc_transmit_current: 115
     adc_transmit_voltage: 160
+    adc_transmit_current: 115
     adc_ambient_temp: 96
     adc_pressure_plus: 73
     adc_pressure_minus: 73
     adc_attitude_temp: 94
     adc_attitude: 130
     adc_contamination_sensor: 159
+    bit_result_demod_1: 0
+    bit_result_demod_0: 0
+    bit_result_timing: 0
     bus_error_exception: 0
     address_error_exception: 0
     illegal_instruction_exception: 0
@@ -1062,20 +1062,17 @@ data:
     reference_layer_start: 1
     reference_layer_stop: 5
     false_target_threshold: 50
-    low_latency_trigger: 0
     transmit_lag_distance: 163
-    cpu_board_serial_number: 681103138035335206
     system_bandwidth: 1
-    system_power: 255
     serial_number: 17231
+    low_latency_trigger: 0
+    cpu_board_serial_number: 681103138035335206
+    system_power: 255
     beam_angle: 20
     ensemble_number: 29
     real_time_clock: [12, 9, 22, 4, 0, 0, 0]
     ensemble_start_time: 3557275200.0000000000000000
     ensemble_number_increment: 0
-    bit_result_demod_1: 0
-    bit_result_demod_0: 0
-    bit_result_timing: 0
     speed_of_sound: 1511
     transducer_depth: 6
     heading: 35638
@@ -1088,14 +1085,17 @@ data:
     heading_stdev: 18
     pitch_stdev: 32
     roll_stdev: 39
-    adc_transmit_current: 115
     adc_transmit_voltage: 161
+    adc_transmit_current: 115
     adc_ambient_temp: 96
     adc_pressure_plus: 73
     adc_pressure_minus: 73
     adc_attitude_temp: 94
     adc_attitude: 130
     adc_contamination_sensor: 159
+    bit_result_demod_1: 0
+    bit_result_demod_0: 0
+    bit_result_timing: 0
     bus_error_exception: 0
     address_error_exception: 0
     illegal_instruction_exception: 0
@@ -1188,20 +1188,17 @@ data:
     reference_layer_start: 1
     reference_layer_stop: 5
     false_target_threshold: 50
-    low_latency_trigger: 0
     transmit_lag_distance: 163
-    cpu_board_serial_number: 681103138035335206
     system_bandwidth: 1
-    system_power: 255
     serial_number: 17231
+    low_latency_trigger: 0
+    cpu_board_serial_number: 681103138035335206
+    system_power: 255
     beam_angle: 20
     ensemble_number: 30
     real_time_clock: [12, 9, 22, 5, 0, 0, 0]
     ensemble_start_time: 3557278800.0000000000000000
     ensemble_number_increment: 0
-    bit_result_demod_1: 0
-    bit_result_demod_0: 0
-    bit_result_timing: 0
     speed_of_sound: 1511
     transducer_depth: 5
     heading: 553
@@ -1214,14 +1211,17 @@ data:
     heading_stdev: 20
     pitch_stdev: 38
     roll_stdev: 35
-    adc_transmit_current: 115
     adc_transmit_voltage: 160
+    adc_transmit_current: 115
     adc_ambient_temp: 96
     adc_pressure_plus: 73
     adc_pressure_minus: 73
     adc_attitude_temp: 94
     adc_attitude: 130
     adc_contamination_sensor: 160
+    bit_result_demod_1: 0
+    bit_result_demod_0: 0
+    bit_result_timing: 0
     bus_error_exception: 0
     address_error_exception: 0
     illegal_instruction_exception: 0
@@ -1314,20 +1314,17 @@ data:
     reference_layer_start: 1
     reference_layer_stop: 5
     false_target_threshold: 50
-    low_latency_trigger: 0
     transmit_lag_distance: 163
-    cpu_board_serial_number: 681103138035335206
     system_bandwidth: 1
-    system_power: 255
     serial_number: 17231
+    low_latency_trigger: 0
+    cpu_board_serial_number: 681103138035335206
+    system_power: 255
     beam_angle: 20
     ensemble_number: 31
     real_time_clock: [12, 9, 22, 6, 0, 0, 0]
     ensemble_start_time: 3557282400.0000000000000000
     ensemble_number_increment: 0
-    bit_result_demod_1: 0
-    bit_result_demod_0: 0
-    bit_result_timing: 0
     speed_of_sound: 1511
     transducer_depth: 4
     heading: 34345
@@ -1340,14 +1337,17 @@ data:
     heading_stdev: 26
     pitch_stdev: 44
     roll_stdev: 33
-    adc_transmit_current: 115
     adc_transmit_voltage: 160
+    adc_transmit_current: 115
     adc_ambient_temp: 96
     adc_pressure_plus: 73
     adc_pressure_minus: 73
     adc_attitude_temp: 94
     adc_attitude: 130
     adc_contamination_sensor: 159
+    bit_result_demod_1: 0
+    bit_result_demod_0: 0
+    bit_result_timing: 0
     bus_error_exception: 0
     address_error_exception: 0
     illegal_instruction_exception: 0
@@ -1440,20 +1440,17 @@ data:
     reference_layer_start: 1
     reference_layer_stop: 5
     false_target_threshold: 50
-    low_latency_trigger: 0
     transmit_lag_distance: 163
-    cpu_board_serial_number: 681103138035335206
     system_bandwidth: 1
-    system_power: 255
     serial_number: 17231
+    low_latency_trigger: 0
+    cpu_board_serial_number: 681103138035335206
+    system_power: 255
     beam_angle: 20
     ensemble_number: 32
     real_time_clock: [12, 9, 22, 7, 0, 0, 0]
     ensemble_start_time: 3557286000.0000000000000000
     ensemble_number_increment: 0
-    bit_result_demod_1: 0
-    bit_result_demod_0: 0
-    bit_result_timing: 0
     speed_of_sound: 1511
     transducer_depth: 3
     heading: 308
@@ -1466,14 +1463,17 @@ data:
     heading_stdev: 27
     pitch_stdev: 27
     roll_stdev: 28
-    adc_transmit_current: 115
     adc_transmit_voltage: 160
+    adc_transmit_current: 115
     adc_ambient_temp: 96
     adc_pressure_plus: 73
     adc_pressure_minus: 73
     adc_attitude_temp: 94
     adc_attitude: 130
     adc_contamination_sensor: 160
+    bit_result_demod_1: 0
+    bit_result_demod_0: 0
+    bit_result_timing: 0
     bus_error_exception: 0
     address_error_exception: 0
     illegal_instruction_exception: 0
@@ -1566,20 +1566,17 @@ data:
     reference_layer_start: 1
     reference_layer_stop: 5
     false_target_threshold: 50
-    low_latency_trigger: 0
     transmit_lag_distance: 163
-    cpu_board_serial_number: 681103138035335206
     system_bandwidth: 1
-    system_power: 255
     serial_number: 17231
+    low_latency_trigger: 0
+    cpu_board_serial_number: 681103138035335206
+    system_power: 255
     beam_angle: 20
     ensemble_number: 33
     real_time_clock: [12, 9, 22, 8, 0, 0, 0]
     ensemble_start_time: 3557289600.0000000000000000
     ensemble_number_increment: 0
-    bit_result_demod_1: 0
-    bit_result_demod_0: 0
-    bit_result_timing: 0
     speed_of_sound: 1511
     transducer_depth: 3
     heading: 212
@@ -1592,14 +1589,17 @@ data:
     heading_stdev: 17
     pitch_stdev: 35
     roll_stdev: 35
-    adc_transmit_current: 115
     adc_transmit_voltage: 160
+    adc_transmit_current: 115
     adc_ambient_temp: 96
     adc_pressure_plus: 73
     adc_pressure_minus: 73
     adc_attitude_temp: 94
     adc_attitude: 130
     adc_contamination_sensor: 160
+    bit_result_demod_1: 0
+    bit_result_demod_0: 0
+    bit_result_timing: 0
     bus_error_exception: 0
     address_error_exception: 0
     illegal_instruction_exception: 0
@@ -1692,20 +1692,17 @@ data:
     reference_layer_start: 1
     reference_layer_stop: 5
     false_target_threshold: 50
-    low_latency_trigger: 0
     transmit_lag_distance: 163
-    cpu_board_serial_number: 681103138035335206
     system_bandwidth: 1
-    system_power: 255
     serial_number: 17231
+    low_latency_trigger: 0
+    cpu_board_serial_number: 681103138035335206
+    system_power: 255
     beam_angle: 20
     ensemble_number: 34
     real_time_clock: [12, 9, 22, 9, 0, 0, 0]
     ensemble_start_time: 3557293200.0000000000000000
     ensemble_number_increment: 0
-    bit_result_demod_1: 0
-    bit_result_demod_0: 0
-    bit_result_timing: 0
     speed_of_sound: 1511
     transducer_depth: 3
     heading: 283
@@ -1718,14 +1715,17 @@ data:
     heading_stdev: 12
     pitch_stdev: 26
     roll_stdev: 37
-    adc_transmit_current: 114
     adc_transmit_voltage: 160
+    adc_transmit_current: 114
     adc_ambient_temp: 96
     adc_pressure_plus: 73
     adc_pressure_minus: 73
     adc_attitude_temp: 94
     adc_attitude: 130
     adc_contamination_sensor: 159
+    bit_result_demod_1: 0
+    bit_result_demod_0: 0
+    bit_result_timing: 0
     bus_error_exception: 0
     address_error_exception: 0
     illegal_instruction_exception: 0
@@ -1818,20 +1818,17 @@ data:
     reference_layer_start: 1
     reference_layer_stop: 5
     false_target_threshold: 50
-    low_latency_trigger: 0
     transmit_lag_distance: 163
-    cpu_board_serial_number: 681103138035335206
     system_bandwidth: 1
-    system_power: 255
     serial_number: 17231
+    low_latency_trigger: 0
+    cpu_board_serial_number: 681103138035335206
+    system_power: 255
     beam_angle: 20
     ensemble_number: 35
     real_time_clock: [12, 9, 22, 10, 0, 0, 0]
     ensemble_start_time: 3557296800.0000000000000000
     ensemble_number_increment: 0
-    bit_result_demod_1: 0
-    bit_result_demod_0: 0
-    bit_result_timing: 0
     speed_of_sound: 1511
     transducer_depth: 4
     heading: 35621
@@ -1844,14 +1841,17 @@ data:
     heading_stdev: 27
     pitch_stdev: 35
     roll_stdev: 53
-    adc_transmit_current: 115
     adc_transmit_voltage: 160
+    adc_transmit_current: 115
     adc_ambient_temp: 96
     adc_pressure_plus: 73
     adc_pressure_minus: 73
     adc_attitude_temp: 94
     adc_attitude: 130
     adc_contamination_sensor: 159
+    bit_result_demod_1: 0
+    bit_result_demod_0: 0
+    bit_result_timing: 0
     bus_error_exception: 0
     address_error_exception: 0
     illegal_instruction_exception: 0
@@ -1944,20 +1944,17 @@ data:
     reference_layer_start: 1
     reference_layer_stop: 5
     false_target_threshold: 50
-    low_latency_trigger: 0
     transmit_lag_distance: 163
-    cpu_board_serial_number: 681103138035335206
     system_bandwidth: 1
-    system_power: 255
     serial_number: 17231
+    low_latency_trigger: 0
+    cpu_board_serial_number: 681103138035335206
+    system_power: 255
     beam_angle: 20
     ensemble_number: 36
     real_time_clock: [12, 9, 22, 11, 0, 0, 0]
     ensemble_start_time: 3557300400.0000000000000000
     ensemble_number_increment: 0
-    bit_result_demod_1: 0
-    bit_result_demod_0: 0
-    bit_result_timing: 0
     speed_of_sound: 1511
     transducer_depth: 3
     heading: 35802
@@ -1970,14 +1967,17 @@ data:
     heading_stdev: 25
     pitch_stdev: 27
     roll_stdev: 30
-    adc_transmit_current: 114
     adc_transmit_voltage: 160
+    adc_transmit_current: 114
     adc_ambient_temp: 96
     adc_pressure_plus: 73
     adc_pressure_minus: 73
     adc_attitude_temp: 94
     adc_attitude: 130
     adc_contamination_sensor: 159
+    bit_result_demod_1: 0
+    bit_result_demod_0: 0
+    bit_result_timing: 0
     bus_error_exception: 0
     address_error_exception: 0
     illegal_instruction_exception: 0
@@ -2070,20 +2070,17 @@ data:
     reference_layer_start: 1
     reference_layer_stop: 5
     false_target_threshold: 50
-    low_latency_trigger: 0
     transmit_lag_distance: 163
-    cpu_board_serial_number: 681103138035335206
     system_bandwidth: 1
-    system_power: 255
     serial_number: 17231
+    low_latency_trigger: 0
+    cpu_board_serial_number: 681103138035335206
+    system_power: 255
     beam_angle: 20
     ensemble_number: 37
     real_time_clock: [12, 9, 22, 12, 0, 0, 0]
     ensemble_start_time: 3557304000.0000000000000000
     ensemble_number_increment: 0
-    bit_result_demod_1: 0
-    bit_result_demod_0: 0
-    bit_result_timing: 0
     speed_of_sound: 1511
     transducer_depth: 11
     heading: 891
@@ -2096,14 +2093,17 @@ data:
     heading_stdev: 17
     pitch_stdev: 33
     roll_stdev: 29
-    adc_transmit_current: 114
     adc_transmit_voltage: 160
+    adc_transmit_current: 114
     adc_ambient_temp: 96
     adc_pressure_plus: 73
     adc_pressure_minus: 73
     adc_attitude_temp: 94
     adc_attitude: 130
     adc_contamination_sensor: 159
+    bit_result_demod_1: 0
+    bit_result_demod_0: 0
+    bit_result_timing: 0
     bus_error_exception: 0
     address_error_exception: 0
     illegal_instruction_exception: 0
@@ -2196,20 +2196,17 @@ data:
     reference_layer_start: 1
     reference_layer_stop: 5
     false_target_threshold: 50
-    low_latency_trigger: 0
     transmit_lag_distance: 163
-    cpu_board_serial_number: 681103138035335206
     system_bandwidth: 1
-    system_power: 255
     serial_number: 17231
+    low_latency_trigger: 0
+    cpu_board_serial_number: 681103138035335206
+    system_power: 255
     beam_angle: 20
     ensemble_number: 38
     real_time_clock: [12, 9, 22, 13, 0, 0, 0]
     ensemble_start_time: 3557307600.0000000000000000
     ensemble_number_increment: 0
-    bit_result_demod_1: 0
-    bit_result_demod_0: 0
-    bit_result_timing: 0
     speed_of_sound: 1511
     transducer_depth: 4
     heading: 35965
@@ -2222,14 +2219,17 @@ data:
     heading_stdev: 20
     pitch_stdev: 28
     roll_stdev: 36
-    adc_transmit_current: 114
     adc_transmit_voltage: 160
+    adc_transmit_current: 114
     adc_ambient_temp: 96
     adc_pressure_plus: 73
     adc_pressure_minus: 73
     adc_attitude_temp: 94
     adc_attitude: 130
     adc_contamination_sensor: 160
+    bit_result_demod_1: 0
+    bit_result_demod_0: 0
+    bit_result_timing: 0
     bus_error_exception: 0
     address_error_exception: 0
     illegal_instruction_exception: 0
@@ -2322,20 +2322,17 @@ data:
     reference_layer_start: 1
     reference_layer_stop: 5
     false_target_threshold: 50
-    low_latency_trigger: 0
     transmit_lag_distance: 163
-    cpu_board_serial_number: 681103138035335206
     system_bandwidth: 1
-    system_power: 255
     serial_number: 17231
+    low_latency_trigger: 0
+    cpu_board_serial_number: 681103138035335206
+    system_power: 255
     beam_angle: 20
     ensemble_number: 39
     real_time_clock: [12, 9, 22, 14, 0, 0, 0]
     ensemble_start_time: 3557311200.0000000000000000
     ensemble_number_increment: 0
-    bit_result_demod_1: 0
-    bit_result_demod_0: 0
-    bit_result_timing: 0
     speed_of_sound: 1511
     transducer_depth: 8
     heading: 33326
@@ -2348,14 +2345,17 @@ data:
     heading_stdev: 35
     pitch_stdev: 45
     roll_stdev: 37
-    adc_transmit_current: 115
     adc_transmit_voltage: 160
+    adc_transmit_current: 115
     adc_ambient_temp: 96
     adc_pressure_plus: 73
     adc_pressure_minus: 73
     adc_attitude_temp: 95
     adc_attitude: 130
     adc_contamination_sensor: 159
+    bit_result_demod_1: 0
+    bit_result_demod_0: 0
+    bit_result_timing: 0
     bus_error_exception: 0
     address_error_exception: 0
     illegal_instruction_exception: 0
@@ -2448,20 +2448,17 @@ data:
     reference_layer_start: 1
     reference_layer_stop: 5
     false_target_threshold: 50
-    low_latency_trigger: 0
     transmit_lag_distance: 163
-    cpu_board_serial_number: 681103138035335206
     system_bandwidth: 1
-    system_power: 255
     serial_number: 17231
+    low_latency_trigger: 0
+    cpu_board_serial_number: 681103138035335206
+    system_power: 255
     beam_angle: 20
     ensemble_number: 40
     real_time_clock: [12, 9, 22, 15, 0, 0, 0]
     ensemble_start_time: 3557314800.0000000000000000
     ensemble_number_increment: 0
-    bit_result_demod_1: 0
-    bit_result_demod_0: 0
-    bit_result_timing: 0
     speed_of_sound: 1510
     transducer_depth: 7
     heading: 34073
@@ -2474,14 +2471,17 @@ data:
     heading_stdev: 17
     pitch_stdev: 27
     roll_stdev: 22
-    adc_transmit_current: 115
     adc_transmit_voltage: 160
+    adc_transmit_current: 115
     adc_ambient_temp: 96
     adc_pressure_plus: 73
     adc_pressure_minus: 73
     adc_attitude_temp: 95
     adc_attitude: 130
     adc_contamination_sensor: 160
+    bit_result_demod_1: 0
+    bit_result_demod_0: 0
+    bit_result_timing: 0
     bus_error_exception: 0
     address_error_exception: 0
     illegal_instruction_exception: 0

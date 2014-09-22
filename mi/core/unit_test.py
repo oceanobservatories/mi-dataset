@@ -21,9 +21,6 @@ config.add_configuration('res/config/mi-logging.yml')
 import unittest
 import json 
 
-#from pyon.util.unit_test import IonUnitTestCase
-#from pyon.util.unit_test import PyonTestCase
-#from pyon.util.int_test  import IonIntegrationTestCase
 from mi.core.instrument.data_particle import DataParticle
 from mi.core.instrument.data_particle import DataParticleKey
 from mi.core.instrument.data_particle import DataParticleValue
@@ -39,26 +36,6 @@ class MiUnitTest(unittest.TestCase):
         return None
 
 
-#class MiUnitTestCase(IonUnitTestCase):
-#    """
-#    Base class for most tests in MI.
-#    """
-#    def shortDescription(self):
-#        return None
-#
-#    def test_verify_service(self):
-#        pass
-#
-#class MiTestCase(PyonTestCase):
-#    """
-#    Base class for most tests in MI.
-#    """
-#    def shortDescription(self):
-#        return None
-#
-#    def test_verify_service(self):
-#        pass
-#
 class MiIntTestCase(unittest.TestCase):
     """
     Base class for most tests in MI.
