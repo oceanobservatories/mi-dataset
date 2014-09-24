@@ -8,10 +8,20 @@
 testing parsers.
 """
 from mi.core.unit_test import MiUnitTest
+from mi.idk.result_set import ResultSet
+
+import os
 
 # Make some stubs if we need to share among parser test suites
 class ParserUnitTestCase(MiUnitTest):
-    pass
 
-#class ParserIntTestCase(MiIntTestCase):
-#    pass
+    def verify_particles(self, particles, resource_path, yml_file):
+        """
+        Verify that the contents of the particles match those in the result file.
+        """
+        rs_file = os.path.join(resource_path, yml_file)
+        rs = ResultSet(rs_file)
+        self.assertTrue(rs.verify(particles),
+                    msg='Failed Unit test data validation')
+
+
