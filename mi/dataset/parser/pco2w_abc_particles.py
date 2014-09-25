@@ -280,9 +280,7 @@ class Pco2wAbcPowerDataParticle(Pco2wAbcBaseDataParticle):
         a particle with the appropriate tag.
         """
 
-        particle_params = super(Pco2wAbcPowerDataParticle, self)._build_parsed_values()
-
-        return particle_params
+        return super(Pco2wAbcPowerDataParticle, self)._build_parsed_values()
 
 
 class Pco2wAbcDclInstrumentDataParticle(Pco2wAbcInstrumentDataParticle, Pco2wAbcDclBaseDataParticle):
@@ -295,9 +293,7 @@ class Pco2wAbcDclInstrumentDataParticle(Pco2wAbcInstrumentDataParticle, Pco2wAbc
         a particle with the appropriate tag.
         """
 
-        particle_params = super(Pco2wAbcDclInstrumentDataParticle, self)._build_parsed_values()
-
-        return particle_params
+        return super(Pco2wAbcDclInstrumentDataParticle, self)._build_parsed_values()
 
 
 class Pco2wAbcDclInstrumentTelemeteredDataParticle(Pco2wAbcDclInstrumentDataParticle):
@@ -320,9 +316,7 @@ class Pco2wAbcDclInstrumentBlankDataParticle(Pco2wAbcInstrumentBlankDataParticle
         a particle with the appropriate tag.
         """
 
-        particle_params = super(Pco2wAbcDclInstrumentBlankDataParticle, self)._build_parsed_values()
-
-        return particle_params
+        return super(Pco2wAbcDclInstrumentBlankDataParticle, self)._build_parsed_values()
 
 
 class Pco2wAbcDclInstrumentBlankTelemeteredDataParticle(Pco2wAbcDclInstrumentBlankDataParticle):
@@ -345,9 +339,7 @@ class Pco2wAbcDclMetadataDataParticle(Pco2wAbcMetadataDataParticle, Pco2wAbcDclB
         a particle with the appropriate tag.
         """
 
-        particle_params = super(Pco2wAbcDclMetadataDataParticle, self)._build_parsed_values()
-
-        return particle_params
+        return super(Pco2wAbcDclMetadataDataParticle, self)._build_parsed_values()
 
 
 class Pco2wAbcDclMetadataTelemeteredDataParticle(Pco2wAbcDclMetadataDataParticle):
@@ -370,9 +362,7 @@ class Pco2wAbcDclPowerDataParticle(Pco2wAbcPowerDataParticle, Pco2wAbcDclBaseDat
         a particle with the appropriate tag.
         """
 
-        particle_params = super(Pco2wAbcDclPowerDataParticle, self)._build_parsed_values()
-
-        return particle_params
+        return super(Pco2wAbcDclPowerDataParticle, self)._build_parsed_values()
 
 
 class Pco2wAbcDclPowerTelemeteredDataParticle(Pco2wAbcDclPowerDataParticle):

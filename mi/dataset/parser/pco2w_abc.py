@@ -375,10 +375,10 @@ class Pco2wAbcParser(Parser):
 
         # Let's create some empty dictionaries which we will use to collect
         # data for the extract sample calls.
-        metadata_dict = self._create_empty_metadata_dict()
-        power_dict = self._create_empty_power_dict()
-        instrument_dict = self._create_empty_instrument_dict()
-        instrument_blank_dict = self._create_empty_instrument_blank_dict()
+        metadata_dict = Pco2wAbcParser._create_empty_metadata_dict()
+        power_dict = Pco2wAbcParser._create_empty_power_dict()
+        instrument_dict = Pco2wAbcParser._create_empty_instrument_dict()
+        instrument_blank_dict = Pco2wAbcParser._create_empty_instrument_blank_dict()
 
         line = self._stream_handle.readline()
 
@@ -416,14 +416,16 @@ class Pco2wAbcParser(Parser):
                     # supply that match
                     if metadata_with_battery_voltage_match:
 
-                        self._fill_metadata_dict(metadata_with_battery_voltage_match,
-                                                 metadata_dict)
+                        Pco2wAbcParser._fill_metadata_dict(
+                            metadata_with_battery_voltage_match,
+                            metadata_dict)
 
                     else:
 
                         # If we found a metadata record without battery voltage,
                         # let's supply that match
-                        self._fill_metadata_dict(metadata_match, metadata_dict)
+                        Pco2wAbcParser._fill_metadata_dict(
+                            metadata_match, metadata_dict)
 
                     timestamp = float(metadata_dict[Pco2wAbcDataParticleKey.RECORD_TIME])
 
@@ -436,11 +438,11 @@ class Pco2wAbcParser(Parser):
                     self._record_buffer.append(particle)
 
                     # Recreate an empty metadata dictionary
-                    metadata_dict = self._create_empty_metadata_dict()
+                    metadata_dict = Pco2wAbcParser._create_empty_metadata_dict()
 
                 elif power_match:
 
-                    self._fill_power_dict(power_match, power_dict)
+                    Pco2wAbcParser._fill_power_dict(power_match, power_dict)
 
                     timestamp = float(power_dict[Pco2wAbcDataParticleKey.RECORD_TIME])
 
@@ -453,11 +455,11 @@ class Pco2wAbcParser(Parser):
                     self._record_buffer.append(particle)
 
                     # Recreate an empty power dictionary
-                    power_dict = self._create_empty_power_dict()
+                    power_dict = Pco2wAbcParser._create_empty_power_dict()
 
                 elif instrument_match:
 
-                    self._fill_instrument_dict(instrument_match, instrument_dict)
+                    Pco2wAbcParser._fill_instrument_dict(instrument_match, instrument_dict)
 
                     timestamp = float(instrument_dict[Pco2wAbcDataParticleKey.RECORD_TIME])
 
@@ -470,11 +472,12 @@ class Pco2wAbcParser(Parser):
                     self._record_buffer.append(particle)
 
                     # Recreate an empty instrument dictionary
-                    instrument_dict = self._create_empty_instrument_dict()
+                    instrument_dict = Pco2wAbcParser._create_empty_instrument_dict()
 
                 elif instrument_blank_match:
 
-                    self._fill_instrument_blank_dict(instrument_blank_match, instrument_blank_dict)
+                    Pco2wAbcParser._fill_instrument_blank_dict(
+                        instrument_blank_match, instrument_blank_dict)
 
                     timestamp = float(instrument_blank_dict[Pco2wAbcDataParticleKey.RECORD_TIME])
 
@@ -487,7 +490,7 @@ class Pco2wAbcParser(Parser):
                     self._record_buffer.append(particle)
 
                     # Recreate an empty instrument blank dictionary
-                    instrument_blank_dict = self._create_empty_instrument_blank_dict()
+                    instrument_blank_dict = Pco2wAbcParser._create_empty_instrument_blank_dict()
 
                 else:
                     # We found a line in the file that was unexpected.  Report a

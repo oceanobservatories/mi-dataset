@@ -48,11 +48,7 @@ class Pco2wAbcDriver:
 
 
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
-    log = get_logger()
-    log.info("MCW HERE2")
     config.add_configuration(os.path.join(basePythonCodePath, 'res', 'config', 'mi-logging.yml'))
-
-    log.info("MCW HERE1")
 
     parser_config = {
         DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.pco2w_abc_particles',

@@ -6,15 +6,6 @@ __author__ = 'mworden'
 @package mi.dataset.parser.test.test_pco2w_abc
 @author Mark Worden
 @brief Test code for the pco2w_abc parser
-
-Files used for testing:
-
-Filename                Blocks      Instrument Records
-20010101.nutnr1.log     1           0
-
-Real file:
-SAMI_C0069_300614.txt has 684 metadata records, 692 power records, 682 instrument records
-and 5 instrument blank records,
 """
 
 from mi.logging import log
@@ -58,6 +49,10 @@ class Pco2wAbcParserUnitTestCase(ParserUnitTestCase):
             }
         }
 
+    def exception_callback(self, exception):
+        log.debug(exception)
+        self._exception_occurred = True
+
     def test_happy_path(self):
         """
         Read files and verify that all expected particles can be read.
@@ -68,15 +63,11 @@ class Pco2wAbcParserUnitTestCase(ParserUnitTestCase):
 
         with open(os.path.join(RESOURCE_PATH, 'happy_path.txt'), 'r') as file_handle:
 
-            def exception_callback(exception):
-                log.debug(exception)
-                self._exception_occurred = True
-
             NUM_PARTICLES_TO_REQUEST = NUM_EXPECTED_PARTICLES = 10
 
             parser = Pco2wAbcParser(self._parser_config,
                                     file_handle,
-                                    exception_callback,
+                                    self.exception_callback,
                                     None,
                                     None)
 
@@ -100,16 +91,12 @@ class Pco2wAbcParserUnitTestCase(ParserUnitTestCase):
 
         with open(os.path.join(RESOURCE_PATH, 'invalid_metadata_timestamp.txt'), 'r') as file_handle:
 
-            def exception_callback(exception):
-                log.debug(exception)
-                self._exception_occurred = True
-
             NUM_PARTICLES_TO_REQUEST = 10
             NUM_EXPECTED_PARTICLES = 9
 
             parser = Pco2wAbcParser(self._parser_config,
                                     file_handle,
-                                    exception_callback,
+                                    self.exception_callback,
                                     None,
                                     None)
 
@@ -133,16 +120,12 @@ class Pco2wAbcParserUnitTestCase(ParserUnitTestCase):
 
         with open(os.path.join(RESOURCE_PATH, 'invalid_record_type.txt'), 'r') as file_handle:
 
-            def exception_callback(exception):
-                log.debug(exception)
-                self._exception_occurred = True
-
             NUM_PARTICLES_TO_REQUEST = 10
             NUM_EXPECTED_PARTICLES = 9
 
             parser = Pco2wAbcParser(self._parser_config,
                                     file_handle,
-                                    exception_callback,
+                                    self.exception_callback,
                                     None,
                                     None)
 
@@ -166,16 +149,12 @@ class Pco2wAbcParserUnitTestCase(ParserUnitTestCase):
 
         with open(os.path.join(RESOURCE_PATH, 'power_record_missing_timestamp.txt'), 'r') as file_handle:
 
-            def exception_callback(exception):
-                log.debug(exception)
-                self._exception_occurred = True
-
             NUM_PARTICLES_TO_REQUEST = 10
             NUM_EXPECTED_PARTICLES = 9
 
             parser = Pco2wAbcParser(self._parser_config,
                                     file_handle,
-                                    exception_callback,
+                                    self.exception_callback,
                                     None,
                                     None)
 
@@ -198,16 +177,12 @@ class Pco2wAbcParserUnitTestCase(ParserUnitTestCase):
 
         with open(os.path.join(RESOURCE_PATH, 'no_particles.txt'), 'r') as file_handle:
 
-            def exception_callback(exception):
-                log.debug(exception)
-                self._exception_occurred = False
-
             NUM_PARTICLES_TO_REQUEST = 10
             NUM_EXPECTED_PARTICLES = 0
 
             parser = Pco2wAbcParser(self._parser_config,
                                     file_handle,
-                                    exception_callback,
+                                    self.exception_callback,
                                     None,
                                     None)
 
@@ -228,16 +203,12 @@ class Pco2wAbcParserUnitTestCase(ParserUnitTestCase):
 
         with open(os.path.join(RESOURCE_PATH, 'SAMI_C0069_300614.txt'), 'r') as file_handle:
 
-            def exception_callback(exception):
-                log.debug(exception)
-                self._exception_occurred = False
-
             NUM_PARTICLES_TO_REQUEST = 2500
             NUM_EXPECTED_PARTICLES = 2063
 
             parser = Pco2wAbcParser(self._parser_config,
                                     file_handle,
-                                    exception_callback,
+                                    self.exception_callback,
                                     None,
                                     None)
 
