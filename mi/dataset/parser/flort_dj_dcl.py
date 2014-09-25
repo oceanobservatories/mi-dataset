@@ -83,7 +83,7 @@ METADATA_PATTERN += START_METADATA    # Metadata record starts with '['
 METADATA_PATTERN += ANY_CHARS         # followed by text
 METADATA_PATTERN += END_METADATA      # followed by ']'
 METADATA_PATTERN += ANY_CHARS         # followed by more text
-METADATA_PATTERN += r'\n'             # metadata record ends with LF
+METADATA_PATTERN += NEW_LINE          # metadata record ends with a newline
 METADATA_MATCHER = re.compile(METADATA_PATTERN)
 
 # Sensor data record:
@@ -99,7 +99,7 @@ SENSOR_DATA_PATTERN += UINT + TAB          # raw signal chl
 SENSOR_DATA_PATTERN += UINT + TAB          # measurement wavelength cdom
 SENSOR_DATA_PATTERN += UINT + TAB          # raw signal cdom
 SENSOR_DATA_PATTERN += UINT                # raw internal temperature
-SENSOR_DATA_PATTERN += r'\r\n'             # sensor data ends with CR-LF
+SENSOR_DATA_PATTERN += NEW_LINE            # sensor data ends with a newline
 SENSOR_DATA_MATCHER = re.compile(SENSOR_DATA_PATTERN)
 
 # SENSOR_DATA_MATCHER produces the following groups.
