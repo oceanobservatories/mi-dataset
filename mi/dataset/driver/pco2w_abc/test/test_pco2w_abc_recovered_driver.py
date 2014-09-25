@@ -2,17 +2,14 @@
 
 __author__ = 'mworden'
 
+from mi.core.log import get_logger
+log = get_logger()
+
+from mi.idk.config import Config
 
 import unittest
 import os
 from mi.dataset.driver.pco2w_abc.pco2w_abc_recovered_driver import parse
-from mi.logging import config
-from mi.core.log import get_logger
-
-base_python_code_path = ''
-
-config.add_configuration(os.path.join(base_python_code_path, 'res', 'config', 'mi-logging.yml'))
-log = get_logger()
 
 from mi.dataset.dataset_driver import ParticleDataHandler
 
@@ -30,7 +27,7 @@ class SampleTest(unittest.TestCase):
         sourceFilePath = os.path.join('mi','dataset','driver','pco2w_abc','resource','SAMI_C0069_300614.txt')
         particle_data_hdlr_obj = ParticleDataHandler()
 
-        particle_data_hdlr_obj = parse(base_python_code_path, sourceFilePath, particle_data_hdlr_obj)
+        particle_data_hdlr_obj = parse(Config().base_dir(), sourceFilePath, particle_data_hdlr_obj)
 
         log.debug("SAMPLES: %s", particle_data_hdlr_obj._samples)
         log.debug("FAILURE: %s", particle_data_hdlr_obj._failure)
