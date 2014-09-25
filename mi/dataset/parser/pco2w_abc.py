@@ -1,17 +1,16 @@
 __author__ = 'Mark Worden'
 __license__ = 'Apache 2.0'
 
-import ntplib
 import re
-import time
-import gc
 
+from mi.core.common import BaseEnum
+from mi.core.exceptions import RecoverableSampleException
 from mi.core.log import get_logger
+from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 
 log = get_logger()
 from mi.dataset.dataset_parser import Parser
-from mi.dataset.parser.pco2w_abc_particles import Pco2wAbcDataParticleKey, Pco2wAbcInstrumentDataParticle, \
-    Pco2wAbcInstrumentBlankDataParticle, Pco2wAbcMetadataDataParticle, Pco2wAbcPowerDataParticle
+from mi.dataset.parser.pco2w_abc_particles import Pco2wAbcDataParticleKey
 from mi.dataset.parser.common_regexes import UNSIGNED_INT_REGEX, ONE_OR_MORE_WHITESPACE_REGEX
 
 """
@@ -54,10 +53,12 @@ INSTRUMENT_BLANK_REGEX = r'^' + INSTRUMENT_BLANK_RECORD_TYPE_REGEX + ONE_OR_MORE
                          BATTERY_VOLTAGE_REGEX + ONE_OR_MORE_WHITESPACE_REGEX + THERMISTOR_REGEX
 INSTRUMENT_BLANK_MATCHER = re.compile(INSTRUMENT_BLANK_REGEX)
 
+# The following constants are used to index into an INSTRUMENT_MATCHER or
+# INSTRUMENT_BLANK_MATCHER match group
 RECORD_TYPE_GROUP_INDEX = 1
 RECORD_TIME_GROUP_INDEX = 2
 LIGHT_MEASUREMENTS_GROUP_INDEX = 3
-BATTERY_VOLTAGE_GROUP_INDEX = 4
+INSTRUMENT_BATTERY_VOLTAGE_GROUP_INDEX = 4
 THERMISTOR_GROUP_INDEX = 5
 """
 *** END definition of regular expressions, matchers and group indices for instrument and instrument blank data records.
@@ -87,18 +88,36 @@ Data Mapping:
 FLAGS_REGEX = r'(\d{2})'
 NUM_DATA_RECORDS_REGEX = NUM_ERROR_RECORDS_REGEX = NUM_BYTES_STORED_REGEX = \
     r'(' + UNSIGNED_INT_REGEX + ')'
-METADATA_RECORD_TYPE_REGEX = r'(128|129|131|133|135)'
+
+METADATA_RECORD_TYPE_REGEX = r'(1[2-9][8-9]|1[3-9][0-9]|2[0-4][0-9]|25[0-5])'
 METADATA_REGEX = r'^' + METADATA_RECORD_TYPE_REGEX + ONE_OR_MORE_WHITESPACE_REGEX + \
                  RECORD_TIME_REGEX + ONE_OR_MORE_WHITESPACE_REGEX + FLAGS_REGEX + \
-                 ONE_OR_MORE_WHITESPACE_REGEX + METADATA_RECORD_TYPE_REGEX + ONE_OR_MORE_WHITESPACE_REGEX + \
+                 ONE_OR_MORE_WHITESPACE_REGEX + NUM_DATA_RECORDS_REGEX + ONE_OR_MORE_WHITESPACE_REGEX + \
                  NUM_ERROR_RECORDS_REGEX + ONE_OR_MORE_WHITESPACE_REGEX + NUM_BYTES_STORED_REGEX
 METADATA_MATCHER = re.compile(METADATA_REGEX)
 
+METADATA_WITH_BATTERY_VOLTAGE_RECORD_TYPE_REGEX = r'(192|193)'
+METADATA_WITH_BATTERY_VOLTAGE_REGEX = \
+    r'^' + METADATA_WITH_BATTERY_VOLTAGE_RECORD_TYPE_REGEX + \
+    ONE_OR_MORE_WHITESPACE_REGEX + RECORD_TIME_REGEX + \
+    ONE_OR_MORE_WHITESPACE_REGEX + FLAGS_REGEX + \
+    ONE_OR_MORE_WHITESPACE_REGEX + NUM_DATA_RECORDS_REGEX + \
+    ONE_OR_MORE_WHITESPACE_REGEX + \
+    NUM_ERROR_RECORDS_REGEX + ONE_OR_MORE_WHITESPACE_REGEX + \
+    NUM_BYTES_STORED_REGEX + ONE_OR_MORE_WHITESPACE_REGEX + \
+    BATTERY_VOLTAGE_REGEX
+METADATA_WITH_BATTERY_VOLTAGE_MATCHER = re.compile(METADATA_WITH_BATTERY_VOLTAGE_REGEX)
+
+# The following constants are used to index into an METADATA_MATCHER or
+# METADATA_WITH_BATTERY_VOLTAGE_MATCHER match group
 FLAGS_GROUP_INDEX = 3
 NUM_DATA_RECORDS_GROUP_INDEX = 4
 NUM_ERROR_RECORDS_GROUP_INDEX = 5
 NUM_BYTES_STORED_GROUP_INDEX = 6
+METADATA_BATTERY_VOLTAGE_GROUP_INDEX = 7
 
+# The following constants are used to index into the array of flag bit values
+# after the numeric value is converted to a bit string and split into a array
 CLOCK_ACTIVE_FLAGS_INDEX = 0
 RECORDING_ACTIVE_FLAGS_INDEX = 1
 RECORD_END_ON_TIME_FLAGS_INDEX = 2
@@ -132,7 +151,7 @@ Data Mapping:
 3466968635 -> seconds since 1904 Sunday, November 10, 2013 5:50:35pm
 """
 
-POWER_RECORD_TYPE_REGEX = r'(17)'
+POWER_RECORD_TYPE_REGEX = r'(17|33|49)'
 POWER_REGEX = r'^' + POWER_RECORD_TYPE_REGEX + ONE_OR_MORE_WHITESPACE_REGEX + \
               RECORD_TIME_REGEX
 POWER_MATCHER = re.compile(POWER_REGEX)
@@ -141,8 +160,27 @@ POWER_MATCHER = re.compile(POWER_REGEX)
 """
 
 """
-NOTE: A record with record type 10 should be ignored.
+NOTE: A record with record type 10 should not be seen since it is pH based and not CO2.
 """
+
+"""
+*** BEGIN definition of regular expressions and matchers for ignore handling.
+"""
+IGNORE_MARKER_END_REGEX = r'^:Data'
+IGNORE_MARKER_END_MATCHER = re.compile(IGNORE_MARKER_END_REGEX)
+"""
+*** END definition of regular expressions and matchers for ignore handling.
+"""
+
+
+class Pco2wAbcParticleClassKey (BaseEnum):
+    """
+    An enum for the keys application to the pco2w abc particle classes
+    """
+    METADATA_PARTICLE_CLASS = 'metadata_particle_class'
+    POWER_PARTICLE_CLASS = 'power_particle_class'
+    INSTRUMENT_PARTICLE_CLASS = 'instrument_particle_class'
+    INSTRUMENT_BLANK_PARTICLE_CLASS = 'instrument_blank_particle_class'
 
 
 class Pco2wAbcParser(Parser):
@@ -151,11 +189,22 @@ class Pco2wAbcParser(Parser):
                  stream_handle,
                  exception_callback,
                  state_callback=None,  # No longer used
-                 publish_callback=None,  # No longer used
-                 *args, **kwargs):
+                 publish_callback=None):  # No longer used
 
-        self._full_file_read = False
+        self._file_parsed = False
         self._record_buffer = []
+        self._metadata_class = config[
+            DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT][
+                Pco2wAbcParticleClassKey.METADATA_PARTICLE_CLASS]
+        self._power_class = config[
+            DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT][
+                Pco2wAbcParticleClassKey.POWER_PARTICLE_CLASS]
+        self._instrument_class = config[
+            DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT][
+                Pco2wAbcParticleClassKey.INSTRUMENT_PARTICLE_CLASS]
+        self._instrument_blank_class = config[
+            DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT][
+                Pco2wAbcParticleClassKey.INSTRUMENT_BLANK_PARTICLE_CLASS]
 
         super(Pco2wAbcParser, self).__init__(config,
                                              stream_handle,
@@ -228,104 +277,104 @@ class Pco2wAbcParser(Parser):
         return instrument_dict
 
     @staticmethod
-    def _fill_metadata_dict(line, metadata_dict):
+    def _fill_metadata_dict(metadata_match, metadata_dict):
 
-        metadata_match = METADATA_MATCHER.match(line)
+        metadata_dict[Pco2wAbcDataParticleKey.RECORD_TYPE] = \
+            metadata_match.group(RECORD_TYPE_GROUP_INDEX)
+        metadata_dict[Pco2wAbcDataParticleKey.RECORD_TIME] = \
+            metadata_match.group(RECORD_TIME_GROUP_INDEX)
 
-        if metadata_match:
-            metadata_dict[Pco2wAbcDataParticleKey.RECORD_TYPE] = \
-                metadata_match.group(RECORD_TYPE_GROUP_INDEX)
-            metadata_dict[Pco2wAbcDataParticleKey.RECORD_TIME] = \
-                metadata_match.group(RECORD_TIME_GROUP_INDEX)
+        # Convert the FLAGS integer value to a 16 bit binary value with leading 0s
+        # as necessary
+        flags = format(int(metadata_match.group(FLAGS_GROUP_INDEX)), '016b')
 
-            flags = format(int(metadata_match.group(FLAGS_GROUP_INDEX)), '016b')
+        metadata_dict[Pco2wAbcDataParticleKey.CLOCK_ACTIVE] = \
+            flags[CLOCK_ACTIVE_FLAGS_INDEX]
+        metadata_dict[Pco2wAbcDataParticleKey.RECORDING_ACTIVE] = \
+            flags[RECORDING_ACTIVE_FLAGS_INDEX]
+        metadata_dict[Pco2wAbcDataParticleKey.RECORD_END_ON_TIME] = \
+            flags[RECORD_END_ON_TIME_FLAGS_INDEX]
+        metadata_dict[Pco2wAbcDataParticleKey.RECORD_MEMORY_FULL] = \
+            flags[RECORD_MEMORY_FULL_FLAGS_INDEX]
+        metadata_dict[Pco2wAbcDataParticleKey.RECORD_END_ON_ERROR] = \
+            flags[RECORD_END_ON_ERROR_FLAGS_INDEX]
+        metadata_dict[Pco2wAbcDataParticleKey.DATA_DOWNLOAD_OK] = \
+            flags[DATA_DOWNLOAD_OK_FLAGS_INDEX]
+        metadata_dict[Pco2wAbcDataParticleKey.FLASH_MEMORY_OPEN] = \
+            flags[FLASH_MEMORY_OPEN_FLAGS_INDEX]
+        metadata_dict[Pco2wAbcDataParticleKey.BATTERY_LOW_PRESTART] = \
+            flags[BATTERY_LOW_PRESTART_FLAGS_INDEX]
+        metadata_dict[Pco2wAbcDataParticleKey.BATTERY_LOW_MEASUREMENT] = \
+            flags[BATTERY_LOW_MEASUREMENT_FLAGS_INDEX]
+        metadata_dict[Pco2wAbcDataParticleKey.BATTERY_LOW_BLANK] = \
+            flags[BATTERY_LOW_BLANK_FLAGS_INDEX]
+        metadata_dict[Pco2wAbcDataParticleKey.BATTERY_LOW_EXTERNAL] = \
+            flags[BATTERY_LOW_EXTERNAL_FLAGS_INDEX]
+        metadata_dict[Pco2wAbcDataParticleKey.EXTERNAL_DEVICE1_FAULT] = \
+            flags[EXTERNAL_DEVICE1_FAULT_FLAGS_INDEX]
+        metadata_dict[Pco2wAbcDataParticleKey.EXTERNAL_DEVICE2_FAULT] = \
+            flags[EXTERNAL_DEVICE2_FAULT_FLAGS_INDEX]
+        metadata_dict[Pco2wAbcDataParticleKey.EXTERNAL_DEVICE3_FAULT] = \
+            flags[EXTERNAL_DEVICE3_FAULT_FLAGS_INDEX]
+        metadata_dict[Pco2wAbcDataParticleKey.FLASH_ERASED] = \
+            flags[FLASH_ERASED_FLAGS_INDEX]
+        metadata_dict[Pco2wAbcDataParticleKey.POWER_ON_INVALID] = \
+            flags[POWER_ON_INVALID_FLAGS_INDEX]
 
-            metadata_dict[Pco2wAbcDataParticleKey.CLOCK_ACTIVE] = \
-                flags[CLOCK_ACTIVE_FLAGS_INDEX]
-            metadata_dict[Pco2wAbcDataParticleKey.RECORDING_ACTIVE] = \
-                flags[RECORDING_ACTIVE_FLAGS_INDEX]
-            metadata_dict[Pco2wAbcDataParticleKey.RECORD_END_ON_TIME] = \
-                flags[RECORD_END_ON_TIME_FLAGS_INDEX]
-            metadata_dict[Pco2wAbcDataParticleKey.RECORD_MEMORY_FULL] = \
-                flags[RECORD_MEMORY_FULL_FLAGS_INDEX]
-            metadata_dict[Pco2wAbcDataParticleKey.RECORD_END_ON_ERROR] = \
-                flags[RECORD_END_ON_ERROR_FLAGS_INDEX]
-            metadata_dict[Pco2wAbcDataParticleKey.DATA_DOWNLOAD_OK] = \
-                flags[DATA_DOWNLOAD_OK_FLAGS_INDEX]
-            metadata_dict[Pco2wAbcDataParticleKey.FLASH_MEMORY_OPEN] = \
-                flags[FLASH_MEMORY_OPEN_FLAGS_INDEX]
-            metadata_dict[Pco2wAbcDataParticleKey.BATTERY_LOW_PRESTART] = \
-                flags[BATTERY_LOW_PRESTART_FLAGS_INDEX]
-            metadata_dict[Pco2wAbcDataParticleKey.BATTERY_LOW_MEASUREMENT] = \
-                flags[BATTERY_LOW_MEASUREMENT_FLAGS_INDEX]
-            metadata_dict[Pco2wAbcDataParticleKey.BATTERY_LOW_BLANK] = \
-                flags[BATTERY_LOW_BLANK_FLAGS_INDEX]
-            metadata_dict[Pco2wAbcDataParticleKey.BATTERY_LOW_EXTERNAL] = \
-                flags[BATTERY_LOW_EXTERNAL_FLAGS_INDEX]
-            metadata_dict[Pco2wAbcDataParticleKey.EXTERNAL_DEVICE1_FAULT] = \
-                flags[EXTERNAL_DEVICE1_FAULT_FLAGS_INDEX]
-            metadata_dict[Pco2wAbcDataParticleKey.EXTERNAL_DEVICE2_FAULT] = \
-                flags[EXTERNAL_DEVICE2_FAULT_FLAGS_INDEX]
-            metadata_dict[Pco2wAbcDataParticleKey.EXTERNAL_DEVICE3_FAULT] = \
-                flags[EXTERNAL_DEVICE3_FAULT_FLAGS_INDEX]
-            metadata_dict[Pco2wAbcDataParticleKey.FLASH_ERASED] = \
-                flags[FLASH_ERASED_FLAGS_INDEX]
-            metadata_dict[Pco2wAbcDataParticleKey.POWER_ON_INVALID] = \
-                flags[POWER_ON_INVALID_FLAGS_INDEX]
+        metadata_dict[Pco2wAbcDataParticleKey.NUM_DATA_RECORDS] = \
+            metadata_match.group(NUM_DATA_RECORDS_GROUP_INDEX)
+        metadata_dict[Pco2wAbcDataParticleKey.NUM_ERROR_RECORDS] = \
+            metadata_match.group(NUM_ERROR_RECORDS_GROUP_INDEX)
+        metadata_dict[Pco2wAbcDataParticleKey.NUM_BYTES_STORED] = \
+            metadata_match.group(NUM_BYTES_STORED_GROUP_INDEX)
 
-            metadata_dict[Pco2wAbcDataParticleKey.NUM_DATA_RECORDS] = \
-                metadata_match.group(NUM_DATA_RECORDS_GROUP_INDEX)
-            metadata_dict[Pco2wAbcDataParticleKey.NUM_ERROR_RECORDS] = \
-                metadata_match.group(NUM_ERROR_RECORDS_GROUP_INDEX)
-            metadata_dict[Pco2wAbcDataParticleKey.NUM_BYTES_STORED] = \
-                metadata_match.group(NUM_BYTES_STORED_GROUP_INDEX)
 
-    @staticmethod
-    def _fill_power_dict(line, power_dict):
-
-        power_match = POWER_MATCHER.match(line)
-
-        if power_match:
-            power_dict[Pco2wAbcDataParticleKey.RECORD_TYPE] = \
-                power_match.group(RECORD_TYPE_GROUP_INDEX)
-            power_dict[Pco2wAbcDataParticleKey.RECORD_TIME] = \
-                power_match.group(RECORD_TIME_GROUP_INDEX)
+        if metadata_match.lastindex == METADATA_BATTERY_VOLTAGE_GROUP_INDEX:
+            metadata_dict[Pco2wAbcDataParticleKey.VOLTAGE_BATTERY] = \
+                metadata_match.group(METADATA_BATTERY_VOLTAGE_GROUP_INDEX)
 
     @staticmethod
-    def _fill_instrument_dict(line, instrument_dict):
-        instrument_record_match = INSTRUMENT_MATCHER.match(line)
+    def _fill_power_dict(power_match, power_dict):
 
-        if instrument_record_match:
-            instrument_dict[Pco2wAbcDataParticleKey.RECORD_TYPE] = \
-                instrument_record_match.group(RECORD_TYPE_GROUP_INDEX)
-            instrument_dict[Pco2wAbcDataParticleKey.RECORD_TIME] = \
-                instrument_record_match.group(RECORD_TIME_GROUP_INDEX)
-            instrument_dict[Pco2wAbcDataParticleKey.LIGHT_MEASUREMENTS] = \
-                instrument_record_match.group(LIGHT_MEASUREMENTS_GROUP_INDEX).split('\t')
-            instrument_dict[Pco2wAbcDataParticleKey.VOLTAGE_BATTERY] = \
-                instrument_record_match.group(BATTERY_VOLTAGE_GROUP_INDEX)
-            instrument_dict[Pco2wAbcDataParticleKey.THERMISTOR_RAW] = \
-                instrument_record_match.group(THERMISTOR_GROUP_INDEX)
+        power_dict[Pco2wAbcDataParticleKey.RECORD_TYPE] = \
+            power_match.group(RECORD_TYPE_GROUP_INDEX)
+        power_dict[Pco2wAbcDataParticleKey.RECORD_TIME] = \
+            power_match.group(RECORD_TIME_GROUP_INDEX)
 
     @staticmethod
-    def _fill_instrument_blank_dict(line, instrument_blank_dict):
-        instrument_blank_record_match = INSTRUMENT_BLANK_MATCHER.match(line)
+    def _fill_instrument_dict(instrument_record_match, instrument_dict):
 
-        if instrument_blank_record_match:
-            instrument_blank_dict[Pco2wAbcDataParticleKey.RECORD_TYPE] = \
-                instrument_blank_record_match.group(RECORD_TYPE_GROUP_INDEX)
-            instrument_blank_dict[Pco2wAbcDataParticleKey.RECORD_TIME] = \
-                instrument_blank_record_match.group(RECORD_TIME_GROUP_INDEX)
-            instrument_blank_dict[Pco2wAbcDataParticleKey.LIGHT_MEASUREMENTS] = \
-                instrument_blank_record_match.group(LIGHT_MEASUREMENTS_GROUP_INDEX). \
-                rstrip().split('\t')
-            instrument_blank_dict[Pco2wAbcDataParticleKey.VOLTAGE_BATTERY] = \
-                instrument_blank_record_match.group(BATTERY_VOLTAGE_GROUP_INDEX)
-            instrument_blank_dict[Pco2wAbcDataParticleKey.THERMISTOR_RAW] = \
-                instrument_blank_record_match.group(THERMISTOR_GROUP_INDEX)
+        instrument_dict[Pco2wAbcDataParticleKey.RECORD_TYPE] = \
+            instrument_record_match.group(RECORD_TYPE_GROUP_INDEX)
+        instrument_dict[Pco2wAbcDataParticleKey.RECORD_TIME] = \
+            instrument_record_match.group(RECORD_TIME_GROUP_INDEX)
+        instrument_dict[Pco2wAbcDataParticleKey.LIGHT_MEASUREMENTS] = \
+            instrument_record_match.group(LIGHT_MEASUREMENTS_GROUP_INDEX). \
+            rstrip().split('\t')
+        instrument_dict[Pco2wAbcDataParticleKey.VOLTAGE_BATTERY] = \
+            instrument_record_match.group(INSTRUMENT_BATTERY_VOLTAGE_GROUP_INDEX)
+        instrument_dict[Pco2wAbcDataParticleKey.THERMISTOR_RAW] = \
+            instrument_record_match.group(THERMISTOR_GROUP_INDEX)
+
+    @staticmethod
+    def _fill_instrument_blank_dict(instrument_blank_record_match, instrument_blank_dict):
+
+        instrument_blank_dict[Pco2wAbcDataParticleKey.RECORD_TYPE] = \
+            instrument_blank_record_match.group(RECORD_TYPE_GROUP_INDEX)
+        instrument_blank_dict[Pco2wAbcDataParticleKey.RECORD_TIME] = \
+            instrument_blank_record_match.group(RECORD_TIME_GROUP_INDEX)
+        instrument_blank_dict[Pco2wAbcDataParticleKey.BLANK_LIGHT_MEASUREMENTS] = \
+            instrument_blank_record_match.group(LIGHT_MEASUREMENTS_GROUP_INDEX). \
+            rstrip().split('\t')
+        instrument_blank_dict[Pco2wAbcDataParticleKey.VOLTAGE_BATTERY] = \
+            instrument_blank_record_match.group(INSTRUMENT_BATTERY_VOLTAGE_GROUP_INDEX)
+        instrument_blank_dict[Pco2wAbcDataParticleKey.THERMISTOR_RAW] = \
+            instrument_blank_record_match.group(THERMISTOR_GROUP_INDEX)
 
     def parse_file(self):
 
+        # Let's create some empty dictionaries which we will use to collect
+        # data for the extract sample calls.
         metadata_dict = self._create_empty_metadata_dict()
         power_dict = self._create_empty_power_dict()
         instrument_dict = self._create_empty_instrument_dict()
@@ -333,77 +382,123 @@ class Pco2wAbcParser(Parser):
 
         line = self._stream_handle.readline()
 
+        found_ignore_marker_end = False
+
+        # Go through each line in the file
         while line:
 
-            if None in metadata_dict.values():
+            # Did we already find the end of ignore data marker?
+            # If not, then see if we found it
+            if not found_ignore_marker_end:
 
-                self._fill_metadata_dict(line, metadata_dict)
+                ignore_marker_end_match = IGNORE_MARKER_END_MATCHER.match(line)
 
-            else:
-                timestamp = float(ntplib.system_to_ntp_time(time.time()))
-                particle = self._extract_sample(Pco2wAbcMetadataDataParticle,
-                                                None,
-                                                metadata_dict,
-                                                timestamp)
-
-                self._record_buffer.append(particle)
-
-                metadata_dict = self._create_empty_metadata_dict()
-
-            if None in power_dict.values():
-                self._fill_power_dict(line, power_dict)
+                # If we found the marker that indicates to stop ignoring data,
+                # set the indication that we found it
+                if ignore_marker_end_match:
+                    found_ignore_marker_end = True
 
             else:
-                timestamp = float(ntplib.system_to_ntp_time(time.time()))
+                # OK.  We need to process lines now.
 
-                particle = self._extract_sample(Pco2wAbcPowerDataParticle,
-                                                None,
-                                                power_dict,
-                                                timestamp)
+                # Let's check for each of the different match possibilities
+                metadata_with_battery_voltage_match = \
+                    METADATA_WITH_BATTERY_VOLTAGE_MATCHER.match(line)
+                metadata_match = METADATA_MATCHER.match(line)
+                power_match = POWER_MATCHER.match(line)
+                instrument_match = INSTRUMENT_MATCHER.match(line)
+                instrument_blank_match = INSTRUMENT_BLANK_MATCHER.match(line)
 
-                self._record_buffer.append(particle)
+                # There are two metadata match possibilities
+                if metadata_with_battery_voltage_match or metadata_match:
 
-                power_dict = self._create_empty_power_dict()
+                    # If we found a metadata record with battery voltage, let's
+                    # supply that match
+                    if metadata_with_battery_voltage_match:
 
-            if None in instrument_dict.values():
+                        self._fill_metadata_dict(metadata_with_battery_voltage_match,
+                                                 metadata_dict)
 
-                self._fill_instrument_dict(line, instrument_dict)
+                    else:
 
-                instrument_dict = self._create_empty_instrument_dict()
+                        # If we found a metadata record without battery voltage,
+                        # let's supply that match
+                        self._fill_metadata_dict(metadata_match, metadata_dict)
 
-            else:
-                timestamp = float(ntplib.system_to_ntp_time(time.time()))
+                    timestamp = float(metadata_dict[Pco2wAbcDataParticleKey.RECORD_TIME])
 
-                particle = self._extract_sample(Pco2wAbcInstrumentDataParticle,
-                                                None,
-                                                instrument_dict,
-                                                timestamp)
+                    particle = self._extract_sample(self._metadata_class,
+                                                    None,
+                                                    metadata_dict,
+                                                    timestamp)
 
-                self._record_buffer.append(particle)
+                    log.debug("Appending metadata particle: %s", particle.generate())
+                    self._record_buffer.append(particle)
 
-                power_dict = self._create_empty_instrument_dict()
+                    # Recreate an empty metadata dictionary
+                    metadata_dict = self._create_empty_metadata_dict()
 
-            if None in instrument_blank_dict.values():
+                elif power_match:
 
-                self._fill_instrument_blank_dict(line, instrument_blank_dict)
+                    self._fill_power_dict(power_match, power_dict)
 
-                instrument_blank_dict = self._create_empty_instrument_blank_dict()
+                    timestamp = float(power_dict[Pco2wAbcDataParticleKey.RECORD_TIME])
 
-            else:
-                timestamp = float(ntplib.system_to_ntp_time(time.time()))
+                    particle = self._extract_sample(self._power_class,
+                                                    None,
+                                                    power_dict,
+                                                    timestamp)
 
-                particle = self._extract_sample(Pco2wAbcInstrumentBlankDataParticle,
-                                                None,
-                                                instrument_blank_dict,
-                                                timestamp)
+                    log.debug("Appending power particle: %s", particle.generate())
+                    self._record_buffer.append(particle)
 
-                self._record_buffer.append(particle)
+                    # Recreate an empty power dictionary
+                    power_dict = self._create_empty_power_dict()
 
-                power_dict = self._create_empty_instrument_blank_dict()
+                elif instrument_match:
+
+                    self._fill_instrument_dict(instrument_match, instrument_dict)
+
+                    timestamp = float(instrument_dict[Pco2wAbcDataParticleKey.RECORD_TIME])
+
+                    particle = self._extract_sample(self._instrument_class,
+                                                    None,
+                                                    instrument_dict,
+                                                    timestamp)
+
+                    log.debug("Appending instrument particle: %s", particle.generate())
+                    self._record_buffer.append(particle)
+
+                    # Recreate an empty instrument dictionary
+                    instrument_dict = self._create_empty_instrument_dict()
+
+                elif instrument_blank_match:
+
+                    self._fill_instrument_blank_dict(instrument_blank_match, instrument_blank_dict)
+
+                    timestamp = float(instrument_blank_dict[Pco2wAbcDataParticleKey.RECORD_TIME])
+
+                    particle = self._extract_sample(self._instrument_blank_class,
+                                                    None,
+                                                    instrument_blank_dict,
+                                                    timestamp)
+
+                    log.debug("Appending instrument blank particle: %s", particle.generate())
+                    self._record_buffer.append(particle)
+
+                    # Recreate an empty instrument blank dictionary
+                    instrument_blank_dict = self._create_empty_instrument_blank_dict()
+
+                else:
+                    # We found a line in the file that was unexpected.  Report a
+                    # RecoverableSampleException
+                    message = "Unexpected data in file, line: " + line
+                    self._exception_callback(RecoverableSampleException(message))
 
             line = self._stream_handle.readline()
 
-        self._full_file_read = True
+        # Let's provide an indication that the file was parsed
+        self._file_parsed = True
 
     def get_records(self, num_records_requested=1):
         """
@@ -415,12 +510,13 @@ class Pco2wAbcParser(Parser):
 
         if num_records_requested > 0:
 
-            print "MCW0"
-
-            if self._full_file_read is False:
+            # If the file was not read, let's parse it
+            if self._file_parsed is False:
                 self.parse_file()
 
+            # Iterate through the particles returned, and pop them off from the beginning of the record
+            # buffer to the end
             while len(particles_to_return) < num_records_requested and len(self._record_buffer) > 0:
-                particles_to_return.append(self._record_buffer.pop())
+                particles_to_return.append(self._record_buffer.pop(0))
 
         return particles_to_return

@@ -2,6 +2,7 @@
 __author__ = 'Mark Worden'
 
 import string
+
 from mi.core.log import get_logger
 log = get_logger()
 from mi.core.common import BaseEnum
@@ -33,7 +34,7 @@ class Pco2wAbcDataParticleKey(BaseEnum):
     BLANK_LIGHT_MEASUREMENTS = 'blank_light_measurements'   # PD2712
     CLOCK_ACTIVE = 'clock_active'                           # PD366
     RECORDING_ACTIVE = 'recording_active'                   # PD367
-    RECORD_END_ON_TIME = 'record_end_on_time'               # D368
+    RECORD_END_ON_TIME = 'record_end_on_time'               # PD368
     RECORD_MEMORY_FULL = 'record_memory_full'               # PD369
     RECORD_END_ON_ERROR = 'record_end_on_error'             # PD370
     DATA_DOWNLOAD_OK = 'data_download_ok'                   # PD371
@@ -61,58 +62,44 @@ class Pco2wAbcBaseDataParticle(DataParticle):
         """
         Take something in the data format and turn it into
         a particle with the appropriate tag.
-        @throws SampleException If there is a problem with sample creation
         """
-        log.trace("In Pco2wAbcBaseDataParticle._build_parsed_values")
 
         particle_parameters = []
 
-        try:
-            particle_parameters.append(
-                self._encode_value(Pco2wAbcDataParticleKey.RECORD_TYPE,
-                                   self.raw_data[Pco2wAbcDataParticleKey.RECORD_TYPE],
-                                   int))
-            particle_parameters.append(
-                self._encode_value(Pco2wAbcDataParticleKey.RECORD_TIME,
-                                   self.raw_data[Pco2wAbcDataParticleKey.RECORD_TIME],
-                                   int))
-
-        except (ValueError, TypeError, IndexError) as ex:
-            raise SampleException("Error (%s) while decoding parameters in data: [%s]"
-                                  % (ex, self.raw_data))
+        particle_parameters.append(
+            self._encode_value(Pco2wAbcDataParticleKey.RECORD_TYPE,
+                               self.raw_data[Pco2wAbcDataParticleKey.RECORD_TYPE],
+                               int))
+        particle_parameters.append(
+            self._encode_value(Pco2wAbcDataParticleKey.RECORD_TIME,
+                               self.raw_data[Pco2wAbcDataParticleKey.RECORD_TIME],
+                               int))
 
         return particle_parameters
 
 
-class Pco2wAbcDclBaseDataParticle(DataParticle):
+class Pco2wAbcDclBaseDataParticle(Pco2wAbcBaseDataParticle):
 
     def _build_parsed_values(self):
         """
         Take something in the data format and turn it into
         a particle with the appropriate tag.
-        @throws SampleException If there is a problem with sample creation
         """
-        log.trace("In Pco2wAbcDclBaseDataParticle._build_parsed_values")
 
         particle_parameters = super(Pco2wAbcDclBaseDataParticle, self)._build_parsed_values()
 
-        try:
-            particle_parameters.append(
-                self._encode_value(Pco2wAbcDataParticleKey.DCL_CONTROLLER_TIMESTAMP,
-                                   self.raw_data[Pco2wAbcDataParticleKey.DCL_CONTROLLER_TIMESTAMP],
-                                   string))
-            particle_parameters.append(
-                self._encode_value(Pco2wAbcDataParticleKey.UNIQUE_ID,
-                                   self.raw_data[Pco2wAbcDataParticleKey.UNIQUE_ID],
-                                   int))
-            particle_parameters.append(
-                self._encode_value(Pco2wAbcDataParticleKey.PASSED_CHECKSUM,
-                                   self.raw_data[Pco2wAbcDataParticleKey.PASSED_CHECKSUM],
-                                   int))
-
-        except (ValueError, TypeError, IndexError) as ex:
-            raise SampleException("Error (%s) while decoding parameters in data: [%s]"
-                                  % (ex, self.raw_data))
+        particle_parameters.append(
+            self._encode_value(Pco2wAbcDataParticleKey.DCL_CONTROLLER_TIMESTAMP,
+                               self.raw_data[Pco2wAbcDataParticleKey.DCL_CONTROLLER_TIMESTAMP],
+                               string))
+        particle_parameters.append(
+            self._encode_value(Pco2wAbcDataParticleKey.UNIQUE_ID,
+                               self.raw_data[Pco2wAbcDataParticleKey.UNIQUE_ID],
+                               int))
+        particle_parameters.append(
+            self._encode_value(Pco2wAbcDataParticleKey.PASSED_CHECKSUM,
+                               self.raw_data[Pco2wAbcDataParticleKey.PASSED_CHECKSUM],
+                               int))
 
         return particle_parameters
 
@@ -125,25 +112,18 @@ class Pco2wAbcInstrumentBaseDataParticle(Pco2wAbcBaseDataParticle):
         """
         Take something in the data format and turn it into
         a particle with the appropriate tag.
-        @throws SampleException If there is a problem with sample creation
         """
-        log.trace("In Pco2wAbcInstrumentBaseDataParticle._build_parsed_values")
 
         particle_params = super(Pco2wAbcInstrumentBaseDataParticle, self)._build_parsed_values()
 
-        try:
-            particle_params.append(
-                self._encode_value(Pco2wAbcDataParticleKey.VOLTAGE_BATTERY,
-                                   self.raw_data[Pco2wAbcDataParticleKey.VOLTAGE_BATTERY],
-                                   int))
-            particle_params.append(
-                self._encode_value(Pco2wAbcDataParticleKey.THERMISTOR_RAW,
-                                   self.raw_data[Pco2wAbcDataParticleKey.THERMISTOR_RAW],
-                                   int))
-
-        except (ValueError, TypeError, IndexError) as ex:
-            raise SampleException("Error (%s) while decoding parameters in data: [%s]"
-                                  % (ex, self.raw_data))
+        particle_params.append(
+            self._encode_value(Pco2wAbcDataParticleKey.VOLTAGE_BATTERY,
+                               self.raw_data[Pco2wAbcDataParticleKey.VOLTAGE_BATTERY],
+                               int))
+        particle_params.append(
+            self._encode_value(Pco2wAbcDataParticleKey.THERMISTOR_RAW,
+                               self.raw_data[Pco2wAbcDataParticleKey.THERMISTOR_RAW],
+                               int))
 
         return particle_params
 
@@ -156,21 +136,14 @@ class Pco2wAbcInstrumentDataParticle(Pco2wAbcInstrumentBaseDataParticle):
         """
         Take something in the data format and turn it into
         a particle with the appropriate tag.
-        @throws SampleException If there is a problem with sample creation
         """
-        log.trace("In Pco2wAbcInstrumentDataParticle._build_parsed_values")
 
         particle_params = super(Pco2wAbcInstrumentDataParticle, self)._build_parsed_values()
 
-        try:
-            particle_params.append(
-                self._encode_value(Pco2wAbcDataParticleKey.LIGHT_MEASUREMENTS,
-                                   self.raw_data[Pco2wAbcDataParticleKey.LIGHT_MEASUREMENTS],
-                                   list))
-
-        except (ValueError, TypeError, IndexError) as ex:
-            raise SampleException("Error (%s) while decoding parameters in data: [%s]"
-                                  % (ex, self.raw_data))
+        particle_params.append(
+            self._encode_value(Pco2wAbcDataParticleKey.LIGHT_MEASUREMENTS,
+                               self.raw_data[Pco2wAbcDataParticleKey.LIGHT_MEASUREMENTS],
+                               list))
 
         return particle_params
 
@@ -183,21 +156,14 @@ class Pco2wAbcInstrumentBlankDataParticle(Pco2wAbcInstrumentBaseDataParticle):
         """
         Take something in the data format and turn it into
         a particle with the appropriate tag.
-        @throws SampleException If there is a problem with sample creation
         """
-        log.trace("In Pco2wAbcInstrumentBlankDataParticle._build_parsed_values")
 
         particle_params = super(Pco2wAbcInstrumentBlankDataParticle, self)._build_parsed_values()
 
-        try:
-            particle_params.append(
-                self._encode_value(Pco2wAbcDataParticleKey.BLANK_LIGHT_MEASUREMENTS,
-                                   self.raw_data[Pco2wAbcDataParticleKey.BLANK_LIGHT_MEASUREMENTS],
-                                   list))
-
-        except (ValueError, TypeError, IndexError) as ex:
-            raise SampleException("Error (%s) while decoding parameters in data: [%s]"
-                                  % (ex, self.raw_data))
+        particle_params.append(
+            self._encode_value(Pco2wAbcDataParticleKey.BLANK_LIGHT_MEASUREMENTS,
+                               self.raw_data[Pco2wAbcDataParticleKey.BLANK_LIGHT_MEASUREMENTS],
+                               list))
 
         return particle_params
 
@@ -210,97 +176,96 @@ class Pco2wAbcMetadataDataParticle(Pco2wAbcBaseDataParticle):
         """
         Take something in the data format and turn it into
         a particle with the appropriate tag.
-        @throws SampleException If there is a problem with sample creation
         """
-        log.trace("In Pco2wAbcMetadataDataParticle._build_parsed_values")
 
         particle_params = super(Pco2wAbcMetadataDataParticle, self)._build_parsed_values()
 
-        try:
-            particle_params.append(
-                self._encode_value(Pco2wAbcDataParticleKey.CLOCK_ACTIVE,
-                                   self.raw_data[Pco2wAbcDataParticleKey.CLOCK_ACTIVE],
-                                   int))
-            particle_params.append(
-                self._encode_value(Pco2wAbcDataParticleKey.RECORDING_ACTIVE,
-                                   self.raw_data[Pco2wAbcDataParticleKey.RECORDING_ACTIVE],
-                                   int))
-            particle_params.append(
-                self._encode_value(Pco2wAbcDataParticleKey.RECORD_END_ON_TIME,
-                                   self.raw_data[Pco2wAbcDataParticleKey.RECORD_END_ON_TIME],
-                                   int))
-            particle_params.append(
-                self._encode_value(Pco2wAbcDataParticleKey.RECORD_MEMORY_FULL,
-                                   self.raw_data[Pco2wAbcDataParticleKey.RECORD_MEMORY_FULL],
-                                   int))
-            particle_params.append(
-                self._encode_value(Pco2wAbcDataParticleKey.RECORD_END_ON_ERROR,
-                                   self.raw_data[Pco2wAbcDataParticleKey.RECORD_END_ON_ERROR],
-                                   int))
-            particle_params.append(
-                self._encode_value(Pco2wAbcDataParticleKey.DATA_DOWNLOAD_OK,
-                                   self.raw_data[Pco2wAbcDataParticleKey.DATA_DOWNLOAD_OK],
-                                   int))
-            particle_params.append(
-                self._encode_value(Pco2wAbcDataParticleKey.FLASH_MEMORY_OPEN,
-                                   self.raw_data[Pco2wAbcDataParticleKey.FLASH_MEMORY_OPEN],
-                                   int))
-            particle_params.append(
-                self._encode_value(Pco2wAbcDataParticleKey.BATTERY_LOW_PRESTART,
-                                   self.raw_data[Pco2wAbcDataParticleKey.BATTERY_LOW_PRESTART],
-                                   int))
-            particle_params.append(
-                self._encode_value(Pco2wAbcDataParticleKey.BATTERY_LOW_MEASUREMENT,
-                                   self.raw_data[Pco2wAbcDataParticleKey.BATTERY_LOW_MEASUREMENT],
-                                   int))
-            particle_params.append(
-                self._encode_value(Pco2wAbcDataParticleKey.BATTERY_LOW_BLANK,
-                                   self.raw_data[Pco2wAbcDataParticleKey.BATTERY_LOW_BLANK],
-                                   int))
-            particle_params.append(
-                self._encode_value(Pco2wAbcDataParticleKey.BATTERY_LOW_EXTERNAL,
-                                   self.raw_data[Pco2wAbcDataParticleKey.BATTERY_LOW_EXTERNAL],
-                                   int))
-            particle_params.append(
-                self._encode_value(Pco2wAbcDataParticleKey.EXTERNAL_DEVICE1_FAULT,
-                                   self.raw_data[Pco2wAbcDataParticleKey.EXTERNAL_DEVICE1_FAULT],
-                                   int))
-            particle_params.append(
-                self._encode_value(Pco2wAbcDataParticleKey.EXTERNAL_DEVICE2_FAULT,
-                                   self.raw_data[Pco2wAbcDataParticleKey.EXTERNAL_DEVICE2_FAULT],
-                                   int))
-            particle_params.append(
-                self._encode_value(Pco2wAbcDataParticleKey.EXTERNAL_DEVICE3_FAULT,
-                                   self.raw_data[Pco2wAbcDataParticleKey.EXTERNAL_DEVICE3_FAULT],
-                                   int))
-            particle_params.append(
-                self._encode_value(Pco2wAbcDataParticleKey.FLASH_ERASED,
-                                   self.raw_data[Pco2wAbcDataParticleKey.FLASH_ERASED],
-                                   int))
-            particle_params.append(
-                self._encode_value(Pco2wAbcDataParticleKey.POWER_ON_INVALID,
-                                   self.raw_data[Pco2wAbcDataParticleKey.POWER_ON_INVALID],
-                                   int))
-            particle_params.append(
-                self._encode_value(Pco2wAbcDataParticleKey.NUM_DATA_RECORDS,
-                                   self.raw_data[Pco2wAbcDataParticleKey.NUM_DATA_RECORDS],
-                                   int))
-            particle_params.append(
-                self._encode_value(Pco2wAbcDataParticleKey.NUM_ERROR_RECORDS,
-                                   self.raw_data[Pco2wAbcDataParticleKey.NUM_ERROR_RECORDS],
-                                   int))
-            particle_params.append(
-                self._encode_value(Pco2wAbcDataParticleKey.NUM_BYTES_STORED,
-                                   self.raw_data[Pco2wAbcDataParticleKey.NUM_BYTES_STORED],
-                                   int))
+        particle_params.append(
+            self._encode_value(Pco2wAbcDataParticleKey.CLOCK_ACTIVE,
+                               self.raw_data[Pco2wAbcDataParticleKey.CLOCK_ACTIVE],
+                               int))
+        particle_params.append(
+            self._encode_value(Pco2wAbcDataParticleKey.RECORDING_ACTIVE,
+                               self.raw_data[Pco2wAbcDataParticleKey.RECORDING_ACTIVE],
+                               int))
+        particle_params.append(
+            self._encode_value(Pco2wAbcDataParticleKey.RECORD_END_ON_TIME,
+                               self.raw_data[Pco2wAbcDataParticleKey.RECORD_END_ON_TIME],
+                               int))
+        particle_params.append(
+            self._encode_value(Pco2wAbcDataParticleKey.RECORD_MEMORY_FULL,
+                               self.raw_data[Pco2wAbcDataParticleKey.RECORD_MEMORY_FULL],
+                               int))
+        particle_params.append(
+            self._encode_value(Pco2wAbcDataParticleKey.RECORD_END_ON_ERROR,
+                               self.raw_data[Pco2wAbcDataParticleKey.RECORD_END_ON_ERROR],
+                               int))
+        particle_params.append(
+            self._encode_value(Pco2wAbcDataParticleKey.DATA_DOWNLOAD_OK,
+                               self.raw_data[Pco2wAbcDataParticleKey.DATA_DOWNLOAD_OK],
+                               int))
+        particle_params.append(
+            self._encode_value(Pco2wAbcDataParticleKey.FLASH_MEMORY_OPEN,
+                               self.raw_data[Pco2wAbcDataParticleKey.FLASH_MEMORY_OPEN],
+                               int))
+        particle_params.append(
+            self._encode_value(Pco2wAbcDataParticleKey.BATTERY_LOW_PRESTART,
+                               self.raw_data[Pco2wAbcDataParticleKey.BATTERY_LOW_PRESTART],
+                               int))
+        particle_params.append(
+            self._encode_value(Pco2wAbcDataParticleKey.BATTERY_LOW_MEASUREMENT,
+                               self.raw_data[Pco2wAbcDataParticleKey.BATTERY_LOW_MEASUREMENT],
+                               int))
+        particle_params.append(
+            self._encode_value(Pco2wAbcDataParticleKey.BATTERY_LOW_BLANK,
+                               self.raw_data[Pco2wAbcDataParticleKey.BATTERY_LOW_BLANK],
+                               int))
+        particle_params.append(
+            self._encode_value(Pco2wAbcDataParticleKey.BATTERY_LOW_EXTERNAL,
+                               self.raw_data[Pco2wAbcDataParticleKey.BATTERY_LOW_EXTERNAL],
+                               int))
+        particle_params.append(
+            self._encode_value(Pco2wAbcDataParticleKey.EXTERNAL_DEVICE1_FAULT,
+                               self.raw_data[Pco2wAbcDataParticleKey.EXTERNAL_DEVICE1_FAULT],
+                               int))
+        particle_params.append(
+            self._encode_value(Pco2wAbcDataParticleKey.EXTERNAL_DEVICE2_FAULT,
+                               self.raw_data[Pco2wAbcDataParticleKey.EXTERNAL_DEVICE2_FAULT],
+                               int))
+        particle_params.append(
+            self._encode_value(Pco2wAbcDataParticleKey.EXTERNAL_DEVICE3_FAULT,
+                               self.raw_data[Pco2wAbcDataParticleKey.EXTERNAL_DEVICE3_FAULT],
+                               int))
+        particle_params.append(
+            self._encode_value(Pco2wAbcDataParticleKey.FLASH_ERASED,
+                               self.raw_data[Pco2wAbcDataParticleKey.FLASH_ERASED],
+                               int))
+        particle_params.append(
+            self._encode_value(Pco2wAbcDataParticleKey.POWER_ON_INVALID,
+                               self.raw_data[Pco2wAbcDataParticleKey.POWER_ON_INVALID],
+                               int))
+        particle_params.append(
+            self._encode_value(Pco2wAbcDataParticleKey.NUM_DATA_RECORDS,
+                               self.raw_data[Pco2wAbcDataParticleKey.NUM_DATA_RECORDS],
+                               int))
+        particle_params.append(
+            self._encode_value(Pco2wAbcDataParticleKey.NUM_ERROR_RECORDS,
+                               self.raw_data[Pco2wAbcDataParticleKey.NUM_ERROR_RECORDS],
+                               int))
+        particle_params.append(
+            self._encode_value(Pco2wAbcDataParticleKey.NUM_BYTES_STORED,
+                               self.raw_data[Pco2wAbcDataParticleKey.NUM_BYTES_STORED],
+                               int))
+
+        if self.raw_data[Pco2wAbcDataParticleKey.VOLTAGE_BATTERY]:
             particle_params.append(
                 self._encode_value(Pco2wAbcDataParticleKey.VOLTAGE_BATTERY,
                                    self.raw_data[Pco2wAbcDataParticleKey.VOLTAGE_BATTERY],
                                    int))
-
-        except (ValueError, TypeError, IndexError) as ex:
-            raise SampleException("Error (%s) while decoding parameters in data: [%s]"
-                                  % (ex, self.raw_data))
+        else:
+            particle_params.append(
+                {DataParticleKey.VALUE_ID: Pco2wAbcDataParticleKey.VOLTAGE_BATTERY,
+                 DataParticleKey.VALUE: None})
 
         return particle_params
 
@@ -313,9 +278,7 @@ class Pco2wAbcPowerDataParticle(Pco2wAbcBaseDataParticle):
         """
         Take something in the data format and turn it into
         a particle with the appropriate tag.
-        @throws SampleException If there is a problem with sample creation
         """
-        log.trace("In Pco2wAbcPowerDataParticle._build_parsed_values")
 
         particle_params = super(Pco2wAbcPowerDataParticle, self)._build_parsed_values()
 
@@ -330,9 +293,7 @@ class Pco2wAbcDclInstrumentDataParticle(Pco2wAbcInstrumentDataParticle, Pco2wAbc
         """
         Take something in the data format and turn it into
         a particle with the appropriate tag.
-        @throws SampleException If there is a problem with sample creation
         """
-        log.trace("In Pco2wAbcDclInstrumentDataParticle._build_parsed_values")
 
         particle_params = super(Pco2wAbcDclInstrumentDataParticle, self)._build_parsed_values()
 
@@ -357,9 +318,7 @@ class Pco2wAbcDclInstrumentBlankDataParticle(Pco2wAbcInstrumentBlankDataParticle
         """
         Take something in the data format and turn it into
         a particle with the appropriate tag.
-        @throws SampleException If there is a problem with sample creation
         """
-        log.trace("In Pco2wAbcDclInstrumentDataParticle._build_parsed_values")
 
         particle_params = super(Pco2wAbcDclInstrumentBlankDataParticle, self)._build_parsed_values()
 
@@ -384,9 +343,7 @@ class Pco2wAbcDclMetadataDataParticle(Pco2wAbcMetadataDataParticle, Pco2wAbcDclB
         """
         Take something in the data format and turn it into
         a particle with the appropriate tag.
-        @throws SampleException If there is a problem with sample creation
         """
-        log.trace("In Pco2wAbcDclMetadataDataParticle._build_parsed_values")
 
         particle_params = super(Pco2wAbcDclMetadataDataParticle, self)._build_parsed_values()
 
@@ -411,9 +368,7 @@ class Pco2wAbcDclPowerDataParticle(Pco2wAbcPowerDataParticle, Pco2wAbcDclBaseDat
         """
         Take something in the data format and turn it into
         a particle with the appropriate tag.
-        @throws SampleException If there is a problem with sample creation
         """
-        log.trace("In Pco2wAbcDclPowerDataParticle._build_parsed_values")
 
         particle_params = super(Pco2wAbcDclPowerDataParticle, self)._build_parsed_values()
 
