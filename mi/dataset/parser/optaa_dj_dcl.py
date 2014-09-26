@@ -54,8 +54,9 @@ UNUSED_BINARY_BYTE = r'[\x00-\xFF]'  # Non-grouped Binary 8-bit field (1 byte)
 DATE = r'(\d{4})(\d{2})(\d{2})'      # Date: YYYYMMDD
 TIME = r'(\d{2})(\d{2})(\d{2})'      # Time: HHMMSS
 
-# Define a regex to parse the filename.
-FILENAME_REGEX = DATE + '_' + TIME
+# Define a regex to parse the filename.  The dot character was added to ensure that the uFrame
+# filename changing still results in capturing the date and time and not other extraneous characters
+FILENAME_REGEX = DATE + '_' + TIME + '\.'
 FILENAME_MATCHER = re.compile(FILENAME_REGEX)
 
 # FILENAME_MATCHER produces the following match.group() indices.
@@ -315,7 +316,7 @@ class OptaaDjDclParser(BufferLoadingParser):
         # This is the start time.  Timestamps for each particle are derived from
         # the start time.
 
-        filename_match = FILENAME_MATCHER.match(filename)
+        filename_match = FILENAME_MATCHER.search(filename)
         if filename_match is not None:
             self.start_date = \
                 filename_match.group(GROUP_YEAR) + '-' + \
