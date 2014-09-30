@@ -1,0 +1,8 @@
+driver_metadata:
+  author: Sung Ahn
+  constructor: PCO2ADclDataSetDriver
+  driver_name: pco_2a_dcl
+  driver_path: "pco_2a/dcl"
+  email: locateSung@gmail.com
+  release_notes: Initial Release
+  version: 0.0.1
