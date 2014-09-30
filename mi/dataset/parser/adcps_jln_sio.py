@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 
 """
-@package mi.dataset.parser.adcps
-@file mi/dataset/parser/adcps.py
+@package mi.dataset.parser.adcps_jln_sio
+@file mi/dataset/parser/adcps_jln_sio.py
 @author Emily Hahn
-@brief An adcps-specific dataset agent parser
+@brief An adcps jln series through the sio dataset agent parser
 """
 
 __author__ = 'Emily Hahn'
@@ -13,14 +13,16 @@ __license__ = 'Apache 2.0'
 import re
 import struct
 import time
+import binascii
 from dateutil import parser
 
 from mi.core.log import get_logger
 log = get_logger()
 
-from mi.dataset.parser.sio_mule_common import SioMuleParser, SIO_HEADER_MATCHER
+from mi.dataset.parser.sio_mule_common import SioParser, SIO_HEADER_MATCHER, SIO_HEADER_GROUP_ID, \
+    SIO_HEADER_GROUP_TIMESTAMP
 from mi.core.common import BaseEnum
-from mi.core.exceptions import  RecoverableSampleException, UnexpectedDataException
+from mi.core.exceptions import RecoverableSampleException, UnexpectedDataException
 from mi.core.instrument.data_particle import DataParticle, DataParticleKey, DataParticleValue
 
 
@@ -28,7 +30,7 @@ class DataParticleType(BaseEnum):
     SAMPLE = 'adcps_jln_sio_mule_instrument'
 
 
-class AdcpsParserDataParticleKey(BaseEnum):
+class AdcpsJlnSioDataParticleKey(BaseEnum):
     CONTROLLER_TIMESTAMP = 'sio_controller_timestamp'
     ENSEMBLE_NUMBER = 'ensemble_number'
     UNIT_ID = 'unit_id'
@@ -105,7 +107,7 @@ CRC_TABLE = [0, 1996959894, 3993919788, 2567524794, 124634137, 1886057615, 39156
              3009837614, 3294710456, 1567103746, 711928724, 3020668471, 3272380065, 1510334235, 755167117]
 
 
-class AdcpsParserDataParticle(DataParticle):
+class AdcpsJlnSioDataParticle(DataParticle):
     """
     Class for parsing data from the ADCPS instrument on a MSFM platform node
     """
@@ -119,7 +121,7 @@ class AdcpsParserDataParticle(DataParticle):
                  quality_flag=DataParticleValue.OK,
                  new_sequence=None):
 
-        super(AdcpsParserDataParticle, self).__init__(raw_data,
+        super(AdcpsJlnSioDataParticle, self).__init__(raw_data,
                                                       port_timestamp,
                                                       internal_timestamp,
                                                       preferred_timestamp,
@@ -130,10 +132,10 @@ class AdcpsParserDataParticle(DataParticle):
 
         if not self._data_match:
 
-            raise RecoverableSampleException("AdcpsParserDataParticle: No regex match of "
+            raise RecoverableSampleException("AdcpsJlnSioParserDataParticle: No regex match of "
                                              "parsed sample data [%s]" % self.raw_data[8:])
 
-        date_str = self.unpack_date(self._data_match.group(0)[11:19])
+        date_str = AdcpsJlnSioDataParticle.unpack_date(self._data_match.group(0)[11:19])
         # convert to unix
         converted_time = float(parser.parse(date_str).strftime("%s.%f"))
         adjusted_time = converted_time - time.timezone
@@ -173,7 +175,7 @@ class AdcpsParserDataParticle(DataParticle):
                 struct_format = '>'
 
                 for i in range(0, nbins):
-                    struct_format = struct_format + 'h'
+                    struct_format += 'h'
     
                 bin_len = nbins*2
                 vel_err = struct.unpack(struct_format,
@@ -186,7 +188,7 @@ class AdcpsParserDataParticle(DataParticle):
                                          match.group(0)[(STARTING_BYTES+(bin_len*3)):(STARTING_BYTES+(bin_len*4))])
     
                 checksum = struct.unpack('<H', match.group(0)[(STARTING_BYTES+(bin_len*4)):(36+(bin_len*4))])
-                calculated_checksum = self.calc_inner_checksum(match.group(0)[:-2])
+                calculated_checksum = AdcpsJlnSioDataParticle.calc_inner_checksum(match.group(0)[:-2])
 
                 if checksum[0] != calculated_checksum:
                     raise ValueError("Inner checksum %s does not match %s" % (checksum[0], calculated_checksum))
@@ -197,41 +199,42 @@ class AdcpsParserDataParticle(DataParticle):
                 raise RecoverableSampleException("Error (%s) while decoding parameters in data: [%s]" % 
                                                 (ex, match.group(0)))
     
-            result = [self._encode_value(AdcpsParserDataParticleKey.CONTROLLER_TIMESTAMP, self.raw_data[0:8],
-                                         AdcpsParserDataParticle.encode_int_16),
-                      self._encode_value(AdcpsParserDataParticleKey.ENSEMBLE_NUMBER, fields[2], int),
-                      self._encode_value(AdcpsParserDataParticleKey.UNIT_ID, fields[3], int),
-                      self._encode_value(AdcpsParserDataParticleKey.FIRMWARE_VERSION, fields[4], int),
-                      self._encode_value(AdcpsParserDataParticleKey.FIRMWARE_REVISION, fields[5], int),
-                      self._encode_value(AdcpsParserDataParticleKey.ADCPS_JLN_YEAR, date_fields[0], int),
-                      self._encode_value(AdcpsParserDataParticleKey.ADCPS_JLN_MONTH, date_fields[1], int),
-                      self._encode_value(AdcpsParserDataParticleKey.ADCPS_JLN_DAY, date_fields[2], int),
-                      self._encode_value(AdcpsParserDataParticleKey.ADCPS_JLN_HOUR, date_fields[3], int),
-                      self._encode_value(AdcpsParserDataParticleKey.ADCPS_JLN_MINUTE, date_fields[4], int),
-                      self._encode_value(AdcpsParserDataParticleKey.ADCPS_JLN_SECOND, date_fields[5], int),
-                      self._encode_value(AdcpsParserDataParticleKey.ADCPS_JLN_HSEC, date_fields[6], int),
-                      self._encode_value(AdcpsParserDataParticleKey.ADCPS_JLN_HEADING, fields[7], int),
-                      self._encode_value(AdcpsParserDataParticleKey.ADCPS_JLN_PITCH, fields[8], int),
-                      self._encode_value(AdcpsParserDataParticleKey.ADCPS_JLN_ROLL, fields[9], int),
-                      self._encode_value(AdcpsParserDataParticleKey.ADCPS_JLN_TEMP, fields[10], int),
-                      self._encode_value(AdcpsParserDataParticleKey.ADCPS_JLN_PRESSURE, fields[11], int),
-                      self._encode_value(AdcpsParserDataParticleKey.VELOCITY_PO_ERROR_FLAG, fields[12] & 1, int),
-                      self._encode_value(AdcpsParserDataParticleKey.VELOCITY_PO_UP_FLAG, (fields[12] & 2) >> 1, int),
-                      self._encode_value(AdcpsParserDataParticleKey.VELOCITY_PO_NORTH_FLAG, (fields[12] & 4) >> 2, int),
-                      self._encode_value(AdcpsParserDataParticleKey.VELOCITY_PO_EAST_FLAG, (fields[12] & 8) >> 3, int),
-                      self._encode_value(AdcpsParserDataParticleKey.SUBSAMPLING_PARAMETER, (fields[12] & 240) >> 4, int),
-                      self._encode_value(AdcpsParserDataParticleKey.ADCPS_JLN_STARTBIN, fields[13], int),
-                      self._encode_value(AdcpsParserDataParticleKey.ADCPS_JLN_BINS, fields[14], int),
-                      self._encode_value(AdcpsParserDataParticleKey.ADCPS_JLN_ERR, vel_err, list),
-                      self._encode_value(AdcpsParserDataParticleKey.ADCPS_JLN_UP, vel_up, list),
-                      self._encode_value(AdcpsParserDataParticleKey.ADCPS_JLN_NORTH, vel_north, list),
-                      self._encode_value(AdcpsParserDataParticleKey.ADCPS_JLN_EAST, vel_east, list)]
+            result = [self._encode_value(AdcpsJlnSioDataParticleKey.CONTROLLER_TIMESTAMP, self.raw_data[0:8],
+                                         AdcpsJlnSioDataParticle.encode_int_16),
+                      self._encode_value(AdcpsJlnSioDataParticleKey.ENSEMBLE_NUMBER, fields[2], int),
+                      self._encode_value(AdcpsJlnSioDataParticleKey.UNIT_ID, fields[3], int),
+                      self._encode_value(AdcpsJlnSioDataParticleKey.FIRMWARE_VERSION, fields[4], int),
+                      self._encode_value(AdcpsJlnSioDataParticleKey.FIRMWARE_REVISION, fields[5], int),
+                      self._encode_value(AdcpsJlnSioDataParticleKey.ADCPS_JLN_YEAR, date_fields[0], int),
+                      self._encode_value(AdcpsJlnSioDataParticleKey.ADCPS_JLN_MONTH, date_fields[1], int),
+                      self._encode_value(AdcpsJlnSioDataParticleKey.ADCPS_JLN_DAY, date_fields[2], int),
+                      self._encode_value(AdcpsJlnSioDataParticleKey.ADCPS_JLN_HOUR, date_fields[3], int),
+                      self._encode_value(AdcpsJlnSioDataParticleKey.ADCPS_JLN_MINUTE, date_fields[4], int),
+                      self._encode_value(AdcpsJlnSioDataParticleKey.ADCPS_JLN_SECOND, date_fields[5], int),
+                      self._encode_value(AdcpsJlnSioDataParticleKey.ADCPS_JLN_HSEC, date_fields[6], int),
+                      self._encode_value(AdcpsJlnSioDataParticleKey.ADCPS_JLN_HEADING, fields[7], int),
+                      self._encode_value(AdcpsJlnSioDataParticleKey.ADCPS_JLN_PITCH, fields[8], int),
+                      self._encode_value(AdcpsJlnSioDataParticleKey.ADCPS_JLN_ROLL, fields[9], int),
+                      self._encode_value(AdcpsJlnSioDataParticleKey.ADCPS_JLN_TEMP, fields[10], int),
+                      self._encode_value(AdcpsJlnSioDataParticleKey.ADCPS_JLN_PRESSURE, fields[11], int),
+                      self._encode_value(AdcpsJlnSioDataParticleKey.VELOCITY_PO_ERROR_FLAG, fields[12] & 1, int),
+                      self._encode_value(AdcpsJlnSioDataParticleKey.VELOCITY_PO_UP_FLAG, (fields[12] & 2) >> 1, int),
+                      self._encode_value(AdcpsJlnSioDataParticleKey.VELOCITY_PO_NORTH_FLAG, (fields[12] & 4) >> 2, int),
+                      self._encode_value(AdcpsJlnSioDataParticleKey.VELOCITY_PO_EAST_FLAG, (fields[12] & 8) >> 3, int),
+                      self._encode_value(AdcpsJlnSioDataParticleKey.SUBSAMPLING_PARAMETER, (fields[12] & 240) >> 4, int),
+                      self._encode_value(AdcpsJlnSioDataParticleKey.ADCPS_JLN_STARTBIN, fields[13], int),
+                      self._encode_value(AdcpsJlnSioDataParticleKey.ADCPS_JLN_BINS, fields[14], int),
+                      self._encode_value(AdcpsJlnSioDataParticleKey.ADCPS_JLN_ERR, vel_err, list),
+                      self._encode_value(AdcpsJlnSioDataParticleKey.ADCPS_JLN_UP, vel_up, list),
+                      self._encode_value(AdcpsJlnSioDataParticleKey.ADCPS_JLN_NORTH, vel_north, list),
+                      self._encode_value(AdcpsJlnSioDataParticleKey.ADCPS_JLN_EAST, vel_east, list)]
 
         log.trace('AdcpsParserDataParticle: particle=%s', result)
 
         return result
 
-    def unpack_date(self, data):
+    @staticmethod
+    def unpack_date(data):
         fields = struct.unpack('HBBBBBB', data)
         #log.debug('Unpacked data into date fields %s', fields)
         zulu_ts = "%04d-%02d-%02dT%02d:%02d:%02d.%02dZ" % (
@@ -243,7 +246,8 @@ class AdcpsParserDataParticle(DataParticle):
     def encode_int_16(hex_str):
         return int(hex_str, 16)
 
-    def calc_inner_checksum(self, data_block):
+    @staticmethod
+    def calc_inner_checksum(data_block):
         """
         calculate the checksum on the adcps data block, which occurs at the end of the data block
         """
@@ -260,26 +264,19 @@ class AdcpsParserDataParticle(DataParticle):
         return crc
 
 
-class AdcpsParser(SioMuleParser):
+class AdcpsJlnSioParser(SioParser):
 
     def __init__(self,
                  config,
-                 state,
                  stream_handle,
-                 state_callback,
-                 publish_callback,
                  exception_callback,
                  *args, **kwargs):
 
-        super(AdcpsParser, self).__init__(config,
-                                          stream_handle,
-                                          state,
-                                          self.sieve_function,
-                                          state_callback,
-                                          publish_callback,
-                                          exception_callback,
-                                          *args,
-                                          **kwargs)
+        super(AdcpsJlnSioParser, self).__init__(config,
+                                                stream_handle,
+                                                exception_callback,
+                                                *args,
+                                                **kwargs)
 
     def parse_chunks(self):
         """
@@ -298,7 +295,7 @@ class AdcpsParser(SioMuleParser):
             header_match = SIO_HEADER_MATCHER.match(chunk)
             sample_count = 0
 
-            if header_match.group(1) == 'AD':
+            if header_match.group(SIO_HEADER_GROUP_ID) == 'AD':
                 log.debug("matched chunk header %s", chunk[1:32])
 
                 # start after sio header
@@ -312,7 +309,7 @@ class AdcpsParser(SioMuleParser):
 
                     if data_wrapper_match:
 
-                        calculated_xml_checksum = self.calc_xml_checksum(data_wrapper_match.group(2))
+                        calculated_xml_checksum = AdcpsJlnSioParser.calc_xml_checksum(data_wrapper_match.group(2))
                         xml_checksum = int(data_wrapper_match.group(1), 16)
 
                         if calculated_xml_checksum == xml_checksum:
@@ -332,8 +329,9 @@ class AdcpsParser(SioMuleParser):
                                 log.debug('Found data match in chunk %s', chunk[1:32])
 
                                 # particle-ize the data block received, return the record
-                                sample = self._extract_sample(AdcpsParserDataParticle, None,
-                                                              header_match.group(3) + data_match.group(0),
+                                sample = self._extract_sample(AdcpsJlnSioDataParticle, None,
+                                                              header_match.group(SIO_HEADER_GROUP_TIMESTAMP) +
+                                                              data_match.group(0),
                                                               None)
                                 if sample:
                                     # create particle
@@ -341,12 +339,14 @@ class AdcpsParser(SioMuleParser):
                                     sample_count += 1
 
                             else:
-
+                                log.warn("Matched adcps xml wrapper but not inside data %s",
+                                         binascii.hexlify(data_wrapper_match.group(0)))
                                 self._exception_callback(RecoverableSampleException(
-                                    "Matched adcps xml wrapper but not data inside, %s" %
-                                    data_wrapper_match.group(0)))
+                                    "Matched adcps xml wrapper but not data inside %s" %
+                                    binascii.hexlify(data_wrapper_match.group(0))))
                         else:
-
+                            log.warn("Xml checksum %s does not match calculated %s",
+                                     xml_checksum, calculated_xml_checksum)
                             self._exception_callback(RecoverableSampleException(
                                 "Xml checksum %s does not match calculated %s" %
                                 (xml_checksum, calculated_xml_checksum)))
@@ -359,12 +359,14 @@ class AdcpsParser(SioMuleParser):
 
                         if end_idx_okay != chunk_idx:
 
-                            log.info("Unexpected data found from index %d to %d, %s", end_idx_okay,
-                                     chunk_idx, chunk[end_idx_okay:chunk_idx])
+                            log.warn("Unexpected data found from index %d to %d, %s", end_idx_okay,
+                                     chunk_idx, binascii.hexlify(chunk[end_idx_okay:chunk_idx]))
 
                             self._exception_callback(UnexpectedDataException("Unexpected data found %s" %
-                                                                             chunk[end_idx_okay:chunk_idx]))
+                                                     binascii.hexlify(chunk[end_idx_okay:chunk_idx])))
 
+                        log.warn("Found adcps error type %s exception %s", data_fail_match.group(1),
+                                 data_fail_match.group(2))
                         self._exception_callback(RecoverableSampleException("Found adcps error type %s exception %s" %
                                                                             (data_fail_match.group(1),
                                                                              data_fail_match.group(2))))
@@ -376,13 +378,12 @@ class AdcpsParser(SioMuleParser):
                         # if we have to skip bytes, we have unexplained data
                         chunk_idx += 1
 
-            self._chunk_sample_count.append(sample_count)
-
             (timestamp, chunk) = self._chunker.get_next_data()
 
         return result_particles
-    
-    def calc_xml_checksum(self, data_block):
+
+    @staticmethod
+    def calc_xml_checksum(data_block):
         """
         calculate the checksum to compare to the xml wrapper around adcps block of data
         """
@@ -392,6 +393,6 @@ class AdcpsParser(SioMuleParser):
 
         for i in range(0, len(data_block)):
             val = struct.unpack('<b', data_block[i])
-            table_idx = (crc ^ int(val[0])) &  255
+            table_idx = (crc ^ int(val[0])) & 255
             crc = CRC_TABLE[table_idx] ^ (crc >> 8)
         return crc
