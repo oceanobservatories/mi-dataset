@@ -17,7 +17,7 @@ from mi.dataset.parser.pco2w_abc_particles import Pco2wAbcInstrumentDataParticle
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 
 from mi.dataset.dataset_driver import DataSetDriver
-from mi.dataset.parser.pco2w_abc import Pco2wAbcParser
+from mi.dataset.parser.pco2w_abc import Pco2wAbcParser, Pco2wAbcParticleClassKey
 
 
 class Pco2wAbcDriver:
@@ -54,11 +54,11 @@ def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
         DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.pco2w_abc_particles',
         DataSetDriverConfigKeys.PARTICLE_CLASS: None,
         DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT: {
-            'instrument_particle_class': Pco2wAbcInstrumentDataParticle,
-            'instrument_blank_particle_class': Pco2wAbcInstrumentBlankDataParticle,
-            'power_particle_class': Pco2wAbcPowerDataParticle,
-            'metadata_particle_class': Pco2wAbcMetadataDataParticle,
-        }
+            Pco2wAbcParticleClassKey.METADATA_PARTICLE_CLASS: Pco2wAbcMetadataDataParticle,
+            Pco2wAbcParticleClassKey.POWER_PARTICLE_CLASS: Pco2wAbcPowerDataParticle,
+            Pco2wAbcParticleClassKey.INSTRUMENT_PARTICLE_CLASS: Pco2wAbcInstrumentDataParticle,
+            Pco2wAbcParticleClassKey.INSTRUMENT_BLANK_PARTICLE_CLASS: Pco2wAbcInstrumentBlankDataParticle,
+            }
     }
 
     driver = Pco2wAbcDriver(sourceFilePath, particleDataHdlrObj, parser_config)
