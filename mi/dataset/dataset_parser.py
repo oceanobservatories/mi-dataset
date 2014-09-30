@@ -1,4 +1,4 @@
-#!/usr/bin/env pythonmrg
+#!/usr/bin/env python
 
 """
 @package mi.dataset.parser A collection of parsers that strip data blocks
@@ -70,11 +70,6 @@ class Parser(object):
         self._exception_callback = exception_callback
         self._config = config
 
-        # It was originally thought that we wanted to start a new sequence for every new file
-        # But that has changed.  If we want this behavior back then we need to change
-        # this back to true
-        self._new_sequence = False
-
         # Build class from module and class name, then set the state
         if config.get(DataSetDriverConfigKeys.PARTICLE_CLASS) is not None:
             if config.get(DataSetDriverConfigKeys.PARTICLE_MODULE):
@@ -90,27 +85,12 @@ class Parser(object):
             else:
                 log.warn("Particle class is specified in config, but no particle module is specified in config")
 
-    def start_new_sequence(self):
-        """
-        Reset the seqeunce flag to true
-        """
-        self._new_sequence = True
-
     def get_records(self, max_count):
         """
         Returns a list of particles (following the instrument driver structure).
         """
         raise NotImplementedException("get_records() not overridden!")
 
-    def set_state(self, state):
-        """
-        Set the state of the last published data block.
-        @param state The structure that indicates what state the parser should
-           be in for this state. This structure should look like what was
-           published for the last state.
-        """
-        raise NotImplementedException("set_state() not overridden!")
-    
     def _publish_sample(self, samples):
         """
         Publish the samples with the given publishing callback.
@@ -120,7 +100,7 @@ class Parser(object):
             self._publish_callback(samples)
         else:
             self._publish_callback([samples])
-        
+
     def _extract_sample(self, particle_class, regex, raw_data, timestamp):
         """
         Extract sample from a response line if present and publish
@@ -139,10 +119,7 @@ class Parser(object):
         try:
             if regex is None or regex.match(raw_data):
                 particle = particle_class(raw_data, internal_timestamp=timestamp,
-                                          preferred_timestamp=DataParticleKey.INTERNAL_TIMESTAMP,
-                                          new_sequence=self._new_sequence)
-                if self._new_sequence:
-                    self._new_sequence = False
+                                          preferred_timestamp=DataParticleKey.INTERNAL_TIMESTAMP)
 
                 # need to actually parse the particle fields to find out of there are errors
                 particle.generate()
@@ -298,3 +275,54 @@ class BufferLoadingParser(Parser):
             nothing was parsed.
         """            
         raise NotImplementedException("Must write parse_chunks()!")
+
+
+class SimpleParser(Parser):
+
+    def __init__(self, config, stream_handle, exception_callback):
+        """
+        Initialize the simple parser, which does not use state or the chunker
+        and sieve functions.
+        @param config: The parser configuration dictionary
+        @param stream_handle: The stream handle of the file to parse
+        @param exception_callback: The callback to use when an exception occurs
+        """
+
+        # the record buffer which will store all parsed particles
+        self._record_buffer = []
+        # a flag indicating if the file has been parsed or not
+        self._file_parsed = False
+
+        super(SimpleParser, self).__init__(config,
+                                           stream_handle,
+                                           None,  # state not used
+                                           None,  # sieve_fn not used
+                                           None,  # state_callback not used
+                                           None,  # publish_callback not used
+                                           exception_callback)
+
+    def parse_file(self):
+        """
+        This method must be overridden.  This method should open and read the file and parser the data within, and at
+        the end of this method self._record_buffer will be filled with all the particles in the file.
+        """
+        raise NotImplementedException("parse_file() not overridden!")
+
+    def get_records(self, number_requested=1):
+        """
+        Initiate parsing the file if it has not been done already, and pop particles off the record buffer to
+        return as many as requested if they are available in the buffer.
+        @param number_requested the number of records requested to be returned
+        @return an array of particles, with a length of the number requested or less
+        """
+        particles_to_return = []
+
+        if number_requested > 0:
+            if self._file_parsed is False:
+                self.parse_file()
+                self._file_parsed = True
+
+        while len(particles_to_return) < number_requested and len(self._record_buffer) > 0:
+            particles_to_return.append(self._record_buffer.pop(0))
+
+        return particles_to_return

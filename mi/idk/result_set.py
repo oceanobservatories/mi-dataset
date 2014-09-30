@@ -79,6 +79,7 @@ import re
 import yaml
 import ntplib
 import time
+import numpy
 from dateutil import parser
 
 from mi.core.instrument.data_particle import DataParticle
@@ -115,7 +116,7 @@ class ResultSet(object):
 
         store verification result in the object and
         return success or failure.
-        @param particls: list of particles to verify.
+        @param particles: list of particles to verify.
         @return True if verification successful, False otherwise
         """
         self._clear_report()
@@ -303,7 +304,7 @@ class ResultSet(object):
             else:
                 # if not a string, timestamp should alread be in ntp
                 expected = expected_time
-            ts_diff =  abs(particle_timestamp - expected)
+            ts_diff = abs(particle_timestamp - expected)
             log.debug("verify timestamp: abs(%s - %s) = %s", expected, particle_timestamp, ts_diff)
 
             if ts_diff > allow_diff:
@@ -314,7 +315,7 @@ class ResultSet(object):
         # in get_particle_data_errors if so
         particle_stream = particle_dict['stream_name']
         if self._result_set_header['particle_type'] != 'MULTIPLE':
-            expected_stream =  self._result_set_header['particle_type']
+            expected_stream = self._result_set_header['particle_type']
             if particle_stream != expected_stream:
                 errors.append("expected stream name mismatch: %s != %s" %
                               (expected_stream, particle_stream))
@@ -376,13 +377,14 @@ class ResultSet(object):
                 expected_value = particle_def[key]
                 particle_value = pv[key]
                 log.debug("Verify value for '%s'", key)
-                e = self._verify_value(expected_value, particle_value)
+                e = ResultSet._verify_value(expected_value, particle_value)
                 if e:
                     errors.append("'%s' %s"  % (key, e))
 
         return errors
 
-    def _verify_value(self, expected_value, particle_value):
+    @staticmethod
+    def _verify_value(expected_value, particle_value):
         """
         Verify a value matches what we expect.  If the expected value (from the yaml)
         is a dict then we expect the value to be in a 'value' field.  Otherwise just
@@ -406,9 +408,106 @@ class ResultSet(object):
             log.debug("rounded value to %s", particle_value)
 
         if ex_value != particle_value:
-            return "value mismatch, %s != %s (decimals may be rounded)" % (ex_value, particle_value)
+            # check for nans, two nans will not equal each other but in this
+            # case they are considered equal
+            if ResultSet._nan_equal_compare(ex_value, particle_value):
+                return None
+
+            return "value mismatch, %s != %s (decimals may be rounded)" % \
+                   (ex_value, particle_value)
 
         return None
+
+    @staticmethod
+    def _nan_equal_compare(expected, received):
+        """
+        Compare the expected and recieved values, considering two NaNs to be equal.
+        If the values are equal True is returned, if they are not False is returned
+        @param expected: Expected value
+        @param received: Received value
+        @return: True if expected and received match including NaNs
+        """
+        # check for a list
+        if ResultSet._are_both_lists(expected, received):
+
+            # check for list within a list
+            if ResultSet._are_both_lists(expected[0], received[0]):
+                # confirm lists are equal size and contain numbers, if not they
+                # don't need checking for nans
+                if len(expected) == len(received) and \
+                        ResultSet._are_both_numbers(expected[0][0], received[0][0]):
+                    # loop and compare each list within a list
+                    all_lists_equal = True
+                    for i in range(0, len(expected)):
+                        if not ResultSet._is_equal_nan_list(expected[i], received[i]):
+                            all_lists_equal = False
+                            break
+                    if all_lists_equal:
+                        return True
+
+            # check for a list of numbers
+            elif ResultSet._are_both_numbers(expected[0], received[0]):
+                # this is a single list of float or ints
+                if ResultSet._is_equal_nan_list(expected, received):
+                    return True
+
+        # check two individual float or ints for nans
+        elif ResultSet._are_both_numbers(expected, received):
+            if numpy.isnan(expected) and numpy.isnan(received):
+                # found two Nans, they match
+                return True
+        return False
+
+    @staticmethod
+    def _are_both_lists(expected, received):
+        """
+        Compare if the expected and recieved values are both lists
+        @param expected: expected value
+        @param received: received value
+        @return: True if both lists, false if not
+        """
+        if isinstance(expected, list) and isinstance(received, list):
+            return True
+        return False
+
+    @staticmethod
+    def _are_both_numbers(expected, received):
+        """
+        Compare if the expected and recieved values are both floats or ints
+        @param expected: expected value
+        @param received: received value
+        @return: True if both lists, false if not
+        """
+        if isinstance(expected, (float, int)) and isinstance(received, (float, int)):
+            return True
+        return False
+
+    @staticmethod
+    def _is_equal_nan_list(expected_list, received_list):
+        """
+        Compare two lists that contain nan values, return True if they match,
+        False if they do not, considering two NaNs to be equal in values
+        @param expected_list: a list of expected values
+        @param received_list: the recieved list of values
+        @return: True if lists match, False if lists don't match
+        """
+        # first check list length, if this doesn't match the lists don't match
+        if len(expected_list) == len(received_list):
+            # get numpy array of True / False matching nan
+            isnan_ex_value = numpy.isnan(expected_list)
+            isnan_particle_value = numpy.isnan(received_list)
+            # make a new list containing only non-nan values
+            ex_val_non_nan = []
+            particle_non_nan = []
+            for i in range(0, len(expected_list)):
+                if not isnan_ex_value[i]:
+                    ex_val_non_nan.append(expected_list[i])
+                if not isnan_particle_value[i]:
+                    particle_non_nan.append(received_list[i])
+            if ex_val_non_nan == particle_non_nan:
+                # all non-nan values match
+                return True
+        return False
 
     def _string_to_ntp_date_time(self, datestr):
         """

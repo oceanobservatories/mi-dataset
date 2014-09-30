@@ -2,26 +2,26 @@
 
 """
 @package mi.dataset.parser.test.test_nutnr_b_dcl_conc
-@file marine-integrations/mi/dataset/parser/test/test_nutnr_b_dcl_conc.py
-@author Steve Myerson (Raytheon)
+@file mi/dataset/parser/test/test_nutnr_b_dcl_conc.py
+@author Steve Myerson (Raytheon), Mark Worden
 @brief Test code for a nutnr_b_dcl_conc data parser
 
 Files used for testing:
 
 Filename             Blocks  Instrument Records
-20010101.nutnr1.log     1         0
-20020125.nutnr2.log     1        25
-20031129.nutnr3.log     2        11, 29
-20040509.nutnr4.log     3        4, 5, 9
-20051220.nutnr5.log     2        40, 75
-20061225.nutnr6.log     3        50, 80, 125
+20010101.nutnr_b_dcl_conc.log     1         0
+20020125.nutnr_b_dcl_conc.log     1        25
+20031129.nutnr_b_dcl_conc.log     2        11, 29
+20040509.nutnr_b_dcl_conc.log     3        4, 5, 9
+20051220.nutnr_b_dcl_conc.log     2        40, 75
+20061225.nutnr_b_dcl_conc.log     3        50, 80, 125
 
-19990401.nutnr99.log    1        19 valid, 1 invalid frame type
-19980401.nutnr98.log    1        20, metadata incomplete
-19970401.nutnr97.log    1        No valid records (various fields incorrect)
+19990401.nutnr_b_dcl_conc.log    1        19 valid, 1 invalid frame type
+19980401.nutnr_b_dcl_conc.log    1        20, metadata incomplete
+19970401.nutnr_b_dcl_conc.log    1        No valid records (various fields incorrect)
 
 Real file:
-20140430.nutnr.log has 8 NDC records and 56 NLC records.
+20140430.nutnr_b_dcl_conc.log has 8 NDC records and 56 NLC records.
 Should generate 8 metadata particles and 64 instrument particles.
 
 Each block produces 1 metadata particle unless there are no instrument records.
@@ -31,14 +31,16 @@ Each instrument record produces 1 instrument particle.
 import os
 from nose.plugins.attrib import attr
 
-from mi.core.log import get_logger; log = get_logger()
+from mi.core.log import get_logger
+log = get_logger()
 
 from mi.dataset.test.test_parser import ParserUnitTestCase
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 
 from mi.dataset.parser.nutnr_b_dcl_conc import \
     NutnrBDclConcRecoveredParser, \
-    NutnrBDclConcTelemeteredParser, \
+    NutnrBDclConcTelemeteredParser
+from mi.dataset.parser.nutnr_b_particles import \
     NutnrBDclConcRecoveredInstrumentDataParticle, \
     NutnrBDclConcTelemeteredInstrumentDataParticle, \
     NutnrBDclConcRecoveredMetadataDataParticle, \
@@ -49,18 +51,19 @@ from mi.idk.config import Config
 RESOURCE_PATH = os.path.join(Config().base_dir(),
     'mi', 'dataset', 'driver', 'nutnr_b', 'dcl_conc', 'resource')
 
-MODULE_NAME = 'mi.dataset.parser.nutnr_b_dcl_conc'
+MODULE_NAME = 'mi.dataset.parser.nutnr_b_particles'
 
-FILE1 = '20010101.nutnr1.log'
-FILE2 = '20020125.nutnr2.log'
-FILE3 = '20031129.nutnr3.log'
-FILE4 = '20040509.nutnr4.log'
-FILE5 = '20051220.nutnr5.log'
-FILE6 = '20061225.nutnr6.log'
-FILE_INVALID_FRAME_TYPE = '19990401.nutnr99.log'
-FILE_MISSING_METADATA = '19980401.nutnr98.log'
-FILE_INVALID_FIELDS = '19970401.nutnr97.log'
-FILE_REAL = '20140430.nutnr.log'
+FILE1 = '20010101.nutnr_b_dcl_conc.log'
+FILE2 = '20020125.nutnr_b_dcl_conc.log'
+FILE3 = '20031129.nutnr_b_dcl_conc.log'
+FILE4 = '20040509.nutnr_b_dcl_conc.log'
+FILE5 = '20051220.nutnr_b_dcl_conc.log'
+FILE6 = '20061225.nutnr_b_dcl_conc.log'
+FILE_INVALID_FRAME_TYPE = '19990401.nutnr_b_dcl_conc.log'
+FILE_MISSING_METADATA = '19980401.nutnr_b_dcl_conc.log'
+FILE_INVALID_FIELDS = '19970401.nutnr_b_dcl_conc.log'
+FILE_REAL = '20140430.nutnr_b_dcl_conc.log'
+SECOND_BLOCK_IN_DATA_BLOCK_FILE = '20040901.nutnr_b_dcl_conc.log'
 
 EXPECTED_PARTICLES1 = 0
 EXPECTED_PARTICLES2 = 26
@@ -72,24 +75,26 @@ EXPECTED_META_PARTICLES_REAL = 8
 EXPECTED_INST_PARTICLES_REAL = 64
 
 EXPECTED_PARTICLES_INVALID_FRAME_TYPE = 18
-EXPECTED_EXCEPTIONS_INVALID_FRAME_TYPE = 2
+EXPECTED_EXCEPTIONS_INVALID_FRAME_TYPE = 3
 EXPECTED_PARTICLES_MISSING_METADATA = 0
-EXPECTED_EXCEPTIONS_MISSING_METADATA = 1
+EXPECTED_EXCEPTIONS_MISSING_METADATA = 3
 EXPECTED_PARTICLES_INVALID_FIELDS = 2
-EXPECTED_EXCEPTIONS_INVALID_FIELDS = 0
+EXPECTED_EXCEPTIONS_INVALID_FIELDS = 20
+EXPECTED_PARTICLES_SECOND_BLOCK_IN_DATA_BLOCK = 7
+EXPECTED_EXCEPTIONS_SECOND_BLOCK_IN_DATA_BLOCK = 0
 
-REC_YML2 = 'rec_20020125.nutnr2.yml'
-REC_YML3 = 'rec_20031129.nutnr3.yml'
-REC_YML4 = 'rec_20040509.nutnr4.yml'
-REC_YML5 = 'rec_20051220.nutnr5.yml'
-REC_YML6 = 'rec_20061225.nutnr6.yml'
-REC_YML_INVALID_FIELDS = 'rec_19970401.nutnr97.yml'
-TEL_YML2 = 'tel_20020125.nutnr2.yml'
-TEL_YML3 = 'tel_20031129.nutnr3.yml'
-TEL_YML4 = 'tel_20040509.nutnr4.yml'
-TEL_YML5 = 'tel_20051220.nutnr5.yml'
-TEL_YML6 = 'tel_20061225.nutnr6.yml'
-TEL_YML_INVALID_FIELDS = 'tel_19970401.nutnr97.yml'
+REC_YML2 = 'rec_20020125.nutnr_b_dcl_conc.yml'
+REC_YML3 = 'rec_20031129.nutnr_b_dcl_conc.yml'
+REC_YML4 = 'rec_20040509.nutnr_b_dcl_conc.yml'
+REC_YML5 = 'rec_20051220.nutnr_b_dcl_conc.yml'
+REC_YML6 = 'rec_20061225.nutnr_b_dcl_conc.yml'
+REC_YML_INVALID_FIELDS = 'rec_19970401.nutnr_b_dcl_conc.yml'
+TEL_YML2 = 'tel_20020125.nutnr_b_dcl_conc.yml'
+TEL_YML3 = 'tel_20031129.nutnr_b_dcl_conc.yml'
+TEL_YML4 = 'tel_20040509.nutnr_b_dcl_conc.yml'
+TEL_YML5 = 'tel_20051220.nutnr_b_dcl_conc.yml'
+TEL_YML6 = 'tel_20061225.nutnr_b_dcl_conc.yml'
+TEL_YML_INVALID_FIELDS = 'tel_19970401.nutnr_b_dcl_conc.yml'
 
 HAPPY_PATH_TABLE = [
     (FILE2, EXPECTED_PARTICLES2, REC_YML2, TEL_YML2),
@@ -110,17 +115,19 @@ class NutnrBDclConcParserUnitTestCase(ParserUnitTestCase):
         """
         This function creates a NutnrBDclConc parser for recovered data.
         """
-        return NutnrBDclConcRecoveredParser(self.rec_config,
-            file_handle, new_state, self.rec_state_callback,
-            self.rec_pub_callback, self.rec_exception_callback)
+        return NutnrBDclConcRecoveredParser(
+            self.rec_config,
+            file_handle, lambda state, ingested : None,
+            lambda data : None, self.rec_exception_callback)
 
     def create_tel_parser(self, file_handle, new_state=None):
         """
         This function creates a NutnrBDclConc parser for telemetered data.
         """
-        return NutnrBDclConcTelemeteredParser(self.tel_config,
-            file_handle, new_state, self.rec_state_callback,
-            self.tel_pub_callback, self.tel_exception_callback)
+        return NutnrBDclConcTelemeteredParser(
+            self.tel_config,
+            file_handle, lambda state, ingested : None,
+            lambda data : None, self.tel_exception_callback)
 
     def open_file(self, filename):
         return open(os.path.join(RESOURCE_PATH, filename), mode='r')
@@ -296,7 +303,37 @@ class NutnrBDclConcParserUnitTestCase(ParserUnitTestCase):
         self.assertEqual(self.tel_exceptions_detected, expected_exceptions)
         in_file.close()
 
+        log.info("Num exceptions: %d, %d", self.rec_exceptions_detected, self.tel_exceptions_detected)
+
         log.debug('===== END TEST MISSING METADATA =====')
+
+    def test_second_nitrate_dark_in_data_block(self):
+        """
+        Verify that no particles are produced if the input file
+        has no instrument records.
+        """
+        log.debug('===== START TEST SECOND DARK IN DATA BLOCK =====')
+
+        input_file = SECOND_BLOCK_IN_DATA_BLOCK_FILE
+        expected_particles = EXPECTED_PARTICLES_SECOND_BLOCK_IN_DATA_BLOCK
+        expected_exceptions = EXPECTED_EXCEPTIONS_SECOND_BLOCK_IN_DATA_BLOCK
+        total_records = expected_particles + 1
+
+        in_file = self.open_file(input_file)
+        parser = self.create_rec_parser(in_file)
+        particles = parser.get_records(total_records)
+        self.assertEqual(len(particles), expected_particles)
+        self.assertEqual(self.rec_exceptions_detected, expected_exceptions)
+        in_file.close()
+
+        in_file = self.open_file(input_file)
+        parser = self.create_tel_parser(in_file)
+        particles = parser.get_records(total_records)
+        self.assertEqual(len(particles), expected_particles)
+        self.assertEqual(self.tel_exceptions_detected, expected_exceptions)
+        in_file.close()
+
+        log.debug('===== END TEST SECOND DARK IN DATA BLOCK =====')
 
     def test_no_particles(self):
         """

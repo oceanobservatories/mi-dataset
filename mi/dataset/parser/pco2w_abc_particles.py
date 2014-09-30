@@ -1,13 +1,10 @@
 
 __author__ = 'Mark Worden'
 
-import string
-
 from mi.core.log import get_logger
 log = get_logger()
 from mi.core.common import BaseEnum
 from mi.core.instrument.data_particle import DataParticle, DataParticleKey
-from mi.core.exceptions import SampleException
 
 
 class DataParticleType(BaseEnum):
@@ -16,7 +13,7 @@ class DataParticleType(BaseEnum):
     PCO2W_ABC_METADATA = 'pco2w_abc_metadata'
     PCO2W_ABC_POWER = 'pco2w_abc_power'
     PCO2W_ABC_DCL_INSTRUMENT = 'pco2w_abc_dcl_instrument'
-    PCO2W_ABC_DCL_INSTRUMENT_RECOVERED  = 'pco2w_abc_dcl_instrument_recovered '
+    PCO2W_ABC_DCL_INSTRUMENT_RECOVERED = 'pco2w_abc_dcl_instrument_recovered'
     PCO2W_ABC_DCL_INSTRUMENT_BLANK = 'pco2w_abc_dcl_instrument_blank'
     PCO2W_ABC_DCL_INSTRUMENT_BLANK_RECOVERED = 'pco2w_abc_dcl_instrument_blank_recovered'
     PCO2W_ABC_DCL_METADATA = 'pco2w_abc_dcl_metadata'
@@ -91,7 +88,7 @@ class Pco2wAbcDclBaseDataParticle(Pco2wAbcBaseDataParticle):
         particle_parameters.append(
             self._encode_value(Pco2wAbcDataParticleKey.DCL_CONTROLLER_TIMESTAMP,
                                self.raw_data[Pco2wAbcDataParticleKey.DCL_CONTROLLER_TIMESTAMP],
-                               string))
+                               str))
         particle_parameters.append(
             self._encode_value(Pco2wAbcDataParticleKey.UNIQUE_ID,
                                self.raw_data[Pco2wAbcDataParticleKey.UNIQUE_ID],
@@ -370,6 +367,6 @@ class Pco2wAbcDclPowerTelemeteredDataParticle(Pco2wAbcDclPowerDataParticle):
     _data_particle_type = DataParticleType.PCO2W_ABC_DCL_POWER
 
 
-class Pco2wAbcDclPowerRecoveredDataParticle(Pco2wAbcPowerDataParticle):
+class Pco2wAbcDclPowerRecoveredDataParticle(Pco2wAbcDclPowerDataParticle):
 
     _data_particle_type = DataParticleType.PCO2W_ABC_DCL_POWER_RECOVERED
