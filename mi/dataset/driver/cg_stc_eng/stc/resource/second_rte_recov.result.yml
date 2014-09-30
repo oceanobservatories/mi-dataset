@@ -2,7 +2,7 @@
 
 header:
   particle_object: RteODclParserRecoveredDataParticle
-  particle_type: rte_o_dcl_recovered
+  particle_type: rte_o_dcl_instrument_recovered
 
 data:
   - _index: 1
