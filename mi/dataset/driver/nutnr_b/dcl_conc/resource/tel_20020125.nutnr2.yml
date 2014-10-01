@@ -1,0 +1,393 @@
+header:
+  particle_object: MULTIPLE
+  particle_type: MULTIPLE
+
+data:
+  - _index:  1
+    particle_object: NutnrBDclConcTelemeteredMetadataDataParticle
+    particle_type: nutnr_b_dcl_conc_metadata
+    internal_timestamp: '2002-01-25T05:07:10Z'
+    dcl_controller_timestamp: '2002/01/25 05:07:35.953'
+    serial_number: '2002'
+    startup_time: 1011935237
+    spec_on_time: 1011935244
+    spec_powered_time: 1011935246
+    lamp_on_time: 1011935248
+    lamp_powered_time: 1011935251
+    data_log_file: 'DATA/LOG_20020125.LOG'
+    internal_timestamp: '2002-01-25T05:07:10Z'
+  - _index:  2
+    particle_object: NutnrBDclConcTelemeteredInstrumentDataParticle
+    particle_type: nutnr_b_dcl_conc_instrument
+    internal_timestamp: '2002-01-25T05:07:35Z'
+    dcl_controller_timestamp: '2002/01/25 05:07:35.953'
+    frame_header: 'SAT'
+    frame_type: 'NDC'
+    serial_number: '2002'
+    date_of_sample: 2002025
+    time_of_sample: 0.000000
+    nitrate_concentration: -13.33
+    aux_fitting_1: -26.66
+    aux_fitting_2: -40.00
+    aux_fitting_3: -53.33
+    rms_error: 0.000000
+  - _index:  3
+    particle_object: NutnrBDclConcTelemeteredInstrumentDataParticle
+    particle_type: nutnr_b_dcl_conc_instrument
+    internal_timestamp: '2002-01-25T05:07:38Z'
+    dcl_controller_timestamp: '2002/01/25 05:07:38.311'
+    frame_header: 'SAT'
+    frame_type: 'NLC'
+    serial_number: '2002'
+    date_of_sample: 2002025
+    time_of_sample: 0.135790
+    nitrate_concentration: -12.22
+    aux_fitting_1: -24.44
+    aux_fitting_2: -36.66
+    aux_fitting_3: -48.88
+    rms_error: 6.666666
+  - _index:  4
+    particle_object: NutnrBDclConcTelemeteredInstrumentDataParticle
+    particle_type: nutnr_b_dcl_conc_instrument
+    internal_timestamp: '2002-01-25T05:07:40Z'
+    dcl_controller_timestamp: '2002/01/25 05:07:40.669'
+    frame_header: 'SAT'
+    frame_type: 'NLC'
+    serial_number: '2002'
+    date_of_sample: 2002025
+    time_of_sample: 0.271580
+    nitrate_concentration: -11.11
+    aux_fitting_1: -22.22
+    aux_fitting_2: -33.33
+    aux_fitting_3: -44.44
+    rms_error: 13.333332
+  - _index:  5
+    particle_object: NutnrBDclConcTelemeteredInstrumentDataParticle
+    particle_type: nutnr_b_dcl_conc_instrument
+    internal_timestamp: '2002-01-25T05:07:43Z'
+    dcl_controller_timestamp: '2002/01/25 05:07:43.027'
+    frame_header: 'SAT'
+    frame_type: 'NLC'
+    serial_number: '2002'
+    date_of_sample: 2002025
+    time_of_sample: 0.407370
+    nitrate_concentration: -10.00
+    aux_fitting_1: -20.00
+    aux_fitting_2: -30.00
+    aux_fitting_3: -40.00
+    rms_error: 19.999998
+  - _index:  6
+    particle_object: NutnrBDclConcTelemeteredInstrumentDataParticle
+    particle_type: nutnr_b_dcl_conc_instrument
+    internal_timestamp: '2002-01-25T05:07:45Z'
+    dcl_controller_timestamp: '2002/01/25 05:07:45.385'
+    frame_header: 'SAT'
+    frame_type: 'NLC'
+    serial_number: '2002'
+    date_of_sample: 2002025
+    time_of_sample: 0.543160
+    nitrate_concentration: -8.89
+    aux_fitting_1: -17.78
+    aux_fitting_2: -26.66
+    aux_fitting_3: -35.55
+    rms_error: 26.666664
+  - _index:  7
+    particle_object: NutnrBDclConcTelemeteredInstrumentDataParticle
+    particle_type: nutnr_b_dcl_conc_instrument
+    internal_timestamp: '2002-01-25T05:07:47Z'
+    dcl_controller_timestamp: '2002/01/25 05:07:47.743'
+    frame_header: 'SAT'
+    frame_type: 'NLC'
+    serial_number: '2002'
+    date_of_sample: 2002025
+    time_of_sample: 0.678950
+    nitrate_concentration: -7.78
+    aux_fitting_1: -15.55
+    aux_fitting_2: -23.33
+    aux_fitting_3: -31.11
+    rms_error: 33.333330
+  - _index:  8
+    particle_object: NutnrBDclConcTelemeteredInstrumentDataParticle
+    particle_type: nutnr_b_dcl_conc_instrument
+    internal_timestamp: '2002-01-25T05:07:50Z'
+    dcl_controller_timestamp: '2002/01/25 05:07:50.101'
+    frame_header: 'SAT'
+    frame_type: 'NLC'
+    serial_number: '2002'
+    date_of_sample: 2002025
+    time_of_sample: 0.814740
+    nitrate_concentration: -6.67
+    aux_fitting_1: -13.33
+    aux_fitting_2: -20.00
+    aux_fitting_3: -26.66
+    rms_error: 39.999996
+  - _index:  9
+    particle_object: NutnrBDclConcTelemeteredInstrumentDataParticle
+    particle_type: nutnr_b_dcl_conc_instrument
+    internal_timestamp: '2002-01-25T05:07:52Z'
+    dcl_controller_timestamp: '2002/01/25 05:07:52.459'
+    frame_header: 'SAT'
+    frame_type: 'NLC'
+    serial_number: '2002'
+    date_of_sample: 2002025
+    time_of_sample: 0.950530
+    nitrate_concentration: -5.55
+    aux_fitting_1: -11.11
+    aux_fitting_2: -16.67
+    aux_fitting_3: -22.22
+    rms_error: 46.666662
+  - _index:  10
+    particle_object: NutnrBDclConcTelemeteredInstrumentDataParticle
+    particle_type: nutnr_b_dcl_conc_instrument
+    internal_timestamp: '2002-01-25T05:07:54Z'
+    dcl_controller_timestamp: '2002/01/25 05:07:54.817'
+    frame_header: 'SAT'
+    frame_type: 'NLC'
+    serial_number: '2002'
+    date_of_sample: 2002025
+    time_of_sample: 1.086320
+    nitrate_concentration: -4.44
+    aux_fitting_1: -8.89
+    aux_fitting_2: -13.33
+    aux_fitting_3: -17.78
+    rms_error: 53.333328
+  - _index:  11
+    particle_object: NutnrBDclConcTelemeteredInstrumentDataParticle
+    particle_type: nutnr_b_dcl_conc_instrument
+    internal_timestamp: '2002-01-25T05:07:57Z'
+    dcl_controller_timestamp: '2002/01/25 05:07:57.175'
+    frame_header: 'SAT'
+    frame_type: 'NLC'
+    serial_number: '2002'
+    date_of_sample: 2002025
+    time_of_sample: 1.222110
+    nitrate_concentration: -3.33
+    aux_fitting_1: -6.67
+    aux_fitting_2: -10.00
+    aux_fitting_3: -13.33
+    rms_error: 59.999994
+  - _index:  12
+    particle_object: NutnrBDclConcTelemeteredInstrumentDataParticle
+    particle_type: nutnr_b_dcl_conc_instrument
+    internal_timestamp: '2002-01-25T05:07:59Z'
+    dcl_controller_timestamp: '2002/01/25 05:07:59.533'
+    frame_header: 'SAT'
+    frame_type: 'NLC'
+    serial_number: '2002'
+    date_of_sample: 2002025
+    time_of_sample: 1.357900
+    nitrate_concentration: -2.22
+    aux_fitting_1: -4.44
+    aux_fitting_2: -6.67
+    aux_fitting_3: -8.89
+    rms_error: 66.666660
+  - _index:  13
+    particle_object: NutnrBDclConcTelemeteredInstrumentDataParticle
+    particle_type: nutnr_b_dcl_conc_instrument
+    internal_timestamp: '2002-01-25T05:08:01Z'
+    dcl_controller_timestamp: '2002/01/25 05:08:01.891'
+    frame_header: 'SAT'
+    frame_type: 'NLC'
+    serial_number: '2002'
+    date_of_sample: 2002025
+    time_of_sample: 1.493690
+    nitrate_concentration: -1.11
+    aux_fitting_1: -2.22
+    aux_fitting_2: -3.33
+    aux_fitting_3: -4.44
+    rms_error: 73.333326
+  - _index:  14
+    particle_object: NutnrBDclConcTelemeteredInstrumentDataParticle
+    particle_type: nutnr_b_dcl_conc_instrument
+    internal_timestamp: '2002-01-25T05:08:04Z'
+    dcl_controller_timestamp: '2002/01/25 05:08:04.249'
+    frame_header: 'SAT'
+    frame_type: 'NLC'
+    serial_number: '2002'
+    date_of_sample: 2002025
+    time_of_sample: 1.629480
+    nitrate_concentration: 0.00
+    aux_fitting_1: 0.00
+    aux_fitting_2: -0.00
+    aux_fitting_3: 0.00
+    rms_error: 79.999992
+  - _index:  15
+    particle_object: NutnrBDclConcTelemeteredInstrumentDataParticle
+    particle_type: nutnr_b_dcl_conc_instrument
+    internal_timestamp: '2002-01-25T05:08:06Z'
+    dcl_controller_timestamp: '2002/01/25 05:08:06.607'
+    frame_header: 'SAT'
+    frame_type: 'NLC'
+    serial_number: '2002'
+    date_of_sample: 2002025
+    time_of_sample: 1.765270
+    nitrate_concentration: 1.11
+    aux_fitting_1: 2.22
+    aux_fitting_2: 3.33
+    aux_fitting_3: 4.44
+    rms_error: 86.666658
+  - _index:  16
+    particle_object: NutnrBDclConcTelemeteredInstrumentDataParticle
+    particle_type: nutnr_b_dcl_conc_instrument
+    internal_timestamp: '2002-01-25T05:08:08Z'
+    dcl_controller_timestamp: '2002/01/25 05:08:08.965'
+    frame_header: 'SAT'
+    frame_type: 'NLC'
+    serial_number: '2002'
+    date_of_sample: 2002025
+    time_of_sample: 1.901060
+    nitrate_concentration: 2.22
+    aux_fitting_1: 4.44
+    aux_fitting_2: 6.67
+    aux_fitting_3: 8.89
+    rms_error: 93.333324
+  - _index:  17
+    particle_object: NutnrBDclConcTelemeteredInstrumentDataParticle
+    particle_type: nutnr_b_dcl_conc_instrument
+    internal_timestamp: '2002-01-25T05:08:11Z'
+    dcl_controller_timestamp: '2002/01/25 05:08:11.323'
+    frame_header: 'SAT'
+    frame_type: 'NLC'
+    serial_number: '2002'
+    date_of_sample: 2002025
+    time_of_sample: 2.036850
+    nitrate_concentration: 3.33
+    aux_fitting_1: 6.67
+    aux_fitting_2: 10.00
+    aux_fitting_3: 13.33
+    rms_error: 99.999990
+  - _index:  18
+    particle_object: NutnrBDclConcTelemeteredInstrumentDataParticle
+    particle_type: nutnr_b_dcl_conc_instrument
+    internal_timestamp: '2002-01-25T05:08:13Z'
+    dcl_controller_timestamp: '2002/01/25 05:08:13.681'
+    frame_header: 'SAT'
+    frame_type: 'NLC'
+    serial_number: '2002'
+    date_of_sample: 2002025
+    time_of_sample: 2.172640
+    nitrate_concentration: 4.44
+    aux_fitting_1: 8.89
+    aux_fitting_2: 13.33
+    aux_fitting_3: 17.78
+    rms_error: 106.666656
+  - _index:  19
+    particle_object: NutnrBDclConcTelemeteredInstrumentDataParticle
+    particle_type: nutnr_b_dcl_conc_instrument
+    internal_timestamp: '2002-01-25T05:08:16Z'
+    dcl_controller_timestamp: '2002/01/25 05:08:16.039'
+    frame_header: 'SAT'
+    frame_type: 'NLC'
+    serial_number: '2002'
+    date_of_sample: 2002025
+    time_of_sample: 2.308430
+    nitrate_concentration: 5.55
+    aux_fitting_1: 11.11
+    aux_fitting_2: 16.66
+    aux_fitting_3: 22.22
+    rms_error: 113.333322
+  - _index:  20
+    particle_object: NutnrBDclConcTelemeteredInstrumentDataParticle
+    particle_type: nutnr_b_dcl_conc_instrument
+    internal_timestamp: '2002-01-25T05:08:18Z'
+    dcl_controller_timestamp: '2002/01/25 05:08:18.397'
+    frame_header: 'SAT'
+    frame_type: 'NLC'
+    serial_number: '2002'
+    date_of_sample: 2002025
+    time_of_sample: 2.444220
+    nitrate_concentration: 6.67
+    aux_fitting_1: 13.33
+    aux_fitting_2: 20.00
+    aux_fitting_3: 26.66
+    rms_error: 119.999988
+  - _index:  21
+    particle_object: NutnrBDclConcTelemeteredInstrumentDataParticle
+    particle_type: nutnr_b_dcl_conc_instrument
+    internal_timestamp: '2002-01-25T05:08:20Z'
+    dcl_controller_timestamp: '2002/01/25 05:08:20.755'
+    frame_header: 'SAT'
+    frame_type: 'NLC'
+    serial_number: '2002'
+    date_of_sample: 2002025
+    time_of_sample: 2.580010
+    nitrate_concentration: 7.78
+    aux_fitting_1: 15.55
+    aux_fitting_2: 23.33
+    aux_fitting_3: 31.11
+    rms_error: 126.666654
+  - _index:  22
+    particle_object: NutnrBDclConcTelemeteredInstrumentDataParticle
+    particle_type: nutnr_b_dcl_conc_instrument
+    internal_timestamp: '2002-01-25T05:08:23Z'
+    dcl_controller_timestamp: '2002/01/25 05:08:23.113'
+    frame_header: 'SAT'
+    frame_type: 'NLC'
+    serial_number: '2002'
+    date_of_sample: 2002025
+    time_of_sample: 2.715800
+    nitrate_concentration: 8.89
+    aux_fitting_1: 17.78
+    aux_fitting_2: 26.66
+    aux_fitting_3: 35.55
+    rms_error: 133.333320
+  - _index:  23
+    particle_object: NutnrBDclConcTelemeteredInstrumentDataParticle
+    particle_type: nutnr_b_dcl_conc_instrument
+    internal_timestamp: '2002-01-25T05:08:25Z'
+    dcl_controller_timestamp: '2002/01/25 05:08:25.471'
+    frame_header: 'SAT'
+    frame_type: 'NLC'
+    serial_number: '2002'
+    date_of_sample: 2002025
+    time_of_sample: 2.851590
+    nitrate_concentration: 10.00
+    aux_fitting_1: 20.00
+    aux_fitting_2: 30.00
+    aux_fitting_3: 40.00
+    rms_error: 139.999986
+  - _index:  24
+    particle_object: NutnrBDclConcTelemeteredInstrumentDataParticle
+    particle_type: nutnr_b_dcl_conc_instrument
+    internal_timestamp: '2002-01-25T05:08:27Z'
+    dcl_controller_timestamp: '2002/01/25 05:08:27.829'
+    frame_header: 'SAT'
+    frame_type: 'NLC'
+    serial_number: '2002'
+    date_of_sample: 2002025
+    time_of_sample: 2.987380
+    nitrate_concentration: 11.11
+    aux_fitting_1: 22.22
+    aux_fitting_2: 33.33
+    aux_fitting_3: 44.44
+    rms_error: 146.666652
+  - _index:  25
+    particle_object: NutnrBDclConcTelemeteredInstrumentDataParticle
+    particle_type: nutnr_b_dcl_conc_instrument
+    internal_timestamp: '2002-01-25T05:08:30Z'
+    dcl_controller_timestamp: '2002/01/25 05:08:30.187'
+    frame_header: 'SAT'
+    frame_type: 'NLC'
+    serial_number: '2002'
+    date_of_sample: 2002025
+    time_of_sample: 3.123170
+    nitrate_concentration: 12.22
+    aux_fitting_1: 24.44
+    aux_fitting_2: 36.66
+    aux_fitting_3: 48.88
+    rms_error: 153.333318
+  - _index:  26
+    particle_object: NutnrBDclConcTelemeteredInstrumentDataParticle
+    particle_type: nutnr_b_dcl_conc_instrument
+    internal_timestamp: '2002-01-25T05:08:32Z'
+    dcl_controller_timestamp: '2002/01/25 05:08:32.545'
+    frame_header: 'SAT'
+    frame_type: 'NLC'
+    serial_number: '2002'
+    date_of_sample: 2002025
+    time_of_sample: 3.258960
+    nitrate_concentration: 13.33
+    aux_fitting_1: 26.66
+    aux_fitting_2: 40.00
+    aux_fitting_3: 53.33
+    rms_error: 159.999984
