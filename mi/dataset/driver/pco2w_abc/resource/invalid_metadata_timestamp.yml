@@ -16,7 +16,7 @@ data:
     record_time: 3466968983
     voltage_battery: 3180
     thermistor_raw: 2138
-    blank_light_measurements: ['41', '36', '2919', '1566', '1921', '1763', '8707', '15056', '42', '38', '2933', '1575', '1925', '1766']
+    blank_light_measurements: [41, 36, 2919, 1566, 1921, 1763, 8707, 15056, 42, 38, 2933, 1575, 1925, 1766]
   - _index: 3
     particle_object: Pco2wAbcPowerDataParticle
     particle_type: pco2w_abc_power
@@ -31,7 +31,7 @@ data:
     record_time: 3466976441
     voltage_battery: 3202
     thermistor_raw: 2174
-    light_measurements: ['43', '38', '2899', '365', '1906', '613', '1876', '5063', '41', '37', '2916', '368', '1909', '615']
+    light_measurements: [43, 38, 2899, 365, 1906, 613, 1876, 5063, 41, 37, 2916, 368, 1909, 615]
   - _index: 5
     particle_object: Pco2wAbcPowerDataParticle
     particle_type: pco2w_abc_power
@@ -46,7 +46,7 @@ data:
     record_time: 3466983945
     voltage_battery: 3200
     thermistor_raw: 2195
-    light_measurements: ['43', '39', '2883', '337', '1891', '628', '1716', '5225', '44', '37', '2904', '339', '1892', '627']
+    light_measurements: [43, 39, 2883, 337, 1891, 628, 1716, 5225, 44, 37, 2904, 339, 1892, 627]
   - _index: 7
     particle_object: Pco2wAbcMetadataDataParticle
     particle_type: pco2w_abc_metadata

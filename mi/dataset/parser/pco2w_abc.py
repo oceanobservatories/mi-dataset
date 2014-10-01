@@ -349,8 +349,8 @@ class Pco2wAbcParser(Parser):
         instrument_dict[Pco2wAbcDataParticleKey.RECORD_TIME] = \
             instrument_record_match.group(RECORD_TIME_GROUP_INDEX)
         instrument_dict[Pco2wAbcDataParticleKey.LIGHT_MEASUREMENTS] = \
-            instrument_record_match.group(LIGHT_MEASUREMENTS_GROUP_INDEX). \
-            rstrip().split('\t')
+            map(int, instrument_record_match.group(LIGHT_MEASUREMENTS_GROUP_INDEX). \
+            rstrip().split('\t'))
         instrument_dict[Pco2wAbcDataParticleKey.VOLTAGE_BATTERY] = \
             instrument_record_match.group(INSTRUMENT_BATTERY_VOLTAGE_GROUP_INDEX)
         instrument_dict[Pco2wAbcDataParticleKey.THERMISTOR_RAW] = \
@@ -364,8 +364,8 @@ class Pco2wAbcParser(Parser):
         instrument_blank_dict[Pco2wAbcDataParticleKey.RECORD_TIME] = \
             instrument_blank_record_match.group(RECORD_TIME_GROUP_INDEX)
         instrument_blank_dict[Pco2wAbcDataParticleKey.BLANK_LIGHT_MEASUREMENTS] = \
-            instrument_blank_record_match.group(LIGHT_MEASUREMENTS_GROUP_INDEX). \
-            rstrip().split('\t')
+            map(int, instrument_blank_record_match.group(LIGHT_MEASUREMENTS_GROUP_INDEX). \
+            rstrip().split('\t'))
         instrument_blank_dict[Pco2wAbcDataParticleKey.VOLTAGE_BATTERY] = \
             instrument_blank_record_match.group(INSTRUMENT_BATTERY_VOLTAGE_GROUP_INDEX)
         instrument_blank_dict[Pco2wAbcDataParticleKey.THERMISTOR_RAW] = \
