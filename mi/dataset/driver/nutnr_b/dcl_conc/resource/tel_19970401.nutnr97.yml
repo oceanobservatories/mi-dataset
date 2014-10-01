@@ -1,0 +1,33 @@
+header:
+  particle_object: MULTIPLE
+  particle_type: MULTIPLE
+
+data:
+  - _index:  1
+    particle_object: NutnrBDclConcTelemeteredMetadataDataParticle
+    particle_type: nutnr_b_dcl_conc_metadata
+    internal_timestamp: '1999-04-01T15:17:20Z'
+    dcl_controller_timestamp: '1999/04/01 15:17:45.963'
+    serial_number: '1999'
+    startup_time: 922979847
+    spec_on_time: 922979854
+    spec_powered_time: 922979856
+    lamp_on_time: 922979858
+    lamp_powered_time: 922979861
+    data_log_file: 'DATA/LOG_19990401.LOG'
+    internal_timestamp: '1999-04-01T15:17:20Z'
+  - _index:  2
+    particle_object: NutnrBDclConcTelemeteredInstrumentDataParticle
+    particle_type: nutnr_b_dcl_conc_instrument
+    internal_timestamp: '1999-04-01T15:17:45Z'
+    dcl_controller_timestamp: '1999/04/01 15:17:45.963'
+    frame_header: 'SAT'
+    frame_type: 'NDC'
+    serial_number: '1999'
+    date_of_sample: 1999091
+    time_of_sample: 0.000000
+    nitrate_concentration: -11.11
+    aux_fitting_1: -22.22
+    aux_fitting_2: -33.33
+    aux_fitting_3: -44.44
+    rms_error: 0.000000
