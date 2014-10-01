@@ -56,7 +56,7 @@ from mi.dataset.dataset_parser import BufferLoadingParser
 ANY_CHARS = r'.*'                    # Any characters excluding a newline
 NEW_LINE = r'(?:\r\n|\n)'            # any type of new line
 UINT = r'(\d*)'                      # unsigned integer as a group
-FLOAT = r'([1-9][0-9]*\.?[0-9]*)'    # generic float
+FLOAT = r'([-]?[1-9][0-9]*\.?[0-9]*)'    # generic float
 WHITESPACE = r'(\s*)'                # any whitespace
 COMMA = ','                          # simple comma
 TAB = '\t'                           # simple tab
@@ -356,7 +356,7 @@ class PresfAbcDclParserWaveDataParticle(DataParticle):
             result.append(self._encode_value(PresfAbcDclWaveParticleKey.PTEMP_FREQUENCY,
                                              ptemp_frequency, float))
             result.append(self._encode_value(PresfAbcDclWaveParticleKey.ABSOLUTE_PRESSURE_BURST,
-                                             absolute_pressure_burst, list))
+                                             map(float,absolute_pressure_burst), list))
 
             return result
 

@@ -18,10 +18,12 @@ from nose.plugins.attrib import attr
 from mi.idk.config import Config
 
 from mi.core.log import get_logger ; log = get_logger()
-from mi.core.exceptions import SampleException
+from mi.core.exceptions import RecoverableSampleException
 from mi.core.instrument.data_particle import DataParticleKey
 
-from mi.dataset.test.test_parser import ParserUnitTestCase
+from mi.dataset.test.test_parser import \
+    ParserUnitTestCase, \
+    BASE_RESOURCE_PATH
 
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 from mi.dataset.parser.presf_abc_dcl import \
@@ -36,8 +38,8 @@ from mi.dataset.parser.presf_abc_dcl import \
     TIDE_MATCHER, \
     PresfAbcDclParser
 
-RESOURCE_PATH = os.path.join(Config().base_dir(), 'mi',
-			     'dataset', 'driver', 'presf_abc',
+RESOURCE_PATH = os.path.join(BASE_RESOURCE_PATH,
+			     'presf_abc',
 			     'dcl', 'resource')
 
 MODULE_NAME = 'mi.dataset.parser.presf_abc_dcl'
@@ -51,21 +53,9 @@ class PresfAbcDclParserUnitTestCase(ParserUnitTestCase):
     """
     presf_abc_dcl Parser unit test suite
     """
-    def state_callback(self, state, file_ingested):
-        """ Call back method to watch what comes in via the position callback """
-        self.state_callback_value = state
-        self.file_ingested_value = file_ingested
-
     def pub_callback(self, pub):
         """ Call back method to watch what comes in via the publish callback """
         self.publish_callback_value = pub
-
-    def exception_callback(self, exception):
-        """ Callback method to watch what comes in via the exception callback """
-	log.debug(exception)
-        self.exception_callback_value = exception
-	self._exception_occurred = True
-        self.count += 1
 
     def open_file(self, filename):
         file = open(os.path.join(RESOURCE_PATH, filename), mode='r')
@@ -98,8 +88,6 @@ class PresfAbcDclParserUnitTestCase(ParserUnitTestCase):
         self.file_ingested_value = None
         self.state_callback_value = None
         self.publish_callback_value = None
-        self.exception_callback_value = None
-        self.count = 0
 
         self.maxDiff = None
 
@@ -114,7 +102,7 @@ class PresfAbcDclParserUnitTestCase(ParserUnitTestCase):
 
 	    parser = PresfAbcDclParser(self.config.get(DataTypeKey.PRESF_ABC_DCL_TELEMETERED),
 				      None, file_handle,
-				      self.state_callback, self.pub_callback,
+				      lambda state, ingested: None, lambda data: None,
 				      self.exception_callback)
 	    
 	    # file has one tide particle and one wave particle
@@ -130,7 +118,7 @@ class PresfAbcDclParserUnitTestCase(ParserUnitTestCase):
 
 	    parser = PresfAbcDclParser(self.config.get(DataTypeKey.PRESF_ABC_DCL_RECOVERED),
 				      None, file_handle,
-				      self.state_callback, self.pub_callback,
+				      lambda state, ingested: None, lambda data: None,
 				      self.exception_callback)
 	    
 	    # file has one tide particle and one wave particle
@@ -154,7 +142,7 @@ class PresfAbcDclParserUnitTestCase(ParserUnitTestCase):
 
 	    parser = PresfAbcDclParser(self.config.get(DataTypeKey.PRESF_ABC_DCL_TELEMETERED),
 				      None, file_handle,
-				      self.state_callback, self.pub_callback,
+				      lambda state, ingested: None, lambda data: None,
 				      self.exception_callback)
 	    
 	    particles = parser.get_records(20)
@@ -168,7 +156,7 @@ class PresfAbcDclParserUnitTestCase(ParserUnitTestCase):
 
 	    parser = PresfAbcDclParser(self.config.get(DataTypeKey.PRESF_ABC_DCL_RECOVERED),
 				      None, file_handle,
-				      self.state_callback, self.pub_callback,
+				      lambda state, ingested: None, lambda data: None,
 				      self.exception_callback)
 	    
 	    particles = parser.get_records(20)
@@ -190,7 +178,7 @@ class PresfAbcDclParserUnitTestCase(ParserUnitTestCase):
 
 	    parser = PresfAbcDclParser(self.config.get(DataTypeKey.PRESF_ABC_DCL_TELEMETERED),
 				      None, file_handle,
-				      self.state_callback, self.pub_callback,
+				      lambda state, ingested: None, lambda data: None,
 				      self.exception_callback)
     
 	    particles = parser.get_records(48)
@@ -213,7 +201,7 @@ class PresfAbcDclParserUnitTestCase(ParserUnitTestCase):
 
 	    parser = PresfAbcDclParser(self.config.get(DataTypeKey.PRESF_ABC_DCL_TELEMETERED),
 				      None, file_handle,
-				      self.state_callback, self.pub_callback,
+				      lambda state, ingested: None, lambda data: None,
 				      self.exception_callback)
 
             particles = parser.get_records(NUM_PARTICLES_TO_REQUEST)
@@ -222,7 +210,8 @@ class PresfAbcDclParserUnitTestCase(ParserUnitTestCase):
 
             self.assert_particles(particles, "20140105_invts.presf_telem.yml", RESOURCE_PATH)
 
-            self.assertEqual(self._exception_occurred, True)
+	    for i in range(len(self.exception_callback_value)):
+		self.assert_(isinstance(self.exception_callback_value[i], RecoverableSampleException))
 
  
         with open(os.path.join(RESOURCE_PATH, '20140105_invts.presf.log'), 'r') as file_handle:
@@ -232,7 +221,7 @@ class PresfAbcDclParserUnitTestCase(ParserUnitTestCase):
 
 	    parser = PresfAbcDclParser(self.config.get(DataTypeKey.PRESF_ABC_DCL_RECOVERED),
 				      None, file_handle,
-				      self.state_callback, self.pub_callback,
+				      lambda state, ingested: None, lambda data: None,
 				      self.exception_callback)
 
             particles = parser.get_records(NUM_PARTICLES_TO_REQUEST)
@@ -241,7 +230,8 @@ class PresfAbcDclParserUnitTestCase(ParserUnitTestCase):
 
             self.assert_particles(particles, "20140105_invts.presf_recov.yml", RESOURCE_PATH)
 
-            self.assertEqual(self._exception_occurred, True)
+	    for i in range(len(self.exception_callback_value)):
+		self.assert_(isinstance(self.exception_callback_value[i], RecoverableSampleException))
 
         log.debug('===== END TEST INVALID TIDE RECORD =====')
 
@@ -259,7 +249,7 @@ class PresfAbcDclParserUnitTestCase(ParserUnitTestCase):
 
 	    parser = PresfAbcDclParser(self.config.get(DataTypeKey.PRESF_ABC_DCL_TELEMETERED),
 				      None, file_handle,
-				      self.state_callback, self.pub_callback,
+				      lambda state, ingested: None, lambda data: None,
 				      self.exception_callback)
 
             particles = parser.get_records(NUM_PARTICLES_TO_REQUEST)
@@ -268,8 +258,8 @@ class PresfAbcDclParserUnitTestCase(ParserUnitTestCase):
 
             self.assert_particles(particles, "20140105_invwv.presf_telem.yml", RESOURCE_PATH)
 
-            self.assertEqual(self._exception_occurred, True)
-
+	    for i in range(len(self.exception_callback_value)):
+		self.assert_(isinstance(self.exception_callback_value[i], RecoverableSampleException))
  
         with open(os.path.join(RESOURCE_PATH, '20140105_invwv.presf.log'), 'r') as file_handle:
 
@@ -278,7 +268,7 @@ class PresfAbcDclParserUnitTestCase(ParserUnitTestCase):
 
 	    parser = PresfAbcDclParser(self.config.get(DataTypeKey.PRESF_ABC_DCL_RECOVERED),
 				      None, file_handle,
-				      self.state_callback, self.pub_callback,
+				      lambda state, ingested: None, lambda data: None,
 				      self.exception_callback)
 
             particles = parser.get_records(NUM_PARTICLES_TO_REQUEST)
@@ -287,8 +277,9 @@ class PresfAbcDclParserUnitTestCase(ParserUnitTestCase):
 
             self.assert_particles(particles, "20140105_invwv.presf_recov.yml", RESOURCE_PATH)
 
-            self.assertEqual(self._exception_occurred, True)
-
+	    for i in range(len(self.exception_callback_value)):
+		self.assert_(isinstance(self.exception_callback_value[i], RecoverableSampleException))
+ 
         log.debug('===== END TEST INVALID TIDE RECORD =====')
 
     def test_no_particles(self):
@@ -305,7 +296,7 @@ class PresfAbcDclParserUnitTestCase(ParserUnitTestCase):
 
 	    parser = PresfAbcDclParser(self.config.get(DataTypeKey.PRESF_ABC_DCL_TELEMETERED),
 				      None, file_handle,
-				      self.state_callback, self.pub_callback,
+				      lambda state, ingested: None, lambda data: None,
 				      self.exception_callback)
 
             particles = parser.get_records(NUM_PARTICLES_TO_REQUEST)
@@ -315,6 +306,5 @@ class PresfAbcDclParserUnitTestCase(ParserUnitTestCase):
             self.assertEqual(self._exception_occurred, False)
 
         log.debug('===== END TEST NO PARTICLES =====')
-
 
 
