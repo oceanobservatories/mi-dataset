@@ -64,6 +64,56 @@ class NutnrBDataParticleKey(BaseEnum):
     SPECTRAL_CHANNELS = 'spectral_channels'                 # PD332
     DATA_LOG_FILE = 'data_log_file'                         # PD352
     DCL_CONTROLLER_TIMESTAMP = 'dcl_controller_timestamp'   # PD2605
+    STARTUP_TIME_STRING = 'startup_time_string'             # PD2707
+    FIRMWARE_VERSION = 'firmware_version'                   # PD113
+    FIRMWARE_DATE = 'firmware_date'                         # PD293
+
+
+class NutnrBMetadataRecoveredDataParticle(DataParticle):
+    """
+    Class for generating the nutnr b metadata recovered particle.
+    """
+    _data_particle_type = DataParticleType.NUTNR_B_METADATA_RECOVERED
+
+    def _build_parsed_values(self):
+        """
+        Build parsed values for Recovered and Telemetered Instrument Data Particle.
+        """
+
+        # Generate a particle by calling encode_value for each entry
+        # in the Metadata Particle Mapping table,
+        # where each entry is a tuple containing the particle field name,
+        # an index into raw_data and a function to use for data conversion.
+
+        values = []
+
+        for name, value, function in self.raw_data:
+            if value is not None:
+                values.append(self._encode_value(name, value, function))
+            else:
+                values.append({DataParticleKey.VALUE_ID: name, DataParticleKey.VALUE: None})
+
+        return values
+
+
+class NutnrBInstrumentRecoveredDataParticle(DataParticle):
+    """
+    Class for generating the nutnr b instrument recovered particle.
+    """
+    _data_particle_type = DataParticleType.NUTNR_B_INSTRUMENT_RECOVERED
+
+    def _build_parsed_values(self):
+        """
+        Build parsed values for Recovered and Telemetered Instrument Data Particle.
+        """
+
+        # Generate a particle by calling encode_value for each entry
+        # in the Instrument Particle Mapping table,
+        # where each entry is a tuple containing the particle field name,
+        # an index into raw_data and a function to use for data conversion.
+
+        return [self._encode_value(name, value, function)
+                for name, value, function in self.raw_data]
 
 
 class NutnrBDclInstrumentDataParticle(DataParticle):

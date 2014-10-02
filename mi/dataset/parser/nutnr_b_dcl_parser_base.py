@@ -15,8 +15,9 @@ __license__ = 'Apache 2.0'
 
 import re
 
-import calendar
+from datetime import datetime
 import ntplib
+import time
 
 from mi.core.log import get_logger
 log = get_logger()
@@ -342,13 +343,14 @@ class NutnrBDclParser(Parser):
         # calculate the metadata particle internal timestamp
         # from the DCL timestamp.
 
-        return calendar.timegm((
-            int(idle_match.group(MetaDataMatchGroups.META_GROUP_DCL_YEAR)),
-            int(idle_match.group(MetaDataMatchGroups.META_GROUP_DCL_MONTH)),
-            int(idle_match.group(MetaDataMatchGroups.META_GROUP_DCL_DAY)),
-            int(idle_match.group(MetaDataMatchGroups.META_GROUP_DCL_HOUR)),
-            int(idle_match.group(MetaDataMatchGroups.META_GROUP_DCL_MINUTE)),
-            int(idle_match.group(MetaDataMatchGroups.META_GROUP_DCL_SECOND))))
+        dcl_datetime = datetime.strptime(idle_match.group(
+            MetaDataMatchGroups.META_GROUP_DCL_TIMESTAMP), "%Y/%m/%d %H:%M:%S.%f")
+        log.info("DCL %s", dcl_datetime.strftime("%s.%f"))
+        utc_time = float(dcl_datetime.strftime("%s.%f")) - time.timezone
+
+        log.info("%s", utc_time)
+
+        return utc_time
 
     def _extract_instrument_ntp_timestamp(self, inst_match):
         """
@@ -359,13 +361,13 @@ class NutnrBDclParser(Parser):
         # calculate the instrument particle internal timestamp
         # from the DCL timestamp.
 
-        return ntplib.system_to_ntp_time(calendar.timegm((
-            int(inst_match.group(InstrumentDataMatchGroups.INST_GROUP_DCL_YEAR)),
-            int(inst_match.group(InstrumentDataMatchGroups.INST_GROUP_DCL_MONTH)),
-            int(inst_match.group(InstrumentDataMatchGroups.INST_GROUP_DCL_DAY)),
-            int(inst_match.group(InstrumentDataMatchGroups.INST_GROUP_DCL_HOUR)),
-            int(inst_match.group(InstrumentDataMatchGroups.INST_GROUP_DCL_MINUTE)),
-            int(inst_match.group(InstrumentDataMatchGroups.INST_GROUP_DCL_SECOND)))))
+        dcl_datetime = datetime.strptime(inst_match.group(
+            InstrumentDataMatchGroups.INST_GROUP_DCL_TIMESTAMP), "%Y/%m/%d %H:%M:%S.%f")
+        utc_time = float(dcl_datetime.strftime("%s.%f")) - time.timezone
+
+        log.info("%s", utc_time)
+
+        return ntplib.system_to_ntp_time(utc_time)
 
     def _process_idle_metadata_record(self, idle_match):
         """
