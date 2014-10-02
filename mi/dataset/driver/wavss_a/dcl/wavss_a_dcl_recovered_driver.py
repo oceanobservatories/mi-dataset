@@ -42,7 +42,7 @@ class WavssADclRecoveredDriver:
                 self._particleDataHdlrObj.setParticleDataCaptureFailure()
 
             # instantiate the parser
-            parser = WavssADclParser(self._parser_config, file_handle, exception_callback, is_telemetered=False)
+            parser = WavssADclParser(file_handle, exception_callback, False)
             # instantiate the driver
             driver = DataSetDriver(parser, self._particleDataHdlrObj)
             # start the driver processing the file
