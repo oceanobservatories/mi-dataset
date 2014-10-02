@@ -4,16 +4,15 @@
 #
 # Copyright 2014 Raytheon Co.
 ##
-__author__ = 'kustert,mworden'
+__author__ = 'mworden'
 
 import os
-import sys
 
 from mi.logging import config
 from mi.core.log import get_logger
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
-from mi.dataset.dataset_driver import DataSetDriver, ParticleDataHandler
-from mi.dataset.parser.nutnr_b_dcl_conc import NutnrBDclConcTelemeteredParser
+from mi.dataset.dataset_driver import DataSetDriver
+from mi.dataset.parser.nutnr_b_dcl_full import NutnrBDclFullTelemeteredParser
 
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     
@@ -29,11 +28,11 @@ def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     def exception_callback(exception):
         log.debug("ERROR: " + exception)
         particleDataHdlrObj.setParticleDataCaptureFailure()
-    
+
     with open(sourceFilePath, 'r') as stream_handle:
-        parser = NutnrBDclConcTelemeteredParser(parser_config,
+        parser = NutnrBDclFullTelemeteredParser(parser_config,
                                                 stream_handle,
-                                                lambda state, ingested : None,
+                                                lambda state, ingested: None,
                                                 lambda data : None,
                                                 exception_callback)
         

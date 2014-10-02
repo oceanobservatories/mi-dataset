@@ -4,7 +4,7 @@
 #
 # Copyright 2014 Raytheon Co.
 ##
-__author__ = 'kustert'
+__author__ = 'kustert,mworden'
 
 import os
 import sys
@@ -22,22 +22,18 @@ def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     log = get_logger()
     
     parser_config = {
-        DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.nutnr_b_dcl_conc',
-        DataSetDriverConfigKeys.PARTICLE_CLASS: [
-            'NutnrBDclConcRecoveredMetadataDataParticle',
-            'NutnrBDclConcRecoveredInstrumentDataParticle'
-        ]
+        DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.nutnr_b_particles',
+        DataSetDriverConfigKeys.PARTICLE_CLASS: None
     }
 
     def exception_callback(exception):
         log.debug("ERROR: " + exception)
         particleDataHdlrObj.setParticleDataCaptureFailure()
     
-    with open(sourceFilePath, 'rb') as stream_handle:
-        parser = NutnrBDclConcRecoveredParser(parser_config, 
+    with open(sourceFilePath, 'r') as stream_handle:
+        parser = NutnrBDclConcRecoveredParser(parser_config,
                                               stream_handle,
-                                              None,
-                                              lambda state,file : None,
+                                              lambda state, ingested : None,
                                               lambda data : None,
                                               exception_callback)
         
