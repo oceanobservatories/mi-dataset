@@ -312,7 +312,7 @@ class MopakODclParserUnitTestCase(ParserUnitTestCase):
         Test a long (normal length file)
         """
         self.stream_handle = open(os.path.join(RESOURCE_PATH,
-                                               '20140120_140004.mopak.log'))
+                                               '20140120_140004_extradata.mopak.log'))
         self.parser =  MopakODclParser(self.config, self.start_state, self.stream_handle,
                                        '20140120_140004.mopak.log', self.state_callback,
                                        self.pub_callback, self.except_callback)
