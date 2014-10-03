@@ -4,7 +4,7 @@
 #
 # Copyright 2014 Raytheon Co.
 ##
-__author__ = 'kustert'
+__author__ = 'kustert,mworden'
 
 import os
 import sys
@@ -33,10 +33,9 @@ def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
         log.debug("ERROR: " + exception)
         particleDataHdlrObj.setParticleDataCaptureFailure()
     
-    with open(sourceFilePath, 'rb') as stream_handle:
+    with open(sourceFilePath, 'r') as stream_handle:
         parser = NutnrBDclConcTelemeteredParser(parser_config,
                                                 stream_handle,
-                                                None,
                                                 lambda state,file : None,
                                                 lambda data : None,
                                                 exception_callback)
