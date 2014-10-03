@@ -298,3 +298,54 @@ class BufferLoadingParser(Parser):
             nothing was parsed.
         """            
         raise NotImplementedException("Must write parse_chunks()!")
+
+
+class SimpleParser(Parser):
+
+    def __init__(self, config, stream_handle, exception_callback):
+        """
+        Initialize the simple parser, which does not use state or the chunker and sieve functions.
+        These are set to None to pass into the parent parser.
+        @param config: The parser configuration dictionary
+        @param stream_handle: The stream handle of the file to parse
+        @param exception_callback: The callback to use when an exception occurs
+        """
+
+        # the record buffer which will store all parsed particles
+        self._record_buffer = []
+        # a flag indicating if the file has been parsed or not
+        self._file_parsed = False
+
+        super(SimpleParser, self).__init__(config,
+                                           stream_handle,
+                                           None, # state no longer used
+                                           None, # sieve no longer used
+                                           None, # state callback no longer used
+                                           None, # publish callback no longer used,
+                                           exception_callback)
+
+    def parse_file(self):
+        """
+        This method must be overridden.  This method should open and read the file and parser the data within, and at
+        the end of this method self._record_buffer will be filled with all the particles in the file.
+        """
+        raise NotImplementedException("parse_file() not overridden!")
+
+    def get_records(self, number_requested=1):
+        """
+        Initiate parsing the file if it has not been done already, and pop particles off the record buffer to
+        return as many as requested if they are available in the buffer.
+        @param number_requested the number of records requested to be returned
+        @return an array of particles, with a length of the number requested or less
+        """
+        particles_to_return = []
+
+        if number_requested > 0:
+            if self._file_parsed is False:
+                self.parse_file()
+                self._file_parsed = True
+
+        while len(particles_to_return) < number_requested and len(self._record_buffer) > 0:
+            particles_to_return.append(self._record_buffer.pop(0))
+
+        return particles_to_return
