@@ -1,5 +1,5 @@
 2005/12/20 11:13:16.021 [nutnr:DLOGP1]:Idle state, without initialize
-2005/12/20 11:13:18.379 [nutnr:DLOGP1]:Instrument sampling - Data Logger entering data acquisition state
+2005/12/20 11:13:18.379 [nutnr:DLOGP1]:Instrument sampling - Data logger entering data acquisition state
 2005/12/20 11:13:20.737 
 2005/12/20 11:13:23.095 12/20/2005 11:13:23: Message: ISUS Awakened on Schedule at UTC 04/30/2014 01:00:00.
 2005/12/20 11:13:25.453 
@@ -55,7 +55,7 @@
 2005/12/20 11:15:23.353 [nutnr:DLOGP7]:----- END OF BLOCK -----
 2005/12/20 11:15:25.711 
 2005/12/20 11:15:28.069 [nutnr:DLOGP1]:Idle state, without initialize
-2005/12/20 11:15:30.427 [nutnr:DLOGP1]:Instrument sampling - Data Logger entering data acquisition state
+2005/12/20 11:15:30.427 [nutnr:DLOGP1]:Instrument sampling - Data logger entering data acquisition state
 2005/12/20 11:15:32.785 
 2005/12/20 11:15:35.143 12/20/2005 11:15:35: Message: ISUS Awakened on Schedule at UTC 04/30/2014 01:00:00.
 2005/12/20 11:15:37.501 

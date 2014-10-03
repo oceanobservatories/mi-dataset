@@ -1,5 +1,5 @@
 2000/01/01 01:03:06.011 [nutnr:DLOGP1]:Idle state, without initialize
-2000/01/01 01:03:08.369 [nutnr:DLOGP1]:Instrument sampling - Data Logger entering data acquisition state
+2000/01/01 01:03:08.369 [nutnr:DLOGP1]:Instrument sampling - Data logger entering data acquisition state
 2000/01/01 01:03:10.727 
 2000/01/01 01:03:13.085 01/01/2000 01:03:13: Message: ISUS Awakened on Schedule at UTC 04/30/2014 01:00:00.
 2000/01/01 01:03:15.443 
@@ -17,7 +17,7 @@
 2000/01/01 01:03:43.739 [nutnr:DLOGP7]:----- END OF BLOCK -----
 2000/01/01 01:03:46.097 
 2000/01/01 01:03:48.455 [nutnr:DLOGP1]:Idle state, without initialize
-2000/01/01 01:03:50.813 [nutnr:DLOGP1]:Instrument sampling - Data Logger entering data acquisition state
+2000/01/01 01:03:50.813 [nutnr:DLOGP1]:Instrument sampling - Data logger entering data acquisition state
 2000/01/01 01:03:53.171 
 2000/01/01 01:03:55.529 01/01/2000 01:03:55: Message: ISUS Awakened on Schedule at UTC 04/30/2014 01:00:00.
 2000/01/01 01:03:57.887 
@@ -35,7 +35,7 @@
 2000/01/01 01:04:26.183 [nutnr:DLOGP7]:----- END OF BLOCK -----
 2000/01/01 01:04:28.541 
 2000/01/01 01:04:30.899 [nutnr:DLOGP1]:Idle state, without initialize
-2000/01/01 01:04:33.257 [nutnr:DLOGP1]:Instrument sampling - Data Logger entering data acquisition state
+2000/01/01 01:04:33.257 [nutnr:DLOGP1]:Instrument sampling - Data logger entering data acquisition state
 2000/01/01 01:04:35.615 
 2000/01/01 01:04:37.973 01/01/2000 01:04:37: Message: ISUS Awakened on Schedule at UTC 04/30/2014 01:00:00.
 2000/01/01 01:04:40.331 
