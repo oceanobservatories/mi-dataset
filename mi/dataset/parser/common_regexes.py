@@ -25,3 +25,7 @@ MULTIPLE_TAB_MATCHER = re.compile(MULTIPLE_TAB_REGEX)
 # A regex and matcher used to match against one or more whitespace characters
 ONE_OR_MORE_WHITESPACE_REGEX = r'\s+'
 ONE_OR_MORE_WHITESPACE_MATCHER = re.compile(ONE_OR_MORE_WHITESPACE_REGEX)
+
+# A regex to match ASCII-HEX characters
+ASCII_HEX_CHAR_REGEX = r'[0-9A-Fa-f]'
+ASCII_HEX_CHAR_MATCHER = re.compile(ASCII_HEX_CHAR_REGEX)
