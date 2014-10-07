@@ -34,8 +34,9 @@ Initial Release
 __author__ = 'Christopher Fortin'
 __license__ = 'Apache 2.0'
 
-import calendar
 import re
+from datetime import datetime
+import time
 
 from mi.core.log import get_logger
 log = get_logger()
@@ -73,6 +74,8 @@ DATE_TIME_STR = r'(\d{2} [a-zA-Z]{3} \d{4} \d{2}:\d{2}:\d{2})'              # Da
 TIMESTAMP = START_GROUP + DATE + WHITESPACE + TIME + END_GROUP        # put together the BOL timestamp
 START_METADATA = r'\['                                                # metadata delimited by []'s
 END_METADATA = r'\]'
+DCL_TIMESTAMP_REGEX = r'(\d{4}/\d{2}/\d{2} \d{2}:\d{2}:\d{2}.\d{3})'
+DCL_TIMESTAMP_MATCHER = re.compile(DCL_TIMESTAMP_REGEX)
 
 # All presf records are ASCII characters separated by a newline.
 PRESF_RECORD_PATTERN = ANY_CHARS       # Any number of ASCII characters
@@ -223,19 +226,11 @@ class PresfAbcDclParserTideDataParticle(DataParticle):
 
         # The particle timestamp is the DCL Controller timestamp.
         # The individual fields have already been extracted by the parser.
-        
-        tide_match = TIDE_MATCHER.match(raw_data)
-        timestamp = (
-            int(tide_match.group(TIDE_GROUP_YEAR)),
-            int(tide_match.group(TIDE_GROUP_MONTH)),
-            int(tide_match.group(TIDE_GROUP_DAY)),
-            int(tide_match.group(TIDE_GROUP_HOUR)),
-            int(tide_match.group(TIDE_GROUP_MINUTE)),
-            int(tide_match.group(TIDE_GROUP_SECOND)),
-            0, 0, 0)
-        
-        elapsed_seconds = calendar.timegm(timestamp)
-        self.set_internal_timestamp(unix_time=elapsed_seconds)
+
+        dcl_datetime = datetime.strptime(self.raw_data.group(1), "%Y/%m/%d %H:%M:%S.%f")
+        # adjust local seconds to get to utc by subtracting timezone seconds
+        utc_time = float(dcl_datetime.strftime("%s.%f")) - time.timezone
+        self.set_internal_timestamp(unix_time=utc_time)
     
     def _build_parsed_values(self):
         """
@@ -243,10 +238,7 @@ class PresfAbcDclParserTideDataParticle(DataParticle):
         an array of dictionaries defining the data in the particle
         with the appropriate tag.
         """
-
-        tide_match = TIDE_MATCHER.match(self.raw_data)
-
-        return [self._encode_value(name, tide_match.group(group), function)
+        return [self._encode_value(name, self.raw_data.group(group), function)
                 for name, group, function in TIDE_PARTICLE_MAP]
 
 
@@ -271,20 +263,11 @@ class PresfAbcDclParserWaveDataParticle(DataParticle):
 
         # The particle timestamp is the DCL Controller timestamp.
         # The individual fields have already been extracted by the parser.
-        
-        wave_match = WAVE_START_MATCHER.match(raw_data)
-       
-        timestamp = (
-            int(wave_match.group(WAVE_START_GROUP_YEAR)),
-            int(wave_match.group(WAVE_START_GROUP_MONTH)),
-            int(wave_match.group(WAVE_START_GROUP_DAY)),
-            int(wave_match.group(WAVE_START_GROUP_HOUR)),
-            int(wave_match.group(WAVE_START_GROUP_MINUTE)),
-            int(wave_match.group(WAVE_START_GROUP_SECOND)),
-            0, 0, 0)
-        
-        elapsed_seconds = calendar.timegm(timestamp)
-        self.set_internal_timestamp(unix_time=elapsed_seconds)
+        date_match = DCL_TIMESTAMP_MATCHER.match(self.raw_data)
+        dcl_datetime = datetime.strptime(date_match.group(0), "%Y/%m/%d %H:%M:%S.%f")
+        # adjust local seconds to get to utc by subtracting timezone seconds
+        utc_time = float(dcl_datetime.strftime("%s.%f")) - time.timezone
+        self.set_internal_timestamp(unix_time=utc_time)
     
     def _build_parsed_values(self):
         """
@@ -307,34 +290,31 @@ class PresfAbcDclParserWaveDataParticle(DataParticle):
         raw_data_len = len(self.raw_data)
 
         while data_index < raw_data_len:
-            record_match = PRESF_RECORD_MATCHER.match(self.raw_data[data_index:])
-            if record_match:
-                # wave records span several lines, wstart begins one
-                test_wstart = WAVE_START_MATCHER.match(record_match.group(0))
-                if test_wstart is not None:
-                    wave_match = WAVE_START_MATCHER.match(self.raw_data)
-                    dcl_controller_start_timestamp = wave_match.group(WAVE_START_GROUP_DCL_TIMESTAMP)
-                    date_time_string = wave_match.group(WAVE_START_GROUP_DATE_TIME_STRING)
-                    data_index += len(test_wstart.group())
-                    continue
+            # wave records span several lines, wstart begins one
+            test_wstart = WAVE_START_MATCHER.match(self.raw_data[data_index:])
+            if test_wstart is not None:
+                dcl_controller_start_timestamp = test_wstart.group(WAVE_START_GROUP_DCL_TIMESTAMP)
+                date_time_string = test_wstart.group(WAVE_START_GROUP_DATE_TIME_STRING)
+                data_index += len(test_wstart.group())
+                continue
 
-                test_ptfreq = WAVE_PTFREQ_MATCHER.match(record_match.group(0))
-                if test_ptfreq is not None:
-                    ptemp_frequency = test_ptfreq.group(WAVE_PTFREQ_GROUP_PTEMP_FREQUENCY)
-                    data_index += len(test_ptfreq.group())
-                    continue
+            test_ptfreq = WAVE_PTFREQ_MATCHER.match(self.raw_data[data_index:])
+            if test_ptfreq is not None:
+                ptemp_frequency = test_ptfreq.group(WAVE_PTFREQ_GROUP_PTEMP_FREQUENCY)
+                data_index += len(test_ptfreq.group())
+                continue
 
-                test_wcont = WAVE_CONT_MATCHER.match(record_match.group(0))
-                if test_wcont is not None:
-                    absolute_pressure_burst.append(test_wcont.group(WAVE_CONT_GROUP_ABSOLUTE_PRESSURE))
-                    data_index += len(test_wcont.group())
-                    continue
+            test_wcont = WAVE_CONT_MATCHER.match(self.raw_data[data_index:])
+            if test_wcont is not None:
+                absolute_pressure_burst.append(test_wcont.group(WAVE_CONT_GROUP_ABSOLUTE_PRESSURE))
+                data_index += len(test_wcont.group())
+                continue
 
-                test_wend = WAVE_END_MATCHER.match(record_match.group(0))
-                if test_wend is not None:
-                    dcl_controller_end_timestamp = test_wend.group(WAVE_END_GROUP_DCL_TIMESTAMP)
-                    data_index += len(test_wend.group())
-                    continue
+            test_wend = WAVE_END_MATCHER.match(self.raw_data[data_index:])
+            if test_wend is not None:
+                dcl_controller_end_timestamp = test_wend.group(WAVE_END_GROUP_DCL_TIMESTAMP)
+                data_index += len(test_wend.group())
+                continue
 
             else:
                 # received a wave start while already parsing a wave record
@@ -356,7 +336,7 @@ class PresfAbcDclParserWaveDataParticle(DataParticle):
             result.append(self._encode_value(PresfAbcDclWaveParticleKey.PTEMP_FREQUENCY,
                                              ptemp_frequency, float))
             result.append(self._encode_value(PresfAbcDclWaveParticleKey.ABSOLUTE_PRESSURE_BURST,
-                                             map(float,absolute_pressure_burst), list))
+                                             map(float, absolute_pressure_burst), list))
 
             return result
 
@@ -471,14 +451,8 @@ class PresfAbcDclParser(BufferLoadingParser):
         # While the data chunk is not None, process the data chunk
         while chunk is not None:
 
-            test_meta = METADATA_MATCHER.match(chunk)
+            # identify a wave chunk by the wave start record at the beginning
             test_wstart = WAVE_START_MATCHER.match(chunk)
-            test_tide = TIDE_MATCHER.match(chunk)
-    
-            if test_meta is not None:
-                # we don't return meta records
-                log.debug("Matched a meta record")        
-            
             if test_wstart is not None:
                 # Extract the wave record particle
                 log.debug('Wave data record')
@@ -489,15 +463,17 @@ class PresfAbcDclParser(BufferLoadingParser):
                 if data_particle is not None:
                     result_particles.append((data_particle, None))
                     
-            if test_tide is not None:
-                # Extract the tide record particle
-                log.debug('Tide data record')
-                data_particle = self._extract_sample(self._tide_particle_class,
-                                                     None,
-                                                     chunk,
-                                                     None)
-                if data_particle is not None:
-                    result_particles.append((data_particle, None))
+            else:
+                test_tide = TIDE_MATCHER.match(chunk)
+                if test_tide is not None:
+                    # Extract the tide record particle
+                    log.debug('Tide data record')
+                    data_particle = self._extract_sample(self._tide_particle_class,
+                                                         None,
+                                                         test_tide,
+                                                         None)
+                    if data_particle is not None:
+                        result_particles.append((data_particle, None))
 
             # Retrieve the next non data chunk
             (nd_timestamp, non_data, non_start, non_end) = self._chunker.get_next_non_data_with_index(clean=False)
