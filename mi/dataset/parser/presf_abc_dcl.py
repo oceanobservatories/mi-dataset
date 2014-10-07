@@ -36,6 +36,8 @@ __license__ = 'Apache 2.0'
 
 import calendar
 import re
+from datetime import datetime
+import time
 
 from mi.core.log import get_logger
 log = get_logger()
@@ -73,6 +75,8 @@ DATE_TIME_STR = r'(\d{2} [a-zA-Z]{3} \d{4} \d{2}:\d{2}:\d{2})'              # Da
 TIMESTAMP = START_GROUP + DATE + WHITESPACE + TIME + END_GROUP        # put together the BOL timestamp
 START_METADATA = r'\['                                                # metadata delimited by []'s
 END_METADATA = r'\]'
+DCL_TIMESTAMP_REGEX = r'(\d{4}/\d{2}/\d{2} \d{2}:\d{2}:\d{2}.\d{3})'
+DCL_TIMESTAMP_MATCHER = re.compile(DCL_TIMESTAMP_REGEX)
 
 # All presf records are ASCII characters separated by a newline.
 PRESF_RECORD_PATTERN = ANY_CHARS       # Any number of ASCII characters
@@ -224,18 +228,12 @@ class PresfAbcDclParserTideDataParticle(DataParticle):
         # The particle timestamp is the DCL Controller timestamp.
         # The individual fields have already been extracted by the parser.
         
-        tide_match = TIDE_MATCHER.match(raw_data)
-        timestamp = (
-            int(tide_match.group(TIDE_GROUP_YEAR)),
-            int(tide_match.group(TIDE_GROUP_MONTH)),
-            int(tide_match.group(TIDE_GROUP_DAY)),
-            int(tide_match.group(TIDE_GROUP_HOUR)),
-            int(tide_match.group(TIDE_GROUP_MINUTE)),
-            int(tide_match.group(TIDE_GROUP_SECOND)),
-            0, 0, 0)
-        
-        elapsed_seconds = calendar.timegm(timestamp)
-        self.set_internal_timestamp(unix_time=elapsed_seconds)
+        date_match = DCL_TIMESTAMP_MATCHER.match(self.raw_data)
+        dcl_datetime = datetime.strptime(date_match.group(0), "%Y/%m/%d %H:%M:%S.%f")
+        # adjust local seconds to get to utc by subtracting timezone seconds
+        utc_time = float(dcl_datetime.strftime("%s.%f")) - time.timezone
+        self.set_internal_timestamp(unix_time=utc_time)
+
     
     def _build_parsed_values(self):
         """
@@ -272,19 +270,11 @@ class PresfAbcDclParserWaveDataParticle(DataParticle):
         # The particle timestamp is the DCL Controller timestamp.
         # The individual fields have already been extracted by the parser.
         
-        wave_match = WAVE_START_MATCHER.match(raw_data)
-       
-        timestamp = (
-            int(wave_match.group(WAVE_START_GROUP_YEAR)),
-            int(wave_match.group(WAVE_START_GROUP_MONTH)),
-            int(wave_match.group(WAVE_START_GROUP_DAY)),
-            int(wave_match.group(WAVE_START_GROUP_HOUR)),
-            int(wave_match.group(WAVE_START_GROUP_MINUTE)),
-            int(wave_match.group(WAVE_START_GROUP_SECOND)),
-            0, 0, 0)
-        
-        elapsed_seconds = calendar.timegm(timestamp)
-        self.set_internal_timestamp(unix_time=elapsed_seconds)
+        date_match = DCL_TIMESTAMP_MATCHER.match(self.raw_data)
+        dcl_datetime = datetime.strptime(date_match.group(0), "%Y/%m/%d %H:%M:%S.%f")
+        # adjust local seconds to get to utc by subtracting timezone seconds
+        utc_time = float(dcl_datetime.strftime("%s.%f")) - time.timezone
+        self.set_internal_timestamp(unix_time=utc_time)
     
     def _build_parsed_values(self):
         """

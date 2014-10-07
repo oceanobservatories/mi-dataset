@@ -1,8 +1,0 @@
-driver_metadata:
-  author: Christopher Fortin
-  constructor: PresfAbcDclDataSetDriver
-  driver_name: presf_abc_dcl
-  driver_path: presf_abc/dcl
-  email: cfortin@bbn.com
-  release_notes: Initial Release
-  version: 0.0.1
