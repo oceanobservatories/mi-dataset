@@ -1,4 +1,4 @@
-#!/usr/bin/env pythonmrg
+#!/usr/bin/env python
 
 """
 @package mi.dataset.parser A collection of parsers that strip data blocks
