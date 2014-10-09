@@ -1,4 +1,4 @@
-#!/usr/bin/env pythonmrg
+#!/usr/bin/env python
 
 """
 @package mi.dataset.parser A collection of parsers that strip data blocks
@@ -279,18 +279,13 @@ class BufferLoadingParser(Parser):
 
 class SimpleParser(Parser):
 
-    def __init__(self, config, stream_handle, exception_callback, state=None,
-                 sieve_fn=None, state_callback=None, publish_callback=None):
+    def __init__(self, config, stream_handle, exception_callback):
         """
         Initialize the simple parser, which does not use state or the chunker
         and sieve functions.
         @param config: The parser configuration dictionary
         @param stream_handle: The stream handle of the file to parse
         @param exception_callback: The callback to use when an exception occurs
-        @param state: not used by default
-        @param sieve_fn: not used by default
-        @param state_callback: not used by default
-        @param publish_callback: not used by default
         """
 
         # the record buffer which will store all parsed particles
@@ -300,10 +295,10 @@ class SimpleParser(Parser):
 
         super(SimpleParser, self).__init__(config,
                                            stream_handle,
-                                           state,
-                                           sieve_fn,
-                                           state_callback,
-                                           publish_callback,
+                                           None,  # state not used
+                                           None,  # sieve_fn not used
+                                           None,  # state_callback not used
+                                           None,  # publish_callback not used
                                            exception_callback)
 
     def parse_file(self):
