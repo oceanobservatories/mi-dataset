@@ -1,4 +1,4 @@
-#!/home/mworden/uframes/ooi/uframe-1.0/python/bin/python
+#!/usr/bin/env python
 
 __author__ = 'Jeff Roy'
 

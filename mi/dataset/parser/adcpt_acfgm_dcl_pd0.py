@@ -104,8 +104,10 @@ class AdcptAcfgmPd0DclParticle(AdcpPd0DataParticle):
 
         log.debug('ADCPT ACFGM BPV self._dcl_data_dict = %s', self._dcl_data_dict)
 
-        dcl_controller_timestamp = self._dcl_data_dict[AdcptAcfgmPd0DclKey.DCL_CONTROLLER_TIMESTAMP]
-        dcl_controller_start_timestamp = self._dcl_data_dict[AdcptAcfgmPd0DclKey.DCL_CONTROLLER_STARTING_TIMESTAMP]
+        dcl_controller_timestamp = \
+            self._dcl_data_dict[AdcptAcfgmPd0DclKey.DCL_CONTROLLER_TIMESTAMP]
+        dcl_controller_start_timestamp = \
+            self._dcl_data_dict[AdcptAcfgmPd0DclKey.DCL_CONTROLLER_STARTING_TIMESTAMP]
 
         parsed_values.append(self._encode_value(AdcptAcfgmPd0DclKey.DCL_CONTROLLER_TIMESTAMP,
                                                 dcl_controller_timestamp, str))
@@ -194,9 +196,11 @@ class AdcptAcfgmDclPd0Parser(Parser):
                     dcl_data_dict[AdcptAcfgmPd0DclKey.PD0_DATA] = pd0_data
 
                     # strip off the trailing space and save the last DCL timestamp group in raw data
-                    dcl_data_dict[AdcptAcfgmPd0DclKey.DCL_CONTROLLER_TIMESTAMP] = dcl_timestamps_match[-1][:-1]
+                    dcl_data_dict[AdcptAcfgmPd0DclKey.DCL_CONTROLLER_TIMESTAMP] = \
+                        dcl_timestamps_match[-1][:-1]
                     # strip off the trailing space and save the first DCL timestamp group in raw data
-                    dcl_data_dict[AdcptAcfgmPd0DclKey.DCL_CONTROLLER_STARTING_TIMESTAMP] = dcl_timestamps_match[0][:-1]
+                    dcl_data_dict[AdcptAcfgmPd0DclKey.DCL_CONTROLLER_STARTING_TIMESTAMP] = \
+                        dcl_timestamps_match[0][:-1]
 
                     # providing dcl_data_dict as raw data parameter
                     # the adcpt afgm particle class will pop off the pd0

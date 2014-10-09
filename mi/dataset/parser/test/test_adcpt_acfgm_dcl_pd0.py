@@ -89,9 +89,9 @@ class AdcptAcfgmPd0DclParserUnitTestCase(ParserUnitTestCase):
         # ND072022.PD0 contains a single ADCPA ensemble
         fid = open(os.path.join(RESOURCE_PATH, '20140424.adcpt.log'), 'rU')
 
-        self.stream_handle = fid
+        stream_handle = fid
         parser = AdcptAcfgmDclPd0Parser(self.config_recov,
-                                        self.stream_handle,
+                                        stream_handle,
                                         self.exception_callback,
                                         self.state_callback,
                                         self.publish_callback)
@@ -120,9 +120,9 @@ class AdcptAcfgmPd0DclParserUnitTestCase(ParserUnitTestCase):
         # ND072022.PD0 contains a single ADCPA ensemble
         fid = open(os.path.join(RESOURCE_PATH, '20140424.adcpt.log'), 'rb')
 
-        self.stream_handle = fid
+        stream_handle = fid
         parser = AdcptAcfgmDclPd0Parser(self.config_telem,
-                                        self.stream_handle,
+                                        stream_handle,
                                         self.exception_callback,
                                         self.state_callback,
                                         self.publish_callback)
@@ -141,12 +141,12 @@ class AdcptAcfgmPd0DclParserUnitTestCase(ParserUnitTestCase):
         """
         Ensure that bad data is skipped when it exists.
         """
-        #LB180210_3_corrupted.PD0 has three records in it, the 2nd record was corrupted
+        #20140424.adcpt_BAD.log has a corrupt record in it
         fid = open(os.path.join(RESOURCE_PATH, '20140424.adcpt_BAD.log'), 'rb')
 
-        self.stream_handle = fid
+        stream_handle = fid
         parser = AdcptAcfgmDclPd0Parser(self.config_recov,
-                                        self.stream_handle,
+                                        stream_handle,
                                         self.exception_callback,
                                         self.state_callback,
                                         self.publish_callback)
