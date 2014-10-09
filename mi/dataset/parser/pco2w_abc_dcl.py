@@ -217,8 +217,68 @@ NOTE: records with different record type will be ignored and RecoverableSampleEx
 """
 
 
-def _calculate_passed_checksum(line, record_checksum):
+def _create_dcl_extension_dict():
+    """
+    Creates a dictionary for the additonal DCL parameters
+    :return: an empty dictionary for the dcl items
+    """
+    # Load the additional DCL dictionary entries for this subclass
+    dcl_dict = dict.fromkeys([Pco2wAbcDataParticleKey.DCL_CONTROLLER_TIMESTAMP,
+                              Pco2wAbcDataParticleKey.UNIQUE_ID,
+                              Pco2wAbcDataParticleKey.PASSED_CHECKSUM],
+                             None)
+    return dcl_dict
 
+
+def _populate_common_dict(common_match, common_dict):
+    """
+    Populates parameters that are common to all the types of particles
+    :param common_match: the match used to get the group
+    :param common_dict: dict to be populated
+    :return: the populated common dict
+    """
+    common_dict[Pco2wAbcDataParticleKey.DCL_CONTROLLER_TIMESTAMP] = \
+        common_match.group(DATE_TIME_GROUP_INDEX)
+
+    unique_id = common_match.group(ID_GROUP_INDEX)
+    common_dict[Pco2wAbcDataParticleKey.UNIQUE_ID] = int(unique_id, 16)
+
+    rec_type = common_match.group(RECORD_TYPE_GROUP_INDEX)
+    common_dict[Pco2wAbcDataParticleKey.RECORD_TYPE] = int(rec_type, 16)
+
+    rec_time = common_match.group(RECORD_TIME_GROUP_INDEX)
+    common_dict[Pco2wAbcDataParticleKey.RECORD_TIME] = int(rec_time, 16)
+
+    return common_dict
+
+
+def _populate_light_measurements(light_measurements, instrument_dict, dict_key):
+    """
+    Helper method for filling in the light measurements (either normal or blank)
+    :param light_measurements: normal or blank light measurements
+    :param instrument_dict: instrument_dict or instrument_blank_dict
+    :param dict_key: either Pco2wAbcDataParticleKey.LIGHT_MEASUREMENTS or
+                    Pco2wAbcDataParticleKey.BLANK_LIGHT_MEASUREMENTS
+    :return: dict filled in normal or blank light measurements
+    """
+
+    end_range = num_chars = 4
+    last_light_measurement_start_index = len(light_measurements)-3
+    for x in range(0, last_light_measurement_start_index, num_chars):
+        light_measurement = light_measurements[x: end_range]
+        log.trace("ascii-hex light_measurement: %s", light_measurement)
+        # convert to int
+        int_light_measurement = int(light_measurement, 16)
+
+        # append int value to instrument_dict
+        instrument_dict[dict_key].append(int_light_measurement)
+
+        end_range += num_chars
+
+    return instrument_dict[dict_key]
+
+
+def _calculate_passed_checksum(line, record_checksum):
     """
     Calculates the checksum of the argument ascii-hex string
     :param line: the record that will be stripped
@@ -263,8 +323,9 @@ def _generate_internal_timestamp(record_dict):
     dcl_controller_timestamp = record_dict[Pco2wAbcDataParticleKey.DCL_CONTROLLER_TIMESTAMP]
 
     dcl_datetime = datetime.strptime(dcl_controller_timestamp, DCL_CONTROLLER_TIMESTAMP_FORMAT)
-    local_seconds = time.mktime(dcl_datetime.timetuple())
-    start_time_utc = local_seconds - time.timezone
+    # Convert to local time in seconds with milliseconds precision
+    local_seconds_ms = float(dcl_datetime.strftime("%s.%f"))
+    start_time_utc = local_seconds_ms - time.timezone
 
     return float(ntplib.system_to_ntp_time(start_time_utc))
 
@@ -285,11 +346,8 @@ class Pco2wAbcDclParser(Pco2wAbcParser):
         # Load the dictionary from the base class
         metadata_dict = Pco2wAbcParser._create_empty_metadata_dict()
 
-        # Load the dictionary entries for this subclass
-        dcl_dict = dict.fromkeys([Pco2wAbcDataParticleKey.DCL_CONTROLLER_TIMESTAMP,
-                                  Pco2wAbcDataParticleKey.UNIQUE_ID,
-                                  Pco2wAbcDataParticleKey.PASSED_CHECKSUM],
-                                 None)
+        # Load the DCL dictionary entries for this subclass
+        dcl_dict = _create_dcl_extension_dict()
 
         # Update the dict from base class with the dictionary entries that are unique
         # to this subclass
@@ -306,10 +364,7 @@ class Pco2wAbcDclParser(Pco2wAbcParser):
         power_dict = Pco2wAbcParser._create_empty_power_dict()
 
         # Load the dictionary entries for this subclass
-        dcl_dict = dict.fromkeys([Pco2wAbcDataParticleKey.DCL_CONTROLLER_TIMESTAMP,
-                                  Pco2wAbcDataParticleKey.UNIQUE_ID,
-                                  Pco2wAbcDataParticleKey.PASSED_CHECKSUM],
-                                 None)
+        dcl_dict = _create_dcl_extension_dict()
 
         # Update the dict from base class with the dictionary entries that are unique
         # to this subclass
@@ -326,10 +381,7 @@ class Pco2wAbcDclParser(Pco2wAbcParser):
         instrument_dict = Pco2wAbcParser._create_empty_instrument_dict()
 
         # Load the dictionary entries for this subclass
-        dcl_dict = dict.fromkeys([Pco2wAbcDataParticleKey.DCL_CONTROLLER_TIMESTAMP,
-                                  Pco2wAbcDataParticleKey.UNIQUE_ID,
-                                  Pco2wAbcDataParticleKey.PASSED_CHECKSUM],
-                                 None)
+        dcl_dict = _create_dcl_extension_dict()
 
         # Update the dict from base class with the dictionary entries that are unique
         # to this subclass
@@ -346,10 +398,7 @@ class Pco2wAbcDclParser(Pco2wAbcParser):
         instrument_dict = Pco2wAbcParser._create_empty_instrument_blank_dict()
 
         # Load the dictionary entries for this subclass
-        dcl_dict = dict.fromkeys([Pco2wAbcDataParticleKey.DCL_CONTROLLER_TIMESTAMP,
-                                  Pco2wAbcDataParticleKey.UNIQUE_ID,
-                                  Pco2wAbcDataParticleKey.PASSED_CHECKSUM],
-                                 None)
+        dcl_dict = _create_dcl_extension_dict()
 
         # Update the dict from base class with the dictionary entries that are unique
         # to this subclass
@@ -363,17 +412,8 @@ class Pco2wAbcDclParser(Pco2wAbcParser):
         the metadata dictionary.
         """
 
-        metadata_dict[Pco2wAbcDataParticleKey.DCL_CONTROLLER_TIMESTAMP] = \
-            metadata_match.group(DATE_TIME_GROUP_INDEX)
-
-        unique_id = metadata_match.group(ID_GROUP_INDEX)
-        metadata_dict[Pco2wAbcDataParticleKey.UNIQUE_ID] = int(unique_id, 16)
-
-        rec_type = metadata_match.group(RECORD_TYPE_GROUP_INDEX)
-        metadata_dict[Pco2wAbcDataParticleKey.RECORD_TYPE] = int(rec_type, 16)
-
-        rec_time = metadata_match.group(RECORD_TIME_GROUP_INDEX)
-        metadata_dict[Pco2wAbcDataParticleKey.RECORD_TIME] = int(rec_time, 16)
+        common_dict = _populate_common_dict(metadata_match, metadata_dict)
+        metadata_dict.update(common_dict)
 
         # Convert the flags group from ASCII-HEX to int
         ascii_hex_flags = metadata_match.group(FLAGS_GROUP_INDEX)
@@ -443,17 +483,8 @@ class Pco2wAbcDclParser(Pco2wAbcParser):
         the power dictionary.
         """
 
-        power_dict[Pco2wAbcDataParticleKey.DCL_CONTROLLER_TIMESTAMP] = \
-            power_match.group(DATE_TIME_GROUP_INDEX)
-
-        unique_id = power_match.group(ID_GROUP_INDEX)
-        power_dict[Pco2wAbcDataParticleKey.UNIQUE_ID] = int(unique_id, 16)
-
-        rec_type = power_match.group(RECORD_TYPE_GROUP_INDEX)
-        power_dict[Pco2wAbcDataParticleKey.RECORD_TYPE] = int(rec_type, 16)
-
-        rec_time = power_match.group(RECORD_TIME_GROUP_INDEX)
-        power_dict[Pco2wAbcDataParticleKey.RECORD_TIME] = int(rec_time, 16)
+        common_dict = _populate_common_dict(power_match, power_dict)
+        power_dict.update(common_dict)
 
         passed_checksum = _calculate_passed_checksum(line,
                                                      int(power_match.group(power_match.lastindex), 16))
@@ -466,34 +497,17 @@ class Pco2wAbcDclParser(Pco2wAbcParser):
         the instrument dictionary.
         """
 
-        instrument_dict[Pco2wAbcDataParticleKey.DCL_CONTROLLER_TIMESTAMP] = \
-            instrument_record_match.group(DATE_TIME_GROUP_INDEX)
-
-        unique_id = instrument_record_match.group(ID_GROUP_INDEX)
-        instrument_dict[Pco2wAbcDataParticleKey.UNIQUE_ID] = int(unique_id, 16)
-
-        rec_type = instrument_record_match.group(RECORD_TYPE_GROUP_INDEX)
-        instrument_dict[Pco2wAbcDataParticleKey.RECORD_TYPE] = int(rec_type, 16)
-
-        rec_time = instrument_record_match.group(RECORD_TIME_GROUP_INDEX)
-        instrument_dict[Pco2wAbcDataParticleKey.RECORD_TIME] = int(rec_time, 16)
+        common_dict = _populate_common_dict(instrument_record_match, instrument_dict)
+        instrument_dict.update(common_dict)
 
         # Light measurements array
         light_measurements = instrument_record_match.group(LIGHT_MEASUREMENTS_GROUP_INDEX)
-
+        log.trace("light_measurements: %s", light_measurements)
         instrument_dict[Pco2wAbcDataParticleKey.LIGHT_MEASUREMENTS] = []
 
-        y = 4
-        for x in range(0, len(light_measurements)-3, 4):
-            light_measurement = light_measurements[x: y]
-            #log.debug("ascii-hex light_measurement: %s", light_measurement)
-            # convert to int
-            int_light_measurement = int(light_measurement, 16)
-
-            # append int value to instrument_dict
-            instrument_dict[Pco2wAbcDataParticleKey.LIGHT_MEASUREMENTS].append(int_light_measurement)
-
-            y += 4
+        instrument_dict[Pco2wAbcDataParticleKey.LIGHT_MEASUREMENTS] \
+            = _populate_light_measurements(light_measurements,
+                                           instrument_dict, Pco2wAbcDataParticleKey.LIGHT_MEASUREMENTS)
 
         battery_voltage = instrument_record_match.group(CO2_BATTERY_VOLTAGE_GROUP_INDEX)
         instrument_dict[Pco2wAbcDataParticleKey.VOLTAGE_BATTERY] = int(battery_voltage, 16)
@@ -515,34 +529,16 @@ class Pco2wAbcDclParser(Pco2wAbcParser):
         the instrument blank dictionary.
         """
 
-        instrument_blank_dict[Pco2wAbcDataParticleKey.DCL_CONTROLLER_TIMESTAMP] = \
-            instrument_blank_record_match.group(DATE_TIME_GROUP_INDEX)
+        common_dict = _populate_common_dict(instrument_blank_record_match, instrument_blank_dict)
+        instrument_blank_dict.update(common_dict)
 
-        unique_id = instrument_blank_record_match.group(ID_GROUP_INDEX)
-        instrument_blank_dict[Pco2wAbcDataParticleKey.UNIQUE_ID] = int(unique_id, 16)
-
-        rec_type = instrument_blank_record_match.group(RECORD_TYPE_GROUP_INDEX)
-        instrument_blank_dict[Pco2wAbcDataParticleKey.RECORD_TYPE] = int(rec_type, 16)
-
-        rec_time = instrument_blank_record_match.group(RECORD_TIME_GROUP_INDEX)
-        instrument_blank_dict[Pco2wAbcDataParticleKey.RECORD_TIME] = int(rec_time, 16)
-
-        # Light measurements array
+        # Blank light measurements array
         light_measurements = instrument_blank_record_match.group(LIGHT_MEASUREMENTS_GROUP_INDEX)
         instrument_blank_dict[Pco2wAbcDataParticleKey.BLANK_LIGHT_MEASUREMENTS] = []
 
-        y = 4
-        for x in range(0, len(light_measurements)-3, 4):
-            light_measurement = light_measurements[x: y]
-            log.trace("ascii-hex blank light_measurement: %s", light_measurement)
-            # convert to int
-            int_light_measurement = int(light_measurement, 16)
-            log.trace("int blank light_measurement: %d", int_light_measurement)
-
-            # append int value to instrument_dict
-            instrument_blank_dict[Pco2wAbcDataParticleKey.BLANK_LIGHT_MEASUREMENTS]\
-                .append(int_light_measurement)
-            y += 4
+        instrument_blank_dict[Pco2wAbcDataParticleKey.BLANK_LIGHT_MEASUREMENTS] \
+            = _populate_light_measurements(light_measurements,
+                                           instrument_blank_dict, Pco2wAbcDataParticleKey.BLANK_LIGHT_MEASUREMENTS)
 
         battery_voltage = instrument_blank_record_match.group(CO2_BATTERY_VOLTAGE_GROUP_INDEX)
         instrument_blank_dict[Pco2wAbcDataParticleKey.VOLTAGE_BATTERY] = int(battery_voltage, 16)
