@@ -408,47 +408,85 @@ class ResultSet(object):
             log.debug("rounded value to %s", particle_value)
 
         if ex_value != particle_value:
-            # check for nans, two nans will not equal each other
+            # check for nans, two nans will not equal each other but in this
+            # case they are considered equal
+            if ResultSet._nan_equal_compare:
+                return None
 
-            # check for 2D list or list of float or int
-            if isinstance(ex_value, list) and isinstance(particle_value, list) and \
-                    isinstance(ex_value[0], (float, int, list)) and isinstance(particle_value[0], (float, int, list)):
-
-                if isinstance(ex_value[0], list) and isinstance(particle_value[0], list):
-                    # this is a 2D array of lists
-                    if len(ex_value) != len(particle_value):
-                        return "size of outer 2D lists do not match %d, %d, expected:%s, recieved:%s" % \
-                               (len(ex_value),  len(particle_value), ex_value, particle_value)
-                    # check for an inner list of float or int
-                    if isinstance(ex_value[0][0], (float, int)) and isinstance(particle_value[0][0], (float, int)):
-                        # loop and compare each list within a list
-                        all_lists_equal = True
-                        for i in range(0, len(ex_value)):
-                            if not ResultSet._is_equal_nan_list(ex_value[i], particle_value[i]):
-                                all_lists_equal = False
-                                break
-                        if all_lists_equal:
-                            return None
-                else:
-                    # this is a single list of float or int
-                    if ResultSet._is_equal_nan_list(ex_value, particle_value):
-                        return None
-
-            # check two individual float or ints for nans
-            elif isinstance(ex_value, (float, int)) and isinstance(particle_value, (float, int)):
-                if numpy.isnan(ex_value) and numpy.isnan(particle_value):
-                    # found two Nans, they match
-                    return None
-
-            return "value mismatch, %s != %s (decimals may be rounded)" % (ex_value, particle_value)
+            return "value mismatch, %s != %s (decimals may be rounded)" % \
+                   (ex_value, particle_value)
 
         return None
 
     @staticmethod
+    def _nan_equal_compare(self, expected, received):
+        """
+        Compare the expected and recieved values, considering two NaNs to be equal.
+        If the values are equal True is returned, if they are not False is returned
+        @param expected: Expected value
+        @param received: Received value
+        @return: True if expected and received match including NaNs
+        """
+        # check for a list
+        if ResultSet._are_both_lists(expected, received):
+
+            # check for list within a list
+            if ResultSet._are_both_lists(expected[0], received[0]):
+                # confirm lists are equal size and contain numbers, if not they
+                # don't need checking for nans
+                if len(expected) == len(received) and \
+                        ResultSet._are_both_numbers(expected[0][0], received[0][0]):
+                    # loop and compare each list within a list
+                    all_lists_equal = True
+                    for i in range(0, len(expected)):
+                        if not ResultSet._is_equal_nan_list(expected[i], received[i]):
+                            all_lists_equal = False
+                            break
+                    if all_lists_equal:
+                        return True
+
+            # check for a list of numbers
+            elif ResultSet._are_both_numbers(expected[0], received[0]):
+                # this is a single list of float or ints
+                if ResultSet._is_equal_nan_list(expected, received):
+                    return True
+
+        # check two individual float or ints for nans
+        elif ResultSet._are_both_numbers(expected, received):
+            if numpy.isnan(expected) and numpy.isnan(received):
+                # found two Nans, they match
+                return True
+        return False
+
+    @staticmethod
+    def _are_both_lists(self, expected, received):
+        """
+        Compare if the expected and recieved values are both lists
+        @param expected: expected value
+        @param received: received value
+        @return: True if both lists, false if not
+        """
+        if isinstance(expected, list) and isinstance(received, list):
+            return True
+        return False
+
+    @staticmethod
+    def _are_both_numbers(self, expected, received):
+        """
+        Compare if the expected and recieved values are both floats or ints
+        @param expected: expected value
+        @param received: received value
+        @return: True if both lists, false if not
+        """
+        if isinstance(expected, (float, int)) and isinstance(received, (float, int)):
+            return True
+        return False
+
+    @staticmethod
     def _is_equal_nan_list(expected_list, received_list):
         """
-        Compare two lists that contain nan values, return True if they match, False if they do not, considering two
-        NaNs to be equal in values
+        Compare two lists that contain nan values, return True if they match,
+        False if they do not, considering two NaNs to be equal in values
         @param expected_list: a list of expected values
         @param received_list: the recieved list of values
         @return: True if lists match, False if lists don't match

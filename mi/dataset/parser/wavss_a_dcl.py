@@ -22,12 +22,13 @@ from mi.core.exceptions import SampleException, RecoverableSampleException
 
 from mi.dataset.dataset_parser import SimpleParser
 
+from mi.dataset.parser.common_regexes import INT_REGEX
 
-INT_REGEX = r'[+-]?\d+'
-FLOAT_REGEX = r'[+-]?\d+.\d+[Ee]?[+-]?\d*'  # requires . followed by at least 1 digit, and includes scientific notation
+
+FLOAT_REGEX = r'[+-]?\d+.\d+[Ee]?[+-]?\d*'  # includes scientific notation
 FLOAT_GROUP_REGEX = r'(' + FLOAT_REGEX + ')'
 INT_GROUP_REGEX = r'(' + INT_REGEX + ')'
-END_OF_LINE_REGEX = r'(?:\r\n|\n)?' # line should have terminator, but end of file might be missing one so make optional
+END_OF_LINE_REGEX = r'(?:\r\n|\n)?'  # end of file might be missing terminator so make optional
 END_OF_SAMPLE_REGEX = r'\*[A-Fa-f0-9]{2}' + END_OF_LINE_REGEX
 DCL_TIMESTAMP_REGEX = r'(\d{4}/\d{2}/\d{2} \d{2}:\d{2}:\d{2}.\d{3})'
 
@@ -488,54 +489,75 @@ class WavssADclParser(SimpleParser):
 
             if tspwa_match:
                 # this is a wave statistics sample
-                particle = self._extract_sample(self.statistics_particle_class, None, tspwa_match, None)
-                self._record_buffer.append(particle)
+                self.extract_particle(self.statistics_particle_class, tspwa_match)
+
             elif tspma_match:
                 # this is a mean directional sample
                 num_bands = int(tspma_match.group(NUMBER_COUNT_GROUP))
+
                 if num_csv != (12 + 3*num_bands):
-                    err_msg = "TSPMA does not contain 12 + 3*%d comma separated values, has %d" % (num_bands, num_csv)
-                    log.warn(err_msg)
-                    self._exception_callback(RecoverableSampleException(err_msg))
+                    self.recov_exception("TSPMA does not contain 12 + 3*%d comma separated values, has %d" %
+                                        (num_bands, num_csv))
+
                 else:
-                    particle = self._extract_sample(self.mean_directional_particle_class, None, tspma_match, None)
-                    self._record_buffer.append(particle)
+                    self.extract_particle(self.mean_directional_particle_class, tspma_match)
+
             elif tspna_match:
                 # this is a non directional sample
                 num_bands = int(tspna_match.group(NUMBER_COUNT_GROUP))
+
                 if num_csv != (10 + num_bands):
-                    err_msg = "TSPNA does not contain 10 + %d comma separated values, has %d" % (num_bands, num_csv)
-                    log.warn(err_msg)
-                    self._exception_callback(RecoverableSampleException(err_msg))
+                    self.recov_exception("TSPNA does not contain 10 + %d comma separated values, has %d" %
+                                        (num_bands, num_csv))
+
                 else:
-                    particle = self._extract_sample(self.non_directional_particle_class, None, tspna_match, None)
-                    self._record_buffer.append(particle)
+                    self.extract_particle(self.non_directional_particle_class, tspna_match)
+
             elif tspha_match:
                 # this is a heave north east / motion sample
                 num_time = int(tspha_match.group(NUMBER_COUNT_GROUP))
+
                 if num_csv != (11 + 3*num_time):
-                    err_msg = "TSPHA doesn't contain 11 + 3*%d comma separated values, has %d" % (num_time, num_csv)
-                    log.warn(err_msg)
-                    self._exception_callback(RecoverableSampleException(err_msg))
+                    self.recov_exception("TSPHA doesn't contain 11 + 3*%d comma separated values, has %d" %
+                                        (num_time, num_csv))
+
                 else:
-                    particle = self._extract_sample(self.motion_particle_class, None, tspha_match, None)
-                    self._record_buffer.append(particle)
+                    self.extract_particle(self.motion_particle_class, tspha_match)
+
             elif tspfb_match:
                 # this is a fourier sample
                 num_bands = int(tspfb_match.group(NUMBER_COUNT_GROUP))
+
                 if num_csv != (13 + 4*(num_bands - 2)):
-                    err_msg = "TSPFB doesn't contain 13 + 4*(%d - 2) comma separated values, has %d" % (num_bands,
-                                                                                                        num_csv)
-                    log.warn(err_msg)
-                    self._exception_callback(RecoverableSampleException(err_msg))
+                    self.recov_exception("TSPFB doesn't contain 13 + 4*(%d - 2) comma separated values, has %d" %
+                                        (num_bands, num_csv))
+
                 else:
-                    particle = self._extract_sample(self.fourier_particle_class, None, tspfb_match, None)
-                    self._record_buffer.append(particle)
+                    self.extract_particle(self.fourier_particle_class, tspfb_match)
+
             else:
                 log_match = LOG_STATUS_MATCHER.match(line)
                 tspsa_match = TSPSA_MATCHER.match(line)
+
                 if not (log_match or tspsa_match):
                     raise SampleException("Wavss encountered unexpected data line '%s'" % line)
 
-           # read the next line in the file
+            # read the next line in the file
             line = self._stream_handle.readline()
+
+    def extract_particle(self, particle_class, match):
+        """
+        Extract a particle of the specified class and append it to the record buffer
+        @param particle_class: particle class to extract
+        @param match: regex match to pass in as raw data
+        """
+        particle = self._extract_sample(particle_class, None, match, None)
+        self._record_buffer.append(particle)
+
+    def recov_exception(self, error_message):
+        """
+        Add a warning log message and use the exception callback to pass a recoverable exception
+        @param error_message: The error message to use in the log and callback
+        """
+        log.warn(error_message)
+        self._exception_callback(RecoverableSampleException(error_message))
