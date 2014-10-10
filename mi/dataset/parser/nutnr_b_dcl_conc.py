@@ -77,7 +77,7 @@ class NutnrBDclConcParser(NutnrBDclParser):
         # Obtain the ntp timestamp
         ntp_timestamp = self._extract_instrument_ntp_timestamp(inst_match)
 
-        # Create the instrument data tuple from the instrument match data
+        # Create the instrument data list of tuples from the instrument match data
         instrument_data_tuple = [
             (NutnrBDataParticleKey.DCL_CONTROLLER_TIMESTAMP,
              inst_match.group(InstrumentDataMatchGroups.INST_GROUP_DCL_TIMESTAMP),

@@ -22,11 +22,8 @@ def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     log = get_logger()
     
     parser_config = {
-        DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.nutnr_b_dcl_conc',
-        DataSetDriverConfigKeys.PARTICLE_CLASS: [
-            'NutnrBDclConcRecoveredMetadataDataParticle',
-            'NutnrBDclConcRecoveredInstrumentDataParticle'
-        ]
+        DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.nutnr_b_particles',
+        DataSetDriverConfigKeys.PARTICLE_CLASS: None
     }
 
     def exception_callback(exception):
@@ -36,7 +33,7 @@ def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     with open(sourceFilePath, 'r') as stream_handle:
         parser = NutnrBDclConcRecoveredParser(parser_config,
                                               stream_handle,
-                                              lambda state,file : None,
+                                              lambda state, ingested : None,
                                               lambda data : None,
                                               exception_callback)
         

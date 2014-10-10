@@ -1,5 +1,14 @@
 __author__ = 'mworden'
 
+"""
+@package mi.dataset.parser.nutnr_b_particles
+@file mi/dataset/parser/nutnr_b_particles.py
+@author Mark Worden
+@brief Parser for the nutnr_b_particles dataset driver
+
+This file contains the particles that are applicable
+nutnr_b_dcl_conc, nutnr_b_dcl_full and nutnr_b.
+"""
 
 from mi.core.log import get_logger
 log = get_logger()
@@ -65,7 +74,7 @@ class NutnrBDclInstrumentDataParticle(DataParticle):
     def __init__(self, raw_data,
                  port_timestamp=None,
                  internal_timestamp=None,
-                 preferred_timestamp=DataParticleKey.PORT_TIMESTAMP,
+                 preferred_timestamp=DataParticleKey.INTERNAL_TIMESTAMP,
                  quality_flag=DataParticleValue.OK,
                  new_sequence=None):
 
@@ -98,7 +107,7 @@ class NutnrBDclMetadataDataParticle(DataParticle):
     def __init__(self, raw_data,
                  port_timestamp=None,
                  internal_timestamp=None,
-                 preferred_timestamp=DataParticleKey.PORT_TIMESTAMP,
+                 preferred_timestamp=DataParticleKey.INTERNAL_TIMESTAMP,
                  quality_flag=DataParticleValue.OK,
                  new_sequence=None):
 
@@ -123,136 +132,56 @@ class NutnrBDclMetadataDataParticle(DataParticle):
                 for name, value, function in self.raw_data]
 
 
-class NutnrBDclConcInstrumentDataParticle(NutnrBDclInstrumentDataParticle):
-    """
-    Class for generating the nutnr b dcl conc instrument particle.
-    """
-
-    def __init__(self, raw_data,
-                 port_timestamp=None,
-                 internal_timestamp=None,
-                 preferred_timestamp=DataParticleKey.PORT_TIMESTAMP,
-                 quality_flag=DataParticleValue.OK,
-                 new_sequence=None):
-
-        super(NutnrBDclConcInstrumentDataParticle, self).__init__(raw_data,
-                                                                  port_timestamp,
-                                                                  internal_timestamp,
-                                                                  preferred_timestamp,
-                                                                  quality_flag,
-                                                                  new_sequence)
-
-
-class NutnrBDclConcRecoveredInstrumentDataParticle(NutnrBDclConcInstrumentDataParticle):
+class NutnrBDclConcRecoveredInstrumentDataParticle(NutnrBDclInstrumentDataParticle):
     """
     Class for generating Offset Data Particles from Recovered data.
     """
     _data_particle_type = DataParticleType.NUTNR_B_DCL_CONC_INSTRUMENT_RECOVERED
 
 
-class NutnrBDclConcTelemeteredInstrumentDataParticle(NutnrBDclConcInstrumentDataParticle):
+class NutnrBDclConcTelemeteredInstrumentDataParticle(NutnrBDclInstrumentDataParticle):
     """
     Class for generating Offset Data Particles from Telemetered data.
     """
     _data_particle_type = DataParticleType.NUTNR_B_DCL_CONC_INSTRUMENT
 
 
-class NutnrBDclConcMetadataDataParticle(NutnrBDclMetadataDataParticle):
-    """
-    Class for generating the Optaa_dj Metadata particle.
-    """
-
-    def __init__(self, raw_data,
-                 port_timestamp=None,
-                 internal_timestamp=None,
-                 preferred_timestamp=DataParticleKey.PORT_TIMESTAMP,
-                 quality_flag=DataParticleValue.OK,
-                 new_sequence=None):
-
-        super(NutnrBDclConcMetadataDataParticle, self).__init__(raw_data,
-                                                                port_timestamp,
-                                                                internal_timestamp,
-                                                                preferred_timestamp,
-                                                                quality_flag,
-                                                                new_sequence)
-
-
-class NutnrBDclConcRecoveredMetadataDataParticle(NutnrBDclConcMetadataDataParticle):
+class NutnrBDclConcRecoveredMetadataDataParticle(NutnrBDclMetadataDataParticle):
     """
     Class for generating Metadata Data Particles from Recovered data.
     """
     _data_particle_type = DataParticleType.NUTNR_B_DCL_CONC_METADATA_RECOVERED
 
 
-class NutnrBDclConcTelemeteredMetadataDataParticle(NutnrBDclConcMetadataDataParticle):
+class NutnrBDclConcTelemeteredMetadataDataParticle(NutnrBDclMetadataDataParticle):
     """
     Class for generating Metadata Data Particles from Telemetered data.
     """
     _data_particle_type = DataParticleType.NUTNR_B_DCL_CONC_METADATA
 
 
-class NutnrBDclFullInstrumentDataParticle(NutnrBDclInstrumentDataParticle):
-    """
-    Class for generating the nutnr b dcl conc instrument particle.
-    """
-
-    def __init__(self, raw_data,
-                 port_timestamp=None,
-                 internal_timestamp=None,
-                 preferred_timestamp=DataParticleKey.PORT_TIMESTAMP,
-                 quality_flag=DataParticleValue.OK,
-                 new_sequence=None):
-
-        super(NutnrBDclFullInstrumentDataParticle, self).__init__(raw_data,
-                                                                  port_timestamp,
-                                                                  internal_timestamp,
-                                                                  preferred_timestamp,
-                                                                  quality_flag,
-                                                                  new_sequence)
-
-
-class NutnrBDclFullRecoveredInstrumentDataParticle(NutnrBDclFullInstrumentDataParticle):
+class NutnrBDclFullRecoveredInstrumentDataParticle(NutnrBDclInstrumentDataParticle):
     """
     Class for generating Offset Data Particles from Recovered data.
     """
     _data_particle_type = DataParticleType.NUTNR_B_DCL_FULL_INSTRUMENT_RECOVERED
 
 
-class NutnrBDclFullTelemeteredInstrumentDataParticle(NutnrBDclFullInstrumentDataParticle):
+class NutnrBDclFullTelemeteredInstrumentDataParticle(NutnrBDclInstrumentDataParticle):
     """
     Class for generating Offset Data Particles from Telemetered data.
     """
     _data_particle_type = DataParticleType.NUTNR_B_DCL_FULL_INSTRUMENT
 
 
-class NutnrBDclFullMetadataDataParticle(NutnrBDclMetadataDataParticle):
-    """
-    Class for generating the Optaa_dj Metadata particle.
-    """
-
-    def __init__(self, raw_data,
-                 port_timestamp=None,
-                 internal_timestamp=None,
-                 preferred_timestamp=DataParticleKey.PORT_TIMESTAMP,
-                 quality_flag=DataParticleValue.OK,
-                 new_sequence=None):
-
-        super(NutnrBDclFullMetadataDataParticle, self).__init__(raw_data,
-                                                                port_timestamp,
-                                                                internal_timestamp,
-                                                                preferred_timestamp,
-                                                                quality_flag,
-                                                                new_sequence)
-
-
-class NutnrBDclFullRecoveredMetadataDataParticle(NutnrBDclFullMetadataDataParticle):
+class NutnrBDclFullRecoveredMetadataDataParticle(NutnrBDclMetadataDataParticle):
     """
     Class for generating Metadata Data Particles from Recovered data.
     """
     _data_particle_type = DataParticleType.NUTNR_B_DCL_FULL_METADATA_RECOVERED
 
 
-class NutnrBDclFullTelemeteredMetadataDataParticle(NutnrBDclFullMetadataDataParticle):
+class NutnrBDclFullTelemeteredMetadataDataParticle(NutnrBDclMetadataDataParticle):
     """
     Class for generating Metadata Data Particles from Telemetered data.
     """

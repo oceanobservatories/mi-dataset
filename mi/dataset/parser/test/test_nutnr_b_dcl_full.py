@@ -30,7 +30,7 @@ from mi.idk.config import Config
 RESOURCE_PATH = os.path.join(Config().base_dir(),
     'mi', 'dataset', 'driver', 'nutnr_b', 'dcl_full', 'resource')
 
-MODULE_NAME = 'mi.dataset.parser.nutnr_b_dcl_full'
+MODULE_NAME = 'mi.dataset.parser.nutnr_b_particles'
 
 NO_PARTICLES_FILE = '20010101.nutnr_b_dcl_full.log'
 HAPPY_PATH_FILE_1 = '20130424.nutnr_b_dcl_full.log'
@@ -82,17 +82,19 @@ class NutnrBDclFullParserUnitTestCase(ParserUnitTestCase):
         """
         This function creates a NutnrBDclfull parser for recovered data.
         """
-        return NutnrBDclFullRecoveredParser(self.rec_config,
-            file_handle, self.rec_state_callback,
-            self.rec_pub_callback, self.rec_exception_callback)
+        return NutnrBDclFullRecoveredParser(
+            self.rec_config,
+            file_handle, lambda state, ingested : None,
+            lambda data : None, self.rec_exception_callback)
 
     def create_tel_parser(self, file_handle, new_state=None):
         """
         This function creates a NutnrBDclfull parser for telemetered data.
         """
-        return NutnrBDclFullTelemeteredParser(self.tel_config,
-            file_handle, self.rec_state_callback,
-            self.tel_pub_callback, self.tel_exception_callback)
+        return NutnrBDclFullTelemeteredParser(
+            self.tel_config,
+            file_handle, lambda state, ingested : None,
+            lambda data : None, self.tel_exception_callback)
 
     def open_file(self, filename):
         return open(os.path.join(RESOURCE_PATH, filename), mode='r')

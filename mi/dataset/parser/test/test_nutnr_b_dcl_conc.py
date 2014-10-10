@@ -9,16 +9,16 @@
 Files used for testing:
 
 Filename             Blocks  Instrument Records
-20010101.nutnr_b_dcl_full.log     1         0
+20010101.nutnr_b_dcl_conc.log     1         0
 20020125.nutnr_b_dcl_conc.log     1        25
-20031129.nutnr_b_dcl_full.log     2        11, 29
+20031129.nutnr_b_dcl_conc.log     2        11, 29
 20040509.nutnr_b_dcl_conc.log     3        4, 5, 9
 20051220.nutnr_b_dcl_conc.log     2        40, 75
 20061225.nutnr_b_dcl_conc.log     3        50, 80, 125
 
 19990401.nutnr_b_dcl_conc.log    1        19 valid, 1 invalid frame type
 19980401.nutnr_b_dcl_conc.log    1        20, metadata incomplete
-19970401.nutnr_b_dcl_full.log    1        No valid records (various fields incorrect)
+19970401.nutnr_b_dcl_conc.log    1        No valid records (various fields incorrect)
 
 Real file:
 20140430.nutnr_b_dcl_conc.log has 8 NDC records and 56 NLC records.
@@ -51,7 +51,7 @@ from mi.idk.config import Config
 RESOURCE_PATH = os.path.join(Config().base_dir(),
     'mi', 'dataset', 'driver', 'nutnr_b', 'dcl_conc', 'resource')
 
-MODULE_NAME = 'mi.dataset.parser.nutnr_b_dcl_conc'
+MODULE_NAME = 'mi.dataset.parser.nutnr_b_particles'
 
 FILE1 = '20010101.nutnr_b_dcl_conc.log'
 FILE2 = '20020125.nutnr_b_dcl_conc.log'
@@ -115,17 +115,19 @@ class NutnrBDclConcParserUnitTestCase(ParserUnitTestCase):
         """
         This function creates a NutnrBDclConc parser for recovered data.
         """
-        return NutnrBDclConcRecoveredParser(self.rec_config,
-            file_handle, self.rec_state_callback,
-            self.rec_pub_callback, self.rec_exception_callback)
+        return NutnrBDclConcRecoveredParser(
+            self.rec_config,
+            file_handle, lambda state, ingested : None,
+            lambda data : None, self.rec_exception_callback)
 
     def create_tel_parser(self, file_handle, new_state=None):
         """
         This function creates a NutnrBDclConc parser for telemetered data.
         """
-        return NutnrBDclConcTelemeteredParser(self.tel_config,
-            file_handle, self.rec_state_callback,
-            self.tel_pub_callback, self.tel_exception_callback)
+        return NutnrBDclConcTelemeteredParser(
+            self.tel_config,
+            file_handle, lambda state, ingested : None,
+            lambda data : None, self.tel_exception_callback)
 
     def open_file(self, filename):
         return open(os.path.join(RESOURCE_PATH, filename), mode='r')
