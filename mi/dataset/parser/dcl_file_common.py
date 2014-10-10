@@ -14,27 +14,22 @@ __author__ = 'Ronald Ronquillo'
 __license__ = 'Apache 2.0'
 
 import calendar
-import copy
 import re
 from functools import partial
 
-from mi.core.instrument.chunker import \
-    StringChunker
-
 from mi.core.log import get_logger
 log = get_logger()
-from mi.core.common import BaseEnum
+from mi.core.instrument.chunker import StringChunker
 from mi.core.instrument.data_particle import DataParticle
-from mi.core.exceptions import DatasetParserException, UnexpectedDataException
+from mi.core.exceptions import UnexpectedDataException
 
 from mi.dataset.dataset_parser import BufferLoadingParser
+from mi.dataset.parser.common_regexes import END_OF_LINE_REGEX
 
 
 # Basic patterns
 ANY_CHARS = r'.*'          # Any characters excluding a newline
-NEW_LINE = r'(?:\r\n|\n)'  # any type of new line
 SPACE = ' +'
-TAB = '\t'
 START_GROUP = '('
 END_GROUP = ')'
 
@@ -50,7 +45,7 @@ END_METADATA = r'\]'
 
 # All basic dcl records are ASCII characters separated by a newline.
 RECORD_PATTERN = ANY_CHARS       # Any number of ASCII characters
-RECORD_PATTERN += NEW_LINE       # separated by a new line
+RECORD_PATTERN += END_OF_LINE_REGEX       # separated by a new line
 RECORD_MATCHER = re.compile(RECORD_PATTERN)
 
 SENSOR_GROUP_TIMESTAMP = 0
@@ -101,10 +96,6 @@ class DclInstrumentDataParticle(DataParticle):
                 for name, group, function in self.instrument_particle_map]
 
 
-class StateKey(BaseEnum):
-    POSITION = 'position'   # holds the file position
-
-
 class DclFileCommonParser(BufferLoadingParser):
 
     """
@@ -117,27 +108,22 @@ class DclFileCommonParser(BufferLoadingParser):
                  metadata_matcher,
                  config,
                  stream_handle,
-                 state,
                  *args, **kwargs):
 
         # Default the position within the file to the beginning.
-        self._read_state = {StateKey.POSITION: 0}
         self.input_file = stream_handle
         self.sensor_data_matcher = sensor_data_matcher
         self.metadata_matcher = metadata_matcher
 
         # No fancy sieve function needed for this parser.
         # File is ASCII with records separated by newlines.
-        super(DclFileCommonParser, self).__init__(config,
-                                                  stream_handle,
-                                                  state,
-                                                  partial(StringChunker.regex_sieve_function,
-                                                          regex_list=[RECORD_MATCHER]),
-                                                  *args, **kwargs)
-
-        # If there's an existing state, update to it.
-        if state is not None:
-            self.set_state(state)
+        super(DclFileCommonParser, self).__init__(
+            config,
+            stream_handle,
+            None,
+            partial(StringChunker.regex_sieve_function,
+                    regex_list=[RECORD_MATCHER]),
+            *args, **kwargs)
 
     def handle_non_data(self, non_data, non_end, start):
         """
@@ -147,17 +133,9 @@ class DclFileCommonParser(BufferLoadingParser):
         # Increment the position within the file.
         # Use the _exception_callback.
         if non_data is not None and non_end <= start:
-            self._increment_position(len(non_data))
             self._exception_callback(UnexpectedDataException(
                 "Found %d bytes of un-expected non-data %s" %
                 (len(non_data), non_data)))
-
-    def _increment_position(self, bytes_read):
-        """
-        Increment the position within the file.
-        @param bytes_read The number of bytes just read
-        """
-        self._read_state[StateKey.POSITION] += bytes_read
 
     def parse_chunks(self):
         """
@@ -173,7 +151,6 @@ class DclFileCommonParser(BufferLoadingParser):
         self.handle_non_data(non_data, non_end, start)
 
         while chunk is not None:
-            self._increment_position(len(chunk))
 
             # If this is a valid sensor data record,
             # use the extracted fields to generate a particle.
@@ -184,7 +161,7 @@ class DclFileCommonParser(BufferLoadingParser):
                                                 sensor_match.groups(),
                                                 None)
                 if particle is not None:
-                    result_particles.append((particle, copy.copy(self._read_state)))
+                    result_particles.append((particle, None))
 
             # It's not a sensor data record, see if it's a metadata record.
             else:
@@ -202,21 +179,3 @@ class DclFileCommonParser(BufferLoadingParser):
             self.handle_non_data(non_data, non_end, start)
 
         return result_particles
-
-    def set_state(self, state_obj):
-        """
-        Set the value of the state object for this parser
-        @param state_obj The object to set the state to.
-        @throws DatasetParserException if there is a bad state structure
-        """
-        if not isinstance(state_obj, dict):
-            raise DatasetParserException("Invalid state structure")
-
-        if not (StateKey.POSITION in state_obj):
-            raise DatasetParserException('%s missing in state keys' % StateKey.POSITION)
-
-        self._record_buffer = []
-        self._state = state_obj
-        self._read_state = state_obj
-
-        self.input_file.seek(state_obj[StateKey.POSITION])
