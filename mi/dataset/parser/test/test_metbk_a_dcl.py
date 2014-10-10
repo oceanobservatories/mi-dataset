@@ -23,6 +23,12 @@ Files used for testing:
 20140917.metbk2.log
   Metadata - 0 sets,  Sensor Data - 904 records
 
+20140805.metbk2_bad_sensor.log
+    Metadata - 4 sets,  Sensor Data - 9 records
+
+20140901.metbk2_no_sensor.log
+    Metadata - 7 sets,  Sensor Data - 0 records
+
 """
 
 import os
@@ -41,7 +47,7 @@ from mi.dataset.test.test_parser import BASE_RESOURCE_PATH
 RESOURCE_PATH = os.path.join(BASE_RESOURCE_PATH, 'metbk_a', 'dcl', 'resource')
 
 FILE_4_1430 = '20140805.metbk2.log'
-FILE_4_0 = '20140805.metbk2_bad_sensor.log'
+FILE_4_9 = '20140805.metbk2_bad_sensor.log'
 FILE_7_0 = '20140901.metbk2_no_sensor.log'
 FILE_7_1061 = '20140901.metbk2.log'
 FILE_0_863 = '20140902.metbk2.log'
@@ -55,9 +61,13 @@ YML_0_904 = 'rec_20140917.metbk2.yml'
 
 RECORDS_FILE_4_1430 = 1430      # number of records expected
 RECORDS_FILE_7_1061 = 1061      # number of records expected
-RECORDS_FILE_0_863 = 863      # number of records expected
-RECORDS_FILE_0_904 = 904
-EXCEPTIONS_FILE8 = 47    # number of exceptions expected
+RECORDS_FILE_0_863 = 863        # number of records expected
+RECORDS_FILE_0_904 = 904        # number of records expected
+
+TOTAL_RECORDS_FILE_7_0 = 7      # total number of records
+TOTAL_RECORDS_FILE_4_9 = 60     # total number of records
+RECORDS_FILE_4_9 = 9            # number of records expected
+EXCEPTIONS_FILE_4_0 = 47        # number of exceptions expected
 
 
 @attr('UNIT', group='mi')
@@ -152,18 +162,18 @@ class MetbkADclParserUnitTestCase(ParserUnitTestCase):
     def test_invalid_sensor_data_records(self):
         """
         Read data from a file containing invalid sensor data records.
-        Verify that no instrument particles are produced
+        Verify that only the expected number of instrument particles are produced
         and the correct number of exceptions are detected.
         """
         log.debug('===== START TEST INVALID SENSOR DATA RECOVERED =====')
-        in_file = self.open_file(FILE_4_0)
+        in_file = self.open_file(FILE_4_9)
         parser = self.create_parser(RECOVERED_PARTICLE_CLASS, in_file)
 
-        # Try to get records and verify that none are returned.
-        result = parser.get_records(60)
+        # Try to get records and verify expected number of particles are returned.
+        result = parser.get_records(TOTAL_RECORDS_FILE_4_9)
 
-        self.assertEqual(len(result), 9)
-        self.assertEqual(len(self.exception_callback_value), EXCEPTIONS_FILE8)
+        self.assertEqual(len(result), RECORDS_FILE_4_9)
+        self.assertEqual(len(self.exception_callback_value), EXCEPTIONS_FILE_4_0)
 
         in_file.close()
 
@@ -179,7 +189,7 @@ class MetbkADclParserUnitTestCase(ParserUnitTestCase):
         parser = self.create_parser(RECOVERED_PARTICLE_CLASS, in_file)
 
         # Try to get a record and verify that none are produced.
-        result = parser.get_records(1)
+        result = parser.get_records(TOTAL_RECORDS_FILE_7_0)
         self.assertEqual(result, [])
 
         self.assertListEqual(self.exception_callback_value, [])

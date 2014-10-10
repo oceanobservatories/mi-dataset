@@ -49,7 +49,7 @@ RECOVERED_PARTICLE_CLASS = 'MetbkADclRecoveredInstrumentDataParticle'
 TELEMETERED_PARTICLE_CLASS = 'MetbkADclTelemeteredInstrumentDataParticle'
 
 # Basic patterns
-CFLOAT_REGEX = '(' + FLOAT_REGEX + ')'  # floating point as a captured group
+FLOAT = '('+FLOAT_REGEX+')'  # floating point as a captured group
 
 # Metadata record:
 #   Timestamp [Text]MoreText newline
@@ -65,20 +65,20 @@ METADATA_MATCHER = re.compile(METADATA_PATTERN)
 # Sensor data record:
 #   Timestamp Date<tab>Time<tab>SensorData
 #   where SensorData are space-separated floating point numbers
-SENSOR_DATA_PATTERN = TIMESTAMP + SPACE         # dcl controller timestamp
-SENSOR_DATA_PATTERN += CFLOAT_REGEX + SPACE     # Barometric Pressure
-SENSOR_DATA_PATTERN += CFLOAT_REGEX + SPACE     # Relative Humidity
-SENSOR_DATA_PATTERN += CFLOAT_REGEX + SPACE     # Air Temperature
-SENSOR_DATA_PATTERN += CFLOAT_REGEX + SPACE     # Longwave Irradiance
-SENSOR_DATA_PATTERN += CFLOAT_REGEX + SPACE     # Precipitation Level
-SENSOR_DATA_PATTERN += CFLOAT_REGEX + SPACE     # Sea Surface Temperature
-SENSOR_DATA_PATTERN += CFLOAT_REGEX + SPACE     # Sea Surface Conductivity
-SENSOR_DATA_PATTERN += CFLOAT_REGEX + SPACE     # Shortwave Irradiance
-SENSOR_DATA_PATTERN += CFLOAT_REGEX + SPACE     # Eastward Wind Velocity relative to Magnetic North
-SENSOR_DATA_PATTERN += CFLOAT_REGEX + SPACE     # Northward Wind Velocity relative to Magnetic North
-SENSOR_DATA_PATTERN += FLOAT_REGEX + SPACE      # Not Applicable (Don't Care)
-SENSOR_DATA_PATTERN += FLOAT_REGEX              # Not Applicable (Don't Care)
-SENSOR_DATA_PATTERN += END_OF_LINE_REGEX        # sensor data ends with CR-LF
+SENSOR_DATA_PATTERN = TIMESTAMP + SPACE     # dcl controller timestamp
+SENSOR_DATA_PATTERN += FLOAT + SPACE        # Barometric Pressure
+SENSOR_DATA_PATTERN += FLOAT + SPACE        # Relative Humidity
+SENSOR_DATA_PATTERN += FLOAT + SPACE        # Air Temperature
+SENSOR_DATA_PATTERN += FLOAT + SPACE        # Longwave Irradiance
+SENSOR_DATA_PATTERN += FLOAT + SPACE        # Precipitation Level
+SENSOR_DATA_PATTERN += FLOAT + SPACE        # Sea Surface Temperature
+SENSOR_DATA_PATTERN += FLOAT + SPACE        # Sea Surface Conductivity
+SENSOR_DATA_PATTERN += FLOAT + SPACE        # Shortwave Irradiance
+SENSOR_DATA_PATTERN += FLOAT + SPACE        # Eastward Wind Velocity relative to Magnetic North
+SENSOR_DATA_PATTERN += FLOAT + SPACE        # Northward Wind Velocity relative to Magnetic North
+SENSOR_DATA_PATTERN += FLOAT_REGEX + SPACE  # Not Applicable (Don't Care)
+SENSOR_DATA_PATTERN += FLOAT_REGEX          # Not Applicable (Don't Care)
+SENSOR_DATA_PATTERN += END_OF_LINE_REGEX    # sensor data ends with CR-LF
 SENSOR_DATA_MATCHER = re.compile(SENSOR_DATA_PATTERN)
 
 
