@@ -97,12 +97,12 @@ class DclInstrumentDataParticle(DataParticle):
 
 
 class DclFileCommonParser(BufferLoadingParser):
-
     """
     Parser for dcl data.
     In addition to the standard constructor parameters,
     this constructor takes an additional parameter particle_class.
     """
+
     def __init__(self,
                  sensor_data_matcher,
                  metadata_matcher,
@@ -146,8 +146,8 @@ class DclFileCommonParser(BufferLoadingParser):
             parsing, plus the state.
         """
         result_particles = []
-        (nd_timestamp, non_data, non_start, non_end) = self._chunker.get_next_non_data_with_index(clean=False)
-        (timestamp, chunk, start, end) = self._chunker.get_next_data_with_index(clean=True)
+        nd_timestamp, non_data, non_start, non_end = self._chunker.get_next_non_data_with_index(clean=False)
+        timestamp, chunk, start, end = self._chunker.get_next_data_with_index(clean=True)
         self.handle_non_data(non_data, non_end, start)
 
         while chunk is not None:
@@ -174,8 +174,8 @@ class DclFileCommonParser(BufferLoadingParser):
                     log.warn(error_message)
                     self._exception_callback(UnexpectedDataException(error_message))
 
-            (nd_timestamp, non_data, non_start, non_end) = self._chunker.get_next_non_data_with_index(clean=False)
-            (timestamp, chunk, start, end) = self._chunker.get_next_data_with_index(clean=True)
+            nd_timestamp, non_data, non_start, non_end = self._chunker.get_next_non_data_with_index(clean=False)
+            timestamp, chunk, start, end = self._chunker.get_next_data_with_index(clean=True)
             self.handle_non_data(non_data, non_end, start)
 
         return result_particles
