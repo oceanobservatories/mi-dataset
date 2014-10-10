@@ -30,13 +30,11 @@ class Pco2wAbcDclDriver:
 
             def exception_callback(exception):
                 log.debug("Exception: %s", exception)
-                #self._particleDataHdlrObj.setParticleDataCaptureFailure()
+                self._particleDataHdlrObj.setParticleDataCaptureFailure()
 
             parser = Pco2wAbcDclParser(self._parser_config,
                                        file_handle,
-                                       exception_callback,
-                                       None,
-                                       None)
+                                       exception_callback)
 
             driver = DataSetDriver(parser, self._particleDataHdlrObj)
 

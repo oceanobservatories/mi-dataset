@@ -13,8 +13,9 @@ import os
 
 from nose.plugins.attrib import attr
 
+from mi.core.exceptions import RecoverableSampleException
 from mi.logging import log
-from mi.dataset.test.test_parser import ParserUnitTestCase
+from mi.dataset.test.test_parser import BASE_RESOURCE_PATH, ParserUnitTestCase
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 from mi.dataset.parser.pco2w_abc import Pco2wAbcParticleClassKey
 from mi.dataset.parser.pco2w_abc_dcl import Pco2wAbcDclParser
@@ -27,11 +28,8 @@ from mi.dataset.parser.pco2w_abc_particles import Pco2wAbcDclInstrumentBlankReco
     Pco2wAbcDclInstrumentTelemeteredDataParticle, \
     Pco2wAbcDclInstrumentBlankTelemeteredDataParticle
 
-from mi.idk.config import Config
-
-
-RESOURCE_PATH = os.path.join(Config().base_dir(),
-                             'mi', 'dataset', 'driver', 'pco2w_abc', 'dcl', 'resource')
+RESOURCE_PATH = os.path.join(BASE_RESOURCE_PATH,
+                             'pco2w_abc', 'dcl', 'resource')
 
 
 @attr('UNIT', group='mi')
@@ -43,8 +41,6 @@ class Pco2wAbcDclParserUnitTestCase(ParserUnitTestCase):
     def setUp(self):
 
         ParserUnitTestCase.setUp(self)
-
-        self._exception_occurred = False
 
         self._recovered_parser_config = {
             DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.pco2w_abc_particles',
@@ -70,10 +66,6 @@ class Pco2wAbcDclParserUnitTestCase(ParserUnitTestCase):
             }
         }
 
-    def exception_callback(self, exception):
-        log.debug(exception)
-        self._exception_occurred = True
-
     def test_happy_path_single(self):
         """
         Read a file and verify that a single record can be read.
@@ -94,7 +86,7 @@ class Pco2wAbcDclParserUnitTestCase(ParserUnitTestCase):
             log.debug("Num particles: %d", len(particles))
 
             self.assert_particles(particles, "rec_single.yml", RESOURCE_PATH)
-            self.assertEqual(self._exception_occurred, False)
+            self.assertEquals(self.exception_callback_value, [])
 
         # Telemetered
         with open(os.path.join(RESOURCE_PATH, 'single.log'), 'r') as file_handle:
@@ -108,7 +100,7 @@ class Pco2wAbcDclParserUnitTestCase(ParserUnitTestCase):
             log.debug("Num particles: %d", len(particles))
 
             self.assert_particles(particles, "tel_single.yml", RESOURCE_PATH)
-            self.assertEqual(self._exception_occurred, False)
+            self.assertEquals(self.exception_callback_value, [])
 
         log.debug('===== END TEST HAPPY PATH SINGLE =====')
 
@@ -121,7 +113,7 @@ class Pco2wAbcDclParserUnitTestCase(ParserUnitTestCase):
         log.debug('===== START TEST HAPPY PATH MANY =====')
 
         # Recovered
-        with open(os.path.join(RESOURCE_PATH, 'many.log'), 'r') as file_handle:
+        with open(os.path.join(RESOURCE_PATH, 'happy_path.log'), 'r') as file_handle:
 
             num_particles = 5
 
@@ -133,11 +125,11 @@ class Pco2wAbcDclParserUnitTestCase(ParserUnitTestCase):
 
             log.debug("Num particles: %d", len(particles))
 
-            self.assert_particles(particles, "rec_many.yml", RESOURCE_PATH)
-            self.assertEqual(self._exception_occurred, False)
+            self.assert_particles(particles, "happy_path_rec.yml", RESOURCE_PATH)
+            self.assertEquals(self.exception_callback_value, [])
 
         # Telemetered
-        with open(os.path.join(RESOURCE_PATH, 'many.log'), 'r') as file_handle:
+        with open(os.path.join(RESOURCE_PATH, 'happy_path.log'), 'r') as file_handle:
 
             parser = Pco2wAbcDclParser(self._telemetered_parser_config,
                                        file_handle,
@@ -147,8 +139,8 @@ class Pco2wAbcDclParserUnitTestCase(ParserUnitTestCase):
 
             log.debug("Num particles: %d", len(particles))
 
-            self.assert_particles(particles, "tel_many.yml", RESOURCE_PATH)
-            self.assertEqual(self._exception_occurred, False)
+            self.assert_particles(particles, "happy_path_tel.yml", RESOURCE_PATH)
+            self.assertEquals(self.exception_callback_value, [])
 
         log.debug('===== END TEST HAPPY PATH MANY =====')
 
@@ -177,13 +169,16 @@ class Pco2wAbcDclParserUnitTestCase(ParserUnitTestCase):
 
             self.assert_particles(particles, "invalid_metadata_timestamp.yml", RESOURCE_PATH)
 
-            self.assertEqual(self._exception_occurred, True)
+            log.debug('Exceptions : %s', self.exception_callback_value)
+
+            self.assert_(isinstance(self.exception_callback_value[0], RecoverableSampleException))
 
         log.debug('===== END TEST INVALID METADATA TIMESTAMP =====')
 
     def test_invalid_record_type(self):
         """
-        The file used in this test has a record type in the second record that does not match any of the expected record types.
+        The file used in this test has a record type in the second record that does not match any
+        of the expected record types.
         This results in 5 particles being retrieved instead of 6, and also result in the exception
         callback being called.
         """
@@ -204,9 +199,11 @@ class Pco2wAbcDclParserUnitTestCase(ParserUnitTestCase):
 
             self.assertEquals(len(particles), num_expected_particles)
 
-            self.assert_particles(particles, "rec_many.yml", RESOURCE_PATH)
+            self.assert_particles(particles, "happy_path_rec.yml", RESOURCE_PATH)
 
-            self.assertEqual(self._exception_occurred, True)
+            log.debug('Exceptions : %s', self.exception_callback_value)
+
+            self.assert_(isinstance(self.exception_callback_value[0], RecoverableSampleException))
 
         log.debug('===== END TEST INVALID RECORD TYPE =====')
 
@@ -233,9 +230,11 @@ class Pco2wAbcDclParserUnitTestCase(ParserUnitTestCase):
 
             self.assertEquals(len(particles), num_expected_particles)
 
-            self.assert_particles(particles, "rec_many.yml", RESOURCE_PATH)
+            self.assert_particles(particles, "happy_path_rec.yml", RESOURCE_PATH)
 
-            self.assertEqual(self._exception_occurred, True)
+            log.debug('Exceptions : %s', self.exception_callback_value)
+
+            self.assert_(isinstance(self.exception_callback_value[0], RecoverableSampleException))
 
         log.debug('===== END TEST POWER RECORD MISSING TIMESTAMP =====')
 
@@ -262,7 +261,7 @@ class Pco2wAbcDclParserUnitTestCase(ParserUnitTestCase):
 
             self.assertEquals(len(particles), num_expected_particles)
 
-            self.assertEqual(self._exception_occurred, False)
+            self.assertEquals(self.exception_callback_value, [])
 
         log.debug('===== END TEST NO PARTICLES =====')
 
@@ -293,9 +292,11 @@ class Pco2wAbcDclParserUnitTestCase(ParserUnitTestCase):
 
             self.assertEquals(len(particles), num_expected_particles)
 
-            self.assert_particles(particles, "rec_many.yml", RESOURCE_PATH)
+            self.assert_particles(particles, "happy_path_rec.yml", RESOURCE_PATH)
 
-            self.assertEqual(self._exception_occurred, True)
+        log.debug('Exceptions : %s', self.exception_callback_value)
+
+        self.assert_(isinstance(self.exception_callback_value[0], RecoverableSampleException))
 
         log.debug('===== END TEST INCORRECT LENGTH =====')
 
@@ -329,10 +330,9 @@ class Pco2wAbcDclParserUnitTestCase(ParserUnitTestCase):
             self.assert_particles(particles, "invalid_checksum.yml", RESOURCE_PATH)
 
             # No exception should be thrown
-            self.assertEqual(self._exception_occurred, False)
+            self.assertEquals(self.exception_callback_value, [])
 
         log.debug('===== END TEST INVALID CHECKSUM =====')
-
 
     def test_real_file(self):
         """
@@ -361,6 +361,6 @@ class Pco2wAbcDclParserUnitTestCase(ParserUnitTestCase):
 
             self.assertEquals(len(particles), num_expected_particles)
 
-            self.assertEqual(self._exception_occurred, False)
+            self.assertEquals(self.exception_callback_value, [])
 
         log.debug('===== END TEST REAL FILE =====')
