@@ -1,8 +1,0 @@
-driver_metadata:
-  author: Ronald Ronquillo
-  constructor: MetbkADclDataSetDriver
-  driver_name: metbk_a_dcl
-  driver_path: "metbk_a/dcl"
-  email: Ronald_C_Ronquillo@raytheon.com
-  release_notes: Initial Release
-  version: 0.0.1
