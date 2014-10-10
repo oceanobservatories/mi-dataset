@@ -35,12 +35,23 @@ from mi.core.log import get_logger
 log = get_logger()
 from mi.core.common import BaseEnum
 
-from mi.dataset.parser.dcl_file_common import DclInstrumentDataParticle, DclFileCommonParser, \
-    SENSOR_GROUP_TIMESTAMP, ANY_CHARS, NEW_LINE, SPACE, TIMESTAMP, START_METADATA, END_METADATA
+from mi.dataset.parser.dcl_file_common import DclInstrumentDataParticle, \
+    DclFileCommonParser, SENSOR_GROUP_TIMESTAMP, ANY_CHARS, SPACE, TIMESTAMP,\
+    START_METADATA, END_METADATA
 
+from mi.dataset.parser.common_regexes import END_OF_LINE_REGEX#, FLOAT_REGEX
+from mi.dataset.dataset_driver import DataSetDriver
+from mi.dataset.dataset_parser import DataSetDriverConfigKeys
+
+
+MODULE_NAME = 'mi.dataset.parser.metbk_a_dcl'
+RECOVERED_PARTICLE_CLASS = 'MetbkADclRecoveredInstrumentDataParticle'
+TELEMETERED_PARTICLE_CLASS = 'MetbkADclTelemeteredInstrumentDataParticle'
 
 # Basic patterns
-FLOAT = r'(-?\d*\.?\d+)'    # floating point as a group
+FROAT_REGEX = r'(?:[+-]?[0-9]|[1-9][0-9])+\.[0-9]+'
+FLOAT =       r'(?:([+-]?[0-9])+\.[0-9]+)'     # floating point as a group
+FLOAT_REGEX = r'([+-]?[0-9]|[0-9])+\.[0-9]+'
 XFLOAT = r'-?\d*\.?\d+'     # floating point as a don't care
 
 
@@ -51,7 +62,7 @@ METADATA_PATTERN += START_METADATA      # Metadata record starts with '['
 METADATA_PATTERN += ANY_CHARS           # followed by text
 METADATA_PATTERN += END_METADATA        # followed by ']'
 METADATA_PATTERN += ANY_CHARS           # followed by more text
-METADATA_PATTERN += NEW_LINE            # metadata record ends with LF
+METADATA_PATTERN += END_OF_LINE_REGEX   # metadata record ends with LF
 METADATA_MATCHER = re.compile(METADATA_PATTERN)
 
 
@@ -71,12 +82,13 @@ SENSOR_DATA_PATTERN += FLOAT + SPACE        # Eastward Wind Velocity relative to
 SENSOR_DATA_PATTERN += FLOAT + SPACE        # Northward Wind Velocity relative to Magnetic North
 SENSOR_DATA_PATTERN += XFLOAT + SPACE       # Not Applicable (Don't Care)
 SENSOR_DATA_PATTERN += XFLOAT               # Not Applicable (Don't Care)
-SENSOR_DATA_PATTERN += NEW_LINE             # sensor data ends with CR-LF
+SENSOR_DATA_PATTERN += END_OF_LINE_REGEX    # sensor data ends with CR-LF
 SENSOR_DATA_MATCHER = re.compile(SENSOR_DATA_PATTERN)
 
 
 # SENSOR_DATA_MATCHER produces the following groups.
-# The following are indices into groups() produced by SENSOR_DATA_MATCHER incremented after common timestamp values.
+# The following are indices into groups() produced by SENSOR_DATA_MATCHER
+# incremented after common timestamp values.
 # i.e, match.groups()[INDEX]
 SENSOR_GROUP_BAROMETRIC_PRESSURE = 7
 SENSOR_GROUP_RELATIVE_HUMIDITY = 8
@@ -108,6 +120,21 @@ INSTRUMENT_PARTICLE_MAP = [
 ]
 
 
+def process(source_file_path, particle_data_hdlr_obj, particle_class):
+
+    with open(source_file_path, "r") as stream_handle:
+        parser = MetbkADclParser(
+            {DataSetDriverConfigKeys.PARTICLE_MODULE: MODULE_NAME,
+             DataSetDriverConfigKeys.PARTICLE_CLASS: particle_class},
+            stream_handle,
+            lambda state, ingested: None,
+            lambda data: log.trace("Found data: %s", data),
+            lambda ex: particle_data_hdlr_obj.setParticleDataCaptureFailure()
+        )
+        driver = DataSetDriver(parser, particle_data_hdlr_obj)
+        driver.processFileStream()
+
+
 class DataParticleType(BaseEnum):
     REC_INSTRUMENT_PARTICLE = 'metbk_a_dcl_instrument_recovered'
     TEL_INSTRUMENT_PARTICLE = 'metbk_a_dcl_instrument'
@@ -119,7 +146,10 @@ class MetbkADclInstrumentDataParticle(DclInstrumentDataParticle):
     """
     def __init__(self, raw_data, *args, **kwargs):
 
-        super(MetbkADclInstrumentDataParticle, self).__init__(raw_data, INSTRUMENT_PARTICLE_MAP, *args, **kwargs)
+        super(MetbkADclInstrumentDataParticle, self).__init__(
+            raw_data,
+            INSTRUMENT_PARTICLE_MAP,
+            *args, **kwargs)
 
 
 class MetbkADclRecoveredInstrumentDataParticle(MetbkADclInstrumentDataParticle):
@@ -136,19 +166,12 @@ class MetbkADclTelemeteredInstrumentDataParticle(MetbkADclInstrumentDataParticle
     _data_particle_type = DataParticleType.TEL_INSTRUMENT_PARTICLE
 
 
-class MetbkADclRecoveredParser(DclFileCommonParser):
+class MetbkADclParser(DclFileCommonParser):
     """
-    This is the entry point for the Recovered Metbk_a_dcl parser.
-    """
-    def __init__(self, *args, **kwargs):
-
-        super(MetbkADclRecoveredParser, self).__init__(SENSOR_DATA_MATCHER, METADATA_MATCHER, *args, **kwargs)
-
-
-class MetbkADclTelemeteredParser(DclFileCommonParser):
-    """
-    This is the entry point for the Telemetered Metbk_a_dcl parser.
+    This is the entry point for the Metbk_a_dcl parser.
     """
     def __init__(self, *args, **kwargs):
 
-        super(MetbkADclTelemeteredParser, self).__init__(SENSOR_DATA_MATCHER, METADATA_MATCHER, *args, **kwargs)
+        super(MetbkADclParser, self).__init__(SENSOR_DATA_MATCHER,
+                                              METADATA_MATCHER,
+                                              *args, **kwargs)
