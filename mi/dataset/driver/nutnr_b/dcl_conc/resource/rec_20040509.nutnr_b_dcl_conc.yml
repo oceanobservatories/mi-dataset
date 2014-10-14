@@ -5,306 +5,306 @@ data:
   - _index: 1
     particle_object: NutnrBDclConcRecoveredMetadataDataParticle
     particle_type: nutnr_b_dcl_conc_metadata_recovered
-    internal_timestamp: 3293082674.000000
+    internal_timestamp:   3293079074.019
     dcl_controller_timestamp: '2004/05/09 09:11:39.957'
     serial_number: '2004'
-    startup_time: 1084093881
-    spec_on_time: 1084093888
-    spec_powered_time: 1084093890
-    lamp_on_time: 1084093892
-    lamp_powered_time: 1084093895
+    startup_time: 1084090281
+    spec_on_time: 1084090288
+    spec_powered_time: 1084090290
+    lamp_on_time: 1084090292
+    lamp_powered_time: 1084090295
     data_log_file: 'DATA/LOG_20040509.LOG'
   - _index: 2
     particle_object: NutnrBDclConcRecoveredInstrumentDataParticle
     particle_type: nutnr_b_dcl_conc_instrument_recovered
-    internal_timestamp: 3293082699.000000
+    internal_timestamp:   3293079099.957
     dcl_controller_timestamp: '2004/05/09 09:11:39.957'
     frame_header: 'SAT'
     frame_type: 'NDC'
     serial_number: '2004'
     date_of_sample: 2004129
-    time_of_sample:         0.000000
-    nitrate_concentration:       -10.000000
-    aux_fitting_1:       -20.000000
-    aux_fitting_2:       -30.000000
-    aux_fitting_3:       -40.000000
-    rms_error:         0.000000
+    time_of_sample:            0.000
+    nitrate_concentration:          -10.000
+    aux_fitting_1:          -20.000
+    aux_fitting_2:          -30.000
+    aux_fitting_3:          -40.000
+    rms_error:            0.000
   - _index: 3
     particle_object: NutnrBDclConcRecoveredInstrumentDataParticle
     particle_type: nutnr_b_dcl_conc_instrument_recovered
-    internal_timestamp: 3293082702.000000
+    internal_timestamp:   3293079102.315
     dcl_controller_timestamp: '2004/05/09 09:11:42.315'
     frame_header: 'SAT'
     frame_type: 'NLC'
     serial_number: '2004'
     date_of_sample: 2004129
-    time_of_sample:         0.135790
-    nitrate_concentration:        -8.890000
-    aux_fitting_1:       -17.780000
-    aux_fitting_2:       -26.660000
-    aux_fitting_3:       -35.550000
-    rms_error:         6.666666
+    time_of_sample:            0.136
+    nitrate_concentration:           -8.890
+    aux_fitting_1:          -17.780
+    aux_fitting_2:          -26.660
+    aux_fitting_3:          -35.550
+    rms_error:            6.667
   - _index: 4
     particle_object: NutnrBDclConcRecoveredInstrumentDataParticle
     particle_type: nutnr_b_dcl_conc_instrument_recovered
-    internal_timestamp: 3293082704.000000
+    internal_timestamp:   3293079104.673
     dcl_controller_timestamp: '2004/05/09 09:11:44.673'
     frame_header: 'SAT'
     frame_type: 'NLC'
     serial_number: '2004'
     date_of_sample: 2004129
-    time_of_sample:         0.271580
-    nitrate_concentration:        -7.780000
-    aux_fitting_1:       -15.550000
-    aux_fitting_2:       -23.330000
-    aux_fitting_3:       -31.110000
-    rms_error:        13.333332
+    time_of_sample:            0.272
+    nitrate_concentration:           -7.780
+    aux_fitting_1:          -15.550
+    aux_fitting_2:          -23.330
+    aux_fitting_3:          -31.110
+    rms_error:           13.333
   - _index: 5
     particle_object: NutnrBDclConcRecoveredInstrumentDataParticle
     particle_type: nutnr_b_dcl_conc_instrument_recovered
-    internal_timestamp: 3293082707.000000
+    internal_timestamp:   3293079107.031
     dcl_controller_timestamp: '2004/05/09 09:11:47.031'
     frame_header: 'SAT'
     frame_type: 'NLC'
     serial_number: '2004'
     date_of_sample: 2004129
-    time_of_sample:         0.407370
-    nitrate_concentration:        -6.670000
-    aux_fitting_1:       -13.330000
-    aux_fitting_2:       -20.000000
-    aux_fitting_3:       -26.660000
-    rms_error:        19.999998
+    time_of_sample:            0.407
+    nitrate_concentration:           -6.670
+    aux_fitting_1:          -13.330
+    aux_fitting_2:          -20.000
+    aux_fitting_3:          -26.660
+    rms_error:           20.000
   - _index: 6
     particle_object: NutnrBDclConcRecoveredMetadataDataParticle
     particle_type: nutnr_b_dcl_conc_metadata_recovered
-    internal_timestamp: 3293082721.000000
+    internal_timestamp:   3293079121.179
     dcl_controller_timestamp: '2004/05/09 09:12:27.117'
     serial_number: '2004'
-    startup_time: 1084093928
-    spec_on_time: 1084093935
-    spec_powered_time: 1084093937
-    lamp_on_time: 1084093940
-    lamp_powered_time: 1084093942
+    startup_time: 1084090328
+    spec_on_time: 1084090335
+    spec_powered_time: 1084090337
+    lamp_on_time: 1084090340
+    lamp_powered_time: 1084090342
     data_log_file: 'DATA/LOG_20040509.LOG'
   - _index: 7
     particle_object: NutnrBDclConcRecoveredInstrumentDataParticle
     particle_type: nutnr_b_dcl_conc_instrument_recovered
-    internal_timestamp: 3293082747.000000
+    internal_timestamp:   3293079147.117
     dcl_controller_timestamp: '2004/05/09 09:12:27.117'
     frame_header: 'SAT'
     frame_type: 'NDC'
     serial_number: '2004'
     date_of_sample: 2004129
-    time_of_sample:         0.543160
-    nitrate_concentration:        -5.560000
-    aux_fitting_1:       -11.110000
-    aux_fitting_2:       -16.670000
-    aux_fitting_3:       -22.220000
-    rms_error:        26.666664
+    time_of_sample:            0.543
+    nitrate_concentration:           -5.560
+    aux_fitting_1:          -11.110
+    aux_fitting_2:          -16.670
+    aux_fitting_3:          -22.220
+    rms_error:           26.667
   - _index: 8
     particle_object: NutnrBDclConcRecoveredInstrumentDataParticle
     particle_type: nutnr_b_dcl_conc_instrument_recovered
-    internal_timestamp: 3293082749.000000
+    internal_timestamp:   3293079149.475
     dcl_controller_timestamp: '2004/05/09 09:12:29.475'
     frame_header: 'SAT'
     frame_type: 'NLC'
     serial_number: '2004'
     date_of_sample: 2004129
-    time_of_sample:         0.678950
-    nitrate_concentration:        -4.440000
-    aux_fitting_1:        -8.890000
-    aux_fitting_2:       -13.330000
-    aux_fitting_3:       -17.780000
-    rms_error:        33.333330
+    time_of_sample:            0.679
+    nitrate_concentration:           -4.440
+    aux_fitting_1:           -8.890
+    aux_fitting_2:          -13.330
+    aux_fitting_3:          -17.780
+    rms_error:           33.333
   - _index: 9
     particle_object: NutnrBDclConcRecoveredInstrumentDataParticle
     particle_type: nutnr_b_dcl_conc_instrument_recovered
-    internal_timestamp: 3293082751.000000
+    internal_timestamp:   3293079151.833
     dcl_controller_timestamp: '2004/05/09 09:12:31.833'
     frame_header: 'SAT'
     frame_type: 'NLC'
     serial_number: '2004'
     date_of_sample: 2004129
-    time_of_sample:         0.814740
-    nitrate_concentration:        -3.330000
-    aux_fitting_1:        -6.670000
-    aux_fitting_2:       -10.000000
-    aux_fitting_3:       -13.330000
-    rms_error:        39.999996
+    time_of_sample:            0.815
+    nitrate_concentration:           -3.330
+    aux_fitting_1:           -6.670
+    aux_fitting_2:          -10.000
+    aux_fitting_3:          -13.330
+    rms_error:           40.000
   - _index: 10
     particle_object: NutnrBDclConcRecoveredInstrumentDataParticle
     particle_type: nutnr_b_dcl_conc_instrument_recovered
-    internal_timestamp: 3293082754.000000
+    internal_timestamp:   3293079154.191
     dcl_controller_timestamp: '2004/05/09 09:12:34.191'
     frame_header: 'SAT'
     frame_type: 'NLC'
     serial_number: '2004'
     date_of_sample: 2004129
-    time_of_sample:         0.950530
-    nitrate_concentration:        -2.220000
-    aux_fitting_1:        -4.440000
-    aux_fitting_2:        -6.670000
-    aux_fitting_3:        -8.890000
-    rms_error:        46.666662
+    time_of_sample:            0.951
+    nitrate_concentration:           -2.220
+    aux_fitting_1:           -4.440
+    aux_fitting_2:           -6.670
+    aux_fitting_3:           -8.890
+    rms_error:           46.667
   - _index: 11
     particle_object: NutnrBDclConcRecoveredInstrumentDataParticle
     particle_type: nutnr_b_dcl_conc_instrument_recovered
-    internal_timestamp: 3293082756.000000
+    internal_timestamp:   3293079156.549
     dcl_controller_timestamp: '2004/05/09 09:12:36.549'
     frame_header: 'SAT'
     frame_type: 'NLC'
     serial_number: '2004'
     date_of_sample: 2004129
-    time_of_sample:         1.086320
-    nitrate_concentration:        -1.110000
-    aux_fitting_1:        -2.220000
-    aux_fitting_2:        -3.330000
-    aux_fitting_3:        -4.440000
-    rms_error:        53.333328
+    time_of_sample:            1.086
+    nitrate_concentration:           -1.110
+    aux_fitting_1:           -2.220
+    aux_fitting_2:           -3.330
+    aux_fitting_3:           -4.440
+    rms_error:           53.333
   - _index: 12
     particle_object: NutnrBDclConcRecoveredMetadataDataParticle
     particle_type: nutnr_b_dcl_conc_metadata_recovered
-    internal_timestamp: 3293082770.000000
+    internal_timestamp:   3293079170.697
     dcl_controller_timestamp: '2004/05/09 09:13:16.635'
     serial_number: '2004'
-    startup_time: 1084093977
-    spec_on_time: 1084093984
-    spec_powered_time: 1084093987
-    lamp_on_time: 1084093989
-    lamp_powered_time: 1084093991
+    startup_time: 1084090377
+    spec_on_time: 1084090384
+    spec_powered_time: 1084090387
+    lamp_on_time: 1084090389
+    lamp_powered_time: 1084090391
     data_log_file: 'DATA/LOG_20040509.LOG'
   - _index: 13
     particle_object: NutnrBDclConcRecoveredInstrumentDataParticle
     particle_type: nutnr_b_dcl_conc_instrument_recovered
-    internal_timestamp: 3293082796.000000
+    internal_timestamp:   3293079196.635
     dcl_controller_timestamp: '2004/05/09 09:13:16.635'
     frame_header: 'SAT'
     frame_type: 'NDC'
     serial_number: '2004'
     date_of_sample: 2004129
-    time_of_sample:         1.222110
-    nitrate_concentration:        -0.000000
-    aux_fitting_1:        -0.000000
-    aux_fitting_2:        -0.000000
-    aux_fitting_3:        -0.000000
-    rms_error:        59.999994
+    time_of_sample:            1.222
+    nitrate_concentration:           -0.000
+    aux_fitting_1:           -0.000
+    aux_fitting_2:           -0.000
+    aux_fitting_3:           -0.000
+    rms_error:           60.000
   - _index: 14
     particle_object: NutnrBDclConcRecoveredInstrumentDataParticle
     particle_type: nutnr_b_dcl_conc_instrument_recovered
-    internal_timestamp: 3293082798.000000
+    internal_timestamp:   3293079198.993
     dcl_controller_timestamp: '2004/05/09 09:13:18.993'
     frame_header: 'SAT'
     frame_type: 'NLC'
     serial_number: '2004'
     date_of_sample: 2004129
-    time_of_sample:         1.357900
-    nitrate_concentration:         1.110000
-    aux_fitting_1:         2.220000
-    aux_fitting_2:         3.330000
-    aux_fitting_3:         4.440000
-    rms_error:        66.666660
+    time_of_sample:            1.358
+    nitrate_concentration:            1.110
+    aux_fitting_1:            2.220
+    aux_fitting_2:            3.330
+    aux_fitting_3:            4.440
+    rms_error:           66.667
   - _index: 15
     particle_object: NutnrBDclConcRecoveredInstrumentDataParticle
     particle_type: nutnr_b_dcl_conc_instrument_recovered
-    internal_timestamp: 3293082801.000000
+    internal_timestamp:   3293079201.351
     dcl_controller_timestamp: '2004/05/09 09:13:21.351'
     frame_header: 'SAT'
     frame_type: 'NLC'
     serial_number: '2004'
     date_of_sample: 2004129
-    time_of_sample:         1.493690
-    nitrate_concentration:         2.220000
-    aux_fitting_1:         4.440000
-    aux_fitting_2:         6.670000
-    aux_fitting_3:         8.890000
-    rms_error:        73.333326
+    time_of_sample:            1.494
+    nitrate_concentration:            2.220
+    aux_fitting_1:            4.440
+    aux_fitting_2:            6.670
+    aux_fitting_3:            8.890
+    rms_error:           73.333
   - _index: 16
     particle_object: NutnrBDclConcRecoveredInstrumentDataParticle
     particle_type: nutnr_b_dcl_conc_instrument_recovered
-    internal_timestamp: 3293082803.000000
+    internal_timestamp:   3293079203.709
     dcl_controller_timestamp: '2004/05/09 09:13:23.709'
     frame_header: 'SAT'
     frame_type: 'NLC'
     serial_number: '2004'
     date_of_sample: 2004129
-    time_of_sample:         1.629480
-    nitrate_concentration:         3.330000
-    aux_fitting_1:         6.670000
-    aux_fitting_2:        10.000000
-    aux_fitting_3:        13.330000
-    rms_error:        79.999992
+    time_of_sample:            1.629
+    nitrate_concentration:            3.330
+    aux_fitting_1:            6.670
+    aux_fitting_2:           10.000
+    aux_fitting_3:           13.330
+    rms_error:           80.000
   - _index: 17
     particle_object: NutnrBDclConcRecoveredInstrumentDataParticle
     particle_type: nutnr_b_dcl_conc_instrument_recovered
-    internal_timestamp: 3293082806.000000
+    internal_timestamp:   3293079206.067
     dcl_controller_timestamp: '2004/05/09 09:13:26.067'
     frame_header: 'SAT'
     frame_type: 'NLC'
     serial_number: '2004'
     date_of_sample: 2004129
-    time_of_sample:         1.765270
-    nitrate_concentration:         4.440000
-    aux_fitting_1:         8.890000
-    aux_fitting_2:        13.330000
-    aux_fitting_3:        17.780000
-    rms_error:        86.666658
+    time_of_sample:            1.765
+    nitrate_concentration:            4.440
+    aux_fitting_1:            8.890
+    aux_fitting_2:           13.330
+    aux_fitting_3:           17.780
+    rms_error:           86.667
   - _index: 18
     particle_object: NutnrBDclConcRecoveredInstrumentDataParticle
     particle_type: nutnr_b_dcl_conc_instrument_recovered
-    internal_timestamp: 3293082808.000000
+    internal_timestamp:   3293079208.425
     dcl_controller_timestamp: '2004/05/09 09:13:28.425'
     frame_header: 'SAT'
     frame_type: 'NLC'
     serial_number: '2004'
     date_of_sample: 2004129
-    time_of_sample:         1.901060
-    nitrate_concentration:         5.550000
-    aux_fitting_1:        11.110000
-    aux_fitting_2:        16.660000
-    aux_fitting_3:        22.220000
-    rms_error:        93.333324
+    time_of_sample:            1.901
+    nitrate_concentration:            5.550
+    aux_fitting_1:           11.110
+    aux_fitting_2:           16.660
+    aux_fitting_3:           22.220
+    rms_error:           93.333
   - _index: 19
     particle_object: NutnrBDclConcRecoveredInstrumentDataParticle
     particle_type: nutnr_b_dcl_conc_instrument_recovered
-    internal_timestamp: 3293082810.000000
+    internal_timestamp:   3293079210.783
     dcl_controller_timestamp: '2004/05/09 09:13:30.783'
     frame_header: 'SAT'
     frame_type: 'NLC'
     serial_number: '2004'
     date_of_sample: 2004129
-    time_of_sample:         2.036850
-    nitrate_concentration:         6.670000
-    aux_fitting_1:        13.330000
-    aux_fitting_2:        20.000000
-    aux_fitting_3:        26.660000
-    rms_error:        99.999990
+    time_of_sample:            2.037
+    nitrate_concentration:            6.670
+    aux_fitting_1:           13.330
+    aux_fitting_2:           20.000
+    aux_fitting_3:           26.660
+    rms_error:          100.000
   - _index: 20
     particle_object: NutnrBDclConcRecoveredInstrumentDataParticle
     particle_type: nutnr_b_dcl_conc_instrument_recovered
-    internal_timestamp: 3293082813.000000
+    internal_timestamp:   3293079213.141
     dcl_controller_timestamp: '2004/05/09 09:13:33.141'
     frame_header: 'SAT'
     frame_type: 'NLC'
     serial_number: '2004'
     date_of_sample: 2004129
-    time_of_sample:         2.172640
-    nitrate_concentration:         7.780000
-    aux_fitting_1:        15.550000
-    aux_fitting_2:        23.330000
-    aux_fitting_3:        31.110000
-    rms_error:       106.666656
+    time_of_sample:            2.173
+    nitrate_concentration:            7.780
+    aux_fitting_1:           15.550
+    aux_fitting_2:           23.330
+    aux_fitting_3:           31.110
+    rms_error:          106.667
   - _index: 21
     particle_object: NutnrBDclConcRecoveredInstrumentDataParticle
     particle_type: nutnr_b_dcl_conc_instrument_recovered
-    internal_timestamp: 3293082815.000000
+    internal_timestamp:   3293079215.499
     dcl_controller_timestamp: '2004/05/09 09:13:35.499'
     frame_header: 'SAT'
     frame_type: 'NLC'
     serial_number: '2004'
     date_of_sample: 2004129
-    time_of_sample:         2.308430
-    nitrate_concentration:         8.890000
-    aux_fitting_1:        17.780000
-    aux_fitting_2:        26.660000
-    aux_fitting_3:        35.550000
-    rms_error:       113.333322
+    time_of_sample:            2.308
+    nitrate_concentration:            8.890
+    aux_fitting_1:           17.780
+    aux_fitting_2:           26.660
+    aux_fitting_3:           35.550
+    rms_error:          113.333

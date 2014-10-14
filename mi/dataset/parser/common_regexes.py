@@ -39,3 +39,13 @@ DATE_MM_DD_YYYY_REGEX = r'(\d{2})/(\d{2})/(\d{4})'
 
 # A regex used to match time in the format of HH:MM:SS
 TIME_HR_MIN_SEC_REGEX = r'(\d{2}):(\d{2}):(\d{2})'
+
+# A regex for a common three character month abbreviation
+THREE_CHAR_MONTH_REGEX = r'(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)'
+
+# A regex for a common three character day of week abbreviation
+THREE_CHAR_DAY_OF_WEEK_REGEX = r'(?:Mon|Tue|Wed|Thu|Fri|Sat|Sun)'
+
+# Date related regex patterns
+DATE_DAY_REGEX = '\d{2}'
+DATE_YEAR_REGEX = '\d{4}'
