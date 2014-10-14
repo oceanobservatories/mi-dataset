@@ -24,12 +24,12 @@ from mi.core.instrument.data_particle import DataParticle
 from mi.core.exceptions import UnexpectedDataException
 
 from mi.dataset.dataset_parser import BufferLoadingParser
-from mi.dataset.parser.common_regexes import END_OF_LINE_REGEX
+from mi.dataset.parser.common_regexes import END_OF_LINE_REGEX, SPACE_REGEX, \
+    ANY_CHARS_REGEX, DATE_YYYY_MM_DD_REGEX, TIME_HR_MIN_SEC_MSEC_REGEX
 
 
 # Basic patterns
-ANY_CHARS = r'.*'          # Any characters excluding a newline
-SPACE = ' +'
+SPACES = SPACE_REGEX + "+"
 START_GROUP = '('
 END_GROUP = ')'
 
@@ -37,14 +37,14 @@ END_GROUP = ')'
 # Metadata fields:  [text] more text
 # Sensor data has space-delimited fields (date, time, integers)
 # All records end with newlines.
-DATE = r'(\d{4})/(\d{2})/(\d{2})'         # Date: YYYY/MM/DD
 TIME = r'(\d{2}):(\d{2}):(\d{2}\.\d{3})'  # Time: HH:MM:SS.mmm
-TIMESTAMP = START_GROUP + DATE + SPACE + TIME + END_GROUP
+TIMESTAMP = START_GROUP + DATE_YYYY_MM_DD_REGEX + SPACE_REGEX + \
+            TIME_HR_MIN_SEC_MSEC_REGEX + END_GROUP
 START_METADATA = r'\['
 END_METADATA = r'\]'
 
 # All basic dcl records are ASCII characters separated by a newline.
-RECORD_PATTERN = ANY_CHARS       # Any number of ASCII characters
+RECORD_PATTERN = ANY_CHARS_REGEX       # Any number of ASCII characters
 RECORD_PATTERN += END_OF_LINE_REGEX       # separated by a new line
 RECORD_MATCHER = re.compile(RECORD_PATTERN)
 
@@ -55,6 +55,7 @@ SENSOR_GROUP_DAY = 3
 SENSOR_GROUP_HOUR = 4
 SENSOR_GROUP_MINUTE = 5
 SENSOR_GROUP_SECOND = 6
+SENSOR_GROUP_MILLISECOND = 7
 
 
 class DclInstrumentDataParticle(DataParticle):
@@ -74,7 +75,8 @@ class DclInstrumentDataParticle(DataParticle):
             int(self.raw_data[SENSOR_GROUP_DAY]),
             int(self.raw_data[SENSOR_GROUP_HOUR]),
             int(self.raw_data[SENSOR_GROUP_MINUTE]),
-            float(self.raw_data[SENSOR_GROUP_SECOND]),
+            float(self.raw_data[SENSOR_GROUP_SECOND] + "." +
+                  self.raw_data[SENSOR_GROUP_MILLISECOND]),
             0, 0, 0)
 
         elapsed_seconds = calendar.timegm(timestamp)
@@ -100,7 +102,8 @@ class DclFileCommonParser(BufferLoadingParser):
     """
     Parser for dcl data.
     In addition to the standard constructor parameters,
-    this constructor takes an additional parameter particle_class.
+    this constructor takes additional parameters sensor_data_matcher
+    and metadata_matcher
     """
 
     def __init__(self,

@@ -36,28 +36,22 @@ log = get_logger()
 from mi.core.common import BaseEnum
 
 from mi.dataset.parser.dcl_file_common import DclInstrumentDataParticle, \
-    DclFileCommonParser, SENSOR_GROUP_TIMESTAMP, ANY_CHARS, SPACE, TIMESTAMP,\
+    DclFileCommonParser, SENSOR_GROUP_TIMESTAMP, SPACES, TIMESTAMP,\
     START_METADATA, END_METADATA
 
-from mi.dataset.parser.common_regexes import END_OF_LINE_REGEX, FLOAT_REGEX
-from mi.dataset.dataset_driver import DataSetDriver
-from mi.dataset.dataset_parser import DataSetDriverConfigKeys
+from mi.dataset.parser.common_regexes import END_OF_LINE_REGEX, FLOAT_REGEX, ANY_CHARS_REGEX
 
-
-MODULE_NAME = 'mi.dataset.parser.metbk_a_dcl'
-RECOVERED_PARTICLE_CLASS = 'MetbkADclRecoveredInstrumentDataParticle'
-TELEMETERED_PARTICLE_CLASS = 'MetbkADclTelemeteredInstrumentDataParticle'
 
 # Basic patterns
 FLOAT = '('+FLOAT_REGEX+')'  # floating point as a captured group
 
 # Metadata record:
 #   Timestamp [Text]MoreText newline
-METADATA_PATTERN = TIMESTAMP + SPACE    # dcl controller timestamp
+METADATA_PATTERN = TIMESTAMP + SPACES    # dcl controller timestamp
 METADATA_PATTERN += START_METADATA      # Metadata record starts with '['
-METADATA_PATTERN += ANY_CHARS           # followed by text
+METADATA_PATTERN += ANY_CHARS_REGEX           # followed by text
 METADATA_PATTERN += END_METADATA        # followed by ']'
-METADATA_PATTERN += ANY_CHARS           # followed by more text
+METADATA_PATTERN += ANY_CHARS_REGEX           # followed by more text
 METADATA_PATTERN += END_OF_LINE_REGEX   # metadata record ends with LF
 METADATA_MATCHER = re.compile(METADATA_PATTERN)
 
@@ -65,18 +59,18 @@ METADATA_MATCHER = re.compile(METADATA_PATTERN)
 # Sensor data record:
 #   Timestamp Date<tab>Time<tab>SensorData
 #   where SensorData are space-separated floating point numbers
-SENSOR_DATA_PATTERN = TIMESTAMP + SPACE     # dcl controller timestamp
-SENSOR_DATA_PATTERN += FLOAT + SPACE        # Barometric Pressure
-SENSOR_DATA_PATTERN += FLOAT + SPACE        # Relative Humidity
-SENSOR_DATA_PATTERN += FLOAT + SPACE        # Air Temperature
-SENSOR_DATA_PATTERN += FLOAT + SPACE        # Longwave Irradiance
-SENSOR_DATA_PATTERN += FLOAT + SPACE        # Precipitation Level
-SENSOR_DATA_PATTERN += FLOAT + SPACE        # Sea Surface Temperature
-SENSOR_DATA_PATTERN += FLOAT + SPACE        # Sea Surface Conductivity
-SENSOR_DATA_PATTERN += FLOAT + SPACE        # Shortwave Irradiance
-SENSOR_DATA_PATTERN += FLOAT + SPACE        # Eastward Wind Velocity relative to Magnetic North
-SENSOR_DATA_PATTERN += FLOAT + SPACE        # Northward Wind Velocity relative to Magnetic North
-SENSOR_DATA_PATTERN += FLOAT_REGEX + SPACE  # Not Applicable (Don't Care)
+SENSOR_DATA_PATTERN = TIMESTAMP + SPACES     # dcl controller timestamp
+SENSOR_DATA_PATTERN += FLOAT + SPACES        # Barometric Pressure
+SENSOR_DATA_PATTERN += FLOAT + SPACES        # Relative Humidity
+SENSOR_DATA_PATTERN += FLOAT + SPACES        # Air Temperature
+SENSOR_DATA_PATTERN += FLOAT + SPACES        # Longwave Irradiance
+SENSOR_DATA_PATTERN += FLOAT + SPACES        # Precipitation Level
+SENSOR_DATA_PATTERN += FLOAT + SPACES        # Sea Surface Temperature
+SENSOR_DATA_PATTERN += FLOAT + SPACES        # Sea Surface Conductivity
+SENSOR_DATA_PATTERN += FLOAT + SPACES        # Shortwave Irradiance
+SENSOR_DATA_PATTERN += FLOAT + SPACES        # Eastward Wind Velocity relative to Magnetic North
+SENSOR_DATA_PATTERN += FLOAT + SPACES        # Northward Wind Velocity relative to Magnetic North
+SENSOR_DATA_PATTERN += FLOAT_REGEX + SPACES  # Not Applicable (Don't Care)
 SENSOR_DATA_PATTERN += FLOAT_REGEX          # Not Applicable (Don't Care)
 SENSOR_DATA_PATTERN += END_OF_LINE_REGEX    # sensor data ends with CR-LF
 SENSOR_DATA_MATCHER = re.compile(SENSOR_DATA_PATTERN)
@@ -86,16 +80,16 @@ SENSOR_DATA_MATCHER = re.compile(SENSOR_DATA_PATTERN)
 # The following are indices into groups() produced by SENSOR_DATA_MATCHER
 # incremented after common timestamp values.
 # i.e, match.groups()[INDEX]
-SENSOR_GROUP_BAROMETRIC_PRESSURE = 7
-SENSOR_GROUP_RELATIVE_HUMIDITY = 8
-SENSOR_GROUP_AIR_TEMPERATURE = 9
-SENSOR_GROUP_LONGWAVE_IRRADIANCE = 10
-SENSOR_GROUP_PRECIPITATION = 11
-SENSOR_GROUP_SEA_SURFACE_TEMPERATURE = 12
-SENSOR_GROUP_SEA_SURFACE_CONDUCTIVITY = 13
-SENSOR_GROUP_SHORTWAVE_IRRADIANCE = 14
-SENSOR_GROUP_EASTWARD_WIND_VELOCITY = 15
-SENSOR_GROUP_NORTHWARD_WIND_VELOCITY = 16
+SENSOR_GROUP_BAROMETRIC_PRESSURE = 8
+SENSOR_GROUP_RELATIVE_HUMIDITY = 9
+SENSOR_GROUP_AIR_TEMPERATURE = 10
+SENSOR_GROUP_LONGWAVE_IRRADIANCE = 11
+SENSOR_GROUP_PRECIPITATION = 12
+SENSOR_GROUP_SEA_SURFACE_TEMPERATURE = 13
+SENSOR_GROUP_SEA_SURFACE_CONDUCTIVITY = 14
+SENSOR_GROUP_SHORTWAVE_IRRADIANCE = 15
+SENSOR_GROUP_EASTWARD_WIND_VELOCITY = 16
+SENSOR_GROUP_NORTHWARD_WIND_VELOCITY = 17
 
 # This table is used in the generation of the instrument data particle.
 # Column 1 - particle parameter name
@@ -114,21 +108,6 @@ INSTRUMENT_PARTICLE_MAP = [
     ('eastward_wind_velocity',      SENSOR_GROUP_EASTWARD_WIND_VELOCITY,    float),
     ('northward_wind_velocity',     SENSOR_GROUP_NORTHWARD_WIND_VELOCITY,   float)
 ]
-
-
-def process(source_file_path, particle_data_hdlr_obj, particle_class):
-
-    with open(source_file_path, "r") as stream_handle:
-        parser = MetbkADclParser(
-            {DataSetDriverConfigKeys.PARTICLE_MODULE: MODULE_NAME,
-             DataSetDriverConfigKeys.PARTICLE_CLASS: particle_class},
-            stream_handle,
-            lambda state, ingested: None,
-            lambda data: log.trace("Found data: %s", data),
-            lambda ex: particle_data_hdlr_obj.setParticleDataCaptureFailure()
-        )
-        driver = DataSetDriver(parser, particle_data_hdlr_obj)
-        driver.processFileStream()
 
 
 class DataParticleType(BaseEnum):

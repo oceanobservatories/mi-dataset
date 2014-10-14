@@ -39,7 +39,8 @@ from mi.core.log import get_logger; log = get_logger()
 from mi.dataset.test.test_parser import ParserUnitTestCase
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 
-from mi.dataset.parser.metbk_a_dcl import MetbkADclParser, MODULE_NAME, \
+from mi.dataset.parser.metbk_a_dcl import MetbkADclParser
+from mi.dataset.driver.metbk_a.dcl.metbk_dcl_a_driver import MODULE_NAME, \
     RECOVERED_PARTICLE_CLASS, TELEMETERED_PARTICLE_CLASS
 
 from mi.dataset.test.test_parser import BASE_RESOURCE_PATH
