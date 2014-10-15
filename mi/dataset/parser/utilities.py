@@ -92,3 +92,39 @@ def mac_timestamp_to_utc_timestamp(mac_timestamp):
     secs_since_1970 = mac_timestamp - unix_minus_mac_secs
 
     return secs_since_1970
+
+
+def convert_to_signed_int_32_bit(input):
+    """
+    Utility function to convert a hex string into a 32 bit signed hex integer value
+    :param input: hex String
+    :return: signed 32 bit integer
+    """
+    val = int(input, 16)
+    if val > 0x7FFFFFFF:
+        val = ((val+0x80000000)&0xFFFFFFFF) - 0x80000000
+    return val
+
+
+def convert_to_signed_int_16_bit(input):
+    """
+    Utility function to convert a hex string into a 16 bit signed hex integer value
+    :param input: hex String
+    :return: signed 16 bit integer
+    """
+    val = int(input, 16)
+    if val > 0x7FFF:
+        val = ((val+0x8000)&0xFFFF) - 0x8000
+    return val
+
+
+def convert_to_signed_int_8_bit(input):
+    """
+    Utility function to convert a hex string into a 8 bit signed hex integer value
+    :param input: hex String
+    :return: signed 8 bit integer
+    """
+    val = int(input, 16)
+    if val > 0x7F:
+        val = ((val+0x80)&0xFF) - 0x80
+    return val
