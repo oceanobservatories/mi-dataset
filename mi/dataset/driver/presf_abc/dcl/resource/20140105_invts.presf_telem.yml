@@ -6,7 +6,7 @@ data:
   - _index: 1
     particle_object: PresfAbcDclTelemeteredTideDataParticle
     particle_type: presf_abc_dcl_tide_measurement
-    internal_timestamp: 3597869122.0
+    internal_timestamp: 3597869122.593999863
     dcl_controller_timestamp: '2014/01/05 00:05:22.594'
     date_time_string: '05 Jan 2014 00:00:28'
     absolute_pressure: 208.8057
@@ -15,7 +15,7 @@ data:
   - _index: 2
     particle_object: PresfAbcDclTelemeteredWaveDataParticle
     particle_type: presf_abc_dcl_wave_burst
-    internal_timestamp: 3597869123.0
+    internal_timestamp: 3597869123.604000092
     dcl_controller_start_timestamp: '2014/01/05 00:05:23.604'
     dcl_controller_end_timestamp: '2014/01/05 00:05:44.707'
     date_time_string: '05 Jan 2014 00:05:30'
@@ -26,7 +26,7 @@ data:
   - _index: 3
     particle_object: PresfAbcDclTelemeteredTideDataParticle
     particle_type: presf_abc_dcl_tide_measurement
-    internal_timestamp: 3597872722.0
+    internal_timestamp: 3597872722.588999748
     dcl_controller_timestamp: '2014/01/05 01:05:22.589'
     date_time_string: '05 Jan 2014 01:00:28'
     absolute_pressure: 209.1991
@@ -35,7 +35,7 @@ data:
   - _index: 4
     particle_object: PresfAbcDclTelemeteredWaveDataParticle
     particle_type: presf_abc_dcl_wave_burst
-    internal_timestamp: 3597872723.0
+    internal_timestamp: 3597872723.598999977
     dcl_controller_start_timestamp: '2014/01/05 01:05:23.599'
     dcl_controller_end_timestamp: '2014/01/05 01:05:44.683'
     date_time_string: '05 Jan 2014 01:05:30'
@@ -46,7 +46,7 @@ data:
   - _index: 5
     particle_object: PresfAbcDclTelemeteredTideDataParticle
     particle_type: presf_abc_dcl_tide_measurement
-    internal_timestamp: 3597876321.0
+    internal_timestamp: 3597876321.585000038
     dcl_controller_timestamp: '2014/01/05 02:05:21.585'
     date_time_string: '05 Jan 2014 02:00:27'
     absolute_pressure: 209.4531
@@ -55,7 +55,7 @@ data:
   - _index: 6
     particle_object: PresfAbcDclTelemeteredWaveDataParticle
     particle_type: presf_abc_dcl_wave_burst
-    internal_timestamp: 3597876322.0
+    internal_timestamp: 3597876322.593999863
     dcl_controller_start_timestamp: '2014/01/05 02:05:22.594'
     dcl_controller_end_timestamp: '2014/01/05 02:05:43.678'
     date_time_string: '05 Jan 2014 02:05:29'
@@ -66,7 +66,7 @@ data:
   - _index: 7
     particle_object: PresfAbcDclTelemeteredTideDataParticle
     particle_type: presf_abc_dcl_tide_measurement
-    internal_timestamp: 3597879921.0
+    internal_timestamp: 3597879921.578000069
     dcl_controller_timestamp: '2014/01/05 03:05:21.578'
     date_time_string: '05 Jan 2014 03:00:27'
     absolute_pressure: 209.5021
@@ -75,7 +75,7 @@ data:
   - _index: 8
     particle_object: PresfAbcDclTelemeteredWaveDataParticle
     particle_type: presf_abc_dcl_wave_burst
-    internal_timestamp: 3597879922.0
+    internal_timestamp: 3597879922.588000298
     dcl_controller_start_timestamp: '2014/01/05 03:05:22.588'
     dcl_controller_end_timestamp: '2014/01/05 03:05:43.672'
     date_time_string: '05 Jan 2014 03:05:29'
@@ -86,7 +86,7 @@ data:
   - _index: 9
     particle_object: PresfAbcDclTelemeteredWaveDataParticle
     particle_type: presf_abc_dcl_wave_burst
-    internal_timestamp: 3597883523.0
+    internal_timestamp: 3597883523.581999779
     dcl_controller_start_timestamp: '2014/01/05 04:05:23.582'
     dcl_controller_end_timestamp: '2014/01/05 04:05:44.665'
     date_time_string: '05 Jan 2014 04:05:30'
@@ -97,7 +97,7 @@ data:
   - _index: 10
     particle_object: PresfAbcDclTelemeteredTideDataParticle
     particle_type: presf_abc_dcl_tide_measurement
-    internal_timestamp: 3597887123.0
+    internal_timestamp: 3597887123.564000130
     dcl_controller_timestamp: '2014/01/05 05:05:23.564'
     date_time_string: '05 Jan 2014 05:00:29'
     absolute_pressure: 209.0280
@@ -106,7 +106,7 @@ data:
   - _index: 11
     particle_object: PresfAbcDclTelemeteredWaveDataParticle
     particle_type: presf_abc_dcl_wave_burst
-    internal_timestamp: 3597887124.0
+    internal_timestamp: 3597887124.573999882
     dcl_controller_start_timestamp: '2014/01/05 05:05:24.574'
     dcl_controller_end_timestamp: '2014/01/05 05:05:45.658'
     date_time_string: '05 Jan 2014 05:05:31'
@@ -117,7 +117,7 @@ data:
   - _index: 12
     particle_object: PresfAbcDclTelemeteredTideDataParticle
     particle_type: presf_abc_dcl_tide_measurement
-    internal_timestamp: 3597890721.0
+    internal_timestamp: 3597890721.558000088
     dcl_controller_timestamp: '2014/01/05 06:05:21.558'
     date_time_string: '05 Jan 2014 06:00:27'
     absolute_pressure: 208.6364
@@ -126,7 +126,7 @@ data:
   - _index: 13
     particle_object: PresfAbcDclTelemeteredWaveDataParticle
     particle_type: presf_abc_dcl_wave_burst
-    internal_timestamp: 3597890722.0
+    internal_timestamp: 3597890722.566999912
     dcl_controller_start_timestamp: '2014/01/05 06:05:22.567'
     dcl_controller_end_timestamp: '2014/01/05 06:05:43.651'
     date_time_string: '05 Jan 2014 06:05:29'
@@ -137,7 +137,7 @@ data:
   - _index: 14
     particle_object: PresfAbcDclTelemeteredTideDataParticle
     particle_type: presf_abc_dcl_tide_measurement
-    internal_timestamp: 3597894323.0
+    internal_timestamp: 3597894323.552999973
     dcl_controller_timestamp: '2014/01/05 07:05:23.553'
     date_time_string: '05 Jan 2014 07:00:29'
     absolute_pressure: 208.2919
@@ -146,7 +146,7 @@ data:
   - _index: 15
     particle_object: PresfAbcDclTelemeteredWaveDataParticle
     particle_type: presf_abc_dcl_wave_burst
-    internal_timestamp: 3597894324.0
+    internal_timestamp: 3597894324.562000275
     dcl_controller_start_timestamp: '2014/01/05 07:05:24.562'
     dcl_controller_end_timestamp: '2014/01/05 07:05:45.658'
     date_time_string: '05 Jan 2014 07:05:31'
@@ -157,7 +157,7 @@ data:
   - _index: 16
     particle_object: PresfAbcDclTelemeteredTideDataParticle
     particle_type: presf_abc_dcl_tide_measurement
-    internal_timestamp: 3597897920.0
+    internal_timestamp: 3597897920.543999672
     dcl_controller_timestamp: '2014/01/05 08:05:20.544'
     date_time_string: '05 Jan 2014 08:00:26'
     absolute_pressure: 208.0616
@@ -166,7 +166,7 @@ data:
   - _index: 17
     particle_object: PresfAbcDclTelemeteredWaveDataParticle
     particle_type: presf_abc_dcl_wave_burst
-    internal_timestamp: 3597897921.0
+    internal_timestamp: 3597897921.553999901
     dcl_controller_start_timestamp: '2014/01/05 08:05:21.554'
     dcl_controller_end_timestamp: '2014/01/05 08:05:42.638'
     date_time_string: '05 Jan 2014 08:05:28'
@@ -177,7 +177,7 @@ data:
   - _index: 18
     particle_object: PresfAbcDclTelemeteredTideDataParticle
     particle_type: presf_abc_dcl_tide_measurement
-    internal_timestamp: 3597901523.0
+    internal_timestamp: 3597901523.538000107
     dcl_controller_timestamp: '2014/01/05 09:05:23.538'
     date_time_string: '05 Jan 2014 09:00:29'
     absolute_pressure: 208.0029
@@ -186,7 +186,7 @@ data:
   - _index: 19
     particle_object: PresfAbcDclTelemeteredWaveDataParticle
     particle_type: presf_abc_dcl_wave_burst
-    internal_timestamp: 3597901524.0
+    internal_timestamp: 3597901524.546999931
     dcl_controller_start_timestamp: '2014/01/05 09:05:24.547'
     dcl_controller_end_timestamp: '2014/01/05 09:05:45.631'
     date_time_string: '05 Jan 2014 09:05:31'
