@@ -252,6 +252,8 @@ class SioParser(BufferLoadingParser):
         elements it was able to collect.
         """
         return_list = []
+        if len(self._record_buffer) < num_to_fetch:
+            num_to_fetch = len(self._record_buffer)
 
         records_to_return = self._record_buffer[:num_to_fetch]
         self._record_buffer = self._record_buffer[num_to_fetch:]
