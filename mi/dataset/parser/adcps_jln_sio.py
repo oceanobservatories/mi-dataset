@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 
 """
-@package mi.dataset.parser.adcps
-@file mi/dataset/parser/adcps.py
+@package mi.dataset.parser.adcps_jln_sio
+@file mi/dataset/parser/adcps_jln_sio.py
 @author Emily Hahn
-@brief An adcps-specific dataset agent parser
+@brief An adcps jln series through the sio dataset agent parser
 """
 
 __author__ = 'Emily Hahn'
