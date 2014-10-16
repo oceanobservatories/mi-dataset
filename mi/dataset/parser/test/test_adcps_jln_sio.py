@@ -1,5 +1,15 @@
 #!/usr/bin/env python
 
+"""
+@package mi.dataset.parser.test.test_adcps_jln_sio
+@file mi/dataset/parser/test/test_adcps_jln_sio.py
+@author Emily Hahn
+@brief An set of tests for the adcps jln series through the sio dataset agent parser
+"""
+
+__author__ = 'Emily Hahn'
+__license__ = 'Apache 2.0'
+
 import os
 from nose.plugins.attrib import attr
 
@@ -8,7 +18,7 @@ log = get_logger()
 
 from mi.core.exceptions import RecoverableSampleException
 from mi.dataset.test.test_parser import ParserUnitTestCase, BASE_RESOURCE_PATH
-from mi.dataset.parser.adcps import AdcpsJlnSioParser
+from mi.dataset.parser.adcps_jln_sio import AdcpsJlnSioParser
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 
 RESOURCE_PATH = os.path.join(BASE_RESOURCE_PATH, 'adcps_jln', 'sio', 'resource')
@@ -21,7 +31,7 @@ class AdcpsJlnSioParserUnitTestCase(ParserUnitTestCase):
         ParserUnitTestCase.setUp(self)
         self.config = \
             {
-                DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.adcps',
+                DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.adcps_jln_sio',
                 DataSetDriverConfigKeys.PARTICLE_CLASS: 'AdcpsJlnSioDataParticle'
             }
 
