@@ -25,8 +25,8 @@ Mal-formed sensor data records and all metadata records produce no particles.
 __author__ = 'Steve Myerson'
 __license__ = 'Apache 2.0'
 
-import calendar
 import copy
+
 from functools import partial
 import re
 
@@ -37,6 +37,12 @@ from mi.core.log import get_logger; log = get_logger()
 
 from mi.dataset.dataset_parser import \
     BufferLoadingParser
+
+from mi.dataset.parser.common_regexes import \
+    DATE_YYYY_MM_DD_REGEX, \
+    TIME_HR_MIN_SEC_MSEC_REGEX
+
+from mi.dataset.parser.utilities import dcl_controller_timestamp_to_ntp_time
 
 from mi.core.common import BaseEnum
 from mi.core.exceptions import \
@@ -56,9 +62,7 @@ TAB = '\t'
 # Metadata fields:  [text] more text
 # Sensor data has tab-delimited fields (integers, floats)
 # All records end with one of the newlines.
-DATE = r'(\d{4})/(\d{2})/(\d{2})'           # Date: YYYY/MM/DD
-TIME = r'(\d{2}):(\d{2}):(\d{2})\.(\d{3})'  # Time: HH:MM:SS.mmm
-TIMESTAMP = '(' + DATE + SPACE + TIME + ')'
+TIMESTAMP = '(' + DATE_YYYY_MM_DD_REGEX + SPACE + TIME_HR_MIN_SEC_MSEC_REGEX + ')'
 START_METADATA = r'\['
 END_METADATA = r'\]'
 PRODUCT = '(4831)'                     # the only valid Product Number
@@ -171,18 +175,10 @@ class DostaAbcdjmDclInstrumentDataParticle(DataParticle):
                                                           new_sequence)
 
         # The particle timestamp is the DCL Controller timestamp.
-        # The individual fields have already been extracted by the parser.
-
-        timestamp = (
-            int(self.raw_data[SENSOR_GROUP_YEAR]),
-            int(self.raw_data[SENSOR_GROUP_MONTH]),
-            int(self.raw_data[SENSOR_GROUP_DAY]),
-            int(self.raw_data[SENSOR_GROUP_HOUR]),
-            int(self.raw_data[SENSOR_GROUP_MINUTE]),
-            int(self.raw_data[SENSOR_GROUP_SECOND]),
-            0, 0, 0)
-        elapsed_seconds = calendar.timegm(timestamp)
-        self.set_internal_timestamp(unix_time=elapsed_seconds)
+        # Convert the DCL controller timestamp string to NTP time (in seconds and microseconds).
+        dcl_controller_timestamp = self.raw_data[SENSOR_GROUP_TIMESTAMP]
+        elapsed_seconds_useconds = dcl_controller_timestamp_to_ntp_time(dcl_controller_timestamp)
+        self.set_internal_timestamp(elapsed_seconds_useconds)
 
     def _build_parsed_values(self):
         """
@@ -227,8 +223,7 @@ class DostaAbcdjmDclParser(BufferLoadingParser):
                  state_callback,
                  publish_callback,
                  exception_callback,
-                 particle_class,
-                 *args, **kwargs):
+                 particle_class):
 
         # No fancy sieve function needed for this parser.
         # File is ASCII with records separated by newlines.
@@ -240,9 +235,7 @@ class DostaAbcdjmDclParser(BufferLoadingParser):
                                                   regex_list=[DOSTA_RECORD_MATCHER]),
                                           state_callback,
                                           publish_callback,
-                                          exception_callback,
-                                          *args,
-                                          **kwargs)
+                                          exception_callback)
 
         # Default the position within the file to the beginning.
 
@@ -357,8 +350,7 @@ class DostaAbcdjmDclRecoveredParser(DostaAbcdjmDclParser):
                  state,
                  state_callback,
                  publish_callback,
-                 exception_callback,
-                 *args, **kwargs):
+                 exception_callback):
 
         super(DostaAbcdjmDclRecoveredParser, self).__init__(config,
                                           stream_handle,
@@ -366,9 +358,7 @@ class DostaAbcdjmDclRecoveredParser(DostaAbcdjmDclParser):
                                           state_callback,
                                           publish_callback,
                                           exception_callback,
-                                          DostaAbcdjmDclRecoveredInstrumentDataParticle,
-                                          *args,
-                                          **kwargs)
+                                          DostaAbcdjmDclRecoveredInstrumentDataParticle)
 
 
 class DostaAbcdjmDclTelemeteredParser(DostaAbcdjmDclParser):
@@ -381,8 +371,7 @@ class DostaAbcdjmDclTelemeteredParser(DostaAbcdjmDclParser):
                  state,
                  state_callback,
                  publish_callback,
-                 exception_callback,
-                 *args, **kwargs):
+                 exception_callback):
 
         super(DostaAbcdjmDclTelemeteredParser, self).__init__(config,
                                           stream_handle,
@@ -390,6 +379,4 @@ class DostaAbcdjmDclTelemeteredParser(DostaAbcdjmDclParser):
                                           state_callback,
                                           publish_callback,
                                           exception_callback,
-                                          DostaAbcdjmDclTelemeteredInstrumentDataParticle,
-                                          *args,
-                                          **kwargs)
+                                          DostaAbcdjmDclTelemeteredInstrumentDataParticle)
