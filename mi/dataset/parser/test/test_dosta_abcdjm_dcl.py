@@ -61,6 +61,7 @@ from mi.core.log import get_logger ; log = get_logger()
 from mi.dataset.test.test_parser import ParserUnitTestCase
 
 from mi.dataset.parser.dosta_abcdjm_dcl import \
+    DostaAbcdjmDclParser, \
     DostaAbcdjmDclRecoveredParser, \
     DostaAbcdjmDclTelemeteredParser, \
     DostaAbcdjmDclRecoveredInstrumentDataParticle, \
@@ -671,3 +672,41 @@ class DostaAbcdjmDclParserUnitTestCase(ParserUnitTestCase):
         in_file.close()
 
         log.debug('===== END TEST SIMPLE =====')
+
+    def test_many_with_yml(self):
+        """
+        Read a file and verify that all records can be read.
+        Verify that the contents of the particles are correct.
+        There should be no exceptions generated.
+        """
+        log.debug('===== START TEST MANY WITH YML RECOVERED =====')
+
+        num_particles = 21
+
+        in_file = self.open_file(FILE1)
+        parser = self.create_rec_parser(in_file)
+
+        particles = parser.get_records(num_particles)
+
+        log.debug("Num particles: %d", len(particles))
+
+        self.assert_particles(particles, "rec_20010121.dosta1.yml", RESOURCE_PATH)
+        self.assertEquals(self.exception_callback_value, [])
+
+        in_file.close()
+
+        log.debug('===== START TEST MANY WITH YML TELEMETERED =====')
+
+        in_file = self.open_file(FILE1)
+        parser = self.create_tel_parser(in_file)
+
+        particles = parser.get_records(num_particles)
+
+        log.debug("Num particles: %d", len(particles))
+
+        self.assert_particles(particles, "tel_20010121.dosta1.yml", RESOURCE_PATH)
+        self.assertEquals(self.exception_callback_value, [])
+
+        in_file.close()
+
+        log.debug('===== END TEST MANY WITH YML =====')

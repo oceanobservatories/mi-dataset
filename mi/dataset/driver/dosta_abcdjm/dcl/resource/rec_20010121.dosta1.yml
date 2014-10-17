@@ -6,7 +6,7 @@ data:
   - _index:  1
     particle_object: DostaAbcdjmDclRecoveredInstrumentDataParticle
     particle_type: dosta_abcdjm_dcl_instrument_recovered
-    internal_timestamp: '2001-01-21T03:06:02Z'
+    internal_timestamp: '2001-01-21T03:06:02.329Z'
     dcl_controller_timestamp: '2001/01/21 03:06:02.329'
     product_number: 4831
     serial_number: 2001
@@ -23,7 +23,7 @@ data:
   - _index:  2
     particle_object: DostaAbcdjmDclRecoveredInstrumentDataParticle
     particle_type: dosta_abcdjm_dcl_instrument_recovered
-    internal_timestamp: '2001-01-21T03:06:15Z'
+    internal_timestamp: '2001-01-21T03:06:15.908Z'
     dcl_controller_timestamp: '2001/01/21 03:06:15.908'
     product_number: 4831
     serial_number: 2001
@@ -40,7 +40,7 @@ data:
   - _index:  3
     particle_object: DostaAbcdjmDclRecoveredInstrumentDataParticle
     particle_type: dosta_abcdjm_dcl_instrument_recovered
-    internal_timestamp: '2001-01-21T03:06:29Z'
+    internal_timestamp: '2001-01-21T03:06:29.487Z'
     dcl_controller_timestamp: '2001/01/21 03:06:29.487'
     product_number: 4831
     serial_number: 2001
@@ -57,7 +57,7 @@ data:
   - _index:  4
     particle_object: DostaAbcdjmDclRecoveredInstrumentDataParticle
     particle_type: dosta_abcdjm_dcl_instrument_recovered
-    internal_timestamp: '2001-01-21T03:06:43Z'
+    internal_timestamp: '2001-01-21T03:06:43.066Z'
     dcl_controller_timestamp: '2001/01/21 03:06:43.066'
     product_number: 4831
     serial_number: 2001
@@ -74,7 +74,7 @@ data:
   - _index:  5
     particle_object: DostaAbcdjmDclRecoveredInstrumentDataParticle
     particle_type: dosta_abcdjm_dcl_instrument_recovered
-    internal_timestamp: '2001-01-21T03:06:56Z'
+    internal_timestamp: '2001-01-21T03:06:56.645Z'
     dcl_controller_timestamp: '2001/01/21 03:06:56.645'
     product_number: 4831
     serial_number: 2001
@@ -91,7 +91,7 @@ data:
   - _index:  6
     particle_object: DostaAbcdjmDclRecoveredInstrumentDataParticle
     particle_type: dosta_abcdjm_dcl_instrument_recovered
-    internal_timestamp: '2001-01-21T03:07:10Z'
+    internal_timestamp: '2001-01-21T03:07:10.224Z'
     dcl_controller_timestamp: '2001/01/21 03:07:10.224'
     product_number: 4831
     serial_number: 2001
@@ -108,7 +108,7 @@ data:
   - _index:  7
     particle_object: DostaAbcdjmDclRecoveredInstrumentDataParticle
     particle_type: dosta_abcdjm_dcl_instrument_recovered
-    internal_timestamp: '2001-01-21T03:07:23Z'
+    internal_timestamp: '2001-01-21T03:07:23.803Z'
     dcl_controller_timestamp: '2001/01/21 03:07:23.803'
     product_number: 4831
     serial_number: 2001
@@ -125,7 +125,7 @@ data:
   - _index:  8
     particle_object: DostaAbcdjmDclRecoveredInstrumentDataParticle
     particle_type: dosta_abcdjm_dcl_instrument_recovered
-    internal_timestamp: '2001-01-21T03:07:37Z'
+    internal_timestamp: '2001-01-21T03:07:37.382Z'
     dcl_controller_timestamp: '2001/01/21 03:07:37.382'
     product_number: 4831
     serial_number: 2001
@@ -142,7 +142,7 @@ data:
   - _index:  9
     particle_object: DostaAbcdjmDclRecoveredInstrumentDataParticle
     particle_type: dosta_abcdjm_dcl_instrument_recovered
-    internal_timestamp: '2001-01-21T03:07:50Z'
+    internal_timestamp: '2001-01-21T03:07:50.961Z'
     dcl_controller_timestamp: '2001/01/21 03:07:50.961'
     product_number: 4831
     serial_number: 2001
@@ -159,7 +159,7 @@ data:
   - _index:  10
     particle_object: DostaAbcdjmDclRecoveredInstrumentDataParticle
     particle_type: dosta_abcdjm_dcl_instrument_recovered
-    internal_timestamp: '2001-01-21T03:08:04Z'
+    internal_timestamp: '2001-01-21T03:08:04.540Z'
     dcl_controller_timestamp: '2001/01/21 03:08:04.540'
     product_number: 4831
     serial_number: 2001
@@ -176,7 +176,7 @@ data:
   - _index:  11
     particle_object: DostaAbcdjmDclRecoveredInstrumentDataParticle
     particle_type: dosta_abcdjm_dcl_instrument_recovered
-    internal_timestamp: '2001-01-21T03:08:18Z'
+    internal_timestamp: '2001-01-21T03:08:18.119Z'
     dcl_controller_timestamp: '2001/01/21 03:08:18.119'
     product_number: 4831
     serial_number: 2001
@@ -193,7 +193,7 @@ data:
   - _index:  12
     particle_object: DostaAbcdjmDclRecoveredInstrumentDataParticle
     particle_type: dosta_abcdjm_dcl_instrument_recovered
-    internal_timestamp: '2001-01-21T03:08:31Z'
+    internal_timestamp: '2001-01-21T03:08:31.698Z'
     dcl_controller_timestamp: '2001/01/21 03:08:31.698'
     product_number: 4831
     serial_number: 2001
@@ -210,7 +210,7 @@ data:
   - _index:  13
     particle_object: DostaAbcdjmDclRecoveredInstrumentDataParticle
     particle_type: dosta_abcdjm_dcl_instrument_recovered
-    internal_timestamp: '2001-01-21T03:08:45Z'
+    internal_timestamp: '2001-01-21T03:08:45.277Z'
     dcl_controller_timestamp: '2001/01/21 03:08:45.277'
     product_number: 4831
     serial_number: 2001
@@ -227,7 +227,7 @@ data:
   - _index:  14
     particle_object: DostaAbcdjmDclRecoveredInstrumentDataParticle
     particle_type: dosta_abcdjm_dcl_instrument_recovered
-    internal_timestamp: '2001-01-21T03:08:58Z'
+    internal_timestamp: '2001-01-21T03:08:58.856Z'
     dcl_controller_timestamp: '2001/01/21 03:08:58.856'
     product_number: 4831
     serial_number: 2001
@@ -244,7 +244,7 @@ data:
   - _index:  15
     particle_object: DostaAbcdjmDclRecoveredInstrumentDataParticle
     particle_type: dosta_abcdjm_dcl_instrument_recovered
-    internal_timestamp: '2001-01-21T03:09:12Z'
+    internal_timestamp: '2001-01-21T03:09:12.435Z'
     dcl_controller_timestamp: '2001/01/21 03:09:12.435'
     product_number: 4831
     serial_number: 2001
@@ -261,7 +261,7 @@ data:
   - _index:  16
     particle_object: DostaAbcdjmDclRecoveredInstrumentDataParticle
     particle_type: dosta_abcdjm_dcl_instrument_recovered
-    internal_timestamp: '2001-01-21T03:09:26Z'
+    internal_timestamp: '2001-01-21T03:09:26.014Z'
     dcl_controller_timestamp: '2001/01/21 03:09:26.014'
     product_number: 4831
     serial_number: 2001
@@ -278,7 +278,7 @@ data:
   - _index:  17
     particle_object: DostaAbcdjmDclRecoveredInstrumentDataParticle
     particle_type: dosta_abcdjm_dcl_instrument_recovered
-    internal_timestamp: '2001-01-21T03:09:39Z'
+    internal_timestamp: '2001-01-21T03:09:39.593Z'
     dcl_controller_timestamp: '2001/01/21 03:09:39.593'
     product_number: 4831
     serial_number: 2001
@@ -295,7 +295,7 @@ data:
   - _index:  18
     particle_object: DostaAbcdjmDclRecoveredInstrumentDataParticle
     particle_type: dosta_abcdjm_dcl_instrument_recovered
-    internal_timestamp: '2001-01-21T03:09:53Z'
+    internal_timestamp: '2001-01-21T03:09:53.172Z'
     dcl_controller_timestamp: '2001/01/21 03:09:53.172'
     product_number: 4831
     serial_number: 2001
@@ -312,7 +312,7 @@ data:
   - _index:  19
     particle_object: DostaAbcdjmDclRecoveredInstrumentDataParticle
     particle_type: dosta_abcdjm_dcl_instrument_recovered
-    internal_timestamp: '2001-01-21T03:10:06Z'
+    internal_timestamp: '2001-01-21T03:10:06.751Z'
     dcl_controller_timestamp: '2001/01/21 03:10:06.751'
     product_number: 4831
     serial_number: 2001
@@ -329,7 +329,7 @@ data:
   - _index:  20
     particle_object: DostaAbcdjmDclRecoveredInstrumentDataParticle
     particle_type: dosta_abcdjm_dcl_instrument_recovered
-    internal_timestamp: '2001-01-21T03:10:20Z'
+    internal_timestamp: '2001-01-21T03:10:20.330Z'
     dcl_controller_timestamp: '2001/01/21 03:10:20.330'
     product_number: 4831
     serial_number: 2001
@@ -346,7 +346,7 @@ data:
   - _index:  21
     particle_object: DostaAbcdjmDclRecoveredInstrumentDataParticle
     particle_type: dosta_abcdjm_dcl_instrument_recovered
-    internal_timestamp: '2001-01-21T03:10:33Z'
+    internal_timestamp: '2001-01-21T03:10:33.909Z'
     dcl_controller_timestamp: '2001/01/21 03:10:33.909'
     product_number: 4831
     serial_number: 2001
