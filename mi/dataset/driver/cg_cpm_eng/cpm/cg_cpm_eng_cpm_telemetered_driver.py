@@ -1,0 +1,26 @@
+#!/usr/local/bin/python2.7
+##
+# OOIPLACEHOLDER
+#
+# Copyright 2014 Raytheon Co.
+##
+
+import os
+
+from mi.logging import config
+
+from mi.dataset.dataset_parser import DataSetDriverConfigKeys
+from mi.dataset.driver.cg_cpm_eng.cpm.cg_cpm_eng_cpm_common_driver import CgCpmEngCpmDriver
+
+def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
+
+    config.add_configuration(os.path.join(basePythonCodePath, 'res', 'config', 'mi-logging.yml'))
+
+    parser_config = {
+        DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.cg_cpm_eng_cpm',
+        DataSetDriverConfigKeys.PARTICLE_CLASS: 'CgCpmEngCpmTelemeteredDataParticle'
+    }
+
+    driver = CgCpmEngCpmDriver(sourceFilePath, particleDataHdlrObj, parser_config)
+
+    return driver.process()
