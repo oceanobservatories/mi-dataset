@@ -691,3 +691,41 @@ class SpkirAbjDclParserUnitTestCase(ParserUnitTestCase):
         in_file.close()
 
         log.debug('===== END TEST SIMPLE =====')
+
+    def test_many_with_yml(self):
+        """
+        Read a file and verify that all records can be read.
+        Verify that the contents of the particles are correct.
+        There should be no exceptions generated.
+        """
+        log.debug('===== START TEST MANY WITH YML RECOVERED =====')
+
+        num_particles = 13
+
+        in_file = self.open_file(FILE2)
+        parser = self.create_rec_parser(in_file)
+
+        particles = parser.get_records(num_particles)
+
+        log.debug("Num particles: %d", len(particles))
+
+        self.assert_particles(particles, "rec_20020113.spkir2.yml", RESOURCE_PATH)
+        self.assertEquals(self.exception_callback_value, [])
+
+        in_file.close()
+
+        log.debug('===== START TEST MANY WITH YML TELEMETERED =====')
+
+        in_file = self.open_file(FILE2)
+        parser = self.create_tel_parser(in_file)
+
+        particles = parser.get_records(num_particles)
+
+        log.debug("Num particles: %d", len(particles))
+
+        self.assert_particles(particles, "tel_20020113.spkir2.yml", RESOURCE_PATH)
+        self.assertEquals(self.exception_callback_value, [])
+
+        in_file.close()
+
+        log.debug('===== END TEST MANY WITH YML =====')
