@@ -1,5 +1,5 @@
 header:
-  particle_object: AdcpsParserDataParticle
+  particle_object: AdcpsJlnSioDataParticle
   particle_type: adcps_jln_sio_mule_instrument
 
 data:
