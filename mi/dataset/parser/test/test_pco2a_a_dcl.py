@@ -56,7 +56,7 @@ class Pco2aADclParserUnitTestCase(ParserUnitTestCase):
         parser = Pco2aADclParser(
             {DataSetDriverConfigKeys.PARTICLE_MODULE: MODULE_NAME,
              DataSetDriverConfigKeys.PARTICLE_CLASS: None,
-            DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT: particle_classes},
+             DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT: particle_classes},
             file_handle,
             lambda state, ingested: None,
             self.publish_callback,

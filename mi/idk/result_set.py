@@ -410,7 +410,7 @@ class ResultSet(object):
         if ex_value != particle_value:
             # check for nans, two nans will not equal each other but in this
             # case they are considered equal
-            if ResultSet._nan_equal_compare:
+            if ResultSet._nan_equal_compare(ex_value, particle_value):
                 return None
 
             return "value mismatch, %s != %s (decimals may be rounded)" % \
@@ -419,7 +419,7 @@ class ResultSet(object):
         return None
 
     @staticmethod
-    def _nan_equal_compare(self, expected, received):
+    def _nan_equal_compare(expected, received):
         """
         Compare the expected and recieved values, considering two NaNs to be equal.
         If the values are equal True is returned, if they are not False is returned
@@ -459,7 +459,7 @@ class ResultSet(object):
         return False
 
     @staticmethod
-    def _are_both_lists(self, expected, received):
+    def _are_both_lists(expected, received):
         """
         Compare if the expected and recieved values are both lists
         @param expected: expected value
@@ -471,7 +471,7 @@ class ResultSet(object):
         return False
 
     @staticmethod
-    def _are_both_numbers(self, expected, received):
+    def _are_both_numbers(expected, received):
         """
         Compare if the expected and recieved values are both floats or ints
         @param expected: expected value

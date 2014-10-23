@@ -16,7 +16,7 @@ Only the names of the output particle streams are different.
 The input file is ASCII and contains 2 types of records.
 Records are separated by a newline.
 All records start with a timestamp.
-Metadata records: timestamp [text] more text newline.
+Metadata records: timestamp [text] more text newline. This corresponds to DCL Logging.
 Sensor Data records: timestamp sensor_data newline.
 Only sensor data records produce particles if properly formed.
 Mal-formed sensor data records and all metadata records produce no particles.
@@ -58,7 +58,7 @@ CHAR_M = ' *M'
 # All records end with one of the newlines.
 SENSOR_DATE = r'(\d{4}/\d{2}/\d{2})'  # Sensor Date: MM/DD/YY
 
-# Metadata record:
+# Metadata record (Corresponds to DCL Logging):
 #   Timestamp [Text]MoreText newline
 METADATA_PATTERN = TIMESTAMP + SPACE_REGEX      # dcl controller timestamp
 METADATA_PATTERN += START_METADATA              # Metadata record starts with '['
@@ -224,4 +224,4 @@ class Pco2aADclParser(DclFileCommonParser):
 
         super(Pco2aADclParser, self).__init__(None,
                                               METADATA_MATCHER,
-                                             *args, **kwargs)
+                                              *args, **kwargs)
