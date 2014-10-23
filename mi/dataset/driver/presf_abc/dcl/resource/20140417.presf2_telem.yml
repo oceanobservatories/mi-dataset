@@ -10,5 +10,5 @@ data:
     dcl_controller_timestamp: 1374837724
     date_time_string: '17 Apr 2014 17:00:00'
     absolute_pressure: 14.6612
-    pressure_temperature: 11.380
+    pressure_temp: 11.380
     seawater_temperature: 11.5248

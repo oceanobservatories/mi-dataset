@@ -167,7 +167,7 @@ TIDE_PARTICLE_MAP = [
     ('dcl_controller_timestamp',    TIDE_GROUP_DCL_TIMESTAMP,            str),
     ('date_time_string',            TIDE_GROUP_DATA_TIME_STRING,         str),
     ('absolute_pressure',           TIDE_GROUP_ABSOLUTE_PRESSURE,        float),
-    ('pressure_temperature',        TIDE_GROUP_PRESSURE_TEMPERATURE,     float),
+    ('pressure_temp',               TIDE_GROUP_PRESSURE_TEMPERATURE,     float),
     ('seawater_temperature',        TIDE_GROUP_SEAWATER_TEMPERATURE,     float)
 ]
 
