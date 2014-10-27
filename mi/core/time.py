@@ -12,6 +12,8 @@ from __future__ import absolute_import
 __author__ = 'Bill French'
 __license__ = 'Apache 2.0'
 
+import calendar
+import datetime
 import ntplib
 import time
 import re
@@ -42,19 +44,19 @@ def string_to_ntp_date_time(datestr):
         if datestr[-1:] != 'Z':
             datestr += 'Z'
 
-        # the parsed date time represents a GMT time, but strftime
-        # does not take timezone into account, so these are seconds from the
-        # local start of 1970
-        local_sec = float(parser.parse(datestr).strftime("%s.%f"))
-        # remove the local time zone to convert to gmt (seconds since gmt jan 1 1970)
-        gmt_sec = local_sec - time.timezone
+        format = "%Y-%m-%dT%H:%M:%S.%fZ"
+
+        dt = datetime.strptime(datestr, format)
+
+        unix_timestamp = calendar.timegm(dt.timetuple()) + (dt.microsecond / 1000000.0)
+
         # convert to ntp (seconds since gmt jan 1 1900)
-        timestamp = ntplib.system_to_ntp_time(gmt_sec)
+        timestamp = ntplib.system_to_ntp_time(unix_timestamp)
 
     except ValueError as e:
         raise ValueError('Value %s could not be formatted to a date. %s' % (str(datestr), e))
 
-    log.debug("converting time string '%s', unix_ts: %s ntp: %s", datestr, gmt_sec, timestamp)
+    log.debug("converting time string '%s', unix_ts: %s ntp: %s", datestr, unix_timestamp, timestamp)
 
     return timestamp
 

@@ -12,15 +12,16 @@ __license__ = 'Apache 2.0'
 
 import re
 import struct
-import time
 import binascii
-from dateutil import parser
 
 from mi.core.log import get_logger
 log = get_logger()
 
 from mi.dataset.parser.sio_mule_common import SioParser, SIO_HEADER_MATCHER, SIO_HEADER_GROUP_ID, \
     SIO_HEADER_GROUP_TIMESTAMP
+
+from mi.dataset.parser import utilities
+
 from mi.core.common import BaseEnum
 from mi.core.exceptions import RecoverableSampleException, UnexpectedDataException
 from mi.core.instrument.data_particle import DataParticle, DataParticleKey, DataParticleValue
@@ -135,12 +136,12 @@ class AdcpsJlnSioDataParticle(DataParticle):
             raise RecoverableSampleException("AdcpsJlnSioParserDataParticle: No regex match of "
                                              "parsed sample data [%s]" % self.raw_data[8:])
 
-        date_str = AdcpsJlnSioDataParticle.unpack_date(self._data_match.group(0)[11:19])
-        # convert to unix
-        converted_time = float(parser.parse(date_str).strftime("%s.%f"))
-        adjusted_time = converted_time - time.timezone
-        self.set_internal_timestamp(unix_time=adjusted_time)
-    
+        date_str = self.unpack_date(self._data_match.group(0)[11:19])
+
+        unix_time = utilities.zulu_timestamp_to_utc_time(date_str)
+
+        self.set_internal_timestamp(unix_time=unix_time)
+
     def _build_parsed_values(self):
         """
         Take something in the binary data values and turn it into a

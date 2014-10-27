@@ -75,12 +75,12 @@ data:
 __author__ = 'Bill French'
 __license__ = 'Apache 2.0'
 
+from datetime import datetime
+import calendar
 import re
 import yaml
 import ntplib
-import time
 import numpy
-from dateutil import parser
 
 from mi.core.instrument.data_particle import DataParticle
 
@@ -527,19 +527,18 @@ class ResultSet(object):
             if datestr[-1:] != 'Z':
                 datestr += 'Z'
 
-            # the parsed date time represents a GMT time, but strftime
-            # does not take timezone into account, so these are seconds from the
-            # local start of 1970
-            local_sec = float(parser.parse(datestr).strftime("%s.%f"))
-            # remove the local time zone to convert to gmt (seconds since gmt jan 1 1970)
-            gmt_sec = local_sec - time.timezone
-            # convert to ntp (seconds since gmt jan 1 1900)
-            timestamp = ntplib.system_to_ntp_time(gmt_sec)
+            format = "%Y-%m-%dT%H:%M:%S.%fZ"
+
+            dt = datetime.strptime(datestr, format)
+
+            unix_timestamp = calendar.timegm(dt.timetuple()) + (dt.microsecond / 1000000.0)
+
+            timestamp = ntplib.system_to_ntp_time(unix_timestamp)
 
         except ValueError as e:
             raise ValueError('Value %s could not be formatted to a date. %s' % (str(datestr), e))
 
-        log.debug("converting time string '%s', unix_ts: %s ntp: %s", datestr, gmt_sec, timestamp)
+        log.debug("converting time string '%s', unix_ts: %s ntp: %s", datestr, unix_timestamp, timestamp)
 
         return timestamp
 

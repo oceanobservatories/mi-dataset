@@ -33,7 +33,7 @@ from mi.core.exceptions import \
 
 from mi.dataset.dataset_parser import BufferLoadingParser
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
-
+from mi.dataset.parser import utilities
 
 ACCEL_ID = b'\xcb'
 RATE_ID = b'\xcf'
@@ -200,9 +200,8 @@ class MopakODclParser(BufferLoadingParser):
         self._read_state = {StateKey.POSITION: 0, StateKey.TIMER_ROLLOVER: 0, StateKey.TIMER_START: None}
         # convert the date / time string from the file name to a starting time in seconds UTC
 
-        file_datetime = datetime.strptime(filename[:15], "%Y%m%d_%H%M%S")
-        local_seconds = time.mktime(file_datetime.timetuple())
-        self._start_time_utc = local_seconds - time.timezone
+        self._start_time_utc = utilities.formatted_timestamp_utc_time(filename[:15],
+                                                                      "%Y%m%d_%H%M%S")
 
         try:
             # Get the particle classes to publish from the configuration

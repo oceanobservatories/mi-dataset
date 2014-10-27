@@ -5,7 +5,7 @@ data:
   - _index: 1
     particle_object: AdcptAcfgmPd0DclInstrumentParticle
     particle_type: adcpt_acfgm_pd0_dcl_instrument
-    internal_timestamp: 3607282920.292000
+    internal_timestamp: 3607286520.292000
     dcl_controller_timestamp: 2014/04/24 00:02:00.292
     dcl_controller_starting_timestamp: 2014/04/24 00:01:58.003
     firmware_version: 51
@@ -133,7 +133,7 @@ data:
   - _index: 2
     particle_object: AdcptAcfgmPd0DclInstrumentParticle
     particle_type: adcpt_acfgm_pd0_dcl_instrument
-    internal_timestamp: 3607283520.293000
+    internal_timestamp: 3607287120.293000
     dcl_controller_timestamp: 2014/04/24 00:12:00.293
     dcl_controller_starting_timestamp: 2014/04/24 00:11:58.003
     firmware_version: 51
@@ -261,7 +261,7 @@ data:
   - _index: 3
     particle_object: AdcptAcfgmPd0DclInstrumentParticle
     particle_type: adcpt_acfgm_pd0_dcl_instrument
-    internal_timestamp: 3607284120.353000
+    internal_timestamp: 3607287720.353000
     dcl_controller_timestamp: 2014/04/24 00:22:00.353
     dcl_controller_starting_timestamp: 2014/04/24 00:21:58.065
     firmware_version: 51
@@ -389,7 +389,7 @@ data:
   - _index: 4
     particle_object: AdcptAcfgmPd0DclInstrumentParticle
     particle_type: adcpt_acfgm_pd0_dcl_instrument
-    internal_timestamp: 3607284720.359000
+    internal_timestamp: 3607288320.359000
     dcl_controller_timestamp: 2014/04/24 00:32:00.359
     dcl_controller_starting_timestamp: 2014/04/24 00:31:58.067
     firmware_version: 51
@@ -517,7 +517,7 @@ data:
   - _index: 5
     particle_object: AdcptAcfgmPd0DclInstrumentParticle
     particle_type: adcpt_acfgm_pd0_dcl_instrument
-    internal_timestamp: 3607285320.288000
+    internal_timestamp: 3607288920.288000
     dcl_controller_timestamp: 2014/04/24 00:42:00.288
     dcl_controller_starting_timestamp: 2014/04/24 00:41:57.999
     firmware_version: 51
@@ -645,7 +645,7 @@ data:
   - _index: 6
     particle_object: AdcptAcfgmPd0DclInstrumentParticle
     particle_type: adcpt_acfgm_pd0_dcl_instrument
-    internal_timestamp: 3607285920.290000
+    internal_timestamp: 3607289520.290000
     dcl_controller_timestamp: 2014/04/24 00:52:00.290
     dcl_controller_starting_timestamp: 2014/04/24 00:51:58.000
     firmware_version: 51
@@ -773,7 +773,7 @@ data:
   - _index: 7
     particle_object: AdcptAcfgmPd0DclInstrumentParticle
     particle_type: adcpt_acfgm_pd0_dcl_instrument
-    internal_timestamp: 3607286520.291000
+    internal_timestamp: 3607290120.291000
     dcl_controller_timestamp: 2014/04/24 01:02:00.291
     dcl_controller_starting_timestamp: 2014/04/24 01:01:57.999
     firmware_version: 51
@@ -901,7 +901,7 @@ data:
   - _index: 8
     particle_object: AdcptAcfgmPd0DclInstrumentParticle
     particle_type: adcpt_acfgm_pd0_dcl_instrument
-    internal_timestamp: 3607290120.284000
+    internal_timestamp: 3607293720.284000
     dcl_controller_timestamp: 2014/04/24 02:02:00.284
     dcl_controller_starting_timestamp: 2014/04/24 02:01:57.994
     firmware_version: 51
@@ -1029,7 +1029,7 @@ data:
   - _index: 9
     particle_object: AdcptAcfgmPd0DclInstrumentParticle
     particle_type: adcpt_acfgm_pd0_dcl_instrument
-    internal_timestamp: 3607293720.322000
+    internal_timestamp: 3607297320.322000
     dcl_controller_timestamp: 2014/04/24 03:02:00.322
     dcl_controller_starting_timestamp: 2014/04/24 03:01:57.993
     firmware_version: 51
@@ -1157,7 +1157,7 @@ data:
   - _index: 10
     particle_object: AdcptAcfgmPd0DclInstrumentParticle
     particle_type: adcpt_acfgm_pd0_dcl_instrument
-    internal_timestamp: 3607304520.274000
+    internal_timestamp: 3607308120.274000
     dcl_controller_timestamp: 2014/04/24 06:02:00.274
     dcl_controller_starting_timestamp: 2014/04/24 06:01:57.985
     firmware_version: 51
@@ -1285,7 +1285,7 @@ data:
   - _index: 11
     particle_object: AdcptAcfgmPd0DclInstrumentParticle
     particle_type: adcpt_acfgm_pd0_dcl_instrument
-    internal_timestamp: 3607315320.264000
+    internal_timestamp: 3607318920.264000
     dcl_controller_timestamp: 2014/04/24 09:02:00.264
     dcl_controller_starting_timestamp: 2014/04/24 09:01:57.975
     firmware_version: 51
@@ -1413,7 +1413,7 @@ data:
   - _index: 12
     particle_object: AdcptAcfgmPd0DclInstrumentParticle
     particle_type: adcpt_acfgm_pd0_dcl_instrument
-    internal_timestamp: 3607326120.255000
+    internal_timestamp: 3607329720.255000
     dcl_controller_timestamp: 2014/04/24 12:02:00.255
     dcl_controller_starting_timestamp: 2014/04/24 12:01:57.969
     firmware_version: 51
@@ -1541,7 +1541,7 @@ data:
   - _index: 13
     particle_object: AdcptAcfgmPd0DclInstrumentParticle
     particle_type: adcpt_acfgm_pd0_dcl_instrument
-    internal_timestamp: 3607336920.248000
+    internal_timestamp: 3607340520.248000
     dcl_controller_timestamp: 2014/04/24 15:02:00.248
     dcl_controller_starting_timestamp: 2014/04/24 15:01:57.959
     firmware_version: 51
@@ -1669,7 +1669,7 @@ data:
   - _index: 14
     particle_object: AdcptAcfgmPd0DclInstrumentParticle
     particle_type: adcpt_acfgm_pd0_dcl_instrument
-    internal_timestamp: 3607347720.238000
+    internal_timestamp: 3607351320.238000
     dcl_controller_timestamp: 2014/04/24 18:02:00.238
     dcl_controller_starting_timestamp: 2014/04/24 18:01:57.949
     firmware_version: 51
@@ -1797,7 +1797,7 @@ data:
   - _index: 15
     particle_object: AdcptAcfgmPd0DclInstrumentParticle
     particle_type: adcpt_acfgm_pd0_dcl_instrument
-    internal_timestamp: 3607358520.230000
+    internal_timestamp: 3607362120.230000
     dcl_controller_timestamp: 2014/04/24 21:02:00.230
     dcl_controller_starting_timestamp: 2014/04/24 21:01:57.941
     firmware_version: 51
