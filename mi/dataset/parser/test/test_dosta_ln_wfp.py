@@ -146,6 +146,67 @@ class DostaLnWfpParserUnitTestCase(ParserUnitTestCase):
 
         self.stream_handle.close()
 
+    def test_verify_record_against_yaml(self):
+        """
+        Read data from a file and pull out data particles
+        one at a time. Verify that the results are those we expected.
+        """
+        file_path = os.path.join(RESOURCE_PATH, 'E0000001.DAT')
+        self.stream_handle = open(file_path, 'rb')
+
+        self.parser = DostaLnWfpParser(self.config, self.start_state, self.stream_handle,
+                                     self.state_callback, self.pub_callback, self.exception_callback)
+
+        # In a single read, get all particles in this file.
+        result = self.parser.get_records(1000)
+        self.assert_particles(result, 'E0000001.yml', RESOURCE_PATH)
+
+        self.stream_handle.close()
+
+    def create_large_yml(self):
+        """
+        Create a large yml file corresponding to an actual recovered dataset. This is not an actual test - it allows
+        us to create what we need for integration testing, i.e. a yml file.
+        """
+        file_path = os.path.join(RESOURCE_PATH, 'E0000001.DAT')
+        self.stream_handle = open(file_path, 'rb')
+
+        self.parser = DostaLnWfpParser(self.config, self.start_state, self.stream_handle,
+                                     self.state_callback, self.pub_callback, self.exception_callback)
+
+        # In a single read, get all particles in this file.
+        result = self.parser.get_records(1000)
+
+        self.particle_to_yml(result, 'E0000001.yml')
+
+
+    def particle_to_yml(self, particles, filename, mode='w'):
+        """
+        This is added as a testing helper, not actually as part of the parser tests. Since the same particles
+        will be used for the driver test it is helpful to write them to .yml in the same form they need in the
+        results.yml fids here.
+        """
+        # open write append, if you want to start from scratch manually delete this fid
+        fid = open(os.path.join(RESOURCE_PATH, filename), mode)
+        fid.write('header:\n')
+        fid.write("    particle_object: 'MULTIPLE'\n")
+        fid.write("    particle_type: 'MULTIPLE'\n")
+        fid.write('data:\n')
+        for i in range(0, len(particles)):
+            particle_dict = particles[i].generate_dict()
+            fid.write('  - _index: %d\n' % (i+1))
+            fid.write('    particle_object: %s\n' % particles[i].__class__.__name__)
+            fid.write('    particle_type: %s\n' % particle_dict.get('stream_name'))
+            fid.write('    internal_timestamp: %f\n' % particle_dict.get('internal_timestamp'))
+            for val in particle_dict.get('values'):
+                if isinstance(val.get('value'), float):
+                    fid.write('    %s: %16.16f\n' % (val.get('value_id'), val.get('value')))
+                elif isinstance(val.get('value'), str):
+                    fid.write("    %s: '%s'\n" % (val.get('value_id'), val.get('value')))
+                else:
+                    fid.write('    %s: %s\n' % (val.get('value_id'), val.get('value')))
+        fid.close()
+
     def test_long_stream(self):
         """
         Test a long stream 
