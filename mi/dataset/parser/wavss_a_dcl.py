@@ -23,6 +23,7 @@ from mi.core.exceptions import SampleException, RecoverableSampleException
 from mi.dataset.dataset_parser import SimpleParser
 
 from mi.dataset.parser.common_regexes import INT_REGEX
+from mi.dataset.parser.utilities import dcl_controller_timestamp_to_utc_time
 
 
 FLOAT_REGEX = r'[+-]?\d+.\d+[Ee]?[+-]?\d*'  # includes scientific notation
@@ -172,9 +173,7 @@ class WavssADclCommonDataParticle(DataParticle):
         Set the timestamp and encode the common particles from the raw data using COMMON_PARTICLE_MAP
         """
         # the timestamp comes from the DCL logger timestamp, parse the string into a datetime
-        dcl_datetime = datetime.strptime(self.raw_data.group(DCL_TIMESTAMP_GROUP), "%Y/%m/%d %H:%M:%S.%f")
-        # adjust local seconds to get to utc by subtracting timezone seconds
-        utc_time = float(dcl_datetime.strftime("%s.%f")) - time.timezone
+        utc_time = dcl_controller_timestamp_to_utc_time(self.raw_data.group(DCL_TIMESTAMP_GROUP))
         self.set_internal_timestamp(unix_time=utc_time)
 
         return [self._encode_value(name, self.raw_data.group(group), function)

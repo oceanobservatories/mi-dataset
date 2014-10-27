@@ -11,8 +11,8 @@ __author__ = 'Joe Padula'
 __license__ = 'Apache 2.0'
 
 import re
-from datetime import datetime
-import time
+from mi.dataset.parser.utilities import dcl_controller_timestamp_to_utc_time, \
+    dcl_controller_timestamp_to_ntp_time
 
 import ntplib
 
@@ -328,14 +328,8 @@ class Pco2wAbcDclParser(Pco2wAbcParser):
         :return: the internal timestamp
         """
 
-        dcl_controller_timestamp = record_dict[Pco2wAbcDataParticleKey.DCL_CONTROLLER_TIMESTAMP]
-
-        dcl_datetime = datetime.strptime(dcl_controller_timestamp, DCL_CONTROLLER_TIMESTAMP_FORMAT)
-        # Convert to local time in seconds with milliseconds precision
-        local_seconds_ms = float(dcl_datetime.strftime("%s.%f"))
-        start_time_utc = local_seconds_ms - time.timezone
-
-        return float(ntplib.system_to_ntp_time(start_time_utc))
+        return float(dcl_controller_timestamp_to_ntp_time(
+            record_dict[Pco2wAbcDataParticleKey.DCL_CONTROLLER_TIMESTAMP]))
 
     @staticmethod
     def _create_empty_metadata_dict():

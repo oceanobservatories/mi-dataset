@@ -53,6 +53,8 @@ from mi.core.exceptions import \
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 from mi.dataset.dataset_parser import BufferLoadingParser
 
+from mi.dataset.parser import utilities
+
 # Basic patterns
 ANY_CHARS = r'.*'                    # Any characters excluding a newline
 NEW_LINE = r'(?:\r\n|\n)'            # any type of new line
@@ -227,9 +229,8 @@ class PresfAbcDclParserTideDataParticle(DataParticle):
         # The particle timestamp is the DCL Controller timestamp.
         # The individual fields have already been extracted by the parser.
 
-        dcl_datetime = datetime.strptime(self.raw_data.group(1), "%Y/%m/%d %H:%M:%S.%f")
-        # adjust local seconds to get to utc by subtracting timezone seconds
-        utc_time = float(dcl_datetime.strftime("%s.%f")) - time.timezone
+        utc_time = utilities.dcl_controller_timestamp_to_utc_time(self.raw_data.group(1))
+
         self.set_internal_timestamp(unix_time=utc_time)
     
     def _build_parsed_values(self):
@@ -264,9 +265,9 @@ class PresfAbcDclParserWaveDataParticle(DataParticle):
         # The particle timestamp is the DCL Controller timestamp.
         # The individual fields have already been extracted by the parser.
         date_match = DCL_TIMESTAMP_MATCHER.match(self.raw_data)
-        dcl_datetime = datetime.strptime(date_match.group(0), "%Y/%m/%d %H:%M:%S.%f")
-        # adjust local seconds to get to utc by subtracting timezone seconds
-        utc_time = float(dcl_datetime.strftime("%s.%f")) - time.timezone
+
+        utc_time = utilities.dcl_controller_timestamp_to_utc_time(date_match.group(0))
+
         self.set_internal_timestamp(unix_time=utc_time)
     
     def _build_parsed_values(self):

@@ -6,6 +6,7 @@
 @author Maria Lutz
 @brief Test code for a adcps_jln_stc data parser
 """
+from datetime import datetime
 import os
 import time
 import ntplib
@@ -318,9 +319,14 @@ class AdcpsJlnStcParserUnitTestCase(ParserUnitTestCase):
     @staticmethod
     def convert_timestamp(timestamp):
         date_str = AdcpsJlnStcInstrumentParserDataParticle.unpack_date(timestamp)
-        converted_time = float(parser.parse(date_str).strftime("%s.%f"))
-        adjusted_time = converted_time - time.timezone
-        timestamp_converted = ntplib.system_to_ntp_time(adjusted_time)
+
+        TIMESTAMP_FORMAT = "%Y-%m-%dT%H:%M:%S.%fZ"
+
+        dt = datetime.strptime(date_str, TIMESTAMP_FORMAT)
+
+        unix_time = calendar.timegm(dt.timetuple()) + (dt.microsecond / 1000000.0)
+
+        timestamp_converted = ntplib.system_to_ntp_time(unix_time)
         return timestamp_converted
 
     def particles_to_yml(self, particles, filename, mode='w'):

@@ -31,6 +31,7 @@ from mi.dataset.parser.adcp_pd0 import \
     AdcpPd0DataParticle, \
     CHECKSUM_BYTES, \
     CHECKSUM_MODULO
+from mi.dataset.parser import utilities
 
 from mi.core.log import get_logger
 log = get_logger()
@@ -124,10 +125,7 @@ class AdcptAcfgmPd0DclParticle(AdcpPd0DataParticle):
         # Note: internal timestamp has to be saved after calling the super class
         # build_parsed_values to over-write what it has saved
 
-        # the timestamp comes from the DCL logger timestamp, parse the string into a datetime
-        dcl_datetime = datetime.strptime(dcl_controller_timestamp, "%Y/%m/%d %H:%M:%S.%f")
-        # adjust local seconds to get to utc by subtracting timezone seconds
-        utc_time = float(dcl_datetime.strftime("%s.%f")) - time.timezone
+        utc_time = utilities.dcl_controller_timestamp_to_utc_time(dcl_controller_timestamp)
 
         self.set_internal_timestamp(unix_time=utc_time)
 

@@ -5,7 +5,7 @@ data:
   - _index: 1
     particle_object: WavssADclMeanDirectionalTelemeteredDataParticle
     particle_type: wavss_a_dcl_mean_directional
-    internal_timestamp: 3617965002.654
+    internal_timestamp: 3617968602.654
     dcl_controller_timestamp: '2014/08/25 15:16:42.654'
     date_string: '20140825'
     time_string: '151642'

@@ -28,6 +28,8 @@ from mi.core.exceptions import RecoverableSampleException, NotImplementedExcepti
 from mi.dataset.dataset_parser import Parser
 
 from mi.dataset.parser.nutnr_b_particles import NutnrBDataParticleKey
+from mi.dataset.parser.utilities import dcl_controller_timestamp_to_utc_time, \
+    dcl_controller_timestamp_to_ntp_time
 
 from mi.core.common import BaseEnum
 
@@ -343,10 +345,8 @@ class NutnrBDclParser(Parser):
         # calculate the metadata particle internal timestamp
         # from the DCL timestamp.
 
-        dcl_datetime = datetime.strptime(idle_match.group(
-            MetaDataMatchGroups.META_GROUP_DCL_TIMESTAMP), "%Y/%m/%d %H:%M:%S.%f")
-        log.info("DCL %s", dcl_datetime.strftime("%s.%f"))
-        utc_time = float(dcl_datetime.strftime("%s.%f")) - time.timezone
+        utc_time = dcl_controller_timestamp_to_utc_time(idle_match.group(
+            MetaDataMatchGroups.META_GROUP_DCL_TIMESTAMP))
 
         log.info("%s", utc_time)
 
@@ -361,13 +361,8 @@ class NutnrBDclParser(Parser):
         # calculate the instrument particle internal timestamp
         # from the DCL timestamp.
 
-        dcl_datetime = datetime.strptime(inst_match.group(
-            InstrumentDataMatchGroups.INST_GROUP_DCL_TIMESTAMP), "%Y/%m/%d %H:%M:%S.%f")
-        utc_time = float(dcl_datetime.strftime("%s.%f")) - time.timezone
-
-        log.info("%s", utc_time)
-
-        return ntplib.system_to_ntp_time(utc_time)
+        return dcl_controller_timestamp_to_ntp_time(inst_match.group(
+            InstrumentDataMatchGroups.INST_GROUP_DCL_TIMESTAMP))
 
     def _process_idle_metadata_record(self, idle_match):
         """

@@ -5,7 +5,7 @@ data:
   - _index: 1
     particle_object: WavssADclFourierTelemeteredDataParticle
     particle_type: wavss_a_dcl_fourier
-    internal_timestamp: 3617965002.543
+    internal_timestamp: 3617968602.543
     dcl_controller_timestamp: '2014/08/25 15:16:42.543'
     date_string: '20140825'
     time_string: '151642'

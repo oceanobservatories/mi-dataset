@@ -15,10 +15,6 @@ import copy
 import time
 from datetime import datetime
 
-import inspect
-import importlib
-import sys
-
 from math import copysign
 from functools import partial
 
@@ -28,6 +24,7 @@ from mi.core.exceptions import SampleException, DatasetParserException, Unexpect
 from mi.core.instrument.chunker import StringChunker
 from mi.core.instrument.data_particle import DataParticle, DataParticleKey
 from mi.dataset.dataset_parser import BufferLoadingParser
+from mi.dataset.parser import utilities
 
 # start the logger
 log = get_logger()
@@ -1575,12 +1572,11 @@ class GliderEngineeringParser(GliderParser):
         # if the day is only one digit, it is replaced with an _ rather than 0
         try:
             # first try 1 digit for the day
-            converted_time = datetime.strptime(fileopen_str, "%a_%b__%d_%H:%M:%S_%Y")
+            utctime = utilities.formatted_timestamp_utc_time(fileopen_str, "%a_%b__%d_%H:%M:%S_%Y")
         except ValueError as e:
             # date might have two digits for the day, now try that
-            converted_time = datetime.strptime(fileopen_str, "%a_%b_%d_%H:%M:%S_%Y")
-        localtime = time.mktime(converted_time.timetuple())
-        utctime = localtime - time.timezone
+            utctime = utilities.formatted_timestamp_utc_time(fileopen_str, "%a_%b_%d_%H:%M:%S_%Y")
+
         return ntplib.system_to_ntp_time(float(utctime))
 
     def _contains_eng_data(self, data_dict, particle_class):
