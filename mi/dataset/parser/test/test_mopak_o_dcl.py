@@ -6,6 +6,7 @@
 @author Emily Hahn
 @brief Test code for a mopak_o_dcl data parser
 """
+import calendar
 import ntplib
 import struct
 import os
@@ -67,10 +68,12 @@ class MopakODclParserUnitTestCase(ParserUnitTestCase):
         }
 
         self.start_state = {StateKey.POSITION: 0, StateKey.TIMER_ROLLOVER: 0, StateKey.TIMER_START: None}
+
+
         # using the same file, and hence the same start time, so just convert the start time here
         file_datetime = datetime.strptime('20140120_140004', "%Y%m%d_%H%M%S")
-        local_seconds = time.mktime(file_datetime.timetuple())
-        start_time_utc = local_seconds - time.timezone
+
+        start_time_utc = calendar.timegm(file_datetime.timetuple()) + (file_datetime.microsecond / 1000000.0)
 
         # Define test data particles and their associated timestamps which will be 
         # compared with returned results
@@ -107,8 +110,8 @@ class MopakODclParserUnitTestCase(ParserUnitTestCase):
         # after this is for a new file with rate in it
         # using the same file, and hence the same start time, so just convert the start time here
         file_datetime = datetime.strptime('20140313_191853', "%Y%m%d_%H%M%S")
-        local_seconds = time.mktime(file_datetime.timetuple())
-        start_time_utc = local_seconds - time.timezone
+
+        start_time_utc = calendar.timegm(file_datetime.timetuple()) + (file_datetime.microsecond / 1000000.0)
 
         # first in larger file
         self._rate_long_timer_start = 11409586

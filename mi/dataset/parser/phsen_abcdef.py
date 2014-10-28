@@ -26,6 +26,7 @@ from mi.core.instrument.data_particle import DataParticle, DataParticleKey, Data
 from mi.core.exceptions import SampleException, DatasetParserException, UnexpectedDataException
 from mi.dataset.dataset_parser import BufferLoadingParser
 from mi.core.instrument.chunker import StringChunker
+from mi.dataset.parser.utilities import mac_timestamp_to_utc_timestamp
 
 # ASCII File with records separated by carriage return, newline, or carriage return - line feed
 NEW_LINE = r'[\n\r]+'
@@ -101,18 +102,6 @@ CONTROL_MSG_NUM_FIELDS = 6
 TIMESTAMP_FIELD = 1
 
 
-def time_to_unix_time(sec_since_1904):
-    """
-    Convert between seconds since 1904 into unix time (epoch time)
-    @param sec_since_1904 ascii string of seconds since Jan 1 1904
-    @retval sec_since_1970 epoch time
-    """
-    local_dt_1904 = parser.parse("1904-01-01T00:00:00.00Z")
-    elapse_1904 = float(local_dt_1904.strftime("%s.%f"))
-    sec_since_1970 = sec_since_1904 + elapse_1904 - time.timezone
-    return sec_since_1970
-
-
 class StateKey(BaseEnum):
     POSITION = 'position'  # hold the current file position
     START_OF_DATA = 'start_of_data'
@@ -158,7 +147,8 @@ class PhsenRecoveredInstrumentDataParticle(DataParticle):
 
         # use the timestamp from the sio header as internal timestamp
         sec_since_1904 = int(self.raw_data[TIMESTAMP_FIELD])
-        unix_time = time_to_unix_time(sec_since_1904)
+
+        unix_time = mac_timestamp_to_utc_timestamp(sec_since_1904)
         self.set_internal_timestamp(unix_time=unix_time)
 
     def _build_parsed_values(self):
@@ -258,7 +248,8 @@ class PhsenRecoveredMetadataDataParticle(DataParticle):
 
         # use the timestamp from the sio header as internal timestamp
         sec_since_1904 = int(self.raw_data[TIMESTAMP_FIELD])
-        unix_time = time_to_unix_time(sec_since_1904)
+
+        unix_time = mac_timestamp_to_utc_timestamp(sec_since_1904)
         self.set_internal_timestamp(unix_time=unix_time)
 
     def _build_parsed_values(self):

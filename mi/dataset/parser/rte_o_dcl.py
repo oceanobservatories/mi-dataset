@@ -13,16 +13,16 @@ Initial Release
 __author__ = 'Jeff Roy'
 __license__ = 'Apache 2.0'
 
+import calendar
 import copy
+from datetime import datetime
 import re
 import ntplib
-import time
-from dateutil import parser
 from functools import partial
 
 from mi.core.log import get_logger ; log = get_logger()
 from mi.core.common import BaseEnum
-from mi.core.instrument.data_particle import DataParticle, DataParticleKey
+from mi.core.instrument.data_particle import DataParticle
 from mi.core.exceptions import SampleException, DatasetParserException, UnexpectedDataException
 from mi.dataset.dataset_parser import BufferLoadingParser
 from mi.core.instrument.chunker import StringChunker
@@ -173,11 +173,13 @@ class RteODclParser(BufferLoadingParser):
         )
         log.trace("converted ts '%s' to '%s'", ts_str[match.start(0):(match.start(0) + 24)], zulu_ts)
 
-        converted_time = float(parser.parse(zulu_ts).strftime("%s.%f"))
-        adjusted_time = converted_time - time.timezone
-        ntptime = ntplib.system_to_ntp_time(adjusted_time)
+        format = "%Y-%m-%dT%H:%M:%S.%fZ"
+        dt = datetime.strptime(zulu_ts, format)
+        unix_timestamp = calendar.timegm(dt.timetuple()) + (dt.microsecond / 1000000.0)
 
-        log.trace("Converted time \"%s\" (unix: %s) into %s", ts_str, adjusted_time, ntptime)
+        ntptime = ntplib.system_to_ntp_time(unix_timestamp)
+
+        log.trace("Converted time \"%s\" (unix: %s) into %s", ts_str, unix_timestamp, ntptime)
         return ntptime
 
     def parse_chunks(self):

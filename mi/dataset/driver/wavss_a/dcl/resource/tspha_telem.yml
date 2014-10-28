@@ -5,7 +5,7 @@ data:
   - _index: 1
     particle_object: WavssADclMotionTelemeteredDataParticle
     particle_type: wavss_a_dcl_motion
-    internal_timestamp: 3617965002.765
+    internal_timestamp: 3617968602.765
     dcl_controller_timestamp: '2014/08/25 15:16:42.765'
     date_string: '20140825'
     time_string: '151642'

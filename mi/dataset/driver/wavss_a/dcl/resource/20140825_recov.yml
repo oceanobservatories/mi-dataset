@@ -5,7 +5,7 @@ data:
   - _index: 1
     particle_object: WavssADclStatisticsRecoveredDataParticle
     particle_type: wavss_a_dcl_statistics_recovered
-    internal_timestamp: 3617964550.100
+    internal_timestamp: 3617968150.100
     dcl_controller_timestamp: '2014/08/25 15:09:10.100'
     date_string: '20140825'
     time_string: '150910'
@@ -27,7 +27,7 @@ data:
   - _index: 2
     particle_object: WavssADclStatisticsRecoveredDataParticle
     particle_type: wavss_a_dcl_statistics_recovered
-    internal_timestamp: 3617965002.321
+    internal_timestamp: 3617968602.321
     dcl_controller_timestamp: '2014/08/25 15:16:42.321'
     date_string: '20140825'
     time_string: '151642'
@@ -49,7 +49,7 @@ data:
   - _index: 3
     particle_object: WavssADclNonDirectionalRecoveredDataParticle
     particle_type: wavss_a_dcl_non_directional_recovered
-    internal_timestamp: 3617965002.432
+    internal_timestamp: 3617968602.432
     dcl_controller_timestamp: '2014/08/25 15:16:42.432'
     date_string: '20140825'
     time_string: '151642'
@@ -61,7 +61,7 @@ data:
   - _index: 4
     particle_object: WavssADclFourierRecoveredDataParticle
     particle_type: wavss_a_dcl_fourier_recovered
-    internal_timestamp: 3617965002.543
+    internal_timestamp: 3617968602.543
     dcl_controller_timestamp: '2014/08/25 15:16:42.543'
     date_string: '20140825'
     time_string: '151642'
@@ -76,7 +76,7 @@ data:
   - _index: 5
     particle_object: WavssADclMeanDirectionalRecoveredDataParticle
     particle_type: wavss_a_dcl_mean_directional_recovered
-    internal_timestamp: 3617965002.654
+    internal_timestamp: 3617968602.654
     dcl_controller_timestamp: '2014/08/25 15:16:42.654'
     date_string: '20140825'
     time_string: '151642'
@@ -92,7 +92,7 @@ data:
   - _index: 6
     particle_object: WavssADclMotionRecoveredDataParticle
     particle_type: wavss_a_dcl_motion_recovered
-    internal_timestamp: 3617965002.765
+    internal_timestamp: 3617968602.765
     dcl_controller_timestamp: '2014/08/25 15:16:42.765'
     date_string: '20140825'
     time_string: '151642'

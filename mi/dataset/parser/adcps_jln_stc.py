@@ -20,7 +20,6 @@ import struct
 import time
 import binascii
 import calendar
-from dateutil import parser
 
 from mi.core.log import get_logger
 log = get_logger()
@@ -31,6 +30,7 @@ from mi.core.exceptions import SampleException, DatasetParserException
 from mi.core.exceptions import RecoverableSampleException, UnexpectedDataException
 
 from mi.dataset.dataset_parser import BufferLoadingParser
+from mi.dataset.parser import utilities
 
 # *** Defining regexes for this parser ***
 HEADER_REGEX = b'#UIMM Status.+DateTime: (\d{8}\s\d{6}).+#ID=(\d+).+#SN=(\d+).+#Volts=(\d+\.\d{2}).+' \
@@ -397,10 +397,10 @@ class AdcpsJlnStcParser(BufferLoadingParser):
                         # pull out the date string from the data
                         date_str = AdcpsJlnStcInstrumentParserDataParticle.unpack_date(data_match.group(2)[11:19])
 
-                        # convert to ntp
-                        converted_time = float(parser.parse(date_str).strftime("%s.%f"))
-                        adjusted_time = converted_time - time.timezone
-                        self._timestamp = ntplib.system_to_ntp_time(adjusted_time)
+                        unix_time = utilities.zulu_timestamp_to_utc_time(date_str)
+
+                        self._timestamp = ntplib.system_to_ntp_time(unix_time)
+
                         # round to ensure the timestamps match
                         self._timestamp = round(self._timestamp*100)/100
 

@@ -5,7 +5,7 @@ data:
   - _index: 1
     particle_object: WavssADclStatisticsTelemeteredDataParticle
     particle_type: wavss_a_dcl_statistics
-    internal_timestamp: 3615924184.865
+    internal_timestamp: 3615927784.865
     dcl_controller_timestamp: '2014/08/02 00:23:04.865'
     date_string: '20140801'
     time_string: '201818'

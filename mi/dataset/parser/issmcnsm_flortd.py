@@ -15,9 +15,6 @@ __license__ = 'Apache 2.0'
 
 import copy
 import re
-import ntplib
-import time
-from dateutil import parser
 from functools import partial
 
 from mi.core.log import get_logger ; log = get_logger()
@@ -25,6 +22,7 @@ from mi.core.common import BaseEnum
 from mi.core.instrument.data_particle import DataParticle, DataParticleKey
 from mi.core.exceptions import SampleException, DatasetParserException
 from mi.dataset.dataset_parser import BufferLoadingParser
+from mi.dataset.parser import utilities
 from mi.core.instrument.chunker import StringChunker
 
 # there are two timestamps, the log timestamp and data timestamp
@@ -214,11 +212,8 @@ class Issmcnsm_flortdParser(BufferLoadingParser):
         )
         log.trace("converted ts '%s' to '%s'", ts_str[match.start(0):(match.start(0) + 24)], zulu_ts)
 
-        converted_time = float(parser.parse(zulu_ts).strftime("%s.%f"))
-        adjusted_time = converted_time - time.timezone
-        ntptime = ntplib.system_to_ntp_time(adjusted_time)
+        ntptime = utilities.zulu_timestamp_to_ntp_time(zulu_ts)
 
-        log.trace("Converted time \"%s\" (unix: %s) into %s", ts_str, adjusted_time, ntptime)
         return ntptime
 
     def parse_chunks(self):

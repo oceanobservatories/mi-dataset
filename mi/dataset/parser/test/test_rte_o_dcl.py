@@ -7,21 +7,17 @@
 @brief Test code for a rte_o_dcl data parser
 """
 
-import time
-import copy
-import re
+import calendar
+from datetime import datetime
 import ntplib
 
 from nose.plugins.attrib import attr
 from StringIO import StringIO
 
-from dateutil import parser
-
 from mi.core.log import get_logger ; log = get_logger()
 
 from mi.dataset.test.test_parser import ParserUnitTestCase
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
-from mi.core.instrument.data_particle import DataParticleKey
 from mi.dataset.parser.rte_o_dcl import RteODclParser, RteODclParserDataParticle, StateKey, LOG_TIME_MATCHER
 
 @attr('UNIT', group='mi')
@@ -74,11 +70,13 @@ class RteODclParserUnitTestCase(ParserUnitTestCase):
         )
         log.trace("converted ts '%s' to '%s'", ts_str[match.start(0):(match.start(0) + 24)], zulu_ts)
 
-        converted_time = float(parser.parse(zulu_ts).strftime("%s.%f"))
-        adjusted_time = converted_time - time.timezone
-        ntptime = ntplib.system_to_ntp_time(adjusted_time)
+        format = "%Y-%m-%dT%H:%M:%S.%fZ"
+        dt = datetime.strptime(zulu_ts, format)
+        unix_timestamp = calendar.timegm(dt.timetuple()) + (dt.microsecond / 1000000.0)
 
-        log.trace("Converted time \"%s\" (unix: %s) into %s", ts_str, adjusted_time, ntptime)
+        ntptime = ntplib.system_to_ntp_time(unix_timestamp)
+
+        log.trace("Converted time \"%s\" (unix: %s) into %s", ts_str, unix_timestamp, ntptime)
         return ntptime
 
     
