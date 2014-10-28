@@ -10,7 +10,7 @@ data:
     dcl_controller_timestamp: '2014/01/05 00:05:22.594'
     date_time_string: '05 Jan 2014 00:00:28'
     absolute_pressure: 208.8057
-    pressure_temperature: 14.004
+    pressure_temp: 14.004
     seawater_temperature: 13.8633
   - _index: 2
     particle_object: PresfAbcDclTelemeteredWaveDataParticle
@@ -30,7 +30,7 @@ data:
     dcl_controller_timestamp: '2014/01/05 01:05:22.589'
     date_time_string: '05 Jan 2014 01:00:28'
     absolute_pressure: 209.1991
-    pressure_temperature: 13.990
+    pressure_temp: 13.990
     seawater_temperature: 13.8445
   - _index: 4
     particle_object: PresfAbcDclTelemeteredWaveDataParticle
@@ -50,7 +50,7 @@ data:
     dcl_controller_timestamp: '2014/01/05 02:05:21.585'
     date_time_string: '05 Jan 2014 02:00:27'
     absolute_pressure: 209.4531
-    pressure_temperature: 14.004
+    pressure_temp: 14.004
     seawater_temperature: 13.8373
   - _index: 6
     particle_object: PresfAbcDclTelemeteredWaveDataParticle
@@ -70,7 +70,7 @@ data:
     dcl_controller_timestamp: '2014/01/05 03:05:21.578'
     date_time_string: '05 Jan 2014 03:00:27'
     absolute_pressure: 209.5021
-    pressure_temperature: 13.981
+    pressure_temp: 13.981
     seawater_temperature: 13.8246
   - _index: 8
     particle_object: PresfAbcDclTelemeteredWaveDataParticle
@@ -101,7 +101,7 @@ data:
     dcl_controller_timestamp: '2014/01/05 05:05:23.564'
     date_time_string: '05 Jan 2014 05:00:29'
     absolute_pressure: 209.0280
-    pressure_temperature: 13.960
+    pressure_temp: 13.960
     seawater_temperature: 13.8105
   - _index: 11
     particle_object: PresfAbcDclTelemeteredWaveDataParticle
@@ -121,7 +121,7 @@ data:
     dcl_controller_timestamp: '2014/01/05 06:05:21.558'
     date_time_string: '05 Jan 2014 06:00:27'
     absolute_pressure: 208.6364
-    pressure_temperature: 14.004
+    pressure_temp: 14.004
     seawater_temperature: 13.9294
   - _index: 13
     particle_object: PresfAbcDclTelemeteredWaveDataParticle
@@ -141,7 +141,7 @@ data:
     dcl_controller_timestamp: '2014/01/05 07:05:23.553'
     date_time_string: '05 Jan 2014 07:00:29'
     absolute_pressure: 208.2919
-    pressure_temperature: 14.074
+    pressure_temp: 14.074
     seawater_temperature: 13.9423
   - _index: 15
     particle_object: PresfAbcDclTelemeteredWaveDataParticle
@@ -161,7 +161,7 @@ data:
     dcl_controller_timestamp: '2014/01/05 08:05:20.544'
     date_time_string: '05 Jan 2014 08:00:26'
     absolute_pressure: 208.0616
-    pressure_temperature: 14.096
+    pressure_temp: 14.096
     seawater_temperature: 13.9301
   - _index: 17
     particle_object: PresfAbcDclTelemeteredWaveDataParticle
@@ -181,7 +181,7 @@ data:
     dcl_controller_timestamp: '2014/01/05 09:05:23.538'
     date_time_string: '05 Jan 2014 09:00:29'
     absolute_pressure: 208.0029
-    pressure_temperature: 14.074
+    pressure_temp: 14.074
     seawater_temperature: 13.9239
   - _index: 19
     particle_object: PresfAbcDclTelemeteredWaveDataParticle
