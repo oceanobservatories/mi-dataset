@@ -26,8 +26,7 @@ from mi.dataset.dataset_parser import BufferLoadingParser
 from mi.core.instrument.chunker import StringChunker
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 from mi.dataset.parser.common_regexes import END_OF_LINE_REGEX, ONE_OR_MORE_WHITESPACE_REGEX
-from mi.dataset.parser.utilities import convert_to_signed_int_16_bit, convert_to_signed_int_8_bit, \
-    convert_to_signed_int_32_bit, dcl_controller_timestamp_to_ntp_time
+from mi.dataset.parser.utilities import convert_to_signed_int_16_bit, dcl_controller_timestamp_to_ntp_time
 
 METADATA_PARTICLE_CLASS_KEY = 'metadata_particle_class'
 # The key for the data particle class
@@ -70,8 +69,8 @@ class DataParticleType(BaseEnum):
     """
     METADATA_RECOVERED = 'phsen_abcdef_dcl_metadata_recovered'
     INSTRUMENT_RECOVERED = 'phsen_abcdef_dcl_instrument_recovered'
-    METADATA_TELEMETERED = 'phsen_abcdef_dcl_metadata_telemetered'
-    INSTRUMENT_TELEMETERED = 'phsen_abcdef_dcl_instrument_telemetered'
+    METADATA_TELEMETERED = 'phsen_abcdef_dcl_metadata'
+    INSTRUMENT_TELEMETERED = 'phsen_abcdef_dcl_instrument'
 
 
 class StateKey(BaseEnum):
@@ -98,7 +97,6 @@ class PhsenAbcdefDclMetadataDataParticle(DataParticle):
         log.trace(" XX ## XX ## XX ## XX PhsenAbcdefDclMetadataDataParticle._generate_particle(): "
                   "dcl_controller_timestamp= %s, converted DCL Time= %s", dcl_controller_timestamp, converted_time)
 
-
         ## extract the working_record string from the raw data tuple
         working_record = self.raw_data[1]
 
@@ -107,7 +105,6 @@ class PhsenAbcdefDclMetadataDataParticle(DataParticle):
 
         log.trace("PhsenAbcdefDclMetadataDataParticle._generate_particle(): Data Length= %s, working_record Length= %s",
                   int(working_record[3:5], 16), len(working_record))
-
 
         ## Per the IDD, voltage_battery data is optional and not guaranteed to be included in every CONTROL
         ## data record. Nominal size of a metadata string without the voltage_battery data is 39 (including the #).
@@ -126,21 +123,21 @@ class PhsenAbcdefDclMetadataDataParticle(DataParticle):
         ## Begin saving particle data
         ##
         unique_id_ascii_hex = working_record[1:3]
-        ## convert 2 ascii (hex) chars to signed int
-        unique_id_int = convert_to_signed_int_8_bit(unique_id_ascii_hex)
+        ## convert 2 ascii (hex) chars to int
+        unique_id_int = int(unique_id_ascii_hex, 16)
 
         record_type_ascii_hex = working_record[5:7]
-        ## convert 2 ascii (hex) chars to signed int
-        record_type_int = convert_to_signed_int_8_bit(record_type_ascii_hex)
+        ## convert 2 ascii (hex) chars to int
+        record_type_int = int(record_type_ascii_hex, 16)
 
         record_time_ascii_hex = working_record[7:15]
-        ## convert 8 ascii (hex) chars to signed int
-        record_time_int = convert_to_signed_int_32_bit(record_time_ascii_hex)
+        ## convert 8 ascii (hex) chars to int
+        record_time_int = int(record_time_ascii_hex, 16)
 
         ## FLAGS
         flags_ascii_hex = working_record[15:19]
         ## convert 4 ascii (hex) chars to list of binary data
-        flags_ascii_int = convert_to_signed_int_8_bit(flags_ascii_hex)
+        flags_ascii_int = int(flags_ascii_hex, 16)
         binary_list = [(flags_ascii_int >> x) & 0x1 for x in range(16)]
         # log.debug("PhsenAbcdefDclMetadataDataParticle._generate_particle(): binary_list= %s", binary_list)
 
@@ -162,28 +159,28 @@ class PhsenAbcdefDclMetadataDataParticle(DataParticle):
         power_on_invalid = binary_list[15]
 
         num_data_records_ascii_hex = working_record[19:25]
-        ## convert 6 ascii (hex) chars to signed int
-        num_data_records_int = convert_to_signed_int_32_bit(num_data_records_ascii_hex)
+        ## convert 6 ascii (hex) chars to int
+        num_data_records_int = int(num_data_records_ascii_hex, 16)
 
         num_error_records_ascii_hex = working_record[25:31]
-        ## convert 6 ascii (hex) chars to signed int
-        num_error_records_int = convert_to_signed_int_32_bit(num_error_records_ascii_hex)
+        ## convert 6 ascii (hex) chars to int
+        num_error_records_int = int(num_error_records_ascii_hex, 16)
 
         num_bytes_stored_ascii_hex = working_record[31:37]
-        ## convert 6 ascii (hex) chars to signed int
-        num_bytes_stored_int = convert_to_signed_int_32_bit(num_bytes_stored_ascii_hex)
+        ## convert 6 ascii (hex) chars to int
+        num_bytes_stored_int = int(num_bytes_stored_ascii_hex, 16)
 
         calculated_checksum = _calculate_working_record_checksum(working_record)
 
         ## Record may not have voltage data...
         if have_voltage_battery_data:
             voltage_battery_ascii_hex = working_record[37:41]
-            ## convert 4 ascii (hex) chars to signed int
-            voltage_battery_int = convert_to_signed_int_16_bit(voltage_battery_ascii_hex)
+            ## convert 4 ascii (hex) chars to int
+            voltage_battery_int = int(voltage_battery_ascii_hex, 16)
 
             passed_checksum_ascii_hex = working_record[41:43]
-            ## convert 2 ascii (hex) chars to signed int
-            passed_checksum_int = convert_to_signed_int_16_bit(passed_checksum_ascii_hex)
+            ## convert 2 ascii (hex) chars to int
+            passed_checksum_int = int(passed_checksum_ascii_hex, 16)
 
             ## Per IDD, if the calculated checksum does not match the checksum in the record,
             ## use a checksum of zero in the resultant particle
@@ -195,8 +192,8 @@ class PhsenAbcdefDclMetadataDataParticle(DataParticle):
             voltage_battery_int = None
 
             passed_checksum_ascii_hex = working_record[37:39]
-            ## convert 2 ascii (hex) chars to signed int
-            passed_checksum_int = convert_to_signed_int_16_bit(passed_checksum_ascii_hex)
+            ## convert 2 ascii (hex) chars to int
+            passed_checksum_int = int(passed_checksum_ascii_hex, 16)
 
             ## Per IDD, if the calculated checksum does not match the checksum in the record,
             ## use a checksum of zero in the resultant particle
@@ -209,57 +206,81 @@ class PhsenAbcdefDclMetadataDataParticle(DataParticle):
                   "calculated_checksum= %s, passed_checksum_int= %s", calculated_checksum, passed_checksum_int)
 
         ## ASSEMBLE THE RESULTANT PARTICLE..
-        resultant_particle_data = [{DataParticleKey.VALUE_ID: PhsenAbcdefDclMetadataDataParticleKey.DCL_CONTROLLER_TIMESTAMP,
-                                    DataParticleKey.VALUE: converted_time},
-                                   {DataParticleKey.VALUE_ID: PhsenAbcdefDclMetadataDataParticleKey.UNIQUE_ID,
+        resultant_particle_data = [{DataParticleKey.VALUE_ID:
+                                        PhsenAbcdefDclMetadataDataParticleKey.DCL_CONTROLLER_TIMESTAMP,
+                                    DataParticleKey.VALUE: dcl_controller_timestamp},
+                                   {DataParticleKey.VALUE_ID:
+                                        PhsenAbcdefDclMetadataDataParticleKey.UNIQUE_ID,
                                     DataParticleKey.VALUE: unique_id_int},
-                                   {DataParticleKey.VALUE_ID: PhsenAbcdefDclMetadataDataParticleKey.RECORD_TYPE,
+                                   {DataParticleKey.VALUE_ID:
+                                        PhsenAbcdefDclMetadataDataParticleKey.RECORD_TYPE,
                                     DataParticleKey.VALUE: record_type_int},
-                                   {DataParticleKey.VALUE_ID: PhsenAbcdefDclMetadataDataParticleKey.RECORD_TIME,
+                                   {DataParticleKey.VALUE_ID:
+                                        PhsenAbcdefDclMetadataDataParticleKey.RECORD_TIME,
                                     DataParticleKey.VALUE: record_time_int},
-                                   {DataParticleKey.VALUE_ID: PhsenAbcdefDclMetadataDataParticleKey.CLOCK_ACTIVE,
+                                   {DataParticleKey.VALUE_ID:
+                                        PhsenAbcdefDclMetadataDataParticleKey.CLOCK_ACTIVE,
                                     DataParticleKey.VALUE: clock_active},
-                                   {DataParticleKey.VALUE_ID: PhsenAbcdefDclMetadataDataParticleKey.RECORDING_ACTIVE,
+                                   {DataParticleKey.VALUE_ID:
+                                        PhsenAbcdefDclMetadataDataParticleKey.RECORDING_ACTIVE,
                                     DataParticleKey.VALUE: recording_active},
-                                   {DataParticleKey.VALUE_ID: PhsenAbcdefDclMetadataDataParticleKey.RECORD_END_ON_TIME,
+                                   {DataParticleKey.VALUE_ID:
+                                        PhsenAbcdefDclMetadataDataParticleKey.RECORD_END_ON_TIME,
                                     DataParticleKey.VALUE: record_end_on_time},
-                                   {DataParticleKey.VALUE_ID: PhsenAbcdefDclMetadataDataParticleKey.RECORD_MEMORY_FULL,
+                                   {DataParticleKey.VALUE_ID:
+                                        PhsenAbcdefDclMetadataDataParticleKey.RECORD_MEMORY_FULL,
                                     DataParticleKey.VALUE: record_memory_full},
-                                   {DataParticleKey.VALUE_ID: PhsenAbcdefDclMetadataDataParticleKey.RECORD_END_ON_ERROR,
+                                   {DataParticleKey.VALUE_ID:
+                                        PhsenAbcdefDclMetadataDataParticleKey.RECORD_END_ON_ERROR,
                                     DataParticleKey.VALUE: record_end_on_error},
-                                   {DataParticleKey.VALUE_ID: PhsenAbcdefDclMetadataDataParticleKey.DATA_DOWNLOAD_OK,
+                                   {DataParticleKey.VALUE_ID:
+                                        PhsenAbcdefDclMetadataDataParticleKey.DATA_DOWNLOAD_OK,
                                     DataParticleKey.VALUE: data_download_ok},
-                                   {DataParticleKey.VALUE_ID: PhsenAbcdefDclMetadataDataParticleKey.FLASH_MEMORY_OPEN,
+                                   {DataParticleKey.VALUE_ID:
+                                        PhsenAbcdefDclMetadataDataParticleKey.FLASH_MEMORY_OPEN,
                                     DataParticleKey.VALUE: flash_memory_open},
-                                   {DataParticleKey.VALUE_ID: PhsenAbcdefDclMetadataDataParticleKey.BATTERY_LOW_PRESTART,
+                                   {DataParticleKey.VALUE_ID:
+                                        PhsenAbcdefDclMetadataDataParticleKey.BATTERY_LOW_PRESTART,
                                     DataParticleKey.VALUE: battery_low_prestart},
-                                   {DataParticleKey.VALUE_ID: PhsenAbcdefDclMetadataDataParticleKey.BATTERY_LOW_MEASUREMENT,
+                                   {DataParticleKey.VALUE_ID:
+                                        PhsenAbcdefDclMetadataDataParticleKey.BATTERY_LOW_MEASUREMENT,
                                     DataParticleKey.VALUE: battery_low_measurement},
-                                   {DataParticleKey.VALUE_ID: PhsenAbcdefDclMetadataDataParticleKey.BATTERY_LOW_BLANK,
+                                   {DataParticleKey.VALUE_ID:
+                                        PhsenAbcdefDclMetadataDataParticleKey.BATTERY_LOW_BLANK,
                                     DataParticleKey.VALUE: battery_low_blank},
-                                   {DataParticleKey.VALUE_ID: PhsenAbcdefDclMetadataDataParticleKey.BATTERY_LOW_EXTERNAL,
+                                   {DataParticleKey.VALUE_ID:
+                                        PhsenAbcdefDclMetadataDataParticleKey.BATTERY_LOW_EXTERNAL,
                                     DataParticleKey.VALUE: battery_low_external},
-                                   {DataParticleKey.VALUE_ID: PhsenAbcdefDclMetadataDataParticleKey.EXTERNAL_DEVICE1_FAULT,
+                                   {DataParticleKey.VALUE_ID:
+                                        PhsenAbcdefDclMetadataDataParticleKey.EXTERNAL_DEVICE1_FAULT,
                                     DataParticleKey.VALUE: external_device1_fault},
-                                   {DataParticleKey.VALUE_ID: PhsenAbcdefDclMetadataDataParticleKey.EXTERNAL_DEVICE2_FAULT,
+                                   {DataParticleKey.VALUE_ID:
+                                        PhsenAbcdefDclMetadataDataParticleKey.EXTERNAL_DEVICE2_FAULT,
                                     DataParticleKey.VALUE: external_device2_fault},
-                                   {DataParticleKey.VALUE_ID: PhsenAbcdefDclMetadataDataParticleKey.EXTERNAL_DEVICE3_FAULT,
+                                   {DataParticleKey.VALUE_ID:
+                                        PhsenAbcdefDclMetadataDataParticleKey.EXTERNAL_DEVICE3_FAULT,
                                     DataParticleKey.VALUE: external_device3_fault},
-                                   {DataParticleKey.VALUE_ID: PhsenAbcdefDclMetadataDataParticleKey.FLASH_ERASED,
+                                   {DataParticleKey.VALUE_ID:
+                                        PhsenAbcdefDclMetadataDataParticleKey.FLASH_ERASED,
                                     DataParticleKey.VALUE: flash_erased},
-                                   {DataParticleKey.VALUE_ID: PhsenAbcdefDclMetadataDataParticleKey.POWER_ON_INVALID,
+                                   {DataParticleKey.VALUE_ID:
+                                        PhsenAbcdefDclMetadataDataParticleKey.POWER_ON_INVALID,
                                     DataParticleKey.VALUE: power_on_invalid},
-                                   {DataParticleKey.VALUE_ID: PhsenAbcdefDclMetadataDataParticleKey.NUM_DATA_RECORDS,
+                                   {DataParticleKey.VALUE_ID:
+                                        PhsenAbcdefDclMetadataDataParticleKey.NUM_DATA_RECORDS,
                                     DataParticleKey.VALUE: num_data_records_int},
-                                   {DataParticleKey.VALUE_ID: PhsenAbcdefDclMetadataDataParticleKey.NUM_ERROR_RECORDS,
+                                   {DataParticleKey.VALUE_ID:
+                                        PhsenAbcdefDclMetadataDataParticleKey.NUM_ERROR_RECORDS,
                                     DataParticleKey.VALUE: num_error_records_int},
-                                   {DataParticleKey.VALUE_ID: PhsenAbcdefDclMetadataDataParticleKey.NUM_BYTES_STORED,
+                                   {DataParticleKey.VALUE_ID:
+                                        PhsenAbcdefDclMetadataDataParticleKey.NUM_BYTES_STORED,
                                     DataParticleKey.VALUE: num_bytes_stored_int},
-                                   {DataParticleKey.VALUE_ID: PhsenAbcdefDclMetadataDataParticleKey.VOLTAGE_BATTERY,
+                                   {DataParticleKey.VALUE_ID:
+                                        PhsenAbcdefDclMetadataDataParticleKey.VOLTAGE_BATTERY,
                                     DataParticleKey.VALUE: voltage_battery_int},
-                                   {DataParticleKey.VALUE_ID: PhsenAbcdefDclMetadataDataParticleKey.PASSED_CHECKSUM,
+                                   {DataParticleKey.VALUE_ID:
+                                        PhsenAbcdefDclMetadataDataParticleKey.PASSED_CHECKSUM,
                                     DataParticleKey.VALUE: checksum_final}]
-
 
         log.debug("PhsenAbcdefDclMetadataDataParticle._build_parsed_values(): resultant_particle_data= %s",
                   resultant_particle_data)
@@ -309,7 +330,7 @@ class PhsenAbcdefDclInstrumentDataParticle(DataParticle):
         light_measurements_chunk = working_record[83:-14]
         light_measurements_ascii_hex = [light_measurements_chunk[i:i+self.measurement_num_of_chars]
                                         for i in range(0, len(light_measurements_chunk),
-                                                     self.measurement_num_of_chars)]
+                                                       self.measurement_num_of_chars)]
 
         for ascii_hex_value in light_measurements_ascii_hex:
             light_measurements_int = convert_to_signed_int_16_bit(ascii_hex_value)
@@ -367,7 +388,6 @@ class PhsenAbcdefDclInstrumentDataParticle(DataParticle):
         log.debug(" XX ## XX ## XX ## XX PhsenAbcdefDclInstrumentDataParticle._generate_particle(): "
                   "dcl_controller_timestamp= %s, converted DCL Time= %s", dcl_controller_timestamp, converted_time)
 
-
         ## extract the working_record string from the raw data tuple
         working_record = self.raw_data[1]
 
@@ -381,35 +401,35 @@ class PhsenAbcdefDclInstrumentDataParticle(DataParticle):
         ## Begin saving particle data
         ##
         unique_id_ascii_hex = working_record[1:3]
-        ## convert 2 ascii (hex) chars to signed int
-        unique_id_int = convert_to_signed_int_8_bit(unique_id_ascii_hex)
+        ## convert 2 ascii (hex) chars to int
+        unique_id_int = int(unique_id_ascii_hex, 16)
 
         record_type_ascii_hex = working_record[5:7]
-        ## convert 2 ascii (hex) chars to signed int
-        record_type_int = convert_to_signed_int_8_bit(record_type_ascii_hex)
+        ## convert 2 ascii (hex) chars to int
+        record_type_int = int(record_type_ascii_hex, 16)
 
         record_time_ascii_hex = working_record[7:15]
-        ## convert 8 ascii (hex) chars to signed int
-        record_time_int = convert_to_signed_int_32_bit(record_time_ascii_hex)
+        ## convert 8 ascii (hex) chars to int
+        record_time_int = int(record_time_ascii_hex, 16)
 
         thermistor_start_ascii_hex = working_record[15:19]
-        ## convert 4 ascii (hex) chars to signed int
-        thermistor_start_int = convert_to_signed_int_16_bit(thermistor_start_ascii_hex)
+        ## convert 4 ascii (hex) chars to int
+        thermistor_start_int = int(thermistor_start_ascii_hex, 16)
 
         reference_light_measurements_list_int = self._create_reference_light_measurements_array(working_record)
 
         light_measurements_list_int = self._create_light_measurements_array(working_record)
 
         voltage_battery_ascii_hex = working_record[455:459]
-        ## convert 4 ascii (hex) chars to signed int
-        voltage_battery_int = convert_to_signed_int_16_bit(voltage_battery_ascii_hex)
+        ## convert 4 ascii (hex) chars to int
+        voltage_battery_int = int(voltage_battery_ascii_hex, 16)
 
         thermistor_end_ascii_hex = working_record[459:463]
-        ## convert 4 ascii (hex) chars to signed int
-        thermistor_end_int = convert_to_signed_int_16_bit(thermistor_end_ascii_hex)
+        ## convert 4 ascii (hex) chars to int
+        thermistor_end_int = int(thermistor_end_ascii_hex, 16)
 
         passed_checksum_ascii_hex = working_record[463:465]
-        ## convert 2 ascii (hex) chars to signed int
+        ## convert 2 ascii (hex) chars to int
         passed_checksum_int = int(passed_checksum_ascii_hex, 16)
 
         calculated_checksum = _calculate_working_record_checksum(working_record)
@@ -425,25 +445,35 @@ class PhsenAbcdefDclInstrumentDataParticle(DataParticle):
             checksum_final = 1
 
         ## ASSEMBLE THE RESULTANT PARTICLE..
-        resultant_particle_data = [{DataParticleKey.VALUE_ID: PhsenAbcdefDclInstrumentDataParticleKey.DCL_CONTROLLER_TIMESTAMP,
-                                    DataParticleKey.VALUE: converted_time},
-                                   {DataParticleKey.VALUE_ID: PhsenAbcdefDclInstrumentDataParticleKey.UNIQUE_ID,
+        resultant_particle_data = [{DataParticleKey.VALUE_ID:
+                                        PhsenAbcdefDclInstrumentDataParticleKey.DCL_CONTROLLER_TIMESTAMP,
+                                    DataParticleKey.VALUE: dcl_controller_timestamp},
+                                   {DataParticleKey.VALUE_ID:
+                                        PhsenAbcdefDclInstrumentDataParticleKey.UNIQUE_ID,
                                     DataParticleKey.VALUE: unique_id_int},
-                                   {DataParticleKey.VALUE_ID: PhsenAbcdefDclInstrumentDataParticleKey.RECORD_TYPE,
+                                   {DataParticleKey.VALUE_ID:
+                                        PhsenAbcdefDclInstrumentDataParticleKey.RECORD_TYPE,
                                     DataParticleKey.VALUE: record_type_int},
-                                   {DataParticleKey.VALUE_ID: PhsenAbcdefDclInstrumentDataParticleKey.RECORD_TIME,
+                                   {DataParticleKey.VALUE_ID:
+                                        PhsenAbcdefDclInstrumentDataParticleKey.RECORD_TIME,
                                     DataParticleKey.VALUE: record_time_int},
-                                   {DataParticleKey.VALUE_ID: PhsenAbcdefDclInstrumentDataParticleKey.THERMISTOR_START,
+                                   {DataParticleKey.VALUE_ID:
+                                        PhsenAbcdefDclInstrumentDataParticleKey.THERMISTOR_START,
                                     DataParticleKey.VALUE: thermistor_start_int},
-                                   {DataParticleKey.VALUE_ID: PhsenAbcdefDclInstrumentDataParticleKey.REFERENCE_LIGHT_MEASUREMENTS,
+                                   {DataParticleKey.VALUE_ID:
+                                        PhsenAbcdefDclInstrumentDataParticleKey.REFERENCE_LIGHT_MEASUREMENTS,
                                     DataParticleKey.VALUE: reference_light_measurements_list_int},
-                                   {DataParticleKey.VALUE_ID: PhsenAbcdefDclInstrumentDataParticleKey.LIGHT_MEASUREMENTS,
+                                   {DataParticleKey.VALUE_ID:
+                                        PhsenAbcdefDclInstrumentDataParticleKey.LIGHT_MEASUREMENTS,
                                     DataParticleKey.VALUE: light_measurements_list_int},
-                                   {DataParticleKey.VALUE_ID: PhsenAbcdefDclInstrumentDataParticleKey.VOLTAGE_BATTERY,
+                                   {DataParticleKey.VALUE_ID:
+                                        PhsenAbcdefDclInstrumentDataParticleKey.VOLTAGE_BATTERY,
                                     DataParticleKey.VALUE: voltage_battery_int},
-                                   {DataParticleKey.VALUE_ID: PhsenAbcdefDclInstrumentDataParticleKey.THERMISTOR_END,
+                                   {DataParticleKey.VALUE_ID:
+                                        PhsenAbcdefDclInstrumentDataParticleKey.THERMISTOR_END,
                                     DataParticleKey.VALUE: thermistor_end_int},
-                                   {DataParticleKey.VALUE_ID: PhsenAbcdefDclInstrumentDataParticleKey.PASSED_CHECKSUM,
+                                   {DataParticleKey.VALUE_ID:
+                                        PhsenAbcdefDclInstrumentDataParticleKey.PASSED_CHECKSUM,
                                     DataParticleKey.VALUE: checksum_final}]
 
         log.debug("PhsenAbcdefDclInstrumentDataParticle._build_parsed_values(): resultant_particle_data= %s",
@@ -518,15 +548,14 @@ class PhsenAbcdefDclParser(BufferLoadingParser):
         log.debug("PhsenAbcdefDclParser.init(): METADATA PARTICLE CLASS= %s",
                   self._metadata_particle_class)
 
-
         super(PhsenAbcdefDclParser, self).__init__(config, stream_handle, state,
-                                                            partial(StringChunker.regex_sieve_function,
-                                                                    regex_list=[line_regex]),
-                                                            state_callback,
-                                                            publish_callback,
-                                                            exception_callback,
-                                                            *args,
-                                                            **kwargs)
+                                                   partial(StringChunker.regex_sieve_function,
+                                                           regex_list=[line_regex]),
+                                                   state_callback,
+                                                   publish_callback,
+                                                   exception_callback,
+                                                   *args,
+                                                   **kwargs)
 
         self._read_state = {StateKey.POSITION: 0, StateKey.START_OF_DATA: False}
 
@@ -576,9 +605,9 @@ class PhsenAbcdefDclParser(BufferLoadingParser):
         """
         if not isinstance(state_obj, dict):
             raise DatasetParserException("Invalid state structure")
-        if not ((StateKey.POSITION in state_obj)):
+        if not (StateKey.POSITION in state_obj):
             raise DatasetParserException("Missing state key %s" % StateKey.POSITION)
-        if not ((StateKey.START_OF_DATA in state_obj)):
+        if not (StateKey.START_OF_DATA in state_obj):
             raise DatasetParserException("Missing state key %s" % StateKey.START_OF_DATA)
 
         self._record_buffer = []
@@ -595,18 +624,8 @@ class PhsenAbcdefDclParser(BufferLoadingParser):
         Increment the parser state
         @param increment The amount to increment the position by
         """
-        oldinc = increment
-        oldstatepos = self._read_state[StateKey.POSITION]
-
-        # log.debug("PhsenAbcdefDclParser._increment_state(): "
-        #           "Incrementing current state: %s with inc: %s", self._read_state, increment)
 
         self._read_state[StateKey.POSITION] += increment
-
-        # log.debug("PhsenAbcdefDclParser._increment_state(): "
-        #           "Current State Position is %s, + Increment of %s", oldstatepos, oldinc)
-        # log.debug("PhsenAbcdefDclParser._increment_state(): "
-        #           "NEW State Position: %s", self._read_state[StateKey.POSITION])
 
     def _strip_logfile_line(self, logfile_line):
         """
@@ -684,8 +703,10 @@ class PhsenAbcdefDclParser(BufferLoadingParser):
 
                     self.result_particle_list.append((particle, copy.copy(self._read_state)))
                 else:
-                    self._exception_callback(RecoverableSampleException("PhsenAbcdefDclParser._process_instrument_data(): "
-                                                                        "Throwing RecoverableSampleException, Size of data record is not the length of an instrument data record"))
+                    self._exception_callback(RecoverableSampleException(
+                        "PhsenAbcdefDclParser._process_instrument_data(): "
+                        "Throwing RecoverableSampleException, Size of data "
+                        "record is not the length of an instrument data record"))
 
             elif data_type is dataTypeEnum.CONTROL:
 
@@ -694,7 +715,7 @@ class PhsenAbcdefDclParser(BufferLoadingParser):
 
                 ## Per the IDD, if the candidate data is not the proper size, throw a recoverable exception
                 if len(working_record) == control_record_length_without_voltage_battery or \
-                                len(working_record) == control_record_length_with_voltage_battery:
+                   len(working_record) == control_record_length_with_voltage_battery:
 
                     ## Create particle mule (to be used later to create the metadata particle)
                     particle = self._extract_sample(self._metadata_particle_class,
@@ -707,8 +728,10 @@ class PhsenAbcdefDclParser(BufferLoadingParser):
                     log.debug("PhsenAbcdefDclParser._process_instrument_data(): "
                               "Size of data record is not the length of a control data record")
 
-                    self._exception_callback(RecoverableSampleException("PhsenAbcdefDclParser._process_instrument_data(): "
-                                                                        "Throwing RecoverableSampleException, Size of data record is not the length of a control data record"))
+                    self._exception_callback(RecoverableSampleException(
+                        "PhsenAbcdefDclParser._process_instrument_data(): "
+                        "Throwing RecoverableSampleException, Size of data "
+                        "record is not the length of a control data record"))
         else:
             log.debug("PhsenAbcdefDclParser._process_instrument_data(): "
                       "Throwing RecoverableSampleException, Record is neither instrument or control")
@@ -792,7 +815,8 @@ class PhsenAbcdefDclParser(BufferLoadingParser):
 
                             ## clear out the working record (the last string that was being built)
                             log.debug(" ## PhsenAbcdefDclParser.parse_chunks(): "
-                                      "### ### ### _process_instrument_data called, CLEARING WORKING RECORD ### ### ###")
+                                      "### ### ### _process_instrument_data called, "
+                                      "CLEARING WORKING RECORD ### ### ###")
 
                             self.working_record = ""
 
@@ -825,10 +849,11 @@ class PhsenAbcdefDclParser(BufferLoadingParser):
                             log.debug("PhsenAbcdefDclParser.parse_chunks(): "
                                       "found a new star but working_record is non-zero length, "
                                       "throwing a RecoverableSample exception")
-                            self._exception_callback(RecoverableSampleException("PhsenAbcdefDclParser.parse_chunks(): "
-                                                                                "found a new record to parse but "
-                                                                                "working_record is non-zero length, "
-                                                                                "throwing a RecoverableSample exception"))
+                            self._exception_callback(RecoverableSampleException(
+                                "PhsenAbcdefDclParser.parse_chunks(): "
+                                "found a new record to parse but "
+                                "working_record is non-zero length, "
+                                "throwing a RecoverableSample exception"))
 
                         ## append time_stripped_logfile_line to working_record
                         self.working_record += stripped_logfile_line
@@ -849,8 +874,6 @@ class PhsenAbcdefDclParser(BufferLoadingParser):
 
                         ## append time_stripped_logfile_line to working_record
                         self.working_record += stripped_logfile_line
-
-
 
             # collect the non-data from the file
             (nd_timestamp, non_data, non_start, non_end) = self._chunker.get_next_non_data_with_index(clean=False)

@@ -1,6 +1,6 @@
 header:
     particle_object: PhsenAbcdefDclInstrumentTelemeteredDataParticle
-    particle_type: phsen_abcdef_dcl_instrument_telemetered
+    particle_type: phsen_abcdef_dcl_instrument
 data:
   - _index: 1
     internal_timestamp: 3607286596.906000137

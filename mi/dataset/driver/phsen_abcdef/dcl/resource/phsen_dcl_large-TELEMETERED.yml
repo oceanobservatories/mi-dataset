@@ -4,7 +4,7 @@ header:
 data:
   - _index: 1
     particle_object: PhsenAbcdefDclInstrumentTelemeteredDataParticle
-    particle_type: phsen_abcdef_dcl_instrument_telemetered
+    particle_type: phsen_abcdef_dcl_instrument
     internal_timestamp: 3607286596.906000137
     dcl_controller_timestamp: '2014/04/24 00:03:16.906'
     unique_id: 238
@@ -18,7 +18,7 @@ data:
     passed_checksum: 1
   - _index: 2
     particle_object: PhsenAbcdefDclInstrumentTelemeteredDataParticle
-    particle_type: phsen_abcdef_dcl_instrument_telemetered
+    particle_type: phsen_abcdef_dcl_instrument
     internal_timestamp: 3607290198.059999943
     dcl_controller_timestamp: '2014/04/24 01:03:18.060'
     unique_id: 238
@@ -32,7 +32,7 @@ data:
     passed_checksum: 1
   - _index: 3
     particle_object: PhsenAbcdefDclInstrumentTelemeteredDataParticle
-    particle_type: phsen_abcdef_dcl_instrument_telemetered
+    particle_type: phsen_abcdef_dcl_instrument
     internal_timestamp: 3607293797.803999901
     dcl_controller_timestamp: '2014/04/24 02:03:17.804'
     unique_id: 238
@@ -46,7 +46,7 @@ data:
     passed_checksum: 1
   - _index: 4
     particle_object: PhsenAbcdefDclInstrumentTelemeteredDataParticle
-    particle_type: phsen_abcdef_dcl_instrument_telemetered
+    particle_type: phsen_abcdef_dcl_instrument
     internal_timestamp: 3607297397.578000069
     dcl_controller_timestamp: '2014/04/24 03:03:17.578'
     unique_id: 238
@@ -60,7 +60,7 @@ data:
     passed_checksum: 1
   - _index: 5
     particle_object: PhsenAbcdefDclInstrumentTelemeteredDataParticle
-    particle_type: phsen_abcdef_dcl_instrument_telemetered
+    particle_type: phsen_abcdef_dcl_instrument
     internal_timestamp: 3607308197.991000175
     dcl_controller_timestamp: '2014/04/24 06:03:17.991'
     unique_id: 238
@@ -74,7 +74,7 @@ data:
     passed_checksum: 1
   - _index: 6
     particle_object: PhsenAbcdefDclInstrumentTelemeteredDataParticle
-    particle_type: phsen_abcdef_dcl_instrument_telemetered
+    particle_type: phsen_abcdef_dcl_instrument
     internal_timestamp: 3607318997.996999741
     dcl_controller_timestamp: '2014/04/24 09:03:17.997'
     unique_id: 238
@@ -88,7 +88,7 @@ data:
     passed_checksum: 1
   - _index: 7
     particle_object: PhsenAbcdefDclInstrumentTelemeteredDataParticle
-    particle_type: phsen_abcdef_dcl_instrument_telemetered
+    particle_type: phsen_abcdef_dcl_instrument
     internal_timestamp: 3607329797.440000057
     dcl_controller_timestamp: '2014/04/24 12:03:17.440'
     unique_id: 238
@@ -102,7 +102,7 @@ data:
     passed_checksum: 1
   - _index: 8
     particle_object: PhsenAbcdefDclInstrumentTelemeteredDataParticle
-    particle_type: phsen_abcdef_dcl_instrument_telemetered
+    particle_type: phsen_abcdef_dcl_instrument
     internal_timestamp: 3607340598.227000237
     dcl_controller_timestamp: '2014/04/24 15:03:18.227'
     unique_id: 238
@@ -116,7 +116,7 @@ data:
     passed_checksum: 1
   - _index: 9
     particle_object: PhsenAbcdefDclInstrumentTelemeteredDataParticle
-    particle_type: phsen_abcdef_dcl_instrument_telemetered
+    particle_type: phsen_abcdef_dcl_instrument
     internal_timestamp: 3607351398.367000103
     dcl_controller_timestamp: '2014/04/24 18:03:18.367'
     unique_id: 238
@@ -130,7 +130,7 @@ data:
     passed_checksum: 1
   - _index: 10
     particle_object: PhsenAbcdefDclInstrumentTelemeteredDataParticle
-    particle_type: phsen_abcdef_dcl_instrument_telemetered
+    particle_type: phsen_abcdef_dcl_instrument
     internal_timestamp: 3607362197.756999969
     dcl_controller_timestamp: '2014/04/24 21:03:17.757'
     unique_id: 238
@@ -144,7 +144,7 @@ data:
     passed_checksum: 1
   - _index: 11
     particle_object: PhsenAbcdefDclMetadataTelemeteredDataParticle
-    particle_type: phsen_abcdef_dcl_metadata_telemetered
+    particle_type: phsen_abcdef_dcl_metadata
     internal_timestamp: 3593134381.970999718
     dcl_controller_timestamp: '2013/11/11 04:53:01.971'
     unique_id: 182
@@ -173,7 +173,7 @@ data:
     passed_checksum: 1
   - _index: 12
     particle_object: PhsenAbcdefDclMetadataTelemeteredDataParticle
-    particle_type: phsen_abcdef_dcl_metadata_telemetered
+    particle_type: phsen_abcdef_dcl_metadata
     internal_timestamp: 3593047981.970999718
     dcl_controller_timestamp: '2013/11/10 04:53:01.971'
     unique_id: 182

@@ -2,7 +2,7 @@
 
 header:
   particle_object: PhsenAbcdefDclMetadataTelemeteredDataParticle
-  particle_type: phsen_abcdef_dcl_metadata_telemetered
+  particle_type: phsen_abcdef_dcl_metadata
 
 data:
   - _index: 1

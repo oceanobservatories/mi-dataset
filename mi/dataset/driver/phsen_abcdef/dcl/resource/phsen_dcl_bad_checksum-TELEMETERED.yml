@@ -7,7 +7,7 @@ header:
 data:
   - _index: 1
     particle_object: PhsenAbcdefDclInstrumentTelemeteredDataParticle
-    particle_type: phsen_abcdef_dcl_instrument_telemetered    
+    particle_type: phsen_abcdef_dcl_instrument
     internal_timestamp: 3607286596.906000137
     dcl_controller_timestamp: '2014/04/24 00:03:16.906'
     unique_id: 238
@@ -21,7 +21,7 @@ data:
     passed_checksum: 0
   - _index: 2
     particle_object: PhsenAbcdefDclMetadataTelemeteredDataParticle
-    particle_type: phsen_abcdef_dcl_metadata_telemetered
+    particle_type: phsen_abcdef_dcl_metadata
     internal_timestamp: 3593134381.970999718
     dcl_controller_timestamp: '2013/11/11 04:53:01.971'
     unique_id: 182
