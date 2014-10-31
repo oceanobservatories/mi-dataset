@@ -122,6 +122,27 @@ class FlcdrXMmpCdsParserUnitTestCase(ParserUnitTestCase):
 
         stream_handle.close()
 
+    def test_verify_with_yml(self):
+        """
+        This test exercises retrieving 20 particles, verifying the 20th particle, then retrieves 30 particles
+         and verifies the 30th particle.
+        """
+
+        file_path = os.path.join(RESOURCE_PATH, 'flcdr_1_20131124T005004_459.mpk')
+        stream_handle = open(file_path, 'rb')
+
+        parser = FlcdrXMmpCdsParser(self.config, None, stream_handle,
+                                      self.state_callback, self.pub_callback)
+
+        particles = parser.get_records(4)
+
+        # Should end up with 20 particles
+        self.assertTrue(len(particles) == 4)
+
+        self.assert_particles(particles, 'first_four_cdr.yml', RESOURCE_PATH)
+
+        stream_handle.close()
+
     def test_long_stream(self):
         """
         This test exercises retrieve approximately 200 particles.
