@@ -392,9 +392,14 @@ class ResultSet(object):
 
         when passing a dict you can specify a 'round' factor.
         """
+
         if isinstance(expected_value, dict):
             ex_value = expected_value['value']
             round_factor = expected_value.get('round')
+        elif isinstance(expected_value, float):
+            # unless otherwise specified round all floating point expected values to 5 digits
+            ex_value = expected_value
+            round_factor = 5
         else:
             ex_value = expected_value
             round_factor = None
