@@ -108,9 +108,9 @@ data:
   - _index: 10
     particle_object: Pco2wAbcMetadataDataParticle
     particle_type: pco2w_abc_metadata
-    internal_timestamp: 3466968623.000000
+    internal_timestamp: 3466991433.000000
     record_type: 192
-    record_time: 3466968623
+    record_time: 3466991433
     clock_active: 0
     recording_active: 0
     record_end_on_time: 0
