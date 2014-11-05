@@ -204,20 +204,20 @@ class VelptAbDataParticle(DataParticle):
                                            VelptAbDataParticle.roll_offset])[0] * 0.1
         roll = struct.unpack('<h', record[VelptAbDataParticle.roll_offset:
                                           VelptAbDataParticle.pressure_msb_offset])[0] * 0.1
-        pressure = ((struct.unpack('B', record[VelptAbDataParticle.pressure_msb_offset:
-                                               VelptAbDataParticle.status_offset]) * 65536) +
-                    struct.unpack('<h', record[VelptAbDataParticle.pressure_lsw_offset:
-                                               VelptAbDataParticle.temperature_offset]))[0] * 0.001
+        pressure = (struct.unpack('B', record[VelptAbDataParticle.pressure_msb_offset:
+                                              VelptAbDataParticle.status_offset])[0] * 65536.0) +\
+                   (struct.unpack('<h', record[VelptAbDataParticle.pressure_lsw_offset:
+                                               VelptAbDataParticle.temperature_offset])[0] * 0.001)
         status = struct.unpack('B', record[VelptAbDataParticle.status_offset:
                                            VelptAbDataParticle.pressure_lsw_offset])[0]
         temperature = struct.unpack('<h', record[VelptAbDataParticle.temperature_offset:
-                                                 VelptAbDataParticle.velocity_beam1_offset])[0] * 0.1
+                                                 VelptAbDataParticle.velocity_beam1_offset])[0] * 0.01
         velocity_beam_1 = struct.unpack('<h', record[VelptAbDataParticle.velocity_beam1_offset:
-                                                     VelptAbDataParticle.velocity_beam2_offset])[0] * 0.1
+                                                     VelptAbDataParticle.velocity_beam2_offset])[0] * 1.0
         velocity_beam_2 = struct.unpack('<h', record[VelptAbDataParticle.velocity_beam2_offset:
-                                                     VelptAbDataParticle.velocity_beam3_offset])[0] * 0.1
+                                                     VelptAbDataParticle.velocity_beam3_offset])[0] * 1.0
         velocity_beam_3 = struct.unpack('<h', record[VelptAbDataParticle.velocity_beam3_offset:
-                                                     VelptAbDataParticle.amplitude_beam1_offset])[0] * 0.1
+                                                     VelptAbDataParticle.amplitude_beam1_offset])[0] * 1.0
         amplitude_beam_1 = struct.unpack('B', record[VelptAbDataParticle.amplitude_beam1_offset:
                                                      VelptAbDataParticle.amplitude_beam2_offset])[0]
         amplitude_beam_2 = struct.unpack('B', record[VelptAbDataParticle.amplitude_beam2_offset:
@@ -257,13 +257,13 @@ class VelptAbDataParticle(DataParticle):
         cell_number_diagnostics = struct.unpack('<h', record[VelptAbDataParticle.cell_number_diagnostics_offset:
                                                              VelptAbDataParticle.noise_amplitude_beam1_offset])[0]
         noise_amplitude_beam1 = struct.unpack('B', record[VelptAbDataParticle.noise_amplitude_beam1_offset:
-                                                           VelptAbDataParticle.noise_amplitude_beam2_offset])[0]
+                                                          VelptAbDataParticle.noise_amplitude_beam2_offset])[0]
         noise_amplitude_beam2 = struct.unpack('B', record[VelptAbDataParticle.noise_amplitude_beam2_offset:
-                                                           VelptAbDataParticle.noise_amplitude_beam3_offset])[0]
+                                                          VelptAbDataParticle.noise_amplitude_beam3_offset])[0]
         noise_amplitude_beam3 = struct.unpack('B', record[VelptAbDataParticle.noise_amplitude_beam3_offset:
-                                                           VelptAbDataParticle.noise_amplitude_beam4_offset])[0]
+                                                          VelptAbDataParticle.noise_amplitude_beam4_offset])[0]
         noise_amplitude_beam4 = struct.unpack('B', record[VelptAbDataParticle.noise_amplitude_beam4_offset:
-                                                           VelptAbDataParticle.processing_magnitude_beam1_offset])[0]
+                                                          VelptAbDataParticle.processing_magnitude_beam1_offset])[0]
         processing_magnitude_beam1 = struct.unpack('<h', record[VelptAbDataParticle.processing_magnitude_beam1_offset:
                                                                 VelptAbDataParticle.
                                                    processing_magnitude_beam2_offset])[0]
