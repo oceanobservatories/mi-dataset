@@ -17,9 +17,9 @@ data:
     pressure: 0.245
     status: 17
     temperature: 21.1
-    velocity_beam1: 27
-    velocity_beam2: -27
-    velocity_beam3: -23
+    velocity_beam1: 27.0
+    velocity_beam2: -27.0
+    velocity_beam3: -23.0
     amplitude_beam1: 142
     amplitude_beam2: 135
     amplitude_beam3: 113
@@ -57,9 +57,9 @@ data:
     pressure: 0.239
     status: 17
     temperature: 21.07
-    velocity_beam1: -153
-    velocity_beam2: -1336
-    velocity_beam3: 5849
+    velocity_beam1: -153.0
+    velocity_beam2: -1336.0
+    velocity_beam3: 5849.0
     amplitude_beam1: 53
     amplitude_beam2: 51
     amplitude_beam3: 53
@@ -78,9 +78,9 @@ data:
     pressure: 0.231
     status: 17
     temperature: 21.07
-    velocity_beam1: 71
-    velocity_beam2: -63
-    velocity_beam3: -123
+    velocity_beam1: 71.0
+    velocity_beam2: -63.0
+    velocity_beam3: -123.0
     amplitude_beam1: 141
     amplitude_beam2: 135
     amplitude_beam3: 111
@@ -99,9 +99,9 @@ data:
     pressure: 0.248
     status: 17
     temperature: 21.07
-    velocity_beam1: 68
-    velocity_beam2: -56
-    velocity_beam3: 25
+    velocity_beam1: 68.0
+    velocity_beam2: -56.0
+    velocity_beam3: 25.0
     amplitude_beam1: 140
     amplitude_beam2: 136
     amplitude_beam3: 116
@@ -120,9 +120,9 @@ data:
     pressure: 0.23
     status: 17
     temperature: 21.06
-    velocity_beam1: -111
-    velocity_beam2: -165
-    velocity_beam3: -59
+    velocity_beam1: -111.0
+    velocity_beam2: -165.0
+    velocity_beam3: -59.0
     amplitude_beam1: 141
     amplitude_beam2: 139
     amplitude_beam3: 113
@@ -141,9 +141,9 @@ data:
     pressure: 0.241
     status: 17
     temperature: 21.06
-    velocity_beam1: 39
-    velocity_beam2: -17
-    velocity_beam3: 192
+    velocity_beam1: 39.0
+    velocity_beam2: -17.0
+    velocity_beam3: 192.0
     amplitude_beam1: 144
     amplitude_beam2: 135
     amplitude_beam3: 115
@@ -162,9 +162,9 @@ data:
     pressure: 0.248
     status: 17
     temperature: 21.07
-    velocity_beam1: 51
-    velocity_beam2: 72
-    velocity_beam3: 47
+    velocity_beam1: 51.0
+    velocity_beam2: 72.0
+    velocity_beam3: 47.0
     amplitude_beam1: 141
     amplitude_beam2: 135
     amplitude_beam3: 112
@@ -183,9 +183,9 @@ data:
     pressure: 0.245
     status: 17
     temperature: 21.06
-    velocity_beam1: 54
-    velocity_beam2: 80
-    velocity_beam3: -190
+    velocity_beam1: 54.0
+    velocity_beam2: 80.0
+    velocity_beam3: -190.0
     amplitude_beam1: 140
     amplitude_beam2: 137
     amplitude_beam3: 107
@@ -204,9 +204,9 @@ data:
     pressure: 0.236
     status: 17
     temperature: 21.06
-    velocity_beam1: -27
-    velocity_beam2: -27
-    velocity_beam3: -41
+    velocity_beam1: -27.0
+    velocity_beam2: -27.0
+    velocity_beam3: -41.0
     amplitude_beam1: 142
     amplitude_beam2: 134
     amplitude_beam3: 110
@@ -225,9 +225,9 @@ data:
     pressure: 0.243
     status: 17
     temperature: 21.06
-    velocity_beam1: 41
-    velocity_beam2: -206
-    velocity_beam3: -101
+    velocity_beam1: 41.0
+    velocity_beam2: -206.0
+    velocity_beam3: -101.0
     amplitude_beam1: 136
     amplitude_beam2: 139
     amplitude_beam3: 113
@@ -246,9 +246,9 @@ data:
     pressure: 0.238
     status: 17
     temperature: 21.06
-    velocity_beam1: 137
-    velocity_beam2: 9
-    velocity_beam3: 7
+    velocity_beam1: 137.0
+    velocity_beam2: 9.0
+    velocity_beam3: 7.0
     amplitude_beam1: 140
     amplitude_beam2: 138
     amplitude_beam3: 115
@@ -267,9 +267,9 @@ data:
     pressure: 0.235
     status: 17
     temperature: 21.06
-    velocity_beam1: -45
-    velocity_beam2: -127
-    velocity_beam3: -34
+    velocity_beam1: -45.0
+    velocity_beam2: -127.0
+    velocity_beam3: -34.0
     amplitude_beam1: 141
     amplitude_beam2: 138
     amplitude_beam3: 113
@@ -288,9 +288,9 @@ data:
     pressure: 0.239
     status: 17
     temperature: 21.06
-    velocity_beam1: 8
-    velocity_beam2: -85
-    velocity_beam3: 49
+    velocity_beam1: 8.0
+    velocity_beam2: -85.0
+    velocity_beam3: 49.0
     amplitude_beam1: 143
     amplitude_beam2: 131
     amplitude_beam3: 114
@@ -309,9 +309,9 @@ data:
     pressure: 0.235
     status: 17
     temperature: 21.06
-    velocity_beam1: 61
-    velocity_beam2: 66
-    velocity_beam3: 60
+    velocity_beam1: 61.0
+    velocity_beam2: 66.0
+    velocity_beam3: 60.0
     amplitude_beam1: 141
     amplitude_beam2: 130
     amplitude_beam3: 115
@@ -330,9 +330,9 @@ data:
     pressure: 0.247
     status: 17
     temperature: 21.06
-    velocity_beam1: 55
-    velocity_beam2: 54
-    velocity_beam3: 22
+    velocity_beam1: 55.0
+    velocity_beam2: 54.0
+    velocity_beam3: 22.0
     amplitude_beam1: 144
     amplitude_beam2: 130
     amplitude_beam3: 107
@@ -351,9 +351,9 @@ data:
     pressure: 0.244
     status: 17
     temperature: 21.06
-    velocity_beam1: 102
-    velocity_beam2: -72
-    velocity_beam3: 53
+    velocity_beam1: 102.0
+    velocity_beam2: -72.0
+    velocity_beam3: 53.0
     amplitude_beam1: 143
     amplitude_beam2: 139
     amplitude_beam3: 107
@@ -372,9 +372,9 @@ data:
     pressure: 0.243
     status: 17
     temperature: 21.06
-    velocity_beam1: 35
-    velocity_beam2: 90
-    velocity_beam3: 165
+    velocity_beam1: 35.0
+    velocity_beam2: 90.0
+    velocity_beam3: 165.0
     amplitude_beam1: 139
     amplitude_beam2: 130
     amplitude_beam3: 117
@@ -393,9 +393,9 @@ data:
     pressure: 0.237
     status: 17
     temperature: 21.06
-    velocity_beam1: 35
-    velocity_beam2: -14
-    velocity_beam3: -64
+    velocity_beam1: 35.0
+    velocity_beam2: -14.0
+    velocity_beam3: -64.0
     amplitude_beam1: 143
     amplitude_beam2: 132
     amplitude_beam3: 117
@@ -414,9 +414,9 @@ data:
     pressure: 0.241
     status: 17
     temperature: 21.06
-    velocity_beam1: 81
-    velocity_beam2: -136
-    velocity_beam3: 53
+    velocity_beam1: 81.0
+    velocity_beam2: -136.0
+    velocity_beam3: 53.0
     amplitude_beam1: 142
     amplitude_beam2: 133
     amplitude_beam3: 109
@@ -435,9 +435,9 @@ data:
     pressure: 0.233
     status: 17
     temperature: 21.06
-    velocity_beam1: 64
-    velocity_beam2: -29
-    velocity_beam3: 140
+    velocity_beam1: 64.0
+    velocity_beam2: -29.0
+    velocity_beam3: 140.0
     amplitude_beam1: 150
     amplitude_beam2: 134
     amplitude_beam3: 108
@@ -456,9 +456,9 @@ data:
     pressure: 0.241
     status: 17
     temperature: 21.06
-    velocity_beam1: 65
-    velocity_beam2: 3
-    velocity_beam3: -45
+    velocity_beam1: 65.0
+    velocity_beam2: 3.0
+    velocity_beam3: -45.0
     amplitude_beam1: 142
     amplitude_beam2: 134
     amplitude_beam3: 115
@@ -477,9 +477,9 @@ data:
     pressure: 0.241
     status: 17
     temperature: 20.93
-    velocity_beam1: -20
-    velocity_beam2: -31
-    velocity_beam3: 52
+    velocity_beam1: -20.0
+    velocity_beam2: -31.0
+    velocity_beam3: 52.0
     amplitude_beam1: 144
     amplitude_beam2: 134
     amplitude_beam3: 114
@@ -498,9 +498,9 @@ data:
     pressure: 0.239
     status: 17
     temperature: 20.77
-    velocity_beam1: 0
-    velocity_beam2: -31
-    velocity_beam3: 35
+    velocity_beam1: 0.0
+    velocity_beam2: -31.0
+    velocity_beam3: 35.0
     amplitude_beam1: 144
     amplitude_beam2: 135
     amplitude_beam3: 114
@@ -519,9 +519,9 @@ data:
     pressure: 0.238
     status: 17
     temperature: 20.67
-    velocity_beam1: 20
-    velocity_beam2: -34
-    velocity_beam3: 21
+    velocity_beam1: 20.0
+    velocity_beam2: -34.0
+    velocity_beam3: 21.0
     amplitude_beam1: 144
     amplitude_beam2: 135
     amplitude_beam3: 113
@@ -540,9 +540,9 @@ data:
     pressure: 0.236
     status: 17
     temperature: 20.52
-    velocity_beam1: 45
-    velocity_beam2: -56
-    velocity_beam3: -15
+    velocity_beam1: 45.0
+    velocity_beam2: -56.0
+    velocity_beam3: -15.0
     amplitude_beam1: 143
     amplitude_beam2: 135
     amplitude_beam3: 112
@@ -561,9 +561,9 @@ data:
     pressure: 0.234
     status: 17
     temperature: 20.42
-    velocity_beam1: 36
-    velocity_beam2: -55
-    velocity_beam3: 3
+    velocity_beam1: 36.0
+    velocity_beam2: -55.0
+    velocity_beam3: 3.0
     amplitude_beam1: 143
     amplitude_beam2: 135
     amplitude_beam3: 113
@@ -582,9 +582,9 @@ data:
     pressure: 0.232
     status: 17
     temperature: 20.34
-    velocity_beam1: 11
-    velocity_beam2: -32
-    velocity_beam3: 56
+    velocity_beam1: 11.0
+    velocity_beam2: -32.0
+    velocity_beam3: 56.0
     amplitude_beam1: 144
     amplitude_beam2: 135
     amplitude_beam3: 112
@@ -622,9 +622,9 @@ data:
     pressure: 0.228
     status: 17
     temperature: 20.34
-    velocity_beam1: 204
-    velocity_beam2: -250
-    velocity_beam3: 6846
+    velocity_beam1: 204.0
+    velocity_beam2: -250.0
+    velocity_beam3: 6846.0
     amplitude_beam1: 53
     amplitude_beam2: 50
     amplitude_beam3: 53
@@ -643,9 +643,9 @@ data:
     pressure: 0.238
     status: 17
     temperature: 20.34
-    velocity_beam1: 57
-    velocity_beam2: -41
-    velocity_beam3: 118
+    velocity_beam1: 57.0
+    velocity_beam2: -41.0
+    velocity_beam3: 118.0
     amplitude_beam1: 140
     amplitude_beam2: 144
     amplitude_beam3: 107
@@ -664,9 +664,9 @@ data:
     pressure: 0.234
     status: 17
     temperature: 20.34
-    velocity_beam1: -12
-    velocity_beam2: -12
-    velocity_beam3: 24
+    velocity_beam1: -12.0
+    velocity_beam2: -12.0
+    velocity_beam3: 24.0
     amplitude_beam1: 142
     amplitude_beam2: 136
     amplitude_beam3: 112
@@ -685,9 +685,9 @@ data:
     pressure: 0.23
     status: 17
     temperature: 20.34
-    velocity_beam1: -19
-    velocity_beam2: -68
-    velocity_beam3: -58
+    velocity_beam1: -19.0
+    velocity_beam2: -68.0
+    velocity_beam3: -58.0
     amplitude_beam1: 152
     amplitude_beam2: 143
     amplitude_beam3: 114
@@ -706,9 +706,9 @@ data:
     pressure: 0.225
     status: 17
     temperature: 20.34
-    velocity_beam1: 100
-    velocity_beam2: 91
-    velocity_beam3: 254
+    velocity_beam1: 100.0
+    velocity_beam2: 91.0
+    velocity_beam3: 254.0
     amplitude_beam1: 147
     amplitude_beam2: 143
     amplitude_beam3: 111
@@ -727,9 +727,9 @@ data:
     pressure: 0.228
     status: 17
     temperature: 20.34
-    velocity_beam1: 85
-    velocity_beam2: 26
-    velocity_beam3: 86
+    velocity_beam1: 85.0
+    velocity_beam2: 26.0
+    velocity_beam3: 86.0
     amplitude_beam1: 147
     amplitude_beam2: 140
     amplitude_beam3: 107
@@ -748,9 +748,9 @@ data:
     pressure: 0.236
     status: 17
     temperature: 20.34
-    velocity_beam1: 96
-    velocity_beam2: 51
-    velocity_beam3: -17
+    velocity_beam1: 96.0
+    velocity_beam2: 51.0
+    velocity_beam3: -17.0
     amplitude_beam1: 146
     amplitude_beam2: 135
     amplitude_beam3: 110
@@ -769,9 +769,9 @@ data:
     pressure: 0.231
     status: 17
     temperature: 20.34
-    velocity_beam1: 16
-    velocity_beam2: -36
-    velocity_beam3: 59
+    velocity_beam1: 16.0
+    velocity_beam2: -36.0
+    velocity_beam3: 59.0
     amplitude_beam1: 147
     amplitude_beam2: 139
     amplitude_beam3: 110
@@ -790,9 +790,9 @@ data:
     pressure: 0.225
     status: 17
     temperature: 20.34
-    velocity_beam1: -8
-    velocity_beam2: 10
-    velocity_beam3: 152
+    velocity_beam1: -8.0
+    velocity_beam2: 10.0
+    velocity_beam3: 152.0
     amplitude_beam1: 138
     amplitude_beam2: 136
     amplitude_beam3: 112
@@ -811,9 +811,9 @@ data:
     pressure: 0.227
     status: 17
     temperature: 20.34
-    velocity_beam1: 79
-    velocity_beam2: -22
-    velocity_beam3: 61
+    velocity_beam1: 79.0
+    velocity_beam2: -22.0
+    velocity_beam3: 61.0
     amplitude_beam1: 142
     amplitude_beam2: 137
     amplitude_beam3: 108
@@ -832,9 +832,9 @@ data:
     pressure: 0.221
     status: 17
     temperature: 20.34
-    velocity_beam1: 32
-    velocity_beam2: 106
-    velocity_beam3: -47
+    velocity_beam1: 32.0
+    velocity_beam2: 106.0
+    velocity_beam3: -47.0
     amplitude_beam1: 144
     amplitude_beam2: 138
     amplitude_beam3: 110
@@ -853,9 +853,9 @@ data:
     pressure: 0.225
     status: 17
     temperature: 20.34
-    velocity_beam1: 58
-    velocity_beam2: 97
-    velocity_beam3: -29
+    velocity_beam1: 58.0
+    velocity_beam2: 97.0
+    velocity_beam3: -29.0
     amplitude_beam1: 148
     amplitude_beam2: 137
     amplitude_beam3: 113
@@ -874,9 +874,9 @@ data:
     pressure: 0.222
     status: 17
     temperature: 20.34
-    velocity_beam1: -14
-    velocity_beam2: -167
-    velocity_beam3: 64
+    velocity_beam1: -14.0
+    velocity_beam2: -167.0
+    velocity_beam3: 64.0
     amplitude_beam1: 147
     amplitude_beam2: 139
     amplitude_beam3: 111
@@ -895,9 +895,9 @@ data:
     pressure: 0.223
     status: 17
     temperature: 20.34
-    velocity_beam1: 62
-    velocity_beam2: 27
-    velocity_beam3: 182
+    velocity_beam1: 62.0
+    velocity_beam2: 27.0
+    velocity_beam3: 182.0
     amplitude_beam1: 147
     amplitude_beam2: 136
     amplitude_beam3: 116
@@ -916,9 +916,9 @@ data:
     pressure: 0.23
     status: 17
     temperature: 20.34
-    velocity_beam1: 79
-    velocity_beam2: 20
-    velocity_beam3: 231
+    velocity_beam1: 79.0
+    velocity_beam2: 20.0
+    velocity_beam3: 231.0
     amplitude_beam1: 143
     amplitude_beam2: 139
     amplitude_beam3: 113
@@ -937,9 +937,9 @@ data:
     pressure: 0.219
     status: 17
     temperature: 20.34
-    velocity_beam1: -13
-    velocity_beam2: -87
-    velocity_beam3: 46
+    velocity_beam1: -13.0
+    velocity_beam2: -87.0
+    velocity_beam3: 46.0
     amplitude_beam1: 142
     amplitude_beam2: 140
     amplitude_beam3: 114
@@ -958,9 +958,9 @@ data:
     pressure: 0.231
     status: 17
     temperature: 20.34
-    velocity_beam1: -44
-    velocity_beam2: -13
-    velocity_beam3: -62
+    velocity_beam1: -44.0
+    velocity_beam2: -13.0
+    velocity_beam3: -62.0
     amplitude_beam1: 150
     amplitude_beam2: 132
     amplitude_beam3: 114
@@ -979,9 +979,9 @@ data:
     pressure: 0.229
     status: 17
     temperature: 20.34
-    velocity_beam1: 94
-    velocity_beam2: -46
-    velocity_beam3: -87
+    velocity_beam1: 94.0
+    velocity_beam2: -46.0
+    velocity_beam3: -87.0
     amplitude_beam1: 143
     amplitude_beam2: 138
     amplitude_beam3: 112
@@ -1000,9 +1000,9 @@ data:
     pressure: 0.219
     status: 17
     temperature: 20.34
-    velocity_beam1: -16
-    velocity_beam2: -51
-    velocity_beam3: 255
+    velocity_beam1: -16.0
+    velocity_beam2: -51.0
+    velocity_beam3: 255.0
     amplitude_beam1: 139
     amplitude_beam2: 133
     amplitude_beam3: 109
@@ -1021,9 +1021,9 @@ data:
     pressure: 0.221
     status: 17
     temperature: 20.34
-    velocity_beam1: 91
-    velocity_beam2: 4
-    velocity_beam3: 133
+    velocity_beam1: 91.0
+    velocity_beam2: 4.0
+    velocity_beam3: 133.0
     amplitude_beam1: 146
     amplitude_beam2: 142
     amplitude_beam3: 113
@@ -1043,9 +1043,9 @@ data:
     pressure: 0.221
     status: 17
     temperature: 20.34
-    velocity_beam1: 91
-    velocity_beam2: 4
-    velocity_beam3: 133
+    velocity_beam1: 91.0
+    velocity_beam2: 4.0
+    velocity_beam3: 133.0
     amplitude_beam1: 146
     amplitude_beam2: 142
     amplitude_beam3: 113
@@ -1065,9 +1065,9 @@ data:
     pressure: 0.231
     status: 17
     temperature: 20.28
-    velocity_beam1: 33
-    velocity_beam2: -19
-    velocity_beam3: 31
+    velocity_beam1: 33.0
+    velocity_beam2: -19.0
+    velocity_beam3: 31.0
     amplitude_beam1: 145
     amplitude_beam2: 136
     amplitude_beam3: 112
