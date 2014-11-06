@@ -1,0 +1,129 @@
+header:
+  particle_object: MULTIPLE
+  particle_type: MULTIPLE
+
+data:
+  - _index: 1
+    particle_object: CtdmoGhqrSioTelemeteredOffsetDataParticle
+    particle_type: ctdmo_ghqr_sio_offset
+    internal_timestamp: '2013-07-26T22:07:18Z'
+    sio_controller_timestamp: 1374876438 
+    inductive_id: 55
+    ctd_time_offset: 0
+  - _index: 2
+    particle_object: CtdmoGhqrSioTelemeteredInstrumentDataParticle
+    particle_type: ctdmo_ghqr_sio_mule_instrument
+    internal_timestamp: '2013-07-26T22:00:01Z'
+    sio_controller_timestamp: 1374883638
+    inductive_id: 55
+    temperature: 224228
+    conductivity: 428201
+    pressure: 4077
+    ctd_time: 428191201
+  - _index: 3
+    particle_object: CtdmoGhqrSioTelemeteredInstrumentDataParticle
+    particle_type: ctdmo_ghqr_sio_mule_instrument
+    internal_timestamp: '2013-07-27T00:00:01Z'
+    sio_controller_timestamp: 1374890839
+    inductive_id: 55
+    temperature: 223970
+    conductivity: 427767
+    pressure: 4125
+    ctd_time: 428198401
+  - _index: 4
+    particle_object: CtdmoGhqrSioTelemeteredInstrumentDataParticle
+    particle_type: ctdmo_ghqr_sio_mule_instrument
+    internal_timestamp: '2013-07-27T02:00:01Z'
+    sio_controller_timestamp: 1374898038
+    inductive_id: 55
+    temperature: 215256
+    conductivity: 419534
+    pressure: 4116
+    ctd_time: 428205601
+  - _index: 5
+    particle_object: CtdmoGhqrSioTelemeteredInstrumentDataParticle
+    particle_type: ctdmo_ghqr_sio_mule_instrument
+    internal_timestamp: '2013-07-27T04:00:01Z'
+    sio_controller_timestamp: 1374905238
+    inductive_id: 55
+    temperature: 214250
+    conductivity: 419172
+    pressure: 4071
+    ctd_time: 428212801
+  - _index: 6
+    particle_object: CtdmoGhqrSioTelemeteredInstrumentDataParticle
+    particle_type: ctdmo_ghqr_sio_mule_instrument
+    internal_timestamp: '2013-07-27T06:00:01Z'
+    sio_controller_timestamp: 1374912438
+    inductive_id: 55
+    temperature: 211718
+    conductivity: 417044
+    pressure: 4004
+    ctd_time: 428220001
+  - _index: 7
+    particle_object: CtdmoGhqrSioTelemeteredInstrumentDataParticle
+    particle_type: ctdmo_ghqr_sio_mule_instrument
+    internal_timestamp: '2013-07-27T08:00:01Z'
+    sio_controller_timestamp: 1374919639
+    inductive_id: 55
+    temperature: 225575
+    conductivity: 429289
+    pressure: 4031
+    ctd_time: 428227201
+  - _index: 8
+    particle_object: CtdmoGhqrSioTelemeteredInstrumentDataParticle
+    particle_type: ctdmo_ghqr_sio_mule_instrument
+    internal_timestamp: '2013-07-27T10:00:01Z'
+    sio_controller_timestamp: 1374926838
+    inductive_id: 55
+    temperature: 220387
+    conductivity: 424886
+    pressure: 4086
+    ctd_time: 428234401
+  - _index: 9
+    particle_object: CtdmoGhqrSioTelemeteredInstrumentDataParticle
+    particle_type: ctdmo_ghqr_sio_mule_instrument
+    internal_timestamp: '2013-07-27T12:00:01Z'
+    sio_controller_timestamp: 1374934038
+    inductive_id: 55
+    temperature: 225035
+    conductivity: 428761
+    pressure: 4101
+    ctd_time: 428241601
+  - _index: 10
+    particle_object: CtdmoGhqrSioTelemeteredInstrumentDataParticle
+    particle_type: ctdmo_ghqr_sio_mule_instrument
+    internal_timestamp: '2013-07-27T14:00:01Z'
+    sio_controller_timestamp: 1374941239
+    inductive_id: 55
+    temperature: 206437
+    conductivity: 412756
+    pressure: 4116
+    ctd_time: 428248801
+  - _index: 11
+    particle_object: CtdmoGhqrSioTelemeteredInstrumentDataParticle
+    particle_type: ctdmo_ghqr_sio_mule_instrument
+    internal_timestamp: '2013-07-27T18:00:01Z'
+    sio_controller_timestamp: 1374955638
+    inductive_id: 55
+    temperature: 224329
+    conductivity: 428386
+    pressure: 4000
+    ctd_time: 428263201
+  - _index: 12
+    particle_object: CtdmoGhqrSioTelemeteredInstrumentDataParticle
+    particle_type: ctdmo_ghqr_sio_mule_instrument
+    internal_timestamp: '2013-07-27T20:00:01Z'
+    sio_controller_timestamp: 1374962838
+    inductive_id: 55
+    temperature: 219153
+    conductivity: 423722
+    pressure: 4013
+    ctd_time: 428270401
+  - _index: 13
+    particle_object: CtdmoGhqrSioTelemeteredOffsetDataParticle
+    particle_type: ctdmo_ghqr_sio_offset
+    internal_timestamp: '2013-07-27T22:07:18Z'
+    sio_controller_timestamp: 1374962838
+    inductive_id: 55
+    ctd_time_offset: 0

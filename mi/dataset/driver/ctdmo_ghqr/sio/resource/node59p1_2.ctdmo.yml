@@ -1,0 +1,45 @@
+header:
+  particle_object: CtdmoGhqrSioTelemeteredInstrumentDataParticle
+  particle_type: ctdmo_ghqr_sio_mule_instrument
+
+data:
+  - _index: 1
+    internal_timestamp: '2013-07-25T10:00:01Z'
+    sio_controller_timestamp: 1374754038
+    inductive_id: 55
+    temperature: 224637
+    conductivity: 427568
+    pressure: 4167
+    ctd_time: 428061601
+  - _index: 2
+    internal_timestamp: '2013-07-25T12:00:01Z'
+    sio_controller_timestamp: 1374761238
+    inductive_id: 55
+    temperature: 222078
+    conductivity: 426011
+    pressure: 4102
+    ctd_time: 428068801
+  - _index: 3
+    internal_timestamp: '2013-07-25T14:00:01Z'
+    sio_controller_timestamp: 1374768438
+    inductive_id: 55
+    temperature: 204897
+    conductivity: 411152
+    pressure: 4078
+    ctd_time: 428076001
+  - _index: 4
+    internal_timestamp: '2013-07-25T16:00:01Z'
+    sio_controller_timestamp: 1374775639
+    inductive_id: 55
+    temperature: 204902
+    conductivity: 411041
+    pressure: 3998
+    ctd_time: 428083201
+  - _index: 5
+    internal_timestamp: '2013-07-25T18:00:01Z'
+    sio_controller_timestamp: 1374782838
+    inductive_id: 55
+    temperature: 225275
+    conductivity: 428916
+    pressure: 3991
+    ctd_time: 428090401
