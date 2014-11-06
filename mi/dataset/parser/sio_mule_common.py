@@ -140,20 +140,20 @@ class SioParser(BufferLoadingParser):
             self.all_data = self.read_file()
             self.file_complete = True
 
-        # there is more data, add it to the chunker
-        self._chunker.add_chunk(self.all_data, ntplib.system_to_ntp_time(time.time()))
+            # there is more data, add it to the chunker
+            self._chunker.add_chunk(self.all_data, ntplib.system_to_ntp_time(time.time()))
 
-        # parse the chunks now that there is new data in the chunker
-        result = self.parse_chunks()
+            # parse the chunks now that there is new data in the chunker
+            result = self.parse_chunks()
 
-        # clear out any non matching data.  Don't do this during parsing because
-        # it cleans out actual data too because of the way the chunker works
-        (nd_timestamp, non_data) = self._chunker.get_next_non_data(clean=True)
-        while non_data is not None:
+            # clear out any non matching data.  Don't do this during parsing because
+            # it cleans out actual data too because of the way the chunker works
             (nd_timestamp, non_data) = self._chunker.get_next_non_data(clean=True)
+            while non_data is not None:
+                (nd_timestamp, non_data) = self._chunker.get_next_non_data(clean=True)
 
-        # add the parsed chunks to the record_buffer
-        self._record_buffer.extend(result)
+            # add the parsed chunks to the record_buffer
+            self._record_buffer.extend(result)
 
         if len(self._record_buffer) < num_records:
             num_to_fetch = len(self._record_buffer)
