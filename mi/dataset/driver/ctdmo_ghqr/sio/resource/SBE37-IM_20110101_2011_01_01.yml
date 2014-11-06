@@ -4,7 +4,7 @@ header:
 
 data:
   - _index:  1
-    particle_object: CtdmoRecoveredInstrumentDataParticle
+    particle_object: CtdmoGhqrRecoveredInstrumentDataParticle
     particle_type: ctdmo_ghqr_instrument_recovered
     internal_timestamp: 3157173610.0
     inductive_id: 55
@@ -15,7 +15,7 @@ data:
     pressure_temp: 40001
     ctd_time: 1500010
   - _index:  2
-    particle_object: CtdmoRecoveredInstrumentDataParticle
+    particle_object: CtdmoGhqrRecoveredInstrumentDataParticle
     particle_type: ctdmo_ghqr_instrument_recovered
     internal_timestamp: 3157173611.0
     inductive_id: 55
@@ -26,7 +26,7 @@ data:
     pressure_temp: 40002
     ctd_time: 1500011
   - _index:  3
-    particle_object: CtdmoRecoveredInstrumentDataParticle
+    particle_object: CtdmoGhqrRecoveredInstrumentDataParticle
     particle_type: ctdmo_ghqr_instrument_recovered
     internal_timestamp: 3157173612.0
     inductive_id: 55
