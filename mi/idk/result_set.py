@@ -86,8 +86,11 @@ from mi.core.instrument.data_particle import DataParticle
 
 from mi.core.log import get_logger ; log = get_logger()
 
-DATE_PATTERN = r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z?$'
-DATE_MATCHER = re.compile(DATE_PATTERN)
+DATE_PATTERN_WITH_MSEC_WITH_Z = r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)Z$'
+DATE_PATTERN_WITH_MSEC_WITHOUT_Z = r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)$'
+DATE_PATTERN_WITHOUT_MSEC_WITH_Z = r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$'
+DATE_PATTERN_WITHOUT_MSEC_WITHOUT_Z = r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$'
+DATE_FORMAT = "%Y-%m-%dT%H:%M:%S.%fZ"
 
 class ResultSet(object):
     """
@@ -522,28 +525,52 @@ class ResultSet(object):
         @throws InstrumentParameterException if datestr cannot be formatted to
         a date.
         """
+
         if not isinstance(datestr, str):
             raise IOError('Value %s is not a string.' % str(datestr))
-        if not DATE_MATCHER.match(datestr):
-            raise ValueError("date string not in ISO8601 format YYYY-MM-DDTHH:MM:SS.SSSSZ")
+
+        date_match_with_msec_with_z = re.match(DATE_PATTERN_WITH_MSEC_WITH_Z, datestr)
+        date_match_with_msec_without_z = re.match(DATE_PATTERN_WITH_MSEC_WITHOUT_Z, datestr)
+        date_match_without_msec_with_z = re.match(DATE_PATTERN_WITHOUT_MSEC_WITH_Z, datestr)
+        date_match_without_msec_without_z = re.match(DATE_PATTERN_WITHOUT_MSEC_WITHOUT_Z, datestr)
+
+        datestr_to_use = ""
+
+        log.debug("Input datestr: %s", datestr)
+
+        if date_match_without_msec_without_z:
+
+            datestr_to_use = datestr + '.0Z'
+
+        elif date_match_without_msec_with_z:
+
+            datestr_to_use = datestr[:-1] + '.0Z'
+
+        elif date_match_with_msec_without_z:
+
+            datestr_to_use = datestr + 'Z'
+
+        elif date_match_with_msec_with_z:
+
+            datestr_to_use = datestr
+
+        else:
+            raise ValueError("NTP date string not in any of the expected formats")
 
         try:
-            # This assumes input date string are in UTC (=GMT)
-            if datestr[-1:] != 'Z':
-                datestr += 'Z'
 
-            format = "%Y-%m-%dT%H:%M:%S.%fZ"
+            log.debug("converting time string '%s'", datestr_to_use)
 
-            dt = datetime.strptime(datestr, format)
+            dt = datetime.strptime(datestr_to_use, DATE_FORMAT)
 
             unix_timestamp = calendar.timegm(dt.timetuple()) + (dt.microsecond / 1000000.0)
 
             timestamp = ntplib.system_to_ntp_time(unix_timestamp)
 
-        except ValueError as e:
-            raise ValueError('Value %s could not be formatted to a date. %s' % (str(datestr), e))
+            log.debug("converted time string '%s', unix_ts: %s ntp: %s", datestr_to_use, unix_timestamp, timestamp)
 
-        log.debug("converting time string '%s', unix_ts: %s ntp: %s", datestr, unix_timestamp, timestamp)
+        except ValueError as e:
+            raise ValueError('Value %s could not be formatted to a date. %s' % (str(datestr_to_use), e))
 
         return timestamp
 
