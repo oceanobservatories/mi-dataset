@@ -114,3 +114,24 @@ class DostaAbcdjmSioParserUnitTestCase(ParserUnitTestCase):
             self.assertEqual(len(particles), 97)
 
             self.assertEqual(self.exception_callback_value, [])
+
+    def test_drain(self):
+        """
+        This test ensures that we stop parsing chunks when we have completed parsing
+        all the records in the input file.
+        """
+        with open(os.path.join(RESOURCE_PATH, 'node59p1_0.dosta.dat')) as stream_handle:
+            parser = DostaAbcdjmSioParser(self.config_telem, stream_handle, self.exception_callback)
+
+            # request more particles than available
+            particles = parser.get_records(40)
+            # confirm we only get requested number
+            self.assertEqual(len(particles), 37)
+
+           # request more particles than available
+            particles = parser.get_records(40)
+            # confirm we only get requested number
+            self.assertEqual(len(particles), 0)
+
+            # confirm no exceptions occurred
+            self.assertEqual(self.exception_callback_value, [])
