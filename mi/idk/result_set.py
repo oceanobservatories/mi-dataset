@@ -86,8 +86,13 @@ from mi.core.instrument.data_particle import DataParticle
 
 from mi.core.log import get_logger ; log = get_logger()
 
-DATE_PATTERN = r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z?$'
-DATE_MATCHER = re.compile(DATE_PATTERN)
+DATE_PATTERN_WITH_MSEC_WITH_Z = r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)Z$'
+DATE_PATTERN_WITH_MSEC_WITHOUT_Z = r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)$'
+DATE_PATTERN_WITHOUT_MSEC_WITH_Z = r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$'
+DATE_PATTERN_WITHOUT_MSEC_WITHOUT_Z = r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$'
+DATE_FORMAT = "%Y-%m-%dT%H:%M:%S.%fZ"
+
+FLOAT_ALLOWED_DIFF = .000001
 
 class ResultSet(object):
     """
@@ -290,7 +295,6 @@ class ResultSet(object):
         particle_dict = self._particle_as_dict(particle)
         particle_timestamp = particle_dict.get('internal_timestamp')
         expected_time = particle_def.get('internal_timestamp')
-        allow_diff = .000001
 
         # Verify the timestamp
         if particle_timestamp and not expected_time:
@@ -307,7 +311,7 @@ class ResultSet(object):
             ts_diff = abs(particle_timestamp - expected)
             log.debug("verify timestamp: abs(%s - %s) = %s", expected, particle_timestamp, ts_diff)
 
-            if ts_diff > allow_diff:
+            if ts_diff > FLOAT_ALLOWED_DIFF:
                 errors.append("expected internal_timestamp mismatch, %.9f != %.9f (%.9f)" %
                               (expected, particle_timestamp, ts_diff))
 
@@ -410,16 +414,29 @@ class ResultSet(object):
 
         if round_factor is not None and particle_value is not None:
             particle_value = round(particle_value, round_factor)
-            log.debug("rounded value to %s", particle_value)
 
-        if ex_value != particle_value:
-            # check for nans, two nans will not equal each other but in this
-            # case they are considered equal
-            if ResultSet._nan_equal_compare(ex_value, particle_value):
-                return None
+            if isinstance(particle_value, float):
+                log.trace("rounded value to %.5f", particle_value)
+                log.trace("expected value %.5f", ex_value)
+            else:
+                log.trace("rounded value to %s", particle_value)
 
-            return "value mismatch, %s != %s (decimals may be rounded)" % \
+        if isinstance(ex_value, float):
+            diff = abs(particle_value - ex_value)
+
+            if diff > FLOAT_ALLOWED_DIFF:
+                return "value mismatch, %.6f != %.6f " % \
                    (ex_value, particle_value)
+
+        else:
+            if ex_value != particle_value:
+                # check for nans, two nans will not equal each other but in this
+                # case they are considered equal
+                if ResultSet._nan_equal_compare(ex_value, particle_value):
+                    return None
+
+                return "value mismatch, %s != %s" % \
+                       (ex_value, particle_value)
 
         return None
 
@@ -522,28 +539,52 @@ class ResultSet(object):
         @throws InstrumentParameterException if datestr cannot be formatted to
         a date.
         """
+
         if not isinstance(datestr, str):
             raise IOError('Value %s is not a string.' % str(datestr))
-        if not DATE_MATCHER.match(datestr):
-            raise ValueError("date string not in ISO8601 format YYYY-MM-DDTHH:MM:SS.SSSSZ")
+
+        date_match_with_msec_with_z = re.match(DATE_PATTERN_WITH_MSEC_WITH_Z, datestr)
+        date_match_with_msec_without_z = re.match(DATE_PATTERN_WITH_MSEC_WITHOUT_Z, datestr)
+        date_match_without_msec_with_z = re.match(DATE_PATTERN_WITHOUT_MSEC_WITH_Z, datestr)
+        date_match_without_msec_without_z = re.match(DATE_PATTERN_WITHOUT_MSEC_WITHOUT_Z, datestr)
+
+        datestr_to_use = ""
+
+        log.debug("Input datestr: %s", datestr)
+
+        if date_match_without_msec_without_z:
+
+            datestr_to_use = datestr + '.0Z'
+
+        elif date_match_without_msec_with_z:
+
+            datestr_to_use = datestr[:-1] + '.0Z'
+
+        elif date_match_with_msec_without_z:
+
+            datestr_to_use = datestr + 'Z'
+
+        elif date_match_with_msec_with_z:
+
+            datestr_to_use = datestr
+
+        else:
+            raise ValueError("NTP date string not in any of the expected formats")
 
         try:
-            # This assumes input date string are in UTC (=GMT)
-            if datestr[-1:] != 'Z':
-                datestr += 'Z'
 
-            format = "%Y-%m-%dT%H:%M:%S.%fZ"
+            log.debug("converting time string '%s'", datestr_to_use)
 
-            dt = datetime.strptime(datestr, format)
+            dt = datetime.strptime(datestr_to_use, DATE_FORMAT)
 
             unix_timestamp = calendar.timegm(dt.timetuple()) + (dt.microsecond / 1000000.0)
 
             timestamp = ntplib.system_to_ntp_time(unix_timestamp)
 
-        except ValueError as e:
-            raise ValueError('Value %s could not be formatted to a date. %s' % (str(datestr), e))
+            log.debug("converted time string '%s', unix_ts: %s ntp: %s", datestr_to_use, unix_timestamp, timestamp)
 
-        log.debug("converting time string '%s', unix_ts: %s ntp: %s", datestr, unix_timestamp, timestamp)
+        except ValueError as e:
+            raise ValueError('Value %s could not be formatted to a date. %s' % (str(datestr_to_use), e))
 
         return timestamp
 
