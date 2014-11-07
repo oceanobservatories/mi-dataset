@@ -17,60 +17,60 @@ data:
     cg_eng_cpu_load5:           0.8500
     cg_eng_cpu_uptime: '0 days 00:01:56'
     cg_eng_err_bcmd: 8
-    cg_eng_err_c_ctl: None
+    cg_eng_err_c_ctl: null
     cg_eng_err_c_gps: 1
-    cg_eng_err_c_imm: None
-    cg_eng_err_c_irid: None
-    cg_eng_err_c_power_sys: None
+    cg_eng_err_c_imm: null
+    cg_eng_err_c_irid: null
+    cg_eng_err_c_power_sys: null
     cg_eng_err_c_pps: 7
-    cg_eng_err_c_status: None
-    cg_eng_err_c_telem_sys: None
-    cg_eng_err_cpm1: None
-    cg_eng_err_d_ctl: None
-    cg_eng_err_d_status: None
-    cg_eng_err_dlog_mgr: None
-    cg_eng_err_dlogp1: None
-    cg_eng_err_dlogp2: None
-    cg_eng_err_dlogp3: None
-    cg_eng_err_dlogp4: None
-    cg_eng_err_dlogp5: None
-    cg_eng_err_dlogp6: None
+    cg_eng_err_c_status: null
+    cg_eng_err_c_telem_sys: null
+    cg_eng_err_cpm1: null
+    cg_eng_err_d_ctl: null
+    cg_eng_err_d_status: null
+    cg_eng_err_dlog_mgr: null
+    cg_eng_err_dlogp1: null
+    cg_eng_err_dlogp2: null
+    cg_eng_err_dlogp3: null
+    cg_eng_err_dlogp4: null
+    cg_eng_err_dlogp5: null
+    cg_eng_err_dlogp6: null
     cg_eng_err_dlogp7: 3
-    cg_eng_err_dlogp8: None
-    cg_eng_err_rcmd: None
+    cg_eng_err_dlogp8: null
+    cg_eng_err_rcmd: null
     cg_eng_err_superv: 9
-    cg_eng_errmsg_bcmd: [None]
-    cg_eng_errmsg_c_ctl: [None]
+    cg_eng_errmsg_bcmd: [null]
+    cg_eng_errmsg_c_ctl: [null]
     cg_eng_errmsg_c_gps: ['***Warning, GPS error message']
-    cg_eng_errmsg_c_imm: [None]
-    cg_eng_errmsg_c_irid: [None]
-    cg_eng_errmsg_c_power_sys: [None]
+    cg_eng_errmsg_c_imm: [null]
+    cg_eng_errmsg_c_irid: [null]
+    cg_eng_errmsg_c_power_sys: [null]
     cg_eng_errmsg_c_pps: ['***Warning, PPS error message']
-    cg_eng_errmsg_c_status: [None]
-    cg_eng_errmsg_c_telem_sys: [None]
-    cg_eng_errmsg_cpm1: [None]
-    cg_eng_errmsg_d_ctl: [None]
-    cg_eng_errmsg_d_status: [None]
-    cg_eng_errmsg_dlog_mgr: [None]
-    cg_eng_errmsg_dlogp1: [None]
-    cg_eng_errmsg_dlogp2: [None]
-    cg_eng_errmsg_dlogp3: [None]
-    cg_eng_errmsg_dlogp4: [None]
-    cg_eng_errmsg_dlogp5: [None]
-    cg_eng_errmsg_dlogp6: [None]
+    cg_eng_errmsg_c_status: [null]
+    cg_eng_errmsg_c_telem_sys: [null]
+    cg_eng_errmsg_cpm1: [null]
+    cg_eng_errmsg_d_ctl: [null]
+    cg_eng_errmsg_d_status: [null]
+    cg_eng_errmsg_dlog_mgr: [null]
+    cg_eng_errmsg_dlogp1: [null]
+    cg_eng_errmsg_dlogp2: [null]
+    cg_eng_errmsg_dlogp3: [null]
+    cg_eng_errmsg_dlogp4: [null]
+    cg_eng_errmsg_dlogp5: [null]
+    cg_eng_errmsg_dlogp6: [null]
     cg_eng_errmsg_dlogp7: ['***Warning, DLOGP7 error message']
-    cg_eng_errmsg_dlogp8: [None]
-    cg_eng_errmsg_rcmd: [None]
-    cg_eng_errmsg_superv: [None]
+    cg_eng_errmsg_dlogp8: [null]
+    cg_eng_errmsg_rcmd: [null]
+    cg_eng_errmsg_superv: [null]
     cg_eng_gps_alt:           1.7000
     cg_eng_gps_cog:         303.5000
     cg_eng_gps_date: 170814
     cg_eng_gps_fix: 2
     cg_eng_gps_hdop:           1.1000
     cg_eng_gps_last_update:           0.8610
-    cg_eng_gps_lat:          44.6587
+    cg_eng_gps_lat:          44.65875
     cg_eng_gps_latstr: '4439.5250 N'
-    cg_eng_gps_lon:        -124.0955
+    cg_eng_gps_lon:        -124.09549
     cg_eng_gps_lonstr: '12405.7295 W'
     cg_eng_gps_msg_date: '2014/08/17'
     cg_eng_gps_msg_time: '12:55:02.868'

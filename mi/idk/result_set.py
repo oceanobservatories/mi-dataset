@@ -92,6 +92,9 @@ DATE_PATTERN_WITHOUT_MSEC_WITH_Z = r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$'
 DATE_PATTERN_WITHOUT_MSEC_WITHOUT_Z = r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$'
 DATE_FORMAT = "%Y-%m-%dT%H:%M:%S.%fZ"
 
+FLOAT_ALLOWED_DIFF = .000001
+
+
 class ResultSet(object):
     """
     Result Set object
@@ -293,7 +296,6 @@ class ResultSet(object):
         particle_dict = self._particle_as_dict(particle)
         particle_timestamp = particle_dict.get('internal_timestamp')
         expected_time = particle_def.get('internal_timestamp')
-        allow_diff = .000001
 
         # Verify the timestamp
         if particle_timestamp and not expected_time:
@@ -310,7 +312,7 @@ class ResultSet(object):
             ts_diff = abs(particle_timestamp - expected)
             log.debug("verify timestamp: abs(%s - %s) = %s", expected, particle_timestamp, ts_diff)
 
-            if ts_diff > allow_diff:
+            if ts_diff > FLOAT_ALLOWED_DIFF:
                 errors.append("expected internal_timestamp mismatch, %.9f != %.9f (%.9f)" %
                               (expected, particle_timestamp, ts_diff))
 
@@ -396,33 +398,51 @@ class ResultSet(object):
         when passing a dict you can specify a 'round' factor.
         """
 
-        if isinstance(expected_value, dict):
-            ex_value = expected_value['value']
-            round_factor = expected_value.get('round')
-        elif isinstance(expected_value, float):
-            # unless otherwise specified round all floating point expected values to 5 digits
-            ex_value = expected_value
-            round_factor = 5
-        else:
-            ex_value = expected_value
-            round_factor = None
+        local_expected_value = expected_value
+        round_factor = None
 
-        if ex_value is None:
+        # Let's first check to see if we have a None for an expected value
+        if local_expected_value is None:
             log.debug("No value to compare, ignoring")
             return None
 
-        if round_factor is not None and particle_value is not None:
-            particle_value = round(particle_value, round_factor)
-            log.debug("rounded value to %s", particle_value)
+        if isinstance(expected_value, dict):
+            local_expected_value = expected_value['value']
+            round_factor = expected_value.get('round')
 
-        if ex_value != particle_value:
-            # check for nans, two nans will not equal each other but in this
-            # case they are considered equal
-            if ResultSet._nan_equal_compare(ex_value, particle_value):
-                return None
+        if isinstance(local_expected_value, float):
 
-            return "value mismatch, %s != %s (decimals may be rounded)" % \
-                   (ex_value, particle_value)
+            if round_factor is None:
+                # unless otherwise specified round all floating point expected values to 5 digits
+                round_factor = 5
+
+            if particle_value is None:
+                return "value mismatch, expected value is float and particle value is None"
+            else:
+                if isinstance(particle_value, float):
+                    particle_value = round(particle_value, round_factor)
+
+                    log.trace("particle value (rounded) to %s", particle_value)
+                    log.trace("expected value %s", local_expected_value)
+
+                    diff = abs(particle_value - local_expected_value)
+
+                    if diff > FLOAT_ALLOWED_DIFF:
+                        return "value mismatch, %.6f != %.6f " % \
+                               (local_expected_value, particle_value)
+                else:
+                    return "value mismatch, expected value is float and particle value is %s" \
+                           % type(particle_value)
+
+        else:
+            if local_expected_value != particle_value:
+                # check for nans, two nans will not equal each other but in this
+                # case they are considered equal
+                if ResultSet._nan_equal_compare(local_expected_value, particle_value):
+                    return None
+
+                return "value mismatch, %s != %s" % \
+                       (local_expected_value, particle_value)
 
         return None
 

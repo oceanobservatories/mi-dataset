@@ -115,7 +115,9 @@ class DostaLnWfpParserUnitTestCase(ParserUnitTestCase):
         self.assert_result(self.test_particle1, particles[5])
 
         test_data = self.get_dict_from_yml('good.yml')
-        self.assert_result(test_data['data'][0], particles[5])
+
+        for i in range(0,6):
+            self.assert_result(test_data['data'][i], particles[i])
 
         self.stream_handle.close()
 
@@ -159,6 +161,7 @@ class DostaLnWfpParserUnitTestCase(ParserUnitTestCase):
 
         # In a single read, get all particles in this file.
         result = self.parser.get_records(1000)
+
         self.assert_particles(result, 'E0000001.yml', RESOURCE_PATH)
 
         self.stream_handle.close()
@@ -200,7 +203,7 @@ class DostaLnWfpParserUnitTestCase(ParserUnitTestCase):
             fid.write('    internal_timestamp: %f\n' % particle_dict.get('internal_timestamp'))
             for val in particle_dict.get('values'):
                 if isinstance(val.get('value'), float):
-                    fid.write('    %s: %16.16f\n' % (val.get('value_id'), val.get('value')))
+                    fid.write('    %s: %16.5f\n' % (val.get('value_id'), val.get('value')))
                 elif isinstance(val.get('value'), str):
                     fid.write("    %s: '%s'\n" % (val.get('value_id'), val.get('value')))
                 else:
