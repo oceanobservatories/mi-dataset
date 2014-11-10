@@ -19,18 +19,14 @@ import ntplib
 from datetime import datetime
 
 from mi.core.log import get_logger
-
 log = get_logger()
 
 from mi.core.common import BaseEnum
 from mi.core.instrument.data_particle import DataParticle
 
-from mi.core.exceptions import \
-    SampleException
+from mi.core.exceptions import SampleException, UnexpectedDataException
 
-from mi.dataset.dataset_parser import Parser
 from mi.dataset.parser.sio_mule_common import \
-    SioMuleParser, \
     SioParser, \
     SIO_HEADER_MATCHER, \
     SIO_HEADER_GROUP_ID, \
@@ -39,7 +35,6 @@ from mi.dataset.parser.sio_mule_common import \
 ENG_REGEX = r'\x01CS([0-9]{5})[0-9]{2}_[0-9A-Fa-f]{4}[a-zA-Z]([0-9A-Fa-f]{8})_' \
             '[0-9A-Fa-f]{2}_[0-9A-Fa-f]{4}\x02\n([-\d]+\.\d+) ' \
             '([-\d]+\.\d+) ([-\d]+) ([-\d]+) ([-\d]+)\n'
-
 ENG_MATCHER = re.compile(ENG_REGEX)
 
 
@@ -48,7 +43,7 @@ class DataParticleType(BaseEnum):
     RECOVERED = 'sio_eng_control_status_recovered'
 
 
-class SioEngSioMuleParserDataParticleKey(BaseEnum):
+class SioEngSioParserDataParticleKey(BaseEnum):
     # sio_eng_control_status
     SIO_CONTROLLER_ID = "sio_controller_id"
     SIO_CONTROLLER_TIMESTAMP = "sio_controller_timestamp"
@@ -78,23 +73,22 @@ class SioEngSioDataParticle(DataParticle):
         # raw_data will contain the match results of the ENG_REGEX
         match = self.raw_data
 
-        result = [self._encode_value(SioEngSioMuleParserDataParticleKey.SIO_CONTROLLER_ID, match.group(1), int),
-                  self._encode_value(SioEngSioMuleParserDataParticleKey.SIO_CONTROLLER_TIMESTAMP,
-                                     match.group(2), SioEngSioMuleDataParticle.encode_int_16),
-                  self._encode_value(SioEngSioMuleParserDataParticleKey.SIO_VOLTAGE_STRING, match.group(3), float),
-                  self._encode_value(SioEngSioMuleParserDataParticleKey.SIO_TEMPERATURE_STRING, match.group(4), float),
-                  self._encode_value(SioEngSioMuleParserDataParticleKey.SIO_ON_TIME, match.group(5), int),
-                  self._encode_value(SioEngSioMuleParserDataParticleKey.SIO_NUMBER_OF_WAKEUPS, match.group(6), int),
-                  self._encode_value(SioEngSioMuleParserDataParticleKey.SIO_CLOCK_DRIFT, match.group(7), int)]
+        result = [self._encode_value(SioEngSioParserDataParticleKey.SIO_CONTROLLER_ID, match.group(1), int),
+                  self._encode_value(SioEngSioParserDataParticleKey.SIO_CONTROLLER_TIMESTAMP,
+                                     match.group(2), SioEngSioDataParticle.encode_int_16),
+                  self._encode_value(SioEngSioParserDataParticleKey.SIO_VOLTAGE_STRING, match.group(3), float),
+                  self._encode_value(SioEngSioParserDataParticleKey.SIO_TEMPERATURE_STRING, match.group(4), float),
+                  self._encode_value(SioEngSioParserDataParticleKey.SIO_ON_TIME, match.group(5), int),
+                  self._encode_value(SioEngSioParserDataParticleKey.SIO_NUMBER_OF_WAKEUPS, match.group(6), int),
+                  self._encode_value(SioEngSioParserDataParticleKey.SIO_CLOCK_DRIFT, match.group(7), int)]
 
         return result
 
 
-class SioEngSioMuleDataParticle(SioEngSioDataParticle):
+class SioEngSioTelemeteredDataParticle(SioEngSioDataParticle):
     """
     Concrete Class for particles from the sio_eng_sio_mule data set
     """
-
     _data_particle_type = DataParticleType.TELEMETERED
 
 
@@ -102,11 +96,10 @@ class SioEngSioRecoveredDataParticle(SioEngSioDataParticle):
     """
     Concrete Class for particles from the sio_eng_sio recovered data set
     """
-
     _data_particle_type = DataParticleType.RECOVERED
 
 
-class SioEngSioCommonParser(Parser):
+class SioEngSioParser(SioParser):
     """
     Abstract Class for parsing Sio Eng Sio files
     """
@@ -120,14 +113,17 @@ class SioEngSioCommonParser(Parser):
             parsing, plus the state. An empty list of nothing was parsed.
         """
         result_particles = []
+
+        (nd_timestamp, non_data, non_start, non_end) = self._chunker.get_next_non_data_with_index(clean=False)
         (timestamp, chunk, start, end) = self._chunker.get_next_data_with_index(clean=True)
+
+        # if there is any non data handle it
+        self.handle_non_data(non_data, non_end, start)
 
         while chunk is not None:
             header_match = SIO_HEADER_MATCHER.match(chunk)
-            sample_count = 0
 
             if header_match.group(SIO_HEADER_GROUP_ID) == 'CS':
-                log.debug('\n\nCS Header detected:::  %s\n\n', header_match.group(0)[1:32])
                 data_match = ENG_MATCHER.match(chunk)
                 if data_match:
                     # put timestamp from hex string to float:
@@ -139,59 +135,32 @@ class SioEngSioCommonParser(Parser):
                     if sample:
                         # create particle
                         result_particles.append(sample)
-                        sample_count += 1
+
                 else:
                     log.warn('CS data does not match REGEX')
                     self._exception_callback(SampleException('CS data does not match REGEX'))
 
-            self._chunk_sample_count.append(sample_count)
+            # 'PS' IDs will also be in this file but are specifically ignored
+            elif header_match.group(SIO_HEADER_GROUP_ID) != 'PS':
+                message = 'Unexpected Sio Header ID %s' % header_match.group(SIO_HEADER_GROUP_ID)
+                log.warn(message)
+                self._exception_callback(UnexpectedDataException(message))
 
+            (nd_timestamp, non_data, non_start, non_end) = self._chunker.get_next_non_data_with_index(clean=False)
             (timestamp, chunk, start, end) = self._chunker.get_next_data_with_index(clean=True)
+
+            # if there is any non data handle it
+            self.handle_non_data(non_data, non_end, start)
 
         return result_particles
 
-
-class SioEngSioMuleParser(SioEngSioCommonParser, SioMuleParser):
-    """
-    Class for parsing Sio Eng Sio Mule files.  This derives functionality from both the
-    SioEngSioCommonParser class above and the SioMuleParser class in sio_mule_common.py
-    """
-
-    def __init__(self,
-                 config,
-                 state,
-                 stream_handle,
-                 state_callback,
-                 publish_callback,
-                 exception_callback):
-
-        super(SioEngSioMuleParser, self).__init__(config,
-                                                  stream_handle,
-                                                  state,
-                                                  self.sieve_function,
-                                                  state_callback,
-                                                  publish_callback,
-                                                  exception_callback)
-
-
-class SioEngSioRecoveredParser(SioEngSioCommonParser, SioParser):
-
-    """
-    Class for parsing Sio Eng Sio recovered files.  This derives functionality from both the
-    SioEngSioCommonParser class above and the SioParser class in sio_mule_common.py
-    """
-    def __init__(self,
-                 config,
-                 state,
-                 stream_handle,
-                 state_callback,
-                 publish_callback,
-                 exception_callback):
-
-        super(SioEngSioRecoveredParser, self).__init__(config,
-                                                       stream_handle,
-                                                       state,
-                                                       self.sieve_function,
-                                                       state_callback,
-                                                       publish_callback,
-                                                       exception_callback)
+    def handle_non_data(self, non_data, non_end, start):
+        """
+        Check for and handle any non-data that is found in the file
+        """
+        # If there is non-data it is an error
+        if non_data is not None and non_end <= start:
+            message = "Found %d bytes of un-expected non-data" % len(non_data)
+            log.warn(message)
+            # if non-data is a fatal error, directly call the exception, if it is not use the _exception_callback
+            self._exception_callback(UnexpectedDataException(message))
