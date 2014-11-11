@@ -180,7 +180,7 @@ class DostaLnWfpParser(WfpEFileParser):
                 log.trace("Found OffloadProfileData without decimation factor")
                 parse_end_point = raw_data_start_index_normal
 
-            # If neither, we are dealing with a global wfp e recovered engineering data record,
+            # If neither, we are dealing with a global wfp_sio e recovered engineering data record,
             # so we will save the start and end points
             elif global_recovered_eng_rec_index >= 0:
                 log.trace("Found OffloadEngineeringData")

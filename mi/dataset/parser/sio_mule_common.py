@@ -27,6 +27,8 @@ from mi.dataset.dataset_parser import BufferLoadingParser
 #   Data
 #   End of block
 
+SIO_TIMESTAMP_NUM_BYTES=8
+
 # SIO block sentinels:
 SIO_HEADER_START = b'\x01'
 SIO_HEADER_END = b'\x02'
