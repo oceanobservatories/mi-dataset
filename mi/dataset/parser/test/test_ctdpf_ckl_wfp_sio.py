@@ -1,15 +1,14 @@
 #!/usr/bin/env python
 
 """
-@package mi.dataset.parser.test.test_ctdpf_ckl_wfp_sio_mule
-@file marine-integrations/mi/dataset/parser/test/test_ctdpf_ckl_wfp_sio_mule.py
+@package mi.dataset.parser.test.test_ctdpf_ckl_wfp_sio
+@file marine-integrations/mi/dataset/parser/test/test_ctdpf_ckl_wfp_sio.py
 @author cgoodrich
-@brief Test code for a ctdpf_ckl_wfp_sio_mule data parser
+@brief Test code for a ctdpf_ckl_wfp_sio data parser
 """
 import os
 import struct
 import ntplib
-import inspect
 from StringIO import StringIO
 
 from nose.plugins.attrib import attr
@@ -20,9 +19,9 @@ from mi.idk.config import Config
 
 from mi.dataset.test.test_parser import ParserUnitTestCase
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
-from mi.dataset.parser.ctdpf_ckl_wfp_sio_mule import CtdpfCklWfpSioMuleParser
-from mi.dataset.parser.ctdpf_ckl_wfp_sio_mule import CtdpfCklWfpSioMuleDataParticle,\
-    CtdpfCklWfpSioMuleMetadataParticle
+from mi.dataset.parser.ctdpf_ckl_wfp_sio import CtdpfCklWfpSioParser
+from mi.dataset.parser.ctdpf_ckl_wfp_sio import CtdpfCklWfpSioDataParticle,\
+    CtdpfCklWfpSioMetadataParticle
 
 # Data stream which contains a decimation factor
 TEST_DATA_wdf = b'\x01\x57\x43\x31\x32\x33\x36\x38\x32\x30\x5f' + \
@@ -128,7 +127,7 @@ EXPECTED_VALUES_3 = (6800, 254299, 1003)
 
 RESOURCE_PATH = os.path.join(Config().base_dir(), 'mi',
                              'dataset', 'driver', 'ctdpf_ckl',
-                             'wfp_sio_mule', 'resource')
+                             'wfp_sio', 'resource')
 
 
 @attr('UNIT', group='mi')
@@ -136,13 +135,6 @@ class CtdpfCklWfpSioMuleParserUnitTestCase(ParserUnitTestCase):
     """
     ctdpf_ckl_wfp_sio_mule Parser unit test suite
     """
-    def state_callback(self, file_ingested):
-        """ Call back method to watch what comes in via the position callback """
-        self.file_ingested_value = file_ingested
-
-    def pub_callback(self, pub):
-        """ Call back method to watch what comes in via the publish callback """
-        self.publish_callback_value = pub
 
     def exception_callback(self, exception):
         """ Callback method to watch what comes in via the exception callback """
@@ -153,10 +145,10 @@ class CtdpfCklWfpSioMuleParserUnitTestCase(ParserUnitTestCase):
         ParserUnitTestCase.setUp(self)
 
         self.config = {
-            DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.ctdpf_ckl_wfp_sio_mule',
-            DataSetDriverConfigKeys.PARTICLE_CLASS: ['CtdpfCklWfpSioMuleDataParticle',
-                                                     'CtdpfCklWfpSioMuleMetadataParticle']
-            }
+            DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.ctdpf_ckl_wfp_sio',
+            DataSetDriverConfigKeys.PARTICLE_CLASS: ['CtdpfCklWfpSioDataParticle',
+                                                     'CtdpfCklWfpSioMetadataParticle']
+        }
 
         # Define test data particles and their associated timestamps which will be
         # compared with returned results
@@ -168,30 +160,20 @@ class CtdpfCklWfpSioMuleParserUnitTestCase(ParserUnitTestCase):
         time_increment = float(end_time - start_time) / 3.0
 
         self.start_timestamp = self.calc_timestamp(start_time, time_increment, 0)
-        self.particle_meta = CtdpfCklWfpSioMuleMetadataParticle(EXPECTED_TIME_STAMP,
+        self.particle_meta = CtdpfCklWfpSioMetadataParticle(EXPECTED_TIME_STAMP,
+                                                            internal_timestamp=self.start_timestamp)
+        self.particle_meta_ndf = CtdpfCklWfpSioMetadataParticle(EXPECTED_TIME_STAMP_ndf,
                                                                 internal_timestamp=self.start_timestamp)
-        self.particle_meta_ndf = CtdpfCklWfpSioMuleMetadataParticle(EXPECTED_TIME_STAMP_ndf,
-                                                                internal_timestamp=self.start_timestamp)
-        self.particle_a = CtdpfCklWfpSioMuleDataParticle(EXPECTED_VALUES_1,
-                                                         internal_timestamp=self.start_timestamp)
+        self.particle_a = CtdpfCklWfpSioDataParticle(EXPECTED_VALUES_1,
+                                                     internal_timestamp=self.start_timestamp)
 
         self.timestamp_2 = self.calc_timestamp(start_time, time_increment, 1)
-        self.particle_b = CtdpfCklWfpSioMuleDataParticle(EXPECTED_VALUES_2,
-                                                         internal_timestamp=self.timestamp_2)
+        self.particle_b = CtdpfCklWfpSioDataParticle(EXPECTED_VALUES_2,
+                                                     internal_timestamp=self.timestamp_2)
 
         timestamp_3 = self.calc_timestamp(start_time, time_increment, 2)
-        self.particle_c = CtdpfCklWfpSioMuleDataParticle(EXPECTED_VALUES_3,
-                                                         internal_timestamp=timestamp_3)
-
-# uncomment to generate yml
-#self.particle_to_yml(self.particle_meta)
-#self.particle_to_yml(self.particle_a)
-#self.particle_to_yml(self.particle_b)
-#self.particle_to_yml(self.particle_c)
-
-        self.file_ingested_value = None
-        self.state_callback_value = None
-        self.publish_callback_value = None
+        self.particle_c = CtdpfCklWfpSioDataParticle(EXPECTED_VALUES_3,
+                                                     internal_timestamp=timestamp_3)
 
     def calc_timestamp(self, start, increment, sample_idx):
         new_time = start + (increment * sample_idx)
@@ -203,27 +185,6 @@ class CtdpfCklWfpSioMuleParserUnitTestCase(ParserUnitTestCase):
         self.assert_(isinstance(self.publish_callback_value, list))
         self.assertEqual(self.publish_callback_value[0], particle)
 
-    @staticmethod
-    def particle_to_yml(self, particle):
-        """
-        This is added as a testing helper, not actually as part of the parser tests. Since the same particles
-        will be used for the driver test it is helpful to write them to .yml in the same form they need in the
-        results.yml files here.
-        """
-        particle_dict = particle.generate_dict()
-        # open write append, if you want to start from scratch manually delete this file
-        fid = open('particle.yml', 'a')
-        fid.write('  - _index: 1\n')
-        fid.write('    internal_timestamp: %f\n' % particle_dict.get('internal_timestamp'))
-        fid.write('    particle_object: %s\n' % particle.__class__.__name__)
-        fid.write('    particle_type: %s\n' % particle_dict.get('stream_name'))
-        for val in particle_dict.get('values'):
-            if isinstance(val.get('value'), float):
-                fid.write('    %s: %16.20f\n' % (val.get('value_id'), val.get('value')))
-            else:
-                fid.write('    %s: %s\n' % (val.get('value_id'), val.get('value')))
-        fid.close()
-
     def test_simple_with_decimation_factor(self):
         """
         Read test data. Should detect that there is a decimation factor in the data.
@@ -231,10 +192,10 @@ class CtdpfCklWfpSioMuleParserUnitTestCase(ParserUnitTestCase):
         """
         log.debug('CAG TEST: FILE HAS DECIMATION FACTOR')
         stream_handle = StringIO(TEST_DATA_wdf)
-        self.parser =  CtdpfCklWfpSioMuleParser(self.config, None, stream_handle,
-                                                self.state_callback, self.pub_callback, self.exception_callback)
+        parser = CtdpfCklWfpSioParser(self.config, stream_handle,
+                                      self.exception_callback)
         # next get records
-        result = self.parser.get_records(4)
+        result = parser.get_records(4)
 
         self.assertEqual(result, [self.particle_meta,
                                   self.particle_a,
@@ -249,10 +210,11 @@ class CtdpfCklWfpSioMuleParserUnitTestCase(ParserUnitTestCase):
         """
         log.debug('CAG TEST: FILE HAS NO DECIMATION FACTOR')
         stream_handle = StringIO(TEST_DATA_ndf)
-        self.parser =  CtdpfCklWfpSioMuleParser(self.config, None, stream_handle,
-                                                self.state_callback, self.pub_callback, self.exception_callback)
+        parser = CtdpfCklWfpSioParser(self.config, stream_handle,
+                                      self.exception_callback)
+
         # next get records
-        result = self.parser.get_records(4)
+        result = parser.get_records(4)
 
         self.assertEqual(result, [self.particle_meta_ndf,
                                   self.particle_a,
@@ -267,14 +229,16 @@ class CtdpfCklWfpSioMuleParserUnitTestCase(ParserUnitTestCase):
         """
         log.debug('CAG TEST: INCORRECT HEADER')
         stream_handle = StringIO(TEST_DATA_bts)
-        self.parser =  CtdpfCklWfpSioMuleParser(self.config, None, stream_handle,
-                                                self.state_callback, self.pub_callback, self.exception_callback)
+        parser = CtdpfCklWfpSioParser(self.config, stream_handle,
+                                      self.exception_callback)
         # next get records
-        result = self.parser.get_records(4)
+        result = parser.get_records(4)
         if result:
             log.debug('CAG TEST: FAILED TO DETECT INCORRECT HEADER')
+            self.fail()
         else:
             log.debug('CAG TEST: INCORRECT HEADER DETECTED')
+            pass
 
     def test_simple_with_bad_time_stamp(self):
         """
@@ -283,14 +247,16 @@ class CtdpfCklWfpSioMuleParserUnitTestCase(ParserUnitTestCase):
         """
         log.debug('CAG TEST: BAD TIME STAMP')
         stream_handle = StringIO(TEST_DATA_bts)
-        self.parser =  CtdpfCklWfpSioMuleParser(self.config, None, stream_handle,
-                                                self.state_callback, self.pub_callback, self.exception_callback)
+        parser = CtdpfCklWfpSioParser(self.config, stream_handle,
+                                      self.exception_callback)
         # next get records
-        result = self.parser.get_records(4)
+        result = parser.get_records(4)
         if result:
             log.debug('CAG TEST: FAILED TO DETECT BAD TIME STAMP')
+            self.fail()
         else:
             log.debug('CAG TEST: BAD TIME STAMP DETECTED')
+            pass
 
     def test_simple_with_no_time_stamp(self):
         """
@@ -299,14 +265,16 @@ class CtdpfCklWfpSioMuleParserUnitTestCase(ParserUnitTestCase):
         """
         log.debug('CAG TEST: NO TIME STAMP')
         stream_handle = StringIO(TEST_DATA_nts)
-        self.parser =  CtdpfCklWfpSioMuleParser(self.config, None, stream_handle,
-                                                self.state_callback, self.pub_callback, self.exception_callback)
+        parser = CtdpfCklWfpSioParser(self.config, stream_handle,
+                                      self.exception_callback)
         # next get records
-        result = self.parser.get_records(4)
+        result = parser.get_records(4)
         if result:
             log.debug('CAG TEST: FAILED TO DETECT NO TIME STAMP')
+            self.fail()
         else:
             log.debug('CAG TEST: NO TIME STAMP DETECTED')
+            pass
 
     def test_simple_with_bad_eop(self):
         """
@@ -315,14 +283,16 @@ class CtdpfCklWfpSioMuleParserUnitTestCase(ParserUnitTestCase):
         """
         log.debug('CAG TEST: BAD END OF PROFILE')
         stream_handle = StringIO(TEST_DATA_beop)
-        self.parser =  CtdpfCklWfpSioMuleParser(self.config, None, stream_handle,
-                                                self.state_callback, self.pub_callback, self.exception_callback)
+        parser = CtdpfCklWfpSioParser(self.config, stream_handle,
+                                      self.exception_callback)
         # next get records
-        result = self.parser.get_records(4)
+        result = parser.get_records(4)
         if result:
             log.debug('CAG TEST: FAILED TO DETECT BAD END OF PROFILE')
+            self.fail()
         else:
             log.debug('CAG TEST: BAD END OF PROFILE DETECTED')
+            pass
 
     def test_simple_with_no_eop(self):
         """
@@ -331,14 +301,16 @@ class CtdpfCklWfpSioMuleParserUnitTestCase(ParserUnitTestCase):
         """
         log.debug('CAG TEST: MISSING END OF PROFILE')
         stream_handle = StringIO(TEST_DATA_neop)
-        self.parser =  CtdpfCklWfpSioMuleParser(self.config, None, stream_handle,
-                                                self.state_callback, self.pub_callback, self.exception_callback)
+        parser = CtdpfCklWfpSioParser(self.config, stream_handle,
+                                      self.exception_callback)
         # next get records
-        result = self.parser.get_records(4)
+        result = parser.get_records(4)
         if result:
             log.debug('CAG TEST: FAILED TO DETECT MISSING END OF PROFILE')
+            self.fail()
         else:
             log.debug('CAG TEST: MISSING END OF PROFILE DETECTED')
+            pass
 
     def test_simple_with_no_data_recs(self):
         """
@@ -347,14 +319,17 @@ class CtdpfCklWfpSioMuleParserUnitTestCase(ParserUnitTestCase):
         """
         log.debug('CAG TEST: NO DATA RECORDS')
         stream_handle = StringIO(TEST_DATA_ndr)
-        self.parser =  CtdpfCklWfpSioMuleParser(self.config, None, stream_handle,
-                                                self.state_callback, self.pub_callback, self.exception_callback)
+        parser = CtdpfCklWfpSioParser(self.config, stream_handle,
+                                      self.exception_callback)
         # next get records
-        result = self.parser.get_records(1)
+        result = parser.get_records(1)
+
         if result:
             log.debug('CAG TEST: FAILED TO DETECT NO DATA RECORDS CASE')
+            self.fail()
         else:
             log.debug('CAG TEST: NO DATA RECORDS DETECTED')
+            pass
 
     def test_simple_with_input_too_short(self):
         """
@@ -363,14 +338,16 @@ class CtdpfCklWfpSioMuleParserUnitTestCase(ParserUnitTestCase):
         """
         log.debug('CAG TEST: FILE IS TOO SHORT')
         stream_handle = StringIO(TEST_DATA_wts)
-        self.parser =  CtdpfCklWfpSioMuleParser(self.config, None, stream_handle,
-                                                self.state_callback, self.pub_callback, self.exception_callback)
+        parser = CtdpfCklWfpSioParser(self.config, stream_handle,
+                                      self.exception_callback)
         # next get records
-        result = self.parser.get_records(1)
+        result = parser.get_records(1)
         if result:
             log.debug('CAG TEST: FAILED TO DETECT FILE IS TOO SHORT CASE')
+            self.fail()
         else:
             log.debug('CAG TEST: FILE IS TOO SHORT DETECTED')
+            pass
 
     def test_simple_with_wrong_header(self):
         """
@@ -379,11 +356,72 @@ class CtdpfCklWfpSioMuleParserUnitTestCase(ParserUnitTestCase):
         """
         log.debug('CAG TEST: FILE HAS THE WRONG HEADER')
         stream_handle = StringIO(TEST_DATA_wwh)
-        self.parser =  CtdpfCklWfpSioMuleParser(self.config, None, stream_handle,
-                                                self.state_callback, self.pub_callback, self.exception_callback)
+        parser = CtdpfCklWfpSioParser(self.config, stream_handle,
+                                      self.exception_callback)
         # next get records
-        result = self.parser.get_records(1)
+        result = parser.get_records(1)
         if result:
             log.debug('CAG TEST: FAILED TO DETECT WRONG HEADER')
+            self.fail()
         else:
             log.debug('CAG TEST: WRONG HEADER DETECTED')
+            pass
+
+    def test_with_yml(self):
+        with open(os.path.join(RESOURCE_PATH, 'node58p1_0.wc_wfp.dat')) as stream_handle:
+            parser = CtdpfCklWfpSioParser(self.config, stream_handle,
+                                      self.exception_callback)
+
+            particles = parser.get_records(50)
+            self.assertEqual(len(particles), 50)
+            self.assert_particles(particles, 'node58p1_0.wc_wfp.yml', RESOURCE_PATH)
+
+        self.assertEqual(self.exception_callback_value, [])
+
+    def particle_to_yml(self, particles, filename, mode='w'):
+        """
+        This is added as a testing helper, not actually as part of the parser tests. Since the same particles
+        will be used for the driver test it is helpful to write them to .yml in the same form they need in the
+        results.yml fids here.
+        """
+        # open write append, if you want to start from scratch manually delete this fid
+        fid = open(os.path.join(RESOURCE_PATH, filename), mode)
+
+        fid.write('header:\n')
+        fid.write("    particle_object: 'MULTIPLE'\n")
+        fid.write("    particle_type: 'MULTIPLE'\n")
+        fid.write('data:\n')
+
+        for i in range(0, len(particles)):
+            particle_dict = particles[i].generate_dict()
+
+            fid.write('  - _index: %d\n' % (i+1))
+
+            fid.write('    particle_object: %s\n' % particles[i].__class__.__name__)
+            fid.write('    particle_type: %s\n' % particle_dict.get('stream_name'))
+            fid.write('    internal_timestamp: %f\n' % particle_dict.get('internal_timestamp'))
+
+            for val in particle_dict.get('values'):
+                if isinstance(val.get('value'), float):
+                    fid.write('    %s: %16.16f\n' % (val.get('value_id'), val.get('value')))
+                else:
+                    fid.write('    %s: %s\n' % (val.get('value_id'), val.get('value')))
+        fid.close()
+
+    def create_yml(self):
+        """
+        This utility creates a yml file
+        """
+
+        #ADCP_data_20130702.PD0 has one record in it
+        fid = open(os.path.join(RESOURCE_PATH, 'node58p1_0.wc_wfp.dat'), 'rb')
+
+        stream_handle = fid
+        parser = CtdpfCklWfpSioParser(self.config, stream_handle,
+                                      self.exception_callback)
+
+        particles = parser.get_records(800)
+
+        self.particle_to_yml(particles, 'node58p1_0.wc_wfp_ALL.yml')
+        fid.close()
+
