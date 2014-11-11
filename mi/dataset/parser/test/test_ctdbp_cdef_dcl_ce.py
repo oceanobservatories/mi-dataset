@@ -9,9 +9,6 @@
 """
 
 import os
-import numpy
-import ntplib
-import yaml
 
 from nose.plugins.attrib import attr
 
@@ -20,9 +17,8 @@ from mi.idk.config import Config
 from mi.core.exceptions import \
     RecoverableSampleException
 
-from mi.core.log import get_logger ; log = get_logger()
-from mi.core.exceptions import SampleException
-from mi.core.instrument.data_particle import DataParticleKey
+from mi.core.log import get_logger
+log = get_logger()
 
 from mi.dataset.test.test_parser import ParserUnitTestCase
 
@@ -32,15 +28,14 @@ from mi.dataset.parser.ctdbp_cdef_dcl_ce import \
     CtdbpCdefDclCeTelemeteredParserDataParticle, \
     CtdbpCdefDclCeRecoveredParserDostaParticle, \
     CtdbpCdefDclCeTelemeteredParserDostaParticle, \
-    StateKey, \
     DataParticleType, \
     PARTICLE_CLASS_KEY, \
     DOSTA_CLASS_KEY, \
     CtdbpCdefDclCeParser
 
 RESOURCE_PATH = os.path.join(Config().base_dir(), 'mi',
-                 'dataset', 'driver', 'ctdbp_cdef',
-                 'dcl_ce', 'resource')
+                             'dataset', 'driver', 'ctdbp_cdef',
+                             'dcl_ce', 'resource')
 
 MODULE_NAME = 'mi.dataset.parser.ctdbp_cdef_dcl_ce'
 
@@ -57,8 +52,6 @@ class CtdbpCdefDclCeParserUnitTestCase(ParserUnitTestCase):
     def setUp(self):
         ParserUnitTestCase.setUp(self)
 
-        self._exception_occurred = False
-
         self.config = {
             DataParticleType.INSTRUMENT_TELEMETERED: {
                 DataSetDriverConfigKeys.PARTICLE_MODULE: MODULE_NAME,
@@ -66,7 +59,7 @@ class CtdbpCdefDclCeParserUnitTestCase(ParserUnitTestCase):
                 DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT: {
                     PARTICLE_CLASS_KEY: CtdbpCdefDclCeTelemeteredParserDataParticle,
                     DOSTA_CLASS_KEY: CtdbpCdefDclCeTelemeteredParserDostaParticle,
-                    }
+                }
             },
             DataParticleType.INSTRUMENT_RECOVERED: {
                 DataSetDriverConfigKeys.PARTICLE_MODULE: MODULE_NAME,
@@ -74,13 +67,9 @@ class CtdbpCdefDclCeParserUnitTestCase(ParserUnitTestCase):
                 DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT: {
                     PARTICLE_CLASS_KEY: CtdbpCdefDclCeRecoveredParserDataParticle,
                     DOSTA_CLASS_KEY: CtdbpCdefDclCeRecoveredParserDostaParticle,
-                    }
+                }
             },
         }
-
-        self.file_ingested_value = None
- 
-        self.maxDiff = None
 
     def test_simple(self):
         """
@@ -219,7 +208,6 @@ class CtdbpCdefDclCeParserUnitTestCase(ParserUnitTestCase):
             # Make sure we obtained 3389 particles
             self.assertTrue(len(particles) == 18)
 
-
         log.debug('===== END TEST LONG STREAM =====')
 
     def test_invalid_record(self):
@@ -251,8 +239,8 @@ class CtdbpCdefDclCeParserUnitTestCase(ParserUnitTestCase):
             NUM_EXPECTED_PARTICLES = 12
 
             parser = CtdbpCdefDclCeParser(self.config.get(DataParticleType.INSTRUMENT_RECOVERED),
-                      file_handle,
-                      self.exception_callback)
+                                          file_handle,
+                                          self.exception_callback)
 
             particles = parser.get_records(NUM_PARTICLES_TO_REQUEST)
 
@@ -262,7 +250,6 @@ class CtdbpCdefDclCeParserUnitTestCase(ParserUnitTestCase):
             self.assert_(isinstance(self.exception_callback_value[0], RecoverableSampleException))
 
         log.debug('===== END TEST INVALID TIDE RECORD =====')
-
 
     def test_no_particles(self):
         """
@@ -277,14 +264,14 @@ class CtdbpCdefDclCeParserUnitTestCase(ParserUnitTestCase):
             NUM_EXPECTED_PARTICLES = 0
 
             parser = CtdbpCdefDclCeParser(self.config.get(DataParticleType.INSTRUMENT_TELEMETERED),
-                      file_handle,
-                      self.exception_callback)
+                                          file_handle,
+                                          self.exception_callback)
 
             particles = parser.get_records(NUM_PARTICLES_TO_REQUEST)
 
             self.assertEquals(len(particles), NUM_EXPECTED_PARTICLES)
-            self.assertEqual(self._exception_occurred, False)
-
+            self.assertEquals(len(self.exception_callback_value), 0)
+            
         log.debug('===== END TEST NO PARTICLES =====')
 
 

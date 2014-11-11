@@ -6,7 +6,7 @@ data:
   - _index: 1
     particle_object: CtdbpCdefDclCeRecoveredParserDataParticle
     particle_type: ctdbp_cdef_dcl_ce_instrument_recovered
-    internal_timestamp: 3619983745.338
+    internal_timestamp: 3619987345.338
     dcl_controller_timestamp: '2014/09/18 00:02:25.338'
     temp: 8.199
     conductivity: 3.62531

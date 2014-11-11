@@ -6,7 +6,7 @@ data:
   - _index: 1
     particle_object: CtdbpCdefDclCeTelemeteredParserDataParticle
     particle_type: ctdbp_cdef_dcl_ce_instrument
-    internal_timestamp: 3619983745.338
+    internal_timestamp: 3619987345.338
     dcl_controller_timestamp: '2014/09/18 00:02:25.338'
     temp: 8.199
     conductivity: 3.62531
@@ -15,7 +15,7 @@ data:
   - _index: 2
     particle_object: CtdbpCdefDclCeTelemeteredParserDataParticle
     particle_type: ctdbp_cdef_dcl_ce_instrument
-    internal_timestamp: 3619983754.392
+    internal_timestamp: 3619987354.392
     dcl_controller_timestamp: '2014/09/18 00:02:34.392'
     temp: 8.1981
     conductivity: 3.62525
@@ -24,7 +24,7 @@ data:
   - _index: 3
     particle_object: CtdbpCdefDclCeTelemeteredParserDataParticle
     particle_type: ctdbp_cdef_dcl_ce_instrument
-    internal_timestamp: 3619983764.392
+    internal_timestamp: 3619987364.392
     dcl_controller_timestamp: '2014/09/18 00:02:44.392'
     temp: 8.1979
     conductivity: 3.62524
@@ -33,7 +33,7 @@ data:
   - _index: 4
     particle_object: CtdbpCdefDclCeTelemeteredParserDataParticle
     particle_type: ctdbp_cdef_dcl_ce_instrument
-    internal_timestamp: 3619983774.394
+    internal_timestamp: 3619987374.394
     dcl_controller_timestamp: '2014/09/18 00:02:54.394'
     temp: 8.1985
     conductivity: 3.62532
@@ -42,7 +42,7 @@ data:
   - _index: 5
     particle_object: CtdbpCdefDclCeTelemeteredParserDataParticle
     particle_type: ctdbp_cdef_dcl_ce_instrument
-    internal_timestamp: 3619984643.617
+    internal_timestamp: 3619988243.617
     dcl_controller_timestamp: '2014/09/18 00:17:23.617'
     temp: 8.2019
     conductivity: 3.62567
@@ -51,7 +51,7 @@ data:
   - _index: 6
     particle_object: CtdbpCdefDclCeTelemeteredParserDataParticle
     particle_type: ctdbp_cdef_dcl_ce_instrument
-    internal_timestamp: 3619984652.393
+    internal_timestamp: 3619988252.393
     dcl_controller_timestamp: '2014/09/18 00:17:32.393'
     temp: 8.2032
     conductivity: 3.62568
@@ -60,7 +60,7 @@ data:
   - _index: 7
     particle_object: CtdbpCdefDclCeTelemeteredParserDataParticle
     particle_type: ctdbp_cdef_dcl_ce_instrument
-    internal_timestamp: 3619984662.405
+    internal_timestamp: 3619988262.405
     dcl_controller_timestamp: '2014/09/18 00:17:42.405'
     temp: 8.2051
     conductivity: 3.62608
@@ -69,7 +69,7 @@ data:
   - _index: 8
     particle_object: CtdbpCdefDclCeTelemeteredParserDataParticle
     particle_type: ctdbp_cdef_dcl_ce_instrument
-    internal_timestamp: 3619984672.394
+    internal_timestamp: 3619988272.394
     dcl_controller_timestamp: '2014/09/18 00:17:52.394'
     temp: 8.21
     conductivity: 3.62653
@@ -78,7 +78,7 @@ data:
   - _index: 9
     particle_object: CtdbpCdefDclCeTelemeteredParserDataParticle
     particle_type: ctdbp_cdef_dcl_ce_instrument
-    internal_timestamp: 3619984682.395
+    internal_timestamp: 3619988282.395
     dcl_controller_timestamp: '2014/09/18 00:18:02.395'
     temp: 8.211
     conductivity: 3.62663
@@ -87,7 +87,7 @@ data:
   - _index: 10
     particle_object: CtdbpCdefDclCeTelemeteredParserDataParticle
     particle_type: ctdbp_cdef_dcl_ce_instrument
-    internal_timestamp: 3619985541.897
+    internal_timestamp: 3619989141.897
     dcl_controller_timestamp: '2014/09/18 00:32:21.897'
     temp: 8.2158
     conductivity: 3.62713
@@ -96,7 +96,7 @@ data:
   - _index: 11
     particle_object: CtdbpCdefDclCeTelemeteredParserDataParticle
     particle_type: ctdbp_cdef_dcl_ce_instrument
-    internal_timestamp: 3619985550.393
+    internal_timestamp: 3619989150.393
     dcl_controller_timestamp: '2014/09/18 00:32:30.393'
     temp: 8.2154
     conductivity: 3.62705
@@ -105,7 +105,7 @@ data:
   - _index: 12
     particle_object: CtdbpCdefDclCeTelemeteredParserDataParticle
     particle_type: ctdbp_cdef_dcl_ce_instrument
-    internal_timestamp: 3619985560.394
+    internal_timestamp: 3619989160.394
     dcl_controller_timestamp: '2014/09/18 00:32:40.394'
     temp: 8.2124
     conductivity: 3.62674
@@ -114,7 +114,7 @@ data:
   - _index: 13
     particle_object: CtdbpCdefDclCeTelemeteredParserDataParticle
     particle_type: ctdbp_cdef_dcl_ce_instrument
-    internal_timestamp: 3619985570.394
+    internal_timestamp: 3619989170.394
     dcl_controller_timestamp: '2014/09/18 00:32:50.394'
     temp: 8.2138
     conductivity: 3.62691
@@ -123,7 +123,7 @@ data:
   - _index: 14
     particle_object: CtdbpCdefDclCeTelemeteredParserDataParticle
     particle_type: ctdbp_cdef_dcl_ce_instrument
-    internal_timestamp: 3619985580.393
+    internal_timestamp: 3619989180.393
     dcl_controller_timestamp: '2014/09/18 00:33:00.393'
     temp: 8.2148
     conductivity: 3.62699
