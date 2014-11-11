@@ -32,10 +32,7 @@ Initial Release
 __author__ = 'Christopher Fortin'
 __license__ = 'Apache 2.0'
 
-import calendar
 import re
-from datetime import datetime
-import time
 
 from mi.core.log import get_logger
 log = get_logger()
@@ -125,7 +122,7 @@ CORR_REGEX = TIMESTAMP + ONE_OR_MORE_WHITESPACE_REGEX                    # dcl c
 CORR_REGEX += '(?:' + HASH + '|' + LOGGERID_PATTERN + ')'                # a loggerid or a hash
 CORR_REGEX += ZERO_OR_MORE_WHITESPACE_REGEX
 CORR_REGEX += FLOAT + COMMA + ONE_OR_MORE_WHITESPACE_REGEX               # temp
-CORR_REGEX += FLOAT + COMMA+ ONE_OR_MORE_WHITESPACE_REGEX                # conductivity
+CORR_REGEX += FLOAT + COMMA + ONE_OR_MORE_WHITESPACE_REGEX                # conductivity
 CORR_REGEX += FLOAT + COMMA + ONE_OR_MORE_WHITESPACE_REGEX               # pressure
 CORR_REGEX += FLOAT + COMMA + ONE_OR_MORE_WHITESPACE_REGEX               # optode oxygen
 CORR_REGEX += DATE_TIME_STR + ONE_OR_MORE_WHITESPACE_REGEX               # date time
@@ -180,7 +177,6 @@ DOSTA_PARTICLE_MAP = [
     ('date_time_string',            CORR_GROUP_DATE_TIME_STRING,         str)
 ]
 
-
 # The following two keys are keys to be used with the PARTICLE_CLASSES_DICT
 # The key for the ctdbp particle class
 PARTICLE_CLASS_KEY = 'particle_class'
@@ -192,11 +188,6 @@ class DataParticleType(BaseEnum):
     INSTRUMENT_RECOVERED = 'ctdbp_cdef_dcl_ce_instrument_recovered'
     DOSTA_TELEMETERED = 'ctdbp_cdef_dcl_ce_dosta'
     DOSTA_RECOVERED = 'ctdbp_cdef_dcl_ce_dosta_recovered'
-
-
-class StateKey(BaseEnum):
-    POSITION = 'position'       # holds the file position
-
 
 
 class CtdbpCdefDclCeParserDataParticle(DataParticle):
@@ -232,14 +223,13 @@ class CtdbpCdefDclCeParserDataParticle(DataParticle):
         """       
 
         # set map based upon whether this is a corrected or unsecorrected record
-        numMatches = len(self.raw_data.groups())
-        if numMatches == NUM_CORR_MATCHGROUPS:
+        num_matches = len(self.raw_data.groups())
+        if num_matches == NUM_CORR_MATCHGROUPS:
             return [self._encode_value(name, self.raw_data.group(group), function)
                     for name, group, function in CORRDATA_PARTICLE_MAP]
-        elif numMatches == NUM_UNCORR_MATCHGROUPS:
+        elif num_matches == NUM_UNCORR_MATCHGROUPS:
             return [self._encode_value(name, self.raw_data.group(group), function)
                     for name, group, function in DATA_PARTICLE_MAP]
-
 
 
 class CtdbpCdefDclCeParserDostaParticle(DataParticle):
@@ -265,11 +255,8 @@ class CtdbpCdefDclCeParserDostaParticle(DataParticle):
         # The individual fields have already been extracted by the parser.
         # This works for both the uncorrected and the corrected files
 
-        dcl_datetime = datetime.strptime(self.raw_data.group(1), "%Y/%m/%d %H:%M:%S.%f")
-        # adjust local seconds to get to utc by subtracting timezone seconds
-        utc_time = float(dcl_datetime.strftime("%s.%f")) - time.timezone
+        utc_time = dcl_controller_timestamp_to_utc_time(self.raw_data.group(1))
         self.set_internal_timestamp(unix_time=utc_time)
-
 
     def _build_parsed_values(self):
         """
@@ -280,7 +267,6 @@ class CtdbpCdefDclCeParserDostaParticle(DataParticle):
         
         return [self._encode_value(name, self.raw_data.group(group), function)
                 for name, group, function in DOSTA_PARTICLE_MAP]
-
 
 
 class CtdbpCdefDclCeRecoveredParserDataParticle(CtdbpCdefDclCeParserDataParticle):
@@ -311,7 +297,6 @@ class CtdbpCdefDclCeTelemeteredParserDostaParticle(CtdbpCdefDclCeParserDostaPart
     _data_particle_type = DataParticleType.DOSTA_TELEMETERED
 
 
-
 class CtdbpCdefDclCeParser(SimpleParser):
     """
     """
@@ -321,8 +306,8 @@ class CtdbpCdefDclCeParser(SimpleParser):
                  exception_callback):
 
         super(CtdbpCdefDclCeParser, self).__init__(config,
-                                                stream_handle,
-                                                exception_callback)
+                                                   stream_handle,
+                                                   exception_callback)
 
         self.input_file = stream_handle
 
@@ -375,7 +360,6 @@ class CtdbpCdefDclCeParser(SimpleParser):
                                                      None,
                                                      test_corr,
                                                      None)
-                print data_particle
                 self._record_buffer.append(data_particle)
 
             else:
@@ -385,7 +369,7 @@ class CtdbpCdefDclCeParser(SimpleParser):
                 
                 if test_meta is None:
                     # something in the data didn't match a required regex, so raise an exception and press on.
-                    message = "Error while decoding parameters in data: [%s]" % (line)
+                    message = "Error while decoding parameters in data: [%s]" % line
                     self._exception_callback(RecoverableSampleException(message))
            
             # read the next line in the file
