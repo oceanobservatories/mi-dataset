@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
 """
-@package mi.dataset.driver.mflm.phsen.phsen_abcdef_recovered_driver
-@file mi-dataset/mi/dataset/driver/mflm/phsen/phsen_abcdef_recovered_driver.py
+@package mi.dataset.driver.phsen_abcdef.phsen_abcdef_recovered_driver
+@file mi-dataset/mi/dataset/driver/phsen_abcdef/phsen_abcdef_recovered_driver.py
 @author Ronald Ronquillo
 @brief Driver for the phsen_abcdef instrument
 

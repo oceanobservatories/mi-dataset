@@ -16,20 +16,16 @@ from nose.plugins.attrib import attr
 from mi.core.log import get_logger
 log = get_logger()
 
-from mi.dataset.test.test_parser import ParserUnitTestCase
-from mi.dataset.parser.phsen_abcdef import StateKey
+from mi.dataset.test.test_parser import ParserUnitTestCase, BASE_RESOURCE_PATH
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 from mi.dataset.parser.phsen_abcdef import PhsenRecoveredParser, PhsenRecoveredMetadataDataParticle, \
     PhsenRecoveredInstrumentDataParticle
 from mi.core.exceptions import SampleException
 
-from mi.idk.config import Config
-RESOURCE_PATH = os.path.join(Config().base_dir(), 'mi', 'dataset', 'driver', 'mflm', 'phsen', 'resource')
+RESOURCE_PATH = os.path.join(BASE_RESOURCE_PATH, 'phsen_abcdef', 'resource')
 
 
-@attr('UNIT', group='mi')\
-
-
+@attr('UNIT', group='mi')
 class PhsenRecoveredParserUnitTestCase(ParserUnitTestCase):
     """
     Phsen ABCDEF Parser unit test suite
@@ -51,7 +47,7 @@ class PhsenRecoveredParserUnitTestCase(ParserUnitTestCase):
     def setUp(self):
         ParserUnitTestCase.setUp(self)
         self.config = {
-            DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.phsen',
+            DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.phsen_abcdef',
             DataSetDriverConfigKeys.PARTICLE_CLASS: ['PhsenRecoveredMetadataDataParticle']
         }
         # Define test data particles and their associated timestamps which will be
@@ -390,75 +386,5 @@ class PhsenRecoveredParserUnitTestCase(ParserUnitTestCase):
 
         result = self.parser.get_records(1)
         self.assertEqual(result, [])
-
-        stream_handle.close()
-
-    def test_mid_state_start(self):
-        """
-        Test starting the parser in a state in the middle of processing
-        """
-        new_state = {StateKey.POSITION: 0x50b, StateKey.START_OF_DATA: False}
-        stream_handle = open(os.path.join(RESOURCE_PATH,
-                                          'SAMI_P0080_180713_simple.txt'))
-        self.parser = PhsenRecoveredParser(self.config, new_state, stream_handle,
-                                           self.state_callback, self.pub_callback, self.exception_callback)
-        result = self.parser.get_records(1)
-        expected_value = self.particle_128
-        self.assertEqual(result, [expected_value])
-        stream_handle.close()
-
-    def test_mid_state_after_start(self):
-        """
-        Test starting the parser in a state after the start point
-        """
-        new_state = {StateKey.POSITION: 0x55f, StateKey.START_OF_DATA: True}
-        stream_handle = open(os.path.join(RESOURCE_PATH,
-                                          'SAMI_P0080_180713_simple.txt'))
-        self.parser = PhsenRecoveredParser(self.config, new_state, stream_handle,
-                                           self.state_callback, self.pub_callback, self.exception_callback)
-        result = self.parser.get_records(1)
-        expected_value = self.particle_129
-
-        self.assertEqual(result, [expected_value])
-        stream_handle.close()
-
-    def test_mid_state_before_ph(self):
-        """
-        Test starting the parser in a state before the ph record
-        """
-        new_state = {StateKey.POSITION: 0x6db, StateKey.START_OF_DATA: True}
-        stream_handle = open(os.path.join(RESOURCE_PATH,
-                                          'SAMI_P0080_180713_simple.txt'))
-        self.parser = PhsenRecoveredParser(self.config, new_state, stream_handle,
-                                           self.state_callback, self.pub_callback, self.exception_callback)
-        result = self.parser.get_records(1)
-        expected_value = self.particle_a
-
-        self.assertEqual(result, [expected_value])
-        stream_handle.close()
-
-    def test_set_state(self):
-        """
-        Test changing to a new state after initializing the parser and
-        reading data, as if new data has been found and the state has
-        changed
-        """
-
-        stream_handle = open(os.path.join(RESOURCE_PATH, 'SAMI_P0080_180713_simple.txt'))
-        self.parser = PhsenRecoveredParser(self.config, None, stream_handle,
-                                           self.state_callback, self.pub_callback, self.exception_callback)
-        # there should only be 4 records, make sure we stop there
-        result = self.parser.get_records(1)
-        expected_value = self.particle_128
-        self.assertEqual(result, [expected_value])
-
-        new_state = {StateKey.POSITION: 0x6db, StateKey.START_OF_DATA: True}
-
-        self.parser.set_state(new_state)
-        result = self.parser.get_records(1)
-
-        expected_value = self.particle_a
-
-        self.assertEqual(result, [expected_value])
 
         stream_handle.close()
