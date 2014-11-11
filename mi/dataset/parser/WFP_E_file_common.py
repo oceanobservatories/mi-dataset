@@ -33,13 +33,13 @@ PROFILE_MATCHER = re.compile(PROFILE_REGEX)
 PROFILE_WITH_DECIM_FACTOR_REGEX = b'\xff\xff\xff[\xfa-\xff][\x00-\xff]{14}'
 PROFILE_WITH_DECIM_FACTOR_MATCHER = re.compile(PROFILE_WITH_DECIM_FACTOR_REGEX)
 
-# This regex will be used to match the flags for the coastal wfp e engineering record:
+# This regex will be used to match the flags for the coastal wfp_sio e engineering record:
 # 0001 0000 0000 0000 0001 0001 0000 0000  (regex: \x00\x01\x00{7}\x01\x00\x01\x00{4})
 # followed by 8 bytes of variable timestamp data (regex: [\x00-\xff]{8})
 WFP_E_COASTAL_FLAGS_HEADER_REGEX = b'(\x00\x01\x00{7}\x01\x00\x01\x00{4})([\x00-\xff]{8})'
 WFP_E_COASTAL_FLAGS_HEADER_MATCHER = re.compile(WFP_E_COASTAL_FLAGS_HEADER_REGEX)
 
-# This regex will be used to match the flags for the global wfp e engineering record:
+# This regex will be used to match the flags for the global wfp_sio e engineering record:
 # 0001 0000 0000 0001 0000 0000 0000 0001 (regex: \x00\x01\x00{5}\x01\x00{7}\x01)
 # followed by 8 bytes of variable timestamp data (regex: [\x00-\xff]{8})
 WFP_E_GLOBAL_FLAGS_HEADER_REGEX = b'(\x00\x01\x00{5}\x01\x00{7}\x01)([\x00-\xff]{8})'
@@ -51,6 +51,8 @@ WFP_E_GLOBAL_RECOVERED_ENG_DATA_SAMPLE_MATCHER = re.compile(WFP_E_GLOBAL_RECOVER
 
 # 4 bytes for the Engineering Data Record time stamp, 26 bytes for the global Engineering Data Record
 WFP_E_GLOBAL_RECOVERED_ENG_DATA_SAMPLE_BYTES = 30
+
+WFP_TIMESTAMP_BYTES = 4
 
 HEADER_BYTES = 24
 

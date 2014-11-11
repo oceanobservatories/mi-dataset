@@ -2,7 +2,7 @@
 
 """
 @package mi.dataset.parser.wfp_eng_wfp_sio_mule
-@file marine-integrations/mi/dataset/parser/wfp_eng_wfp_sio_mule.py
+@file marine-integrations/mi/dataset/parser/wfp_eng_wfp_sio.py
 @author Mark Worden
 @brief Parser for the wfp_eng_wfp_sio_mule dataset driver
 Release notes:
@@ -22,12 +22,13 @@ from mi.core.log import get_logger
 log = get_logger()
 from mi.core.common import BaseEnum
 from mi.core.instrument.data_particle import DataParticle, DataParticleKey
-from mi.core.exceptions import SampleException, RecoverableSampleException
-from mi.dataset.parser.sio_mule_common import SioMuleParser, SIO_HEADER_MATCHER
+from mi.core.exceptions import SampleException
+from mi.dataset.parser.sio_mule_common import SioParser, SIO_HEADER_MATCHER, \
+    SIO_TIMESTAMP_NUM_BYTES
 from mi.dataset.parser.WFP_E_file_common import WFP_E_GLOBAL_FLAGS_HEADER_REGEX, \
-    WFP_E_GLOBAL_RECOVERED_ENG_DATA_SAMPLE_MATCHER, WFP_E_GLOBAL_RECOVERED_ENG_DATA_SAMPLE_BYTES
+    WFP_E_GLOBAL_RECOVERED_ENG_DATA_SAMPLE_BYTES
 from mi.dataset.parser.WFP_E_file_common import STATUS_BYTES_AUGMENTED, \
-    STATUS_BYTES, STATUS_START_MATCHER
+    STATUS_BYTES, STATUS_START_MATCHER, WFP_TIMESTAMP_BYTES
 
 # The regex for a WFP E data block.
 DATA_REGEX = WFP_E_GLOBAL_FLAGS_HEADER_REGEX + '(.*)\x03'
@@ -63,7 +64,25 @@ class WfpEngWfpSioMuleParserDataEngineeringParticleKey(BaseEnum):
     WFP_PROF_PRESSURE = 'wfp_prof_pressure'
 
 
-class WfpEngWfpSioMuleParserDataStartTimeParticle(DataParticle):
+class WfpEngWfpSioDataParticle(DataParticle):
+    """
+    A base class for wfp_eng_wfp_sio data particles.
+    """
+
+    def _build_result(self, encoding_rules):
+        """
+        Uses a supplied set of encoding rules to generate a list of
+        encoded parameter values.
+        """
+        result = []
+
+        for particle_key, value, encoding_func in encoding_rules:
+            result.append(self._encode_value(particle_key, value, encoding_func))
+
+        return result
+
+
+class WfpEngWfpSioMuleParserDataStartTimeParticle(WfpEngWfpSioDataParticle):
     """
     Class for building the WfpEngWfpSioMuleParserDataStartTimeParticle
     """
@@ -72,42 +91,29 @@ class WfpEngWfpSioMuleParserDataStartTimeParticle(DataParticle):
 
     def _build_parsed_values(self):
         """
-        Take something in the data format and turn it into
-        an array of dictionaries defining the data in the particle
-        with the appropriate tag.
-        @throws SampleException If there is a problem with sample creation
+        Takes the raw_data provided on construction and extracts particle data from
+        it to create a list of encoded parameter values.
         """
-        result = []
 
-        try:
+        # Unpack the binary data content that includes:
+        # - SIO controller timestamp 8 ASCII char string)
+        # - sensor start time unsigned int
+        # - profile start time unsigned int
+        fields = struct.unpack_from('>8sII', self.raw_data)
 
-            # Unpack the binary data content that includes:
-            # - SIO controller timestamp 8 ASCII char string)
-            # - sensor start time unsigned int
-            # - profile start time unsigned int
-            fields = struct.unpack_from('>8sII', self.raw_data)
+        # Unpack the SIO controller timestamp in ASCII to unsigned int
+        controller_timestamp = struct.unpack_from('>I', binascii.a2b_hex(fields[0]))[0]
 
-            # Unpack the SIO controller timestamp in ASCII to unsigned int
-            controller_timestamp = struct.unpack_from('>I', binascii.a2b_hex(fields[0]))[0]
+        sensor_start_time = fields[1]
+        profile_start_time = fields[2]
 
-            sensor_start_time = fields[1]
-            profile_start_time = fields[2]
-
-            result.append(self._encode_value(WfpEngWfpSioMuleParserDataStartTimeParticleKey.CONTROLLER_TIMESTAMP,
-                                             controller_timestamp, int))
-            result.append(self._encode_value(WfpEngWfpSioMuleParserDataStartTimeParticleKey.WFP_SENSOR_START,
-                                             sensor_start_time, int))
-            result.append(self._encode_value(WfpEngWfpSioMuleParserDataStartTimeParticleKey.WFP_PROFILE_START,
-                                             profile_start_time, int))
-
-        except (ValueError, TypeError, IndexError) as ex:
-            raise RecoverableSampleException("Error (%s) while decoding parameters in data: [%s]"
-                                             % (ex, self.raw_data))
-
-        return result
+        return self._build_result([
+            (WfpEngWfpSioMuleParserDataStartTimeParticleKey.CONTROLLER_TIMESTAMP, controller_timestamp, int),
+            (WfpEngWfpSioMuleParserDataStartTimeParticleKey.WFP_SENSOR_START, sensor_start_time, int),
+            (WfpEngWfpSioMuleParserDataStartTimeParticleKey.WFP_PROFILE_START, profile_start_time, int)])
 
 
-class WfpEngWfpSioMuleParserDataStatusParticle(DataParticle):
+class WfpEngWfpSioMuleParserDataStatusParticle(WfpEngWfpSioDataParticle):
     """
     Class for building the WfpEngWfpSioMuleParserDataStatusParticle
     """
@@ -116,67 +122,53 @@ class WfpEngWfpSioMuleParserDataStatusParticle(DataParticle):
 
     def _build_parsed_values(self):
         """
-        Take something in the data format and turn it into
-        an array of dictionaries defining the data in the particle
-        with the appropriate tag.
-        @throws SampleException If there is a problem with sample creation
+        Takes the raw_data provided on construction and extracts particle data from
+        it to create a list of encoded parameter values.
         """
 
-        result = []
+        # Default the optional decimation factor to None
+        decimation_factor = None
 
-        try:
+        # Unpack the binary data content that includes:
+        # - SIO controller timestamp 8 ASCII char string)
+        # - indicator int
+        # - ramp status short
+        # - profile status short
+        # - profile stop time unsigned int
+        # - sensor stop time unsigned int
+        # - (optional) decimation factor
+        if len(self.raw_data) == SIO_TIMESTAMP_NUM_BYTES+STATUS_BYTES_AUGMENTED:
+            # Need to deal with the extra decimation factor
+            fields = struct.unpack_from('>8sihhIIH', self.raw_data)
 
-            # Default the optional decimation factor to None
-            decimation_factor = None
+            # The last field is the unsigned int 16 decimation factor
+            decimation_factor = fields[6]
+        else:
+            fields = struct.unpack_from('>8sihhII', self.raw_data)
 
-            # Unpack the binary data content that includes:
-            # - SIO controller timestamp 8 ASCII char string)
-            # - indicator int
-            # - ramp status short
-            # - profile status short
-            # - profile stop time unsigned int
-            # - sensor stop time unsigned int
-            # - (optional) decimation factor
-            if len(self.raw_data) == STATUS_BYTES_AUGMENTED:
-                # Need to deal with the extra decimation factor
-                fields = struct.unpack_from('>8sihhIIH', self.raw_data)
+        # Unpack the SIO controller timestamp in ASCII to unsigned int
+        controller_timestamp = struct.unpack_from('>I', binascii.a2b_hex(fields[0]))[0]
+        indicator = fields[1]
+        ramp_status = fields[2]
+        profile_status = fields[3]
+        profile_stop_time = fields[4]
+        sensor_stop_time = fields[5]
 
-                # The last field is the unsigned int 16 decimation factor
-                decimation_factor = fields[6]
-            else:
-                fields = struct.unpack_from('>8sihhII', self.raw_data)
+        result = self._build_result([
+            (WfpEngWfpSioMuleParserDataStatusParticleKey.CONTROLLER_TIMESTAMP, controller_timestamp, int),
+            (WfpEngWfpSioMuleParserDataStatusParticleKey.WFP_INDICATOR, indicator, int),
+            (WfpEngWfpSioMuleParserDataStatusParticleKey.WFP_RAMP_STATUS, ramp_status, int),
+            (WfpEngWfpSioMuleParserDataStatusParticleKey.WFP_PROFILE_STATUS, profile_status, int),
+            (WfpEngWfpSioMuleParserDataStatusParticleKey.WFP_PROFILE_STOP, profile_stop_time, int),
+            (WfpEngWfpSioMuleParserDataStatusParticleKey.WFP_SENSOR_STOP, sensor_stop_time, int)])
 
-            # Unpack the SIO controller timestamp in ASCII to unsigned int
-            controller_timestamp = struct.unpack_from('>I', binascii.a2b_hex(fields[0]))[0]
-            indicator = fields[1]
-            ramp_status = fields[2]
-            profile_status = fields[3]
-            profile_stop_time = fields[4]
-            sensor_stop_time = fields[5]
-
-            result.append(self._encode_value(WfpEngWfpSioMuleParserDataStatusParticleKey.CONTROLLER_TIMESTAMP,
-                                             controller_timestamp, int))
-            result.append(self._encode_value(WfpEngWfpSioMuleParserDataStatusParticleKey.WFP_INDICATOR,
-                                             indicator, int))
-            result.append(self._encode_value(WfpEngWfpSioMuleParserDataStatusParticleKey.WFP_RAMP_STATUS,
-                                             ramp_status, int))
-            result.append(self._encode_value(WfpEngWfpSioMuleParserDataStatusParticleKey.WFP_PROFILE_STATUS,
-                                             profile_status, int))
-            result.append(self._encode_value(WfpEngWfpSioMuleParserDataStatusParticleKey.WFP_PROFILE_STOP,
-                                             profile_stop_time, int))
-            result.append(self._encode_value(WfpEngWfpSioMuleParserDataStatusParticleKey.WFP_SENSOR_STOP,
-                                             sensor_stop_time, int))
-            result.append({DataParticleKey.VALUE_ID: WfpEngWfpSioMuleParserDataStatusParticleKey.WFP_DECIMATION_FACTOR,
-                           DataParticleKey.VALUE: decimation_factor})
-
-        except (ValueError, TypeError, IndexError) as ex:
-            raise RecoverableSampleException("Error (%s) while decoding parameters in data: [%s]"
-                                             % (ex, self.raw_data))
+        result.append({DataParticleKey.VALUE_ID: WfpEngWfpSioMuleParserDataStatusParticleKey.WFP_DECIMATION_FACTOR,
+                       DataParticleKey.VALUE: decimation_factor})
 
         return result
 
 
-class WfpEngWfpSioMuleParserDataEngineeringParticle(DataParticle):
+class WfpEngWfpSioMuleParserDataEngineeringParticle(WfpEngWfpSioDataParticle):
     """
     Class for building the WfpEngWfpSioMuleParserDataEngineeringParticle
     """
@@ -185,66 +177,38 @@ class WfpEngWfpSioMuleParserDataEngineeringParticle(DataParticle):
     
     def _build_parsed_values(self):
         """
-        Take something in the binary data values and turn it into a
-        particle with the appropriate tag.
-        throws SampleException If there is a problem with sample creation
+        Takes the raw_data provided on construction and extracts particle data from
+        it to create a list of encoded parameter values.
         """
 
-        match = WFP_E_GLOBAL_RECOVERED_ENG_DATA_SAMPLE_MATCHER.match(self.raw_data)
+        # Let's first get the 32-bit unsigned int timestamp which should be in the first match group
+        fields = struct.unpack_from('>I', self.raw_data)
+        wfp_timestamp = fields[0]
 
-        if not match:
-            raise RecoverableSampleException(
-                "WfpEngWfpSioMuleParserDataEngineeringParticle: No regex match of parsed sample data: [%s]",
-                self.raw_data)
+        # Now let's grab the global engineering data record match group
+        # Should be 3 float 32-bit values
+        fields = struct.unpack_from('>fff', self.raw_data[WFP_TIMESTAMP_BYTES:])
 
-        try:
-            # Let's first get the 32-bit unsigned int timestamp which should be in the first match group
-            fields = struct.unpack_from('>I', match.group(1))
-            wfp_timestamp = fields[0]
+        current = fields[0]
+        voltage = fields[1]
+        pressure = fields[2]
 
-            # Now let's grab the global engineering data record match group
-            # Should be 3 float 32-bit values
-            fields = struct.unpack_from('>fff', match.group(2))
-
-            current = fields[0]
-            voltage = fields[1]
-            pressure = fields[2]
-
-            result = [self._encode_value(WfpEngWfpSioMuleParserDataEngineeringParticleKey.WFP_TIMESTAMP,
-                                         wfp_timestamp, int),
-                      self._encode_value(WfpEngWfpSioMuleParserDataEngineeringParticleKey.WFP_PROF_CURRENT,
-                                         current, float),
-                      self._encode_value(WfpEngWfpSioMuleParserDataEngineeringParticleKey.WFP_PROF_VOLTAGE,
-                                         voltage, float),
-                      self._encode_value(WfpEngWfpSioMuleParserDataEngineeringParticleKey.WFP_PROF_PRESSURE,
-                                         pressure, float)]
-
-        except (ValueError, TypeError, IndexError) as ex:
-            raise RecoverableSampleException("Error (%s) while decoding parameters in data: [%s]"
-                                             % (ex, match.group(0)))
-
-        return result
+        return self._build_result([
+            (WfpEngWfpSioMuleParserDataEngineeringParticleKey.WFP_TIMESTAMP, wfp_timestamp, int),
+            (WfpEngWfpSioMuleParserDataEngineeringParticleKey.WFP_PROF_CURRENT, current, float),
+            (WfpEngWfpSioMuleParserDataEngineeringParticleKey.WFP_PROF_VOLTAGE, voltage, float),
+            (WfpEngWfpSioMuleParserDataEngineeringParticleKey.WFP_PROF_PRESSURE, pressure, float)])
 
 
-class WfpEngWfpSioMuleParser(SioMuleParser):
+class WfpEngWfpSioParser(SioParser):
 
     def __init__(self,
                  config,
-                 state,
                  stream_handle,
-                 state_callback,
-                 publish_callback,
-                 exception_callback,
-                 *args, **kwargs):
-        super(WfpEngWfpSioMuleParser, self).__init__(config,
+                 exception_callback):
+        super(WfpEngWfpSioParser, self).__init__(config,
                                                      stream_handle,
-                                                     state,
-                                                     self.sieve_function,
-                                                     state_callback,
-                                                     publish_callback,
-                                                     exception_callback,
-                                                     *args,
-                                                     **kwargs)
+                                                     exception_callback)
 
     def parse_chunks(self):
         """
@@ -284,7 +248,7 @@ class WfpEngWfpSioMuleParser(SioMuleParser):
                                                       sensor_profile_start_time_data,
                                                       float(ntplib.system_to_ntp_time(timestamp)))
                         if sample:
-                            log.debug("Sample found: %s", sample)
+                            log.trace("Sample found: %s", sample.generate())
                             # create particle
                             result_particles.append(sample)
                             sample_count += 1
@@ -307,7 +271,7 @@ class WfpEngWfpSioMuleParser(SioMuleParser):
                         # Check for an an augmented status first
                         if start_index_augmented >= 0 and \
                                 STATUS_START_MATCHER.match(profile_eng_data[start_index_augmented:parse_end_point]):
-                            log.debug("Found OffloadProfileData with decimation factor")
+                            log.trace("Found OffloadProfileData with decimation factor")
 
                             fields_prof = struct.unpack_from('>I', profile_eng_data[start_index_augmented+8:])
                             timestamp = fields_prof[0]
@@ -323,7 +287,7 @@ class WfpEngWfpSioMuleParser(SioMuleParser):
                         # Check for a normal status
                         elif start_index_normal >= 0 and \
                                 STATUS_START_MATCHER.match(profile_eng_data[start_index_normal:parse_end_point]):
-                            log.debug("Found OffloadProfileData without decimation factor")
+                            log.trace("Found OffloadProfileData without decimation factor")
 
                             fields_prof = struct.unpack_from('>I', profile_eng_data[start_index_normal+8:])
                             timestamp = fields_prof[0]
@@ -335,10 +299,10 @@ class WfpEngWfpSioMuleParser(SioMuleParser):
 
                             parse_end_point = start_index_normal
 
-                        # If neither, we are dealing with a global wfp e recovered engineering data record,
+                        # If neither, we are dealing with a global wfp_sio e recovered engineering data record,
                         # so we will save the start and end points
                         elif global_recovered_eng_rec_index >= 0:
-                            log.debug("Found OffloadEngineeringData")
+                            log.trace("Found OffloadEngineeringData")
 
                             fields_prof = struct.unpack_from('>I', profile_eng_data[global_recovered_eng_rec_index:])
                             timestamp = fields_prof[0]
@@ -359,16 +323,13 @@ class WfpEngWfpSioMuleParser(SioMuleParser):
                             self._exception_callback(SampleException("Data invalid"))
 
                         if sample:
-                            log.debug("Sample found: %s", sample)
+                            log.trace("Sample found: %s", sample.generate())
                             # create particle
                             result_particles.append(sample)
                             sample_count += 1
 
                 else:
                     self._exception_callback(SampleException("Unexpected data"))
-
-            # Important:  We must set the sample count for every chunk
-            self._chunk_sample_count.append(sample_count)
 
             (timestamp, chunk, start, end) = self._chunker.get_next_data_with_index()
 
