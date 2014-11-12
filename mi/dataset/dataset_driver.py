@@ -97,6 +97,6 @@ class SimpleDatasetDriver(DataSetDriver):
         :return: None
         """
 
-        log.debug("ERROR: " + exception)
+        log.debug("ERROR: %r", exception)
         self._particleDataHdlrObj.setParticleDataCaptureFailure()
     
