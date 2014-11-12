@@ -942,7 +942,7 @@ class AdcpPd0DataParticle(DataParticle):
         @throws RecoverableSampleException If there is a problem with sample creation
         """
 
-        log.info("*** parse_bottom_track_data called***")
+        log.debug("*** parse_bottom_track_data called***")
         #info statement to find a record with bottom track data!
 
         (bottom_track_id, bt_pings_per_ensemble, bt_delay_before_reacquire,

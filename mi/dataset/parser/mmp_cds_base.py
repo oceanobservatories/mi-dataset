@@ -208,8 +208,6 @@ class MmpCdsParser(BufferLoadingParser):
         records_to_return = self._record_buffer[particles_returned:end_range]
         if len(records_to_return) > 0:
 
-            log.info(records_to_return)
-
             # Update the number of particles returned
             self._state[StateKey.PARTICLES_RETURNED] = particles_returned+num_to_fetch
 

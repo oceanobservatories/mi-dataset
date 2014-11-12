@@ -35,7 +35,7 @@ class WfpEngStcImodemParser(WfpEFileParser):
                  publish_callback,
                  *args, **kwargs):
         self._saved_header = None
-        log.info(config)
+        log.debug(config)
         particle_classes_dict = config.get(DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT)
         self._start_data_particle_class = particle_classes_dict.get('start_data_particle_class')
         self._status_data_particle_class = particle_classes_dict.get('status_data_particle_class')
@@ -80,7 +80,7 @@ class WfpEngStcImodemParser(WfpEFileParser):
             fields = struct.unpack('>II', match.group(2))
             timestamp = int(fields[1])
             self._timestamp = float(ntplib.system_to_ntp_time(timestamp))
-            log.info(self._start_data_particle_class)
+            log.debug(self._start_data_particle_class)
             sample = self._extract_sample(self._start_data_particle_class,
                                           None,
                                           header, self._timestamp)
@@ -108,7 +108,7 @@ class WfpEngStcImodemParser(WfpEFileParser):
             # use the profile stop time
             timestamp = int(fields[3])
             self._timestamp = float(ntplib.system_to_ntp_time(timestamp))
-            log.info(self._status_data_particle_class)
+            log.debug(self._status_data_particle_class)
             sample = self._extract_sample(self._status_data_particle_class, None,
                                           record, self._timestamp)
             self._increment_state(STATUS_BYTES)
@@ -120,7 +120,7 @@ class WfpEngStcImodemParser(WfpEFileParser):
             timestamp = int(fields[0])
             self._timestamp = float(ntplib.system_to_ntp_time(timestamp))
             log.trace("Converting record timestamp %f to ntp timestamp %f", timestamp, self._timestamp)
-            log.info(self._engineering_data_particle_class)
+            log.debug(self._engineering_data_particle_class)
             sample = self._extract_sample(self._engineering_data_particle_class, None,
                                           record, self._timestamp)
             self._increment_state(SAMPLE_BYTES)

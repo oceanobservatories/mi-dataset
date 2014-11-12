@@ -389,12 +389,12 @@ class PhsenRecoveredParser(BufferLoadingParser):
 
         while chunk is not None:
 
-            log.info("Chunk: ****%s****", chunk)
+            log.debug("Chunk: ****%s****", chunk)
 
             self._increment_state(len(chunk))
             if not self._read_state[StateKey.START_OF_DATA]:
 
-                log.info("In if not self._read_state[StateKey.START_OF_DATA]")
+                log.debug("In if not self._read_state[StateKey.START_OF_DATA]")
 
                 start_of_data = START_OF_DATA_MATCHER.match(chunk)
                 if start_of_data:

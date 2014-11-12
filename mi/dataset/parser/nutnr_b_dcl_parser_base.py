@@ -348,8 +348,6 @@ class NutnrBDclParser(Parser):
         utc_time = dcl_controller_timestamp_to_utc_time(idle_match.group(
             MetaDataMatchGroups.META_GROUP_DCL_TIMESTAMP))
 
-        log.info("%s", utc_time)
-
         return utc_time
 
     def _extract_instrument_ntp_timestamp(self, inst_match):
