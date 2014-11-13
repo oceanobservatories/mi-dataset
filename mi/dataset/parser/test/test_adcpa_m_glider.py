@@ -87,7 +87,7 @@ class AdcpsMGliderParserUnitTestCase(ParserUnitTestCase):
         """
 
         #ADCP_data_20130702.PD0 has one record in it
-        fid = open(os.path.join(RESOURCE_PATH, 'NE051400.PD0'), 'rb')
+        fid = open(os.path.join(RESOURCE_PATH, 'ND161646.PD0'), 'rb')
 
         self.stream_handle = fid
         self.parser = AdcpPd0Parser(self.config_recov, None, self.stream_handle,
@@ -95,7 +95,7 @@ class AdcpsMGliderParserUnitTestCase(ParserUnitTestCase):
 
         particles = self.parser.get_records(250)
 
-        self.particle_to_yml(particles, 'NE051400.yml')
+        self.particle_to_yml(particles, 'ND161646.yml')
         fid.close()
 
     def trim_file(self):
@@ -198,9 +198,29 @@ class AdcpsMGliderParserUnitTestCase(ParserUnitTestCase):
                                     self.state_callback, self.publish_callback, self.exception_callback)
 
         particles = self.parser.get_records(54)
-        log.info('got back %d records', len(particles))
+        log.debug('got back %d records', len(particles))
 
         self.assert_particles(particles, 'ND072023_recov.yml', RESOURCE_PATH)
+
+
+        fid.close()
+
+    def test_with_status_data(self):
+        """
+        Verify the parser will work with a file that contains the status data block
+        This was found during integration test with real recovered data
+        """
+
+        fid = open(os.path.join(RESOURCE_PATH, 'ND161646.PD0'), 'rb')
+
+        self.stream_handle = fid
+        self.parser = AdcpPd0Parser(self.config_recov, None, self.stream_handle,
+                                    self.state_callback, self.publish_callback, self.exception_callback)
+
+        particles = self.parser.get_records(250)
+        log.debug('got back %d records', len(particles))
+
+        self.assert_particles(particles, 'ND161646.yml', RESOURCE_PATH)
 
 
         fid.close()
