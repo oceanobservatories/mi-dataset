@@ -27,7 +27,7 @@ log = get_logger()
 from mi.core.common import BaseEnum
 from mi.core.instrument.data_particle import \
     DataParticle, DataParticleKey, DataParticleValue
-from mi.core.exceptions import SampleException, RecoverableSampleException, \
+from mi.core.exceptions import SampleException, \
     DatasetParserException, UnexpectedDataException
 from mi.dataset.dataset_parser import BufferLoadingParser
 
@@ -388,7 +388,7 @@ class AdcpPd0DataParticle(DataParticle):
             elif data_type == VELOCITY_ID:
 
                 if not fixed_leader_found:
-                    raise RecoverableSampleException("No Fixed leader")
+                    raise SampleException("No Fixed leader")
 
                 # number of bytes is a function of the user selectable number of
                 # depth cells (WN command), calculated above
@@ -399,7 +399,7 @@ class AdcpPd0DataParticle(DataParticle):
             # correlation magnitude data (x00x02)
             elif data_type == CORRELATION_ID:
                 if not fixed_leader_found:
-                    raise RecoverableSampleException("No Fixed leader")
+                    raise SampleException("No Fixed leader")
 
                 # number of bytes is a function of the user selectable number of
                 # depth cells (WN command), calculated above
@@ -410,7 +410,7 @@ class AdcpPd0DataParticle(DataParticle):
             # echo intensity data (x00x03)
             elif data_type == ECHO_INTENSITY_ID:
                 if not fixed_leader_found:
-                    raise RecoverableSampleException("No Fixed leader")
+                    raise SampleException("No Fixed leader")
 
                 # number of bytes is a function of the user selectable number of
                 # depth cells (WN command), calculated above
@@ -421,7 +421,7 @@ class AdcpPd0DataParticle(DataParticle):
             # percent-good data (x00x04)
             elif data_type == PERCENT_GOOD_ID:
                 if not fixed_leader_found:
-                    raise RecoverableSampleException("No Fixed leader")
+                    raise SampleException("No Fixed leader")
 
                 # number of bytes is a function of the user selectable number of
                 # depth cells (WN command), calculated above
@@ -432,12 +432,12 @@ class AdcpPd0DataParticle(DataParticle):
             # bottom track data (x00x06)
             elif data_type == BOTTOM_TRACK_ID:
                 if not fixed_leader_found:
-                    raise RecoverableSampleException("No Fixed leader")
+                    raise SampleException("No Fixed leader")
 
                 data = self.raw_data[offset:offset + bottom_track_bytes]
                 self.parse_bottom_track_data(data)
             else:
-                raise RecoverableSampleException("unrecognized ID")
+                log.warn("Found unrecognizeable data type ID in PD0 file. ID(hex) = %.4x ", data_type)
         return self.final_result
 
     def parse_fixed_leader(self, data):
@@ -490,7 +490,7 @@ class AdcpPd0DataParticle(DataParticle):
         #bitwise right shift 4 bits note: must do the and first then shift
 
         if 0 != data_flag:
-            raise RecoverableSampleException("real/sim data_flag was not equal to 0")
+            log.warn("real/sim data_flag was not equal to 0")
 
         self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.DATA_FLAG,
                                                     data_flag, int))
@@ -508,7 +508,7 @@ class AdcpPd0DataParticle(DataParticle):
                                                     blank_after_transmit, int))
 
         if 1 != signal_processing_mode:
-            raise RecoverableSampleException("signal_processing_mode was not equal to 1")
+            log.warn("signal_processing_mode was not equal to 1")
 
         self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.SIGNAL_PROCESSING_MODE,
                                                     signal_processing_mode, int))
@@ -909,7 +909,6 @@ class AdcpPd0DataParticle(DataParticle):
         """
         Parse the percent good portion of the particle
 
-        @throws RecoverableSampleException If there is a problem with sample creation
         """
         num_cells = self.num_depth_cells
         offset = ID_BYTES
@@ -939,7 +938,6 @@ class AdcpPd0DataParticle(DataParticle):
         """
         Parse the bottom track portion of the particle
 
-        @throws RecoverableSampleException If there is a problem with sample creation
         """
 
         log.debug("*** parse_bottom_track_data called***")
