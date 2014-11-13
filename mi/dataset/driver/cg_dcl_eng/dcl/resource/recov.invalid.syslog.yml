@@ -55,7 +55,7 @@ data:
     gps_quality: 2
     gps_num_satellites: 8
     header_timestamp: '2014/09/15 00:04:33.020'
-    msg_sent_timestamp: '2014/09/15 00:04:19.676'
+    message_sent_timestamp: '2014/09/15 00:04:19.676'
     gps_hdop:          1.00000
     date_of_fix: '150914'
     latitude:         59.92748
@@ -70,7 +70,7 @@ data:
     bad_pulses: 0
     nmea_lock: 1
     header_timestamp: '2014/09/15 00:04:37.021'
-    msg_sent_timestamp: '2014/09/15 00:04:15.000'
+    message_sent_timestamp: '2014/09/15 00:04:15.000'
     delta: 999963
     delta_max: -48
   - _index: 8
@@ -81,7 +81,7 @@ data:
     bad_pulses: 0
     nmea_lock: 1
     header_timestamp: '2014/09/15 00:09:38.920'
-    msg_sent_timestamp: '2014/09/15 00:09:15.000'
+    message_sent_timestamp: '2014/09/15 00:09:15.000'
     delta: 1000000
     delta_max: 39
   - _index: 9
@@ -154,7 +154,7 @@ data:
     time_last_communicated: 1410739431
     bytes_sent: 1904
     header_timestamp: '2014/09/15 00:04:20.025'
-    msg_sent_timestamp: '2014/09/15 00:03:51.083'
+    message_sent_timestamp: '2014/09/15 00:03:51.083'
     good_records: 1280759
     time_received_last_data: 1410739431
     bad_bytes: 0
@@ -169,7 +169,7 @@ data:
     ntp_offset:         -0.20200
     message_sent_type: 'NTP'
     header_timestamp: '2014/09/15 00:04:20.260'
-    msg_sent_timestamp: '2014/09/15 00:04:20.031'
+    message_sent_timestamp: '2014/09/15 00:04:20.031'
   - _index: 13
     particle_object: CgDclEngDclDlogAarmRecoveredDataParticle
     particle_type: cg_dcl_eng_dcl_dlog_aarm_recovered

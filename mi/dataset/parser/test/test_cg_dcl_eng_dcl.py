@@ -236,7 +236,7 @@ class CgParserUnitTestCase(ParserUnitTestCase):
 
             self.assertEqual(len(particles), 13)
 
-            self.assertEqual(self._exceptions_detected, 35)
+            self.assertEqual(self._exceptions_detected, 30)
 
             self.assert_particles(particles, 'recov.invalid.syslog.yml', RESOURCE_PATH)
 
@@ -252,7 +252,7 @@ class CgParserUnitTestCase(ParserUnitTestCase):
 
             self.assertEqual(len(particles), 13)
 
-            self.assertEqual(self._exceptions_detected, 35)
+            self.assertEqual(self._exceptions_detected, 30)
 
             self.assert_particles(particles, 'telem.invalid.syslog.yml', RESOURCE_PATH)
 
@@ -324,3 +324,28 @@ class CgParserUnitTestCase(ParserUnitTestCase):
                 CgDclEngDclParser(self._bad_telemetered_config_2, file_handle,
                                   self.exception_callback)
 
+    def test_bug_1271_fix(self):
+        """
+        TBD
+        """
+        log.debug('===== START TEST BUG 1271 FIX =====')
+
+        with open(os.path.join(RESOURCE_PATH, '20140626.syslog.log')) as file_handle:
+            parser = CgDclEngDclParser(self._recovered_config, file_handle,
+                                       self.exception_callback)
+
+            particles = parser.get_records(100)
+
+            self.assertEqual(self._exceptions_detected, 0)
+
+            self.assert_particles(particles, 'recov.20140626.syslog.yml', RESOURCE_PATH)
+
+        with open(os.path.join(RESOURCE_PATH, '20140626.syslog.log')) as file_handle:
+            parser = CgDclEngDclParser(self._telemetered_config, file_handle,
+                                       self.exception_callback)
+
+            particles = parser.get_records(100)
+
+            self.assertEqual(self._exceptions_detected, 0)
+
+            self.assert_particles(particles, 'telem.20140626.syslog.yml', RESOURCE_PATH)
