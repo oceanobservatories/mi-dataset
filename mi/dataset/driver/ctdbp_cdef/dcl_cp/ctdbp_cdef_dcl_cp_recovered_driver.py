@@ -3,8 +3,8 @@
 """
 @package mi.dataset.driver.ctdbp_cdef.dcl_cp.ctdbp_cdef_dcl_cp
 @file mi-dataset/mi/dataset/driver/ctdbp_cdef/dcl_cp/ctdbp_cdef_dcl_cp.py
-@author Christopher Fortin
-@brief Driver for the ctdbp_cdef_dcl_cp instrument
+@author Tapana Gupta
+@brief Driver for the ctdbp_cdef_dcl_cp instrument (Recovered Data)
 
 Release notes:
 
@@ -13,9 +13,12 @@ Initial Release
 
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 from mi.dataset.dataset_driver import SimpleDatasetDriver
-from mi.core.exceptions import NotImplementedException
-from mi.dataset.parser.ctdbp_cdef_dcl_cp import CtdbpCdefDclCpParser
+from mi.dataset.parser.ctdbp_cdef_dcl_cp import \
+    CtdbpCdefDclCpParser, \
+    CtdbpCdefDclCpRecoveredParserDataParticle
 
+
+MODULE_NAME = 'mi.dataset.parser.ctdbp_cdef_dcl_cp'
 
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     """
@@ -29,13 +32,13 @@ def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     with open(sourceFilePath, 'rb') as stream_handle:
 
         # create an instance of the concrete driver class defined below
-        driver = CtdbpCdefDclCp(basePythonCodePath, stream_handle, particleDataHdlrObj)
+        driver = CtdbpCdefDclCpRecoveredDriver(basePythonCodePath, stream_handle, particleDataHdlrObj)
         driver.processFileStream()
 
     return particleDataHdlrObj
 
 
-class CtdbpCdefDclCp(SimpleDatasetDriver):
+class CtdbpCdefDclCpRecoveredDriver(SimpleDatasetDriver):
     """
     Derived ctdbp_cdef_dcl_cp driver class
     All this needs to do is create a concrete _build_parser method
@@ -43,4 +46,15 @@ class CtdbpCdefDclCp(SimpleDatasetDriver):
 
     def _build_parser(self, stream_handle):
 
-        raise NotImplementedException("_build_parser() not overridden!")
+        parser_config = {
+            DataSetDriverConfigKeys.PARTICLE_MODULE: MODULE_NAME,
+            DataSetDriverConfigKeys.PARTICLE_CLASS: CtdbpCdefDclCpRecoveredParserDataParticle
+
+        }
+
+        # The parser inherits from simple parser - other callbacks not needed here
+        parser = CtdbpCdefDclCpParser(parser_config,
+                                      stream_handle,
+                                      self._exception_callback)
+
+        return parser
