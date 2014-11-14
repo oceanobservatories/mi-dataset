@@ -1,33 +1,30 @@
 #!/usr/bin/env python
 
 """
-@package mi.dataset.parser.flortd
-@file mi/dataset/parser/flortd.py
+@package mi.dataset.parser
+@file mi/dataset/parser/flort_dj_sio.py
 @author Emily Hahn
-@brief An flort-d specific dataset agent parser
+@brief An flort-dj SIO specific dataset agent parser
 """
 
 __author__ = 'Emily Hahn'
 __license__ = 'Apache 2.0'
 
 import re
-import ntplib
-import time
-from time import strftime, strptime
-from dateutil import parser
 
-from mi.core.log import get_logger; log = get_logger()
+from mi.core.log import get_logger
+log = get_logger()
 from mi.core.common import BaseEnum
 from mi.core.instrument.data_particle import DataParticle, DataParticleKey, DataParticleValue
 
-from mi.dataset.dataset_parser import Parser
-from mi.dataset.parser.sio_mule_common import SioMuleParser, SioParser, SIO_HEADER_MATCHER
-from mi.core.exceptions import SampleException, DatasetParserException
+from mi.dataset.parser.sio_mule_common import SioParser, SIO_HEADER_MATCHER
+from mi.core.exceptions import RecoverableSampleException
 
 
 class DataParticleType(BaseEnum):
     SAMPLE = 'flort_dj_sio_instrument'
     SAMPLE_RECOVERED = 'flort_dj_sio_instrument_recovered'
+
 
 class FlortdParserDataParticleKey(BaseEnum):
     CONTROLLER_TIMESTAMP = 'sio_controller_timestamp'
@@ -50,6 +47,7 @@ DATA_MATCHER = re.compile(DATA_REGEX)
 TIMESTAMP_REGEX = b'[0-9A-Fa-f]{8}'
 TIMESTAMP_MATCHER = re.compile(TIMESTAMP_REGEX)
 
+
 class FlortdCommonParserDataParticle(DataParticle):
     """
     Class for parsing data from the FLORT-D instrument
@@ -62,16 +60,16 @@ class FlortdCommonParserDataParticle(DataParticle):
                  quality_flag=DataParticleValue.OK,
                  new_sequence=None):
         super(FlortdCommonParserDataParticle, self).__init__(raw_data,
-                                                      port_timestamp,
-                                                      internal_timestamp,
-                                                      preferred_timestamp,
-                                                      quality_flag,
-                                                      new_sequence)
+                                                             port_timestamp,
+                                                             internal_timestamp,
+                                                             preferred_timestamp,
+                                                             quality_flag,
+                                                             new_sequence)
         # the raw data has the timestamp from the sio header pre-pended to it, match the first 8 bytes
         timestamp_match = TIMESTAMP_MATCHER.match(self.raw_data[:8])
         if not timestamp_match:
-            raise RecoverableSampleException("FlortdParserDataParticle: No regex match of " \
-                                             "timestamp [%s]" % self.raw_data[:8])
+            raise RecoverableSampleException(
+                "FlortdParserDataParticle: No regex match of timestamp [%s]" % self.raw_data[:8])
         # now match the flort data, excluding the sio header timestamp in the first 8 bytes
         self._data_match = DATA_MATCHER.match(self.raw_data[8:])
         if not self._data_match:
@@ -95,15 +93,18 @@ class FlortdCommonParserDataParticle(DataParticle):
                                          FlortdParserDataParticle.encode_int_16),
                       self._encode_value(FlortdParserDataParticleKey.DATE_STRING, self._data_match.group(1), str),
                       self._encode_value(FlortdParserDataParticleKey.TIME_STRING, self._data_match.group(2), str),
-                      self._encode_value(FlortdParserDataParticleKey.MEASUREMENT_WAVELENGTH_BETA, self._data_match.group(3),
+                      self._encode_value(FlortdParserDataParticleKey.MEASUREMENT_WAVELENGTH_BETA,
+                                         self._data_match.group(3),
                                          FlortdParserDataParticle.encode_int_or_dash),
                       self._encode_value(FlortdParserDataParticleKey.RAW_SIGNAL_BETA, self._data_match.group(4),
                                          FlortdParserDataParticle.encode_int_or_dash),
-                      self._encode_value(FlortdParserDataParticleKey.MEASUREMENT_WAVELENTH_CHL, self._data_match.group(5),
+                      self._encode_value(FlortdParserDataParticleKey.MEASUREMENT_WAVELENTH_CHL,
+                                         self._data_match.group(5),
                                          FlortdParserDataParticle.encode_int_or_dash),
                       self._encode_value(FlortdParserDataParticleKey.RAW_SIGNAL_CHL, self._data_match.group(6),
                                          FlortdParserDataParticle.encode_int_or_dash),
-                      self._encode_value(FlortdParserDataParticleKey.MEASUREMENT_WAVELENGTH_CDOM, self._data_match.group(7),
+                      self._encode_value(FlortdParserDataParticleKey.MEASUREMENT_WAVELENGTH_CDOM,
+                                         self._data_match.group(7),
                                          FlortdParserDataParticle.encode_int_or_dash),
                       self._encode_value(FlortdParserDataParticleKey.RAW_SIGNAL_CDOM, self._data_match.group(8),
                                          FlortdParserDataParticle.encode_int_or_dash),
@@ -140,7 +141,7 @@ class FlortdRecoveredParserDataParticle(FlortdCommonParserDataParticle):
     _data_particle_type = DataParticleType.SAMPLE_RECOVERED
 
 
-class FlortdCommonParser(Parser):
+class FlortDjSioParser(SioParser):
 
     def parse_chunks(self):
         """
@@ -151,12 +152,10 @@ class FlortdCommonParser(Parser):
             parsing, plus the state. An empty list of nothing was parsed.
         """
         result_particles = []
-        (nd_timestamp, non_data, non_start, non_end) = self._chunker.get_next_non_data_with_index(clean=False)
         (timestamp, chunk, start, end) = self._chunker.get_next_data_with_index()
 
-        while (chunk != None):
+        while chunk is not None:
             header_match = SIO_HEADER_MATCHER.match(chunk)
-            sample_count = 0
             if header_match.group(1) == 'FL':
                 data_match = DATA_MATCHER.search(chunk)
                 if data_match:
@@ -171,54 +170,9 @@ class FlortdCommonParser(Parser):
                     if sample:
                         # create particle
                         result_particles.append(sample)
-                        sample_count += 1
 
-            self._chunk_sample_count.append(sample_count)
-
-            (nd_timestamp, non_data, non_start, non_end) = self._chunker.get_next_non_data_with_index(clean=False)
             (timestamp, chunk, start, end) = self._chunker.get_next_data_with_index()
 
         return result_particles
 
-
-class FlortdParser(FlortdCommonParser, SioMuleParser):
-
-    def __init__(self,
-                 config,
-                 state,
-                 stream_handle,
-                 state_callback,
-                 publish_callback,
-                 exception_callback,
-                 *args, **kwargs):
-        super(FlortdParser, self).__init__(config,
-                                          stream_handle,
-                                          state,
-                                          self.sieve_function,
-                                          state_callback,
-                                          publish_callback,
-                                          exception_callback,
-                                          *args,
-                                          **kwargs)
-
-
-class FlortdRecoveredParser(FlortdCommonParser, SioParser):
-
-    def __init__(self,
-                 config,
-                 state,
-                 stream_handle,
-                 state_callback,
-                 publish_callback,
-                 exception_callback,
-                 *args, **kwargs):
-        super(FlortdRecoveredParser, self).__init__(config,
-                                          stream_handle,
-                                          state,
-                                          self.sieve_function,
-                                          state_callback,
-                                          publish_callback,
-                                          exception_callback,
-                                          *args,
-                                          **kwargs)
 
