@@ -3,6 +3,30 @@ header:
     particle_type: flort_dj_sio_instrument_recovered
 data:
   - _index: 1
+    internal_timestamp: 3583440901.0
+    sio_controller_timestamp: 1374452101
+    date_string: '17/12/13'
+    time_string: '00:15:04'
+    measurement_wavelength_beta: 700
+    raw_signal_beta: 4130
+    measurement_wavelength_chl: 695
+    raw_signal_chl: 708
+    measurement_wavelength_cdom: 460
+    raw_signal_cdom: 4130
+    raw_internal_temp: 548
+  - _index: 2
+    internal_timestamp: 3583441801.0
+    sio_controller_timestamp: 1374453001
+    date_string: '17/12/13'
+    time_string: '00:30:04'
+    measurement_wavelength_beta: 700
+    raw_signal_beta: 4130
+    measurement_wavelength_chl: 695
+    raw_signal_chl: 702
+    measurement_wavelength_cdom: 460
+    raw_signal_cdom: 4130
+    raw_internal_temp: 548
+  - _index: 3
     internal_timestamp: 3583442701.0
     sio_controller_timestamp: 1374453901
     date_string: '17/12/13'
@@ -14,7 +38,7 @@ data:
     measurement_wavelength_cdom: 460
     raw_signal_cdom: 4130
     raw_internal_temp: 548
-  - _index: 2
+  - _index: 4
     internal_timestamp: 3583443601.0
     sio_controller_timestamp: 1374454801
     date_string: '17/12/13'
@@ -26,7 +50,7 @@ data:
     measurement_wavelength_cdom: 460
     raw_signal_cdom: 4130
     raw_internal_temp: 548
-  - _index: 3
+  - _index: 5
     internal_timestamp: 3583444501.0
     sio_controller_timestamp: 1374455701
     date_string: '17/12/13'
