@@ -24,25 +24,6 @@ data:
     amplitude_beam2: 135
     amplitude_beam3: 113
   - _index: 2
-    particle_object: VelptAbDiagnosticsHeaderParticleRecovered
-    particle_type: velpt_ab_dcl_diagnostics_metadata_recovered
-    internal_timestamp: 3616878017.000
-    date_time_string: 2014/08/13 00:20:17
-    records_to_follow: 20
-    cell_number_diagnostics: 1
-    noise_amplitude_beam1: 0
-    noise_amplitude_beam2: 0
-    noise_amplitude_beam3: 0
-    noise_amplitude_beam4: 0
-    processing_magnitude_beam1: 5664
-    processing_magnitude_beam2: 19
-    processing_magnitude_beam3: 2068
-    processing_magnitude_beam4: 0
-    distance_beam1: 0
-    distance_beam2: 0
-    distance_beam3: 0
-    distance_beam4: 0
-  - _index: 3
     particle_object: VelptAbDiagnosticsDataParticleRecovered
     particle_type: velpt_ab_dcl_diagnostics_recovered
     internal_timestamp: 3616878017.000
@@ -63,7 +44,7 @@ data:
     amplitude_beam1: 53
     amplitude_beam2: 51
     amplitude_beam3: 53
-  - _index: 4
+  - _index: 3
     particle_object: VelptAbDiagnosticsDataParticleRecovered
     particle_type: velpt_ab_dcl_diagnostics_recovered
     internal_timestamp: 3616878018.000
@@ -84,7 +65,7 @@ data:
     amplitude_beam1: 141
     amplitude_beam2: 135
     amplitude_beam3: 111
-  - _index: 5
+  - _index: 4
     particle_object: VelptAbDiagnosticsDataParticleRecovered
     particle_type: velpt_ab_dcl_diagnostics_recovered
     internal_timestamp: 3616878019.000
@@ -105,7 +86,7 @@ data:
     amplitude_beam1: 140
     amplitude_beam2: 136
     amplitude_beam3: 116
-  - _index: 6
+  - _index: 5
     particle_object: VelptAbDiagnosticsDataParticleRecovered
     particle_type: velpt_ab_dcl_diagnostics_recovered
     internal_timestamp: 3616878020.000
@@ -126,7 +107,7 @@ data:
     amplitude_beam1: 141
     amplitude_beam2: 139
     amplitude_beam3: 113
-  - _index: 7
+  - _index: 6
     particle_object: VelptAbDiagnosticsDataParticleRecovered
     particle_type: velpt_ab_dcl_diagnostics_recovered
     internal_timestamp: 3616878021.000
@@ -147,7 +128,7 @@ data:
     amplitude_beam1: 144
     amplitude_beam2: 135
     amplitude_beam3: 115
-  - _index: 8
+  - _index: 7
     particle_object: VelptAbDiagnosticsDataParticleRecovered
     particle_type: velpt_ab_dcl_diagnostics_recovered
     internal_timestamp: 3616878022.000
@@ -168,7 +149,7 @@ data:
     amplitude_beam1: 141
     amplitude_beam2: 135
     amplitude_beam3: 112
-  - _index: 9
+  - _index: 8
     particle_object: VelptAbDiagnosticsDataParticleRecovered
     particle_type: velpt_ab_dcl_diagnostics_recovered
     internal_timestamp: 3616878023.000
@@ -189,7 +170,7 @@ data:
     amplitude_beam1: 140
     amplitude_beam2: 137
     amplitude_beam3: 107
-  - _index: 10
+  - _index: 9
     particle_object: VelptAbDiagnosticsDataParticleRecovered
     particle_type: velpt_ab_dcl_diagnostics_recovered
     internal_timestamp: 3616878024.000
@@ -210,7 +191,7 @@ data:
     amplitude_beam1: 142
     amplitude_beam2: 134
     amplitude_beam3: 110
-  - _index: 11
+  - _index: 10
     particle_object: VelptAbDiagnosticsDataParticleRecovered
     particle_type: velpt_ab_dcl_diagnostics_recovered
     internal_timestamp: 3616878025.000
@@ -231,7 +212,7 @@ data:
     amplitude_beam1: 136
     amplitude_beam2: 139
     amplitude_beam3: 113
-  - _index: 12
+  - _index: 11
     particle_object: VelptAbDiagnosticsDataParticleRecovered
     particle_type: velpt_ab_dcl_diagnostics_recovered
     internal_timestamp: 3616878026.000
@@ -252,7 +233,7 @@ data:
     amplitude_beam1: 140
     amplitude_beam2: 138
     amplitude_beam3: 115
-  - _index: 13
+  - _index: 12
     particle_object: VelptAbDiagnosticsDataParticleRecovered
     particle_type: velpt_ab_dcl_diagnostics_recovered
     internal_timestamp: 3616878027.000
@@ -273,7 +254,7 @@ data:
     amplitude_beam1: 141
     amplitude_beam2: 138
     amplitude_beam3: 113
-  - _index: 14
+  - _index: 13
     particle_object: VelptAbDiagnosticsDataParticleRecovered
     particle_type: velpt_ab_dcl_diagnostics_recovered
     internal_timestamp: 3616878028.000
@@ -294,7 +275,7 @@ data:
     amplitude_beam1: 143
     amplitude_beam2: 131
     amplitude_beam3: 114
-  - _index: 15
+  - _index: 14
     particle_object: VelptAbDiagnosticsDataParticleRecovered
     particle_type: velpt_ab_dcl_diagnostics_recovered
     internal_timestamp: 3616878029.000
@@ -315,7 +296,7 @@ data:
     amplitude_beam1: 141
     amplitude_beam2: 130
     amplitude_beam3: 115
-  - _index: 16
+  - _index: 15
     particle_object: VelptAbDiagnosticsDataParticleRecovered
     particle_type: velpt_ab_dcl_diagnostics_recovered
     internal_timestamp: 3616878030.000
@@ -336,7 +317,7 @@ data:
     amplitude_beam1: 144
     amplitude_beam2: 130
     amplitude_beam3: 107
-  - _index: 17
+  - _index: 16
     particle_object: VelptAbDiagnosticsDataParticleRecovered
     particle_type: velpt_ab_dcl_diagnostics_recovered
     internal_timestamp: 3616878031.000
@@ -357,7 +338,7 @@ data:
     amplitude_beam1: 143
     amplitude_beam2: 139
     amplitude_beam3: 107
-  - _index: 18
+  - _index: 17
     particle_object: VelptAbDiagnosticsDataParticleRecovered
     particle_type: velpt_ab_dcl_diagnostics_recovered
     internal_timestamp: 3616878032.000
@@ -378,7 +359,7 @@ data:
     amplitude_beam1: 139
     amplitude_beam2: 130
     amplitude_beam3: 117
-  - _index: 19
+  - _index: 18
     particle_object: VelptAbDiagnosticsDataParticleRecovered
     particle_type: velpt_ab_dcl_diagnostics_recovered
     internal_timestamp: 3616878033.000
@@ -399,7 +380,7 @@ data:
     amplitude_beam1: 143
     amplitude_beam2: 132
     amplitude_beam3: 117
-  - _index: 20
+  - _index: 19
     particle_object: VelptAbDiagnosticsDataParticleRecovered
     particle_type: velpt_ab_dcl_diagnostics_recovered
     internal_timestamp: 3616878034.000
@@ -420,7 +401,7 @@ data:
     amplitude_beam1: 142
     amplitude_beam2: 133
     amplitude_beam3: 109
-  - _index: 21
+  - _index: 20
     particle_object: VelptAbDiagnosticsDataParticleRecovered
     particle_type: velpt_ab_dcl_diagnostics_recovered
     internal_timestamp: 3616878035.000
@@ -441,6 +422,27 @@ data:
     amplitude_beam1: 150
     amplitude_beam2: 134
     amplitude_beam3: 108
+  - _index: 21
+    particle_object: VelptAbDiagnosticsDataParticleRecovered
+    particle_type: velpt_ab_dcl_diagnostics_recovered
+    internal_timestamp: 3616878036.000
+    date_time_string: 2014/08/13 00:20:36
+    error_code: 0
+    analog1: 0
+    battery_voltage: 11.7
+    sound_speed_analog2: 1524.3
+    heading: 196.0
+    pitch: -1.3
+    roll: -1.6
+    pressure: 0.241
+    status: 17
+    temperature: 21.06
+    velocity_beam1: 65.0
+    velocity_beam2: 3.0
+    velocity_beam3: -45.0
+    amplitude_beam1: 142
+    amplitude_beam2: 134
+    amplitude_beam3: 115
   - _index: 22
     particle_object: VelptAbDiagnosticsDataParticleRecovered
     particle_type: velpt_ab_dcl_diagnostics_recovered

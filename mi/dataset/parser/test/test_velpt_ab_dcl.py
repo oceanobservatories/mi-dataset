@@ -59,34 +59,34 @@ class VelptAbDclParserUnitTestCase(ParserUnitTestCase):
             }
         }
 
+        self._incomplete_parser_config = {
+            DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.velpt_ab_dcl_particles',
+            DataSetDriverConfigKeys.PARTICLE_CLASS: None
+        }
+
         self._bad_parser_config = {
             DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.velpt_ab_dcl_particles',
             DataSetDriverConfigKeys.PARTICLE_CLASS: None,
             DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT: {}
         }
 
-    def exception_callback(self, exception):
-        log.debug(exception)
-        self._exception_occurred = True
-
     def test_simple(self):
         """
         Read files and verify that all expected particles can be read.
         Verify that the contents of the particles are correct.
-        There should be no exceptions generated.
+        This is the happy path.
         """
         log.debug('===== START TEST SIMPLE =====')
 
         # Test the telemetered version
+        log.debug('----- TELEMETERED -----')
         with open(os.path.join(RESOURCE_PATH, '20140813.velpt.log'), 'rb') as file_handle:
 
             num_particles_to_request = num_expected_particles = 50
 
             parser = VelptAbDclParser(self._telemetered_parser_config,
                                       file_handle,
-                                      self.exception_callback,
-                                      None,
-                                      None)
+                                      self.exception_callback)
 
             particles = parser.get_records(num_particles_to_request)
 
@@ -95,15 +95,14 @@ class VelptAbDclParserUnitTestCase(ParserUnitTestCase):
             self.assert_particles(particles, '20140813.velpt.yml', RESOURCE_PATH)
 
         # Test the recovered version
+        log.debug('------ RECOVERED ------')
         with open(os.path.join(RESOURCE_PATH, '20140813.velpt.log'), 'rb') as file_handle:
 
             num_particles_to_request = num_expected_particles = 50
 
             parser = VelptAbDclParser(self._recovered_parser_config,
                                       file_handle,
-                                      self.exception_callback,
-                                      None,
-                                      None)
+                                      self.exception_callback)
 
             particles = parser.get_records(num_particles_to_request)
 
@@ -121,15 +120,14 @@ class VelptAbDclParserUnitTestCase(ParserUnitTestCase):
         log.debug('===== START TEST NOT ENOUGH DIAGNOSTICS RECORDS =====')
 
         # Test the telemetered version
+        log.debug('----- TELEMETERED -----')
         with open(os.path.join(RESOURCE_PATH, 'too_few_20140813.velpt.log'), 'rb') as file_handle:
 
             num_particles_to_request = num_expected_particles = 49
 
             parser = VelptAbDclParser(self._telemetered_parser_config,
                                       file_handle,
-                                      self.exception_callback,
-                                      None,
-                                      None)
+                                      self.exception_callback)
 
             particles = parser.get_records(num_particles_to_request)
 
@@ -138,15 +136,14 @@ class VelptAbDclParserUnitTestCase(ParserUnitTestCase):
             self.assert_particles(particles, 'too_few_20140813.velpt.yml', RESOURCE_PATH)
 
         # Test the recovered version
+        log.debug('------ RECOVERED ------')
         with open(os.path.join(RESOURCE_PATH, 'too_few_20140813.velpt.log'), 'rb') as file_handle:
 
             num_particles_to_request = num_expected_particles = 49
 
             parser = VelptAbDclParser(self._recovered_parser_config,
                                       file_handle,
-                                      self.exception_callback,
-                                      None,
-                                      None)
+                                      self.exception_callback)
 
             particles = parser.get_records(num_particles_to_request)
 
@@ -164,15 +161,14 @@ class VelptAbDclParserUnitTestCase(ParserUnitTestCase):
         log.debug('===== START TEST TOO MANY DIAGNOSTICS RECORDS =====')
 
         # Test the telemetered version
+        log.debug('----- TELEMETERED -----')
         with open(os.path.join(RESOURCE_PATH, 'too_many_20140813.velpt.log'), 'rb') as file_handle:
 
             num_particles_to_request = num_expected_particles = 51
 
             parser = VelptAbDclParser(self._telemetered_parser_config,
                                       file_handle,
-                                      self.exception_callback,
-                                      None,
-                                      None)
+                                      self.exception_callback)
 
             particles = parser.get_records(num_particles_to_request)
 
@@ -181,15 +177,14 @@ class VelptAbDclParserUnitTestCase(ParserUnitTestCase):
             self.assert_particles(particles, 'too_many_20140813.velpt.yml', RESOURCE_PATH)
 
         # Test the recovered version
+        log.debug('------ RECOVERED ------')
         with open(os.path.join(RESOURCE_PATH, 'too_many_20140813.velpt.log'), 'rb') as file_handle:
 
             num_particles_to_request = num_expected_particles = 51
 
             parser = VelptAbDclParser(self._recovered_parser_config,
                                       file_handle,
-                                      self.exception_callback,
-                                      None,
-                                      None)
+                                      self.exception_callback)
 
             particles = parser.get_records(num_particles_to_request)
 
@@ -207,15 +202,14 @@ class VelptAbDclParserUnitTestCase(ParserUnitTestCase):
         log.debug('===== START TEST INVALID SYNC BYTE =====')
 
         # Test the telemetered version
+        log.debug('----- TELEMETERED -----')
         with open(os.path.join(RESOURCE_PATH, 'extra_bytes_20140813.velpt.log'), 'rb') as file_handle:
 
             num_particles_to_request = num_expected_particles = 50
 
             parser = VelptAbDclParser(self._telemetered_parser_config,
                                       file_handle,
-                                      self.exception_callback,
-                                      None,
-                                      None)
+                                      self.exception_callback)
 
             particles = parser.get_records(num_particles_to_request)
 
@@ -224,15 +218,14 @@ class VelptAbDclParserUnitTestCase(ParserUnitTestCase):
             self.assert_particles(particles, '20140813.velpt.yml', RESOURCE_PATH)
 
         # Test the recovered version
+        log.debug('------ RECOVERED ------')
         with open(os.path.join(RESOURCE_PATH, 'extra_bytes_20140813.velpt.log'), 'rb') as file_handle:
 
             num_particles_to_request = num_expected_particles = 50
 
             parser = VelptAbDclParser(self._recovered_parser_config,
                                       file_handle,
-                                      self.exception_callback,
-                                      None,
-                                      None)
+                                      self.exception_callback)
 
             particles = parser.get_records(num_particles_to_request)
 
@@ -250,15 +243,14 @@ class VelptAbDclParserUnitTestCase(ParserUnitTestCase):
         log.debug('===== START TEST INVALID RECORD ID =====')
 
         # Test the telemetered version
+        log.debug('----- TELEMETERED -----')
         with open(os.path.join(RESOURCE_PATH, 'bad_id_20140813.velpt.log'), 'rb') as file_handle:
 
             num_particles_to_request = num_expected_particles = 50
 
             parser = VelptAbDclParser(self._telemetered_parser_config,
                                       file_handle,
-                                      self.exception_callback,
-                                      None,
-                                      None)
+                                      self.exception_callback)
 
             particles = parser.get_records(num_particles_to_request)
 
@@ -267,15 +259,14 @@ class VelptAbDclParserUnitTestCase(ParserUnitTestCase):
             self.assert_particles(particles, '20140813.velpt.yml', RESOURCE_PATH)
 
         # Test the recovered version
+        log.debug('------ RECOVERED ------')
         with open(os.path.join(RESOURCE_PATH, 'bad_id_20140813.velpt.log'), 'rb') as file_handle:
 
             num_particles_to_request = num_expected_particles = 50
 
             parser = VelptAbDclParser(self._recovered_parser_config,
                                       file_handle,
-                                      self.exception_callback,
-                                      None,
-                                      None)
+                                      self.exception_callback)
 
             particles = parser.get_records(num_particles_to_request)
 
@@ -285,7 +276,7 @@ class VelptAbDclParserUnitTestCase(ParserUnitTestCase):
 
         log.debug('===== END TEST INVALID RECORD ID =====')
 
-    def test_bad_checksum(self):
+    def test_bad_diagnostic_checksum(self):
         """
         The file used in this test has a power record with a missing timestamp.
         This results in 9 particles being retrieved instead of 10, and also result in the exception
@@ -294,38 +285,36 @@ class VelptAbDclParserUnitTestCase(ParserUnitTestCase):
         log.debug('===== START TEST FOUND BAD CHECKSUM =====')
 
         # Test the telemetered version
-        with open(os.path.join(RESOURCE_PATH, 'bad_checksum_20140813.velpt.log'), 'rb') as file_handle:
+        log.debug('----- TELEMETERED -----')
+        with open(os.path.join(RESOURCE_PATH, 'bad_diagnostic_checksum_20140813.velpt.log'), 'rb') as file_handle:
 
             num_particles_to_request = num_expected_particles = 49
 
             parser = VelptAbDclParser(self._telemetered_parser_config,
                                       file_handle,
-                                      self.exception_callback,
-                                      None,
-                                      None)
+                                      self.exception_callback)
 
             particles = parser.get_records(num_particles_to_request)
 
             self.assertEquals(len(particles), num_expected_particles)
 
-            self.assert_particles(particles, 'bad_checksum_20140813.velpt.yml', RESOURCE_PATH)
+            self.assert_particles(particles, 'bad_diagnostic_checksum_20140813.velpt.yml', RESOURCE_PATH)
 
         # Test the recovered version
-        with open(os.path.join(RESOURCE_PATH, 'bad_checksum_20140813.velpt.log'), 'rb') as file_handle:
+        log.debug('------ RECOVERED ------')
+        with open(os.path.join(RESOURCE_PATH, 'bad_diagnostic_checksum_20140813.velpt.log'), 'rb') as file_handle:
 
             num_particles_to_request = num_expected_particles = 49
 
             parser = VelptAbDclParser(self._recovered_parser_config,
                                       file_handle,
-                                      self.exception_callback,
-                                      None,
-                                      None)
+                                      self.exception_callback)
 
             particles = parser.get_records(num_particles_to_request)
 
             self.assertEquals(len(particles), num_expected_particles)
 
-            self.assert_particles(particles, 'recovered_bad_checksum_20140813.velpt.yml', RESOURCE_PATH)
+            self.assert_particles(particles, 'recovered_bad_diagnostic_checksum_20140813.velpt.yml', RESOURCE_PATH)
 
         log.debug('===== END TEST FOUND BAD CHECKSUM =====')
 
@@ -338,15 +327,14 @@ class VelptAbDclParserUnitTestCase(ParserUnitTestCase):
         log.debug('===== START TEST FOUND TRUNCATED FILE =====')
 
         # Test the telemetered version
+        log.debug('----- TELEMETERED -----')
         with open(os.path.join(RESOURCE_PATH, 'truncated_file_20140813.velpt.log'), 'rb') as file_handle:
 
             num_particles_to_request = num_expected_particles = 49
 
             parser = VelptAbDclParser(self._telemetered_parser_config,
                                       file_handle,
-                                      self.exception_callback,
-                                      None,
-                                      None)
+                                      self.exception_callback)
 
             particles = parser.get_records(num_particles_to_request)
 
@@ -355,15 +343,14 @@ class VelptAbDclParserUnitTestCase(ParserUnitTestCase):
             self.assert_particles(particles, 'truncated_file_20140813.velpt.yml', RESOURCE_PATH)
 
         # Test the recovered version
+        log.debug('------ RECOVERED ------')
         with open(os.path.join(RESOURCE_PATH, 'truncated_file_20140813.velpt.log'), 'rb') as file_handle:
 
             num_particles_to_request = num_expected_particles = 49
 
             parser = VelptAbDclParser(self._recovered_parser_config,
                                       file_handle,
-                                      self.exception_callback,
-                                      None,
-                                      None)
+                                      self.exception_callback)
 
             particles = parser.get_records(num_particles_to_request)
 
@@ -384,8 +371,323 @@ class VelptAbDclParserUnitTestCase(ParserUnitTestCase):
             with self.assertRaises(ConfigurationException):
                 parser = VelptAbDclParser(self._bad_parser_config,
                                           file_handle,
-                                          self.exception_callback,
-                                          None,
-                                          None)
+                                          self.exception_callback)
 
         log.debug('===== END TEST BAD CONFIGURATION =====')
+
+    def test_bad_velocity_checksum(self):
+        """
+        The file used in this test has a record with a bad checksum.
+        This results in 49 particles being retrieved instead of 50.
+        The standard 20140813.velpt.log was used, the checksum of the
+        third velocity record was corrupted to make it fail.
+        """
+        log.debug('===== START TEST FOUND BAD VELOCITY CHECKSUM =====')
+
+        # Test the telemetered version
+        log.debug('----- TELEMETERED -----')
+        with open(os.path.join(RESOURCE_PATH, 'bad_velocity_checksum_20140813.velpt.log'), 'rb') as file_handle:
+
+            num_particles_to_request = num_expected_particles = 49
+
+            parser = VelptAbDclParser(self._telemetered_parser_config,
+                                      file_handle,
+                                      self.exception_callback)
+
+            particles = parser.get_records(num_particles_to_request)
+
+            self.assertEquals(len(particles), num_expected_particles)
+
+            self.assert_particles(particles, 'bad_velocity_checksum_20140813.velpt.yml', RESOURCE_PATH)
+
+        # Test the recovered version
+        log.debug('----- RECOVERED -----')
+        with open(os.path.join(RESOURCE_PATH, 'bad_velocity_checksum_20140813.velpt.log'), 'rb') as file_handle:
+
+            num_particles_to_request = num_expected_particles = 49
+
+            parser = VelptAbDclParser(self._recovered_parser_config,
+                                      file_handle,
+                                      self.exception_callback)
+
+            particles = parser.get_records(num_particles_to_request)
+
+            self.assertEquals(len(particles), num_expected_particles)
+
+            self.assert_particles(particles, 'recovered_bad_velocity_checksum_20140813.velpt.yml', RESOURCE_PATH)
+
+        log.debug('===== END TEST FOUND BAD VELOCITY CHECKSUM =====')
+
+    def test_diag_header_bad_checksum(self):
+        """
+        The file used in this test has a record with a bad checksum.
+        This results in 491 particles being retrieved instead of 50.
+        The standard 20140813.velpt.log was used, the checksum of the
+        third velocity record was corrupted to make it fail.
+        """
+        log.debug('===== START TEST FOUND BAD DIAGNOSTIC HEADER CHECKSUM =====')
+
+        # Test the telemetered version
+        log.debug('----- TELEMETERED -----')
+        with open(os.path.join(RESOURCE_PATH, 'bad_diag_hdr_checksum_20140813.velpt.log'), 'rb') as file_handle:
+
+            num_particles_to_request = num_expected_particles = 49
+
+            parser = VelptAbDclParser(self._telemetered_parser_config,
+                                      file_handle,
+                                      self.exception_callback)
+
+            particles = parser.get_records(num_particles_to_request)
+
+            self.assertEquals(len(particles), num_expected_particles)
+
+            self.assert_particles(particles, 'bad_diag_hdr_checksum_20140813.velpt.yml', RESOURCE_PATH)
+
+        # Test the recovered version
+        log.debug('----- RECOVERED -----')
+        with open(os.path.join(RESOURCE_PATH, 'bad_diag_hdr_checksum_20140813.velpt.log'), 'rb') as file_handle:
+
+            num_particles_to_request = num_expected_particles = 49
+
+            parser = VelptAbDclParser(self._recovered_parser_config,
+                                      file_handle,
+                                      self.exception_callback)
+
+            particles = parser.get_records(num_particles_to_request)
+
+            self.assertEquals(len(particles), num_expected_particles)
+
+            self.assert_particles(particles, 'recovered_bad_diag_hdr_checksum_20140813.velpt.yml', RESOURCE_PATH)
+
+        log.debug('===== END TEST FOUND BAD DIAGNOSTIC HEADER CHECKSUM =====')
+
+    def test_missing_diag_header(self):
+        """
+        The file used in this test has a record with a bad checksum.
+        This results in 491 particles being retrieved instead of 50.
+        The standard 20140813.velpt.log was used, the checksum of the
+        third velocity record was corrupted to make it fail.
+        """
+        log.debug('===== START TEST MISSING DIAGNOSTIC HEADER =====')
+
+        # Test the telemetered version
+        log.debug('----- TELEMETERED -----')
+        with open(os.path.join(RESOURCE_PATH, 'missing_diag_header_20140813.velpt.log'), 'rb') as file_handle:
+
+            num_particles_to_request = num_expected_particles = 49
+
+            parser = VelptAbDclParser(self._telemetered_parser_config,
+                                      file_handle,
+                                      self.exception_callback)
+
+            particles = parser.get_records(num_particles_to_request)
+
+            self.assertEquals(len(particles), num_expected_particles)
+
+            self.assert_particles(particles, 'missing_diag_header_20140813.velpt.yml', RESOURCE_PATH)
+
+        # Test the recovered version
+        log.debug('----- RECOVERED -----')
+        with open(os.path.join(RESOURCE_PATH, 'missing_diag_header_20140813.velpt.log'), 'rb') as file_handle:
+
+            num_particles_to_request = num_expected_particles = 49
+
+            parser = VelptAbDclParser(self._recovered_parser_config,
+                                      file_handle,
+                                      self.exception_callback)
+
+            particles = parser.get_records(num_particles_to_request)
+
+            self.assertEquals(len(particles), num_expected_particles)
+
+            self.assert_particles(particles, 'recovered_missing_diag_header_20140813.velpt.yml', RESOURCE_PATH)
+
+        log.debug('===== END TEST MISSING DIAGNOSTIC HEADER =====')
+
+    def test_random_diag_record(self):
+        """
+        The file used in this test has a record with a bad checksum.
+        This results in 491 particles being retrieved instead of 50.
+        The standard 20140813.velpt.log was used, the checksum of the
+        third velocity record was corrupted to make it fail.
+        """
+        log.debug('===== START TEST FOUND RANDOM DIAGNOSTIC RECORD =====')
+
+        # Test the telemetered version
+        log.debug('----- TELEMETERED -----')
+        with open(os.path.join(RESOURCE_PATH, 'random_diag_record_20140813.velpt.log'), 'rb') as file_handle:
+
+            num_particles_to_request = num_expected_particles = 51
+
+            parser = VelptAbDclParser(self._telemetered_parser_config,
+                                      file_handle,
+                                      self.exception_callback)
+
+            particles = parser.get_records(num_particles_to_request)
+
+            self.assertEquals(len(particles), num_expected_particles)
+
+            self.assert_particles(particles, 'random_diag_record_20140813.velpt.yml', RESOURCE_PATH)
+
+        # Test the recovered version
+        log.debug('----- RECOVERED -----')
+        with open(os.path.join(RESOURCE_PATH, 'random_diag_record_20140813.velpt.log'), 'rb') as file_handle:
+
+            num_particles_to_request = num_expected_particles = 51
+
+            parser = VelptAbDclParser(self._recovered_parser_config,
+                                      file_handle,
+                                      self.exception_callback)
+
+            particles = parser.get_records(num_particles_to_request)
+
+            self.assertEquals(len(particles), num_expected_particles)
+
+            self.assert_particles(particles, 'recovered_random_diag_record_20140813.velpt.yml', RESOURCE_PATH)
+
+        log.debug('===== END TEST FOUND RANDOM DIAGNOSTIC RECORD =====')
+
+    def test_missing_diag_recs(self):
+        """
+        The file used in this test has a record with a bad checksum.
+        This results in 49 particles being retrieved instead of 50.
+        The standard 20140813.velpt.log was used, the checksum of the
+        third velocity record was corrupted to make it fail.
+        """
+        log.debug('===== START TEST MISSING DIAGNOSTIC RECORDS =====')
+
+        # Test the telemetered version
+        log.debug('----- TELEMETERED -----')
+        with open(os.path.join(RESOURCE_PATH, 'missing_diag_recs_20140813.velpt.log'), 'rb') as file_handle:
+
+            num_particles_to_request = num_expected_particles = 29
+
+            parser = VelptAbDclParser(self._telemetered_parser_config,
+                                      file_handle,
+                                      self.exception_callback)
+
+            particles = parser.get_records(num_particles_to_request)
+
+            self.assertEquals(len(particles), num_expected_particles)
+
+            self.assert_particles(particles, 'missing_diag_recs_20140813.velpt.yml', RESOURCE_PATH)
+
+        # Test the recovered version
+        log.debug('----- RECOVERED -----')
+        with open(os.path.join(RESOURCE_PATH, 'missing_diag_recs_20140813.velpt.log'), 'rb') as file_handle:
+
+            num_particles_to_request = num_expected_particles = 29
+
+            parser = VelptAbDclParser(self._recovered_parser_config,
+                                      file_handle,
+                                      self.exception_callback)
+
+            particles = parser.get_records(num_particles_to_request)
+
+            self.assertEquals(len(particles), num_expected_particles)
+
+            self.assert_particles(particles, 'recovered_missing_diag_recs_20140813.velpt.yml', RESOURCE_PATH)
+
+        log.debug('===== END TEST MISSING DIAGNOSTIC RECORDS =====')
+
+    def test_partial_configuration(self):
+        """
+        Attempt to build a parser with a bad configuration.
+        """
+        log.debug('===== START TEST PARTIAL CONFIGURATION =====')
+
+        with open(os.path.join(RESOURCE_PATH, '20140813.velpt.log'), 'rb') as file_handle:
+
+            with self.assertRaises(ConfigurationException):
+                parser = VelptAbDclParser(self._incomplete_parser_config,
+                                          file_handle,
+                                          self.exception_callback)
+
+        log.debug('===== END TEST PARTIAL CONFIGURATION =====')
+
+    def test_bad_diag_checksum_19_recs(self):
+        """
+        The file used in this test has a power record with a missing timestamp.
+        This results in 9 particles being retrieved instead of 10, and also result in the exception
+        callback being called.
+        """
+        log.debug('===== START TEST FOUND BAD DIAG HDR CHECKSUM AND TOO FEW RECS =====')
+
+        # Test the telemetered version
+        log.debug('----- TELEMETERED -----')
+        with open(os.path.join(RESOURCE_PATH, 'bad_diag_hdr_checksum_19_diag_20140813.velpt.log'), 'rb') as file_handle:
+
+            num_particles_to_request = num_expected_particles = 48
+
+            parser = VelptAbDclParser(self._telemetered_parser_config,
+                                      file_handle,
+                                      self.exception_callback)
+
+            particles = parser.get_records(num_particles_to_request)
+
+            self.assertEquals(len(particles), num_expected_particles)
+
+            self.assert_particles(particles, 'bad_diag_hdr_checksum_19_diag_20140813.velpt.yml', RESOURCE_PATH)
+
+        # Test the recovered version
+        log.debug('------ RECOVERED ------')
+        with open(os.path.join(RESOURCE_PATH, 'bad_diag_hdr_checksum_19_diag_20140813.velpt.log'), 'rb') as file_handle:
+
+            num_particles_to_request = num_expected_particles = 48
+
+            parser = VelptAbDclParser(self._recovered_parser_config,
+                                      file_handle,
+                                      self.exception_callback)
+
+            particles = parser.get_records(num_particles_to_request)
+
+            self.assertEquals(len(particles), num_expected_particles)
+
+            self.assert_particles(particles, 'recovered_bad_diag_hdr_checksum_19_diag_20140813.velpt.yml',
+                                  RESOURCE_PATH)
+
+        log.debug('===== END TEST FOUND BAD DIAG HDR CHECKSUM AND TOO FEW RECS =====')
+
+    def test_bad_diag_checksum_21_recs(self):
+        """
+        The file used in this test has a power record with a missing timestamp.
+        This results in 9 particles being retrieved instead of 10, and also result in the exception
+        callback being called.
+        """
+        log.debug('===== START TEST FOUND BAD DIAG HDR CHECKSUM AND TOO MANY RECS =====')
+
+        # Test the telemetered version
+        log.debug('----- TELEMETERED -----')
+        with open(os.path.join(RESOURCE_PATH, 'bad_diag_hdr_checksum_21_diag_20140813.velpt.log'), 'rb') as file_handle:
+
+            num_particles_to_request = num_expected_particles = 50
+
+            parser = VelptAbDclParser(self._telemetered_parser_config,
+                                      file_handle,
+                                      self.exception_callback)
+
+            particles = parser.get_records(num_particles_to_request)
+
+            self.assertEquals(len(particles), num_expected_particles)
+
+            self.assert_particles(particles, 'bad_diag_hdr_checksum_21_diag_20140813.velpt.yml', RESOURCE_PATH)
+
+        # Test the recovered version
+        log.debug('------ RECOVERED ------')
+        with open(os.path.join(RESOURCE_PATH, 'bad_diag_hdr_checksum_21_diag_20140813.velpt.log'), 'rb') as file_handle:
+
+            num_particles_to_request = num_expected_particles = 50
+
+            parser = VelptAbDclParser(self._recovered_parser_config,
+                                      file_handle,
+                                      self.exception_callback)
+
+            particles = parser.get_records(num_particles_to_request)
+
+            self.assertEquals(len(particles), num_expected_particles)
+
+            self.assert_particles(particles, 'recovered_bad_diag_hdr_checksum_21_diag_20140813.velpt.yml',
+                                  RESOURCE_PATH)
+
+        log.debug('===== END TEST FOUND BAD DIAG HDR CHECKSUM AND TOO MANY RECS =====')
+

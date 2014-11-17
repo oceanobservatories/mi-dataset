@@ -133,15 +133,35 @@ class VelptAbDclParser(SimpleParser):
     """
     Class used to parse the velpt_ab_dcl data set.
     """
+    VELOCITY_DATA_ID = b'\x01'
+    DIAGNOSTIC_HEADER_ID = b'\x06'
+    DIAGNOSTIC_DATA_ID = b'\x80'
+    SYNC_MARKER = b'\xA5'
+    DEFAULT_DIAGNOSTICS_COUNT = 20
+
     def __init__(self,
                  config,
-                 stream_handle,
-                 exception_callback,
-                 state_callback=None,
-                 publish_callback=None):
+                 file_handle,
+                 exception_callback):
 
         self._record_buffer = []
         self._calculated_checksum = 0
+        self._current_record = ''
+        self._velocity_data = False
+        self._diagnostic_header = False
+        self._diagnostic_header_published = False
+        self._diagnostic_data = False
+        self._end_of_file = False
+        self._sending_diagnostics = False
+        self._bad_diagnostic_header = False
+        self._first_diagnostics_record = False
+        self._diagnostics_count = 0
+        self._total_diagnostic_records = 0
+        self._velocity_data_dict = {}
+        self._diagnostics_header_dict = {}
+        self._diagnostics_data_dict = {}
+        self._diagnostics_header_record = ''
+        self._file_handle = file_handle
 
         # Obtain the particle classes dictionary from the config data
         if DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT in config:
@@ -160,18 +180,42 @@ class VelptAbDclParser(SimpleParser):
                 self._velocity_data_class = config[DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT][
                     VelptAbParticleClassKey.INSTRUMENT_PARTICLE_CLASS]
             else:
-                log.warning(
+                log.error(
                     'Configuration missing metadata or data particle class key in particle classes dict')
                 raise ConfigurationException(
                     'Configuration missing metadata or data particle class key in particle classes dict')
         else:
-            log.warning('Configuration missing particle classes dict')
+            log.error('Configuration missing particle classes dict')
             raise ConfigurationException('Configuration missing particle classes dict')
 
-        super(VelptAbDclParser, self).__init__(config, stream_handle, exception_callback)
+        super(VelptAbDclParser, self).__init__(config, file_handle, exception_callback)
 
-    @staticmethod
-    def _checksums_match(self, record, length, checksum):
+    def good_record_type(self, id_byte):
+        """
+        Determine the type of the record.
+        :param id_byte: The ID byte from the record
+        :return: boolean indicating success or failure
+        """
+        status = True
+        self._velocity_data = False
+        self._diagnostic_header = False
+        self._diagnostic_data = False
+
+        # Determine the type of processing based on the ID byte
+        if id_byte == self.VELOCITY_DATA_ID:
+            self._velocity_data = True
+        elif id_byte == self.DIAGNOSTIC_HEADER_ID:
+            self._diagnostic_header = True
+            self._bad_diagnostic_header = False
+            self._diagnostic_header_published = False
+        elif id_byte == self.DIAGNOSTIC_DATA_ID:
+            self._diagnostic_data = True
+        else:
+            status = False
+
+        return status
+
+    def _bad_checksum(self, length, checksum):
         """
         Determines if the stored checksum matches the actual checksum
         :param record: the read-in record
@@ -182,197 +226,219 @@ class VelptAbDclParser(SimpleParser):
         self._calculated_checksum = 46476
 
         for x in range(0, length-3, 2):
-            self._calculated_checksum += struct.unpack('<H', record[x:x+2])[0]
+            self._calculated_checksum += struct.unpack('<H', self._current_record[x:x+2])[0]
 
         # Modulo 65536 is applied to the checksum to keep it a 16 bit value
         self._calculated_checksum %= 65536
 
-        if self._calculated_checksum == checksum:
+        if self._calculated_checksum != checksum:
             return True
         else:
             return False
+
+    def load_record(self):
+        """
+        Attempt to load a data record.
+        :return: boolean indicating success or failure
+        """
+        record_start = 0
+
+        # Assume the operation will be successful
+        status = True
+
+        # Read the Sync byte
+        sync_byte = self._file_handle.read(1)
+
+        # If the first byte is a valid sync byte
+        # determine the record type and the record length.
+        if sync_byte == self.SYNC_MARKER:
+
+            # Need to capture the record start address for reading the entire record later
+            record_start = self._file_handle.tell() - 1
+
+            # Get the ID byte and see if it's a valid record
+            id_byte = self._file_handle.read(1)
+
+            if not self.good_record_type(id_byte):
+                status = False
+                log.warning('Found invalid ID byte: %d, at %d skipping to next byte',
+                            struct.unpack('B', id_byte)[0], self._file_handle.tell()-1)
+                self._exception_callback(
+                    RecoverableSampleException('Found Invalid ID Byte, skipping to next byte'))
+
+        elif sync_byte == '':  # Found the end of the file
+            self._end_of_file = True
+            status = False
+        else:
+            status = False
+            log.warning('Found invalid sync byte: %d at %d , skipping to next byte',
+                        struct.unpack('B', sync_byte)[0], self._file_handle.tell()-1)
+            self._exception_callback(
+                RecoverableSampleException('Found Invalid Sync Byte, skipping to next byte'))
+
+        # If the record is valid, read it
+        if status:
+            record_length = struct.unpack('<H', self._file_handle.read(2))[0]*2
+            self._file_handle.seek(record_start, 0)
+            self._current_record = self._file_handle.read(record_length)
+
+            # If the length of what was read matches what we asked for,
+            # update the next record start position. Otherwise we found
+            # a malformed record at the end of the file.
+            if len(self._current_record) == record_length:
+
+                # Check that the checksum of this record is good
+                stored_checksum = struct.unpack('<H', self._current_record[(record_length-2):record_length])[0]
+
+                if self._bad_checksum(record_length, stored_checksum):
+                    # Did the checksum fail on a diagnostic header record?
+                    if self._diagnostic_header:
+                        self._total_diagnostic_records = self.DEFAULT_DIAGNOSTICS_COUNT
+                        self._bad_diagnostic_header = True
+                        self._sending_diagnostics = True  # The header is bad, the records may be okay
+                        log.warning('Diagnostic Header Invalid')
+                        self._exception_callback(
+                            RecoverableSampleException('Diagnostic Header Invalid, no particle generated'))
+
+                    log.warning('Invalid checksum: %d, expected %d - record will not be processed',
+                                stored_checksum, self._calculated_checksum)
+                    self._exception_callback(
+                        RecoverableSampleException('Invalid checksum, no particle generated'))
+
+                    status = False
+
+            else:
+                self._end_of_file = True
+                status = False
+                log.warning('Last record in file was malformed')
+                self._exception_callback(
+                    RecoverableSampleException('Last record in file malformed, no particle generated'))
+
+        return status
+
+    def process_velocity_data(self):
+        """
+        Handles the processing of velocity data particles and handles error processing if events
+        which should have occurred prior to receiving a velocity record did not happen.
+        """
+        # Get the timestamp of the velocity record in case we need it for the metadata particle.
+        timestamp = VelptAbDataParticle.get_timestamp(self._current_record)
+
+        # If this flag is still indicating TRUE, it means we found NO diagnostic records.
+        # That's an error!
+        if self._first_diagnostics_record:
+            self._first_diagnostics_record = False
+            log.warning('No diagnostic records present, just a header.'
+                        'No particles generated')
+            self._exception_callback(
+                RecoverableSampleException('No diagnostic records present, just a header.'
+                                           'No particles generated'))
+
+        # This flag indicates that diagnostics were being produced and now that
+        # the first velocity record has been encountered, it's time to match the
+        # number of diagnostics particles produced against the number of diagnostic
+        # records expected from the diagnostics header.
+        if self._sending_diagnostics:
+            self._sending_diagnostics = False
+            if self._total_diagnostic_records != self._diagnostics_count:
+                if self._diagnostics_count < self._total_diagnostic_records:
+                    log.warning('Not enough diagnostics records, got %s, expected %s',
+                                self._diagnostics_count, self._total_diagnostic_records)
+                    self._exception_callback(
+                        RecoverableSampleException('Not enough diagnostics records'))
+
+                elif self._diagnostics_count > self._total_diagnostic_records:
+                    log.warning('Too many diagnostics records, got %s, expected %s',
+                                self._diagnostics_count, self._total_diagnostic_records)
+                    self._exception_callback(
+                        RecoverableSampleException('Too many diagnostics records'))
+                    self._diagnostics_count = 0
+                    self._total_diagnostic_records = 0
+
+        velocity_data_dict = VelptAbDataParticle.generate_data_dict(self._current_record)
+
+        particle = self._extract_sample(self._velocity_data_class,
+                                        None,
+                                        velocity_data_dict,
+                                        timestamp)
+
+        self._record_buffer.append(particle)
+
+    def process_diagnostic_data(self):
+        """
+        Handles the processing of diagnostic data particles and handles error processing if events
+        which should have occurred prior to receiving a diagnostic record did not happen.
+        """
+        # As diagnostics records have the same format as velocity records
+        # you can use the same routine used to break down the velocity data
+
+        timestamp = VelptAbDataParticle.get_timestamp(self._current_record)
+        date_time_group = VelptAbDataParticle.get_date_time_string(self._current_record)
+
+        self._diagnostics_data_dict = VelptAbDataParticle.generate_data_dict(self._current_record)
+
+        # Upon encountering the first diagnostics record, use its timestamp
+        # for diagnostics metadata particle. Produce that metadata particle now.
+        if self._first_diagnostics_record:
+            self._first_diagnostics_record = False
+
+            diagnostics_header_dict = VelptAbDataParticle.generate_diagnostics_header_dict(
+                date_time_group, self._diagnostics_header_record)
+            self._total_diagnostic_records = VelptAbDataParticle.\
+                get_diagnostics_count(self._diagnostics_header_record)
+
+            particle = self._extract_sample(self._metadata_class,
+                                            None,
+                                            diagnostics_header_dict,
+                                            timestamp)
+            self._diagnostic_header_published = True
+
+            self._record_buffer.append(particle)
+
+        # Cover the case where unexpected diagnostics records are encountered
+        elif ((not self._diagnostic_header_published) | (not self._sending_diagnostics))\
+                & (not self._bad_diagnostic_header):
+            self._total_diagnostic_records = self.DEFAULT_DIAGNOSTICS_COUNT
+            self._diagnostic_header_published = True
+            log.warning('Unexpected diagnostic data record encountered')
+            self._exception_callback(
+                RecoverableSampleException('Unexpected diagnostic data record encountered, not preceded by header'))
+
+        particle = self._extract_sample(self._diagnostics_class,
+                                        None,
+                                        self._diagnostics_data_dict,
+                                        timestamp)
+
+        self._record_buffer.append(particle)
+
+        self._diagnostics_count += 1
 
     def parse_file(self):
         """
         Parser for velpt_ab_dcl data.
         """
-        sync_marker = b'\xA5'
-        velocity_data_id = b'\x01'
-        diagnostic_header_id = b'\x06'
-        diagnostic_data_id = b'\x80'
-        done = False
-        record_start = 0
-        record_length = 0
-        first_diagnostics_header_record = True
-        diagnostics_count = 0
-        total_diagnostic_records = 0
-        velocity_data_dict = {}
-        diagnostics_header_dict = {}
-        diagnostics_data_dict = {}
-        diagnostics_header_record = ''
-        sending_diagnostics = False
-        bad_byte = False
+        while not self._end_of_file:
+            # Determine the type of record and load it for processing.
+            good_record = self.load_record()
 
-        while not done:
+            # Sequence through the various expected record types
+            if good_record:
 
-            # Assume the record will be good
-            good_record = True
+                if self._velocity_data:
+                    self.process_velocity_data()
 
-            # Reset the record type flags
-            velocity_data = False
-            diagnostic_header = False
-            diagnostic_data = False
+                elif self._diagnostic_data:
+                    self.process_diagnostic_data()
 
-            # LOSE THIS!
-            if bad_byte:
-                bad_byte = False
+                # Finding a diagnostic header in the data requires some
+                # extra processing as the header record has no time tag
+                # we need to get that from the first diagnostic record.
+                # We also have to check that the number of following
+                # diagnostic data records matches what is in the header.
+                elif self._diagnostic_header:
+                    self._first_diagnostics_record = True
+                    self._diagnostics_count = 0
+                    self._diagnostics_header_record = self._current_record
+                    self._sending_diagnostics = True
 
-            # Read the Sync byte
-            sync_byte = self._stream_handle.read(1)
-
-            # If the first byte is the sync byte (0xA5)
-            # read the ID byte and the record length.
-            if sync_byte == sync_marker:
-
-                # Capture the record start address for reading the entire record later
-                record_start = self._stream_handle.tell() - 1
-
-                # Assume the id byte is good
-                good_id = True
-
-                # Read the ID byte
-                id_byte = self._stream_handle.read(1)
-
-                # If this a valid record type (0x01 | 0x06 | 0x80)
-                # continue processing.
-                if id_byte == velocity_data_id:
-                    velocity_data = True
-                elif id_byte == diagnostic_header_id:
-                    diagnostic_header = True
-                elif id_byte == diagnostic_data_id:
-                    diagnostic_data = True
-                else:
-                    good_id = False
-                    good_record = False
-
-                if good_id:
-                    record_length = struct.unpack('<H', self._stream_handle.read(2))[0]*2
-                    bad_byte = False
-                else:
-                    bad_byte = True
-                    log.warning('Found invalid ID byte: %d, at %d skipping to next sync byte',
-                                struct.unpack('B', id_byte)[0], self._stream_handle.tell()-1)
-                    self._exception_callback(
-                        RecoverableSampleException('Found Invalid ID Byte, skipping to next record'))
-
-            else:
-                if sync_byte == '':
-                    done = True
-                else:
-                    bad_byte = True
-                    good_record = False
-                    log.warning('Found invalid sync byte: %d at %d , skipping to next byte',
-                                struct.unpack('B', sync_byte)[0], self._stream_handle.tell()-1)
-                    self._exception_callback(
-                        RecoverableSampleException('Found Invalid Sync Byte, skipping to next record'))
-
-            # If the record is valid, read it
-            if good_record and not done:
-
-                self._stream_handle.seek(record_start, 0)
-
-                current_record = self._stream_handle.read(record_length)
-
-                if len(current_record) == record_length:
-
-                    record_start += record_length
-
-                    stored_checksum = struct.unpack('<H', current_record[(record_length-2):record_length])[0]
-
-                    if self._checksums_match(self, current_record, record_length, stored_checksum):
-
-                        if velocity_data:
-
-                            if sending_diagnostics:
-                                sending_diagnostics = False
-                                if total_diagnostic_records != diagnostics_count:
-                                    if diagnostics_count < total_diagnostic_records:
-                                        log.warning('Not enough diagnostics records, got %s, expected %d',
-                                                    diagnostics_count, total_diagnostic_records)
-                                        self._exception_callback(
-                                            RecoverableSampleException('Not enough diagnostics records'))
-
-                                    elif diagnostics_count > total_diagnostic_records:
-                                        log.warning('Too many diagnostics records, got %s, expected %d',
-                                                    diagnostics_count, total_diagnostic_records)
-                                        self._exception_callback(
-                                            RecoverableSampleException('Too many diagnostics records'))
-                                diagnostics_count = 0
-                                total_diagnostic_records = 0
-
-                            timestamp = VelptAbDataParticle.get_timestamp(current_record)
-
-                            velocity_data_dict = VelptAbDataParticle.generate_data_dict(self, current_record)
-
-                            particle = self._extract_sample(self._velocity_data_class,
-                                                            None,
-                                                            velocity_data_dict,
-                                                            timestamp)
-
-                            self._record_buffer.append(particle)
-
-                        elif diagnostic_data:
-
-                            # As diagnostics records have the same format as velocity records
-                            # you can use the same routine used to break down the velocity data
-
-                            timestamp = VelptAbDataParticle.get_timestamp(current_record)
-                            date_time_group = VelptAbDataParticle.get_date_time_string(current_record)
-
-                            diagnostics_data_dict = VelptAbDataParticle.generate_data_dict(self, current_record)
-
-                            if first_diagnostics_header_record:
-                                first_diagnostics_header_record = False
-
-                                diagnostics_header_dict =\
-                                    VelptAbDataParticle.generate_diagnostics_header_dict(self, date_time_group,
-                                                                                         diagnostics_header_record)
-
-                                total_diagnostic_records = VelptAbDataParticle.get_diagnostics_count(
-                                    diagnostics_header_record)
-
-                                particle = self._extract_sample(self._metadata_class,
-                                                                None,
-                                                                diagnostics_header_dict,
-                                                                timestamp)
-
-                                self._record_buffer.append(particle)
-
-                            particle = self._extract_sample(self._diagnostics_class,
-                                                            None,
-                                                            diagnostics_data_dict,
-                                                            timestamp)
-
-                            self._record_buffer.append(particle)
-
-                            diagnostics_count += 1
-
-                        elif diagnostic_header:
-                            first_diagnostics_header_record = True
-                            diagnostics_count = 0
-                            diagnostics_header_record = current_record
-                            sending_diagnostics = True
-
-                    else:
-                        log.warning('Invalid checksum: %d, expected %d - record will not be processed',
-                                    stored_checksum, self._calculated_checksum)
-                        self._exception_callback(
-                            RecoverableSampleException('Invalid checksum, no particle generated'))
-
-                else:
-                    done = True
-                    log.warning('Last record in file was malformed')
-                    self._exception_callback(
-                        RecoverableSampleException('Last record in file malformed, no particle generated'))
-
-        log.trace('File has been completely processed')
+        log.debug('File has been completely processed')

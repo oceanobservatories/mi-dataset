@@ -14,6 +14,7 @@ __license__ = 'Apache 2.0'
 
 import struct
 import calendar
+import ntplib
 from mi.core.log import get_logger
 log = get_logger()
 from mi.core.common import BaseEnum
@@ -166,7 +167,8 @@ class VelptAbDataParticle(DataParticle):
         second = VelptAbDataParticle._convert_bcd_to_decimal(record[VelptAbDataParticle.second_offset])
         timestamp = (year, month, day, hour, minute, second, 0, 0, 0)
         elapsed_seconds = calendar.timegm(timestamp)
-        return elapsed_seconds
+
+        return float(ntplib.system_to_ntp_time(elapsed_seconds))
 
     @staticmethod
     def get_diagnostics_count(record):
@@ -179,7 +181,7 @@ class VelptAbDataParticle(DataParticle):
                                           VelptAbDataParticle.cell_number_diagnostics_offset])[0]
 
     @staticmethod
-    def generate_data_dict(self, record):
+    def generate_data_dict(record):
         """
         Pull the needed fields from the data file and convert them
         to the format needed for the particle per the IDD. Then put
@@ -244,7 +246,7 @@ class VelptAbDataParticle(DataParticle):
                 VelptAbDataParticleKey.AMPLITUDE_BEAM3: amplitude_beam_3}
 
     @staticmethod
-    def generate_diagnostics_header_dict(self, date_time_string, record):
+    def generate_diagnostics_header_dict(date_time_string, record):
         """
         Pull the needed fields from the data file and convert them
         to the format needed for the particle per the IDD. Then put
