@@ -14,6 +14,7 @@ __license__ = 'Apache 2.0'
 
 import struct
 import calendar
+import ntplib
 from mi.core.log import get_logger
 log = get_logger()
 from mi.core.common import BaseEnum
@@ -166,7 +167,8 @@ class VelptAbDataParticle(DataParticle):
         second = VelptAbDataParticle._convert_bcd_to_decimal(record[VelptAbDataParticle.second_offset])
         timestamp = (year, month, day, hour, minute, second, 0, 0, 0)
         elapsed_seconds = calendar.timegm(timestamp)
-        return elapsed_seconds
+
+        return float(ntplib.system_to_ntp_time(elapsed_seconds))
 
     @staticmethod
     def get_diagnostics_count(record):
