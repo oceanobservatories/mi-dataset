@@ -81,6 +81,7 @@ import re
 import yaml
 import ntplib
 import numpy
+import math
 
 from mi.core.instrument.data_particle import DataParticle
 
@@ -399,7 +400,8 @@ class ResultSet(object):
         """
 
         local_expected_value = expected_value
-        round_factor = None
+        # unless otherwise specified round all floating point expected values to 5 digits
+        round_factor = 5
 
         # Let's first check to see if we have a None for an expected value
         if local_expected_value is None:
@@ -410,18 +412,16 @@ class ResultSet(object):
             local_expected_value = expected_value['value']
             round_factor = expected_value.get('round')
 
-        if isinstance(local_expected_value, float):
+        # apply the rounding factor to both values as necessary (ie. floats, list containing floats)
+        particle_value = massage_data(particle_value, round_factor)
+        local_expected_value = massage_data(local_expected_value, round_factor)
 
-            if round_factor is None:
-                # unless otherwise specified round all floating point expected values to 5 digits
-                round_factor = 5
+        if isinstance(local_expected_value, float):
 
             if particle_value is None:
                 return "value mismatch, expected value is float and particle value is None"
             else:
                 if isinstance(particle_value, float):
-                    particle_value = round(particle_value, round_factor)
-
                     log.trace("particle value (rounded) to %s", particle_value)
                     log.trace("expected value %s", local_expected_value)
 
@@ -599,3 +599,26 @@ class ResultSet(object):
             return particle
 
         return particle.generate_dict()
+
+
+def massage_data(value, _round=5):
+    """
+    Recursive helper function that accepts all types of data that may need to be modified for
+    comparison purposes. Note: Derived from validate_dataset
+    @param value: value to round, remove strip whitespace,
+    or convert to NaN to match yaml conversion
+    @param _round: precision in decimal digits
+    @return: the value massaged as necessary
+    """
+    if type(value) == str:
+        return value.strip()
+    elif type(value) == float and math.isnan(value):
+        return 'NaN'
+    elif type(value) == float:
+        return round(value, _round)
+    elif type(value) == list:
+        return [massage_data(x, _round) for x in value]
+    elif type(value) == dict:
+        return {massage_data(k, _round): massage_data(v, _round) for k, v in value.items()}
+    else:
+        return value
