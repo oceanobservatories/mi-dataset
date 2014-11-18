@@ -93,7 +93,7 @@ DATE_PATTERN_WITHOUT_MSEC_WITH_Z = r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$'
 DATE_PATTERN_WITHOUT_MSEC_WITHOUT_Z = r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$'
 DATE_FORMAT = "%Y-%m-%dT%H:%M:%S.%fZ"
 
-FLOAT_ALLOWED_DIFF = .000001
+FLOAT_ALLOWED_DIFF = .00001
 
 
 class ResultSet(object):
@@ -152,7 +152,7 @@ class ResultSet(object):
     ###
     #   Helpers
     ###
-    def _add_to_report(self, messages, indent = 0):
+    def _add_to_report(self, messages, indent=0):
         """
         Add a message to the report buffer, pass an indent factor to
         indent message in the ascii report.
@@ -181,7 +181,8 @@ class ResultSet(object):
         log.trace("Parsing result set header: %s", result_set)
 
         self._result_set_header = result_set.get("header")
-        if not self._result_set_header: raise IOError("Missing result set header")
+        if not self._result_set_header:
+            raise IOError("Missing result set header")
         log.trace("Header: %s", self._result_set_header)
 
         if self._result_set_header.get("particle_object") is None:
@@ -222,7 +223,7 @@ class ResultSet(object):
         # if this driver returns multiple particle classes, type checking happens
         # for each particle in _get_particle_data_errors
         if self._result_set_header.get("particle_object") != 'MULTIPLE' and \
-        self._result_set_header.get("particle_type") != 'MULTIPLE':
+           self._result_set_header.get("particle_type") != 'MULTIPLE':
             for particle in particles:
                 if not self._verify_particle_type(particle):
                     log.error("particle type mismatch: %s", particle)
@@ -255,7 +256,7 @@ class ResultSet(object):
             # Otherwise lets do some validation
             else:
                 errors += self._get_particle_header_errors(particle, particle_def)
-                errors += self._get_particle_data_errors(particle, particle_def)
+                errors += ResultSet._get_particle_data_errors(particle, particle_def)
 
             if len(errors):
                 self._add_to_report("Failed particle validation for index %d" % index)
@@ -294,7 +295,7 @@ class ResultSet(object):
         - Internal timestamp
         """
         errors = []
-        particle_dict = self._particle_as_dict(particle)
+        particle_dict = ResultSet._particle_as_dict(particle)
         particle_timestamp = particle_dict.get('internal_timestamp')
         expected_time = particle_def.get('internal_timestamp')
 
@@ -328,13 +329,14 @@ class ResultSet(object):
 
         return errors
 
-    def _get_particle_data_errors(self, particle, particle_def):
+    @staticmethod
+    def _get_particle_data_errors(particle, particle_def):
         """
         Verify that all data parameters are present and have the
         expected value
         """
         errors = []
-        particle_dict = self._particle_as_dict(particle)
+        particle_dict = ResultSet._particle_as_dict(particle)
         log.debug("Particle to test: %s", particle_dict)
         log.debug("Particle definition: %s", particle_def)
         particle_values = particle_dict['values']
@@ -365,7 +367,7 @@ class ResultSet(object):
 
         expected_keys = []
         for (key, value) in particle_def.items():
-            if(key not in ['_index', '_new_sequence', 'internal_timestamp', 'particle_object', 'particle_type']):
+            if key not in ['_index', '_new_sequence', 'internal_timestamp', 'particle_object', 'particle_type']:
                 expected_keys.append(key)
 
         particle_keys = []
@@ -385,7 +387,7 @@ class ResultSet(object):
                 log.debug("Verify value for '%s'", key)
                 e = ResultSet._verify_value(expected_value, particle_value)
                 if e:
-                    errors.append("'%s' %s"  % (key, e))
+                    errors.append("'%s' %s" % (key, e))
 
         return errors
 
@@ -400,8 +402,6 @@ class ResultSet(object):
         """
 
         local_expected_value = expected_value
-        # unless otherwise specified round all floating point expected values to 5 digits
-        round_factor = 5
 
         # Let's first check to see if we have a None for an expected value
         if local_expected_value is None:
@@ -411,131 +411,82 @@ class ResultSet(object):
         if isinstance(expected_value, dict):
             local_expected_value = expected_value['value']
             round_factor = expected_value.get('round')
+            local_expected_value = massage_data(local_expected_value, round_factor)
 
-        # apply the rounding factor to both values as necessary (ie. floats, list containing floats)
-        particle_value = massage_data(particle_value, round_factor)
-        local_expected_value = massage_data(local_expected_value, round_factor)
+        # get expected and particle types for comparison
+        expected_type = type(local_expected_value)
+        particle_type = type(particle_value)
 
-        if isinstance(local_expected_value, float):
+        # allow floats and ints to be compared, but not other types
+        if expected_type is not particle_type and not ((expected_type is float and particle_type is int) or
+           (expected_type is int and particle_type is float)):
+            log.info("expected value '%s', particle value '%s'", local_expected_value, particle_value)
+            return "value mismatch, expected type %s particle type %s" % (expected_type, particle_type)
 
-            if particle_value is None:
-                return "value mismatch, expected value is float and particle value is None"
-            else:
-                if isinstance(particle_value, float):
-                    log.trace("particle value (rounded) to %s", particle_value)
-                    log.trace("expected value %s", local_expected_value)
+        # check if this is a float
+        if expected_type is float:
+            # special compare for floats, see if they are within tolerance and are both non NaN
+            if not ResultSet._is_float_equal(local_expected_value, particle_value):
+                return "value mismatch, %.6f != %.6f " % (local_expected_value, particle_value)
 
-                    diff = abs(particle_value - local_expected_value)
+        # check if this is a list of floats
+        elif expected_type is list and len(local_expected_value) > 0:
+            if len(local_expected_value) != len(particle_value):
+                return "list size mismatch, %d != %d" % (len(local_expected_value), len(particle_value))
 
-                    if diff > FLOAT_ALLOWED_DIFF:
-                        return "value mismatch, %.6f != %.6f " % \
-                               (local_expected_value, particle_value)
-                else:
-                    return "value mismatch, expected value is float and particle value is %s" \
-                           % type(particle_value)
+            # loop over list items and compare
+            for i in range(0, len(local_expected_value)):
 
-        else:
-            if local_expected_value != particle_value:
-                # check for nans, two nans will not equal each other but in this
-                # case they are considered equal
-                if ResultSet._nan_equal_compare(local_expected_value, particle_value):
-                    return None
+                # check for nested list
+                if isinstance(local_expected_value[i], list):
 
-                return "value mismatch, %s != %s" % \
-                       (local_expected_value, particle_value)
+                    # this is a list, need to compare inner lists
+                    for j in range(0, len(local_expected_value[i])):
+                        # use special compare if this list item is a float
+                        if not ResultSet._is_float_or_other_equal(local_expected_value[i][j], particle_value[i][j]):
+                            return "value mismatch, %s != %s" % (local_expected_value, particle_value)
+
+                # use special compare if this list item is a float
+                elif not ResultSet._is_float_or_other_equal(local_expected_value[i], particle_value[i]):
+                    return "value mismatch, %s != %s" % (local_expected_value, particle_value)
+
+        # not a float or list of floats
+        elif local_expected_value != particle_value:
+            return "value mismatch, %s != %s" % (local_expected_value, particle_value)
 
         return None
 
     @staticmethod
-    def _nan_equal_compare(expected, received):
+    def _is_float_equal(expected, received):
         """
-        Compare the expected and recieved values, considering two NaNs to be equal.
-        If the values are equal True is returned, if they are not False is returned
-        @param expected: Expected value
-        @param received: Received value
-        @return: True if expected and received match including NaNs
+        Compare if two floats are with a tolerance of each other or are both NaNs (two NaNs are considered equal)
+        :param expected:
+        :param received:
+        :return: True if floats are equal, False if not
         """
-        # check for a list
-        if ResultSet._are_both_lists(expected, received):
-
-            # check for list within a list
-            if ResultSet._are_both_lists(expected[0], received[0]):
-                # confirm lists are equal size and contain numbers, if not they
-                # don't need checking for nans
-                if len(expected) == len(received) and \
-                        ResultSet._are_both_numbers(expected[0][0], received[0][0]):
-                    # loop and compare each list within a list
-                    all_lists_equal = True
-                    for i in range(0, len(expected)):
-                        if not ResultSet._is_equal_nan_list(expected[i], received[i]):
-                            all_lists_equal = False
-                            break
-                    if all_lists_equal:
-                        return True
-
-            # check for a list of numbers
-            elif ResultSet._are_both_numbers(expected[0], received[0]):
-                # this is a single list of float or ints
-                if ResultSet._is_equal_nan_list(expected, received):
-                    return True
-
-        # check two individual float or ints for nans
-        elif ResultSet._are_both_numbers(expected, received):
-            if numpy.isnan(expected) and numpy.isnan(received):
-                # found two Nans, they match
-                return True
-        return False
-
-    @staticmethod
-    def _are_both_lists(expected, received):
-        """
-        Compare if the expected and recieved values are both lists
-        @param expected: expected value
-        @param received: received value
-        @return: True if both lists, false if not
-        """
-        if isinstance(expected, list) and isinstance(received, list):
+        if (numpy.isnan(expected) and numpy.isnan(received)) or (abs(received - expected) < FLOAT_ALLOWED_DIFF):
             return True
         return False
 
     @staticmethod
-    def _are_both_numbers(expected, received):
+    def _is_float_or_other_equal(expected, received):
         """
-        Compare if the expected and recieved values are both floats or ints
-        @param expected: expected value
-        @param received: received value
-        @return: True if both lists, false if not
+        Check if the values to be compared are floats, if they are use the float equal method to compare,
+        otherwise use '!='
+        :param expected: The expected value
+        :param received: The received value
+        :return: True if values are equal, False if not
         """
-        if isinstance(expected, (float, int)) and isinstance(received, (float, int)):
-            return True
-        return False
-
-    @staticmethod
-    def _is_equal_nan_list(expected_list, received_list):
-        """
-        Compare two lists that contain nan values, return True if they match,
-        False if they do not, considering two NaNs to be equal in values
-        @param expected_list: a list of expected values
-        @param received_list: the recieved list of values
-        @return: True if lists match, False if lists don't match
-        """
-        # first check list length, if this doesn't match the lists don't match
-        if len(expected_list) == len(received_list):
-            # get numpy array of True / False matching nan
-            isnan_ex_value = numpy.isnan(expected_list)
-            isnan_particle_value = numpy.isnan(received_list)
-            # make a new list containing only non-nan values
-            ex_val_non_nan = []
-            particle_non_nan = []
-            for i in range(0, len(expected_list)):
-                if not isnan_ex_value[i]:
-                    ex_val_non_nan.append(expected_list[i])
-                if not isnan_particle_value[i]:
-                    particle_non_nan.append(received_list[i])
-            if ex_val_non_nan == particle_non_nan:
-                # all non-nan values match
+        # If this is a float, use the special float compare, otherwise compare with '!='
+        if isinstance(expected, float):
+            # need a special case for ints if the type is wrong but two values are the same
+            if isinstance(received, int) and received == expected:
                 return True
-        return False
+            if not isinstance(received, float) or not ResultSet._is_float_equal(expected, received):
+                return False
+        elif expected != received:
+            return False
+        return True
 
     def _string_to_ntp_date_time(self, datestr):
         """
@@ -594,7 +545,8 @@ class ResultSet(object):
 
         return timestamp
 
-    def _particle_as_dict(self, particle):
+    @staticmethod
+    def _particle_as_dict(particle):
         if isinstance(particle, dict):
             return particle
 
@@ -605,20 +557,13 @@ def massage_data(value, _round=5):
     """
     Recursive helper function that accepts all types of data that may need to be modified for
     comparison purposes. Note: Derived from validate_dataset
-    @param value: value to round, remove strip whitespace,
-    or convert to NaN to match yaml conversion
+    @param value: value to round, remove strip whitespace
     @param _round: precision in decimal digits
     @return: the value massaged as necessary
     """
-    if type(value) == str:
-        return value.strip()
-    elif type(value) == float and math.isnan(value):
-        return 'NaN'
-    elif type(value) == float:
+    if type(value) == float and not math.isnan(value):
         return round(value, _round)
     elif type(value) == list:
         return [massage_data(x, _round) for x in value]
-    elif type(value) == dict:
-        return {massage_data(k, _round): massage_data(v, _round) for k, v in value.items()}
     else:
         return value
