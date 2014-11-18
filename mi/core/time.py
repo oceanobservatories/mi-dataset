@@ -13,17 +13,17 @@ __author__ = 'Bill French'
 __license__ = 'Apache 2.0'
 
 import calendar
-import datetime
+from datetime import datetime
 import ntplib
 import time
 import re
-from dateutil import parser
 
 from mi.core.log import get_logger
 log = get_logger()
 
 DATE_PATTERN = r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z?$'
 DATE_MATCHER = re.compile(DATE_PATTERN)
+DATE_FORMAT = "%Y-%m-%dT%H:%M:%S.%fZ"
 
 
 def string_to_ntp_date_time(datestr):
@@ -36,27 +36,34 @@ def string_to_ntp_date_time(datestr):
     """
     if not isinstance(datestr, str):
         raise IOError('Value %s is not a string.' % str(datestr))
+
     if not DATE_MATCHER.match(datestr):
         raise ValueError("date string not in ISO8601 format YYYY-MM-DDTHH:MM:SS.SSSSZ")
 
     try:
         # This assumes input date string are in UTC (=GMT)
+
+        # if there is no decimal place, add one to match the date format
+        if datestr.find('.') == -1:
+            if datestr[-1] != 'Z':
+                datestr += '.0Z'
+            else:
+                datestr = datestr[:-1] + '.0Z'
+
+        # if there is no trailing 'Z' on the input string add one
         if datestr[-1:] != 'Z':
             datestr += 'Z'
 
-        format = "%Y-%m-%dT%H:%M:%S.%fZ"
-
-        dt = datetime.strptime(datestr, format)
+        dt = datetime.strptime(datestr, DATE_FORMAT)
 
         unix_timestamp = calendar.timegm(dt.timetuple()) + (dt.microsecond / 1000000.0)
 
         # convert to ntp (seconds since gmt jan 1 1900)
         timestamp = ntplib.system_to_ntp_time(unix_timestamp)
+        log.debug("converted time string '%s', unix_ts: %s ntp: %s", datestr, unix_timestamp, timestamp)
 
     except ValueError as e:
         raise ValueError('Value %s could not be formatted to a date. %s' % (str(datestr), e))
-
-    log.debug("converting time string '%s', unix_ts: %s ntp: %s", datestr, unix_timestamp, timestamp)
 
     return timestamp
 
