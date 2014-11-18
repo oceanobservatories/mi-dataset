@@ -265,9 +265,8 @@ class CtdbpCdefDclCpParser(SimpleParser):
         # read the first line in the file
         line = self._stream_handle.readline()
 
-
         while line:
- 
+
             test_inst = UNCORR_MATCHER.match(line)
             test_meta = STATUS_MATCHER.match(line)
             test_corr = CORR_MATCHER.match(line)
@@ -295,9 +294,8 @@ class CtdbpCdefDclCpParser(SimpleParser):
             else:
                 # received an unrecognized line
                 log.warn("Exception when parsing file")
-                message = "Error while parsing line: [%s]" + line
+                message = "Error while parsing line: [%s]" % line
                 self._exception_callback(RecoverableSampleException(message))
 
             # read the next line in the file
             line = self._stream_handle.readline()
-

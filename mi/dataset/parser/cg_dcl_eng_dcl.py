@@ -20,7 +20,7 @@ from mi.core.instrument.data_particle import DataParticle, DataParticleKey
 from mi.dataset.dataset_parser import SimpleParser, DataSetDriverConfigKeys
 from mi.dataset.parser.common_regexes import END_OF_LINE_REGEX, \
     DATE_YYYY_MM_DD_REGEX, TIME_HR_MIN_SEC_MSEC_REGEX, INT_REGEX, \
-    TIME_HR_MIN_SEC_REGEX, FLOAT_REGEX
+    TIME_HR_MIN_SEC_REGEX, FLOAT_REGEX, ASCII_HEX_CHAR_REGEX
 
 from mi.dataset.parser import utilities
 
@@ -88,7 +88,7 @@ class CgDclEngDclParserDataParticleKey(BaseEnum):
     NUM_PROCESSES = 'num_processes'
     LOG_TYPE = 'log_type'
     MESSAGE_TEXT = 'message_text'
-    MESSAGE_SENT_TIMESTAMP = 'msg_sent_timestamp'
+    MESSAGE_SENT_TIMESTAMP = 'message_sent_timestamp'
     LATITUDE = 'latitude'
     LONGITUDE = 'longitude'
     GPS_SPEED = 'gps_speed'
@@ -502,7 +502,7 @@ SUPERV_REGEX = r'(?P<' + CgDclEngDclParserDataParticleKey.HEADER_TIMESTAMP + '>'
                CgDclEngDclParserDataParticleKey.IMAIN_CURRENT + \
                '>' + FLOAT_REGEX + ')\s+(?P<' + \
                ERROR_BITS_PARAM + \
-               '>' + INT_REGEX + ')\s+t\s+(?P<' + \
+               '>' + ASCII_HEX_CHAR_REGEX + '{8})\s+t\s+(?P<' + \
                CgDclEngDclParserDataParticleKey.BMP085_TEMP + \
                '>' + FLOAT_REGEX + ')\s+(?P<' + \
                CgDclEngDclParserDataParticleKey.SHT25_TEMP + \
@@ -1191,15 +1191,8 @@ class CgDclEngDclParser(SimpleParser):
                     log.error(message)
                     self._exception_callback(UnexpectedDataException(message))
 
-            elif re.match(IGNORE_REGEX, line):
-
-                log.debug("Found ignore match.  Line: %s", line)
-
             else:
-                message = "Invalid Log record, Line: " + line
-                log.error(message)
-                self._exception_callback(UnexpectedDataException(message))
-
+                log.info("Non-match .. ignoring line: %s", line)
 
             if sample:
                 self._record_buffer.append(sample)

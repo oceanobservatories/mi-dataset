@@ -160,12 +160,12 @@ data:
     particle_object: CgDclEngDclCpuUptimeTelemeteredDataParticle
     particle_type: cg_dcl_eng_dcl_cpu_uptime
     internal_timestamp: 3619728259.680000
-    uptime_string: '4 days 11:48:15'
     mem_free: 12424
     num_processes: 88
     load_val_3:          0.18000
     load_val_2:          0.24000
     load_val_1:          0.80000
+    uptime_string: '4 days 11:48:15'
     header_timestamp: '2014/09/15 00:04:19.680'
   - _index: 6
     particle_object: CgDclEngDclMsgCountsTelemeteredDataParticle
@@ -181,6 +181,7 @@ data:
     particle_object: CgDclEngDclGpsTelemeteredDataParticle
     particle_type: cg_dcl_eng_dcl_gps
     internal_timestamp: 3619728260.020000
+    message_sent_timestamp: '2014/09/15 00:04:19.676'
     latitude_alt_format: '5955.6485 N'
     gps_true_course:        294.60000
     gps_speed:          0.00000
@@ -188,7 +189,6 @@ data:
     gps_quality: 2
     gps_num_satellites: 8
     header_timestamp: '2014/09/15 00:04:20.020'
-    msg_sent_timestamp: '2014/09/15 00:04:19.676'
     gps_hdop:          1.00000
     date_of_fix: '150914'
     latitude:         59.92748
@@ -199,11 +199,11 @@ data:
     particle_object: CgDclEngDclPpsTelemeteredDataParticle
     particle_type: cg_dcl_eng_dcl_pps
     internal_timestamp: 3619728260.021000
+    message_sent_timestamp: '2014/09/15 00:04:15.000'
     delta_min: -28
     bad_pulses: 0
     nmea_lock: 1
     header_timestamp: '2014/09/15 00:04:20.021'
-    msg_sent_timestamp: '2014/09/15 00:04:15.000'
     delta: 999963
     delta_max: -48
   - _index: 9
@@ -286,107 +286,107 @@ data:
     particle_type: cg_dcl_eng_dcl_dlog_status
     internal_timestamp: 3619728260.025000
     bytes_logged: 55072637
-    instrument_identifier: 'mopak'
+    message_sent_timestamp: '2014/09/15 00:03:51.083'
     bad_records: 18
     time_last_communicated: 1410739431
     bytes_sent: 1904
     header_timestamp: '2014/09/15 00:04:20.025'
-    msg_sent_timestamp: '2014/09/15 00:03:51.083'
     good_records: 1280759
     time_received_last_data: 1410739431
     bad_bytes: 0
     bytes_received: 55079462
+    instrument_identifier: 'mopak'
     datalogger_state: 'DAQ'
   - _index: 13
     particle_object: CgDclEngDclDlogStatusTelemeteredDataParticle
     particle_type: cg_dcl_eng_dcl_dlog_status
     internal_timestamp: 3619728260.026000
     bytes_logged: 109303
-    instrument_identifier: 'hyd1'
+    message_sent_timestamp: '2014/09/15 00:03:58.161'
     bad_records: 88
     time_last_communicated: 1410739426
     bytes_sent: 5811
     header_timestamp: '2014/09/15 00:04:20.026'
-    msg_sent_timestamp: '2014/09/15 00:03:58.161'
     good_records: 1937
     time_received_last_data: 1410739426
     bad_bytes: 0
     bytes_received: 21502
+    instrument_identifier: 'hyd1'
     datalogger_state: 'DAQ'
   - _index: 14
     particle_object: CgDclEngDclDlogStatusTelemeteredDataParticle
     particle_type: cg_dcl_eng_dcl_dlog_status
     internal_timestamp: 3619728260.027000
     bytes_logged: 1769073
-    instrument_identifier: 'dosta'
+    message_sent_timestamp: '2014/09/15 00:04:17.077'
     bad_records: 831
     time_last_communicated: 1410739384
     bytes_sent: 6411
     header_timestamp: '2014/09/15 00:04:20.027'
-    msg_sent_timestamp: '2014/09/15 00:04:17.077'
     good_records: 14711
     time_received_last_data: 1410739384
     bad_bytes: 34662
     bytes_received: 1417568
+    instrument_identifier: 'dosta'
     datalogger_state: 'IDLE'
   - _index: 15
     particle_object: CgDclEngDclDlogStatusTelemeteredDataParticle
     particle_type: cg_dcl_eng_dcl_dlog_status
     internal_timestamp: 3619728260.028000
     bytes_logged: 2384919
-    instrument_identifier: 'spkir1'
+    message_sent_timestamp: '2014/09/15 00:03:57.912'
     bad_records: 64
     time_last_communicated: 1410738484
     bytes_sent: 594
     header_timestamp: '2014/09/15 00:04:20.028'
-    msg_sent_timestamp: '2014/09/15 00:03:57.912'
     good_records: 27595
     time_received_last_data: 1410738484
     bad_bytes: 0
     bytes_received: 1682248
+    instrument_identifier: 'spkir1'
     datalogger_state: 'IDLE'
   - _index: 16
     particle_object: CgDclEngDclDlogStatusTelemeteredDataParticle
     particle_type: cg_dcl_eng_dcl_dlog_status
     internal_timestamp: 3619728260.029000
     bytes_logged: 756832
-    instrument_identifier: 'metbk1'
+    message_sent_timestamp: '2014/09/15 00:04:14.938'
     bad_records: 0
     time_last_communicated: 1410739423
     bytes_sent: 36057
     header_timestamp: '2014/09/15 00:04:20.029'
-    msg_sent_timestamp: '2014/09/15 00:04:14.938'
     good_records: 6467
     time_received_last_data: 1410739423
     bad_bytes: 0
     bytes_received: 1118113
+    instrument_identifier: 'metbk1'
     datalogger_state: 'DAQ'
   - _index: 17
     particle_object: CgDclEngDclDlogStatusTelemeteredDataParticle
     particle_type: cg_dcl_eng_dcl_dlog_status
     internal_timestamp: 3619728260.030000
     bytes_logged: 201650
-    instrument_identifier: 'nutnr1'
+    message_sent_timestamp: '2014/09/15 00:04:03.911'
     bad_records: 0
     time_last_communicated: 1410739386
     bytes_sent: 863
     header_timestamp: '2014/09/15 00:04:20.030'
-    msg_sent_timestamp: '2014/09/15 00:04:03.911'
     good_records: 1658
     time_received_last_data: 1410739268
     bad_bytes: 431
     bytes_received: 439263
+    instrument_identifier: 'nutnr1'
     datalogger_state: 'IDLE'
   - _index: 18
     particle_object: CgDclEngDclStatusTelemeteredDataParticle
     particle_type: cg_dcl_eng_dcl_status
     internal_timestamp: 3619728260.260000
     ntp_jitter:          0.06700
-    sync_type: '*SHM(1) .PPS.'
+    message_sent_timestamp: '2014/09/15 00:04:20.031'
     ntp_offset:         -0.20200
     message_sent_type: 'NTP'
     header_timestamp: '2014/09/15 00:04:20.260'
-    msg_sent_timestamp: '2014/09/15 00:04:20.031'
+    sync_type: '*SHM(1) .PPS.'
   - _index: 19
     particle_object: CgDclEngDclSupervTelemeteredDataParticle
     particle_type: cg_dcl_eng_dcl_superv
@@ -440,12 +440,12 @@ data:
     particle_object: CgDclEngDclCpuUptimeTelemeteredDataParticle
     particle_type: cg_dcl_eng_dcl_cpu_uptime
     internal_timestamp: 3619728560.704000
-    uptime_string: '4 days 11:53:16'
     mem_free: 15096
     num_processes: 84
     load_val_3:          0.15000
     load_val_2:          0.13000
     load_val_1:          0.10000
+    uptime_string: '4 days 11:53:16'
     header_timestamp: '2014/09/15 00:09:20.704'
   - _index: 21
     particle_object: CgDclEngDclMsgCountsTelemeteredDataParticle
@@ -461,6 +461,7 @@ data:
     particle_object: CgDclEngDclGpsTelemeteredDataParticle
     particle_type: cg_dcl_eng_dcl_gps
     internal_timestamp: 3619728560.919000
+    message_sent_timestamp: '2014/09/15 00:09:20.701'
     latitude_alt_format: '5955.6402 N'
     gps_true_course:        285.50000
     gps_speed:          1.50000
@@ -468,7 +469,6 @@ data:
     gps_quality: 2
     gps_num_satellites: 7
     header_timestamp: '2014/09/15 00:09:20.919'
-    msg_sent_timestamp: '2014/09/15 00:09:20.701'
     gps_hdop:          1.10000
     date_of_fix: '150914'
     latitude:         59.92734
@@ -479,11 +479,11 @@ data:
     particle_object: CgDclEngDclPpsTelemeteredDataParticle
     particle_type: cg_dcl_eng_dcl_pps
     internal_timestamp: 3619728560.920000
+    message_sent_timestamp: '2014/09/15 00:09:15.000'
     delta_min: 0
     bad_pulses: 0
     nmea_lock: 1
     header_timestamp: '2014/09/15 00:09:20.920'
-    msg_sent_timestamp: '2014/09/15 00:09:15.000'
     delta: 1000000
     delta_max: 39
   - _index: 24
@@ -566,107 +566,107 @@ data:
     particle_type: cg_dcl_eng_dcl_dlog_status
     internal_timestamp: 3619728560.929000
     bytes_logged: 55205937
-    instrument_identifier: 'mopak'
+    message_sent_timestamp: '2014/09/15 00:09:01.078'
     bad_records: 18
     time_last_communicated: 1410739741
     bytes_sent: 1904
     header_timestamp: '2014/09/15 00:09:20.929'
-    msg_sent_timestamp: '2014/09/15 00:09:01.078'
     good_records: 1283859
     time_received_last_data: 1410739741
     bad_bytes: 0
     bytes_received: 55212762
+    instrument_identifier: 'mopak'
     datalogger_state: 'DAQ'
   - _index: 28
     particle_object: CgDclEngDclDlogStatusTelemeteredDataParticle
     particle_type: cg_dcl_eng_dcl_dlog_status
     internal_timestamp: 3619728560.930000
     bytes_logged: 109654
-    instrument_identifier: 'hyd1'
+    message_sent_timestamp: '2014/09/15 00:09:18.374'
     bad_records: 88
     time_last_communicated: 1410739498
     bytes_sent: 5829
     header_timestamp: '2014/09/15 00:09:20.930'
-    msg_sent_timestamp: '2014/09/15 00:09:18.374'
     good_records: 1943
     time_received_last_data: 1410739498
     bad_bytes: 0
     bytes_received: 21568
+    instrument_identifier: 'hyd1'
     datalogger_state: 'IDLE'
   - _index: 29
     particle_object: CgDclEngDclDlogStatusTelemeteredDataParticle
     particle_type: cg_dcl_eng_dcl_dlog_status
     internal_timestamp: 3619728560.931000
     bytes_logged: 1769073
-    instrument_identifier: 'dosta'
+    message_sent_timestamp: '2014/09/15 00:09:09.576'
     bad_records: 831
     time_last_communicated: 1410739384
     bytes_sent: 6411
     header_timestamp: '2014/09/15 00:09:20.931'
-    msg_sent_timestamp: '2014/09/15 00:09:09.576'
     good_records: 14711
     time_received_last_data: 1410739384
     bad_bytes: 34662
     bytes_received: 1417568
+    instrument_identifier: 'dosta'
     datalogger_state: 'IDLE'
   - _index: 30
     particle_object: CgDclEngDclDlogStatusTelemeteredDataParticle
     particle_type: cg_dcl_eng_dcl_dlog_status
     internal_timestamp: 3619728560.932000
     bytes_logged: 2384919
-    instrument_identifier: 'spkir1'
+    message_sent_timestamp: '2014/09/15 00:09:17.914'
     bad_records: 64
     time_last_communicated: 1410738484
     bytes_sent: 594
     header_timestamp: '2014/09/15 00:09:20.932'
-    msg_sent_timestamp: '2014/09/15 00:09:17.914'
     good_records: 27595
     time_received_last_data: 1410738484
     bad_bytes: 0
     bytes_received: 1682248
+    instrument_identifier: 'spkir1'
     datalogger_state: 'IDLE'
   - _index: 31
     particle_object: CgDclEngDclDlogStatusTelemeteredDataParticle
     particle_type: cg_dcl_eng_dcl_dlog_status
     internal_timestamp: 3619728560.933000
     bytes_logged: 757417
-    instrument_identifier: 'metbk1'
+    message_sent_timestamp: '2014/09/15 00:09:03.048'
     bad_records: 0
     time_last_communicated: 1410739715
     bytes_sent: 36084
     header_timestamp: '2014/09/15 00:09:20.933'
-    msg_sent_timestamp: '2014/09/15 00:09:03.048'
     good_records: 6472
     time_received_last_data: 1410739715
     bad_bytes: 0
     bytes_received: 1118950
+    instrument_identifier: 'metbk1'
     datalogger_state: 'DAQ'
   - _index: 32
     particle_object: CgDclEngDclDlogStatusTelemeteredDataParticle
     particle_type: cg_dcl_eng_dcl_dlog_status
     internal_timestamp: 3619728560.939000
     bytes_logged: 201650
-    instrument_identifier: 'nutnr1'
+    message_sent_timestamp: '2014/09/15 00:09:00.897'
     bad_records: 0
     time_last_communicated: 1410739386
     bytes_sent: 863
     header_timestamp: '2014/09/15 00:09:20.939'
-    msg_sent_timestamp: '2014/09/15 00:09:00.897'
     good_records: 1658
     time_received_last_data: 1410739268
     bad_bytes: 431
     bytes_received: 439263
+    instrument_identifier: 'nutnr1'
     datalogger_state: 'IDLE'
   - _index: 33
     particle_object: CgDclEngDclStatusTelemeteredDataParticle
     particle_type: cg_dcl_eng_dcl_status
     internal_timestamp: 3619728561.115000
     ntp_jitter:          0.06100
-    sync_type: '*SHM(1) .PPS.'
+    message_sent_timestamp: '2014/09/15 00:09:20.940'
     ntp_offset:         -0.18900
     message_sent_type: 'NTP'
     header_timestamp: '2014/09/15 00:09:21.115'
-    msg_sent_timestamp: '2014/09/15 00:09:20.940'
+    sync_type: '*SHM(1) .PPS.'
   - _index: 34
     particle_object: CgDclEngDclSupervTelemeteredDataParticle
     particle_type: cg_dcl_eng_dcl_superv
@@ -720,12 +720,12 @@ data:
     particle_object: CgDclEngDclCpuUptimeTelemeteredDataParticle
     particle_type: cg_dcl_eng_dcl_cpu_uptime
     internal_timestamp: 3619728861.728000
-    uptime_string: '4 days 11:58:17'
     mem_free: 14816
     num_processes: 84
     load_val_3:          0.13000
     load_val_2:          0.15000
     load_val_1:          0.37000
+    uptime_string: '4 days 11:58:17'
     header_timestamp: '2014/09/15 00:14:21.728'
   - _index: 36
     particle_object: CgDclEngDclMsgCountsTelemeteredDataParticle
@@ -741,6 +741,7 @@ data:
     particle_object: CgDclEngDclGpsTelemeteredDataParticle
     particle_type: cg_dcl_eng_dcl_gps
     internal_timestamp: 3619728861.974000
+    message_sent_timestamp: '2014/09/15 00:14:21.725'
     latitude_alt_format: '5955.6214 N'
     gps_true_course:        278.30000
     gps_speed:          1.40000
@@ -748,7 +749,6 @@ data:
     gps_quality: 2
     gps_num_satellites: 9
     header_timestamp: '2014/09/15 00:14:21.974'
-    msg_sent_timestamp: '2014/09/15 00:14:21.725'
     gps_hdop:          0.90000
     date_of_fix: '150914'
     latitude:         59.92702
@@ -759,11 +759,11 @@ data:
     particle_object: CgDclEngDclPpsTelemeteredDataParticle
     particle_type: cg_dcl_eng_dcl_pps
     internal_timestamp: 3619728861.976000
+    message_sent_timestamp: '2014/09/15 00:14:15.000'
     delta_min: 0
     bad_pulses: 0
     nmea_lock: 1
     header_timestamp: '2014/09/15 00:14:21.976'
-    msg_sent_timestamp: '2014/09/15 00:14:15.000'
     delta: 999999
     delta_max: 32
   - _index: 39
@@ -846,123 +846,123 @@ data:
     particle_type: cg_dcl_eng_dcl_dlog_status
     internal_timestamp: 3619728861.986000
     bytes_logged: 55339237
-    instrument_identifier: 'mopak'
+    message_sent_timestamp: '2014/09/15 00:14:11.074'
     bad_records: 18
     time_last_communicated: 1410740051
     bytes_sent: 1904
     header_timestamp: '2014/09/15 00:14:21.986'
-    msg_sent_timestamp: '2014/09/15 00:14:11.074'
     good_records: 1286959
     time_received_last_data: 1410740051
     bad_bytes: 0
     bytes_received: 55346062
+    instrument_identifier: 'mopak'
     datalogger_state: 'DAQ'
   - _index: 43
     particle_object: CgDclEngDclDlogStatusTelemeteredDataParticle
     particle_type: cg_dcl_eng_dcl_dlog_status
     internal_timestamp: 3619728861.989000
     bytes_logged: 0
-    instrument_identifier: 'imm'
+    message_sent_timestamp: '2014/09/15 00:10:01.965'
     bad_records: 0
     time_last_communicated: 1410739801
     bytes_sent: 0
     header_timestamp: '2014/09/15 00:14:21.989'
-    msg_sent_timestamp: '2014/09/15 00:10:01.965'
     good_records: 0
     time_received_last_data: 1410739801
     bad_bytes: 0
     bytes_received: 0
+    instrument_identifier: 'imm'
     datalogger_state: 'ACTIVE'
   - _index: 44
     particle_object: CgDclEngDclDlogStatusTelemeteredDataParticle
     particle_type: cg_dcl_eng_dcl_dlog_status
     internal_timestamp: 3619728861.991000
     bytes_logged: 109654
-    instrument_identifier: 'hyd1'
+    message_sent_timestamp: '2014/09/15 00:14:06.754'
     bad_records: 88
     time_last_communicated: 1410739498
     bytes_sent: 5829
     header_timestamp: '2014/09/15 00:14:21.991'
-    msg_sent_timestamp: '2014/09/15 00:14:06.754'
     good_records: 1943
     time_received_last_data: 1410739498
     bad_bytes: 0
     bytes_received: 21568
+    instrument_identifier: 'hyd1'
     datalogger_state: 'IDLE'
   - _index: 45
     particle_object: CgDclEngDclDlogStatusTelemeteredDataParticle
     particle_type: cg_dcl_eng_dcl_dlog_status
     internal_timestamp: 3619728861.994000
     bytes_logged: 1769073
-    instrument_identifier: 'dosta'
+    message_sent_timestamp: '2014/09/15 00:14:02.084'
     bad_records: 831
     time_last_communicated: 1410739384
     bytes_sent: 6411
     header_timestamp: '2014/09/15 00:14:21.994'
-    msg_sent_timestamp: '2014/09/15 00:14:02.084'
     good_records: 14711
     time_received_last_data: 1410739384
     bad_bytes: 34662
     bytes_received: 1417568
+    instrument_identifier: 'dosta'
     datalogger_state: 'IDLE'
   - _index: 46
     particle_object: CgDclEngDclDlogStatusTelemeteredDataParticle
     particle_type: cg_dcl_eng_dcl_dlog_status
     internal_timestamp: 3619728861.996000
     bytes_logged: 2384919
-    instrument_identifier: 'spkir1'
+    message_sent_timestamp: '2014/09/15 00:14:05.903'
     bad_records: 64
     time_last_communicated: 1410738484
     bytes_sent: 594
     header_timestamp: '2014/09/15 00:14:21.996'
-    msg_sent_timestamp: '2014/09/15 00:14:05.903'
     good_records: 27595
     time_received_last_data: 1410738484
     bad_bytes: 0
     bytes_received: 1682248
+    instrument_identifier: 'spkir1'
     datalogger_state: 'IDLE'
   - _index: 47
     particle_object: CgDclEngDclDlogStatusTelemeteredDataParticle
     particle_type: cg_dcl_eng_dcl_dlog_status
     internal_timestamp: 3619728861.999000
     bytes_logged: 757885
-    instrument_identifier: 'metbk1'
+    message_sent_timestamp: '2014/09/15 00:13:52.916'
     bad_records: 0
     time_last_communicated: 1410740000
     bytes_sent: 36111
     header_timestamp: '2014/09/15 00:14:21.999'
-    msg_sent_timestamp: '2014/09/15 00:13:52.916'
     good_records: 6476
     time_received_last_data: 1410739968
     bad_bytes: 0
     bytes_received: 1119787
+    instrument_identifier: 'metbk1'
     datalogger_state: 'DAQ'
   - _index: 48
     particle_object: CgDclEngDclDlogStatusTelemeteredDataParticle
     particle_type: cg_dcl_eng_dcl_dlog_status
     internal_timestamp: 3619728862.002000
     bytes_logged: 201650
-    instrument_identifier: 'nutnr1'
+    message_sent_timestamp: '2014/09/15 00:13:57.905'
     bad_records: 0
     time_last_communicated: 1410739386
     bytes_sent: 863
     header_timestamp: '2014/09/15 00:14:22.002'
-    msg_sent_timestamp: '2014/09/15 00:13:57.905'
     good_records: 1658
     time_received_last_data: 1410739268
     bad_bytes: 431
     bytes_received: 439263
+    instrument_identifier: 'nutnr1'
     datalogger_state: 'IDLE'
   - _index: 49
     particle_object: CgDclEngDclStatusTelemeteredDataParticle
     particle_type: cg_dcl_eng_dcl_status
     internal_timestamp: 3619728862.182000
     ntp_jitter:          0.06100
-    sync_type: '*SHM(1) .PPS.'
+    message_sent_timestamp: '2014/09/15 00:14:22.004'
     ntp_offset:         -0.12300
     message_sent_type: 'NTP'
     header_timestamp: '2014/09/15 00:14:22.182'
-    msg_sent_timestamp: '2014/09/15 00:14:22.004'
+    sync_type: '*SHM(1) .PPS.'
   - _index: 50
     particle_object: CgDclEngDclSupervTelemeteredDataParticle
     particle_type: cg_dcl_eng_dcl_superv
@@ -1212,12 +1212,12 @@ data:
     particle_object: CgDclEngDclCpuUptimeTelemeteredDataParticle
     particle_type: cg_dcl_eng_dcl_cpu_uptime
     internal_timestamp: 3619729162.721000
-    uptime_string: '4 days 12:03:18'
     mem_free: 14648
     num_processes: 84
     load_val_3:          0.14000
     load_val_2:          0.21000
     load_val_1:          0.49000
+    uptime_string: '4 days 12:03:18'
     header_timestamp: '2014/09/15 00:19:22.721'
   - _index: 56
     particle_object: CgDclEngDclMsgCountsTelemeteredDataParticle
@@ -1233,6 +1233,7 @@ data:
     particle_object: CgDclEngDclGpsTelemeteredDataParticle
     particle_type: cg_dcl_eng_dcl_gps
     internal_timestamp: 3619729163.028000
+    message_sent_timestamp: '2014/09/15 00:19:22.717'
     latitude_alt_format: '5955.6070 N'
     gps_true_course:         22.90000
     gps_speed:          1.50000
@@ -1240,7 +1241,6 @@ data:
     gps_quality: 2
     gps_num_satellites: 10
     header_timestamp: '2014/09/15 00:19:23.028'
-    msg_sent_timestamp: '2014/09/15 00:19:22.717'
     gps_hdop:          1.00000
     date_of_fix: '150914'
     latitude:         59.92678
@@ -1251,11 +1251,11 @@ data:
     particle_object: CgDclEngDclPpsTelemeteredDataParticle
     particle_type: cg_dcl_eng_dcl_pps
     internal_timestamp: 3619729163.029000
+    message_sent_timestamp: '2014/09/15 00:19:15.000'
     delta_min: 1
     bad_pulses: 0
     nmea_lock: 1
     header_timestamp: '2014/09/15 00:19:23.029'
-    msg_sent_timestamp: '2014/09/15 00:19:15.000'
     delta: 1000006
     delta_max: -81
   - _index: 59
@@ -1338,123 +1338,123 @@ data:
     particle_type: cg_dcl_eng_dcl_dlog_status
     internal_timestamp: 3619729163.033000
     bytes_logged: 55472537
-    instrument_identifier: 'mopak'
+    message_sent_timestamp: '2014/09/15 00:19:21.078'
     bad_records: 18
     time_last_communicated: 1410740361
     bytes_sent: 1904
     header_timestamp: '2014/09/15 00:19:23.033'
-    msg_sent_timestamp: '2014/09/15 00:19:21.078'
     good_records: 1290059
     time_received_last_data: 1410740361
     bad_bytes: 0
     bytes_received: 55479362
+    instrument_identifier: 'mopak'
     datalogger_state: 'DAQ'
   - _index: 63
     particle_object: CgDclEngDclDlogStatusTelemeteredDataParticle
     particle_type: cg_dcl_eng_dcl_dlog_status
     internal_timestamp: 3619729163.034000
     bytes_logged: 0
-    instrument_identifier: 'imm'
+    message_sent_timestamp: '2014/09/15 00:18:22.072'
     bad_records: 0
     time_last_communicated: 1410740302
     bytes_sent: 0
     header_timestamp: '2014/09/15 00:19:23.034'
-    msg_sent_timestamp: '2014/09/15 00:18:22.072'
     good_records: 0
     time_received_last_data: 1410740302
     bad_bytes: 0
     bytes_received: 0
+    instrument_identifier: 'imm'
     datalogger_state: 'IDLE'
   - _index: 64
     particle_object: CgDclEngDclDlogStatusTelemeteredDataParticle
     particle_type: cg_dcl_eng_dcl_dlog_status
     internal_timestamp: 3619729163.035000
     bytes_logged: 109654
-    instrument_identifier: 'hyd1'
+    message_sent_timestamp: '2014/09/15 00:18:54.883'
     bad_records: 88
     time_last_communicated: 1410739498
     bytes_sent: 5829
     header_timestamp: '2014/09/15 00:19:23.035'
-    msg_sent_timestamp: '2014/09/15 00:18:54.883'
     good_records: 1943
     time_received_last_data: 1410739498
     bad_bytes: 0
     bytes_received: 21568
+    instrument_identifier: 'hyd1'
     datalogger_state: 'IDLE'
   - _index: 65
     particle_object: CgDclEngDclDlogStatusTelemeteredDataParticle
     particle_type: cg_dcl_eng_dcl_dlog_status
     internal_timestamp: 3619729163.036000
     bytes_logged: 1772747
-    instrument_identifier: 'dosta'
+    message_sent_timestamp: '2014/09/15 00:18:58.532'
     bad_records: 831
     time_last_communicated: 1410740283
     bytes_sent: 6422
     header_timestamp: '2014/09/15 00:19:23.036'
-    msg_sent_timestamp: '2014/09/15 00:18:58.532'
     good_records: 14746
     time_received_last_data: 1410740283
     bad_bytes: 34662
     bytes_received: 1420342
+    instrument_identifier: 'dosta'
     datalogger_state: 'IDLE'
   - _index: 66
     particle_object: CgDclEngDclDlogStatusTelemeteredDataParticle
     particle_type: cg_dcl_eng_dcl_dlog_status
     internal_timestamp: 3619729163.046000
     bytes_logged: 2399340
-    instrument_identifier: 'spkir1'
+    message_sent_timestamp: '2014/09/15 00:18:52.703'
     bad_records: 64
     time_last_communicated: 1410740284
     bytes_sent: 596
     header_timestamp: '2014/09/15 00:19:23.046'
-    msg_sent_timestamp: '2014/09/15 00:18:52.703'
     good_records: 27765
     time_received_last_data: 1410740284
     bad_bytes: 0
     bytes_received: 1692448
+    instrument_identifier: 'spkir1'
     datalogger_state: 'IDLE'
   - _index: 67
     particle_object: CgDclEngDclDlogStatusTelemeteredDataParticle
     particle_type: cg_dcl_eng_dcl_dlog_status
     internal_timestamp: 3619729163.050000
     bytes_logged: 758587
-    instrument_identifier: 'metbk1'
+    message_sent_timestamp: '2014/09/15 00:19:15.891'
     bad_records: 0
     time_last_communicated: 1410740323
     bytes_sent: 36141
     header_timestamp: '2014/09/15 00:19:23.050'
-    msg_sent_timestamp: '2014/09/15 00:19:15.891'
     good_records: 6482
     time_received_last_data: 1410740323
     bad_bytes: 0
     bytes_received: 1120717
+    instrument_identifier: 'metbk1'
     datalogger_state: 'DAQ'
   - _index: 68
     particle_object: CgDclEngDclDlogStatusTelemeteredDataParticle
     particle_type: cg_dcl_eng_dcl_dlog_status
     internal_timestamp: 3619729163.052000
     bytes_logged: 202045
-    instrument_identifier: 'nutnr1'
+    message_sent_timestamp: '2014/09/15 00:18:50.894'
     bad_records: 0
     time_last_communicated: 1410740285
     bytes_sent: 865
     header_timestamp: '2014/09/15 00:19:23.052'
-    msg_sent_timestamp: '2014/09/15 00:18:50.894'
     good_records: 1661
     time_received_last_data: 1410740168
     bad_bytes: 432
     bytes_received: 440231
+    instrument_identifier: 'nutnr1'
     datalogger_state: 'IDLE'
   - _index: 69
     particle_object: CgDclEngDclStatusTelemeteredDataParticle
     particle_type: cg_dcl_eng_dcl_status
     internal_timestamp: 3619729163.229000
     ntp_jitter:          0.06100
-    sync_type: '*SHM(1) .PPS.'
+    message_sent_timestamp: '2014/09/15 00:19:23.055'
     ntp_offset:         -0.11400
     message_sent_type: 'NTP'
     header_timestamp: '2014/09/15 00:19:23.229'
-    msg_sent_timestamp: '2014/09/15 00:19:23.055'
+    sync_type: '*SHM(1) .PPS.'
   - _index: 70
     particle_object: CgDclEngDclSupervTelemeteredDataParticle
     particle_type: cg_dcl_eng_dcl_superv
@@ -1508,12 +1508,12 @@ data:
     particle_object: CgDclEngDclCpuUptimeTelemeteredDataParticle
     particle_type: cg_dcl_eng_dcl_cpu_uptime
     internal_timestamp: 3619729463.241000
-    uptime_string: '4 days 12:08:19'
     mem_free: 14624
     num_processes: 84
     load_val_3:          0.13000
     load_val_2:          0.17000
     load_val_1:          0.13000
+    uptime_string: '4 days 12:08:19'
     header_timestamp: '2014/09/15 00:24:23.241'
   - _index: 72
     particle_object: CgDclEngDclMsgCountsTelemeteredDataParticle
@@ -1529,6 +1529,7 @@ data:
     particle_object: CgDclEngDclGpsTelemeteredDataParticle
     particle_type: cg_dcl_eng_dcl_gps
     internal_timestamp: 3619729463.417000
+    message_sent_timestamp: '2014/09/15 00:24:22.858'
     latitude_alt_format: '5955.5918 N'
     gps_true_course:         88.00000
     gps_speed:          1.90000
@@ -1536,7 +1537,6 @@ data:
     gps_quality: 2
     gps_num_satellites: 10
     header_timestamp: '2014/09/15 00:24:23.417'
-    msg_sent_timestamp: '2014/09/15 00:24:22.858'
     gps_hdop:          0.90000
     date_of_fix: '150914'
     latitude:         59.92653
@@ -1547,11 +1547,11 @@ data:
     particle_object: CgDclEngDclPpsTelemeteredDataParticle
     particle_type: cg_dcl_eng_dcl_pps
     internal_timestamp: 3619729463.418000
+    message_sent_timestamp: '2014/09/15 00:24:15.000'
     delta_min: 1
     bad_pulses: 0
     nmea_lock: 1
     header_timestamp: '2014/09/15 00:24:23.418'
-    msg_sent_timestamp: '2014/09/15 00:24:15.000'
     delta: 999996
     delta_max: -8
   - _index: 75
@@ -1634,117 +1634,117 @@ data:
     particle_type: cg_dcl_eng_dcl_dlog_status
     internal_timestamp: 3619729463.422000
     bytes_logged: 55489780
-    instrument_identifier: 'mopak'
+    message_sent_timestamp: '2014/09/15 00:24:07.187'
     bad_records: 18
     time_last_communicated: 1410740401
     bytes_sent: 1908
     header_timestamp: '2014/09/15 00:24:23.422'
-    msg_sent_timestamp: '2014/09/15 00:24:07.187'
     good_records: 1290460
     time_received_last_data: 1410740401
     bad_bytes: 0
     bytes_received: 55496615
+    instrument_identifier: 'mopak'
     datalogger_state: 'IDLE'
   - _index: 79
     particle_object: CgDclEngDclDlogStatusTelemeteredDataParticle
     particle_type: cg_dcl_eng_dcl_dlog_status
     internal_timestamp: 3619729463.423000
     bytes_logged: 109654
-    instrument_identifier: 'hyd1'
+    message_sent_timestamp: '2014/09/15 00:24:14.916'
     bad_records: 88
     time_last_communicated: 1410739498
     bytes_sent: 5829
     header_timestamp: '2014/09/15 00:24:23.423'
-    msg_sent_timestamp: '2014/09/15 00:24:14.916'
     good_records: 1943
     time_received_last_data: 1410739498
     bad_bytes: 0
     bytes_received: 21568
+    instrument_identifier: 'hyd1'
     datalogger_state: 'IDLE'
   - _index: 80
     particle_object: CgDclEngDclDlogStatusTelemeteredDataParticle
     particle_type: cg_dcl_eng_dcl_dlog_status
     internal_timestamp: 3619729463.424000
     bytes_logged: 1772747
-    instrument_identifier: 'dosta'
+    message_sent_timestamp: '2014/09/15 00:23:51.291'
     bad_records: 831
     time_last_communicated: 1410740283
     bytes_sent: 6422
     header_timestamp: '2014/09/15 00:24:23.424'
-    msg_sent_timestamp: '2014/09/15 00:23:51.291'
     good_records: 14746
     time_received_last_data: 1410740283
     bad_bytes: 34662
     bytes_received: 1420342
+    instrument_identifier: 'dosta'
     datalogger_state: 'IDLE'
   - _index: 81
     particle_object: CgDclEngDclDlogStatusTelemeteredDataParticle
     particle_type: cg_dcl_eng_dcl_dlog_status
     internal_timestamp: 3619729463.432000
     bytes_logged: 2399340
-    instrument_identifier: 'spkir1'
+    message_sent_timestamp: '2014/09/15 00:24:12.756'
     bad_records: 64
     time_last_communicated: 1410740284
     bytes_sent: 596
     header_timestamp: '2014/09/15 00:24:23.432'
-    msg_sent_timestamp: '2014/09/15 00:24:12.756'
     good_records: 27765
     time_received_last_data: 1410740284
     bad_bytes: 0
     bytes_received: 1692448
+    instrument_identifier: 'spkir1'
     datalogger_state: 'IDLE'
   - _index: 82
     particle_object: CgDclEngDclDlogStatusTelemeteredDataParticle
     particle_type: cg_dcl_eng_dcl_dlog_status
     internal_timestamp: 3619729463.433000
     bytes_logged: 759172
-    instrument_identifier: 'metbk1'
+    message_sent_timestamp: '2014/09/15 00:24:06.207'
     bad_records: 0
     time_last_communicated: 1410740614
     bytes_sent: 36168
     header_timestamp: '2014/09/15 00:24:23.433'
-    msg_sent_timestamp: '2014/09/15 00:24:06.207'
     good_records: 6487
     time_received_last_data: 1410740614
     bad_bytes: 0
     bytes_received: 1121554
+    instrument_identifier: 'metbk1'
     datalogger_state: 'DAQ'
   - _index: 83
     particle_object: CgDclEngDclDlogStatusTelemeteredDataParticle
     particle_type: cg_dcl_eng_dcl_dlog_status
     internal_timestamp: 3619729463.437000
     bytes_logged: 202045
-    instrument_identifier: 'nutnr1'
+    message_sent_timestamp: '2014/09/15 00:24:20.864'
     bad_records: 0
     time_last_communicated: 1410740285
     bytes_sent: 865
     header_timestamp: '2014/09/15 00:24:23.437'
-    msg_sent_timestamp: '2014/09/15 00:24:20.864'
     good_records: 1661
     time_received_last_data: 1410740168
     bad_bytes: 432
     bytes_received: 440231
+    instrument_identifier: 'nutnr1'
     datalogger_state: 'IDLE'
   - _index: 84
     particle_object: CgDclEngDclStatusTelemeteredDataParticle
     particle_type: cg_dcl_eng_dcl_status
     internal_timestamp: 3619729463.621000
     ntp_jitter:          0.06100
-    sync_type: '*SHM(1) .PPS.'
+    message_sent_timestamp: '2014/09/15 00:24:23.438'
     ntp_offset:         -0.10500
     message_sent_type: 'NTP'
     header_timestamp: '2014/09/15 00:24:23.621'
-    msg_sent_timestamp: '2014/09/15 00:24:23.438'
+    sync_type: '*SHM(1) .PPS.'
   - _index: 85
     particle_object: CgDclEngDclCpuUptimeTelemeteredDataParticle
     particle_type: cg_dcl_eng_dcl_cpu_uptime
     internal_timestamp: 3619729763.726000
-    uptime_string: '4 days 12:13:19'
     mem_free: 14620
     num_processes: 84
     load_val_3:          0.10000
     load_val_2:          0.11000
     load_val_1:          0.08000
+    uptime_string: '4 days 12:13:19'
     header_timestamp: '2014/09/15 00:29:23.726'
   - _index: 86
     particle_object: CgDclEngDclMsgCountsTelemeteredDataParticle
@@ -1760,6 +1760,7 @@ data:
     particle_object: CgDclEngDclGpsTelemeteredDataParticle
     particle_type: cg_dcl_eng_dcl_gps
     internal_timestamp: 3619729763.938000
+    message_sent_timestamp: '2014/09/15 00:29:23.723'
     latitude_alt_format: '5955.5792 N'
     gps_true_course:        197.90000
     gps_speed:          2.10000
@@ -1767,7 +1768,6 @@ data:
     gps_quality: 2
     gps_num_satellites: 11
     header_timestamp: '2014/09/15 00:29:23.938'
-    msg_sent_timestamp: '2014/09/15 00:29:23.723'
     gps_hdop:          0.80000
     date_of_fix: '150914'
     latitude:         59.92632
@@ -1778,11 +1778,11 @@ data:
     particle_object: CgDclEngDclPpsTelemeteredDataParticle
     particle_type: cg_dcl_eng_dcl_pps
     internal_timestamp: 3619729763.939000
+    message_sent_timestamp: '2014/09/15 00:29:15.000'
     delta_min: 0
     bad_pulses: 0
     nmea_lock: 1
     header_timestamp: '2014/09/15 00:29:23.939'
-    msg_sent_timestamp: '2014/09/15 00:29:15.000'
     delta: 999974
     delta_max: -26
   - _index: 89
@@ -1850,107 +1850,107 @@ data:
     particle_type: cg_dcl_eng_dcl_dlog_status
     internal_timestamp: 3619729763.942000
     bytes_logged: 55489780
-    instrument_identifier: 'mopak'
+    message_sent_timestamp: '2014/09/15 00:28:55.277'
     bad_records: 18
     time_last_communicated: 1410740401
     bytes_sent: 1908
     header_timestamp: '2014/09/15 00:29:23.942'
-    msg_sent_timestamp: '2014/09/15 00:28:55.277'
     good_records: 1290460
     time_received_last_data: 1410740401
     bad_bytes: 0
     bytes_received: 55496615
+    instrument_identifier: 'mopak'
     datalogger_state: 'IDLE'
   - _index: 92
     particle_object: CgDclEngDclDlogStatusTelemeteredDataParticle
     particle_type: cg_dcl_eng_dcl_dlog_status
     internal_timestamp: 3619729763.943000
     bytes_logged: 109654
-    instrument_identifier: 'hyd1'
+    message_sent_timestamp: '2014/09/15 00:29:02.885'
     bad_records: 88
     time_last_communicated: 1410739498
     bytes_sent: 5829
     header_timestamp: '2014/09/15 00:29:23.943'
-    msg_sent_timestamp: '2014/09/15 00:29:02.885'
     good_records: 1943
     time_received_last_data: 1410739498
     bad_bytes: 0
     bytes_received: 21568
+    instrument_identifier: 'hyd1'
     datalogger_state: 'IDLE'
   - _index: 93
     particle_object: CgDclEngDclDlogStatusTelemeteredDataParticle
     particle_type: cg_dcl_eng_dcl_dlog_status
     internal_timestamp: 3619729763.944000
     bytes_logged: 1772747
-    instrument_identifier: 'dosta'
+    message_sent_timestamp: '2014/09/15 00:29:16.622'
     bad_records: 831
     time_last_communicated: 1410740283
     bytes_sent: 6422
     header_timestamp: '2014/09/15 00:29:23.944'
-    msg_sent_timestamp: '2014/09/15 00:29:16.622'
     good_records: 14746
     time_received_last_data: 1410740283
     bad_bytes: 34662
     bytes_received: 1420342
+    instrument_identifier: 'dosta'
     datalogger_state: 'IDLE'
   - _index: 94
     particle_object: CgDclEngDclDlogStatusTelemeteredDataParticle
     particle_type: cg_dcl_eng_dcl_dlog_status
     internal_timestamp: 3619729763.945000
     bytes_logged: 2399340
-    instrument_identifier: 'spkir1'
+    message_sent_timestamp: '2014/09/15 00:29:00.769'
     bad_records: 64
     time_last_communicated: 1410740284
     bytes_sent: 596
     header_timestamp: '2014/09/15 00:29:23.945'
-    msg_sent_timestamp: '2014/09/15 00:29:00.769'
     good_records: 27765
     time_received_last_data: 1410740284
     bad_bytes: 0
     bytes_received: 1692448
+    instrument_identifier: 'spkir1'
     datalogger_state: 'IDLE'
   - _index: 95
     particle_object: CgDclEngDclDlogStatusTelemeteredDataParticle
     particle_type: cg_dcl_eng_dcl_dlog_status
     internal_timestamp: 3619729763.946000
     bytes_logged: 759640
-    instrument_identifier: 'metbk1'
+    message_sent_timestamp: '2014/09/15 00:28:55.297'
     bad_records: 0
     time_last_communicated: 1410740903
     bytes_sent: 36195
     header_timestamp: '2014/09/15 00:29:23.946'
-    msg_sent_timestamp: '2014/09/15 00:28:55.297'
     good_records: 6491
     time_received_last_data: 1410740871
     bad_bytes: 0
     bytes_received: 1122391
+    instrument_identifier: 'metbk1'
     datalogger_state: 'DAQ'
   - _index: 96
     particle_object: CgDclEngDclDlogStatusTelemeteredDataParticle
     particle_type: cg_dcl_eng_dcl_dlog_status
     internal_timestamp: 3619729763.947000
     bytes_logged: 202045
-    instrument_identifier: 'nutnr1'
+    message_sent_timestamp: '2014/09/15 00:29:17.886'
     bad_records: 0
     time_last_communicated: 1410740285
     bytes_sent: 865
     header_timestamp: '2014/09/15 00:29:23.947'
-    msg_sent_timestamp: '2014/09/15 00:29:17.886'
     good_records: 1661
     time_received_last_data: 1410740168
     bad_bytes: 432
     bytes_received: 440231
+    instrument_identifier: 'nutnr1'
     datalogger_state: 'IDLE'
   - _index: 97
     particle_object: CgDclEngDclStatusTelemeteredDataParticle
     particle_type: cg_dcl_eng_dcl_status
     internal_timestamp: 3619729764.118000
     ntp_jitter:          0.06100
-    sync_type: '*SHM(1) .PPS.'
+    message_sent_timestamp: '2014/09/15 00:29:23.948'
     ntp_offset:         -0.11300
     message_sent_type: 'NTP'
     header_timestamp: '2014/09/15 00:29:24.118'
-    msg_sent_timestamp: '2014/09/15 00:29:23.948'
+    sync_type: '*SHM(1) .PPS.'
   - _index: 98
     particle_object: CgDclEngDclSupervTelemeteredDataParticle
     particle_type: cg_dcl_eng_dcl_superv
