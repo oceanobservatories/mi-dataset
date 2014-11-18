@@ -24,7 +24,7 @@ from mi.dataset.parser.WFP_E_file_common import HEADER_BYTES, StateKey
 from mi.dataset.parser.dosta_ln_wfp import DostaLnWfpParser, WFP_E_GLOBAL_RECOVERED_ENG_DATA_SAMPLE_BYTES, \
     DostaLnWfpInstrumentParserDataParticleKey
 
-RESOURCE_PATH = os.path.join(Config().base_dir(), 'mi', 'dataset', 'driver', 'dosta_ln', 'wfp_sio_mule', 'resource')
+RESOURCE_PATH = os.path.join(Config().base_dir(), 'mi', 'dataset', 'driver', 'dosta_ln', 'wfp_sio', 'resource')
 
 
 
