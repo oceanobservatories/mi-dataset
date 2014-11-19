@@ -25,7 +25,7 @@ def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     log.debug("My ADCPS JLN STC Config: %s", config)
 
     def exception_callback(exception):
-        log.debug("ERROR: " + exception)
+        log.debug("ERROR: %r", exception)
         particleDataHdlrObj.setParticleDataCaptureFailure()
 
     with open(sourceFilePath, 'rb') as file_handle:

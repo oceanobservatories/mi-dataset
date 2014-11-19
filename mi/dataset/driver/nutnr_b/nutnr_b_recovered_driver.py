@@ -29,7 +29,7 @@ def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     }
 
     def exception_callback(exception):
-        log.debug("ERROR: " + exception)
+        log.debug("ERROR: %r", exception)
         particleDataHdlrObj.setParticleDataCaptureFailure()
     
     with open(sourceFilePath, 'r') as stream_handle:

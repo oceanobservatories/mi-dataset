@@ -23,7 +23,7 @@ class MopakDriver:
         log = get_logger()
         
         def exception_callback(exception):
-            log.debug("ERROR: " + exception)
+            log.debug("ERROR: %r", exception)
             self._particleDataHdlrObj.setParticleDataCaptureFailure()
 
         pathList = (self._sourceFilePath.split('/'))

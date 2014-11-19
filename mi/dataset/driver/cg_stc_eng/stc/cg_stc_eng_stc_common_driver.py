@@ -22,7 +22,7 @@ class CgStcEngDriver:
         log = get_logger()
         
         def exception_callback(exception):
-            log.debug("ERROR: " + exception)
+            log.debug("ERROR: %r", exception)
             self._particleDataHdlrObj.setParticleDataCaptureFailure()
 
         with open(self._sourceFilePath, 'rb') as stream_handle:
