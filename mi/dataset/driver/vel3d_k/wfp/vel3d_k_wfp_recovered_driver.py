@@ -16,11 +16,11 @@ from mi.dataset.dataset_driver import DataSetDriver, ParticleDataHandler
 from mi.dataset.parser.vel3d_k_wfp import Vel3dKWfpParser
 
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
-    
+
     config.add_configuration(os.path.join(basePythonCodePath, 'res', 'config', 'mi-logging.yml'))
 
     log = get_logger()
-    
+
     parser_config = {
         DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.vel3d_k_wfp',
         DataSetDriverConfigKeys.PARTICLE_CLASS: ['Vel3dKWfpMetadataParticle',
@@ -31,17 +31,17 @@ def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     def exception_callback(exception):
         log.debug("ERROR: %r", exception)
         particleDataHdlrObj.setParticleDataCaptureFailure()
-    
-    with open(sourceFilePath, 'rb') as stream_handle:
-        parser = Vel3dKWfpParser(parser_config, 
-                                 None, 
-                                 stream_handle,
-                                 lambda state,file : None, 
-                                 lambda data : None,
-                                 exception_callback)        
-        
-        driver = DataSetDriver(parser, particleDataHdlrObj)
-        driver.processFileStream()    
 
-        
+    with open(sourceFilePath, 'rb') as stream_handle:
+        parser = Vel3dKWfpParser(parser_config,
+                                 None,
+                                 stream_handle,
+                                 lambda state,file : None,
+                                 lambda data : None,
+                                 exception_callback)
+
+        driver = DataSetDriver(parser, particleDataHdlrObj)
+        driver.processFileStream()
+
+
     return particleDataHdlrObj
