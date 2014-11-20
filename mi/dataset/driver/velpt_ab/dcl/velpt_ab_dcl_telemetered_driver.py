@@ -58,8 +58,6 @@ class VelptAbDclTelemeteredDriver(SimpleDatasetDriver):
 
         parser = VelptAbDclParser(parser_config,
                                   stream_handle,
-                                  lambda state, ingested: None,
-                                  lambda data: None,
                                   self._exception_callback)
 
         return parser
