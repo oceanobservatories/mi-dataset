@@ -14,8 +14,6 @@ __license__ = 'Apache 2.0'
 from datetime import datetime, timedelta
 import ntplib
 import calendar
-import time
-from dateutil import parser
 
 from mi.core.log import get_logger
 log = get_logger()
@@ -55,6 +53,18 @@ def zulu_timestamp_to_ntp_time(zulu_timestamp_str):
     utc_time = zulu_timestamp_to_utc_time(zulu_timestamp_str)
 
     return float(ntplib.system_to_ntp_time(utc_time))
+
+
+def time_2000_to_ntp_time(time_2000):
+    """
+    This function calculates and returns a timestamp in epoch 1900
+    based on an integer timestamp in epoch 2000.
+    Parameter:
+      time_2000 - timestamp in number of seconds since Jan 1, 2000
+    Returns:
+      timestamp in number of seconds since Jan 1, 1900
+    """
+    return time_2000 + zulu_timestamp_to_ntp_time("2000-01-01T00:00:00.00Z")
 
 
 def dcl_controller_timestamp_to_utc_time(dcl_controller_timestamp_str):
