@@ -1,20 +1,23 @@
 #!/usr/bin/env python
 
 """
-@package mi.dataset.parser.test.test_vel3d_k_wfp_stc
+@package mi.dataset.parser.test
 @file marine-integrations/mi/dataset/parser/test/test_vel3d_k_wfp_stc.py
 @author Steve Myerson (Raytheon)
 @brief Test code for a vel3d_k_wfp_stc data parser
 """
 
 import ntplib
+import os
 
 from nose.plugins.attrib import attr
 from StringIO import StringIO
 
-from mi.core.exceptions import SampleException, DatasetParserException
-from mi.core.log import get_logger ; log = get_logger()
-from mi.core.instrument.data_particle import DataParticleKey
+from mi.core.exceptions import SampleException
+from mi.core.log import get_logger
+log = get_logger()
+
+from mi.idk.config import Config
 
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 from mi.dataset.parser.vel3d_k_wfp_stc import \
@@ -101,18 +104,20 @@ TIME_1_GROUPS = (1380470402, 1380470683, 1)
 TIME_2_GROUPS = (1380470402, 1380470683, 2)
 TIME_8_GROUPS = (1380470402, 1380470683, 8)
 
+RESOURCE_PATH = os.path.join(Config().base_dir(), 'mi', 'dataset', 'driver',
+                             'vel3d_k', 'wfp_stc', 'resource')
+
+
 @attr('UNIT', group='mi')
 class Vel3dKWfpStcParserUnitTestCase(ParserUnitTestCase):
     """
     Vel3d_k__stc_imodem Parser unit test suite
     """
-    def create_parser(self, file_handle, new_state):
+    def create_parser(self, file_handle):
         """
         This function creates a Vel3dKWfpStcParser parser.
         """
-        if new_state is None:
-            new_state = self.state
-        parser = Vel3dKWfpStcParser(self.config, new_state, file_handle,
+        parser = Vel3dKWfpStcParser(self.config, None, file_handle,
             self.state_callback, self.pub_callback, self.exception_callback)
         return parser
 
@@ -202,7 +207,7 @@ class Vel3dKWfpStcParserUnitTestCase(ParserUnitTestCase):
         log.info("START SIMPLE")
         log.info("Simple length %d", len(TEST_DATA_GOOD_1_REC))
         input_file = StringIO(TEST_DATA_GOOD_1_REC)
-        self.parser = self.create_parser(input_file, self.state)
+        self.parser = self.create_parser(input_file)
 
         log.info("SIMPLE VERIFY VELOCITY RECORD 1")
         result = self.parser.get_records(1)
@@ -229,7 +234,7 @@ class Vel3dKWfpStcParserUnitTestCase(ParserUnitTestCase):
         log.info("START SOME")
         log.info("Some length %d", len(TEST_DATA_GOOD_2_REC))
         input_file = StringIO(TEST_DATA_GOOD_2_REC)
-        self.parser = self.create_parser(input_file, self.state)
+        self.parser = self.create_parser(input_file)
 
         log.info("SOME VERIFY VELOCITY RECORD 1")
         result = self.parser.get_records(1)
@@ -263,7 +268,7 @@ class Vel3dKWfpStcParserUnitTestCase(ParserUnitTestCase):
         log.info("START MANY")
         log.info("Many length %d", len(TEST_DATA_GOOD_BIG_FILE))
         input_file = StringIO(TEST_DATA_GOOD_BIG_FILE)
-        self.parser = self.create_parser(input_file, self.state)
+        self.parser = self.create_parser(input_file)
 
         log.info("MANY VERIFY VELOCITY RECORD 1")
         result = self.parser.get_records(1)
@@ -304,65 +309,6 @@ class Vel3dKWfpStcParserUnitTestCase(ParserUnitTestCase):
         self.verify_file_info(True, expected_file_position)
         log.info("END MANY")
 
-    def test_mid_state_start(self):
-        """
-        Test starting the parser in a state in the middle of processing
-        """
-        log.info("START MID-STATE")
-        log.info("Mid-state length %d", len(TEST_DATA_GOOD_BIG_FILE))
-        input_file = StringIO(TEST_DATA_GOOD_BIG_FILE)
-
-        ## Skip past the flag record and the first 2 velocity records.
-        position = FLAG_RECORD_SIZE + (2 * VELOCITY_RECORD_SIZE)
-        new_state = {Vel3dKWfpStcStateKey.POSITION: position,
-            Vel3dKWfpStcStateKey.FIRST_RECORD: True,
-            Vel3dKWfpStcStateKey.VELOCITY_END: False}
-
-        self.parser = self.create_parser(input_file, new_state)
-
-        ## This should get record 3.
-        log.info("MID-STATE AFTER RECORD 2, POSITION %d", 
-            self.parser._read_state[Vel3dKWfpStcStateKey.POSITION])
-        result = self.parser.get_records(1)
-        self.verify_contents(result, self.expected_particle3)
-
-        expected_file_position = position + VELOCITY_RECORD_SIZE
-        self.verify_file_info(False, expected_file_position)
-        log.info("END MID-STATE")
-
-    def test_set_state(self):
-        """
-        Test changing to a new state after initializing the parser and 
-        reading data, as if new data has been found and the state has changed
-        """
-        log.info("SET STATE")
-        log.info("Set state length %d", len(TEST_DATA_GOOD_BIG_FILE))
-        input_file = StringIO(TEST_DATA_GOOD_BIG_FILE)
-
-        self.parser = self.create_parser(input_file, self.state)
-
-        log.info("SET STATE VERIFY VELOCITY RECORD 1")
-        result = self.parser.get_records(1)
-        self.verify_contents(result, self.expected_particle1)
-
-        expected_file_position = FLAG_RECORD_SIZE + VELOCITY_RECORD_SIZE
-        self.verify_file_info(False, expected_file_position)
-
-        ## Skip to velocity record 4.
-        position = FLAG_RECORD_SIZE + (3 * VELOCITY_RECORD_SIZE)
-        log.info("SET STATE SKIPPING TO POSITION %d", position)
-        new_state = {Vel3dKWfpStcStateKey.POSITION: position,
-            Vel3dKWfpStcStateKey.FIRST_RECORD: True,
-            Vel3dKWfpStcStateKey.VELOCITY_END: False}
-        self.parser.set_state(new_state)
-
-        log.info("SET STATE VERIFY VELOCITY RECORD 4")
-        result = self.parser.get_records(1)
-        self.verify_contents(result, self.expected_particle4)
-
-        expected_file_position = position + VELOCITY_RECORD_SIZE
-        self.verify_file_info(False, expected_file_position)
-
     def test_bad_flag_record(self):
         """
         Ensure that bad data is skipped when flag record is invalid.
@@ -373,7 +319,7 @@ class Vel3dKWfpStcParserUnitTestCase(ParserUnitTestCase):
         log.info("Bad Flag length %d", len(TEST_DATA_BAD_FLAG_RECORD))
         input_file = StringIO(TEST_DATA_BAD_FLAG_RECORD)
         with self.assertRaises(SampleException):
-            self.parser = self.create_parser(input_file, self.state)
+            self.parser = self.create_parser(input_file)
         log.info("END BAD FLAG")
 
     def test_short_flag_record(self):
@@ -386,5 +332,134 @@ class Vel3dKWfpStcParserUnitTestCase(ParserUnitTestCase):
         log.info("Short Flag length %d", len(TEST_DATA_SHORT_FLAG_RECORD))
         input_file = StringIO(TEST_DATA_SHORT_FLAG_RECORD)
         with self.assertRaises(SampleException):
-            self.parser = self.create_parser(input_file, self.state)
+            self.parser = self.create_parser(input_file)
         log.info("END SHORT FLAG")
+
+    def test_real_file_1(self):
+        """
+        Ensure that data is skipped when flag record is too short.
+        This should raise an exception indicating that end of file was
+        reached while reading the Flag record.
+        """
+        log.info("START REAL FILE 1")
+
+        with open(os.path.join(RESOURCE_PATH, 'A0000010_another.DEC')) as file_handle:
+
+            self.parser = self.create_parser(file_handle)
+
+            particles = self.parser.get_records(100)
+
+            self.particle_to_yml(particles, 'A0000010_another.yml')
+
+            self.assert_particles(particles, 'A0000010_another.yml', RESOURCE_PATH)
+
+        log.info("END REAL FILE 1")
+
+    def test_real_file_2(self):
+        """
+        Ensure that data is skipped when flag record is too short.
+        This should raise an exception indicating that end of file was
+        reached while reading the Flag record.
+        """
+        log.info("START REAL FILE 2")
+
+        with open(os.path.join(RESOURCE_PATH, 'A0000000_NoBeams.DEC')) as file_handle:
+
+            self.parser = self.create_parser(file_handle)
+
+            particles = self.parser.get_records(100)
+
+            self.particle_to_yml(particles, 'A0000000_NoBeams.yml')
+
+            self.assert_particles(particles, 'A0000000_NoBeams.yml', RESOURCE_PATH)
+
+        log.info("END REAL FILE 2")
+
+    def test_real_file_3(self):
+        """
+        Ensure that data is skipped when flag record is too short.
+        This should raise an exception indicating that end of file was
+        reached while reading the Flag record.
+        """
+        log.info("START REAL FILE 3")
+
+        with open(os.path.join(RESOURCE_PATH, 'A0000001_WithBeams.DEC')) as file_handle:
+
+            self.parser = self.create_parser(file_handle)
+
+            particles = self.parser.get_records(100)
+
+            self.particle_to_yml(particles, 'A0000001_WithBeams.yml')
+
+            self.assert_particles(particles, 'A0000001_WithBeams.yml', RESOURCE_PATH)
+
+        log.info("END REAL FILE 3")
+
+    def test_real_file_4(self):
+        """
+        Ensure that data is skipped when flag record is too short.
+        This should raise an exception indicating that end of file was
+        reached while reading the Flag record.
+        """
+        log.info("START REAL FILE 4")
+
+        with open(os.path.join(RESOURCE_PATH, 'valid_A0000004.DEC')) as file_handle:
+
+            self.parser = self.create_parser(file_handle)
+
+            particles = self.parser.get_records(1000)
+
+            self.particle_to_yml(particles, 'valid_A0000004.yml')
+
+            self.assert_particles(particles, 'valid_A0000004.yml', RESOURCE_PATH)
+
+        log.info("END REAL FILE 4")
+
+    def particle_to_yml(self, particles, filename, mode='w'):
+        """
+        This is added as a testing helper, not actually as part of the parser tests. Since the same particles
+        will be used for the driver test it is helpful to write them to .yml in the same form they need in the
+        results.yml fids here.
+        """
+        # open write append, if you want to start from scratch manually delete this fid
+        fid = open(os.path.join(RESOURCE_PATH, filename), mode)
+
+        fid.write('header:\n')
+        fid.write("    particle_object: 'MULTIPLE'\n")
+        fid.write("    particle_type: 'MULTIPLE'\n")
+        fid.write('data:\n')
+
+        for i in range(0, len(particles)):
+            particle_dict = particles[i].generate_dict()
+
+            fid.write('  - _index: %d\n' % (i+1))
+
+            fid.write('    particle_object: %s\n' % particles[i].__class__.__name__)
+            fid.write('    particle_type: %s\n' % particle_dict.get('stream_name'))
+            fid.write('    internal_timestamp: %f\n' % particle_dict.get('internal_timestamp'))
+
+            for val in particle_dict.get('values'):
+                if isinstance(val.get('value'), float):
+
+                    fid.write('    %s: %16.5f\n' % (val.get('value_id'), val.get('value')))
+                elif isinstance(val.get('value'), str):
+                    fid.write("    %s: '%s'\n" % (val.get('value_id'), val.get('value')))
+                elif val.get('value') is None:
+                    fid.write("    %s: !!null\n" % (val.get('value_id')))
+                elif isinstance(val.get('value'), list):
+                    fid.write("    %s: [ " % (val.get('value_id')))
+                    list_values = val.get('value')
+                    if list_values[0] is None:
+                        fid.write("null")
+                    else:
+                        fid.write(" %s" % list_values[0])
+                    for item in list_values[1:len(list_values)]:
+                        fid.write(", ")
+                        if item is None:
+                            fid.write("null")
+                        else:
+                            fid.write("%s" % item)
+                    fid.write(" ]\n")
+                else:
+                    fid.write('    %s: %s\n' % (val.get('value_id'), val.get('value')))
+        fid.close()

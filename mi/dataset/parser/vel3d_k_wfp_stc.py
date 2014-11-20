@@ -3,23 +3,23 @@
 """
 @package mi.dataset.parser.vel3d_k_wfp_stc
 @file marine-integrations/mi/dataset/parser/vel3d_k_wfp_stc.py
-@author Steve Myerson (Raytheon)
+@author Steve Myerson (Raytheon), Mark Worden
 @brief Parser for the Vel3dKWfpStc dataset driver
 Release notes:
 
 Initial Release
 """
 
-#
-# The VEL3D input file is a binary file.
-# The first record is the Flag record that indicates which of the data
-# fields are to be expected in the Velocity data records.
-# Following the Flag record are some number of Velocity data records,
-# terminated by a Velocity data record with all fields set to zero.
-# Following the all zero Velocity data record is a Time record.
-# This design assumes that only one set of data records
-# (Flag, N * Velocity, Time) is in each file.
-#
+"""
+The VEL3D input file is a binary file.
+The first record is the Flag record that indicates which of the data
+fields are to be expected in the Velocity data records.
+Following the Flag record are some number of Velocity data records,
+terminated by a Velocity data record with all fields set to zero.
+Following the all zero Velocity data record is a Time record.
+This design assumes that only one set of data records
+(Flag, N * Velocity, Time) is in each file.
+"""
 
 __author__ = 'Steve Myerson (Raytheon)'
 __license__ = 'Apache 2.0'
@@ -30,12 +30,13 @@ import re
 import struct
 
 from mi.core.common import BaseEnum
-from mi.core.exceptions import SampleException, DatasetParserException
+from mi.core.exceptions import SampleException
 from mi.core.instrument.data_particle import DataParticle, DataParticleKey
-from mi.core.log import get_logger; log = get_logger()
+from mi.core.log import get_logger
+log = get_logger()
 from mi.dataset.dataset_parser import BufferLoadingParser
 
-FLAG_RECORD_SIZE = 26                   # bytes
+FLAG_RECORD_SIZE = 26
 FLAG_RECORD_REGEX = b'(\x00|\x01){26}'  # 26 bytes of zeroes or ones
 FLAG_FORMAT = '<26?'                    # 26 booleans
 FLAG_RECORD_MATCHER = re.compile(FLAG_RECORD_REGEX)
@@ -65,38 +66,74 @@ SAMPLE_RATE = .5             # Velocity records sample rate
 #
 INDEX_DATA_BYTES = 0
 INDEX_FORMAT = 1
-INDEX_KEY = 2
+PARAM_NAME_KEY_INDEX = 2
+
+
+class Vel3dKWfpStcParticleKey(BaseEnum):
+    DATE_TIME_ARRAY = 'date_time_array'
+    VEL3D_K_SOUNDSPEED = 'vel3d_k_soundSpeed'
+    VEL3D_K_TEMP_C = 'vel3d_k_temp_c'
+    VEL3D_K_HEADING = 'vel3d_k_heading'
+    VEL3D_K_PITCH = 'vel3d_k_pitch'
+    VEL3D_K_ROLL = 'vel3d_k_roll'
+    VEL3D_K_MAG_X = 'vel3d_k_mag_x'
+    VEL3D_K_MAG_Y = 'vel3d_k_mag_y'
+    VEL3D_K_MAG_Z = 'vel3d_k_mag_z'
+    VEL3D_K_BEAMS = 'vel3d_k_beams'
+    VEL3D_K_CELLS = 'vel3d_k_cells'
+    VEL3D_K_DATA_SET_DESCRIPTION = 'vel3d_k_data_set_description'
+    VEL3D_K_V_SCALE = 'vel3d_k_v_scale'
+    VEL3D_K_VEL0 = 'vel3d_k_vel0'
+    VEL3D_K_VEL1 = 'vel3d_k_vel1'
+    VEL3D_K_VEL2 = 'vel3d_k_vel2'
+    VEL3D_K_AMP0 = 'vel3d_k_amp0'
+    VEL3D_K_AMP1 = 'vel3d_k_amp1'
+    VEL3D_K_AMP2 = 'vel3d_k_amp2'
+    VEL3D_K_COR0 = 'vel3d_k_cor0'
+    VEL3D_K_COR1 = 'vel3d_k_cor1'
+    VEL3D_K_COR2 = 'vel3d_k_cor2'
+
+
+class Vel3dKWfpStcBeamParams(BaseEnum):
+    VEL3D_K_BEAM1 = 'vel3d_k_beam1'
+    VEL3D_K_BEAM2 = 'vel3d_k_beam2'
+    VEL3D_K_BEAM3 = 'vel3d_k_beam3'
+    VEL3D_K_BEAM4 = 'vel3d_k_beam4'
+    VEL3D_K_BEAM5 = 'vel3d_k_beam5'
+
+flags = []
+
 
 VEL3D_PARAMETERS = \
-[ 
-  # Bytes Format Key
-    [6,    '6b',  'date_time_array'], 
-    [2,    'H',   'vel3d_k_soundSpeed'], 
-    [2,    'h',   'vel3d_k_temp_c'], 
-    [2,    'H',   'vel3d_k_heading'], 
-    [2,    'h',   'vel3d_k_pitch'], 
-    [2,    'h',   'vel3d_k_roll'], 
-    [2,    'h',   'vel3d_k_mag_x'], 
-    [2,    'h',   'vel3d_k_mag_y'], 
-    [2,    'h',   'vel3d_k_mag_z'], 
-    [1,    'B',   'vel3d_k_beams'], 
-    [1,    'B',   'vel3d_k_cells'], 
-    [1,    'B',   'vel3d_k_beam1'], 
-    [1,    'B',   'vel3d_k_beam2'], 
-    [1,    'B',   'vel3d_k_beam3'], 
-    [1,    'B',   'vel3d_k_beam4'], 
-    [1,    'B',   'vel3d_k_beam5'], 
-    [1,    'b',   'vel3d_k_v_scale'], 
-    [2,    'h',   'vel3d_k_vel0'], 
-    [2,    'h',   'vel3d_k_vel1'], 
-    [2,    'h',   'vel3d_k_vel2'], 
-    [1,    'B',   'vel3d_k_amp0'], 
-    [1,    'B',   'vel3d_k_amp1'], 
-    [1,    'B',   'vel3d_k_amp2'], 
-    [1,    'B',   'vel3d_k_cor0'], 
-    [1,    'B',   'vel3d_k_cor1'], 
-    [1,    'B',   'vel3d_k_cor2']
-]
+    [
+        # Bytes Format Key
+        [6,    '6b',  Vel3dKWfpStcParticleKey.DATE_TIME_ARRAY],
+        [2,    'H',   Vel3dKWfpStcParticleKey.VEL3D_K_SOUNDSPEED],
+        [2,    'h',   Vel3dKWfpStcParticleKey.VEL3D_K_TEMP_C],
+        [2,    'H',   Vel3dKWfpStcParticleKey.VEL3D_K_HEADING],
+        [2,    'h',   Vel3dKWfpStcParticleKey.VEL3D_K_PITCH],
+        [2,    'h',   Vel3dKWfpStcParticleKey.VEL3D_K_ROLL],
+        [2,    'h',   Vel3dKWfpStcParticleKey.VEL3D_K_MAG_X],
+        [2,    'h',   Vel3dKWfpStcParticleKey.VEL3D_K_MAG_Y],
+        [2,    'h',   Vel3dKWfpStcParticleKey.VEL3D_K_MAG_Z],
+        [1,    'B',   Vel3dKWfpStcParticleKey.VEL3D_K_BEAMS],
+        [1,    'B',   Vel3dKWfpStcParticleKey.VEL3D_K_CELLS],
+        [1,    'B',   Vel3dKWfpStcBeamParams.VEL3D_K_BEAM1],
+        [1,    'B',   Vel3dKWfpStcBeamParams.VEL3D_K_BEAM2],
+        [1,    'B',   Vel3dKWfpStcBeamParams.VEL3D_K_BEAM3],
+        [1,    'B',   Vel3dKWfpStcBeamParams.VEL3D_K_BEAM4],
+        [1,    'B',   Vel3dKWfpStcBeamParams.VEL3D_K_BEAM5],
+        [1,    'b',   Vel3dKWfpStcParticleKey.VEL3D_K_V_SCALE],
+        [2,    'h',   Vel3dKWfpStcParticleKey.VEL3D_K_VEL0],
+        [2,    'h',   Vel3dKWfpStcParticleKey.VEL3D_K_VEL1],
+        [2,    'h',   Vel3dKWfpStcParticleKey.VEL3D_K_VEL2],
+        [1,    'B',   Vel3dKWfpStcParticleKey.VEL3D_K_AMP0],
+        [1,    'B',   Vel3dKWfpStcParticleKey.VEL3D_K_AMP1],
+        [1,    'B',   Vel3dKWfpStcParticleKey.VEL3D_K_AMP2],
+        [1,    'B',   Vel3dKWfpStcParticleKey.VEL3D_K_COR0],
+        [1,    'B',   Vel3dKWfpStcParticleKey.VEL3D_K_COR1],
+        [1,    'B',   Vel3dKWfpStcParticleKey.VEL3D_K_COR2]
+    ]
 
 
 class Vel3dKWfpStcStateKey(BaseEnum):
@@ -115,6 +152,9 @@ class Vel3dKWfpStcMetadataParticleKey(BaseEnum):
     TIME_OFF = 'vel3d_k_time_off'
     TIME_ON = 'vel3d_k_time_on'
 
+DATE_TIME_SIZE = 6                     # 6 bytes for the output date time field
+DATA_SET_DESCRIPTION_SIZE = 5
+
 
 class Vel3dKWfpStcMetadataParticle(DataParticle):
     """
@@ -122,18 +162,18 @@ class Vel3dKWfpStcMetadataParticle(DataParticle):
     """
 
     _data_particle_type = Vel3dKWfpStcDataParticleType.METADATA_PARTICLE
-    
+
     def _build_parsed_values(self):
         """
         Take something in the data format and turn it into
         a particle with the appropriate tag.
         """
 
-        # 
-        # Generate a time data particle.
-        # Note that raw_data already contains the individual fields
-        # extracted and unpacked from the time data record.
-        #
+        """
+        Generate a time data particle.
+        Note that raw_data already contains the individual fields
+        extracted and unpacked from the time data record.
+        """
         particle = [
             {
                 DataParticleKey.VALUE_ID:
@@ -161,51 +201,73 @@ class Vel3dKWfpStcInstrumentParticle(DataParticle):
     """
 
     _data_particle_type = Vel3dKWfpStcDataParticleType.INSTRUMENT_PARTICLE
-    
+
     def _build_parsed_values(self):
         """
         Take something in the data format and turn it into
         a particle with the appropriate tag.
         """
 
-        # 
-        # Generate a velocity data particle.
-        # Note that raw_data already contains the individual fields
-        # extracted and unpacked from the velocity data record.
-        #
+        """
+        Generate a velocity data particle.
+        Note that raw_data already contains the individual fields
+        extracted and unpacked from the velocity data record.
+        """
         global flags
         particle = []
         field = 0
-        for flag in range(0, FLAG_RECORD_SIZE):
-            #
+
+        data_set_description_param_values = []
+
+        for flag_index in range(0, FLAG_RECORD_SIZE):
+
             # If the flags indicated that this field is to be expected,
             # store the next unpacked value into the data particle.
-            #
-            key = VEL3D_PARAMETERS[flag][INDEX_KEY]
-            if flags[flag]:
-                if flag == INDEX_FLAG_TIME:
-                    #
-                    # This returns a tuple, but particle wants a list.
-                    #
-                    time_array = self.raw_data[field:field + OUTPUT_TIME_SIZE]
+            key = VEL3D_PARAMETERS[flag_index][PARAM_NAME_KEY_INDEX]
+            if key == Vel3dKWfpStcParticleKey.DATE_TIME_ARRAY:
+                time_array = self.raw_data[field: field + DATE_TIME_SIZE]
+                particle.append({DataParticleKey.VALUE_ID: key,
+                                 DataParticleKey.VALUE: list(time_array)})
+                field += DATE_TIME_SIZE
 
-                    particle.append({DataParticleKey.VALUE_ID: key,
-                       DataParticleKey.VALUE: list(time_array)})
-                    field += OUTPUT_TIME_SIZE
+            elif key in (
+                    Vel3dKWfpStcBeamParams.VEL3D_K_BEAM1,
+                    Vel3dKWfpStcBeamParams.VEL3D_K_BEAM2,
+                    Vel3dKWfpStcBeamParams.VEL3D_K_BEAM3,
+                    Vel3dKWfpStcBeamParams.VEL3D_K_BEAM4,
+                    Vel3dKWfpStcBeamParams.VEL3D_K_BEAM5):
+                if flags[flag_index]:
+                    data_set_description_param_values.append(
+                        int(self.raw_data[field]))
+                    field += 1
+                else:
+                    data_set_description_param_values.append(None)
+
+            elif key == Vel3dKWfpStcParticleKey.VEL3D_K_BEAMS:
+                if flags[flag_index]:
+                    key_value = self._encode_value(key,
+                                                   self.raw_data[field],
+                                                   int)
+                    particle.append(key_value)
+                    field += 1
                 else:
                     particle.append({DataParticleKey.VALUE_ID: key,
-                       DataParticleKey.VALUE: self.raw_data[field]})
+                                     DataParticleKey.VALUE: None})
+            else:
+                if flags[flag_index]:
+                    key_value = self._encode_value(key,
+                                                   self.raw_data[field],
+                                                   int)
+                    particle.append(key_value)
                     field += 1
 
-            #
-            # If flags indicate that this field is not present,
-            # output a value of None.
-            #
-            else:
-                particle.append({DataParticleKey.VALUE_ID: key,
-                  DataParticleKey.VALUE: None})
+        particle.append(self._encode_value(
+            Vel3dKWfpStcParticleKey.VEL3D_K_DATA_SET_DESCRIPTION,
+            data_set_description_param_values,
+            list))
 
         return particle
+
 
 class Vel3dKWfpStcParser(BufferLoadingParser):
 
@@ -221,7 +283,7 @@ class Vel3dKWfpStcParser(BufferLoadingParser):
     flags = [False for x in range(FLAG_RECORD_SIZE)]
 
     def __init__(self, config, state, file_handle,
-      state_callback, publish_callback, exception_callback):
+                 state_callback, publish_callback, exception_callback):
         """
         Constructor for the Vel3d_k__stc_imodemParser class.
         Arguments:
@@ -233,29 +295,23 @@ class Vel3dKWfpStcParser(BufferLoadingParser):
           exception_callback - Callback for an exception
         """
 
-        #
         # From the input file, get the parameters which define the inputs.
-        # 
-        (valid_flag_record, velocity_regex, end_of_velocity_regex, 
-          self.velocity_format, self.velocity_record_size, 
-          time_fields) = self.get_file_parameters(file_handle)
+        (valid_flag_record, velocity_regex, end_of_velocity_regex,
+         self.velocity_format, self.velocity_record_size,
+         time_fields) = self.get_file_parameters(file_handle)
 
-        #
-        # If the Flag record was valid,
-        # save the timestamp that will go into the data particles and
-        # create the pattern matchers for the Velocity record.
-        #
+        """
+        If the Flag record was valid,
+        save the timestamp that will go into the data particles and
+        create the pattern matchers for the Velocity record.
+        """
         if valid_flag_record:
             self._timestamp = 0.0
             self.input_file = file_handle
-            if state:
-                self.set_state(state)
-            else:
-                initial_state = {Vel3dKWfpStcStateKey.FIRST_RECORD: True,
-                                 Vel3dKWfpStcStateKey.POSITION: 0,
-                                 Vel3dKWfpStcStateKey.VELOCITY_END: False}
-                self.set_state(initial_state)
-
+            self._state = {Vel3dKWfpStcStateKey.FIRST_RECORD: True,
+                           Vel3dKWfpStcStateKey.POSITION: 0,
+                           Vel3dKWfpStcStateKey.VELOCITY_END: False}
+            self._read_state = self._state
             self.time_on = int(time_fields[INDEX_TIME_ON])
 
             #
@@ -267,27 +323,31 @@ class Vel3dKWfpStcParser(BufferLoadingParser):
             # This one checks for the end of the Velocity record.
             #
             self.velocity_end_record_matcher = \
-              re.compile(end_of_velocity_regex)
+                re.compile(end_of_velocity_regex)
 
-        super(Vel3dKWfpStcParser, self).__init__(config, file_handle,
-            state, self.sieve_function, state_callback, publish_callback,
-            exception_callback)
+        super(Vel3dKWfpStcParser, self).__init__(config,
+                                                 file_handle,
+                                                 state,
+                                                 self.sieve_function,
+                                                 state_callback,
+                                                 publish_callback,
+                                                 exception_callback)
 
     def calculate_record_number(self):
         """
-        This function calculates the record number based on the current 
+        This function calculates the record number based on the current
         position in the file and the size of each velocity data record.
         """
-        return (self._read_state[Vel3dKWfpStcStateKey.POSITION] - FLAG_RECORD_SIZE) \
-          / self.velocity_record_size
+        return (self._read_state[Vel3dKWfpStcStateKey.POSITION] -
+                FLAG_RECORD_SIZE) / self.velocity_record_size
 
     def calculate_timestamp(self):
         """
-        This function calculates the timestamp based on the current 
+        This function calculates the timestamp based on the current
         position in the file and the size of each velocity data record.
         """
         return ((self.calculate_record_number() - 1) * SAMPLE_RATE) + \
-          self.time_on
+            self.time_on
 
     def get_block(self):
         """
@@ -340,10 +400,10 @@ class Vel3dKWfpStcParser(BufferLoadingParser):
         if len(record) != FLAG_RECORD_SIZE:
             log.warn("EOF reading for flag record")
             raise SampleException("EOF reading for flag record")
-        
-        (valid_record, regex_velocity_record, 
-          regex_end_velocity_record, format_unpack_velocity, 
-          record_size) = self.parse_flag_record(record)
+
+        (valid_record, regex_velocity_record,
+         regex_end_velocity_record, format_unpack_velocity,
+         record_size) = self.parse_flag_record(record)
 
         #
         # If there is a valid Flag record, process the Time record.
@@ -365,34 +425,16 @@ class Vel3dKWfpStcParser(BufferLoadingParser):
         # If the Flag record is invalid, we're done.
         #
         else:
-            log.warn("Invalid Flag record")
-            raise SampleException("Invalid Flag record")
+            message = "Invalid Flag record"
+            log.warn(message)
+            raise SampleException(message)
 
-        return valid_record, regex_velocity_record, regex_end_velocity_record, \
-          format_unpack_velocity, record_size, times
-
-    def set_state(self, state_obj):
-        """
-        Set the value of the state object for this parser
-        @param state_obj The object to set the state to. 
-        @throws DatasetParserException if there is a bad state structure
-        """
-        if not isinstance(state_obj, dict):
-            raise DatasetParserException("Invalid state structure")
-        if not (Vel3dKWfpStcStateKey.FIRST_RECORD in state_obj) or \
-           not (Vel3dKWfpStcStateKey.POSITION in state_obj) or \
-           not (Vel3dKWfpStcStateKey.VELOCITY_END in state_obj):
-            raise DatasetParserException("Invalid state keys")
-
-        #
-        # Initialize parent data.
-        #
-        self._timestamp = 0.0
-        self._record_buffer = []
-
-        self._state = state_obj
-        self._read_state = state_obj
-        self.input_file.seek(self._read_state[Vel3dKWfpStcStateKey.POSITION], 0)  
+        return valid_record, \
+            regex_velocity_record, \
+            regex_end_velocity_record, \
+            format_unpack_velocity, \
+            record_size, \
+            times
 
     def _increment_state(self, bytes_read):
         """
@@ -408,20 +450,21 @@ class Vel3dKWfpStcParser(BufferLoadingParser):
         timestamp. Go until the chunker has no more valid data.
         @retval a list of tuples with sample particles encountered in this
             parsing, plus the state. An empty list of nothing was parsed.
-        """            
+        """
         result_particles = []
-        (timestamp, chunk, start, end) = self._chunker.get_next_data_with_index()
+        (timestamp, chunk, start, end) = \
+            self._chunker.get_next_data_with_index()
 
         while chunk is not None:
             #
             # Discard the Flag record since it has already been processed.
-            # We also need to check for this being the first record, 
-            # since an end of velocity record could result in a pattern match 
-            # with a Flag record if the size of the velocity records are 
+            # We also need to check for this being the first record,
+            # since an end of velocity record could result in a pattern match
+            # with a Flag record if the size of the velocity records are
             # greater than or equal to the Flag record size.
             #
             if self._read_state[Vel3dKWfpStcStateKey.FIRST_RECORD] and \
-              FLAG_RECORD_MATCHER.match(chunk):
+                    FLAG_RECORD_MATCHER.match(chunk):
                 self._increment_state(FLAG_RECORD_SIZE)
 
             #
@@ -458,14 +501,15 @@ class Vel3dKWfpStcParser(BufferLoadingParser):
                             None, velocity_fields, ntp_time)
 
                         result_particles.append((particle,
-                            copy.copy(self._read_state)))
+                                                 copy.copy(self._read_state)))
 
                     #
                     # Ran off the end of the file.  Tell 'em the bad news.
                     #
                     else:
-                        log.warn("EOF reading velocity records")
-                        raise SampleException("EOF reading velocity records")
+                        message = "EOF reading velocity records"
+                        log.warn(message)
+                        raise SampleException(message)
 
             #
             # If we have read the end of velocity data records,
@@ -492,10 +536,12 @@ class Vel3dKWfpStcParser(BufferLoadingParser):
                     ntp_time = ntplib.system_to_ntp_time(self.time_on)
 
                     particle = self._extract_sample(
-                        Vel3dKWfpStcMetadataParticle, None, time_fields, ntp_time)
+                        Vel3dKWfpStcMetadataParticle,
+                        None, time_fields, ntp_time)
 
                     self._increment_state(TIME_RECORD_SIZE)
-                    result_particles.append((particle, copy.copy(self._read_state)))
+                    result_particles.append((particle,
+                                             copy.copy(self._read_state)))
 
                 else:
                     log.warn("EOF reading time record")
@@ -503,15 +549,15 @@ class Vel3dKWfpStcParser(BufferLoadingParser):
 
             self._read_state[Vel3dKWfpStcStateKey.FIRST_RECORD] = False
 
-            (timestamp, chunk, start, 
-                end) = self._chunker.get_next_data_with_index()
+            (timestamp, chunk, start,
+             end) = self._chunker.get_next_data_with_index()
 
         return result_particles
 
     def parse_flag_record(self, record):
         """
         This function parses the Flag record.
-        A Flag record consists of 26 binary bytes, 
+        A Flag record consists of 26 binary bytes,
         with each byte being either 0 or 1.
         Each byte corresponds to a data item in the Velocity record.
         Then we use the received Flag record fields to override
@@ -544,15 +590,15 @@ class Vel3dKWfpStcParser(BufferLoadingParser):
             # interpret each field as a boolean value.
             #
             valid_flag_record = True
-            flags = struct.unpack(FLAG_FORMAT, 
-                flag_record.group(0)[0:FLAG_RECORD_SIZE])
+            flags = struct.unpack(FLAG_FORMAT,
+                                  flag_record.group(0)[0:FLAG_RECORD_SIZE])
 
             #
             # The format string for unpacking the velocity data record
             # fields must be constructed based on which fields the Flag
             # record indicates we'll be receiving.
             # Start with the little endian symbol for the format.
-            # We also compute the record length for each velocity data 
+            # We also compute the record length for each velocity data
             # record, again based on the Flag record.
             #
             format_unpack_velocity = '<'
@@ -561,11 +607,11 @@ class Vel3dKWfpStcParser(BufferLoadingParser):
             #
             # Check each field from the input Flag record.
             #
-            for x in range(0, FLAG_RECORD_SIZE):
+            for x in range(0, len(VEL3D_PARAMETERS)):
                 #
                 # If the flag field is True,
                 # increment the total number of bytes expected in each
-                # velocity data record and add the corresponding text to 
+                # velocity data record and add the corresponding text to
                 # the format.
                 #
                 if flags[x]:
@@ -602,8 +648,8 @@ class Vel3dKWfpStcParser(BufferLoadingParser):
         if not time_record:
             time_data = None
         else:
-            time_data = struct.unpack(TIME_FORMAT, 
-                time_record.group(0)[0:TIME_RECORD_SIZE])
+            time_data = struct.unpack(TIME_FORMAT,
+                                      time_record.group(0)[0:TIME_RECORD_SIZE])
 
         return time_data
 
@@ -649,28 +695,29 @@ class Vel3dKWfpStcParser(BufferLoadingParser):
         if not velocity_record:
             velocity_fields = None
         else:
-            velocity_fields = struct.unpack(self.velocity_format,
+            velocity_fields = struct.unpack(
+                self.velocity_format,
                 velocity_record.group(0)[0:self.velocity_record_size])
 
         return velocity_fields
 
-    def sieve_function(self, source):        
-        """        
-        Sort through the input source to extract blocks of data that 
-        need processing.        
-        This is needed instead of a regex because blocks are 
-        identified by specific lengths in this binary file.        
-        This algorithm assumes that the velocity data records are 
-        longer than the time record.  
+    def sieve_function(self, source):
+        """
+        Sort through the input source to extract blocks of data that
+        need processing.
+        This is needed instead of a regex because blocks are
+        identified by specific lengths in this binary file.
+        This algorithm assumes that the velocity data records are
+        longer than the time record.
         Arguments:
           source - the contents of the input file
-        """        
+        """
 
         indices_list = []     # array of tuples (start index, end index)
 
         #
         # If the first record is a valid Flag record, add it to the list.
-        # The first record might not be a Flag record 
+        # The first record might not be a Flag record
         # if the parser is being restarted in the middle of the file.
         # Note: If this parser is restarted with a file position in the
         # middle of a Velocity record, results will be unpredictable.
@@ -682,7 +729,7 @@ class Vel3dKWfpStcParser(BufferLoadingParser):
             start_index += FLAG_RECORD_SIZE
 
         source_length = len(source)   # Total bytes to process
- 
+
         #
         # While there is more data to process and we haven't found the
         # Time record yet, add a start,end pair for each Velocity record
