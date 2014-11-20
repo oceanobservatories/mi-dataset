@@ -7,16 +7,13 @@
 @brief Test code for a vel3d_k_wfp data parser
 """
 
-import inspect
 import ntplib
 
 from nose.plugins.attrib import attr
 from StringIO import StringIO
 
 from mi.core.log import get_logger; log = get_logger()
-from mi.core.exceptions import DatasetParserException, RecoverableSampleException, \
-    SampleException, UnexpectedDataException
-from mi.core.instrument.data_particle import DataParticleKey
+from mi.core.exceptions import SampleException
 
 from mi.dataset.test.test_parser import ParserUnitTestCase
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
