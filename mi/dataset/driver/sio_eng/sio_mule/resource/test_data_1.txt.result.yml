@@ -1,9 +1,0 @@
-# Result data after parsing test_data_1.txt
-
- header:
-   particle_object: MULTIPLE
-   particle_type: MULTIPLE
-
- data:
-- _index: 1
-
