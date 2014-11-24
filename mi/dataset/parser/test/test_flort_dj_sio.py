@@ -194,7 +194,7 @@ class FlortDjSioParserUnitTestCase(ParserUnitTestCase):
 
         result = self.parser.get_records(96)
         for particle in result:
-            print particle.generate()
+            log.debug(particle.generate())
 
         # compare returned particles at the start of the file
         self.assertEqual(result[0], self.particle_a_recov)
