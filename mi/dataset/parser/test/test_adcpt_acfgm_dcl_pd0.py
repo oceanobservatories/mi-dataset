@@ -6,15 +6,13 @@
 @author Jeff Roy
 @brief Test code for a adcpt_acfgm_dcl_pd0 data parser
 """
-
-from nose.plugins.attrib import attr
 import os
+from nose.plugins.attrib import attr
 
 from mi.core.log import get_logger
 log = get_logger()
 
 from mi.core.exceptions import RecoverableSampleException
-
 from mi.idk.config import Config
 from mi.dataset.test.test_parser import ParserUnitTestCase
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
@@ -87,26 +85,22 @@ class AdcptAcfgmPd0DclParserUnitTestCase(ParserUnitTestCase):
         """
 
         # ND072022.PD0 contains a single ADCPA ensemble
-        fid = open(os.path.join(RESOURCE_PATH, '20140424.adcpt.log'), 'rU')
+        with open(os.path.join(RESOURCE_PATH, '20140424.adcpt.log'), 'rU') as stream_handle:
+            parser = AdcptAcfgmDclPd0Parser(self.config_recov,
+                                            stream_handle,
+                                            self.exception_callback,
+                                            self.state_callback,
+                                            self.publish_callback)
 
-        stream_handle = fid
-        parser = AdcptAcfgmDclPd0Parser(self.config_recov,
-                                        stream_handle,
-                                        self.exception_callback,
-                                        self.state_callback,
-                                        self.publish_callback)
+            particles = parser.get_records(20)
+            # ask for 20 but should only get 15
 
-        particles = parser.get_records(20)
-        # ask for 20 but should only get 15
+            log.debug('got back %d particles', len(particles))
 
-        log.debug('got back %d particles', len(particles))
-
-        # Note the yml file was produced from the parser output but was hand verified
-        # against the sample outputs provided in the IDD
-        self.assert_particles(particles, '20140424.recov.adcpt.yml', RESOURCE_PATH)
-        self.assertEqual(self.exception_callback_value, [])
-
-        fid.close()
+            # Note the yml file was produced from the parser output but was hand verified
+            # against the sample outputs provided in the IDD
+            self.assert_particles(particles, '20140424.recov.adcpt.yml', RESOURCE_PATH)
+            self.assertEqual(self.exception_callback_value, [])
 
     def test_telem(self):
         """
@@ -118,44 +112,58 @@ class AdcptAcfgmPd0DclParserUnitTestCase(ParserUnitTestCase):
         """
 
         # ND072022.PD0 contains a single ADCPA ensemble
-        fid = open(os.path.join(RESOURCE_PATH, '20140424.adcpt.log'), 'rb')
+        with open(os.path.join(RESOURCE_PATH, '20140424.adcpt.log'), 'rb') as stream_handle:
+            parser = AdcptAcfgmDclPd0Parser(self.config_telem,
+                                            stream_handle,
+                                            self.exception_callback,
+                                            self.state_callback,
+                                            self.publish_callback)
 
-        stream_handle = fid
-        parser = AdcptAcfgmDclPd0Parser(self.config_telem,
-                                        stream_handle,
-                                        self.exception_callback,
-                                        self.state_callback,
-                                        self.publish_callback)
+            particles = parser.get_records(20)
+            # ask for 20 but should only get 15
 
-        particles = parser.get_records(20)
-        # ask for 20 but should only get 15
+            log.debug('got back %d particles', len(particles))
 
-        log.debug('got back %d particles', len(particles))
-
-        self.assert_particles(particles, '20140424.telem.adcpt.yml', RESOURCE_PATH)
-        self.assertEqual(self.exception_callback_value, [])
-
-        fid.close()
+            self.assert_particles(particles, '20140424.telem.adcpt.yml', RESOURCE_PATH)
+            self.assertEqual(self.exception_callback_value, [])
 
     def test_bad_data(self):
         """
         Ensure that bad data is skipped when it exists.
         """
         #20140424.adcpt_BAD.log has a corrupt record in it
-        fid = open(os.path.join(RESOURCE_PATH, '20140424.adcpt_BAD.log'), 'rb')
+        with open(os.path.join(RESOURCE_PATH, '20140424.adcpt_BAD.log'), 'rb') as stream_handle:
+            parser = AdcptAcfgmDclPd0Parser(self.config_recov,
+                                            stream_handle,
+                                            self.exception_callback,
+                                            self.state_callback,
+                                            self.publish_callback)
 
-        stream_handle = fid
-        parser = AdcptAcfgmDclPd0Parser(self.config_recov,
-                                        stream_handle,
-                                        self.exception_callback,
-                                        self.state_callback,
-                                        self.publish_callback)
+            #try to get a particle, should get none
+            parser.get_records(1)
+            log.debug('Exceptions : %s', self.exception_callback_value)
+            self.assert_(isinstance(self.exception_callback_value[0], RecoverableSampleException))
 
-        #try to get a particle, should get non
-        parser.get_records(1)
+    def test_live_data(self):
+        files_without_records = [
+            '20140424.adcpt_BAD.log',
+            '20141007.adcpt.log',
+            '20141008.adcpt.log',
+        ]
+        for filename in os.listdir(RESOURCE_PATH):
+            if filename.endswith('.log'):
+                log.info('Testing file: %s', filename)
+                with open(os.path.join(RESOURCE_PATH, filename), 'rb') as fh:
 
-        log.debug('Exceptions : %s', self.exception_callback_value)
+                    parser = AdcptAcfgmDclPd0Parser(self.config_telem,
+                                                    fh,
+                                                    self.exception_callback,
+                                                    self.state_callback,
+                                                    self.publish_callback)
 
-        self.assert_(isinstance(self.exception_callback_value[0], RecoverableSampleException))
+                    particles = parser.get_records(100)
 
-        fid.close()
+                    log.debug('got back %d particles', len(particles))
+                    if filename not in files_without_records:
+                        self.assertGreater(len(particles), 0)
+
