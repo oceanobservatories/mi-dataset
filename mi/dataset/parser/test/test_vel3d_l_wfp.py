@@ -9,6 +9,10 @@
 
 from nose.plugins.attrib import attr
 
+import os
+
+from mi.dataset.test.test_parser import BASE_RESOURCE_PATH
+
 from mi.core.log import get_logger; log = get_logger()
 from mi.core.exceptions import SampleException
 from StringIO import StringIO
@@ -16,11 +20,10 @@ from StringIO import StringIO
 from mi.dataset.test.test_parser import ParserUnitTestCase
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 
-from mi.dataset.parser.sio_mule_common import StateKey
 from mi.dataset.parser.vel3d_l_wfp import \
     Vel3dLWfpStateKey, \
     Vel3dLWfpParser, \
-    Vel3dLWfpSioMuleParser, \
+    Vel3dLWfpSioParser, \
     Vel3dLWfpInstrumentParticle, \
     Vel3dLWfpInstrumentRecoveredParticle, \
     Vel3dLWfpMetadataRecoveredParticle, \
@@ -979,6 +982,35 @@ TEL_EXPECTED_FIELDS_SIO_PS_WA_WA_3_META = (1374902331, 1390820404, 1390826721,
                                            65535, 4, 12, 1374902331)
 
 
+### NEW STUFF DEFS
+
+RESOURCE_PATH = os.path.join(BASE_RESOURCE_PATH, 'vel3d_l', 'wfp', 'resource')
+
+SIMPLE_LOG_FILE = 'tel_vel3d_l_1.dat'
+YAML_FILE = 'tel_vel3d_l_1.yml'
+NUM_REC_SIMPLE_LOG_FILE = 11
+
+LARGE_LOG_FILE = 'tel_node58p1_0_wa_wfp.dat'
+LARGE_YAML_FILE = 'tel_node58p1_0_wa_wfp.yml'
+
+DEC_LOG_FILE = 'tel_node15p1.dat'
+DEC_YAML_FILE = 'tel_node15p1.yml'
+
+MIX_LOG_FILE = 'tel_vel3d_l_4.dat'
+MIX_YAML_FILE = 'tel_vel3d_l_4.yml'
+
+REC_LOG_FILE_SIMPLE = 'rec_vel3d_l_2.dat'
+REC_YAML_FILE_SIMPLE = 'rec_vel3d_l_2.yml'
+
+REC_LOG_FILE_1 = 'A0000001.dat'
+REC_YAML_FILE_1 = 'A0000001.yml'
+
+REC_LOG_FILE_2 = 'A0000001_PAPA14.dat'
+REC_YAML_FILE_2 = 'A0000001_PAPA14.yml'
+
+### END NEW STUFF DEFS
+
+
 # The list of generated tests are the suggested tests, but there may
 # be other tests needed to fully test your parser
 
@@ -1257,43 +1289,31 @@ class Vel3dLWfpParserUnitTestCase(ParserUnitTestCase):
         self.tel_expected_particle_sio_ps_wa_wa_3_meta = Vel3dLWfpSioMuleMetadataParticle(
             TEL_EXPECTED_FIELDS_SIO_PS_WA_WA_3_META, internal_timestamp=3583891131.0)
 
-    def create_rec_parser(self, file_handle, new_state):
+    def create_rec_parser(self, file_handle):
         """
         This function creates a Vel3d_l_Wfp parser for recovered data.
         """
-        if new_state is None:
-            new_state = self.state
-        parser = Vel3dLWfpParser(self.rec_config, new_state, file_handle,
-            self.rec_state_callback, self.pub_callback, self.exception_callback)
+        parser = Vel3dLWfpParser(self.rec_config, file_handle, self.exception_callback)
         return parser
 
-    def create_tel_parser(self, file_handle, new_state):
+    def create_tel_parser(self, file_handle):
         """
         This function creates a Vel3d_l_Wfp_Sio_Mule parser for telemetered data.
         """
-        if new_state is None:
-            new_state = self.state
-        parser = Vel3dLWfpSioMuleParser(self.tel_config, new_state, file_handle,
-            self.tel_state_callback, self.pub_callback, self.exception_callback)
+        parser = Vel3dLWfpSioParser(self.tel_config, file_handle, self.exception_callback)
         return parser
 
-    def exception_callback(self, exception):
-        """ Callback method to watch what comes in via the exception callback """
-        self.exception_callback_value = exception
-        log.info("EXCEPTION RECEIVED %s", exception)
+    def open_file(self, filename):
+        file = open(os.path.join(RESOURCE_PATH, filename), mode='rb')
+        return file
 
-    def rec_state_callback(self, state, file_ingested):
-        """ Call back method to watch what comes in via the position callback """
-        self.rec_state_callback_value = state
-        self.rec_file_ingested_value = file_ingested
+    def open_file_write(self, filename):
+        file = open(os.path.join(RESOURCE_PATH, filename), mode='w')
+        return file
 
-    def tel_state_callback(self, state):
-        """ Call back method to watch what comes in via the position callback """
-        self.state_callback_value = state
-
-    def pub_callback(self, pub):
-        """ Call back method to watch what comes in via the publish callback """
-        self.publish_callback_value = pub
+    def verify_contents(self, actual_particle, expected_particle):
+        self.assertEqual(actual_particle, [expected_particle])
+        self.assert_(isinstance(self.publish_callback_value, list))
 
     def setUp(self):
         ParserUnitTestCase.setUp(self)
@@ -1317,11 +1337,8 @@ class Vel3dLWfpParserUnitTestCase(ParserUnitTestCase):
         # compared with returned results
 
         self.rec_file_ingested_value = None
-        self.state_callback_value = None
-        self.rec_state_callback_value = None
-        self.publish_callback_value = None
-        self.exception_callback_value = None
-        self.state = None
+        self.publish_callback_value = []
+        self.exception_callback_value = []
         self.maxDiff = None
         self.create_expected_results()
 
@@ -1333,7 +1350,7 @@ class Vel3dLWfpParserUnitTestCase(ParserUnitTestCase):
         log.info("============== START RECOVERED EXCESS DATA ==================")
         log.info("Recovered Excess Data length %d", len(REC_EXCESS_METADATA))
         input_file = StringIO(REC_EXCESS_METADATA)
-        self.parser = self.create_rec_parser(input_file, self.state)
+        self.parser = self.create_rec_parser(input_file)
 
         with self.assertRaises(SampleException):
             result = self.parser.get_records(1)
@@ -1348,7 +1365,7 @@ class Vel3dLWfpParserUnitTestCase(ParserUnitTestCase):
         log.info("=================== START RECOVERED MANY ======================")
         log.info("Recovered Many length %d", len(REC_RECORD_4))
         input_file = StringIO(REC_RECORD_4)
-        self.parser = self.create_rec_parser(input_file, self.state)
+        self.parser = self.create_rec_parser(input_file)
 
         log.info("REC MANY VERIFY RECORDS 1-4")
         result = self.parser.get_records(4)
@@ -1382,7 +1399,7 @@ class Vel3dLWfpParserUnitTestCase(ParserUnitTestCase):
         log.info("============== START RECOVERED LONG STREAM ==================")
         log.info("Recovered Long Stream length %d", len(REC_RECORD_10))
         input_file = StringIO(REC_RECORD_10)
-        self.parser = self.create_rec_parser(input_file, self.state)
+        self.parser = self.create_rec_parser(input_file)
 
         result = self.parser.get_records(10)
         self.assertEqual(result, [self.rec_expected_particle_10_1,
@@ -1400,41 +1417,10 @@ class Vel3dLWfpParserUnitTestCase(ParserUnitTestCase):
         result = self.parser.get_records(1)
         self.verify_contents(result, self.rec_expected_particle_10_meta)
 
-        self.assertEqual(self.exception_callback_value, None)
+        self.assertEqual(self.exception_callback_value, [])
 
         log.info("============== END RECOVERED LONG STREAM ==================")
 
-    def test_rec_mid_state_start(self):
-        """
-        Test starting the parser in a state in the middle of processing
-        """
-        log.info("============ START RECOVERED MID STATE START ================")
-        log.info("Recovered Mid State length %d", len(REC_RECORD_2_10))
-        input_file = StringIO(REC_RECORD_2_10)
-
-        # Skip past the first block.
-        new_state = {
-            Vel3dLWfpStateKey.POSITION: 479,
-            Vel3dLWfpStateKey.PARTICLE_NUMBER: 0
-        }
-        self.parser = self.create_rec_parser(input_file, new_state)
-
-        log.info("REC MID STATE VERIFY BLOCK 2, RECORDS 1-6 and METADATA")
-        result = self.parser.get_records(7)
-        self.assertEqual(result, [self.rec_expected_particle_2_10_2_1,
-                                  self.rec_expected_particle_2_10_2_2,
-                                  self.rec_expected_particle_2_10_2_3,
-                                  self.rec_expected_particle_2_10_2_4,
-                                  self.rec_expected_particle_2_10_2_5,
-                                  self.rec_expected_particle_2_10_2_6,
-                                  self.rec_expected_particle_2_10_2_meta])
-
-        # Should be at EOF now, so position is the size of the file.
-        log.info("REC MID STATE VERIFY STATE")
-        self.assertEqual(self.parser._state[Vel3dLWfpStateKey.POSITION],
-                         len(REC_RECORD_2_10))
-
-        log.info("============ END RECOVERED MID STATE START ================")
 
     def test_rec_multiple_blocks(self):
         """
@@ -1443,7 +1429,7 @@ class Vel3dLWfpParserUnitTestCase(ParserUnitTestCase):
         log.info("============ START RECOVERED MULTIPLE BLOCKS ================")
         log.info("Recovered Multiple Blocks length %d", len(REC_RECORD_2_10))
         input_file = StringIO(REC_RECORD_2_10)
-        self.parser = self.create_rec_parser(input_file, self.state)
+        self.parser = self.create_rec_parser(input_file)
 
         result = self.parser.get_records(12)
         self.assertEqual(result, [self.rec_expected_particle_2_10_1_1,
@@ -1461,46 +1447,6 @@ class Vel3dLWfpParserUnitTestCase(ParserUnitTestCase):
 
         log.info("============ END RECOVERED MULTIPLE BLOCKS ================")
 
-    def test_rec_set_state(self):
-        """
-        Test changing to a new state after initializing the parser and
-        reading data, as if new data has been found and the state has
-        changed
-        """
-        log.info("============== START RECOVERED SET STATE ==================")
-        log.info("Recovered Set State length %d", len(REC_RECORD_2_10))
-        input_file = StringIO(REC_RECORD_2_10)
-        self.parser = self.create_rec_parser(input_file, self.state)
-
-        log.info("REC SET STATE VERIFY BLOCK 1 RECORDS 1-2")
-        result = self.parser.get_records(2)
-        self.assertEqual(result, [self.rec_expected_particle_2_10_1_1,
-                                  self.rec_expected_particle_2_10_1_2])
-
-        # Skip past the other records in block 1.
-        log.info("REC SET STATE RESET STATE")
-        new_state = {
-            Vel3dLWfpStateKey.POSITION: 479,
-            Vel3dLWfpStateKey.PARTICLE_NUMBER: 0
-        }
-        self.parser.set_state(new_state)
-
-        log.info("REC SET STATE VERIFY BLOCK 2 ALL RECORDS")
-        result = self.parser.get_records(7)
-        self.assertEqual(result, [self.rec_expected_particle_2_10_2_1,
-                                  self.rec_expected_particle_2_10_2_2,
-                                  self.rec_expected_particle_2_10_2_3,
-                                  self.rec_expected_particle_2_10_2_4,
-                                  self.rec_expected_particle_2_10_2_5,
-                                  self.rec_expected_particle_2_10_2_6,
-                                  self.rec_expected_particle_2_10_2_meta])
-
-        log.info("REC SET STATE VERIFY STATE")
-        self.assertEqual(self.parser._state[Vel3dLWfpStateKey.POSITION],
-                         len(REC_RECORD_2_10))
-
-        log.info("============== END RECOVERED SET STATE ==================")
-
     def test_rec_simple_no_decimation(self):
         """
         Read test data and pull out data particles one at a time.
@@ -1509,7 +1455,7 @@ class Vel3dLWfpParserUnitTestCase(ParserUnitTestCase):
         log.info("========== START RECOVERED SIMPLE WITHOUT DECIMATION ==========")
         log.info("Recovered Simple length %d", len(REC_RECORD_3))
         input_file = StringIO(REC_RECORD_3)
-        self.parser = self.create_rec_parser(input_file, self.state)
+        self.parser = self.create_rec_parser(input_file)
 
         log.info("REC SIMPLE WITHOUT DECIMATION VERIFY RECORD 1")
         result = self.parser.get_records(1)
@@ -1529,100 +1475,6 @@ class Vel3dLWfpParserUnitTestCase(ParserUnitTestCase):
 
         log.info("========== END RECOVERED SIMPLE WITHOUT DECIMATION ==========")
 
-    def test_tel_get_many(self):
-        """
-        Read test data and pull out multiple data particles at one time.
-        Assert that the results are those we expected.
-        """
-        log.info("================ START TELEMETERED MANY ===================")
-        log.info("Telemetered Many length %d", len(TEL_RECORD_4))
-        input_file = StringIO(TEL_RECORD_4)
-        self.parser = self.create_tel_parser(input_file, self.state)
-
-        log.info("TEL MANY VERIFY RECORDS 1-4")
-        result = self.parser.get_records(4)
-        self.assertEqual(result, [self.tel_expected_particle_4_1,
-                                  self.tel_expected_particle_4_2,
-                                  self.tel_expected_particle_4_3,
-                                  self.tel_expected_particle_4_4])
-
-        self.assertEqual(self.publish_callback_value[0],
-            self.tel_expected_particle_4_1)
-
-        self.assertEqual(self.publish_callback_value[1],
-            self.tel_expected_particle_4_2)
-
-        self.assertEqual(self.publish_callback_value[2],
-            self.tel_expected_particle_4_3)
-
-        self.assertEqual(self.publish_callback_value[3],
-            self.tel_expected_particle_4_4)
-
-        log.info("TEL MANY VERIFY METADATA RECORD")
-        result = self.parser.get_records(1)
-        self.verify_contents(result, self.tel_expected_particle_4_meta)
-
-        log.info("=================== END TELEMETERED MANY ======================")
-
-    def test_tel_long_stream(self):
-        """
-        Test a long stream
-        """
-        log.info("============== START TELEMETERED LONG STREAM ==================")
-        log.info("Telemetered Long Stream length %d", len(TEL_RECORD_10))
-        input_file = StringIO(TEL_RECORD_10)
-        self.parser = self.create_tel_parser(input_file, self.state)
-
-        result = self.parser.get_records(10)
-        self.assertEqual(result, [self.tel_expected_particle_10_1,
-                                  self.tel_expected_particle_10_2,
-                                  self.tel_expected_particle_10_3,
-                                  self.tel_expected_particle_10_4,
-                                  self.tel_expected_particle_10_5,
-                                  self.tel_expected_particle_10_6,
-                                  self.tel_expected_particle_10_7,
-                                  self.tel_expected_particle_10_8,
-                                  self.tel_expected_particle_10_9,
-                                  self.tel_expected_particle_10_10])
-
-        log.info("TEL LONG STREAM VERIFY METADATA RECORD")
-        result = self.parser.get_records(1)
-        self.verify_contents(result, self.tel_expected_particle_10_meta)
-
-        self.assertEqual(self.exception_callback_value, None)
-
-        log.info("============== END TELEMETERED LONG STREAM ==================")
-
-    def test_tel_mid_state_start(self):
-        """
-        Test starting the parser in a state in the middle of processing
-        """
-        log.info("=========== START TELEMETERED MID STATE START ===============")
-        log.info("Telemetered Mid State length %d", len(TEL_RECORD_2_10))
-        input_file = StringIO(TEL_RECORD_2_10)
-
-        # Skip past the first SIO block and
-        # the first 2 instrument records in SIO block 2.
-        new_state = {
-            StateKey.UNPROCESSED_DATA: [[515, 1122]],
-            StateKey.IN_PROCESS_DATA: [[515, 1122, 6, 2]],
-            StateKey.FILE_SIZE: 1122}
-        self.parser = self.create_tel_parser(input_file, new_state)
-
-        log.info("TEL MID STATE VERIFY RECORD 2_10")
-        result = self.parser.get_records(1)
-        self.verify_contents(result, self.tel_expected_particle_2_10_2_3)
-        result = self.parser.get_records(1)
-        self.verify_contents(result, self.tel_expected_particle_2_10_2_4)
-
-        log.info("TEL MID STATE VERIFY STATE")
-        self.assertEqual(self.parser._state[StateKey.IN_PROCESS_DATA],
-                        [[515, 1122, 6, 4]])
-        self.assertEqual(self.parser._state[StateKey.UNPROCESSED_DATA],
-                         [[515, 1122]])
-
-        log.info("=========== END TELEMETERED MID STATE START ===============")
-
     def test_tel_multiple_sio_blocks(self):
         """
         This function verifies that multiple SIO blocks can be read.
@@ -1630,7 +1482,7 @@ class Vel3dLWfpParserUnitTestCase(ParserUnitTestCase):
         log.info("========== START TELEMETERED MULTIPLE SIO BLOCKS ==============")
         log.info("Telemetered Multiple SIO Blocks length %d", len(TEL_RECORD_2_10))
         input_file = StringIO(TEL_RECORD_2_10)
-        self.parser = self.create_tel_parser(input_file, self.state)
+        self.parser = self.create_tel_parser(input_file)
 
         result = self.parser.get_records(12)
         self.assertEqual(result, [self.tel_expected_particle_2_10_1_1,
@@ -1655,7 +1507,7 @@ class Vel3dLWfpParserUnitTestCase(ParserUnitTestCase):
         log.info("========== START TELEMETERED NOT MY SIO BLOCK ==============")
         log.info("Not my SIO Block length %d", len(TEL_SIO_PS_WA_WA))
         input_file = StringIO(TEL_SIO_PS_WA_WA)
-        self.parser = self.create_tel_parser(input_file, self.state)
+        self.parser = self.create_tel_parser(input_file)
 
         result = self.parser.get_records(9)
         self.assertEqual(result, [self.tel_expected_particle_sio_ps_wa_wa_2_1,
@@ -1670,55 +1522,6 @@ class Vel3dLWfpParserUnitTestCase(ParserUnitTestCase):
 
         log.info("========== END TELEMETERED NOT MY SIO BLOCK ==============")
 
-    def test_tel_set_state(self):
-        """
-        Test changing to a new state after initializing the parser and
-        reading data, as if new data has been found and the state has
-        changed
-        """
-        log.info("============== START TELEMETERED SET STATE ==================")
-        log.info("Telemetered Set State length %d", len(TEL_RECORD_2_10))
-        input_file = StringIO(TEL_RECORD_2_10)
-        self.parser = self.create_tel_parser(input_file, self.state)
-
-        log.info("TEL SET STATE VERIFY RECORD 1_1")
-        result = self.parser.get_records(1)
-        self.verify_contents(result, self.tel_expected_particle_2_10_1_1)
-
-        # Skip past the other 3 instrument records in SIO block 1.
-        # The next record that will be read is the metadata record.
-        log.info("TEL SET STATE SKIP IN SIO BLOCK 1")
-        new_state = {
-            StateKey.UNPROCESSED_DATA: [[0, 1122]],
-            StateKey.IN_PROCESS_DATA: [[0, 515, 5, 4], [515, 1122, None, 0]],
-            StateKey.FILE_SIZE: 1122}
-        self.parser.set_state(new_state)
-
-        log.info("TEL SET STATE VERIFY RECORD 1_META")
-        result = self.parser.get_records(1)
-        self.verify_contents(result, self.tel_expected_particle_2_10_1_meta)
-
-        # Skip past the first instrument record in SIO block 2.
-        log.info("TEL SET STATE SKIP IN SIO BLOCK 2")
-        new_state = {
-            StateKey.UNPROCESSED_DATA: [[515, 1122]],
-            StateKey.IN_PROCESS_DATA: [[515, 1122, 7, 1]],
-            StateKey.FILE_SIZE: 1122}
-        self.parser.set_state(new_state)
-
-        log.info("TEL SET STATE VERIFY RECORD 2_2")
-        result = self.parser.get_records(1)
-        self.verify_contents(result, self.tel_expected_particle_2_10_2_2)
-        result = self.parser.get_records(1)
-        self.verify_contents(result, self.tel_expected_particle_2_10_2_3)
-
-        log.info("TEL SET STATE VERIFY STATE")
-        self.assertEqual(self.parser._state[StateKey.IN_PROCESS_DATA],
-                        [[515, 1122, 7, 3]])
-        self.assertEqual(self.parser._state[StateKey.UNPROCESSED_DATA],
-                         [[515, 1122]])
-
-        log.info("============== END TELEMETERED SET STATE ==================")
 
     def test_tel_simple_no_decimation(self):
         """
@@ -1729,7 +1532,7 @@ class Vel3dLWfpParserUnitTestCase(ParserUnitTestCase):
         log.info("========= START TELEMETERED SIMPLE NO DECIMATION =============")
         log.info("Telemetered Simple length %d", len(TEL_RECORD_1))
         input_file = StringIO(TEL_RECORD_1)
-        self.parser = self.create_tel_parser(input_file, self.state)
+        self.parser = self.create_tel_parser(input_file)
 
         log.info("TEL SIMPLE NO DECIMATION VERIFY RECORD 1")
         result = self.parser.get_records(1)
@@ -1750,7 +1553,7 @@ class Vel3dLWfpParserUnitTestCase(ParserUnitTestCase):
         log.info("========= START TELEMETERED SIMPLE WITH DECIMATION ===========")
         log.info("Simple length %d", len(TEL_RECORD_2))
         input_file = StringIO(TEL_RECORD_2)
-        self.parser = self.create_tel_parser(input_file, self.state)
+        self.parser = self.create_tel_parser(input_file)
 
         log.info("SIMPLE WITH DECIMATION VERIFY RECORD 1")
         result = self.parser.get_records(1)
@@ -1766,7 +1569,186 @@ class Vel3dLWfpParserUnitTestCase(ParserUnitTestCase):
 
         log.info("========= END TELEMETERED SIMPLE WITH DECIMATION =============")
 
-    def verify_contents(self, actual_particle, expected_particle):
-        self.assertEqual(actual_particle, [expected_particle])
-        self.assert_(isinstance(self.publish_callback_value, list))
-        self.assertEqual(self.publish_callback_value[0], expected_particle)
+    ################## END OLDER TESTS -- START NEW TESTS #########################
+
+    def test_rec_parser_simple(self):
+        """
+        Read data from a file and pull out data particles
+        one at a time. Verify that the results are those we expected.
+        """
+        log.info('===== START YAML TEST =====')
+        in_file = self.open_file(REC_LOG_FILE_SIMPLE)
+        parser = self.create_rec_parser(in_file)
+
+        # In a single read, get all particles in this file.
+        result = parser.get_records(20)
+        self.assert_particles(result, REC_YAML_FILE_SIMPLE, RESOURCE_PATH)
+
+        in_file.close()
+        self.assertListEqual(self.exception_callback_value, [])
+
+        log.info('===== END YAML TEST =====')
+
+    def test_rec_parser_yaml(self):
+        """
+        Read data from a file and pull out data particles
+        one at a time. Verify that the results are those we expected.
+        """
+        log.info('===== START YAML TEST =====')
+        in_file = self.open_file(REC_LOG_FILE_1)
+        parser = self.create_rec_parser(in_file)
+
+        # In a single read, get all particles in this file.
+        result = parser.get_records(15000)
+        self.assert_particles(result, REC_YAML_FILE_1, RESOURCE_PATH)
+
+        in_file.close()
+        self.assertListEqual(self.exception_callback_value, [])
+
+        log.info('===== END YAML TEST =====')
+
+    def test_rec_parser_large_yaml(self):
+        """
+        Read data from a file and pull out data particles
+        one at a time. Verify that the results are those we expected.
+        """
+        log.info('===== START YAML TEST =====')
+        in_file = self.open_file(REC_LOG_FILE_2)
+        parser = self.create_rec_parser(in_file)
+
+        # In a single read, get all particles in this file.
+        result = parser.get_records(25000)
+        self.assert_particles(result, REC_YAML_FILE_2, RESOURCE_PATH)
+
+        in_file.close()
+        self.assertListEqual(self.exception_callback_value, [])
+
+        log.info('===== END YAML TEST =====')
+
+    def test_tel_parser_yaml_simple(self):
+        """
+        Read data from a file and pull out data particles
+        one at a time. Verify that the results are those we expected.
+        """
+        log.info('===== START YAML TEST =====')
+        in_file = self.open_file(SIMPLE_LOG_FILE)
+        parser = self.create_tel_parser(in_file)
+
+        # In a single read, get all particles in this file.
+        number_expected_results = NUM_REC_SIMPLE_LOG_FILE
+        result = parser.get_records(number_expected_results)
+        self.assert_particles(result, YAML_FILE, RESOURCE_PATH)
+
+        in_file.close()
+        self.assertListEqual(self.exception_callback_value, [])
+
+        log.info('===== END YAML TEST =====')
+
+    def test_tel_parser_yaml_no_decimation(self):
+        """
+        Read data from a log file with no decimation.
+        Verify that the results are those we expected.
+        """
+        log.info('===== START NO DEC TEST =====')
+        in_file = self.open_file(LARGE_LOG_FILE)
+        parser = self.create_tel_parser(in_file)
+
+        # In a single read, get all particles in this file.
+        result = parser.get_records(500)
+        self.assert_particles(result, LARGE_YAML_FILE, RESOURCE_PATH)
+
+        in_file.close()
+        self.assertListEqual(self.exception_callback_value, [])
+
+        log.info('===== END NO DEC TEST =====')
+
+    def test_tel_parser_yaml_with_decimation(self):
+        """
+        Read data from a log file with a decimation factor.
+        Verify that the results are those we expected.
+        """
+        log.info('===== START DEC TEST =====')
+        in_file = self.open_file(DEC_LOG_FILE)
+        parser = self.create_tel_parser(in_file)
+
+        # In a single read, get all particles in this file.
+        result = parser.get_records(500)
+        self.assert_particles(result, DEC_YAML_FILE, RESOURCE_PATH)
+
+        in_file.close()
+        self.assertListEqual(self.exception_callback_value, [])
+
+        log.info('===== END DEC TEST =====')
+
+    def test_tel_parser_yaml_decimation_mix(self):
+        """
+        Some records have a decimation factor, others don't.
+        Verify that the results are those we expected.
+        """
+        log.info('===== START MIX TEST =====')
+        in_file = self.open_file(MIX_LOG_FILE)
+        parser = self.create_tel_parser(in_file)
+
+        # In a single read, get all particles in this file.
+        result = parser.get_records(15)
+        self.assert_particles(result, MIX_YAML_FILE, RESOURCE_PATH)
+
+        in_file.close()
+        self.assertListEqual(self.exception_callback_value, [])
+
+        log.info('===== END MIX TEST =====')
+
+    def create_rec_yml_file(self):
+        """
+        Create a yml file corresponding to an actual recovered dataset. This is not an actual test - it allows
+        us to create what we need for integration testing, i.e. a yml file.
+        """
+        in_file = self.open_file(REC_LOG_FILE_2)
+        parser = self.create_rec_parser(in_file)
+
+        # In a single read, get all particles in this file.
+        result = parser.get_records(100000)
+
+        self.particle_to_yml(result, REC_YAML_FILE_2)
+
+    def create_tel_yml_file(self):
+        """
+        Create a yml file corresponding to an actual recovered dataset. This is not an actual test - it allows
+        us to create what we need for integration testing, i.e. a yml file.
+        """
+        in_file = self.open_file(LARGE_LOG_FILE)
+        parser = self.create_tel_parser(in_file)
+
+        # In a single read, get all particles in this file.
+        result = parser.get_records(500)
+
+        self.particle_to_yml(result, LARGE_YAML_FILE)
+
+    def particle_to_yml(self, particles, filename):
+        """
+        This is added as a testing helper, not actually as part of the parser tests. Since the same particles
+        will be used for the driver test it is helpful to write them to .yml in the same form they need in the
+        results.yml fids here.
+        """
+        # open write append, if you want to start from scratch manually delete this fid
+        fid = self.open_file_write(filename)
+        fid.write('header:\n')
+        fid.write("    particle_object: 'MULTIPLE'\n")
+        fid.write("    particle_type: 'MULTIPLE'\n")
+        fid.write('data:\n')
+        for i in range(0, len(particles)):
+            particle_dict = particles[i].generate_dict()
+            fid.write('  - _index: %d\n' % (i+1))
+            fid.write('    particle_object: %s\n' % particles[i].__class__.__name__)
+            fid.write('    particle_type: %s\n' % particle_dict.get('stream_name'))
+            fid.write('    internal_timestamp: %f\n' % particle_dict.get('internal_timestamp'))
+            for val in particle_dict.get('values'):
+                if val.get('value') is None:
+                    fid.write('    %s: %s\n' % (val.get('value_id'), '!!null'))
+                elif isinstance(val.get('value'), float):
+                    fid.write('    %s: %16.12f\n' % (val.get('value_id'), val.get('value')))
+                elif isinstance(val.get('value'), str):
+                    fid.write("    %s: '%s'\n" % (val.get('value_id'), val.get('value')))
+                else:
+                    fid.write('    %s: %s\n' % (val.get('value_id'), val.get('value')))
+        fid.close()
