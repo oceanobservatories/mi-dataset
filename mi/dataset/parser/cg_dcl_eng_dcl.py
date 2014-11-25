@@ -1192,7 +1192,7 @@ class CgDclEngDclParser(SimpleParser):
                     self._exception_callback(UnexpectedDataException(message))
 
             else:
-                log.info("Non-match .. ignoring line: %s", line)
+                log.debug("Non-match .. ignoring line: %r", line)
 
             if sample:
                 self._record_buffer.append(sample)
