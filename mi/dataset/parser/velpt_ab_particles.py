@@ -66,7 +66,7 @@ class VelptAbDataParticleKey(BaseEnum):
     DISTANCE_BEAM4 = 'distance_beam4'                                            # PD460
 
     # Particle field enums for extracting from the Hardware Configuration record
-    INSTRUMENT_TYPE_SERIAL_NUMBER = 'instrument_type_serial_number'              # PD461
+    INSTRUMENT_TYPE_SERIAL_NUMBER = 'instrmt_type_serial_number'                 # PD461
     PIC_VERSION = 'pic_version'                                                  # PD465
     HARDWARE_REVISION = 'hardware_revision'                                      # PD466
     RECORDER_SIZE = 'recorder_size'                                              # PD467
@@ -75,13 +75,13 @@ class VelptAbDataParticleKey(BaseEnum):
 
     # Particle field enums for extracting from the Head Configuration record
     PRESSURE_SENSOR = 'pressure_sensor'                                          # PD470
-    MAGNETOMETER = 'magnetometer'                                                # PD471
+    MAGNETOMETER = 'magnetometer_sensor'                                         # PD471
     TILT_SENSOR = 'tilt_sensor'                                                  # PD472
     TILT_SENSOR_MOUNTING = 'tilt_sensor_mounting'                                # PD473
     HEAD_FREQUENCY = 'head_frequency'                                            # PD474
     HEAD_TYPE = 'head_type'                                                      # PD475
     HEAD_SERIAL_NUMBER = 'head_serial_number'                                    # PD476
-    NUMBER_OF_BEAMS = 'number_of_beams'                                          # PD478
+    NUMBER_OF_BEAMS = 'number_beams'                                             # PD478
 
     # Particle field enums for extracting from the User Configuration record
     TRANSMIT_PULSE_LENGTH = 'transmit_pulse_length'                              # PD479
@@ -107,7 +107,7 @@ class VelptAbDataParticleKey(BaseEnum):
     STAGE_ENABLE = 'stage_enable'                                                # PD511
     ANALOG_POWER_OUTPUT = 'analog_power_output'                                  # PD512
     SOUND_SPEED_ADJUST_FACTOR = 'sound_speed_adjust_factor'                      # PD513
-    NUMBER_DIAGNOSTIC_SAMPLES = 'number_diagnostic_samples'                      # PD514
+    NUMBER_DIAGNOSTIC_SAMPLES = 'number_diagnostics_samples'                      # PD514
     NUMBER_OF_BEAMS_IN_DIAGNOSTICS_MODE = 'number_of_beams_in_diagnostics_mode'  # PD2932
     NUMBER_PINGS_DIAGNOSTIC = 'number_pings_diagnostic'                          # PD516
     SOFTWARE_VERSION = 'software_version'                                        # PD520

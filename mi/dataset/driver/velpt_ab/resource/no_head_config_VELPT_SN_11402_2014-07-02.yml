@@ -7,20 +7,20 @@ data:
     particle_type: velpt_ab_instrument_metadata_recovered
     internal_timestamp: 3589656305.000
     date_time_string: 2013/10/01 22:45:05
-    instrument_type_serial_number: AQD11402
+    instrmt_type_serial_number: AQD11402
     pic_version: 0
     hardware_revision: 4
     recorder_size: 9437184
     velocity_range: 0
     firmware_version: '3.35'
     pressure_sensor: 0
-    magnetometer: 0
+    magnetometer_sensor: 0
     tilt_sensor: 0
     tilt_sensor_mounting: 0
     head_frequency: 0
     head_type: 0
     head_serial_number: ''
-    number_of_beams: 0
+    number_beams: 0
     transmit_pulse_length: 125
     blanking_distance: 49
     receive_length: 32
@@ -44,7 +44,7 @@ data:
     stage_enable: 0
     analog_power_output: 0
     sound_speed_adjust_factor: 16657
-    number_diagnostic_samples: 20
+    number_diagnostics_samples: 20
     number_of_beams_in_diagnostics_mode: 1
     number_pings_diagnostic: 20
     software_version: N6
