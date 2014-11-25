@@ -19,7 +19,7 @@ from mi.dataset.test.test_parser import ParserUnitTestCase, BASE_RESOURCE_PATH
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 from mi.dataset.parser.sio_eng_sio import SioEngSioParser
 
-RESOURCE_PATH = os.path.join(BASE_RESOURCE_PATH, 'sio_eng', 'sio_mule', 'resource')
+RESOURCE_PATH = os.path.join(BASE_RESOURCE_PATH, 'sio_eng', 'sio', 'resource')
 
 
 @attr('UNIT', group='mi')
@@ -53,6 +53,9 @@ class SioEngSioMuleParserUnitTestCase(ParserUnitTestCase):
             # request one more particle than expected
             result = parser.get_records(5)
             self.assert_particles(result, 'node59p1_1.yml', RESOURCE_PATH)
+
+            result = parser.get_records(5)
+            log.debug('second get records got back %s records', len(result))
 
         self.assertEqual(self.exception_callback_value, [])
 
