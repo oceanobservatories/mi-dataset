@@ -11,7 +11,7 @@ initial release
 __author__ = 'Joe Padula'
 __license__ = 'Apache 2.0'
 
-from datetime import datetime, timedelta
+from datetime import datetime
 import ntplib
 import calendar
 
@@ -138,3 +138,27 @@ def convert_to_signed_int_8_bit(input):
     if val > 0x7F:
         val = ((val+0x80)&0xFF) - 0x80
     return val
+
+
+def sum_hex_digits(ascii_hex_str):
+    """
+    This method will take an ascii hex string and sum each of the bytes
+    returning the result as hex.
+    :param ascii_hex_str: The ascii hex string to sum
+    :return:
+    """
+
+    len_of_ascii_hex = len(ascii_hex_str)
+
+    if len_of_ascii_hex % 2 != 0:
+        raise ValueError("The ASCII Hex string is not divisible by 2.")
+
+    x = 0
+
+    # Iterate through each byte of ascii hex
+    for index in range(0, len_of_ascii_hex, 2):
+        # Convert each byte to an int and add it to the existing summation
+        x += int(ascii_hex_str[index:index+2], 16)
+
+    # Return the resultant summation as hex
+    return hex(x)
