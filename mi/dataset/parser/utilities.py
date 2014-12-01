@@ -138,3 +138,13 @@ def convert_to_signed_int_8_bit(input):
     if val > 0x7F:
         val = ((val+0x80)&0xFF) - 0x80
     return val
+
+
+def sum_hex_digits(ascii_hex_str):
+
+    x = 0
+
+    for index in range(0,len(ascii_hex_str),2):
+        x += int(ascii_hex_str[index:index+2], 16)
+
+    return hex(x)
