@@ -15,9 +15,7 @@ __license__ = 'Apache 2.0'
 
 import re
 
-from datetime import datetime
 import ntplib
-import time
 
 from mi.core.log import get_logger
 log = get_logger()
@@ -60,7 +58,7 @@ IDLE_TIME_REGEX = DCL_TIMESTAMP + SPACE_REGEX   # Record Timestamp
 IDLE_TIME_REGEX += START_METADATA         # Start of metadata
 IDLE_TIME_REGEX += ANY_CHARS_REGEX              # Any text
 IDLE_TIME_REGEX += END_METADATA + ':'     # End of metadata
-IDLE_TIME_REGEX += 'Idle state, without initialize'
+IDLE_TIME_REGEX += '.*?Idle state, without initialize'
 IDLE_TIME_REGEX += END_OF_LINE_REGEX
 IDLE_TIME_MATCHER = re.compile(IDLE_TIME_REGEX)
 
@@ -108,6 +106,7 @@ NEXT_WAKEUP_REGEX += INST_TIMESTAMP
 NEXT_WAKEUP_REGEX += r'\.'
 NEXT_WAKEUP_REGEX += END_OF_LINE_REGEX
 NEXT_WAKEUP_MATCHER = re.compile(NEXT_WAKEUP_REGEX)
+
 
 # The META_MESSAGE_MATCHER produces the following groups (used in group(xxx)):
 class MetaDataMatchGroups(BaseEnum):
@@ -213,7 +212,7 @@ class InstrumentDataMatchGroups(BaseEnum):
     INST_GROUP_VOLTAGE_MAIN = 26
     INST_GROUP_REF_CHANNEL_AVERAGE = 27
     INST_GROUP_REF_CHANNEL_VARIANCE = 28
-    INST_GROUP_SEA_WATER_DARK= 29
+    INST_GROUP_SEA_WATER_DARK = 29
     INST_GROUP_SPEC_CHANNEL_AVERAGE = 30
     INST_GROUP_SPECTRAL_CHANNELS = 31
 
@@ -264,7 +263,7 @@ END_OF_BLOCK_REGEX = \
 
 # Note that the \xF0 character in the following regex is the eth char
 DCL_DATE_TIME_WITH_ETH_CHAR_REGEX = \
-    DCL_TIMESTAMP + ONE_OR_MORE_WHITESPACE_REGEX + "\xF0"  + ANY_CHARS_REGEX + \
+    DCL_TIMESTAMP + ONE_OR_MORE_WHITESPACE_REGEX + "\xF0" + ANY_CHARS_REGEX + \
     END_OF_LINE_REGEX + "?"
 
 CHARGING_PPC_CHARGED_REGEX = \
@@ -388,6 +387,7 @@ class NutnrBDclParser(Parser):
         # raise a recoverable sample exception.
 
         frame_type = inst_match.group(InstrumentDataMatchGroups.INST_GROUP_FRAME_TYPE)
+
         if frame_type != self._frame_types[FRAME_TYPE_DARK_INDEX] \
                 and frame_type != self._frame_types[FRAME_TYPE_LIGHT_INDEX]:
             error_message = 'Invalid frame type %s' % frame_type
@@ -396,79 +396,57 @@ class NutnrBDclParser(Parser):
 
         else:
 
-            # A frame type of DARK is the trigger for a metadata particle.
-            # If all the metadata has been received,
-            # generate the metadata particle for this block.
+            #generate one metadata record if it has not already been done
+            if self._metadata_state == ALL_METADATA_RECEIVED and self._metadata_particle_generated_for_block is False:
 
-            if frame_type == self._frame_types[FRAME_TYPE_DARK_INDEX]:
+                # Fields for the metadata particle must be
+                # in the same order as the RAW_INDEX_META_xxx values.
+                # DCL Controller timestamp and serial number
+                # are from the instrument data record.
+                # Other data comes from the various metadata records
+                # which has been accumulated in the Metadata State Table.
+                meta_fields = [value
+                               for state, matcher, value in METADATA_STATE_TABLE]
 
-                log.debug("Metadata state: %s", "{0:b}".format(self._metadata_state))
+                metadata_tuple = [
+                    (NutnrBDataParticleKey.DCL_CONTROLLER_TIMESTAMP,
+                     inst_match.group(InstrumentDataMatchGroups.INST_GROUP_DCL_TIMESTAMP),
+                     str),
+                    (NutnrBDataParticleKey.SERIAL_NUMBER,
+                     inst_match.group(InstrumentDataMatchGroups.INST_GROUP_SERIAL_NUMBER),
+                     str),
+                    (NutnrBDataParticleKey.STARTUP_TIME,
+                     meta_fields[0],
+                     int),
+                    (NutnrBDataParticleKey.SPEC_ON_TIME,
+                     meta_fields[1],
+                     int),
+                    (NutnrBDataParticleKey.SPEC_POWERED_TIME,
+                     meta_fields[2],
+                     int),
+                    (NutnrBDataParticleKey.LAMP_ON_TIME,
+                     meta_fields[3],
+                     int),
+                    (NutnrBDataParticleKey.LAMP_POWERED_TIME,
+                     meta_fields[4],
+                     int),
+                    (NutnrBDataParticleKey.DATA_LOG_FILE,
+                     meta_fields[5],
+                     str)]
 
-                if self._metadata_state == ALL_METADATA_RECEIVED:
-
-                    if self._metadata_particle_generated_for_block is False:
-
-                        # Fields for the metadata particle must be
-                        # in the same order as the RAW_INDEX_META_xxx values.
-                        # DCL Controller timestamp and serial number
-                        # are from the instrument data record.
-                        # Other data comes from the various metadata records
-                        # which has been accumulated in the Metadata State Table.
-                        meta_fields = [value
-                                       for state, matcher, value in METADATA_STATE_TABLE]
-
-                        metadata_tuple = [
-                            (NutnrBDataParticleKey.DCL_CONTROLLER_TIMESTAMP,
-                             inst_match.group(InstrumentDataMatchGroups.INST_GROUP_DCL_TIMESTAMP),
-                             str),
-                            (NutnrBDataParticleKey.SERIAL_NUMBER,
-                             inst_match.group(InstrumentDataMatchGroups.INST_GROUP_SERIAL_NUMBER),
-                             str),
-                            (NutnrBDataParticleKey.STARTUP_TIME,
-                             meta_fields[0],
-                             int),
-                            (NutnrBDataParticleKey.SPEC_ON_TIME,
-                             meta_fields[1],
-                             int),
-                            (NutnrBDataParticleKey.SPEC_POWERED_TIME,
-                             meta_fields[2],
-                             int),
-                            (NutnrBDataParticleKey.LAMP_ON_TIME,
-                             meta_fields[3],
-                             int),
-                            (NutnrBDataParticleKey.LAMP_POWERED_TIME,
-                             meta_fields[4],
-                             int),
-                            (NutnrBDataParticleKey.DATA_LOG_FILE,
-                             meta_fields[5],
-                             str)]
-
-                        # Generate the metadata particle class and add the
-                        # result to the list of particles to be returned.
-                        particle = self._extract_sample(self._metadata_particle_class,
-                                                        None,
-                                                        metadata_tuple,
-                                                        self._metadata_timestamp)
-
-                        if particle is not None:
-                            self._record_buffer.append(particle)
-
-                            self._metadata_particle_generated_for_block = True
-
-                else:
-                    error_message = 'Incomplete Metadata'
-                    log.warn(error_message)
-                    self._exception_callback(RecoverableSampleException(error_message))
-
-            if self._metadata_state == ALL_METADATA_RECEIVED:
-
-                # Fields for the instrument particle must be in the same
-                # order as the RAW_INDEX_INST_xxx values.
-
-                particle = self._create_instrument_particle(inst_match)
+                particle = self._extract_sample(self._metadata_particle_class,
+                                                None,
+                                                metadata_tuple,
+                                                self._metadata_timestamp)
 
                 if particle is not None:
                     self._record_buffer.append(particle)
+                    self._metadata_particle_generated_for_block = True
+
+            #
+            particle = self._create_instrument_particle(inst_match)
+            if particle is not None:
+                self._record_buffer.append(particle)
 
     def _process_next_wakeup_match(self):
 
@@ -507,14 +485,11 @@ class NutnrBDclParser(Parser):
                 # Jan 1, 1970 (Unix Epoch time).
 
                 if matcher != LOG_FILE_MATCHER:
-                    table_data[METADATA_VALUE_INDEX] = \
-                        self._extract_metadata_unix_timestamp(match)
+                    table_data[METADATA_VALUE_INDEX] = self._extract_metadata_unix_timestamp(match)
 
                 # For the LOG_FILE matcher, save the name of the log file.
-
                 else:
-                    table_data[METADATA_VALUE_INDEX] = \
-                        match.group(MetaDataMatchGroups.META_GROUP_INST_LOGFILE)
+                    table_data[METADATA_VALUE_INDEX] = match.group(MetaDataMatchGroups.META_GROUP_INST_LOGFILE)
 
         if match_found is False:
             error_message = 'Unexpected metadata found: ' + line
@@ -525,8 +500,7 @@ class NutnrBDclParser(Parser):
         """
         Parse file and collect particles
         """
-        raise NotImplementedException(
-            "The parse_file must be implemented by the inheriting class!")
+        raise NotImplementedException("The parse_file must be implemented by the inheriting class!")
 
     def get_records(self, num_records_requested=1):
         """

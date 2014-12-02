@@ -27,8 +27,7 @@ from mi.dataset.parser.nutnr_b_particles import \
 
 from mi.idk.config import Config
 
-RESOURCE_PATH = os.path.join(Config().base_dir(),
-    'mi', 'dataset', 'driver', 'nutnr_b', 'dcl_full', 'resource')
+RESOURCE_PATH = os.path.join(Config().base_dir(), 'mi', 'dataset', 'driver', 'nutnr_b', 'dcl_full', 'resource')
 
 MODULE_NAME = 'mi.dataset.parser.nutnr_b_particles'
 
@@ -49,7 +48,7 @@ EXPECTED_INST_PARTICLES_CONJECTURE = 8
 
 EXPECTED_PARTICLES_INVALID_FRAME_TYPE = 3
 EXPECTED_EXCEPTIONS_INVALID_FRAME_TYPE = 4
-EXPECTED_PARTICLES_MISSING_METADATA = 3
+EXPECTED_PARTICLES_MISSING_METADATA = 4
 EXPECTED_EXCEPTIONS_MISSING_METADATA = 2
 EXPECTED_PARTICLES_INVALID_FIELDS = 3
 EXPECTED_EXCEPTIONS_INVALID_FIELDS = 78
@@ -84,8 +83,8 @@ class NutnrBDclFullParserUnitTestCase(ParserUnitTestCase):
         """
         return NutnrBDclFullRecoveredParser(
             self.rec_config,
-            file_handle, lambda state, ingested : None,
-            lambda data : None, self.rec_exception_callback)
+            file_handle, lambda state, ingested: None,
+            lambda data: None, self.rec_exception_callback)
 
     def create_tel_parser(self, file_handle, new_state=None):
         """
@@ -93,8 +92,8 @@ class NutnrBDclFullParserUnitTestCase(ParserUnitTestCase):
         """
         return NutnrBDclFullTelemeteredParser(
             self.tel_config,
-            file_handle, lambda state, ingested : None,
-            lambda data : None, self.tel_exception_callback)
+            file_handle, lambda state, ingested: None,
+            lambda data: None, self.tel_exception_callback)
 
     def open_file(self, filename):
         return open(os.path.join(RESOURCE_PATH, filename), mode='r')
@@ -158,12 +157,10 @@ class NutnrBDclFullParserUnitTestCase(ParserUnitTestCase):
         """
         Read files and verify that all expected particles can be read.
         Verify that the contents of the particles are correct.
-        There should be no exceptions generated.
         """
         log.debug('===== START TEST HAPPY PATH =====')
 
-        for input_file, expected_particles, rec_yml_file, tel_yml_file \
-            in HAPPY_PATH_TABLE:
+        for input_file, expected_particles, rec_yml_file, tel_yml_file in HAPPY_PATH_TABLE:
 
             in_file = self.open_file(input_file)
             parser = self.create_rec_parser(in_file)
@@ -171,6 +168,7 @@ class NutnrBDclFullParserUnitTestCase(ParserUnitTestCase):
             self.assert_particles(particles, rec_yml_file, RESOURCE_PATH)
             self.assertEqual(self.rec_exceptions_detected, 0)
             in_file.close()
+
             in_file = self.open_file(input_file)
             parser = self.create_tel_parser(in_file)
             particles = parser.get_records(expected_particles)
@@ -246,7 +244,7 @@ class NutnrBDclFullParserUnitTestCase(ParserUnitTestCase):
         """
         The file used in this test is missing one of the required
         metadata records.
-        This causes no particles to be generated and 1 Recoverable exception.
+        This causes no metadata particles to be generated.
         """
         log.debug('===== START TEST MISSING METADATA =====')
 
@@ -260,6 +258,18 @@ class NutnrBDclFullParserUnitTestCase(ParserUnitTestCase):
         particles = parser.get_records(total_records)
         self.assertEqual(len(particles), expected_particles)
         self.assertEqual(self.rec_exceptions_detected, expected_exceptions)
+
+        inst_particles = 0
+        meta_particles = 0
+        for particle in particles:
+            if isinstance(particle, NutnrBDclFullRecoveredInstrumentDataParticle):
+                inst_particles += 1
+            elif isinstance(particle, NutnrBDclFullRecoveredMetadataDataParticle):
+                meta_particles += 1
+
+        self.assertEqual(inst_particles, expected_particles)
+        self.assertEqual(meta_particles, 0)
+
         in_file.close()
 
         in_file = self.open_file(input_file)
@@ -267,9 +277,19 @@ class NutnrBDclFullParserUnitTestCase(ParserUnitTestCase):
         particles = parser.get_records(total_records)
         self.assertEqual(len(particles), expected_particles)
         self.assertEqual(self.tel_exceptions_detected, expected_exceptions)
-        in_file.close()
 
-        log.info("Num exceptions: %d, %d", self.rec_exceptions_detected, self.tel_exceptions_detected)
+        inst_particles = 0
+        meta_particles = 0
+        for particle in particles:
+            if isinstance(particle, NutnrBDclFullTelemeteredInstrumentDataParticle):
+                inst_particles += 1
+            elif isinstance(particle, NutnrBDclFullTelemeteredMetadataDataParticle):
+                meta_particles += 1
+
+        self.assertEqual(inst_particles, expected_particles)
+        self.assertEqual(meta_particles, 0)
+
+        in_file.close()
 
         log.debug('===== END TEST MISSING METADATA =====')
 
