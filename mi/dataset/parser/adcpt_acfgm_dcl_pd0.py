@@ -15,26 +15,23 @@ initial release
 __author__ = 'Jeff Roy'
 __license__ = 'Apache 2.0'
 
-import re
 import binascii
-from datetime import datetime
-import time
 import struct
 
 from mi.core.common import BaseEnum
 from mi.dataset.dataset_parser import Parser
 from mi.core.instrument.data_particle import DataParticleKey, DataParticleValue
 from mi.core.exceptions import RecoverableSampleException
-
 from mi.dataset.parser.adcp_pd0 import \
     AdcpFileType, \
     AdcpPd0DataParticle, \
     CHECKSUM_BYTES, \
     CHECKSUM_MODULO
 from mi.dataset.parser import utilities
+from mi.core.log import get_logger, get_logging_metaclass
 
-from mi.core.log import get_logger
 log = get_logger()
+METACLASS =get_logging_metaclass('trace')
 
 
 class DataParticleType(BaseEnum):
@@ -55,20 +52,7 @@ class AdcptAcfgmPd0DclKey(BaseEnum):
     DCL_CONTROLLER_STARTING_TIMESTAMP = 'dcl_controller_starting_timestamp'
     PD0_DATA = 'pd0_data'
 
-END_OF_LINE_REGEX = r'(?:\r\n|\n)'   # any line termination
-DCL_DATE_REGEX = r'\d{4}/\d{2}/\d{2}'      # Date: YYYY/MM/DD
-DCL_TIME_REGEX = r'\d{2}:\d{2}:\d{2}.\d{3}'      # Time: HH:MM:SS.ddd
-SPACE = ' '        # just a space
-
-# capture the DCL timestamp
-# include trailing space so they can be completely removed from the input record
-DCL_TIMESTAMP_REGEX = '(' + DCL_DATE_REGEX + SPACE + DCL_TIME_REGEX + SPACE + ')'
-# beginning of every PD0 ensemble
-PD0_HEADER_REGEX = r'7[Ff]7[Ff]'
-# non-capturing 2 character representation of a hex byte
-ASCII_HEX_BYTE_REGEX = r'(?:[0-9a-fA-F]{2})'
-# PD0 Header followed by any number of bytes
-PD0_ENSEMBLE_REGEX = '(' + PD0_HEADER_REGEX + ASCII_HEX_BYTE_REGEX + r'+)'
+PD0_START_STRING = '\x7f\x7f'
 
 
 class AdcptAcfgmPd0DclParticle(AdcpPd0DataParticle):
@@ -145,6 +129,8 @@ class AdcptAcfgmPd0DclInstrumentRecoveredParticle(AdcptAcfgmPd0DclParticle):
 
 
 class AdcptAcfgmDclPd0Parser(Parser):
+    __metaclass__ = METACLASS
+
     def __init__(self,
                  config,
                  stream_handle,
@@ -164,57 +150,64 @@ class AdcptAcfgmDclPd0Parser(Parser):
                                                      exception_callback)
 
     def _parse_file(self):
-
-        line = self._stream_handle.readline()
+        pd0_data = []
+        dcl_data_dict = {}
 
         # Go through each line in the file
-        while line:
+        for line in self._stream_handle:
+            log.trace('line: %r', line)
 
-            #find  all the DCL timestamps in the line.
-            dcl_timestamps_match = re.findall(DCL_TIMESTAMP_REGEX, line)
+            # data looks like this
+            # TS [adcpt:DLOG4]:<data>
+            # with the "label" sometimes missing.  We will split the line into tokens based on whitespace
+            # The first token will always be the timestamp and the last token will sometimes be good
+            # data.
+            parts = line.strip().split()
+            ts = ' '.join(parts[:2])
+            data = parts[-1].split(':')[-1]
 
-            #remove all DCL timestamps
-            stripped_line = re.sub(DCL_TIMESTAMP_REGEX, '', line)
-            #remove the line termination
-            stripped_line = re.sub(END_OF_LINE_REGEX, '', stripped_line)
+            # If we can decode it, assume it is good
+            try:
+                data = binascii.unhexlify(data)
+            except TypeError:
+                continue
 
-            # only need to process the lines with PD0 data, all others can be ignored
-            if re.match(PD0_ENSEMBLE_REGEX, stripped_line):
+            log.trace('Found valid data: %r', data)
 
-                # convert the stripped PD0 hex ascii back to binary
-                pd0_data = binascii.unhexlify(stripped_line)
+            # Look for start of a PD0 ensemble.  If we have a particle queued up, ship it
+            # then reset our state.
+            if data.startswith(PD0_START_STRING):
+                log.trace('found pd0 start')
+                if self._create_particle(pd0_data, dcl_data_dict) or not dcl_data_dict:
+                    dcl_data_dict = {
+                        AdcptAcfgmPd0DclKey.DCL_CONTROLLER_STARTING_TIMESTAMP: ts,
+                        AdcptAcfgmPd0DclKey.DCL_CONTROLLER_TIMESTAMP: ts
+                    }
+                    pd0_data = []
 
-                # make sure it is a valid record
-                if self._validate_checksum(pd0_data):
+            pd0_data.append(data)
+            dcl_data_dict[AdcptAcfgmPd0DclKey.DCL_CONTROLLER_TIMESTAMP] = ts
 
-                    # create a dictionary as raw_data parameter to extract_sample
-                    dcl_data_dict = {}
-
-                    # save the binary pd0 data
-                    dcl_data_dict[AdcptAcfgmPd0DclKey.PD0_DATA] = pd0_data
-
-                    # strip off the trailing space and save the last DCL timestamp group in raw data
-                    dcl_data_dict[AdcptAcfgmPd0DclKey.DCL_CONTROLLER_TIMESTAMP] = \
-                        dcl_timestamps_match[-1][:-1]
-                    # strip off the trailing space and save the first DCL timestamp group in raw data
-                    dcl_data_dict[AdcptAcfgmPd0DclKey.DCL_CONTROLLER_STARTING_TIMESTAMP] = \
-                        dcl_timestamps_match[0][:-1]
-
-                    # providing dcl_data_dict as raw data parameter
-                    # the adcpt afgm particle class will pop off the pd0
-                    # data and provide it to the base pd0 particle class
-                    particle = self._extract_sample(self._particle_class,
-                                                    None,
-                                                    dcl_data_dict,
-                                                    None)
-
-                    self._record_buffer.append(particle)
-
-            line = self._stream_handle.readline()
+        # finally, see if we have a particle now, if so, publish
+        self._create_particle(pd0_data, dcl_data_dict)
 
         # provide an indication that the file was parsed
         self._file_parsed = True
         log.debug('PARSE_FILE create %s particles', len(self._record_buffer))
+
+    def _create_particle(self, data, dcl_dict):
+        # step through the list, see if there is a valid particle anywhere
+        for i in xrange(len(data)):
+            if data[i].startswith(PD0_START_STRING):
+                if self._validate_checksum(''.join(data[i:])):
+                    dcl_dict[AdcptAcfgmPd0DclKey.PD0_DATA] = ''.join(data)
+                    particle = self._extract_sample(self._particle_class,
+                                                    None,
+                                                    dcl_dict,
+                                                    None)
+                    self._record_buffer.append(particle)
+                    return True
+        return False
 
     def get_records(self, num_records_requested=1):
         """
@@ -239,30 +232,23 @@ class AdcptAcfgmDclPd0Parser(Parser):
 
     def _validate_checksum(self, input_buffer):
 
-        num_bytes = struct.unpack("<H", input_buffer[2: 4])[0]
+        num_bytes, = struct.unpack("<H", input_buffer[2:4])
         # get the number of bytes in the record, number of bytes is immediately
         # after the sentinel bytes and does not include the 2 checksum bytes
 
-        record_start = 0
-        record_end = num_bytes
+        if len(input_buffer) < (num_bytes+CHECKSUM_BYTES):
+            # not enough bytes, fail
+            log.info('Not enough bytes in buffer, fail checksum')
+            return False
 
-        #if there is enough in the buffer check the record
-        if record_end <= len(input_buffer[0: -CHECKSUM_BYTES]):
-            #make sure the checksum bytes are in the buffer too
+        checksum = sum([ord(x) for x in input_buffer[:num_bytes]]) & CHECKSUM_MODULO
+        message_checksum, = struct.unpack("<H", input_buffer[num_bytes:num_bytes + CHECKSUM_BYTES])
 
-            total = 0
-            for i in range(record_start, record_end):
-                total += ord(input_buffer[i])
-            #add up all the bytes in the record
+        if checksum == message_checksum:
+            return True
 
-            checksum = total & CHECKSUM_MODULO  # bitwise and with 65535 or mod vs 65536
+        err_msg = 'ADCPT ACFGM DCL RECORD FAILED CHECKSUM'
+        self._exception_callback(RecoverableSampleException(err_msg))
+        log.warn(err_msg)
+        return False
 
-            #log.debug("checksum & total = %d %d ", checksum, total)
-
-            if checksum == struct.unpack("<H", input_buffer[record_end: record_end + CHECKSUM_BYTES])[0]:
-                return True
-            else:
-                err_msg = 'ADCPT ACFGM DCL RECORD FAILED CHECKSUM'
-                self._exception_callback(RecoverableSampleException(err_msg))
-                log.warn(err_msg)
-                return False
