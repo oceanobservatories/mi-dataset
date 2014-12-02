@@ -24,7 +24,7 @@
 1998/04/01 14:46:30.808 Entering operational loop, press S to exit.
 1998/04/01 14:46:30.809 
 1998/04/01 15:17:31.815 04/01/1999 15:17:31: Message: Initializing analog output.
-1998/04/01 14:46:31.240 06/27/2014 14:46:31: Message: Turning ON Spectrometer.
+1998/04/01 14:46:31.240 06/27/2014 14:46:31: Message: NOT Turning ON Spectrometer.
 1998/04/01 15:17:36.531 04/01/1999 15:17:36: Message: Spectrometer powered up.
 1998/04/01 15:17:38.889 04/01/1999 15:17:38: Message: Turning ON UV light source.
 1998/04/01 15:17:41.247 04/01/1999 15:17:41: Message: UV light source powered up.

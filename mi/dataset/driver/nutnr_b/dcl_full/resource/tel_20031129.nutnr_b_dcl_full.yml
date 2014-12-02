@@ -23,7 +23,7 @@ data:
     frame_type: 'NDF'
     serial_number: '0260'
     date_of_sample: 2014178
-    time_of_sample:           14.780
+    time_of_sample:           14.780260
     nitrate_concentration:            0.000
     aux_fitting_1:            0.000
     aux_fitting_2:            0.000
@@ -51,12 +51,12 @@ data:
     frame_type: 'NLF'
     serial_number: '0260'
     date_of_sample: 2014178
-    time_of_sample:           14.781
+    time_of_sample:           14.780610
     nitrate_concentration:           15.350
     aux_fitting_1:          -48.180
     aux_fitting_2:           73.660
     aux_fitting_3:           -0.060
-    rms_error:            0.000
+    rms_error:            0.000270
     temp_interior:           23.120
     temp_spectrometer:           23.690
     temp_lamp:           16.670

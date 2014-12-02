@@ -38,12 +38,12 @@ data:
     frame_type: 'NLC'
     serial_number: '2002'
     date_of_sample: 2002025
-    time_of_sample:            0.136
+    time_of_sample:            0.135790
     nitrate_concentration:          -12.220
     aux_fitting_1:          -24.440
     aux_fitting_2:          -36.660
     aux_fitting_3:          -48.880
-    rms_error:            6.667
+    rms_error:            6.666670
   - _index: 4
     particle_object: NutnrBDclConcRecoveredInstrumentDataParticle
     particle_type: nutnr_b_dcl_conc_instrument_recovered
@@ -53,12 +53,12 @@ data:
     frame_type: 'NLC'
     serial_number: '2002'
     date_of_sample: 2002025
-    time_of_sample:            0.272
+    time_of_sample:            0.271580
     nitrate_concentration:          -11.110
     aux_fitting_1:          -22.220
     aux_fitting_2:          -33.330
     aux_fitting_3:          -44.440
-    rms_error:           13.333
+    rms_error:           13.333330
   - _index: 5
     particle_object: NutnrBDclConcRecoveredInstrumentDataParticle
     particle_type: nutnr_b_dcl_conc_instrument_recovered
@@ -68,7 +68,7 @@ data:
     frame_type: 'NLC'
     serial_number: '2002'
     date_of_sample: 2002025
-    time_of_sample:            0.407
+    time_of_sample:            0.407370
     nitrate_concentration:          -10.000
     aux_fitting_1:          -20.000
     aux_fitting_2:          -30.000
@@ -83,12 +83,12 @@ data:
     frame_type: 'NLC'
     serial_number: '2002'
     date_of_sample: 2002025
-    time_of_sample:            0.543
+    time_of_sample:            0.543160
     nitrate_concentration:           -8.890
     aux_fitting_1:          -17.780
     aux_fitting_2:          -26.660
     aux_fitting_3:          -35.550
-    rms_error:           26.667
+    rms_error:           26.666660
   - _index: 7
     particle_object: NutnrBDclConcRecoveredInstrumentDataParticle
     particle_type: nutnr_b_dcl_conc_instrument_recovered
@@ -98,12 +98,12 @@ data:
     frame_type: 'NLC'
     serial_number: '2002'
     date_of_sample: 2002025
-    time_of_sample:            0.679
+    time_of_sample:            0.678950
     nitrate_concentration:           -7.780
     aux_fitting_1:          -15.550
     aux_fitting_2:          -23.330
     aux_fitting_3:          -31.110
-    rms_error:           33.333
+    rms_error:           33.333330
   - _index: 8
     particle_object: NutnrBDclConcRecoveredInstrumentDataParticle
     particle_type: nutnr_b_dcl_conc_instrument_recovered
@@ -113,7 +113,7 @@ data:
     frame_type: 'NLC'
     serial_number: '2002'
     date_of_sample: 2002025
-    time_of_sample:            0.815
+    time_of_sample:            0.814740
     nitrate_concentration:           -6.670
     aux_fitting_1:          -13.330
     aux_fitting_2:          -20.000
@@ -128,12 +128,12 @@ data:
     frame_type: 'NLC'
     serial_number: '2002'
     date_of_sample: 2002025
-    time_of_sample:            0.951
+    time_of_sample:            0.950530
     nitrate_concentration:           -5.550
     aux_fitting_1:          -11.110
     aux_fitting_2:          -16.670
     aux_fitting_3:          -22.220
-    rms_error:           46.667
+    rms_error:           46.666660
   - _index: 10
     particle_object: NutnrBDclConcRecoveredInstrumentDataParticle
     particle_type: nutnr_b_dcl_conc_instrument_recovered
@@ -143,12 +143,12 @@ data:
     frame_type: 'NLC'
     serial_number: '2002'
     date_of_sample: 2002025
-    time_of_sample:            1.086
+    time_of_sample:            1.086320
     nitrate_concentration:           -4.440
     aux_fitting_1:           -8.890
     aux_fitting_2:          -13.330
     aux_fitting_3:          -17.780
-    rms_error:           53.333
+    rms_error:           53.333330
   - _index: 11
     particle_object: NutnrBDclConcRecoveredInstrumentDataParticle
     particle_type: nutnr_b_dcl_conc_instrument_recovered
@@ -158,12 +158,12 @@ data:
     frame_type: 'NLC'
     serial_number: '2002'
     date_of_sample: 2002025
-    time_of_sample:            1.222
+    time_of_sample:            1.222110
     nitrate_concentration:           -3.330
     aux_fitting_1:           -6.670
     aux_fitting_2:          -10.000
     aux_fitting_3:          -13.330
-    rms_error:           60.000
+    rms_error:           59.999990
   - _index: 12
     particle_object: NutnrBDclConcRecoveredInstrumentDataParticle
     particle_type: nutnr_b_dcl_conc_instrument_recovered
@@ -173,12 +173,12 @@ data:
     frame_type: 'NLC'
     serial_number: '2002'
     date_of_sample: 2002025
-    time_of_sample:            1.358
+    time_of_sample:            1.357900
     nitrate_concentration:           -2.220
     aux_fitting_1:           -4.440
     aux_fitting_2:           -6.670
     aux_fitting_3:           -8.890
-    rms_error:           66.667
+    rms_error:           66.666660
   - _index: 13
     particle_object: NutnrBDclConcRecoveredInstrumentDataParticle
     particle_type: nutnr_b_dcl_conc_instrument_recovered
@@ -188,12 +188,12 @@ data:
     frame_type: 'NLC'
     serial_number: '2002'
     date_of_sample: 2002025
-    time_of_sample:            1.494
+    time_of_sample:            1.493690
     nitrate_concentration:           -1.110
     aux_fitting_1:           -2.220
     aux_fitting_2:           -3.330
     aux_fitting_3:           -4.440
-    rms_error:           73.333
+    rms_error:           73.333330
   - _index: 14
     particle_object: NutnrBDclConcRecoveredInstrumentDataParticle
     particle_type: nutnr_b_dcl_conc_instrument_recovered
@@ -203,12 +203,12 @@ data:
     frame_type: 'NLC'
     serial_number: '2002'
     date_of_sample: 2002025
-    time_of_sample:            1.629
+    time_of_sample:            1.629480
     nitrate_concentration:            0.000
     aux_fitting_1:            0.000
     aux_fitting_2:           -0.000
     aux_fitting_3:            0.000
-    rms_error:           80.000
+    rms_error:           79.999990
   - _index: 15
     particle_object: NutnrBDclConcRecoveredInstrumentDataParticle
     particle_type: nutnr_b_dcl_conc_instrument_recovered
@@ -218,12 +218,12 @@ data:
     frame_type: 'NLC'
     serial_number: '2002'
     date_of_sample: 2002025
-    time_of_sample:            1.765
+    time_of_sample:            1.765270
     nitrate_concentration:            1.110
     aux_fitting_1:            2.220
     aux_fitting_2:            3.330
     aux_fitting_3:            4.440
-    rms_error:           86.667
+    rms_error:           86.666660
   - _index: 16
     particle_object: NutnrBDclConcRecoveredInstrumentDataParticle
     particle_type: nutnr_b_dcl_conc_instrument_recovered
@@ -233,12 +233,12 @@ data:
     frame_type: 'NLC'
     serial_number: '2002'
     date_of_sample: 2002025
-    time_of_sample:            1.901
+    time_of_sample:            1.901060
     nitrate_concentration:            2.220
     aux_fitting_1:            4.440
     aux_fitting_2:            6.670
     aux_fitting_3:            8.890
-    rms_error:           93.333
+    rms_error:           93.333320
   - _index: 17
     particle_object: NutnrBDclConcRecoveredInstrumentDataParticle
     particle_type: nutnr_b_dcl_conc_instrument_recovered
@@ -248,12 +248,12 @@ data:
     frame_type: 'NLC'
     serial_number: '2002'
     date_of_sample: 2002025
-    time_of_sample:            2.037
+    time_of_sample:            2.036850
     nitrate_concentration:            3.330
     aux_fitting_1:            6.670
     aux_fitting_2:           10.000
     aux_fitting_3:           13.330
-    rms_error:          100.000
+    rms_error:          99.999990
   - _index: 18
     particle_object: NutnrBDclConcRecoveredInstrumentDataParticle
     particle_type: nutnr_b_dcl_conc_instrument_recovered
@@ -263,12 +263,12 @@ data:
     frame_type: 'NLC'
     serial_number: '2002'
     date_of_sample: 2002025
-    time_of_sample:            2.173
+    time_of_sample:            2.172640
     nitrate_concentration:            4.440
     aux_fitting_1:            8.890
     aux_fitting_2:           13.330
     aux_fitting_3:           17.780
-    rms_error:          106.667
+    rms_error:          106.666660
   - _index: 19
     particle_object: NutnrBDclConcRecoveredInstrumentDataParticle
     particle_type: nutnr_b_dcl_conc_instrument_recovered
@@ -278,12 +278,12 @@ data:
     frame_type: 'NLC'
     serial_number: '2002'
     date_of_sample: 2002025
-    time_of_sample:            2.308
+    time_of_sample:            2.308430
     nitrate_concentration:            5.550
     aux_fitting_1:           11.110
     aux_fitting_2:           16.660
     aux_fitting_3:           22.220
-    rms_error:          113.333
+    rms_error:          113.333320
   - _index: 20
     particle_object: NutnrBDclConcRecoveredInstrumentDataParticle
     particle_type: nutnr_b_dcl_conc_instrument_recovered
@@ -293,12 +293,12 @@ data:
     frame_type: 'NLC'
     serial_number: '2002'
     date_of_sample: 2002025
-    time_of_sample:            2.444
+    time_of_sample:            2.444220
     nitrate_concentration:            6.670
     aux_fitting_1:           13.330
     aux_fitting_2:           20.000
     aux_fitting_3:           26.660
-    rms_error:          120.000
+    rms_error:          119.999990
   - _index: 21
     particle_object: NutnrBDclConcRecoveredInstrumentDataParticle
     particle_type: nutnr_b_dcl_conc_instrument_recovered
@@ -308,12 +308,12 @@ data:
     frame_type: 'NLC'
     serial_number: '2002'
     date_of_sample: 2002025
-    time_of_sample:            2.580
+    time_of_sample:            2.580010
     nitrate_concentration:            7.780
     aux_fitting_1:           15.550
     aux_fitting_2:           23.330
     aux_fitting_3:           31.110
-    rms_error:          126.667
+    rms_error:          126.666650
   - _index: 22
     particle_object: NutnrBDclConcRecoveredInstrumentDataParticle
     particle_type: nutnr_b_dcl_conc_instrument_recovered
@@ -323,12 +323,12 @@ data:
     frame_type: 'NLC'
     serial_number: '2002'
     date_of_sample: 2002025
-    time_of_sample:            2.716
+    time_of_sample:            2.715800
     nitrate_concentration:            8.890
     aux_fitting_1:           17.780
     aux_fitting_2:           26.660
     aux_fitting_3:           35.550
-    rms_error:          133.333
+    rms_error:          133.333320
   - _index: 23
     particle_object: NutnrBDclConcRecoveredInstrumentDataParticle
     particle_type: nutnr_b_dcl_conc_instrument_recovered
@@ -338,12 +338,12 @@ data:
     frame_type: 'NLC'
     serial_number: '2002'
     date_of_sample: 2002025
-    time_of_sample:            2.852
+    time_of_sample:            2.851590
     nitrate_concentration:           10.000
     aux_fitting_1:           20.000
     aux_fitting_2:           30.000
     aux_fitting_3:           40.000
-    rms_error:          140.000
+    rms_error:          139.999990
   - _index: 24
     particle_object: NutnrBDclConcRecoveredInstrumentDataParticle
     particle_type: nutnr_b_dcl_conc_instrument_recovered
@@ -353,12 +353,12 @@ data:
     frame_type: 'NLC'
     serial_number: '2002'
     date_of_sample: 2002025
-    time_of_sample:            2.987
+    time_of_sample:            2.987380
     nitrate_concentration:           11.110
     aux_fitting_1:           22.220
     aux_fitting_2:           33.330
     aux_fitting_3:           44.440
-    rms_error:          146.667
+    rms_error:          146.666650
   - _index: 25
     particle_object: NutnrBDclConcRecoveredInstrumentDataParticle
     particle_type: nutnr_b_dcl_conc_instrument_recovered
@@ -368,12 +368,12 @@ data:
     frame_type: 'NLC'
     serial_number: '2002'
     date_of_sample: 2002025
-    time_of_sample:            3.123
+    time_of_sample:            3.123170
     nitrate_concentration:           12.220
     aux_fitting_1:           24.440
     aux_fitting_2:           36.660
     aux_fitting_3:           48.880
-    rms_error:          153.333
+    rms_error:          153.333320
   - _index: 26
     particle_object: NutnrBDclConcRecoveredInstrumentDataParticle
     particle_type: nutnr_b_dcl_conc_instrument_recovered
@@ -383,9 +383,9 @@ data:
     frame_type: 'NLC'
     serial_number: '2002'
     date_of_sample: 2002025
-    time_of_sample:            3.259
+    time_of_sample:            3.258960
     nitrate_concentration:           13.330
     aux_fitting_1:           26.660
     aux_fitting_2:           40.000
     aux_fitting_3:           53.330
-    rms_error:          160.000
+    rms_error:          159.999980

@@ -23,7 +23,7 @@ data:
     frame_type: 'NDF'
     serial_number: '0260'
     date_of_sample: 1997178
-    time_of_sample:           14.780
+    time_of_sample:           14.780260
     nitrate_concentration:            0.000
     aux_fitting_1:            0.000
     aux_fitting_2:            0.000
@@ -51,7 +51,7 @@ data:
     frame_type: 'NLF'
     serial_number: '0260'
     date_of_sample: 1997178
-    time_of_sample:           14.780
+    time_of_sample:           14.780260
     nitrate_concentration:            0.000
     aux_fitting_1:            0.000
     aux_fitting_2:            0.000

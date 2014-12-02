@@ -2,9 +2,9 @@
 2014/04/30 00:59:02.907 [nutnr:DLOGP7]:Instrument sampling - Data logger entering data acquisition state
 2014/04/30 01:00:09.930 Charging power protection circuit ++++++++++ charged
 2014/04/30 01:00:09.975 04/30/2014 01:00:10: Message: ISUS Awakened on Schedule at UTC 04/30/2014 01:00:00.
-2014/04/30 01:00:10.144 
+2014/04/30 01:00:10.144
 2014/04/30 01:00:10.146 Entering operational loop, press S to exit.
-2014/04/30 01:00:10.146 
+2014/04/30 01:00:10.146
 2014/04/30 01:00:10.148 04/30/2014 01:00:10: Message: Initializing analog output.
 2014/04/30 01:00:10.552 04/30/2014 01:00:10: Message: Turning ON Spectrometer.
 2014/04/30 01:00:11.404 04/30/2014 01:00:11: Message: Spectrometer powered up.
@@ -22,14 +22,14 @@
 2014/04/30 01:00:37.686 04/30/2014 01:00:37: Message: ISUS Next Wakeup at UTC 04/30/2014 02:00:00.
 2014/04/30 01:00:37.862 04/30/2014 01:00:37: Message: Entering low power suspension, waiting for scheduled event.
 2014/04/30 01:01:01.863 [nutnr:DLOGP7]:Instrument Stopped [Power Off]
-2014/04/30 01:01:06.020 ð2014/04/30 01:10:02.340 [nutnr:DLOGP7]:Instrument Stopped [Quit/Power Off]
+2014/04/30 01:01:06.020 ï¿½2014/04/30 01:10:02.340 [nutnr:DLOGP7]:Instrument Stopped [Quit/Power Off]
 2014/04/30 03:57:12.547 [nutnr:DLOGP7]:Idle state, without initialize
 2014/04/30 03:59:03.978 [nutnr:DLOGP7]:Instrument sampling - Data logger entering data acquisition state
 2014/04/30 04:00:09.921 Charging power protection circuit ++++++++++ charged
 2014/04/30 04:00:09.967 04/30/2014 04:00:10: Message: ISUS Awakened on Schedule at UTC 04/30/2014 04:00:00.
-2014/04/30 04:00:10.107 
+2014/04/30 04:00:10.107
 2014/04/30 04:00:10.119 Entering operational loop, press S to exit.
-2014/04/30 04:00:10.120 
+2014/04/30 04:00:10.120
 2014/04/30 04:00:10.138 04/30/2014 04:00:10: Message: Initializing analog output.
 2014/04/30 04:00:10.534 04/30/2014 04:00:10: Message: Turning ON Spectrometer.
 2014/04/30 04:00:11.396 04/30/2014 04:00:11: Message: Spectrometer powered up.
@@ -47,14 +47,14 @@
 2014/04/30 04:00:37.666 04/30/2014 04:00:37: Message: ISUS Next Wakeup at UTC 04/30/2014 05:00:00.
 2014/04/30 04:00:37.815 04/30/2014 04:00:37: Message: Entering low power suspension, waiting for scheduled event.
 2014/04/30 04:01:01.803 [nutnr:DLOGP7]:Instrument Stopped [Power Off]
-2014/04/30 04:01:04.891 ð2014/04/30 04:10:03.008 [nutnr:DLOGP7]:Instrument Stopped [Quit/Power Off]
+2014/04/30 04:01:04.891 2014/04/30 04:10:03.008 [nutnr:DLOGP7]:Instrument Stopped [Quit/Power Off]
 2014/04/30 06:57:11.949 [nutnr:DLOGP7]:Idle state, without initialize
 2014/04/30 06:59:03.167 [nutnr:DLOGP7]:Instrument sampling - Data logger entering data acquisition state
 2014/04/30 07:00:09.930 Charging power protection circuit ++++++++++ charged
 2014/04/30 07:00:09.976 04/30/2014 07:00:10: Message: ISUS Awakened on Schedule at UTC 04/30/2014 07:00:00.
-2014/04/30 07:00:10.115 
+2014/04/30 07:00:10.115
 2014/04/30 07:00:10.126 Entering operational loop, press S to exit.
-2014/04/30 07:00:10.127 
+2014/04/30 07:00:10.127
 2014/04/30 07:00:10.146 04/30/2014 07:00:10: Message: Initializing analog output.
 2014/04/30 07:00:10.543 04/30/2014 07:00:10: Message: Turning ON Spectrometer.
 2014/04/30 07:00:11.405 04/30/2014 07:00:11: Message: Spectrometer powered up.
@@ -72,14 +72,14 @@
 2014/04/30 07:00:37.653 04/30/2014 07:00:37: Message: ISUS Next Wakeup at UTC 04/30/2014 08:00:00.
 2014/04/30 07:00:37.804 04/30/2014 07:00:37: Message: Entering low power suspension, waiting for scheduled event.
 2014/04/30 07:01:01.792 [nutnr:DLOGP7]:Instrument Stopped [Power Off]
-2014/04/30 07:01:06.310 ð2014/04/30 07:10:02.270 [nutnr:DLOGP7]:Instrument Stopped [Quit/Power Off]
+2014/04/30 07:01:06.310 2014/04/30 07:10:02.270 [nutnr:DLOGP7]:Instrument Stopped [Quit/Power Off]
 2014/04/30 09:57:11.833 [nutnr:DLOGP7]:Idle state, without initialize
 2014/04/30 09:59:02.973 [nutnr:DLOGP7]:Instrument sampling - Data logger entering data acquisition state
 2014/04/30 10:00:09.913 Charging power protection circuit ++++++++++ charged
 2014/04/30 10:00:09.967 04/30/2014 10:00:10: Message: ISUS Awakened on Schedule at UTC 04/30/2014 10:00:00.
-2014/04/30 10:00:10.095 
+2014/04/30 10:00:10.095
 2014/04/30 10:00:10.106 Entering operational loop, press S to exit.
-2014/04/30 10:00:10.107 
+2014/04/30 10:00:10.107
 2014/04/30 10:00:10.126 04/30/2014 10:00:10: Message: Initializing analog output.
 2014/04/30 10:00:10.522 04/30/2014 10:00:10: Message: Turning ON Spectrometer.
 2014/04/30 10:00:11.387 04/30/2014 10:00:11: Message: Spectrometer powered up.
@@ -97,14 +97,14 @@
 2014/04/30 10:00:37.761 04/30/2014 10:00:37: Message: ISUS Next Wakeup at UTC 04/30/2014 11:00:00.
 2014/04/30 10:00:37.910 04/30/2014 10:00:37: Message: Entering low power suspension, waiting for scheduled event.
 2014/04/30 10:01:03.937 [nutnr:DLOGP7]:Instrument Stopped [Power Off]
-2014/04/30 10:01:07.824 ð2014/04/30 10:10:04.016 [nutnr:DLOGP7]:Instrument Stopped [Quit/Power Off]
+2014/04/30 10:01:07.824 2014/04/30 10:10:04.016 [nutnr:DLOGP7]:Instrument Stopped [Quit/Power Off]
 2014/04/30 12:57:10.853 [nutnr:DLOGP7]:Idle state, without initialize
 2014/04/30 12:59:02.912 [nutnr:DLOGP7]:Instrument sampling - Data logger entering data acquisition state
 2014/04/30 13:00:09.942 Charging power protection circuit ++++++++++ charged
 2014/04/30 13:00:09.988 04/30/2014 13:00:10: Message: ISUS Awakened on Schedule at UTC 04/30/2014 13:00:00.
-2014/04/30 13:00:10.128 
+2014/04/30 13:00:10.128
 2014/04/30 13:00:10.139 Entering operational loop, press S to exit.
-2014/04/30 13:00:10.140 
+2014/04/30 13:00:10.140
 2014/04/30 13:00:10.159 04/30/2014 13:00:10: Message: Initializing analog output.
 2014/04/30 13:00:10.554 04/30/2014 13:00:10: Message: Turning ON Spectrometer.
 2014/04/30 13:00:11.419 04/30/2014 13:00:11: Message: Spectrometer powered up.
@@ -122,14 +122,14 @@
 2014/04/30 13:00:37.799 04/30/2014 13:00:37: Message: ISUS Next Wakeup at UTC 04/30/2014 14:00:00.
 2014/04/30 13:00:37.942 04/30/2014 13:00:37: Message: Entering low power suspension, waiting for scheduled event.
 2014/04/30 13:01:01.944 [nutnr:DLOGP7]:Instrument Stopped [Power Off]
-2014/04/30 13:01:05.961 ð2014/04/30 13:10:02.119 [nutnr:DLOGP7]:Instrument Stopped [Quit/Power Off]
+2014/04/30 13:01:05.961 2014/04/30 13:10:02.119 [nutnr:DLOGP7]:Instrument Stopped [Quit/Power Off]
 2014/04/30 15:57:10.085 [nutnr:DLOGP7]:Idle state, without initialize
 2014/04/30 15:59:02.078 [nutnr:DLOGP7]:Instrument sampling - Data logger entering data acquisition state
 2014/04/30 16:00:09.935 Charging power protection circuit ++++++++++ charged
 2014/04/30 16:00:09.943 04/30/2014 16:00:10: Message: ISUS Awakened on Schedule at UTC 04/30/2014 16:00:00.
-2014/04/30 16:00:10.082 
+2014/04/30 16:00:10.082
 2014/04/30 16:00:10.094 Entering operational loop, press S to exit.
-2014/04/30 16:00:10.095 
+2014/04/30 16:00:10.095
 2014/04/30 16:00:10.113 04/30/2014 16:00:10: Message: Initializing analog output.
 2014/04/30 16:00:10.509 04/30/2014 16:00:10: Message: Turning ON Spectrometer.
 2014/04/30 16:00:11.374 04/30/2014 16:00:11: Message: Spectrometer powered up.
@@ -147,14 +147,14 @@
 2014/04/30 16:00:37.764 04/30/2014 16:00:37: Message: ISUS Next Wakeup at UTC 04/30/2014 17:00:00.
 2014/04/30 16:00:37.913 04/30/2014 16:00:37: Message: Entering low power suspension, waiting for scheduled event.
 2014/04/30 16:01:01.913 [nutnr:DLOGP7]:Instrument Stopped [Power Off]
-2014/04/30 16:01:05.151 ð2014/04/30 16:10:03.471 [nutnr:DLOGP7]:Instrument Stopped [Quit/Power Off]
+2014/04/30 16:01:05.151 2014/04/30 16:10:03.471 [nutnr:DLOGP7]:Instrument Stopped [Quit/Power Off]
 2014/04/30 18:57:10.083 [nutnr:DLOGP7]:Idle state, without initialize
 2014/04/30 18:59:01.845 [nutnr:DLOGP7]:Instrument sampling - Data logger entering data acquisition state
 2014/04/30 19:00:09.888 Charging power protection circuit ++++++++++ charged
 2014/04/30 19:00:09.931 04/30/2014 19:00:10: Message: ISUS Awakened on Schedule at UTC 04/30/2014 19:00:00.
-2014/04/30 19:00:10.106 
+2014/04/30 19:00:10.106
 2014/04/30 19:00:10.107 Entering operational loop, press S to exit.
-2014/04/30 19:00:10.109 
+2014/04/30 19:00:10.109
 2014/04/30 19:00:10.110 04/30/2014 19:00:10: Message: Initializing analog output.
 2014/04/30 19:00:10.498 04/30/2014 19:00:10: Message: Turning ON Spectrometer.
 2014/04/30 19:00:11.375 04/30/2014 19:00:11: Message: Spectrometer powered up.
@@ -172,14 +172,14 @@
 2014/04/30 19:00:37.773 04/30/2014 19:00:37: Message: ISUS Next Wakeup at UTC 04/30/2014 20:00:00.
 2014/04/30 19:00:37.918 04/30/2014 19:00:38: Message: Entering low power suspension, waiting for scheduled event.
 2014/04/30 19:01:01.909 [nutnr:DLOGP7]:Instrument Stopped [Power Off]
-2014/04/30 19:01:05.757 ð2014/04/30 19:10:01.859 [nutnr:DLOGP7]:Instrument Stopped [Quit/Power Off]
+2014/04/30 19:01:05.757 2014/04/30 19:10:01.859 [nutnr:DLOGP7]:Instrument Stopped [Quit/Power Off]
 2014/04/30 21:57:10.012 [nutnr:DLOGP7]:Idle state, without initialize
 2014/04/30 21:59:03.625 [nutnr:DLOGP7]:Instrument sampling - Data logger entering data acquisition state
 2014/04/30 22:00:09.923 Charging power protection circuit ++++++++++ charged
 2014/04/30 22:00:09.925 04/30/2014 22:00:10: Message: ISUS Awakened on Schedule at UTC 04/30/2014 22:00:00.
-2014/04/30 22:00:10.064 
+2014/04/30 22:00:10.064
 2014/04/30 22:00:10.079 Entering operational loop, press S to exit.
-2014/04/30 22:00:10.080 
+2014/04/30 22:00:10.080
 2014/04/30 22:00:10.099 04/30/2014 22:00:10: Message: Initializing analog output.
 2014/04/30 22:00:10.492 04/30/2014 22:00:10: Message: Turning ON Spectrometer.
 2014/04/30 22:00:11.356 04/30/2014 22:00:11: Message: Spectrometer powered up.
@@ -197,4 +197,4 @@
 2014/04/30 22:00:37.915 04/30/2014 22:00:38: Message: ISUS Next Wakeup at UTC 04/30/2014 23:00:00.
 2014/04/30 22:00:38.063 04/30/2014 22:00:38: Message: Entering low power suspension, waiting for scheduled event.
 2014/04/30 22:01:02.060 [nutnr:DLOGP7]:Instrument Stopped [Power Off]
-2014/04/30 22:01:05.413 ð2014/04/30 22:10:03.738 [nutnr:DLOGP7]:Instrument Stopped [Quit/Power Off]
+2014/04/30 22:01:05.413 2014/04/30 22:10:03.738 [nutnr:DLOGP7]:Instrument Stopped [Quit/Power Off]
