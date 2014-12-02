@@ -169,14 +169,13 @@ class NutnrBDclFullParserUnitTestCase(ParserUnitTestCase):
             parser = self.create_rec_parser(in_file)
             particles = parser.get_records(expected_particles)
             self.assert_particles(particles, rec_yml_file, RESOURCE_PATH)
-            # self.assertEqual(self.rec_exceptions_detected, 0)
+            self.assertEqual(self.rec_exceptions_detected, 0)
             in_file.close()
-
             in_file = self.open_file(input_file)
             parser = self.create_tel_parser(in_file)
             particles = parser.get_records(expected_particles)
             self.assert_particles(particles, tel_yml_file, RESOURCE_PATH)
-            # self.assertEqual(self.tel_exceptions_detected, 0)
+            self.assertEqual(self.tel_exceptions_detected, 0)
             in_file.close()
 
         log.debug('===== END TEST HAPPY PATH =====')
