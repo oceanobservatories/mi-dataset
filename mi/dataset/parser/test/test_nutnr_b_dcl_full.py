@@ -399,3 +399,52 @@ class NutnrBDclFullParserUnitTestCase(ParserUnitTestCase):
         in_file.close()
 
         log.debug('===== END TEST CONJECTURE FILE =====')
+
+    def particle_to_yml(self, particles, filename, mode='w'):
+        """
+        This is added as a testing helper, not actually as part of the parser tests. Since the same particles
+        will be used for the driver test it is helpful to write them to .yml in the same form they need in the
+        results.yml fids here.
+        """
+        # open write append, if you want to start from scratch manually delete this fid
+        fid = open(os.path.join(RESOURCE_PATH, filename), mode)
+
+        fid.write('header:\n')
+        fid.write("    particle_object: 'MULTIPLE'\n")
+        fid.write("    particle_type: 'MULTIPLE'\n")
+        fid.write('data:\n')
+
+        for i in range(0, len(particles)):
+            particle_dict = particles[i].generate_dict()
+
+            fid.write('  - _index: %d\n' % (i+1))
+
+            fid.write('    particle_object: %s\n' % particles[i].__class__.__name__)
+            fid.write('    particle_type: %s\n' % particle_dict.get('stream_name'))
+            fid.write('    internal_timestamp: %f\n' % particle_dict.get('internal_timestamp'))
+
+            for val in particle_dict.get('values'):
+                if isinstance(val.get('value'), float):
+                    value = ('%16.5f' % val.get('value')).rstrip('0')
+                    fid.write('    %s: %s\n' % (val.get('value_id'), value))
+                elif isinstance(val.get('value'), str):
+                    fid.write("    %s: '%s'\n" % (val.get('value_id'), val.get('value')))
+                elif val.get('value') is None:
+                    fid.write("    %s: !!null\n" % (val.get('value_id')))
+                elif isinstance(val.get('value'), list):
+                    fid.write("    %s: [ " % (val.get('value_id')))
+                    list_values = val.get('value')
+                    if list_values[0] is None:
+                        fid.write("null")
+                    else:
+                        fid.write(" %s" % list_values[0])
+                    for item in list_values[1:len(list_values)]:
+                        fid.write(", ")
+                        if item is None:
+                            fid.write("null")
+                        else:
+                            fid.write("%s" % item)
+                    fid.write(" ]\n")
+                else:
+                    fid.write('    %s: %s\n' % (val.get('value_id'), val.get('value')))
+        fid.close()
