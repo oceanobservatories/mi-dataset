@@ -51,8 +51,8 @@ from mi.dataset.parser.dcl_file_common import DclInstrumentDataParticle, \
 from mi.core.exceptions import RecoverableSampleException
 from mi.dataset.dataset_parser import SimpleParser
 
-from mi.dataset.parser.common_regexes import END_OF_LINE_REGEX, \
-    FLOAT_REGEX, UNSIGNED_INT_REGEX, INT_REGEX, SPACE_REGEX, ANY_CHARS_REGEX, ASCII_HEX_CHAR_REGEX
+from mi.dataset.parser.common_regexes import FLOAT_REGEX, UNSIGNED_INT_REGEX, INT_REGEX, SPACE_REGEX, ANY_CHARS_REGEX, \
+    ASCII_HEX_CHAR_REGEX
 
 # Basic patterns
 UINT = '(' + UNSIGNED_INT_REGEX + ')'   # unsigned integer as a group
@@ -73,7 +73,6 @@ DCL_LOG_PATTERN += START_METADATA           # Metadata record starts with '['
 DCL_LOG_PATTERN += ANY_NON_BRACKET_CHAR     # followed by text
 DCL_LOG_PATTERN += END_METADATA             # followed by ']'
 DCL_LOG_PATTERN += ANY_CHARS_REGEX          # followed by more text
-DCL_LOG_PATTERN += END_OF_LINE_REGEX        # metadata record ends with LF
 DCL_LOG_MATCHER = re.compile(DCL_LOG_PATTERN)
 
 # DCL Power On Log record:
@@ -82,8 +81,7 @@ DCL_LOG_ON_PATTERN = TIMESTAMP + SPACE_REGEX                # DCL controller tim
 DCL_LOG_ON_PATTERN += START_METADATA                        # Metadata record starts with '['
 DCL_LOG_ON_PATTERN += ANY_NON_BRACKET_CHAR                  # followed by text
 DCL_LOG_ON_PATTERN += END_METADATA                          # followed by ']'
-DCL_LOG_ON_PATTERN += ':Instrument Started \[Power On\]'    # followed by power on text
-DCL_LOG_ON_PATTERN += END_OF_LINE_REGEX                     # metadata record ends with LF
+DCL_LOG_ON_PATTERN += '.*? \[Power On\]'    # followed by power on text
 DCL_LOG_ON_MATCHER = re.compile(DCL_LOG_ON_PATTERN)
 
 # DCL Power Off Log record:
@@ -92,26 +90,15 @@ DCL_LOG_OFF_PATTERN = TIMESTAMP + SPACE_REGEX               # DCL controller tim
 DCL_LOG_OFF_PATTERN += START_METADATA                       # Metadata record starts with '['
 DCL_LOG_OFF_PATTERN += ANY_NON_BRACKET_CHAR                 # followed by text
 DCL_LOG_OFF_PATTERN += END_METADATA                         # followed by ']'
-DCL_LOG_OFF_PATTERN += ':Instrument Stopped \[Power Off\]'  # followed by power off text
-DCL_LOG_OFF_PATTERN += END_OF_LINE_REGEX                    # metadata record ends with LF
+DCL_LOG_OFF_PATTERN += '.*?Power Off'  # followed by power off text
 DCL_LOG_OFF_MATCHER = re.compile(DCL_LOG_OFF_PATTERN)
-
-# DCL Last Log record:
-# 2013/12/01 01:06:18.891 [adcp:DLOGP1]:\n
-DCL_LOG_LAST_PATTERN = TIMESTAMP + SPACE_REGEX   # DCL controller timestamp
-DCL_LOG_LAST_PATTERN += START_METADATA           # Metadata record starts with '['
-DCL_LOG_LAST_PATTERN += ANY_NON_BRACKET_CHAR     # followed by text
-DCL_LOG_LAST_PATTERN += END_METADATA             # followed by ']'
-DCL_LOG_LAST_PATTERN += ANY_NON_BRACKET_CHAR     # followed by more text
-DCL_LOG_LAST_PATTERN += END_OF_LINE_REGEX        # metadata record ends with LF
-DCL_LOG_LAST_MATCHER = re.compile(DCL_LOG_LAST_PATTERN)
 
 # Header 1
 # 2013/12/01 01:04:18.213 2013/12/01 01:00:27.53 00001\n
 SENSOR_TIME_PATTERN = TIMESTAMP + MULTI_SPACE  # DCL controller timestamp
 SENSOR_TIME_PATTERN += START_GROUP + SENSOR_DATE + MULTI_SPACE  # sensor date
 SENSOR_TIME_PATTERN += SENSOR_TIME + END_GROUP + MULTI_SPACE    # sensor time
-SENSOR_TIME_PATTERN += UINT + END_OF_LINE_REGEX                 # Ensemble Number
+SENSOR_TIME_PATTERN += UINT                                     # Ensemble Number
 SENSOR_TIME_MATCHER = re.compile(SENSOR_TIME_PATTERN)
 
 # Header 2
@@ -119,7 +106,7 @@ SENSOR_TIME_MATCHER = re.compile(SENSOR_TIME_PATTERN)
 SENSOR_HEAD_PATTERN = TIMESTAMP + MULTI_SPACE  # DCL controller timestamp
 SENSOR_HEAD_PATTERN += 'Hdg:' + MULTI_SPACE + FLOAT + MULTI_SPACE           # Hdg
 SENSOR_HEAD_PATTERN += 'Pitch:' + MULTI_SPACE + FLOAT + MULTI_SPACE         # Pitch
-SENSOR_HEAD_PATTERN += 'Roll:' + MULTI_SPACE + FLOAT + END_OF_LINE_REGEX    # Roll
+SENSOR_HEAD_PATTERN += 'Roll:' + MULTI_SPACE + FLOAT                        # Roll
 SENSOR_HEAD_MATCHER = re.compile(SENSOR_HEAD_PATTERN)
 
 # Header 3
@@ -127,14 +114,13 @@ SENSOR_HEAD_MATCHER = re.compile(SENSOR_HEAD_PATTERN)
 SENSOR_TEMP_PATTERN = TIMESTAMP + MULTI_SPACE  # DCL controller timestamp
 SENSOR_TEMP_PATTERN += 'Temp:' + MULTI_SPACE + FLOAT + MULTI_SPACE          # temp
 SENSOR_TEMP_PATTERN += 'SoS:' + MULTI_SPACE + SINT + MULTI_SPACE            # SoS
-SENSOR_TEMP_PATTERN += 'BIT:' + MULTI_SPACE + TWO_HEX + END_OF_LINE_REGEX   # sensor BIT
+SENSOR_TEMP_PATTERN += 'BIT:' + MULTI_SPACE + TWO_HEX                       # sensor BIT
 SENSOR_TEMP_MATCHER = re.compile(SENSOR_TEMP_PATTERN)
 
 # Header 4
 # 2013/12/01 01:04:18.363 Bin    Dir    Mag     E/W     N/S    Vert     Err   Echo1  Echo2  Echo3  Echo4\n
 IGNORE_HEADING_PATTERN = TIMESTAMP + MULTI_SPACE  # DCL controller timestamp
 IGNORE_HEADING_PATTERN += 'Bin' + MULTI_SPACE + ANY_CHARS_REGEX
-IGNORE_HEADING_PATTERN += END_OF_LINE_REGEX
 IGNORE_HEADING_MATCHER = re.compile(IGNORE_HEADING_PATTERN)
 
 # Sensor Data Record:
@@ -151,13 +137,11 @@ SENSOR_DATA_PATTERN += UINT + MULTI_SPACE       # Echo1
 SENSOR_DATA_PATTERN += UINT + MULTI_SPACE       # Echo2
 SENSOR_DATA_PATTERN += UINT + MULTI_SPACE       # Echo3
 SENSOR_DATA_PATTERN += UINT                     # Echo4
-SENSOR_DATA_PATTERN += END_OF_LINE_REGEX  # sensor data ends with CR-LF
 SENSOR_DATA_MATCHER = re.compile(SENSOR_DATA_PATTERN)
 
 # Empty Timestamp
 # 2013/12/01 01:04:20.834\n
-IGNORE_EMPTY_PATTERN = TIMESTAMP + MULTI_SPACE  # DCL controller timestamp
-IGNORE_EMPTY_PATTERN += END_OF_LINE_REGEX
+IGNORE_EMPTY_PATTERN = TIMESTAMP + '\s*$'       # DCL controller timestamp
 IGNORE_EMPTY_MATCHER = re.compile(IGNORE_EMPTY_PATTERN)
 
 
@@ -339,12 +323,6 @@ class AdcptAcfgmPd8Parser(SimpleParser):
                     dcl_log_match = DCL_LOG_OFF_MATCHER.match(line)
                     if dcl_log_match is None:
                         self.recov_exception_callback("Expecting Off DCL Timestamp, received: %r" % line)
-                        break
-
-                    line = self._stream_handle.readline()
-                    dcl_log_match = DCL_LOG_LAST_MATCHER.match(line)
-                    if dcl_log_match is None:
-                        self.recov_exception_callback("Expecting last DCL Timestamp, received: %r" % line)
                         break
 
                     particle_data = []
