@@ -32,7 +32,7 @@ from mi.dataset.dataset_parser import \
     BufferLoadingParser
 
 from mi.dataset.parser.sio_mule_common import \
-    SioMuleParser, \
+    SioParser, \
     SIO_HEADER_MATCHER, \
     SIO_HEADER_GROUP_ID, \
     SIO_HEADER_GROUP_TIMESTAMP
@@ -535,35 +535,21 @@ class Vel3dLParser(Parser):
 
 class Vel3dLWfpParser(BufferLoadingParser, Vel3dLParser):
 
-    def __init__(self, config, state, file_handle,
-                 state_callback, publish_callback, exception_callback):
+    def __init__(self, config, file_handle, exception_callback):
         """
         @param config The configuration parameters to feed into the parser
-        @param state The location in the file to start parsing from.
-           This reflects what has already been published.
         @param file_handle An already open file-like file handle
-        @param state_callback The callback method from the agent driver
-           (ultimately the agent) to call back when a state needs to be
-           updated
-        @param publish_callback The callback from the agent driver (and
-           ultimately from the agent) where we send our sample particle to
-           be published into ION
         @param exception_callback The callback from the agent driver to
            send an exception to
         """
 
-        super(Vel3dLWfpParser, self).__init__(config, file_handle, state,
-            self.sieve_function, state_callback, publish_callback, exception_callback)
+        super(Vel3dLWfpParser, self).__init__(config, file_handle, None,
+                                              self.sieve_function,
+                                              lambda state, ingested: None,
+                                              lambda data: None,
+                                              exception_callback)
 
         self.input_file = file_handle
-        self._read_state = {
-            Vel3dLWfpStateKey.POSITION: 0,
-            Vel3dLWfpStateKey.PARTICLE_NUMBER: 0
-        }
-
-        if state is not None:
-            log.debug('XXX VEL state %s', state)
-            self.set_state(state)
 
     def handle_non_data(self, non_data, non_end, start):
         """
@@ -571,18 +557,9 @@ class Vel3dLWfpParser(BufferLoadingParser, Vel3dLParser):
         """
         # Handle non-data here by calling the exception callback.
         if non_data is not None and non_end <= start:
-            # increment the state
-            self._increment_position(len(non_data))
-            # use the _exception_callback
+
             self._exception_callback(UnexpectedDataException(
                 "Found %d bytes of un-expected non-data %s" % (len(non_data), non_data)))
-
-    def _increment_position(self, bytes_read):
-        """
-        Increment the parser position
-        @param bytes_read The number of bytes just read
-        """
-        self._read_state[Vel3dLWfpStateKey.POSITION] += bytes_read
 
     def parse_chunks(self):
         """
@@ -590,7 +567,7 @@ class Vel3dLWfpParser(BufferLoadingParser, Vel3dLParser):
         it is a valid data piece, build a particle, update the position and
         timestamp. Go until the chunker has no more valid data.
         @retval a list of tuples with sample particles encountered in this
-            parsing, plus the state.
+            parsing.
         """
         result_particles = []
         (nd_timestamp, non_data, non_start, non_end) = self._chunker.get_next_non_data_with_index(clean=False)
@@ -601,55 +578,19 @@ class Vel3dLWfpParser(BufferLoadingParser, Vel3dLParser):
             fields = self.parse_vel3d_data(PARTICLE_TYPE_WFP_INSTRUMENT,
                                            PARTICLE_TYPE_WFP_METADATA,
                                            chunk)
-
             #
             # Generate the particles for this chunk.
             # Add them to the return list of particles.
-            # Increment the state (position within the file) for the last particle.
-            # The first N-1 particles are tagged with the previous file position
-            # and a PARTICLE_NUMBER 1 to N.
-            # The Nth particle is tagged with with current file position
-            # and a PARTICLE_NUMBER of 0.
-            #
             (sample_count, particles) = self.generate_samples(fields)
-            for x in range(self._read_state[Vel3dLWfpStateKey.PARTICLE_NUMBER],
-                           sample_count - 1):
-                self._read_state[Vel3dLWfpStateKey.PARTICLE_NUMBER] += 1
-                result_particles.append((particles[x], copy.copy(self._read_state)))
 
-            self._increment_position(len(chunk))
-            self._read_state[Vel3dLWfpStateKey.PARTICLE_NUMBER] = 0
-            result_particles.append((particles[sample_count - 1],
-                                     copy.copy(self._read_state)))
+            for particle in particles:
+                result_particles.append((particle, None))
 
             (nd_timestamp, non_data, non_start, non_end) = self._chunker.get_next_non_data_with_index(clean=False)
             (timestamp, chunk, start, end) = self._chunker.get_next_data_with_index(clean=True)
             self.handle_non_data(non_data, non_end, start)
 
         return result_particles
-
-    def set_state(self, state_obj):
-        """
-        Set the value of the state object for this parser
-        @param state_obj The object to set the state to.
-        @throws DatasetParserException if there is a bad state structure
-        """
-        if not isinstance(state_obj, dict):
-            raise DatasetParserException("Invalid state structure")
-
-        if not (Vel3dLWfpStateKey.POSITION in state_obj):
-            raise DatasetParserException("State key %s missing" %
-                                         Vel3dLWfpStateKey.POSITION)
-
-        if not (Vel3dLWfpStateKey.PARTICLE_NUMBER in state_obj):
-            raise DatasetParserException("State key %s missing" %
-                                         Vel3dLWfpStateKey.PARTICLE_NUMBER)
-
-        self._record_buffer = []
-        self._state = state_obj
-        self._read_state = state_obj
-
-        self.input_file.seek(state_obj[Vel3dLWfpStateKey.POSITION])
 
     def sieve_function(self, input_buffer):
         """
@@ -684,46 +625,35 @@ class Vel3dLWfpParser(BufferLoadingParser, Vel3dLParser):
             # add the start,end pair to the list of indices.
             # If not enough room, we're done for now.
             #
-            if end_index <= len(input_buffer):
-                indices_list.append((start_index, end_index))
-                start_index = end_index
-            else:
+            if end_index > len(input_buffer):
                 break
+            indices_list.append((start_index, end_index))
+            start_index = end_index
 
         return indices_list
 
 
-class Vel3dLWfpSioMuleParser(SioMuleParser, Vel3dLParser):
+class Vel3dLWfpSioParser(SioParser, Vel3dLParser):
 
-    def __init__(self, config, state, stream_handle,
-                 state_callback, publish_callback, exception_callback):
+    def __init__(self, config, stream_handle, exception_callback):
         """
         @param config The configuration parameters to feed into the parser
-        @param state The location in the file to start parsing from.
-           This reflects what has already been published.
         @param stream_handle An already open file-like file handle
-        @param state_callback The callback method from the agent driver
-           (ultimately the agent) to call back when a state needs to be
-           updated
-        @param publish_callback The callback from the agent driver (and
-           ultimately from the agent) where we send our sample particle to
-           be published into ION
         @param exception_callback The callback from the agent driver to
            send an exception to
         """
-        super(Vel3dLWfpSioMuleParser, self).__init__(config, stream_handle, state,
-            self.sieve_function, state_callback, publish_callback, exception_callback)
+        super(Vel3dLWfpSioParser, self).__init__(config, stream_handle, exception_callback)
 
     def parse_chunks(self):
         """
         Parse out any pending data chunks in the chunker. If
-        it is a valid data piece, build a particle, update the position and
+        it is a valid data piece, build a particle, update the
         timestamp. Go until the chunker has no more valid data.
         @retval a list of tuples with sample particles encountered in this
-            parsing, plus the state. An empty list of nothing was parsed.
+            parsing. An empty list of nothing was parsed.
         """
         result_particles = []
-        (timestamp, chunk, start, end) = self._chunker.get_next_data_with_index(clean=True)
+        (timestamp, chunk, start, end) = self._chunker.get_next_data_with_index()
 
         while chunk is not None:
             #
@@ -753,15 +683,6 @@ class Vel3dLWfpSioMuleParser(SioMuleParser, Vel3dLParser):
                 for x in range(0, samples):
                     result_particles.append(particles[x])
 
-            #
-            # Not our instrument, but still must indicate that no samples were found.
-            #
-            else:
-                samples = 0
-
-            # keep track of how many samples were found in this chunk
-            self._chunk_sample_count.append(samples)
-
-            (timestamp, chunk, start, end) = self._chunker.get_next_data_with_index(clean=True)
+            (timestamp, chunk, start, end) = self._chunker.get_next_data_with_index()
 
         return result_particles
