@@ -230,29 +230,18 @@ class WcWmCsppParser(CsppParser):
 
     def __init__(self,
                  config,
-                 state,
                  stream_handle,
-                 state_callback,
-                 publish_callback,
-                 exception_callback,
-                 *args, **kwargs):
+                 exception_callback):
         """
         This method is a constructor that will instantiate an WcWmCsppParser object.
         @param config The configuration for this WcWmCsppParser parser
-        @param state The state the WcWmCsppParser should use to initialize itself
         @param stream_handle The handle to the data stream containing the cspp_eng_cspp data
-        @param state_callback The function to call upon detecting state changes
-        @param publish_callback The function to call to provide particles
         @param exception_callback The function to call to report exceptions
         """
 
         # Call the superclass constructor
         super(WcWmCsppParser, self).__init__(config,
-                                             state,
                                              stream_handle,
-                                             state_callback,
-                                             publish_callback,
                                              exception_callback,
                                              DATA_REGEX,
-                                             ignore_matcher=None,
-                                             *args, **kwargs)
+                                             ignore_matcher=None)

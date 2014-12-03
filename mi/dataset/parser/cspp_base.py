@@ -67,6 +67,7 @@ METADATA_PARTICLE_CLASS_KEY = 'metadata_particle_class'
 # The key for the data particle class
 DATA_PARTICLE_CLASS_KEY = 'data_particle_class'
 
+
 def encode_y_or_n(val):
     if val == 'y' or val == 'Y':
         return 1
@@ -212,26 +213,19 @@ class CsppParser(BufferLoadingParser):
 
     def __init__(self,
                  config,
-                 state,
                  stream_handle,
-                 state_callback,
-                 publish_callback,
                  exception_callback,
                  data_record_regex,
                  header_key_list=None,
-                 ignore_matcher=None,
-                 *args, **kwargs):
+                 ignore_matcher=None):
         """
         This method is a constructor that will instantiate an CsppParser object.
         @param config The configuration for this CsppParser parser
-        @param state The state the CsppParser should use to initialize itself
         @param stream_handle The handle to the data stream containing the cspp data
-        @param state_callback The function to call upon detecting state changes
-        @param publish_callback The function to call to provide particles
         @param exception_callback The function to call to report exceptions
         @param data_record_regex The data regex that should be used to obtain data records
         @param header_key_list The list of header keys expected within a header
-        @param ignore_regex A regex to use to ignore expected junk lines
+        @param ignore_matcher A matcher from a regex to use to ignore expected junk lines
         """
 
         self._data_record_matcher = None
@@ -258,8 +252,10 @@ class CsppParser(BufferLoadingParser):
         if DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT in config:
             particle_classes_dict = config.get(DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT)
             # Set the metadata and data particle classes to be used later
+
             if METADATA_PARTICLE_CLASS_KEY in particle_classes_dict and \
-            DATA_PARTICLE_CLASS_KEY in particle_classes_dict:
+               DATA_PARTICLE_CLASS_KEY in particle_classes_dict:
+
                 self._data_particle_class = particle_classes_dict.get(DATA_PARTICLE_CLASS_KEY)
                 self._metadata_particle_class = particle_classes_dict.get(METADATA_PARTICLE_CLASS_KEY)
             else:
@@ -275,53 +271,17 @@ class CsppParser(BufferLoadingParser):
         self._record_buffer = []
 
         # Initialize the read state
-        self._read_state = {StateKey.POSITION: 0, StateKey.METADATA_EXTRACTED: False}
+        self._read_state = {StateKey.METADATA_EXTRACTED: False}
 
         # Call the superclass constructor
         super(CsppParser, self).__init__(config,
                                          stream_handle,
-                                         state,
+                                         None,
                                          partial(StringChunker.regex_sieve_function,
                                                  regex_list=[SIEVE_MATCHER]),
-                                         state_callback,
-                                         publish_callback,
-                                         exception_callback,
-                                         *args, **kwargs)
-
-        # If provided a state, set it.  This needs to be done post superclass __init__
-        if state:
-            self.set_state(state)
-
-    def set_state(self, state_obj):
-        """
-        Set the value of the state object for this parser
-        @param state_obj The object to set the state to.
-        @throws DatasetParserException if there is a bad state structure
-        """
-
-        if not isinstance(state_obj, dict):
-            raise DatasetParserException("Invalid state structure")
-        if not (StateKey.POSITION in state_obj and StateKey.METADATA_EXTRACTED in state_obj):
-            raise DatasetParserException("Provided state is missing position or metadata extracted")
-
-        self._state = state_obj
-        self._read_state = state_obj
-
-        # Clear the record buffer
-        self._record_buffer = []
-
-        # Need to seek the correct position in the file stream using the read state position.
-        self._stream_handle.seek(self._read_state[StateKey.POSITION])
-
-        # make sure we have cleaned the chunker out of old data
-        self._chunker.clean_all_chunks()
-
-    def _increment_read_state(self, increment):
-        """
-        Increment the parser state
-        @param increment The offset for the file position
-        """
-        self._read_state[StateKey.POSITION] += increment
+                                         lambda state, ingested: None,
+                                         lambda data: None,
+                                         exception_callback)
 
     def _process_data_match(self, data_match, result_particles):
         """
@@ -411,9 +371,9 @@ class CsppParser(BufferLoadingParser):
         # ignore the expected timestamp line and any lines matching the ignore regex,
         # otherwise data is unexpected
         elif not TIMESTAMP_LINE_MATCHER.match(chunk) and not \
-        (self._ignore_matcher is not None and self._ignore_matcher.match(chunk)):
+                (self._ignore_matcher is not None and self._ignore_matcher.match(chunk)):
             # Unexpected data was found 
-            log.warn('got unrecognized row %s at position %s', chunk, self._read_state[StateKey.POSITION])
+            log.warn('got unrecognized row %s', chunk)
             self._exception_callback(RecoverableSampleException("Found an invalid chunk: %s" % chunk))
 
     def parse_chunks(self):
@@ -439,9 +399,6 @@ class CsppParser(BufferLoadingParser):
 
         # While the data chunk is not None, process the data chunk
         while chunk is not None:
-
-            # Increment the read state position now
-            self._increment_read_state(len(chunk))
 
             # See if the chunk matches a data record
             data_match = self._data_record_matcher.match(chunk)
@@ -478,8 +435,6 @@ class CsppParser(BufferLoadingParser):
         # if non-data is expected, handle it here, otherwise it is an error
         if non_data is not None and non_end <= start:
             log.debug("non_data: %s", non_data)
-            # if this non-data is an error, send an UnexpectedDataException and increment the state
-            self._increment_read_state(len(non_data))
             # if non-data is a fatal error, directly call the exception, if it is not use the _exception_callback
             self._exception_callback(UnexpectedDataException("Found %d bytes of un-expected non-data %s" %
                                                              (len(non_data), non_data)))
