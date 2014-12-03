@@ -12,6 +12,15 @@ data:
     unique_id: 194
     passed_checksum: 1
   - _index: 2
+    particle_object: Pco2wAbcDclPowerRecoveredDataParticle
+    particle_type: pco2w_abc_dcl_power_recovered
+    internal_timestamp: 3608413240.402000
+    record_type: 17
+    record_time: 3482269311
+    dcl_controller_timestamp: '2014/05/07 01:00:40.402'
+    unique_id: 194
+    passed_checksum: 0
+  - _index: 3
     particle_object: Pco2wAbcDclInstrumentRecoveredDataParticle
     particle_type: pco2w_abc_dcl_instrument_recovered
     internal_timestamp: 3608413533.702000
@@ -23,7 +32,7 @@ data:
     voltage_battery: 3163
     thermistor_raw: 2019
     light_measurements: [  68, 76, 3343, 579, 1968, 507, 2504, 3709, 68, 75, 3342, 578, 1970, 507 ]
-  - _index: 3
+  - _index: 4
     particle_object: Pco2wAbcDclInstrumentBlankRecoveredDataParticle
     particle_type: pco2w_abc_dcl_instrument_blank_recovered
     internal_timestamp: 3608456780.390000
@@ -35,7 +44,7 @@ data:
     voltage_battery: 3146
     thermistor_raw: 2018
     blank_light_measurements: [  64, 76, 3340, 564, 1969, 522, 2439, 3854, 69, 78, 3344, 566, 1970, 522 ]
-  - _index: 4
+  - _index: 5
     particle_object: Pco2wAbcDclMetadataRecoveredDataParticle
     particle_type: pco2w_abc_dcl_metadata_recovered
     internal_timestamp: 3619399981.971000
@@ -64,7 +73,7 @@ data:
     num_error_records: 0
     num_bytes_stored: 2609
     voltage_battery: !!null
-  - _index: 5
+  - _index: 6
     particle_object: Pco2wAbcDclMetadataRecoveredDataParticle
     particle_type: pco2w_abc_dcl_metadata_recovered
     internal_timestamp: 3619399981.972000
