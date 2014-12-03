@@ -7,13 +7,13 @@
 __author__ = 'kustert,mworden'
 
 import os
-import sys
 
 from mi.logging import config
 from mi.core.log import get_logger
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
-from mi.dataset.dataset_driver import DataSetDriver, ParticleDataHandler
+from mi.dataset.dataset_driver import DataSetDriver
 from mi.dataset.parser.nutnr_b_dcl_conc import NutnrBDclConcRecoveredParser
+
 
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     
@@ -33,12 +33,11 @@ def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     with open(sourceFilePath, 'r') as stream_handle:
         parser = NutnrBDclConcRecoveredParser(parser_config,
                                               stream_handle,
-                                              lambda state, ingested : None,
-                                              lambda data : None,
+                                              lambda state, ingested: None,
+                                              lambda data: None,
                                               exception_callback)
         
         driver = DataSetDriver(parser, particleDataHdlrObj)
-        driver.processFileStream()    
-
+        driver.processFileStream()
         
     return particleDataHdlrObj

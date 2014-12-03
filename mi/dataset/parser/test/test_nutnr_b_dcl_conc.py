@@ -33,10 +33,8 @@ from nose.plugins.attrib import attr
 
 from mi.core.log import get_logger
 log = get_logger()
-
 from mi.dataset.test.test_parser import ParserUnitTestCase
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
-
 from mi.dataset.parser.nutnr_b_dcl_conc import \
     NutnrBDclConcRecoveredParser, \
     NutnrBDclConcTelemeteredParser
@@ -74,10 +72,10 @@ EXPECTED_PARTICLES6 = 258
 EXPECTED_META_PARTICLES_REAL = 8
 EXPECTED_INST_PARTICLES_REAL = 64
 
-EXPECTED_PARTICLES_INVALID_FRAME_TYPE = 18
+EXPECTED_PARTICLES_INVALID_FRAME_TYPE = 19
 EXPECTED_EXCEPTIONS_INVALID_FRAME_TYPE = 3
-EXPECTED_PARTICLES_MISSING_METADATA = 0
-EXPECTED_EXCEPTIONS_MISSING_METADATA = 3
+EXPECTED_PARTICLES_MISSING_METADATA = 20
+EXPECTED_EXCEPTIONS_MISSING_METADATA = 2
 EXPECTED_PARTICLES_INVALID_FIELDS = 2
 EXPECTED_EXCEPTIONS_INVALID_FIELDS = 20
 EXPECTED_PARTICLES_SECOND_BLOCK_IN_DATA_BLOCK = 7
@@ -117,8 +115,8 @@ class NutnrBDclConcParserUnitTestCase(ParserUnitTestCase):
         """
         return NutnrBDclConcRecoveredParser(
             self.rec_config,
-            file_handle, lambda state, ingested : None,
-            lambda data : None, self.rec_exception_callback)
+            file_handle, lambda state, ingested: None,
+            lambda data: None, self.rec_exception_callback)
 
     def create_tel_parser(self, file_handle, new_state=None):
         """
@@ -126,8 +124,8 @@ class NutnrBDclConcParserUnitTestCase(ParserUnitTestCase):
         """
         return NutnrBDclConcTelemeteredParser(
             self.tel_config,
-            file_handle, lambda state, ingested : None,
-            lambda data : None, self.tel_exception_callback)
+            file_handle, lambda state, ingested: None,
+            lambda data: None, self.tel_exception_callback)
 
     def open_file(self, filename):
         return open(os.path.join(RESOURCE_PATH, filename), mode='r')
@@ -191,12 +189,10 @@ class NutnrBDclConcParserUnitTestCase(ParserUnitTestCase):
         """
         Read files and verify that all expected particles can be read.
         Verify that the contents of the particles are correct.
-        There should be no exceptions generated.
         """
         log.debug('===== START TEST HAPPY PATH =====')
 
-        for input_file, expected_particles, rec_yml_file, tel_yml_file \
-            in HAPPY_PATH_TABLE:
+        for input_file, expected_particles, rec_yml_file, tel_yml_file in HAPPY_PATH_TABLE:
 
             in_file = self.open_file(input_file)
             parser = self.create_rec_parser(in_file)
@@ -249,7 +245,7 @@ class NutnrBDclConcParserUnitTestCase(ParserUnitTestCase):
         """
         The file used in this test has an valid frame type instead
         of the NDC (dark) type and 1 other invalid frame type.
-        This results in no metadata,
+        This results in 1 metadata,
         instrument particles for the other valid instrument types,
         plus 2 Recoverable exceptions.
         """
@@ -280,7 +276,7 @@ class NutnrBDclConcParserUnitTestCase(ParserUnitTestCase):
         """
         The file used in this test is missing one of the required
         metadata records.
-        This causes no particles to be generated and 1 Recoverable exception.
+        This causes no metadata particles to be generated and 20 science particles
         """
         log.debug('===== START TEST MISSING METADATA =====')
 
@@ -294,6 +290,18 @@ class NutnrBDclConcParserUnitTestCase(ParserUnitTestCase):
         particles = parser.get_records(total_records)
         self.assertEqual(len(particles), expected_particles)
         self.assertEqual(self.rec_exceptions_detected, expected_exceptions)
+
+        inst_particles = 0
+        meta_particles = 0
+        for particle in particles:
+            if isinstance(particle, NutnrBDclConcRecoveredInstrumentDataParticle):
+                inst_particles += 1
+            elif isinstance(particle, NutnrBDclConcRecoveredMetadataDataParticle):
+                meta_particles += 1
+
+        self.assertEqual(inst_particles, expected_particles)
+        self.assertEqual(meta_particles, 0)
+
         in_file.close()
 
         in_file = self.open_file(input_file)
@@ -301,9 +309,19 @@ class NutnrBDclConcParserUnitTestCase(ParserUnitTestCase):
         particles = parser.get_records(total_records)
         self.assertEqual(len(particles), expected_particles)
         self.assertEqual(self.tel_exceptions_detected, expected_exceptions)
-        in_file.close()
 
-        log.info("Num exceptions: %d, %d", self.rec_exceptions_detected, self.tel_exceptions_detected)
+        inst_particles = 0
+        meta_particles = 0
+        for particle in particles:
+            if isinstance(particle, NutnrBDclConcTelemeteredInstrumentDataParticle):
+                inst_particles += 1
+            elif isinstance(particle, NutnrBDclConcTelemeteredMetadataDataParticle):
+                meta_particles += 1
+
+        self.assertEqual(inst_particles, expected_particles)
+        self.assertEqual(meta_particles, 0)
+
+        in_file.close()
 
         log.debug('===== END TEST MISSING METADATA =====')
 
@@ -317,7 +335,7 @@ class NutnrBDclConcParserUnitTestCase(ParserUnitTestCase):
         input_file = SECOND_BLOCK_IN_DATA_BLOCK_FILE
         expected_particles = EXPECTED_PARTICLES_SECOND_BLOCK_IN_DATA_BLOCK
         expected_exceptions = EXPECTED_EXCEPTIONS_SECOND_BLOCK_IN_DATA_BLOCK
-        total_records = expected_particles + 1
+        total_records = expected_particles
 
         in_file = self.open_file(input_file)
         parser = self.create_rec_parser(in_file)
@@ -367,7 +385,7 @@ class NutnrBDclConcParserUnitTestCase(ParserUnitTestCase):
         Verify that the correct number of particles are generated
         from a real file.
         """
-        log.debug('===== START TEST NO PARTICLES =====')
+        log.debug('===== START TEST REAL FILE =====')
 
         input_file = FILE_REAL
         expected_inst_particles = EXPECTED_INST_PARTICLES_REAL
@@ -390,7 +408,6 @@ class NutnrBDclConcParserUnitTestCase(ParserUnitTestCase):
         self.assertEqual(inst_particles, expected_inst_particles)
         self.assertEqual(meta_particles, expected_meta_particles)
 
-        self.assertEqual(self.rec_exceptions_detected, 0)
         in_file.close()
 
         in_file = self.open_file(input_file)
@@ -409,7 +426,6 @@ class NutnrBDclConcParserUnitTestCase(ParserUnitTestCase):
         self.assertEqual(inst_particles, expected_inst_particles)
         self.assertEqual(meta_particles, expected_meta_particles)
 
-        self.assertEqual(self.tel_exceptions_detected, 0)
         in_file.close()
 
-        log.debug('===== END TEST NO PARTICLES =====')
+        log.debug('===== END TEST REAL FILE =====')
