@@ -6,16 +6,11 @@
 @author Maria Lutz
 @brief Test code for a adcps_jln_stc data parser
 """
-from datetime import datetime
 import os
-import time
-import ntplib
-import calendar
-from StringIO import StringIO
-from dateutil import parser
 
 from nose.plugins.attrib import attr
 
+from mi.core.exceptions import SampleException
 from mi.core.log import get_logger
 log = get_logger()
 
@@ -23,9 +18,13 @@ from mi.idk.config import Config
 
 from mi.dataset.test.test_parser import ParserUnitTestCase
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
-from mi.dataset.parser.adcps_jln_stc import AdcpsJlnStcParser, StateKey
-from mi.dataset.parser.adcps_jln_stc import AdcpsJlnStcInstrumentParserDataParticle
-from mi.dataset.parser.adcps_jln_stc import AdcpsJlnStcMetadataParserDataParticle
+from mi.dataset.parser.adcps_jln_stc import AdcpsJlnStcParser, \
+    AdcpsJlnStcInstrumentTelemeteredDataParticle, \
+    AdcpsJlnStcInstrumentRecoveredDataParticle, \
+    AdcpsJlnStcMetadataTelemeteredDataParticle, \
+    AdcpsJlnStcMetadataRecoveredDataParticle, \
+    AdcpsJlnStcParticleClassKey
+
 
 RESOURCE_PATH = os.path.join(Config().base_dir(), 'mi',
                              'dataset', 'driver', 'adcps_jln',
@@ -37,469 +36,201 @@ class AdcpsJlnStcParserUnitTestCase(ParserUnitTestCase):
     """
     adcps_jln_stc Parser unit test suite
     """
-    # Bad test data. Checksum value is wrong in record 1764.
-    BAD_CHECKSUM = '#UIMM Status\r\n#7370_DateTime: 20130929 091817\r\n#ID=10\r\n#SN=70001672\r\n' \
-                   '#Volts=6.40\r\n#Records=5\r\n#Length=1780\r\n#Events=84\r\n#Begin UIMM Data\r\n' \
-                   'Record[1764]:n\x7fb\x01C' \
-                   '\x06\x00\x00\x002(\xdd\x07\t\x1d\x08\x0f\x00\x00\xa6C\xe9\xf2\x1f\xf2\x93\x07' \
-                   '\xe2\x06\x00\x00\x1f\x01(\x15\x00\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                   '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                   '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                   '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                   '\x80\x00\x80\x00\x80\x00\x80\xdf\xff\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                   '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                   '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                   '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                   '\x80\x00\x80\x00\x80\x00\x80\xd5\xff\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                   '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                   '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                   '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                   '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                   '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                   '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                   '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                   '\x80\x00\x80\x00\x80\x00\x80\x00Z\r\n' \
-                   'Record[1765]:' \
-                   'n\x7fb\x01D\x06\x00\x00\x002(\xdd\x07\t\x1d\x08\x1e\x00\x00\xa2C\xe9\xf2!\xf2\x91' \
-                   '\x07\xd9\x05\x00\x00\x1f\x01(\x13\x00\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                   '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                   '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                   '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                   '\x80\x00\x80\x00\x80\x00\x80\xe5\xff\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                   '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                   '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                   '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                   '\x80\x00\x80\x00\x80\x00\x80\xf9\xff\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                   '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                   '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                   '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                   '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                   '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                   '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                   '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                   '\x80\x00\x80\x00\x80\x00\x80$[\r\n' \
-                   '#End UIMM Data, 5 samples written\r\n'
-
-    # Bad test data. Number of bytes reported in record 1764 does not match number of bytes received.
-    BAD_NUM_BYTES = '#UIMM Status\r\n#7370_DateTime: 20130929 091817\r\n#ID=10\r\n#SN=70001672\r\n' \
-                    '#Volts=6.40\r\n#Records=5\r\n#Length=1780\r\n#Events=84\r\n#Begin UIMM Data\r\n' \
-                    'Record[1764]:n\x7f0\x01C' \
-                    '\x06\x00\x00\x002(\xdd\x07\t\x1d\x08\x0f\x00\x00\xa6C\xe9\xf2\x1f\xf2\x93\x07' \
-                    '\xe2\x06\x00\x00\x1f\x01(\x15\x00\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                    '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                    '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                    '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                    '\x80\x00\x80\x00\x80\x00\x80\xdf\xff\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                    '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                    '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                    '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                    '\x80\x00\x80\x00\x80\x00\x80\xd5\xff\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                    '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                    '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                    '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                    '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                    '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                    '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                    '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                    '\x80\x00\x80\x00\x80\x00\x80\xfaZ\r\n' \
-                    'Record[1765]:' \
-                    'n\x7fb\x01D\x06\x00\x00\x002(\xdd\x07\t\x1d\x08\x1e\x00\x00\xa2C\xe9\xf2!\xf2\x91' \
-                    '\x07\xd9\x05\x00\x00\x1f\x01(\x13\x00\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                    '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                    '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                    '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                    '\x80\x00\x80\x00\x80\x00\x80\xe5\xff\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                    '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                    '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                    '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                    '\x80\x00\x80\x00\x80\x00\x80\xf9\xff\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                    '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                    '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                    '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                    '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                    '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                    '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                    '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                    '\x80\x00\x80\x00\x80\x00\x80$[\r\n' \
-                    '#End UIMM Data, 5 samples written\r\n'
-
-    # Bad test data. Record 1764 is marked with 'ReceiveFailure.' The record should be skipped.
-    BAD_RX_FAILURE = '#UIMM Status\r\n#7370_DateTime: 20130929 091817\r\n#ID=10\r\n#SN=70001672\r\n' \
-                     '#Volts=6.40\r\n#Records=5\r\n#Length=1780\r\n#Events=84\r\n#Begin UIMM Data\r\n' \
-                     'Record[1764]:ReceiveFailure\r\n' \
-                     'Record[1765]:' \
-                     'n\x7fb\x01D\x06\x00\x00\x002(\xdd\x07\t\x1d\x08\x1e\x00\x00\xa2C\xe9\xf2!\xf2\x91' \
-                     '\x07\xd9\x05\x00\x00\x1f\x01(\x13\x00\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                     '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                     '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                     '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                     '\x80\x00\x80\x00\x80\x00\x80\xe5\xff\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                     '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                     '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                     '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                     '\x80\x00\x80\x00\x80\x00\x80\xf9\xff\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                     '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                     '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                     '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                     '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                     '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                     '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                     '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00' \
-                     '\x80\x00\x80\x00\x80\x00\x80$[\r\n' \
-                     '#End UIMM Data, 5 samples written\r\n'
-
-    def state_callback(self, state, file_ingested):
-        """ Call back method to watch what comes in via the position callback """
-        self.state_callback_value = state
-        self.file_ingested_value = file_ingested
-
-    def pub_callback(self, pub):
-        """ Call back method to watch what comes in via the publish callback """
-        self.publish_callback_value = pub
-
-    def exception_callback(self, exception):
-        """ Callback method to watch what comes in via the exception callback """
-        self.exception_callback_value = exception
-
     def setUp(self):
         ParserUnitTestCase.setUp(self)
-        self.config = {
+        self._telem_config = {
             DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.adcps_jln_stc',
-            DataSetDriverConfigKeys.PARTICLE_CLASS: ['AdcpsJlnStcInstrumentParserDataParticle',
-                                                     'AdcpsJlnStcMetadataParserDataParticle']
+            DataSetDriverConfigKeys.PARTICLE_CLASS: None,
+            DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT: {
+                AdcpsJlnStcParticleClassKey.METADATA_PARTICLE_CLASS:
+                    AdcpsJlnStcMetadataTelemeteredDataParticle,
+                AdcpsJlnStcParticleClassKey.INSTRUMENT_PARTICLE_CLASS:
+                    AdcpsJlnStcInstrumentTelemeteredDataParticle,
+            }
         }
-        # Define test data particles and their associated timestamps which will be 
-        # compared with returned results
-        self.start_state = {StateKey.POSITION: 0}
-
-        # Define test data particles and their associated timestamps which will be 
-        # compared with returned results
-        timestamp = '20130929 091817'
-        timestamp_struct = time.strptime(timestamp, "%Y%m%d %H%M%S")
-        timestamp_s = calendar.timegm(timestamp_struct)
-        self.timestamp_header = float(ntplib.system_to_ntp_time(timestamp_s))
-        self.particle_header_footer = AdcpsJlnStcMetadataParserDataParticle(
-            '#UIMM '
-            'Status\r\n#7370_DateTime: 20130929 091817\r\n#ID=10\r\n#SN=70001672\r\n#Volts=6.40'
-            '\r\n#Records=5\r\n#Length=1780\r\n#Events=84\r\n#Begin UIMM Data\r\n#End UIMM Data'
-            ', 5 samples written\r\n', internal_timestamp=self.timestamp_header)
-
-        # The first record of adcpt_20130929_091817.dat, record 1764:
-        timestamp = '\xdd\x07\t\x1d\x08\x0f\x00\x00'
-        self.timestamp_a = self.convert_timestamp(timestamp)
-        self.particle_a = AdcpsJlnStcInstrumentParserDataParticle(
-            b'Record[1764]:n\x7fb\x01C'
-            '\x06\x00\x00\x002(\xdd\x07\t\x1d\x08\x0f\x00\x00\xa6C\xe9\xf2\x1f\xf2\x93\x07'
-            '\xe2\x06\x00\x00\x1f\x01(\x15\x00\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00'
-            '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00'
-            '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00'
-            '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00'
-            '\x80\x00\x80\x00\x80\x00\x80\xdf\xff\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00'
-            '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00'
-            '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00'
-            '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00'
-            '\x80\x00\x80\x00\x80\x00\x80\xd5\xff\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00'
-            '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00'
-            '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00'
-            '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00'
-            '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00'
-            '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00'
-            '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00'
-            '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00'
-            '\x80\x00\x80\x00\x80\x00\x80\xfaZ\r\n', internal_timestamp=self.timestamp_a)
-
-        # Record 1765 
-        timestamp = '\xdd\x07\t\x1d\x08\x1e\x00\x00'
-        self.timestamp_b = self.convert_timestamp(timestamp)
-        self.particle_b = AdcpsJlnStcInstrumentParserDataParticle(
-            b'Record[1765]:'
-            'n\x7fb\x01D\x06\x00\x00\x002(\xdd\x07\t\x1d\x08\x1e\x00\x00\xa2C\xe9\xf2!\xf2\x91'
-            '\x07\xd9\x05\x00\x00\x1f\x01(\x13\x00\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00'
-            '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00'
-            '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00'
-            '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00'
-            '\x80\x00\x80\x00\x80\x00\x80\xe5\xff\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00'
-            '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00'
-            '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00'
-            '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00'
-            '\x80\x00\x80\x00\x80\x00\x80\xf9\xff\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00'
-            '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00'
-            '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00'
-            '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00'
-            '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00'
-            '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00'
-            '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00'
-            '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00'
-            '\x80\x00\x80\x00\x80\x00\x80$[\r\n', internal_timestamp=self.timestamp_b)
-
-        # Record 1766
-        timestamp = '\xdd\x07\t\x1d\x08-\x00\x00'
-        self.timestamp_c = self.convert_timestamp(timestamp)
-        self.particle_c = AdcpsJlnStcInstrumentParserDataParticle(
-            b'Record[1766]:'
-            'n\x7fb\x01E\x06\x00\x00\x002(\xdd\x07\t\x1d\x08-\x00\x00\xa7C\xea\xf2 \xf2\x8e\x07'
-            '\xe2\x04\x00\x00\x1f\x01(\xd5\xff\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80'
-            '\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80'
-            '\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80'
-            '\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80'
-            '\x00\x80\x00\x80\x00\x80\xe8\xff\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80'
-            '\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80'
-            '\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80'
-            '\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80'
-            '\x00\x80\x00\x80\x00\x80)\x00\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00'
-            '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00'
-            '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00'
-            '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00'
-            '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00'
-            '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00'
-            '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00'
-            '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00'
-            '\x80\x00\x80\x00\x803[\r\n', internal_timestamp=self.timestamp_c)
-
-        # Record 1767
-        timestamp = '\xdd\x07\t\x1d\t\x00\x00\x00'
-        self.timestamp_d = self.convert_timestamp(timestamp)
-        self.particle_d = AdcpsJlnStcInstrumentParserDataParticle(
-            b'Record[1767]:'
-            'n\x7fb\x01F\x06\x00\x00\x002(\xdd\x07\t\x1d\t\x00\x00\x00\xa2C\xeb\xf2!\xf2\x8b'
-            '\x07\xd8\x0f\x00\x00\x1f\x01(\xf8\xff\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00'
-            '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00'
-            '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00'
-            '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00'
-            '\x80\x00\x80\x00\x80\x00\x80\xe9\xff\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00'
-            '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00'
-            '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00'
-            '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00'
-            '\x80\x00\x80\x00\x80\x00\x80\x11\x00\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00'
-            '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00'
-            '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00'
-            '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00'
-            '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00'
-            '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00'
-            '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00'
-            '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00'
-            '\x80\x00\x80\x00\x80\x00\x80\x0f[\r\n', internal_timestamp=self.timestamp_d)
-
-        # Record 1786 at the end of file.
-        timestamp = '\xdd\x07\t\x1d\t\x0f\x00\x00'
-        self.timestamp_e = self.convert_timestamp(timestamp)
-        self.particle_e = AdcpsJlnStcInstrumentParserDataParticle(
-            b'Record[1768]:'
-            'n\x7fb\x01G\x06\x00\x00\x002(\xdd\x07\t\x1d\t\x0f\x00\x00\x9eC\xec\xf2"\xf2\x87'
-            '\x07\x8d\x07\x00\x00\x1f\x01(\x0c\x00\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00'
-            '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00'
-            '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00'
-            '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00'
-            '\x80\x00\x80\x00\x80\x00\x80\xa3\xff\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00'
-            '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00'
-            '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00'
-            '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00'
-            '\x80\x00\x80\x00\x80\x00\x80\xd4\xff\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00'
-            '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00'
-            '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00'
-            '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00'
-            '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00'
-            '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00'
-            '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00'
-            '\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00\x80\x00'
-            '\x80\x00\x80\x00\x80\x00\x80WZ\r\n', internal_timestamp=self.timestamp_e)
-
-        # uncomment to generate particles in yml format
-        #self.particle_to_yml(self.particle_header_footer)
-        #self.particle_to_yml(self.particle_a)
-        #self.particle_to_yml(self.particle_b)
-        #self.particle_to_yml(self.particle_c)
-        #self.particle_to_yml(self.particle_d)
-        #self.particle_to_yml(self.particle_e)
-
-        self.file_ingested_value = None
-        self.state_callback_value = None
-        self.publish_callback_value = None
-
-    @staticmethod
-    def convert_timestamp(timestamp):
-        date_str = AdcpsJlnStcInstrumentParserDataParticle.unpack_date(timestamp)
-
-        TIMESTAMP_FORMAT = "%Y-%m-%dT%H:%M:%S.%fZ"
-
-        dt = datetime.strptime(date_str, TIMESTAMP_FORMAT)
-
-        unix_time = calendar.timegm(dt.timetuple()) + (dt.microsecond / 1000000.0)
-
-        timestamp_converted = ntplib.system_to_ntp_time(unix_time)
-        return timestamp_converted
-
-    def particles_to_yml(self, particles, filename, mode='w'):
-        """
-        This is added as a testing helper, not actually as part of the parser tests. Since the same particles
-        will be used for the driver test it is helpful to write them to .yml in the same form they need in the
-        results.yml fids here.
-        """
-        # open write append, if you want to start from scratch manually delete this fid
-        fid = open(os.path.join(RESOURCE_PATH, filename), mode)
-
-        fid.write('header:\n')
-        fid.write("    particle_object: 'MULTIPLE'\n")
-        fid.write("    particle_type: 'MULTIPLE'\n")
-        fid.write('data:\n')
-
-        for i in range(0, len(particles)):
-            particle_dict = particles[i].generate_dict()
-
-            fid.write('  - _index: %d\n' % (i+1))
-
-            fid.write('    particle_object: %s\n' % particles[i].__class__.__name__)
-            fid.write('    particle_type: %s\n' % particle_dict.get('stream_name'))
-            fid.write('    internal_timestamp: %f\n' % particle_dict.get('internal_timestamp'))
-
-            for val in particle_dict.get('values'):
-                if isinstance(val.get('value'), float):
-                    fid.write('    %s: %16.16f\n' % (val.get('value_id'), val.get('value')))
-                else:
-                    fid.write('    %s: %s\n' % (val.get('value_id'), val.get('value')))
-        fid.close()
-
-    def create_yml(self):
-        """
-        This utility creates a yml file
-        """
-
-        #ADCP_data_20130702.PD0 has one record in it
-        fid = open(os.path.join(RESOURCE_PATH, 'adcpt_20140504_015742.DAT'), 'rb')
-
-        self.stream_handle = fid
-        self.parser = AdcpsJlnStcParser(self.config, self.start_state, self.stream_handle,
-                                        self.state_callback, self.pub_callback, self.exception_callback)
-
-        particles = self.parser.get_records(20)
-
-        self.particles_to_yml(particles, 'adcpt_20140504_015742.yml')
-        fid.close()
-
-    def assert_result(self, result, particle, position):
-        self.assertEqual(result, [particle])
-
-        # Check parser state
-        self.assertEqual(self.parser._state[StateKey.POSITION], position)
-        self.assertEqual(self.state_callback_value[StateKey.POSITION], position)
-
-        self.assert_(isinstance(self.publish_callback_value, list))
-        self.assertEqual(self.publish_callback_value[0], particle)
+        self._recov_config = {
+            DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.adcps_jln_stc',
+            DataSetDriverConfigKeys.PARTICLE_CLASS: None,
+            DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT: {
+                AdcpsJlnStcParticleClassKey.METADATA_PARTICLE_CLASS:
+                    AdcpsJlnStcMetadataRecoveredDataParticle,
+                AdcpsJlnStcParticleClassKey.INSTRUMENT_PARTICLE_CLASS:
+                    AdcpsJlnStcInstrumentRecoveredDataParticle,
+            }
+        }
 
     def test_simple(self):
-        """
-        Read test data and pull out data particles one at a time.
-        Assert that the results are those we expected.
-        """
-        self.stream_handle = open(os.path.join(RESOURCE_PATH, 'adcpt_20130929_091817.DAT'))
-        self.parser = AdcpsJlnStcParser(self.config, self.start_state, self.stream_handle,
-                                        self.state_callback, self.pub_callback, self.exception_callback)
-
-        result = self.parser.get_records(1)
-        self.assert_result(result, self.particle_header_footer, 138)
-        result = self.parser.get_records(1)
-        self.assert_result(result, self.particle_a, 509)
-        result = self.parser.get_records(1)
-        self.assert_result(result, self.particle_b, 880)
-        result = self.parser.get_records(1)
-        self.assert_result(result, self.particle_c, 1251)
-        result = self.parser.get_records(1)
-        self.assert_result(result, self.particle_d, 1622)
-        result = self.parser.get_records(1)
-        self.assert_result(result, self.particle_e, 1993)
-
-        # no data left
-        result = self.parser.get_records(1)
-        self.assertEqual(result, [])
-        self.assert_(isinstance(self.publish_callback_value, list))
-        self.assertEqual(self.publish_callback_value[0], self.particle_e)
-
-    def test_get_many(self):
         """
         Read test data and pull out multiple data particles at one time.
         Assert that the results are those we expected.
         """
-        self.stream_handle = open(os.path.join(RESOURCE_PATH, 'adcpt_20130929_091817.DAT'))
-        self.parser = AdcpsJlnStcParser(self.config, self.start_state, self.stream_handle,
-                                        self.state_callback, self.pub_callback, self.exception_callback)
-        result = self.parser.get_records(4)
-        self.assertEqual(result, [self.particle_header_footer, self.particle_a, self.particle_b, self.particle_c])
-        log.debug('POSITION: %s', self.parser._state[StateKey.POSITION])
-        self.assertEqual(self.parser._state[StateKey.POSITION], 1251)
-        self.assertEqual(self.state_callback_value[StateKey.POSITION], 1251)
-        self.assertEqual(self.publish_callback_value[0], self.particle_header_footer)
-        self.assertEqual(self.publish_callback_value[1], self.particle_a)
-        self.assertEqual(self.publish_callback_value[2], self.particle_b)
-        self.assertEqual(self.publish_callback_value[3], self.particle_c)
+        with open(os.path.join(RESOURCE_PATH, 'adcpt_20130929_091817.DAT')) as file_handle:
+            parser = AdcpsJlnStcParser(self._telem_config,
+                                       None,
+                                       file_handle,
+                                       lambda state, ingested: None,
+                                       lambda data: None,
+                                       self.exception_callback)
 
-    def test_mid_state_start(self):
-        """
-        Test starting the parser in a state in the middle of processing
-        """
-        # Move position in file to middle of second record. Should return the 3rd record (particle c)
-        new_state = {StateKey.POSITION: 590}
-        self.stream_handle = open(os.path.join(RESOURCE_PATH, 'adcpt_20130929_091817.DAT'))
-        self.parser = AdcpsJlnStcParser(self.config, new_state, self.stream_handle,
-                                        self.state_callback, self.pub_callback, self.exception_callback)
-        result = self.parser.get_records(1)
-        self.assert_result(result, self.particle_c, 1251)
+            result = parser.get_records(6)
 
-    def test_set_state(self):
-        """
-        Test changing to a new state after initializing the parser and 
-        reading data, as if new data has been found and the state has
-        changed
-        """
-        self.stream_handle = open(os.path.join(RESOURCE_PATH, 'adcpt_20130929_091817.DAT'))
-        self.parser = AdcpsJlnStcParser(self.config, self.start_state, self.stream_handle,
-                                        self.state_callback, self.pub_callback, self.exception_callback)
-        new_state = {StateKey.POSITION: 590}
-        self.parser.set_state(new_state)
-        result = self.parser.get_records(1)
-        self.assert_result(result, self.particle_c, 1251)
-        result = self.parser.get_records(1)
-        self.assert_result(result, self.particle_d, 1622)
+            self.assert_particles(result, 'adcpt_20130929_091817.telem.yml', RESOURCE_PATH)
 
-    def test_bad_data(self):
+            self.assertEquals(len(self.exception_callback_value), 0)
+
+        with open(os.path.join(RESOURCE_PATH, 'adcpt_20130929_091817.DAT')) as file_handle:
+            parser = AdcpsJlnStcParser(self._recov_config,
+                                       None,
+                                       file_handle,
+                                       lambda state, ingested: None,
+                                       lambda data: None,
+                                       self.exception_callback)
+
+            result = parser.get_records(6)
+
+            self.assert_particles(result, 'adcpt_20130929_091817.recov.yml', RESOURCE_PATH)
+
+            self.assertEquals(len(self.exception_callback_value), 0)
+
+    def test_bad_data_telem(self):
         """
         Ensure that bad data is skipped when it exists.
         """
         # Bad checksum
         # If checksum is bad, skip the record and continue parsing.
-        self.stream_handle = StringIO(AdcpsJlnStcParserUnitTestCase.BAD_CHECKSUM)
-        self.parser = AdcpsJlnStcParser(self.config, self.start_state, self.stream_handle,
-                                        self.state_callback, self.pub_callback, self.exception_callback)
-        # Only the header and second record, particle_b should be returned.
-        result = self.parser.get_records(3)
-        self.assertEqual(self.publish_callback_value[0], self.particle_header_footer)
-        self.assertEqual(self.publish_callback_value[1], self.particle_b)
-        if len(result) != 2:
-            self.fail("Expected two records and got %d. Record containing bad data should have been skipped.",
-                      len(result))
+        with open(os.path.join(RESOURCE_PATH, 'adcps_jln_stc.bad_checksum.DAT'), 'r') as file_handle:
+
+            parser = AdcpsJlnStcParser(self._telem_config,
+                                       None, file_handle,
+                                       lambda state, ingested: None,
+                                       lambda data: None,
+                                       self.exception_callback)
+
+            result = parser.get_records(10)
+
+            self.assert_particles(result, 'adcps_jln_stc.bad_checksum.telem.yml', RESOURCE_PATH)
+
+            self.assertEquals(len(self.exception_callback_value), 1)
+
+            self.assert_(isinstance(self.exception_callback_value[0], SampleException))
+
+            self.exception_callback_value.pop()
 
         # Incorrect number of bytes
         # If numbytes is incorrect, skip the record and continue parsing.
-        self.start_state = {StateKey.POSITION: 0}
-        self.stream_handle = StringIO(AdcpsJlnStcParserUnitTestCase.BAD_NUM_BYTES)
-        self.parser = AdcpsJlnStcParser(self.config, self.start_state, self.stream_handle,
-                                        self.state_callback, self.pub_callback, self.exception_callback)
-        result = self.parser.get_records(3)
-        self.assertEqual(self.publish_callback_value[0], self.particle_header_footer)
-        self.assertEqual(self.publish_callback_value[1], self.particle_b)
-        if len(result) != 2:
-            self.fail("Expected two records and got %d. Record containing bad data should have been skipped.",
-                      len(result))
+        with open(os.path.join(RESOURCE_PATH, 'adcps_jln_stc.bad_num_bytes.DAT'), 'r') as file_handle:
+            parser = AdcpsJlnStcParser(self._telem_config,
+                                       None,
+                                       file_handle,
+                                       lambda state, ingested: None,
+                                       lambda data: None,
+                                       self.exception_callback)
+            result = parser.get_records(10)
 
-    def test_receive_fail(self):
+            self.assert_particles(result, 'adcps_jln_stc.bad_num_bytes.telem.yml', RESOURCE_PATH)
+
+            self.assertEquals(len(self.exception_callback_value), 1)
+
+            self.assert_(isinstance(self.exception_callback_value[0], SampleException))
+
+    def test_bad_data_recov(self):
+        """
+        Ensure that bad data is skipped when it exists.
+        """
+        # Bad checksum
+        # If checksum is bad, skip the record and continue parsing.
+        with open(os.path.join(RESOURCE_PATH, 'adcps_jln_stc.bad_checksum.DAT'), 'r') as file_handle:
+
+            parser = AdcpsJlnStcParser(self._recov_config,
+                                       None,
+                                       file_handle,
+                                       lambda state, ingested: None,
+                                       lambda data: None,
+                                       self.exception_callback)
+
+            result = parser.get_records(10)
+
+            self.assert_particles(result, 'adcps_jln_stc.bad_checksum.recov.yml', RESOURCE_PATH)
+
+            self.assertEquals(len(self.exception_callback_value), 1)
+
+            self.assert_(isinstance(self.exception_callback_value[0], SampleException))
+
+            self.exception_callback_value.pop()
+
+        # Incorrect number of bytes
+        # If numbytes is incorrect, skip the record and continue parsing.
+        with open(os.path.join(RESOURCE_PATH, 'adcps_jln_stc.bad_num_bytes.DAT'), 'r') as file_handle:
+            parser = AdcpsJlnStcParser(self._recov_config,
+                                       None,
+                                       file_handle,
+                                       lambda state, ingested: None,
+                                       lambda data: None,
+                                       self.exception_callback)
+            result = parser.get_records(10)
+
+            self.assert_particles(result, 'adcps_jln_stc.bad_num_bytes.recov.yml', RESOURCE_PATH)
+
+            self.assertEquals(len(self.exception_callback_value), 1)
+
+            self.assert_(isinstance(self.exception_callback_value[0], SampleException))
+
+    def test_receive_fail_telem(self):
         # ReceiveFailure
         # If record marked with 'ReceiveFailure', skip the record and continue parsing.
-        self.start_state = {StateKey.POSITION: 0}
-        self.stream_handle = StringIO(AdcpsJlnStcParserUnitTestCase.BAD_RX_FAILURE)
-        self.parser = AdcpsJlnStcParser(self.config, self.start_state, self.stream_handle,
-                                        self.state_callback, self.pub_callback, self.exception_callback)
-        result = self.parser.get_records(3)
-        self.assertEqual(self.publish_callback_value[0], self.particle_header_footer)
-        self.assertEqual(self.publish_callback_value[1], self.particle_b)
-        if len(result) != 2:
-            self.fail("Expected two records and got %d. Record containing ReceiveFailure should have been skipped.",
-                      len(result))
+        with open(os.path.join(RESOURCE_PATH, 'adcps_jln_stc.bad_rx_failure.DAT'), 'r') as file_handle:
+            parser = AdcpsJlnStcParser(self._telem_config,
+                                       None, file_handle,
+                                       lambda state, ingested: None,
+                                       lambda data: None,
+                                       self.exception_callback)
+
+            result = parser.get_records(10)
+
+            self.assert_particles(result, 'adcps_jln_stc.bad_rx_failure.telem.yml', RESOURCE_PATH)
+
+            self.assertEquals(len(self.exception_callback_value), 0)
+
+    def test_receive_fail_telem(self):
+        # ReceiveFailure
+        # If record marked with 'ReceiveFailure', skip the record and continue parsing.
+        with open(os.path.join(RESOURCE_PATH, 'adcps_jln_stc.bad_rx_failure.DAT'), 'r') as file_handle:
+            parser = AdcpsJlnStcParser(self._recov_config,
+                                       None, file_handle,
+                                       lambda state, ingested: None,
+                                       lambda data: None,
+                                       self.exception_callback)
+
+            result = parser.get_records(10)
+
+            self.assert_particles(result, 'adcps_jln_stc.bad_rx_failure.recov.yml', RESOURCE_PATH)
+
+            self.assertEquals(len(self.exception_callback_value), 0)
+
+    def test_real_file(self):
+
+        with open(os.path.join(RESOURCE_PATH, 'adcpt_20140504_015742.DAT'), 'r') as file_handle:
+            parser = AdcpsJlnStcParser(self._telem_config,
+                                       None, file_handle,
+                                       lambda state, ingested: None,
+                                       lambda data: None,
+                                       self.exception_callback)
+
+            result = parser.get_records(1000)
+
+            self.assert_particles(result, 'adcpt_20140504_015742.telem.yml', RESOURCE_PATH)
+
+            self.assertEquals(len(self.exception_callback_value), 0)
+
+        with open(os.path.join(RESOURCE_PATH, 'adcpt_20140504_015742.DAT'), 'r') as file_handle:
+            parser = AdcpsJlnStcParser(self._recov_config,
+                                       None, file_handle,
+                                       lambda state, ingested: None,
+                                       lambda data: None,
+                                       self.exception_callback)
+
+            result = parser.get_records(1000)
+
+            self.assert_particles(result, 'adcpt_20140504_015742.recov.yml', RESOURCE_PATH)
+
+            self.assertEquals(len(self.exception_callback_value), 0)
