@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 """
 @package mi.dataset.parser.test
 @file mi-dataset/mi/dataset/parser/test/test_phsen_abcdef_imodem.py
@@ -131,7 +129,7 @@ class PhsenAbcdefImodemParserUnitTestCase(ParserUnitTestCase):
 
     def test_invalid_header_timestamp(self):
         """
-        The file used in this test has error in the timestamp for the header record.
+        The file used in this test has error in the File Date Time for the header record.
         This results in 4 particles being created instead of 5
         (metadata particle is not created), and also result in the exception
         callback being called.
@@ -181,7 +179,7 @@ class PhsenAbcdefImodemParserUnitTestCase(ParserUnitTestCase):
 
             self.assertEquals(len(particles), num_expected_particles)
 
-            self.assert_particles(particles, "example1_rec.yml", RESOURCE_PATH)
+            self.assert_particles(particles, "invalid_record_type_rec.yml", RESOURCE_PATH)
 
             log.debug('Exceptions : %s', self.exception_callback_value)
 
@@ -211,7 +209,7 @@ class PhsenAbcdefImodemParserUnitTestCase(ParserUnitTestCase):
 
             self.assertEquals(len(particles), num_expected_particles)
 
-            self.assert_particles(particles, "example1_rec.yml", RESOURCE_PATH)
+            self.assert_particles(particles, "ph_record_missing_timestamp_rec.yml", RESOURCE_PATH)
 
             log.debug('Exceptions : %s', self.exception_callback_value)
 
@@ -272,7 +270,7 @@ class PhsenAbcdefImodemParserUnitTestCase(ParserUnitTestCase):
 
             self.assertEquals(len(particles), num_expected_particles)
 
-            self.assert_particles(particles, "example1_rec.yml", RESOURCE_PATH)
+            self.assert_particles(particles, "incorrect_data_length_rec.yml", RESOURCE_PATH)
 
         log.debug('Exceptions : %s', self.exception_callback_value)
 
@@ -307,6 +305,33 @@ class PhsenAbcdefImodemParserUnitTestCase(ParserUnitTestCase):
 
         log.debug('===== END TEST INVALID CHECKSUM =====')
 
+    def test_invalid_header_fields(self):
+        """
+        The header in the file used in this test has in invalid Voltage and Number of Samples Written.
+        A metadata particle will still get created, but there will be None in some of the parameters
+        (an exception will be generated).
+        """
+        log.debug('===== START TEST INVALID HEADER FIELDS =====')
+
+        with open(os.path.join(RESOURCE_PATH, 'invalid_header_fields.DAT'), O_MODE) as file_handle:
+
+            num_particles_to_request = 5
+            num_expected_particles = 5
+
+            parser = PhsenAbcdefImodemParser(self._recovered_parser_config,
+                                             file_handle,
+                                             self.exception_callback)
+
+            particles = parser.get_records(num_particles_to_request)
+
+            self.assertEquals(len(particles), num_expected_particles)
+
+            self.assert_particles(particles, "invalid_header_fields_rec.yml", RESOURCE_PATH)
+
+            self.assert_(isinstance(self.exception_callback_value[0], UnexpectedDataException))
+
+        log.debug('===== END TEST INVALID HEADER FIELDS =====')
+
     def test_real_file(self):
         """
         The file used in this test, is a real file from the acquisition server.
@@ -316,10 +341,10 @@ class PhsenAbcdefImodemParserUnitTestCase(ParserUnitTestCase):
         """
         log.debug('===== START TEST REAL FILE =====')
 
-        with open(os.path.join(RESOURCE_PATH, 'phsen1_20140730_190554.DAT'), O_MODE) as file_handle:
+        num_particles_to_request = 25
+        num_expected_particles = 21
 
-            num_particles_to_request = 25
-            num_expected_particles = 21
+        with open(os.path.join(RESOURCE_PATH, 'phsen1_20140730_190554.DAT'), O_MODE) as file_handle:
 
             parser = PhsenAbcdefImodemParser(self._recovered_parser_config,
                                              file_handle,
@@ -331,9 +356,73 @@ class PhsenAbcdefImodemParserUnitTestCase(ParserUnitTestCase):
 
             self.assertEquals(len(particles), num_expected_particles)
 
+            self.assert_particles(particles, "phsen1_20140730_190554_rec.yml", RESOURCE_PATH)
+
+            self.assertEquals(self.exception_callback_value, [])
+
+        with open(os.path.join(RESOURCE_PATH, 'phsen1_20140730_190554.DAT'), O_MODE) as file_handle:
+
+            parser = PhsenAbcdefImodemParser(self._telemetered_parser_config,
+                                             file_handle,
+                                             self.exception_callback)
+
+            particles = parser.get_records(num_particles_to_request)
+
+            log.info(len(particles))
+
+            self.assertEquals(len(particles), num_expected_particles)
+
+            self.assert_particles(particles, "phsen1_20140730_190554_tel.yml", RESOURCE_PATH)
+
             self.assertEquals(self.exception_callback_value, [])
 
         log.debug('===== END TEST REAL FILE =====')
+
+    def test_real_file_2(self):
+        """
+        The file used in this test, is a real file from the acquisition server.
+        It contains 9 pH records:
+        Verify that 9 instrument particles and one metadata particle are generated
+        from the real file.
+        """
+        log.debug('===== START TEST REAL 2 FILE =====')
+
+        num_particles_to_request = 10
+        num_expected_particles = 10
+
+        with open(os.path.join(RESOURCE_PATH, 'phsen1_20140725_192532.DAT'), O_MODE) as file_handle:
+
+            parser = PhsenAbcdefImodemParser(self._recovered_parser_config,
+                                             file_handle,
+                                             self.exception_callback)
+
+            particles = parser.get_records(num_particles_to_request)
+
+            log.info(len(particles))
+
+            self.assertEquals(len(particles), num_expected_particles)
+
+            self.assert_particles(particles, "phsen1_20140725_192532_rec.yml", RESOURCE_PATH)
+
+            self.assertEquals(self.exception_callback_value, [])
+
+        with open(os.path.join(RESOURCE_PATH, 'phsen1_20140725_192532.DAT'), O_MODE) as file_handle:
+
+            parser = PhsenAbcdefImodemParser(self._telemetered_parser_config,
+                                             file_handle,
+                                             self.exception_callback)
+
+            particles = parser.get_records(num_particles_to_request)
+
+            log.info(len(particles))
+
+            self.assertEquals(len(particles), num_expected_particles)
+
+            self.assert_particles(particles, "phsen1_20140725_192532_tel.yml", RESOURCE_PATH)
+
+            self.assertEquals(self.exception_callback_value, [])
+
+        log.debug('===== END TEST REAL 2 FILE =====')
 
     def particle_to_yml(self, particles, filename, mode='w'):
         """
@@ -371,9 +460,9 @@ class PhsenAbcdefImodemParserUnitTestCase(ParserUnitTestCase):
         """
         This utility creates a yml file
         """
-        self.stream_handle = open(os.path.join(RESOURCE_PATH, 'header_and_footer_only.DAT'), O_MODE)
-        self.build_recov_parser()
+        self.stream_handle = open(os.path.join(RESOURCE_PATH, 'phsen1_20140725_192532.DAT'), O_MODE)
+        self.build_telem_parser()
         particles = self.parser.get_records(21)
 
-        self.particle_to_yml(particles, 'header_and_footer_only_rec.yml')
+        self.particle_to_yml(particles, 'phsen1_20140725_192532_tel.yml')
         self.stream_handle.close()
