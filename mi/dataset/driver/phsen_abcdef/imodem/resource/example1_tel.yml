@@ -59,10 +59,10 @@ data:
   - _index: 4
     particle_object: PhsenAbcdefImodemControlTelemeteredDataParticle
     particle_type: phsen_abcdef_imodem_control
-    internal_timestamp: 3618489599.0
+    internal_timestamp: 3618490111.0
     unique_id: 87
     record_type: 193
-    record_time: 3492345599
+    record_time: 3492346111
     passed_checksum: 1
     clock_active: 1
     recording_active: 1

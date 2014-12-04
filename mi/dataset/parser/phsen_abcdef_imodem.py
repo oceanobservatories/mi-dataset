@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 """
 @package mi.dataset.parser
 @file mi-dataset/mi/dataset/parser/phsen_abcdef_imodem.py
@@ -16,7 +14,8 @@ import ntplib
 import re
 
 from mi.core.common import BaseEnum
-from mi.core.exceptions import ConfigurationException, UnexpectedDataException
+from mi.core.exceptions import ConfigurationException, UnexpectedDataException, \
+    RecoverableSampleException
 from mi.core.log import get_logger
 log = get_logger()
 
@@ -67,19 +66,19 @@ BLANK_LINE_REGEX = r'\s*' + END_OF_LINE_REGEX
 
 # Metadata REGEX section
 
-FILE_TIME_REGEX = r'#7370_DateTime:\s+(?P<' + \
+FILE_TIME_REGEX = r'#\w+_DateTime:\s+(?P<' + \
                   PhsenAbcdefImodemDataParticleKey.FILE_TIME + \
                   '>\d{8}\s+\d{6})' + END_OF_LINE_REGEX
 
 INSTRUMENT_ID_REGEX = \
     r'#ID=(?P<' + \
     PhsenAbcdefImodemDataParticleKey.INSTRUMENT_ID + \
-    '>\d+)' + END_OF_LINE_REGEX
+    '>\w+)' + END_OF_LINE_REGEX
 
 SERIAL_NUMBER_REGEX = \
     r'#SN=(?P<' + \
     PhsenAbcdefImodemDataParticleKey.SERIAL_NUMBER + \
-    '>\d+)' + END_OF_LINE_REGEX
+    '>\w+)' + END_OF_LINE_REGEX
 
 VOLTAGE_FLT32_REGEX = \
     r'#Volts=(?P<' + \
@@ -220,8 +219,6 @@ class PhsenAbcdefImodemParser(SimpleParser):
                                                       stream_handle,
                                                       exception_callback)
 
-        self._record_buffer = []
-
         try:
             self._instrument_particle_class = config[
                 DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT][
@@ -283,7 +280,7 @@ class PhsenAbcdefImodemParser(SimpleParser):
         last_light_measurement_start_index = len(light_measurements)-3
         for x in range(0, last_light_measurement_start_index, num_chars):
             light_measurement = light_measurements[x: end_range]
-            #log.debug("ascii-hex light_measurement[%s]: %s", x+1, light_measurement)
+            log.trace("ascii-hex light_measurement[%s]: %s", x+1, light_measurement)
             # convert to int
             int_light_measurement = int(light_measurement, 16)
 
@@ -307,14 +304,15 @@ class PhsenAbcdefImodemParser(SimpleParser):
                   len(line), line, record_checksum)
         checksum = 0
 
-        # Strip off the leading part of the record, including the ID characters.
-        #   If the record starts with "Record", this will be 15
-        #   otherwise 3.
+        # Strip off the leading part of the record, including the ID characters. This
+        # will vary as some lines start with Record, and others don't. Also the
+        # lines that start with Record are different, example Record[13], or
+        # Record[135] so the starting point to slice will vary.
+        #
         # Strip off the trailing Checksum characters and newline (3 characters).
-        if line.startswith("Record"):
-            start_slice = 15
-        else:
-            start_slice = 3
+
+        beg = line.find('*')
+        start_slice = beg + 3   # Get past the ID
         stripped_record = line[start_slice:-3]
         log.trace("stripped line: %s", stripped_record)
         stripped_record_length = len(stripped_record)
@@ -323,12 +321,12 @@ class PhsenAbcdefImodemParser(SimpleParser):
                   stripped_record_length)
         for x in range(0, stripped_record_length, 2):
             value = stripped_record[x:x+2]
-            #log.debug("value: %s", value)
+            log.trace("value: %s", value)
             checksum += int(value, 16)
 
         # module of the checksum will give us the low order byte
-        log.debug("modulo of calculated checksum: %s", checksum % 256)
-        log.debug("record checksum: %s", record_checksum)
+        log.trace("modulo of calculated checksum: %s", checksum % 256)
+        log.trace("record checksum: %s", record_checksum)
         if record_checksum == checksum % 256:
             passed_checksum = 1
         else:
@@ -404,26 +402,33 @@ class PhsenAbcdefImodemParser(SimpleParser):
         This function generates a metadata particle.
         """
 
-        particle_data = dict()
+        if self._metadata_matches_dict[MetadataMatchKey.FILE_TIME_MATCH] is None:
+            message = "Unable to create metadata particle due to missing file time"
+            log.warn(message)
+            self._exception_callback(RecoverableSampleException(message))
+        else:
+            particle_data = dict()
 
-        for key in self._metadata_matches_dict.keys():
+            for key in self._metadata_matches_dict.keys():
+                log.trace('key: %s, particle_data: %s', key, particle_data)
 
-            self._process_metadata_match_dict(key, particle_data)
+                if self._metadata_matches_dict[key]:
+                    self._process_metadata_match_dict(key, particle_data)
 
-        utc_time = formatted_timestamp_utc_time(
-            particle_data[PhsenAbcdefImodemDataParticleKey.FILE_TIME],
-            "%Y%m%d %H%M%S")
-        ntp_time = ntplib.system_to_ntp_time(utc_time)
+            utc_time = formatted_timestamp_utc_time(
+                particle_data[PhsenAbcdefImodemDataParticleKey.FILE_TIME],
+                "%Y%m%d %H%M%S")
+            ntp_timestamp = ntplib.system_to_ntp_time(utc_time)
 
-        # Generate the metadata particle class and add the
-        # result to the list of particles to be returned.
-        particle = self._extract_sample(self._metadata_particle_class,
-                                        None,
-                                        particle_data,
-                                        ntp_time)
-        if particle is not None:
-            log.debug("Appending metadata particle to record buffer: %s", particle.generate())
-            self._record_buffer.append(particle)
+            # Generate the metadata particle class and add the
+            # result to the list of particles to be returned.
+            particle = self._extract_sample(self._metadata_particle_class,
+                                            None,
+                                            particle_data,
+                                            ntp_timestamp)
+            if particle is not None:
+                log.trace("Appending metadata particle to record buffer: %s", particle.generate())
+                self._record_buffer.append(particle)
 
     @staticmethod
     def _create_empty_instrument_dict():
@@ -496,9 +501,9 @@ class PhsenAbcdefImodemParser(SimpleParser):
         control_dict.update(common_dict)
 
         # Convert the flags group from ASCII-HEX to int
-        log.debug('control_match.group(FLAGS_GROUP_INDEX): %s', control_match.group(FLAGS_GROUP_INDEX))
+        log.trace('control_match.group(FLAGS_GROUP_INDEX): %s', control_match.group(FLAGS_GROUP_INDEX))
         int_flags = int(control_match.group(FLAGS_GROUP_INDEX), 16)
-        log.debug('int_flags: %s', int_flags)
+        log.trace('int_flags: %s', int_flags)
 
         # Convert the FLAGS integer value to a 16 bit binary value with leading 0s
         # as necessary. This is stored as a string array.
@@ -507,7 +512,7 @@ class PhsenAbcdefImodemParser(SimpleParser):
         # into the string the right most bit, so we had to adjust the index into flags
         # accordingly.
         flags = format(int(int_flags), '016b')
-        log.debug('flags: %s', flags)
+        log.trace('flags: %s', flags)
 
         control_dict[PhsenAbcdefImodemDataParticleKey.CLOCK_ACTIVE] = \
             flags[CLOCK_ACTIVE_FLAGS_INDEX]
@@ -630,6 +635,65 @@ class PhsenAbcdefImodemParser(SimpleParser):
             message = msg_str + line
             self._exception_callback(UnexpectedDataException(message))
 
+    def _check_for_metadata_match(self, line):
+        """
+        Check for each of the different match possibilities. If we have a match
+        put it in the dictionary. Once a match is found, return True.
+        :param line: the line to check
+        :return: True if a metadata match was found, otherwise False
+        """
+
+        file_time_match = re.match(FILE_TIME_REGEX, line)
+        if file_time_match:
+            self._metadata_matches_dict[MetadataMatchKey.FILE_TIME_MATCH] = \
+                file_time_match
+            return True
+
+        instrument_id_match = re.match(INSTRUMENT_ID_REGEX, line)
+        if instrument_id_match:
+            self._metadata_matches_dict[MetadataMatchKey.INSTRUMENT_ID_MATCH] = \
+                instrument_id_match
+            return True
+
+        serial_number_match = re.match(SERIAL_NUMBER_REGEX, line)
+        if serial_number_match:
+            self._metadata_matches_dict[MetadataMatchKey.SERIAL_NUMBER_MATCH] = \
+                serial_number_match
+            return True
+
+        voltage_flt32_match = re.match(VOLTAGE_FLT32_REGEX, line)
+        if voltage_flt32_match:
+            self._metadata_matches_dict[MetadataMatchKey.VOLTAGE_FLT32_MATCH] = \
+                voltage_flt32_match
+            return True
+
+        num_data_records_match = re.match(HEADER_NUM_DATA_RECORDS_REGEX, line)
+        if num_data_records_match:
+            self._metadata_matches_dict[MetadataMatchKey.NUM_DATA_RECORDS_MATCH] = \
+                num_data_records_match
+            return True
+
+        record_length_match = re.match(RECORD_LENGTH_REGEX, line)
+        if record_length_match:
+            self._metadata_matches_dict[MetadataMatchKey.RECORD_LENGTH_MATCH] = \
+                record_length_match
+            return True
+
+        num_events_match = re.match(NUM_EVENTS_REGEX, line)
+        if num_events_match:
+            self._metadata_matches_dict[MetadataMatchKey.NUM_EVENTS_MATCH] = \
+                num_events_match
+            return True
+
+        num_samples_match = re.match(NUM_SAMPLES_REGEX, line)
+        if num_samples_match:
+            self._metadata_matches_dict[MetadataMatchKey.NUM_SAMPLES_MATCH] = \
+                num_samples_match
+            return True
+
+        # No metadata matches found
+        return False
+
     def parse_file(self):
         """
         Parse the input file.
@@ -648,14 +712,6 @@ class PhsenAbcdefImodemParser(SimpleParser):
             log.trace("line = %s", line)
 
             # Check for each of the different match possibilities
-            file_time_match = re.match(FILE_TIME_REGEX, line)
-            instrument_id_match = re.match(INSTRUMENT_ID_REGEX, line)
-            serial_number_match = re.match(SERIAL_NUMBER_REGEX, line)
-            voltage_flt32_match = re.match(VOLTAGE_FLT32_REGEX, line)
-            num_data_records_match = re.match(HEADER_NUM_DATA_RECORDS_REGEX, line)
-            record_length_match = re.match(RECORD_LENGTH_REGEX, line)
-            num_events_match = re.match(NUM_EVENTS_REGEX, line)
-            num_samples_match = re.match(NUM_SAMPLES_REGEX, line)
 
             control_with_battery_voltage_match \
                 = CONTROL_WITH_BATTERY_VOLTAGE_MATCHER.match(line)
@@ -663,130 +719,98 @@ class PhsenAbcdefImodemParser(SimpleParser):
 
             ph_match = PH_MATCHER.match(line)
 
-            # if we have a match put it in the dictionary
+            if not self._check_for_metadata_match(line):
 
-            if file_time_match:
-                self._metadata_matches_dict[MetadataMatchKey.FILE_TIME_MATCH] = \
-                    file_time_match
+                # There are two control match possibilities
+                if control_with_battery_voltage_match or control_match:
 
-            elif instrument_id_match:
-                self._metadata_matches_dict[MetadataMatchKey.INSTRUMENT_ID_MATCH] = \
-                    instrument_id_match
+                    # If we found a control record with battery voltage,
+                    # supply the match
+                    if control_with_battery_voltage_match:
 
-            elif serial_number_match:
-                self._metadata_matches_dict[MetadataMatchKey.SERIAL_NUMBER_MATCH] = \
-                    serial_number_match
+                        self._control_record_has_battery_voltage = True
 
-            elif voltage_flt32_match:
-                self._metadata_matches_dict[MetadataMatchKey.VOLTAGE_FLT32_MATCH] = \
-                    voltage_flt32_match
+                        log.trace("found control record with battery voltage, line: %s", line)
+                        log.trace("control groups: %s", control_with_battery_voltage_match.groups())
+                        log.trace("control group1: %s", control_with_battery_voltage_match.group(1))
+                        log.trace("control group2: %s", control_with_battery_voltage_match.group(2))
+                        log.trace("control group3: %s", control_with_battery_voltage_match.group(3))
+                        log.trace("control group4: %s", control_with_battery_voltage_match.group(4))
+                        log.trace("control group5: %s", control_with_battery_voltage_match.group(5))
+                        log.trace("control group6: %s", control_with_battery_voltage_match.group(6))
+                        log.trace("control group7: %s", control_with_battery_voltage_match.group(7))
+                        log.trace("control group8: %s", control_with_battery_voltage_match.group(8))
+                        log.trace("control group9: %s", control_with_battery_voltage_match.group(9))
 
-            elif num_data_records_match:
-                self._metadata_matches_dict[MetadataMatchKey.NUM_DATA_RECORDS_MATCH] = \
-                    num_data_records_match
+                        self._populate_control_dict(control_with_battery_voltage_match,
+                                                    control_dict, line)
 
-            elif record_length_match:
-                self._metadata_matches_dict[MetadataMatchKey.RECORD_LENGTH_MATCH] = \
-                    record_length_match
+                    else:
+                        log.trace("found control record without battery voltage, line: %s", line)
+                        log.trace("control groups: %s", control_match.groups())
+                        log.trace("control group1: %s", control_match.group(1))
+                        log.trace("control group2: %s", control_match.group(2))
+                        log.trace("control group3: %s", control_match.group(3))
+                        log.trace("control group4: %s", control_match.group(4))
+                        log.trace("control group5: %s", control_match.group(5))
+                        log.trace("control group6: %s", control_match.group(6))
+                        log.trace("control group7: %s", control_match.group(7))
+                        log.trace("control group8: %s", control_match.group(8))
+                        log.trace("control group9: %s", control_match.group(9))
 
-            elif num_events_match:
-                self._metadata_matches_dict[MetadataMatchKey.NUM_EVENTS_MATCH] = \
-                    num_events_match
+                        self._control_record_has_battery_voltage = False
 
-            elif num_samples_match:
-                self._metadata_matches_dict[MetadataMatchKey.NUM_SAMPLES_MATCH] = \
-                    num_samples_match
+                        # If we found a control record without battery voltage,
+                        # supply that match
+                        self._populate_control_dict(control_match, control_dict, line)
 
-            # There are two control match possibilities
-            elif control_with_battery_voltage_match or control_match:
+                    particle = self._extract_sample(
+                        self._control_particle_class,
+                        None,
+                        control_dict,
+                        PhsenAbcdefImodemParser._generate_internal_timestamp(control_dict))
 
-                # If we found a control record with battery voltage,
-                # supply the match
-                if control_with_battery_voltage_match:
+                    log.trace("Appending control particle: %s", particle.generate())
+                    self._record_buffer.append(particle)
 
-                    self._control_record_has_battery_voltage = True
+                    # Recreate an empty control dictionary
+                    control_dict = self._create_empty_control_dict()
 
-                    log.trace("found control record with battery voltage, line: %s", line)
-                    log.trace("control groups: %s", control_with_battery_voltage_match.groups())
-                    log.trace("control group1: %s", control_with_battery_voltage_match.group(1))
-                    log.trace("control group2: %s", control_with_battery_voltage_match.group(2))
-                    log.trace("control group3: %s", control_with_battery_voltage_match.group(3))
-                    log.trace("control group4: %s", control_with_battery_voltage_match.group(4))
-                    log.trace("control group5: %s", control_with_battery_voltage_match.group(5))
-                    log.trace("control group6: %s", control_with_battery_voltage_match.group(6))
-                    log.trace("control group7: %s", control_with_battery_voltage_match.group(7))
-                    log.trace("control group8: %s", control_with_battery_voltage_match.group(8))
-                    log.trace("control group9: %s", control_with_battery_voltage_match.group(9))
+                # Does the line contain pH data?
+                elif ph_match:
+                    log.trace("Found pH record, line: %s", line)
+                    log.trace("pH groups %s", ph_match.groups())
+                    log.trace("pH group1 id %s", ph_match.group(1))
+                    log.trace("pH group2 len %s", ph_match.group(2))
+                    log.trace("pH group3 type %s", ph_match.group(3))
+                    log.trace("pH group4 time %s", ph_match.group(4))
+                    log.trace("pH group5 thermistor start %s", ph_match.group(5))
+                    log.trace("pH group6 ref light meas %s", ph_match.group(6))
+                    log.trace("pH group7 light meas %s", ph_match.group(7))
+                    log.trace("pH group8 voltage %s", ph_match.group(8))
+                    log.trace("pH group9 end thermistor %s", ph_match.group(9))
 
-                    self._populate_control_dict(control_with_battery_voltage_match,
-                                                control_dict, line)
+                    self._populate_instrument_dict(ph_match, instrument_dict, line)
+
+                    particle = self._extract_sample(
+                        self._instrument_particle_class,
+                        None,
+                        instrument_dict,
+                        PhsenAbcdefImodemParser._generate_internal_timestamp(instrument_dict))
+
+                    log.trace("Appending instrument particle: %s", particle.generate())
+                    self._record_buffer.append(particle)
+
+                    # Recreate an empty instrument dictionary
+                    instrument_dict = self._create_empty_instrument_dict()
 
                 else:
-                    log.trace("found control record without battery voltage, line: %s", line)
-                    log.trace("control groups: %s", control_match.groups())
-                    log.trace("control group1: %s", control_match.group(1))
-                    log.trace("control group2: %s", control_match.group(2))
-                    log.trace("control group3: %s", control_match.group(3))
-                    log.trace("control group4: %s", control_match.group(4))
-                    log.trace("control group5: %s", control_match.group(5))
-                    log.trace("control group6: %s", control_match.group(6))
-                    log.trace("control group7: %s", control_match.group(7))
-                    log.trace("control group8: %s", control_match.group(8))
-                    log.trace("control group9: %s", control_match.group(9))
-
-                    self._control_record_has_battery_voltage = False
-
-                    # If we found a control record without battery voltage,
-                    # supply that match
-                    self._populate_control_dict(control_match, control_dict, line)
-
-                particle = self._extract_sample(
-                    self._control_particle_class,
-                    None,
-                    control_dict,
-                    PhsenAbcdefImodemParser._generate_internal_timestamp(control_dict))
-
-                log.debug("Appending control particle: %s", particle.generate())
-                self._record_buffer.append(particle)
-
-                # Recreate an empty control dictionary
-                control_dict = self._create_empty_control_dict()
-
-            # Does the line contain pH data?
-            elif ph_match:
-                log.trace("Found pH record, line: %s", line)
-                log.trace("pH groups %s", ph_match.groups())
-                log.trace("pH group1 id %s", ph_match.group(1))
-                log.trace("pH group2 len %s", ph_match.group(2))
-                log.trace("pH group3 type %s", ph_match.group(3))
-                log.trace("pH group4 time %s", ph_match.group(4))
-                log.trace("pH group5 thermistor start %s", ph_match.group(5))
-                log.trace("pH group6 ref light meas %s", ph_match.group(6))
-                log.trace("pH group7 light meas %s", ph_match.group(7))
-                log.trace("pH group8 voltage %s", ph_match.group(8))
-                log.trace("pH group9 end thermistor %s", ph_match.group(9))
-
-                self._populate_instrument_dict(ph_match, instrument_dict, line)
-
-                particle = self._extract_sample(
-                    self._instrument_particle_class,
-                    None,
-                    instrument_dict,
-                    PhsenAbcdefImodemParser._generate_internal_timestamp(instrument_dict))
-
-                log.debug("Appending instrument particle: %s", particle.generate())
-                self._record_buffer.append(particle)
-
-                # Recreate an empty instrument dictionary
-                instrument_dict = self._create_empty_instrument_dict()
-
-            else:
-                self._handle_non_match(line)
+                    self._handle_non_match(line)
 
             # See if we have all the metadata parameters
             if (None not in self._metadata_matches_dict.values() and
                     not self._metadata_sample_generated):
-                # Attempt to generate metadata particles
+                # Attempt to generate metadata particle
                 self._generate_metadata_particle()
                 self._metadata_sample_generated = True
 
@@ -795,4 +819,6 @@ class PhsenAbcdefImodemParser(SimpleParser):
 
         # If the metadata sample is not fully populated log a warning
         if not self._metadata_sample_generated:
-            log.warn("Metadata particle was not created, not all parameters were populated")
+            log.warn("Not all parameters are populated in the metadata particle")
+            # Attempt to generate metadata particle with whatever parameters have been populated
+            self._generate_metadata_particle()
