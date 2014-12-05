@@ -18,23 +18,7 @@ import ntplib
 
 from mi.core.exceptions import RecoverableSampleException
 from mi.core.log import get_logger
-from mi.dataset.parser.pco2w_abc import Pco2wAbcParser, \
-    CLOCK_ACTIVE_FLAGS_INDEX, \
-    RECORDING_ACTIVE_FLAGS_INDEX, \
-    RECORD_END_ON_TIME_FLAGS_INDEX, \
-    RECORD_MEMORY_FULL_FLAGS_INDEX, \
-    RECORD_END_ON_ERROR_FLAGS_INDEX, \
-    DATA_DOWNLOAD_OK_FLAGS_INDEX, \
-    FLASH_MEMORY_OPEN_FLAGS_INDEX, \
-    BATTERY_LOW_PRESTART_FLAGS_INDEX, \
-    BATTERY_LOW_MEASUREMENT_FLAGS_INDEX, \
-    BATTERY_LOW_BLANK_FLAGS_INDEX, \
-    BATTERY_LOW_EXTERNAL_FLAGS_INDEX, \
-    EXTERNAL_DEVICE1_FAULT_FLAGS_INDEX, \
-    EXTERNAL_DEVICE2_FAULT_FLAGS_INDEX, \
-    EXTERNAL_DEVICE3_FAULT_FLAGS_INDEX, \
-    FLASH_ERASED_FLAGS_INDEX, \
-    POWER_ON_INVALID_FLAGS_INDEX
+from mi.dataset.parser.pco2w_abc import Pco2wAbcParser
 
 log = get_logger()
 from mi.dataset.parser.pco2w_abc_particles import Pco2wAbcDataParticleKey
@@ -415,41 +399,31 @@ class Pco2wAbcDclParser(Pco2wAbcParser):
 
         # Convert the FLAGS integer value to a 16 bit binary value with leading 0s
         # as necessary
-        flags = format(int(int_flags), '016b')
+        bit_string = format(int(int_flags), '016b')
 
-        metadata_dict[Pco2wAbcDataParticleKey.CLOCK_ACTIVE] = \
-            flags[CLOCK_ACTIVE_FLAGS_INDEX]
-        metadata_dict[Pco2wAbcDataParticleKey.RECORDING_ACTIVE] = \
-            flags[RECORDING_ACTIVE_FLAGS_INDEX]
-        metadata_dict[Pco2wAbcDataParticleKey.RECORD_END_ON_TIME] = \
-            flags[RECORD_END_ON_TIME_FLAGS_INDEX]
-        metadata_dict[Pco2wAbcDataParticleKey.RECORD_MEMORY_FULL] = \
-            flags[RECORD_MEMORY_FULL_FLAGS_INDEX]
-        metadata_dict[Pco2wAbcDataParticleKey.RECORD_END_ON_ERROR] = \
-            flags[RECORD_END_ON_ERROR_FLAGS_INDEX]
-        metadata_dict[Pco2wAbcDataParticleKey.DATA_DOWNLOAD_OK] = \
-            flags[DATA_DOWNLOAD_OK_FLAGS_INDEX]
-        metadata_dict[Pco2wAbcDataParticleKey.FLASH_MEMORY_OPEN] = \
-            flags[FLASH_MEMORY_OPEN_FLAGS_INDEX]
-        metadata_dict[Pco2wAbcDataParticleKey.BATTERY_LOW_PRESTART] = \
-            flags[BATTERY_LOW_PRESTART_FLAGS_INDEX]
-        metadata_dict[Pco2wAbcDataParticleKey.BATTERY_LOW_MEASUREMENT] = \
-            flags[BATTERY_LOW_MEASUREMENT_FLAGS_INDEX]
-        metadata_dict[Pco2wAbcDataParticleKey.BATTERY_LOW_BLANK] = \
-            flags[BATTERY_LOW_BLANK_FLAGS_INDEX]
-        metadata_dict[Pco2wAbcDataParticleKey.BATTERY_LOW_EXTERNAL] = \
-            flags[BATTERY_LOW_EXTERNAL_FLAGS_INDEX]
-        metadata_dict[Pco2wAbcDataParticleKey.EXTERNAL_DEVICE1_FAULT] = \
-            flags[EXTERNAL_DEVICE1_FAULT_FLAGS_INDEX]
-        metadata_dict[Pco2wAbcDataParticleKey.EXTERNAL_DEVICE2_FAULT] = \
-            flags[EXTERNAL_DEVICE2_FAULT_FLAGS_INDEX]
-        metadata_dict[Pco2wAbcDataParticleKey.EXTERNAL_DEVICE3_FAULT] = \
-            flags[EXTERNAL_DEVICE3_FAULT_FLAGS_INDEX]
-        metadata_dict[Pco2wAbcDataParticleKey.FLASH_ERASED] = \
-            flags[FLASH_ERASED_FLAGS_INDEX]
-        metadata_dict[Pco2wAbcDataParticleKey.POWER_ON_INVALID] = \
-            flags[POWER_ON_INVALID_FLAGS_INDEX]
-        # End of flags
+        bit_flag_params = [Pco2wAbcDataParticleKey.POWER_ON_INVALID,
+                           Pco2wAbcDataParticleKey.FLASH_ERASED,
+                           Pco2wAbcDataParticleKey.EXTERNAL_DEVICE3_FAULT,
+                           Pco2wAbcDataParticleKey.EXTERNAL_DEVICE2_FAULT,
+                           Pco2wAbcDataParticleKey.EXTERNAL_DEVICE1_FAULT,
+                           Pco2wAbcDataParticleKey.BATTERY_LOW_EXTERNAL,
+                           Pco2wAbcDataParticleKey.BATTERY_LOW_BLANK,
+                           Pco2wAbcDataParticleKey.BATTERY_LOW_MEASUREMENT,
+                           Pco2wAbcDataParticleKey.BATTERY_LOW_PRESTART,
+                           Pco2wAbcDataParticleKey.FLASH_MEMORY_OPEN,
+                           Pco2wAbcDataParticleKey.DATA_DOWNLOAD_OK,
+                           Pco2wAbcDataParticleKey.RECORD_END_ON_ERROR,
+                           Pco2wAbcDataParticleKey.RECORD_MEMORY_FULL,
+                           Pco2wAbcDataParticleKey.RECORD_END_ON_TIME,
+                           Pco2wAbcDataParticleKey.RECORDING_ACTIVE,
+                           Pco2wAbcDataParticleKey.CLOCK_ACTIVE]
+
+        index = 0
+
+        for bit in bit_string:
+
+            metadata_dict[bit_flag_params[index]] = bit
+            index += 1
 
         num_data_records = metadata_match.group(NUM_DATA_RECORDS_GROUP_INDEX)
         metadata_dict[Pco2wAbcDataParticleKey.NUM_DATA_RECORDS] = int(num_data_records, 16)

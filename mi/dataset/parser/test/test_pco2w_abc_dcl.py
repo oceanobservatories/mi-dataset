@@ -187,7 +187,7 @@ class Pco2wAbcDclParserUnitTestCase(ParserUnitTestCase):
         with open(os.path.join(RESOURCE_PATH, 'invalid_record_type.log'), 'r') as file_handle:
 
             num_particles_to_request = 6
-            num_expected_particles = 5
+            num_expected_particles = 6
 
             parser = Pco2wAbcDclParser(self._recovered_parser_config,
                                        file_handle,
@@ -199,7 +199,7 @@ class Pco2wAbcDclParserUnitTestCase(ParserUnitTestCase):
 
             self.assertEquals(len(particles), num_expected_particles)
 
-            self.assert_particles(particles, "happy_path_rec.yml", RESOURCE_PATH)
+            self.assert_particles(particles, "invalid_record_type.yml", RESOURCE_PATH)
 
             log.debug('Exceptions : %s', self.exception_callback_value)
 
@@ -218,7 +218,7 @@ class Pco2wAbcDclParserUnitTestCase(ParserUnitTestCase):
         with open(os.path.join(RESOURCE_PATH, 'power_record_missing_timestamp.log'), 'r') as file_handle:
 
             num_particles_to_request = 6
-            num_expected_particles = 5
+            num_expected_particles = 6
 
             parser = Pco2wAbcDclParser(self._recovered_parser_config,
                                        file_handle,
@@ -230,7 +230,7 @@ class Pco2wAbcDclParserUnitTestCase(ParserUnitTestCase):
 
             self.assertEquals(len(particles), num_expected_particles)
 
-            self.assert_particles(particles, "happy_path_rec.yml", RESOURCE_PATH)
+            self.assert_particles(particles, "power_record_missing_timestamp.yml", RESOURCE_PATH)
 
             log.debug('Exceptions : %s', self.exception_callback_value)
 
@@ -292,7 +292,7 @@ class Pco2wAbcDclParserUnitTestCase(ParserUnitTestCase):
 
             self.assertEquals(len(particles), num_expected_particles)
 
-            self.assert_particles(particles, "happy_path_rec.yml", RESOURCE_PATH)
+            self.assert_particles(particles, "incorrect_data_length.yml", RESOURCE_PATH)
 
         log.debug('Exceptions : %s', self.exception_callback_value)
 
