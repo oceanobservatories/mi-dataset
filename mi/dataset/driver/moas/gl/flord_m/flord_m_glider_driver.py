@@ -30,10 +30,7 @@ class FlordMDriver:
                 self._particleDataHdlrObj.setParticleDataCaptureFailure()
 
             parser = GliderParser(self._config,
-                                  parser_state,
                                   stream_handle,
-                                  lambda state, ingested: None,
-                                  lambda data: None,
                                   exp_callback)
             driver = DataSetDriver(parser, self._particleDataHdlrObj)
             driver.processFileStream()

@@ -33,10 +33,7 @@ class ParadMDriver:
                 self._particleDataHdlrObj.setParticleDataCaptureFailure()
 
             parser = GliderParser(self._config,
-                                  None,
                                   file_handle,
-                                  lambda state, ingested: None,
-                                  lambda data: None,
                                   exception_callback)
 
             driver = DataSetDriver(parser, self._particleDataHdlrObj)

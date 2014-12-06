@@ -30,9 +30,7 @@ class DostaAbcdjmGliderDriver:
                 self._particleDataHdlrObj.setParticleDataCaptureFailure()
 
             parser = GliderParser(self._parser_config,
-                                  None, file_handle,
-                                  lambda state, ingested: None,
-                                  lambda data: None,
+                                  file_handle,
                                   exception_callback)
     
             driver = DataSetDriver(parser, self._particleDataHdlrObj)

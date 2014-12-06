@@ -12,7 +12,8 @@ from StringIO import StringIO
 import numpy as np
 import ntplib
 
-from mi.core.log import get_logger
+from mi.core.log import get_logger, get_logging_metaclass
+
 log = get_logger()
 
 from nose.plugins.attrib import attr
@@ -217,35 +218,23 @@ class GliderParserUnitTestCase(ParserUnitTestCase):
         """
         self.test_data = open(filename, "r")
 
-    def reset_parser(self, state = {}):
+    def reset_parser(self):
         self.state_callback_values = []
         self.publish_callback_values = []
         self.error_callback_values = []
-        self.parser = GliderParser(self.config, state, self.test_data,
-                                   self.state_callback, self.pub_callback, self.error_callback)
+        self.parser = GliderParser(self.config, self.test_data, self.error_callback)
 
-    def reset_eng_parser(self, state = {}):
+    def reset_eng_parser(self):
         self.state_callback_values = []
         self.publish_callback_values = []
         self.error_callback_values = []
-        self.parser = GliderEngineeringParser(self.config, state, self.test_data,
-                                   self.state_callback, self.pub_callback, self.error_callback)
+        self.parser = GliderEngineeringParser(self.config, self.test_data, self.error_callback)
 
     def get_published_value(self):
         return self.publish_callback_values.pop(0)
 
     def get_state_value(self):
         return self.state_callback_values.pop(0)
-
-    def assert_state(self, expected_position):
-        """
-        Verify the state
-        """
-        state = self.parser._read_state
-        log.debug("Current state: %s", state)
-
-        position = state.get(StateKey.POSITION)
-        self.assertEqual(position, expected_position)
 
     def assert_no_more_data(self):
         """
@@ -272,23 +261,9 @@ class GliderParserUnitTestCase(ParserUnitTestCase):
         self.assertIsInstance(records, list)
         self.assertEqual(len(records), 1)
 
-        self.assertEqual(len(self.publish_callback_values), 1)
-        self.assertEqual(len(self.state_callback_values), 1)
-
-        particles = self.get_published_value()
-        self.assertEqual(len(particles), 1)
-
         # Verify the data
         if values_dict:
-            self.assert_particle_values(particles[0], values_dict)
-
-        # Verify the parser state
-        state = self.get_state_value()
-        log.debug("Published state: %s", state)
-
-        if expected_position:
-            position = state.get(StateKey.POSITION)
-            self.assertEqual(position, expected_position)
+            self.assert_particle_values(records[0], values_dict)
 
     def assert_particle_values(self, particle, expected_values):
         """
@@ -313,45 +288,10 @@ class GliderParserUnitTestCase(ParserUnitTestCase):
         assertion = np.allclose(ntp_timestamp, ntp_stamp)
         self.assertTrue(assertion)
 
-    def test_init(self):
-        """
-        Verify we can initialize
-        """
-        self.set_data(HEADER)
-        self.reset_parser()
-        self.assert_state(1003)
-
-        self.set_data(HEADER2)
-        self.reset_parser()
-        self.assert_state(1004)
-
     def test_exception(self):
         with self.assertRaises(SampleException):
             self.set_data("Foo")
             self.reset_parser()
-
-    def test_chunker(self):
-        """
-        Verify the chunker is returning values we expect.
-        """
-        self.set_data(HEADER, CHUNKER_TEST)
-        self.reset_parser()
-
-        records = CHUNKER_TEST.strip("\n").split("\n")
-        log.debug("Expected Records: %s", records)
-        self.assertEqual(len(records), 2)
-
-        # Load all data into the chunker
-        self.parser.get_block(1024)
-
-        self.assertEqual(CHUNKER_TEST.strip("\n"), self.parser._chunker.buffer.strip("\n"))
-
-        (timestamp, data_record, start, end) = self.parser._chunker.get_next_data_with_index()
-        log.debug("Data Record: %s", data_record)
-        self.assertEqual(records[0]+"\n", data_record)
-
-        (timestamp, data_record, start, end) = self.parser._chunker.get_next_data_with_index()
-        self.assertEqual(records[1]+"\n", data_record)
 
 
 @attr('UNIT', group='mi')
@@ -378,12 +318,6 @@ class CTDGV_Telemetered_GliderTest(GliderParserUnitTestCase):
                     CtdgvParticleKey.SCI_WATER_PRESSURE: 0.093}
 
         self.assert_generate_particle(CtdgvTelemeteredDataParticle, record_1, 1162)
-        self.assert_generate_particle(CtdgvTelemeteredDataParticle, record_2, 1321)
-        self.assert_no_more_data()
-
-        # Reset with the parser, but with a state this time
-        self.set_data(HEADER, CTDGV_RECORD)
-        self.reset_parser({StateKey.POSITION: 1162})
         self.assert_generate_particle(CtdgvTelemeteredDataParticle, record_2, 1321)
         self.assert_no_more_data()
 
@@ -425,12 +359,6 @@ class CTDGV_Recovered_GliderTest(GliderParserUnitTestCase):
         self.assert_generate_particle(CtdgvRecoveredDataParticle, record_2, 1321)
         self.assert_no_more_data()
 
-        # Reset with the parser, but with a state this time
-        self.set_data(HEADER, CTDGV_RECORD)
-        self.reset_parser({StateKey.POSITION: 1162})
-        self.assert_generate_particle(CtdgvRecoveredDataParticle, record_2, 1321)
-        self.assert_no_more_data()
-
     def test_gps(self):
         self.set_data(HEADER, ZERO_GPS_VALUE)
         self.reset_parser()
@@ -467,12 +395,6 @@ class DOSTATelemeteredGliderTest(GliderParserUnitTestCase):
         self.assert_generate_particle(DostaTelemeteredDataParticle, record_2, 1315)
         self.assert_no_more_data()
 
-        # Reset with the parser, but with a state this time
-        self.set_data(HEADER, DOSTA_RECORD)
-        self.reset_parser({StateKey.POSITION: 1159})
-        self.assert_generate_particle(DostaTelemeteredDataParticle, record_2, 1315)
-        self.assert_no_more_data()
-
 
 @attr('UNIT', group='mi')
 class DOSTARecoveredGliderTest(GliderParserUnitTestCase):
@@ -496,12 +418,6 @@ class DOSTARecoveredGliderTest(GliderParserUnitTestCase):
         record_2 = {DostaRecoveredParticleKey.SCI_OXY4_OXYGEN: 242.141, DostaRecoveredParticleKey.SCI_OXY4_SATURATION: 95.988}
 
         self.assert_generate_particle(DostaRecoveredDataParticle, record_1, 1159)
-        self.assert_generate_particle(DostaRecoveredDataParticle, record_2, 1315)
-        self.assert_no_more_data()
-
-        # Reset with the parser, but with a state this time
-        self.set_data(HEADER, DOSTA_RECORD)
-        self.reset_parser({StateKey.POSITION: 1159})
         self.assert_generate_particle(DostaRecoveredDataParticle, record_2, 1315)
         self.assert_no_more_data()
 
@@ -535,12 +451,6 @@ class FLORTTelemeteredGliderTest(GliderParserUnitTestCase):
         self.assert_generate_particle(FlortTelemeteredDataParticle, record_2, 11977)
         self.assert_no_more_data()
 
-        # Reset with the parser, but with a state this time
-        self.set_data(HEADER3, FLORT_RECORD)
-        self.reset_parser({StateKey.POSITION: 10534})
-        self.assert_generate_particle(FlortTelemeteredDataParticle, record_2, 11977)
-        self.assert_no_more_data()
-
 
 @attr('UNIT', group='mi')
 class FLORTRecoveredGliderTest(GliderParserUnitTestCase):
@@ -571,12 +481,6 @@ class FLORTRecoveredGliderTest(GliderParserUnitTestCase):
         self.assert_generate_particle(FlortRecoveredDataParticle, record_2, 11977)
         self.assert_no_more_data()
 
-        # Reset with the parser, but with a state this time
-        self.set_data(HEADER3, FLORT_RECORD)
-        self.reset_parser({StateKey.POSITION: 10534})
-        self.assert_generate_particle(FlortRecoveredDataParticle, record_2, 11977)
-        self.assert_no_more_data()
-
 
 @attr('UNIT', group='mi')
 class PARADTelemeteredGliderTest(GliderParserUnitTestCase):
@@ -603,12 +507,6 @@ class PARADTelemeteredGliderTest(GliderParserUnitTestCase):
         # (10553 = file size up to start of last row) 10553 - 19 bytes (for 19 lines of Carriage returns above) = 10534
         self.assert_generate_particle(ParadTelemeteredDataParticle, record_1, 10534)
         # (11997 = file size in bytes) 11997 - 20 bytes (for 20 lines of Carriage returns above) = 11977
-        self.assert_generate_particle(ParadTelemeteredDataParticle, record_2, 11977)
-        self.assert_no_more_data()
-
-        # Reset with the parser, but with a state this time
-        self.set_data(HEADER3, FLORT_RECORD)
-        self.reset_parser({StateKey.POSITION: 10534})
         self.assert_generate_particle(ParadTelemeteredDataParticle, record_2, 11977)
         self.assert_no_more_data()
 
@@ -642,12 +540,6 @@ class PARADRecoveredGliderTest(GliderParserUnitTestCase):
         self.assert_generate_particle(ParadRecoveredDataParticle, record_2, 11977)
         self.assert_no_more_data()
 
-        # Reset with the parser, but with a state this time
-        self.set_data(HEADER3, FLORT_RECORD)
-        self.reset_parser({StateKey.POSITION: 10534})
-        self.assert_generate_particle(ParadRecoveredDataParticle, record_2, 11977)
-        self.assert_no_more_data()
-
 
 @attr('UNIT', group='mi')
 class FLORD_Telemetered_GliderTest(GliderParserUnitTestCase):
@@ -677,12 +569,6 @@ class FLORD_Telemetered_GliderTest(GliderParserUnitTestCase):
         self.assert_generate_particle(FlordTelemeteredDataParticle, record_2, 12251)
         self.assert_no_more_data()
 
-        # Reset with the parser, but with a state this time
-        self.set_data(HEADER5, FLORD_RECORD)
-        self.reset_parser({StateKey.POSITION: 10764})
-        self.assert_generate_particle(FlordTelemeteredDataParticle, record_2, 12251)
-        self.assert_no_more_data()
-
 @attr('UNIT', group='mi')
 class FLORD_Recovered_GliderTest(GliderParserUnitTestCase):
     """
@@ -708,12 +594,6 @@ class FLORD_Recovered_GliderTest(GliderParserUnitTestCase):
 
         self.assert_generate_particle(FlordRecoveredDataParticle, record_1, 10764)
 
-        self.assert_generate_particle(FlordRecoveredDataParticle, record_2, 12251)
-        self.assert_no_more_data()
-
-        # Reset with the parser, but with a state this time
-        self.set_data(HEADER5, FLORD_RECORD)
-        self.reset_parser({StateKey.POSITION: 10764})
         self.assert_generate_particle(FlordRecoveredDataParticle, record_2, 12251)
         self.assert_no_more_data()
 
@@ -760,13 +640,6 @@ class ENGGliderTest(GliderParserUnitTestCase):
         self.assert_generate_particle(EngineeringScienceTelemeteredDataParticle, record_sci_2, 12479)
         self.assert_no_more_data()
 
-        # # Reset with the parser, but with a state this time
-        self.set_data(HEADER4, ENGSCI_RECORD)
-        self.reset_eng_parser({StateKey.POSITION: 10795, StateKey.SENT_METADATA: True})
-        self.assert_generate_particle(EngineeringTelemeteredDataParticle, record_2, 10795)
-        self.assert_generate_particle(EngineeringScienceTelemeteredDataParticle, record_sci_2, 12479)
-        self.assert_no_more_data()
-
 @attr('UNIT', group='mi')
 class ENGRecoveredGliderTest(GliderParserUnitTestCase):
     """
@@ -806,13 +679,6 @@ class ENGRecoveredGliderTest(GliderParserUnitTestCase):
         self.assert_generate_particle(EngineeringRecoveredDataParticle, record_1, 9110)
         self.assert_generate_particle(EngineeringScienceRecoveredDataParticle, record_sci_1, 10795)
         # total file size in bytes
-        self.assert_generate_particle(EngineeringRecoveredDataParticle, record_2, 10795)
-        self.assert_generate_particle(EngineeringScienceRecoveredDataParticle, record_sci_2, 12479)
-        self.assert_no_more_data()
-
-        # Reset with the parser, but with a state this time
-        self.set_data(HEADER4, ENGSCI_RECORD)
-        self.reset_eng_parser({StateKey.POSITION: 10795, StateKey.SENT_METADATA: True})
         self.assert_generate_particle(EngineeringRecoveredDataParticle, record_2, 10795)
         self.assert_generate_particle(EngineeringScienceRecoveredDataParticle, record_sci_2, 12479)
         self.assert_no_more_data()
