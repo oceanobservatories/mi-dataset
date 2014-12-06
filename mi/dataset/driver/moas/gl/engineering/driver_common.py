@@ -38,10 +38,8 @@ class GliderEngineeringDriver:
             # essentially comment out the state and data callbacks by inserting
             # lambda with None functions, so it doesn't complain about not being
             # able to pass arguments
-            parser = GliderEngineeringParser(self._parser_config, None,
+            parser = GliderEngineeringParser(self._parser_config,
                                              file_handle,
-                                             lambda state, ingested: None,
-                                             lambda data: None,
                                              exception_callback)
 
             # instantiate the driver
