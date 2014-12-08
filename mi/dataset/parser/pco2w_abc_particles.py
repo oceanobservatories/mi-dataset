@@ -5,6 +5,18 @@ from mi.core.log import get_logger
 log = get_logger()
 from mi.core.common import BaseEnum
 from mi.core.instrument.data_particle import DataParticle, DataParticleKey
+from mi.dataset.parser.utilities import mac_timestamp_to_utc_timestamp
+
+
+class Pco2wAbcParticleClassKey (BaseEnum):
+    """
+    An enum for the keys application to the pco2w abc particle classes
+    """
+    METADATA_PARTICLE_CLASS = 'metadata_particle_class'
+    POWER_PARTICLE_CLASS = 'power_particle_class'
+    INSTRUMENT_PARTICLE_CLASS = 'instrument_particle_class'
+    INSTRUMENT_BLANK_PARTICLE_CLASS = 'instrument_blank_particle_class'
+    CONTROL_PARTICLE_CLASS = 'control_particle_class'
 
 
 class DataParticleType(BaseEnum):
@@ -20,6 +32,16 @@ class DataParticleType(BaseEnum):
     PCO2W_ABC_DCL_METADATA_RECOVERED = 'pco2w_abc_dcl_metadata_recovered'
     PCO2W_ABC_DCL_POWER = 'pco2w_abc_dcl_power'
     PCO2W_ABC_DCL_POWER_RECOVERED = 'pco2w_abc_dcl_power_recovered'
+    PCO2W_ABC_IMODEM_INSTRUMENT = 'pco2w_abc_imodem_instrument'
+    PCO2W_ABC_IMODEM_INSTRUMENT_RECOVERED = 'pco2w_abc_imodem_instrument_recovered'
+    PCO2W_ABC_IMODEM_INSTRUMENT_BLANK = 'pco2w_abc_imodem_instrument_blank'
+    PCO2W_ABC_IMODEM_INSTRUMENT_BLANK_RECOVERED = 'pco2w_abc_imodem_instrument_blank_recovered'
+    PCO2W_ABC_IMODEM_CONTROL = 'pco2w_abc_imodem_control'
+    PCO2W_ABC_IMODEM_CONTROL_RECOVERED = 'pco2w_abc_imodem_control_recovered'
+    PCO2W_ABC_IMODEM_POWER = 'pco2w_abc_imodem_power'
+    PCO2W_ABC_IMODEM_POWER_RECOVERED = 'pco2w_abc_imodem_power_recovered'
+    PCO2W_ABC_IMODEM_METADATA = 'pco2w_abc_imodem_metadata'
+    PCO2W_ABC_IMODEM_METADATA_RECOVERED = 'pco2w_abc_imodem_metadata_recovered'
 
 
 class Pco2wAbcDataParticleKey(BaseEnum):
@@ -51,6 +73,13 @@ class Pco2wAbcDataParticleKey(BaseEnum):
     DCL_CONTROLLER_TIMESTAMP = 'dcl_controller_timestamp'   # PD2605
     UNIQUE_ID = 'unique_id'                                 # PD353
     PASSED_CHECKSUM = 'passed_checksum'                     # PD2228
+    FILE_TIME = 'file_time'                                 # PD3060
+    INSTRUMENT_ID = 'instrument_id'                         # PD1089
+    SERIAL_NUMBER = 'serial_number'                         # PD312
+    VOLTAGE_FLT32 = 'voltage_flt32'                         # PD2649
+    RECORD_LENGTH = 'record_length'                         # PD583
+    NUM_EVENTS = 'num_events'                               # PD263
+    NUM_SAMPLES = 'num_samples'                             # PD203
 
 
 class Pco2wAbcBaseDataParticle(DataParticle):
@@ -61,7 +90,7 @@ class Pco2wAbcBaseDataParticle(DataParticle):
         a particle with the appropriate tag.
         """
 
-        particle_parameters = []
+        particle_parameters = list()
 
         particle_parameters.append(
             self._encode_value(Pco2wAbcDataParticleKey.RECORD_TYPE,
@@ -370,3 +399,168 @@ class Pco2wAbcDclPowerTelemeteredDataParticle(Pco2wAbcDclPowerDataParticle):
 class Pco2wAbcDclPowerRecoveredDataParticle(Pco2wAbcDclPowerDataParticle):
 
     _data_particle_type = DataParticleType.PCO2W_ABC_DCL_POWER_RECOVERED
+
+
+class Pco2wAbcImodemDataParticle(DataParticle):
+
+    _encoding_rules = None
+
+    def _build_parsed_values(self):
+        """
+        Take something in the data format and turn it into
+        a particle with the appropriate tag.
+        """
+        result = []
+
+        for key in self.raw_data.keys():
+
+            if key == Pco2wAbcDataParticleKey.RECORD_TIME:
+                unix_time = mac_timestamp_to_utc_timestamp(self.raw_data[key])
+                self.set_internal_timestamp(unix_time=unix_time)
+
+            if self.raw_data[key] is None:
+
+                result.append({DataParticleKey.VALUE_ID: key,
+                               DataParticleKey.VALUE: None})
+            else:
+
+                result.append(
+                    self._encode_value(key,
+                                       self.raw_data[key],
+                                       self._encoding_rules[key]))
+
+        return result
+
+
+class Pco2wAbcImodemInstrumentDataParticle(Pco2wAbcImodemDataParticle):
+
+    _encoding_rules = {
+        Pco2wAbcDataParticleKey.UNIQUE_ID: int,
+        Pco2wAbcDataParticleKey.RECORD_TYPE: int,
+        Pco2wAbcDataParticleKey.RECORD_TIME: int,
+        Pco2wAbcDataParticleKey.LIGHT_MEASUREMENTS: list,
+        Pco2wAbcDataParticleKey.VOLTAGE_BATTERY: int,
+        Pco2wAbcDataParticleKey.THERMISTOR_RAW: int,
+        Pco2wAbcDataParticleKey.PASSED_CHECKSUM: int,
+    }
+
+
+class Pco2wAbcImodemInstrumentTelemeteredDataParticle(Pco2wAbcImodemInstrumentDataParticle):
+
+    _data_particle_type = DataParticleType.PCO2W_ABC_IMODEM_INSTRUMENT
+
+
+class Pco2wAbcImodemInstrumentRecoveredDataParticle(Pco2wAbcImodemInstrumentDataParticle):
+
+    _data_particle_type = DataParticleType.PCO2W_ABC_IMODEM_INSTRUMENT_RECOVERED
+
+
+class Pco2wAbcImodemInstrumentBlankDataParticle(Pco2wAbcImodemDataParticle):
+
+    _encoding_rules = {
+        Pco2wAbcDataParticleKey.UNIQUE_ID: int,
+        Pco2wAbcDataParticleKey.RECORD_TYPE: int,
+        Pco2wAbcDataParticleKey.RECORD_TIME: int,
+        Pco2wAbcDataParticleKey.BLANK_LIGHT_MEASUREMENTS: list,
+        Pco2wAbcDataParticleKey.VOLTAGE_BATTERY: int,
+        Pco2wAbcDataParticleKey.THERMISTOR_RAW: int,
+        Pco2wAbcDataParticleKey.PASSED_CHECKSUM: int,
+    }
+
+
+class Pco2wAbcImodemInstrumentBlankTelemeteredDataParticle(
+        Pco2wAbcImodemInstrumentBlankDataParticle):
+
+    _data_particle_type = \
+        DataParticleType.PCO2W_ABC_IMODEM_INSTRUMENT_BLANK
+
+
+class Pco2wAbcImodemInstrumentBlankRecoveredDataParticle(
+        Pco2wAbcImodemInstrumentBlankDataParticle):
+
+    _data_particle_type = \
+        DataParticleType.PCO2W_ABC_IMODEM_INSTRUMENT_BLANK_RECOVERED
+
+
+class Pco2wAbcImodemControlDataParticle(Pco2wAbcImodemDataParticle):
+
+    _encoding_rules = {
+        Pco2wAbcDataParticleKey.UNIQUE_ID: int,
+        Pco2wAbcDataParticleKey.RECORD_TYPE: int,
+        Pco2wAbcDataParticleKey.RECORD_TIME: int,
+        Pco2wAbcDataParticleKey.CLOCK_ACTIVE: int,
+        Pco2wAbcDataParticleKey.RECORDING_ACTIVE: int,
+        Pco2wAbcDataParticleKey.RECORD_END_ON_TIME: int,
+        Pco2wAbcDataParticleKey.RECORD_MEMORY_FULL: int,
+        Pco2wAbcDataParticleKey.RECORD_END_ON_ERROR: int,
+        Pco2wAbcDataParticleKey.DATA_DOWNLOAD_OK: int,
+        Pco2wAbcDataParticleKey.FLASH_MEMORY_OPEN: int,
+        Pco2wAbcDataParticleKey.BATTERY_LOW_PRESTART: int,
+        Pco2wAbcDataParticleKey.BATTERY_LOW_MEASUREMENT: int,
+        Pco2wAbcDataParticleKey.BATTERY_LOW_BLANK: int,
+        Pco2wAbcDataParticleKey.BATTERY_LOW_EXTERNAL: int,
+        Pco2wAbcDataParticleKey.EXTERNAL_DEVICE1_FAULT: int,
+        Pco2wAbcDataParticleKey.EXTERNAL_DEVICE2_FAULT: int,
+        Pco2wAbcDataParticleKey.EXTERNAL_DEVICE3_FAULT: int,
+        Pco2wAbcDataParticleKey.FLASH_ERASED: int,
+        Pco2wAbcDataParticleKey.POWER_ON_INVALID: int,
+        Pco2wAbcDataParticleKey.NUM_DATA_RECORDS: int,
+        Pco2wAbcDataParticleKey.NUM_ERROR_RECORDS: int,
+        Pco2wAbcDataParticleKey.NUM_BYTES_STORED: int,
+        Pco2wAbcDataParticleKey.VOLTAGE_BATTERY: int,
+        Pco2wAbcDataParticleKey.PASSED_CHECKSUM: int,
+    }
+
+
+class Pco2wAbcImodemControlTelemeteredDataParticle(Pco2wAbcImodemControlDataParticle):
+
+    _data_particle_type = DataParticleType.PCO2W_ABC_IMODEM_CONTROL
+
+
+class Pco2wAbcImodemControlRecoveredDataParticle(Pco2wAbcImodemControlDataParticle):
+
+    _data_particle_type = DataParticleType.PCO2W_ABC_IMODEM_CONTROL_RECOVERED
+
+
+class Pco2wAbcImodemPowerDataParticle(Pco2wAbcImodemDataParticle):
+
+    _encoding_rules = {
+        Pco2wAbcDataParticleKey.UNIQUE_ID: int,
+        Pco2wAbcDataParticleKey.RECORD_TYPE: int,
+        Pco2wAbcDataParticleKey.RECORD_TIME: int,
+        Pco2wAbcDataParticleKey.PASSED_CHECKSUM: int,
+    }
+
+
+class Pco2wAbcImodemPowerTelemeteredDataParticle(Pco2wAbcImodemPowerDataParticle):
+
+    _data_particle_type = DataParticleType.PCO2W_ABC_IMODEM_POWER
+
+
+class Pco2wAbcImodemPowerRecoveredDataParticle(Pco2wAbcImodemPowerDataParticle):
+
+    _data_particle_type = DataParticleType.PCO2W_ABC_IMODEM_POWER_RECOVERED
+
+
+class Pco2wAbcImodemMetadataDataParticle(Pco2wAbcImodemDataParticle):
+
+    _encoding_rules = {
+        Pco2wAbcDataParticleKey.FILE_TIME: str,
+        Pco2wAbcDataParticleKey.INSTRUMENT_ID: str,
+        Pco2wAbcDataParticleKey.SERIAL_NUMBER: str,
+        Pco2wAbcDataParticleKey.VOLTAGE_FLT32: float,
+        Pco2wAbcDataParticleKey.NUM_DATA_RECORDS: int,
+        Pco2wAbcDataParticleKey.RECORD_LENGTH: int,
+        Pco2wAbcDataParticleKey.NUM_EVENTS: int,
+        Pco2wAbcDataParticleKey.NUM_SAMPLES: int,
+    }
+
+
+class Pco2wAbcImodemMetadataTelemeteredDataParticle(Pco2wAbcImodemMetadataDataParticle):
+
+    _data_particle_type = DataParticleType.PCO2W_ABC_IMODEM_METADATA
+
+
+class Pco2wAbcImodemMetadataRecoveredDataParticle(Pco2wAbcImodemMetadataDataParticle):
+
+    _data_particle_type = DataParticleType.PCO2W_ABC_IMODEM_METADATA_RECOVERED

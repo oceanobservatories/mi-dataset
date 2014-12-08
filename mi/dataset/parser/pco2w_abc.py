@@ -3,15 +3,16 @@ __license__ = 'Apache 2.0'
 
 import re
 
-from mi.core.common import BaseEnum
 from mi.core.exceptions import RecoverableSampleException
 from mi.core.log import get_logger
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 
 log = get_logger()
 from mi.dataset.dataset_parser import Parser
-from mi.dataset.parser.pco2w_abc_particles import Pco2wAbcDataParticleKey
-from mi.dataset.parser.common_regexes import UNSIGNED_INT_REGEX, ONE_OR_MORE_WHITESPACE_REGEX
+from mi.dataset.parser.pco2w_abc_particles import Pco2wAbcDataParticleKey, \
+    Pco2wAbcParticleClassKey
+from mi.dataset.parser.common_regexes import UNSIGNED_INT_REGEX, \
+    ONE_OR_MORE_WHITESPACE_REGEX
 
 """
 *** BEGIN definition of regular expressions, matchers and group indices for instrument and instrument blank
@@ -153,16 +154,6 @@ IGNORE_MARKER_END_MATCHER = re.compile(IGNORE_MARKER_END_REGEX)
 """
 *** END definition of regular expressions and matchers for ignore handling.
 """
-
-
-class Pco2wAbcParticleClassKey (BaseEnum):
-    """
-    An enum for the keys application to the pco2w abc particle classes
-    """
-    METADATA_PARTICLE_CLASS = 'metadata_particle_class'
-    POWER_PARTICLE_CLASS = 'power_particle_class'
-    INSTRUMENT_PARTICLE_CLASS = 'instrument_particle_class'
-    INSTRUMENT_BLANK_PARTICLE_CLASS = 'instrument_blank_particle_class'
 
 
 class Pco2wAbcParser(Parser):
