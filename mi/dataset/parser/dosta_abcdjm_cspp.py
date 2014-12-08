@@ -1,7 +1,6 @@
-#!/usr/bin/env python
 
 """
-@package mi.dataset.parser.dosta_abcdjm_cspp
+@package mi.dataset.parser
 @file marine-integrations/mi/dataset/parser/dosta_abcdjm_cspp.py
 @author Mark Worden
 @brief Parser for the dosta_abcdjm_cspp dataset driver
@@ -20,13 +19,10 @@ log = get_logger()
 from mi.core.common import BaseEnum
 from mi.core.exceptions import SampleException
 from mi.core.instrument.data_particle import DataParticle
+from mi.dataset.parser.common_regexes import INT_REGEX, FLOAT_REGEX, MULTIPLE_TAB_REGEX, END_OF_LINE_REGEX
 from mi.dataset.parser.cspp_base import \
     CsppParser, \
-    FLOAT_REGEX, \
-    INT_REGEX, \
-    MULTIPLE_TAB_REGEX, \
     Y_OR_N_REGEX, \
-    END_OF_LINE_REGEX, \
     CsppMetadataDataParticle, \
     MetadataRawDataKey, \
     PARTICLE_KEY_INDEX, \
@@ -39,20 +35,20 @@ from mi.dataset.parser.cspp_base import \
 SPECIAL_CHARS_REGEX = r'(?:[\?][%])?'
 
 # A regular expression that should match a dosta_abcdjm data record
-DATA_REGEX = r'(' + FLOAT_REGEX + ')' + MULTIPLE_TAB_REGEX # Profiler Timestamp
-DATA_REGEX += '(' + FLOAT_REGEX + ')' + MULTIPLE_TAB_REGEX # Depth
-DATA_REGEX += '(' + Y_OR_N_REGEX + ')' + MULTIPLE_TAB_REGEX # Suspect Timestamp
-DATA_REGEX += SPECIAL_CHARS_REGEX + '(' + INT_REGEX + ')' + MULTIPLE_TAB_REGEX # Model Number
-DATA_REGEX += '(' + INT_REGEX + ')' + MULTIPLE_TAB_REGEX # Serial Numbe
-DATA_REGEX += '(' + FLOAT_REGEX + ')' + MULTIPLE_TAB_REGEX # oxygen content
-DATA_REGEX += '(' + FLOAT_REGEX + ')' + MULTIPLE_TAB_REGEX # ambient temperature
-DATA_REGEX += '(' + FLOAT_REGEX + ')' + MULTIPLE_TAB_REGEX # calibrated phase
-DATA_REGEX += '(' + FLOAT_REGEX + ')' + MULTIPLE_TAB_REGEX # temperature compensated phase
-DATA_REGEX += '(' + FLOAT_REGEX + ')' + MULTIPLE_TAB_REGEX # phase measurement with blue excitation
-DATA_REGEX += '(' + FLOAT_REGEX + ')' + MULTIPLE_TAB_REGEX # phase measurement with red excitation
-DATA_REGEX += '(' + FLOAT_REGEX + ')' + MULTIPLE_TAB_REGEX # amplitude measurement with blue excitation
-DATA_REGEX += '(' + FLOAT_REGEX + ')' + MULTIPLE_TAB_REGEX # amplitude measurement with red excitation
-DATA_REGEX += '(' + FLOAT_REGEX + ')' + END_OF_LINE_REGEX # raw temperature, voltage from thermistor
+DATA_REGEX = r'(' + FLOAT_REGEX + ')' + MULTIPLE_TAB_REGEX   # Profiler Timestamp
+DATA_REGEX += '(' + FLOAT_REGEX + ')' + MULTIPLE_TAB_REGEX   # Depth
+DATA_REGEX += '(' + Y_OR_N_REGEX + ')' + MULTIPLE_TAB_REGEX  # Suspect Timestamp
+DATA_REGEX += SPECIAL_CHARS_REGEX + '(' + INT_REGEX + ')' + MULTIPLE_TAB_REGEX  # Model Number
+DATA_REGEX += '(' + INT_REGEX + ')' + MULTIPLE_TAB_REGEX    # Serial Number
+DATA_REGEX += '(' + FLOAT_REGEX + ')' + MULTIPLE_TAB_REGEX  # oxygen content
+DATA_REGEX += '(' + FLOAT_REGEX + ')' + MULTIPLE_TAB_REGEX  # ambient temperature
+DATA_REGEX += '(' + FLOAT_REGEX + ')' + MULTIPLE_TAB_REGEX  # calibrated phase
+DATA_REGEX += '(' + FLOAT_REGEX + ')' + MULTIPLE_TAB_REGEX  # temperature compensated phase
+DATA_REGEX += '(' + FLOAT_REGEX + ')' + MULTIPLE_TAB_REGEX  # phase measurement with blue excitation
+DATA_REGEX += '(' + FLOAT_REGEX + ')' + MULTIPLE_TAB_REGEX  # phase measurement with red excitation
+DATA_REGEX += '(' + FLOAT_REGEX + ')' + MULTIPLE_TAB_REGEX  # amplitude measurement with blue excitation
+DATA_REGEX += '(' + FLOAT_REGEX + ')' + MULTIPLE_TAB_REGEX  # amplitude measurement with red excitation
+DATA_REGEX += '(' + FLOAT_REGEX + ')' + END_OF_LINE_REGEX   # raw temperature, voltage from thermistor
 
 
 class DataMatchesGroupNumber(BaseEnum):
@@ -92,7 +88,7 @@ class DostaAbcdjmCsppParserDataParticleKey(BaseEnum):
     PRODUCT_NUMBER = 'product_number'
     SERIAL_NUMBER = 'serial_number'
     PROFILER_TIMESTAMP = 'profiler_timestamp'
-    PRESSURE = 'pressure'
+    PRESSURE = 'pressure_depth'
     SUSPECT_TIMESTAMP = 'suspect_timestamp'
     ESTIMATED_OXYGEN_CONCENTRATION = 'estimated_oxygen_concentration'
     OPTODE_TEMPERATURE = 'optode_temperature'
@@ -248,28 +244,17 @@ class DostaAbcdjmCsppParser(CsppParser):
 
     def __init__(self,
                  config,
-                 state,
                  stream_handle,
-                 state_callback,
-                 publish_callback,
-                 exception_callback,
-                 *args, **kwargs):
+                 exception_callback):
         """
         This method is a constructor that will instantiate an DostaAbcdjmCsppParser object.
         @param config The configuration for this DostaAbcdjmCsppParser parser
-        @param state The state the DostaAbcdjmCsppParser should use to initialize itself
         @param stream_handle The handle to the data stream containing the dosta_abcdjm_cspp data
-        @param state_callback The function to call upon detecting state changes
-        @param publish_callback The function to call to provide particles
         @param exception_callback The function to call to report exceptions
         """
 
         # Call the superclass constructor
         super(DostaAbcdjmCsppParser, self).__init__(config,
-                                                    state,
                                                     stream_handle,
-                                                    state_callback,
-                                                    publish_callback,
                                                     exception_callback,
-                                                    DATA_REGEX,
-                                                    *args, **kwargs)
+                                                    DATA_REGEX)

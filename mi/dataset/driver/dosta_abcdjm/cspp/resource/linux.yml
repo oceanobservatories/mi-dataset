@@ -20,7 +20,7 @@ data:
     particle_type: dosta_abcdjm_cspp_instrument_recovered
     internal_timestamp: 3606767020.029000
     profiler_timestamp: 1397778220.029000
-    pressure:        22.634000
+    pressure_depth:        22.634000
     suspect_timestamp: 1
     estimated_oxygen_concentration:       234.656000
     optode_temperature:         9.091000
@@ -36,7 +36,7 @@ data:
     particle_type: dosta_abcdjm_cspp_instrument_recovered
     internal_timestamp: 3606767022.258000
     profiler_timestamp: 1397778222.258000
-    pressure:        22.634000
+    pressure_depth:        22.634000
     suspect_timestamp: 0
     estimated_oxygen_concentration:       233.463000
     optode_temperature:         9.087000
@@ -52,7 +52,7 @@ data:
     particle_type: dosta_abcdjm_cspp_instrument_recovered
     internal_timestamp: 3606767024.201000
     profiler_timestamp: 1397778224.201000
-    pressure:        22.634000
+    pressure_depth:        22.634000
     suspect_timestamp: 0
     estimated_oxygen_concentration:       233.331000
     optode_temperature:         9.086000
@@ -68,7 +68,7 @@ data:
     particle_type: dosta_abcdjm_cspp_instrument_recovered
     internal_timestamp: 3606767025.190000
     profiler_timestamp: 1397778225.190000
-    pressure:        22.634000
+    pressure_depth:        22.634000
     suspect_timestamp: 0
     estimated_oxygen_concentration:       232.887000
     optode_temperature:         9.088000
@@ -84,7 +84,7 @@ data:
     particle_type: dosta_abcdjm_cspp_instrument_recovered
     internal_timestamp: 3606767026.178000
     profiler_timestamp: 1397778226.178000
-    pressure:        22.634000
+    pressure_depth:        22.634000
     suspect_timestamp: 0
     estimated_oxygen_concentration:       232.418000
     optode_temperature:         9.091000
@@ -100,7 +100,7 @@ data:
     particle_type: dosta_abcdjm_cspp_instrument_recovered
     internal_timestamp: 3606767027.179000
     profiler_timestamp: 1397778227.179000
-    pressure:        22.634000
+    pressure_depth:        22.634000
     suspect_timestamp: 0
     estimated_oxygen_concentration:       231.857000
     optode_temperature:         9.091000
@@ -116,7 +116,7 @@ data:
     particle_type: dosta_abcdjm_cspp_instrument_recovered
     internal_timestamp: 3606767028.179000
     profiler_timestamp: 1397778228.179000
-    pressure:        22.634000
+    pressure_depth:        22.634000
     suspect_timestamp: 0
     estimated_oxygen_concentration:       231.387000
     optode_temperature:         9.094000
@@ -132,7 +132,7 @@ data:
     particle_type: dosta_abcdjm_cspp_instrument_recovered
     internal_timestamp: 3606767029.180000
     profiler_timestamp: 1397778229.180000
-    pressure:        22.634000
+    pressure_depth:        22.634000
     suspect_timestamp: 0
     estimated_oxygen_concentration:       230.955000
     optode_temperature:         9.091000
@@ -148,7 +148,7 @@ data:
     particle_type: dosta_abcdjm_cspp_instrument_recovered
     internal_timestamp: 3606767030.179000
     profiler_timestamp: 1397778230.179000
-    pressure:        22.634000
+    pressure_depth:        22.634000
     suspect_timestamp: 0
     estimated_oxygen_concentration:       230.514000
     optode_temperature:         9.088000
@@ -164,7 +164,7 @@ data:
     particle_type: dosta_abcdjm_cspp_instrument_recovered
     internal_timestamp: 3606767031.178000
     profiler_timestamp: 1397778231.178000
-    pressure:        22.634000
+    pressure_depth:        22.634000
     suspect_timestamp: 0
     estimated_oxygen_concentration:       230.112000
     optode_temperature:         9.089000
@@ -180,7 +180,7 @@ data:
     particle_type: dosta_abcdjm_cspp_instrument_recovered
     internal_timestamp: 3606767032.180000
     profiler_timestamp: 1397778232.180000
-    pressure:        22.634000
+    pressure_depth:        22.634000
     suspect_timestamp: 0
     estimated_oxygen_concentration:       229.760000
     optode_temperature:         9.091000
@@ -196,7 +196,7 @@ data:
     particle_type: dosta_abcdjm_cspp_instrument_recovered
     internal_timestamp: 3606767033.181000
     profiler_timestamp: 1397778233.181000
-    pressure:        22.634000
+    pressure_depth:        22.634000
     suspect_timestamp: 0
     estimated_oxygen_concentration:       229.458000
     optode_temperature:         9.090000
@@ -212,7 +212,7 @@ data:
     particle_type: dosta_abcdjm_cspp_instrument_recovered
     internal_timestamp: 3606767034.179000
     profiler_timestamp: 1397778234.179000
-    pressure:        22.634000
+    pressure_depth:        22.634000
     suspect_timestamp: 0
     estimated_oxygen_concentration:       229.188000
     optode_temperature:         9.088000
@@ -228,7 +228,7 @@ data:
     particle_type: dosta_abcdjm_cspp_instrument_recovered
     internal_timestamp: 3606767035.180000
     profiler_timestamp: 1397778235.180000
-    pressure:        22.634000
+    pressure_depth:        22.634000
     suspect_timestamp: 0
     estimated_oxygen_concentration:       228.937000
     optode_temperature:         9.088000
@@ -244,7 +244,7 @@ data:
     particle_type: dosta_abcdjm_cspp_instrument_recovered
     internal_timestamp: 3606767036.180000
     profiler_timestamp: 1397778236.180000
-    pressure:        22.634000
+    pressure_depth:        22.634000
     suspect_timestamp: 1
     estimated_oxygen_concentration:       228.818000
     optode_temperature:         9.082000
@@ -260,7 +260,7 @@ data:
     particle_type: dosta_abcdjm_cspp_instrument_recovered
     internal_timestamp: 3606767037.179000
     profiler_timestamp: 1397778237.179000
-    pressure:        22.634000
+    pressure_depth:        22.634000
     suspect_timestamp: 0
     estimated_oxygen_concentration:       228.546000
     optode_temperature:         9.085000
@@ -276,7 +276,7 @@ data:
     particle_type: dosta_abcdjm_cspp_instrument_recovered
     internal_timestamp: 3606767038.179000
     profiler_timestamp: 1397778238.179000
-    pressure:        22.634000
+    pressure_depth:        22.634000
     suspect_timestamp: 0
     estimated_oxygen_concentration:       228.347000
     optode_temperature:         9.089000
@@ -292,7 +292,7 @@ data:
     particle_type: dosta_abcdjm_cspp_instrument_recovered
     internal_timestamp: 3606767039.178000
     profiler_timestamp: 1397778239.178000
-    pressure:        22.634000
+    pressure_depth:        22.634000
     suspect_timestamp: 0
     estimated_oxygen_concentration:       228.162000
     optode_temperature:         9.084000
@@ -308,7 +308,7 @@ data:
     particle_type: dosta_abcdjm_cspp_instrument_recovered
     internal_timestamp: 3606767040.305000
     profiler_timestamp: 1397778240.305000
-    pressure:        22.634000
+    pressure_depth:        22.634000
     suspect_timestamp: 1
     estimated_oxygen_concentration:       227.985000
     optode_temperature:         9.082000
