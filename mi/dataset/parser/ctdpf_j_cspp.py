@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 
 """
-@package mi.dataset.parser.ctdpf_j_cspp
+@package mi.dataset.parser
 @file marine-integrations/mi/dataset/parser/ctdpf_j_cspp.py
 @author Joe Padula
 @brief Parser for the ctdpf_j_cspp dataset driver
 Release notes:
+Modified by Chris Goodrich, December 2014 to remove state stuff
 
 Initial Release
 """
@@ -20,16 +21,14 @@ log = get_logger()
 from mi.core.common import BaseEnum
 from mi.core.instrument.data_particle import DataParticle
 from mi.core.exceptions import RecoverableSampleException
-
-from mi.dataset.parser.cspp_base import \
-    CsppParser, \
-    FLOAT_REGEX, \
+from mi.dataset.parser.common_regexes import END_OF_LINE_REGEX, \
+    FLOAT_REGEX, MULTIPLE_TAB_REGEX
+from mi.dataset.parser.cspp_base import CsppParser, \
     Y_OR_N_REGEX, \
-    MULTIPLE_TAB_REGEX, \
-    END_OF_LINE_REGEX, \
     CsppMetadataDataParticle, \
     MetadataRawDataKey, \
     encode_y_or_n
+
 
 # regex for the data record
 DATA_REGEX = r'(' + FLOAT_REGEX + ')' + MULTIPLE_TAB_REGEX  # Profiler Timestamp
@@ -200,28 +199,18 @@ class CtdpfJCsppParser(CsppParser):
 
     def __init__(self,
                  config,
-                 state,
                  stream_handle,
-                 state_callback,
-                 publish_callback,
-                 exception_callback,
-                 *args, **kwargs):
+                 exception_callback):
         """
         This method is a constructor that will instantiate an CtdpfJCsppParser object.
         @param config The configuration for this CtdpfJCsppParser parser
-        @param state The state the CtdpfJCsppParser should use to initialize itself
         @param stream_handle The handle to the data stream containing the ctdpf_j_cspp data
-        @param state_callback The function to call upon detecting state changes
-        @param publish_callback The function to call to provide particles
         @param exception_callback The function to call to report exceptions
         """
 
         # Call the superclass constructor
         super(CtdpfJCsppParser, self).__init__(config,
-                                                 state,
-                                                 stream_handle,
-                                                 state_callback,
-                                                 publish_callback,
-                                                 exception_callback,
-                                                 DATA_REGEX,
-                                                 *args, **kwargs)
+                                               stream_handle,
+                                               exception_callback,
+                                               DATA_REGEX,
+                                               ignore_matcher=None)
