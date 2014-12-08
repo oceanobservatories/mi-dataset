@@ -5,7 +5,7 @@ data:
   - _index: 1
     particle_object: DostaAbcdjmCsppMetadataRecoveredDataParticle
     particle_type: dosta_abcdjm_cspp_metadata_recovered
-    internal_timestamp: 3606767020.029000
+    internal_timestamp: 3606767022.258
     last_character_controller_id: '1'
     day_of_year_number: 107
     fraction_of_day: 9894
@@ -16,22 +16,6 @@ data:
     product_number: 4831
     serial_number: 209
   - _index: 2
-    particle_object: DostaAbcdjmCsppInstrumentRecoveredDataParticle
-    particle_type: dosta_abcdjm_cspp_instrument_recovered
-    internal_timestamp: 3606767020.029
-    profiler_timestamp: 1397778220.029
-    pressure_depth:        22.634
-    suspect_timestamp: 1
-    estimated_oxygen_concentration:       234.656
-    optode_temperature:         9.091
-    calibrated_phase:        36.93
-    temp_compensated_phase:        36.93
-    blue_phase:        46.151
-    red_phase:         9.221
-    blue_amplitude:      1047.5
-    red_amplitude:       979.7
-    raw_temperature:       637.7
-  - _index: 3
     particle_object: DostaAbcdjmCsppInstrumentRecoveredDataParticle
     particle_type: dosta_abcdjm_cspp_instrument_recovered
     internal_timestamp: 3606767022.258
@@ -47,7 +31,7 @@ data:
     blue_amplitude:      1049.0
     red_amplitude:       981.8
     raw_temperature:       637.8
-  - _index: 4
+  - _index: 3
     particle_object: DostaAbcdjmCsppInstrumentRecoveredDataParticle
     particle_type: dosta_abcdjm_cspp_instrument_recovered
     internal_timestamp: 3606767024.201
@@ -63,7 +47,7 @@ data:
     blue_amplitude:      1049.5
     red_amplitude:       978.2
     raw_temperature:       637.8
-  - _index: 5
+  - _index: 4
     particle_object: DostaAbcdjmCsppInstrumentRecoveredDataParticle
     particle_type: dosta_abcdjm_cspp_instrument_recovered
     internal_timestamp: 3606767025.19
@@ -79,7 +63,7 @@ data:
     blue_amplitude:      1050.0
     red_amplitude:       976.0
     raw_temperature:       637.7
-  - _index: 6
+  - _index: 5
     particle_object: DostaAbcdjmCsppInstrumentRecoveredDataParticle
     particle_type: dosta_abcdjm_cspp_instrument_recovered
     internal_timestamp: 3606767026.178
@@ -95,7 +79,7 @@ data:
     blue_amplitude:      1050.7
     red_amplitude:       974.4
     raw_temperature:       637.7
-  - _index: 7
+  - _index: 6
     particle_object: DostaAbcdjmCsppInstrumentRecoveredDataParticle
     particle_type: dosta_abcdjm_cspp_instrument_recovered
     internal_timestamp: 3606767027.179
@@ -111,7 +95,7 @@ data:
     blue_amplitude:      1051.5
     red_amplitude:       973.3
     raw_temperature:       637.6
-  - _index: 8
+  - _index: 7
     particle_object: DostaAbcdjmCsppInstrumentRecoveredDataParticle
     particle_type: dosta_abcdjm_cspp_instrument_recovered
     internal_timestamp: 3606767028.179
@@ -127,7 +111,7 @@ data:
     blue_amplitude:      1052.2
     red_amplitude:       972.2
     raw_temperature:       637.5
-  - _index: 9
+  - _index: 8
     particle_object: DostaAbcdjmCsppInstrumentRecoveredDataParticle
     particle_type: dosta_abcdjm_cspp_instrument_recovered
     internal_timestamp: 3606767029.180
@@ -143,7 +127,7 @@ data:
     blue_amplitude:      1053.3
     red_amplitude:       971.3
     raw_temperature:       637.7
-  - _index: 10
+  - _index: 9
     particle_object: DostaAbcdjmCsppInstrumentRecoveredDataParticle
     particle_type: dosta_abcdjm_cspp_instrument_recovered
     internal_timestamp: 3606767030.179
@@ -159,7 +143,7 @@ data:
     blue_amplitude:      1054.0
     red_amplitude:       970.5
     raw_temperature:       637.7
-  - _index: 11
+  - _index: 10
     particle_object: DostaAbcdjmCsppInstrumentRecoveredDataParticle
     particle_type: dosta_abcdjm_cspp_instrument_recovered
     internal_timestamp: 3606767031.178
@@ -175,7 +159,7 @@ data:
     blue_amplitude:      1054.7
     red_amplitude:       969.7
     raw_temperature:       637.7
-  - _index: 12
+  - _index: 11
     particle_object: DostaAbcdjmCsppInstrumentRecoveredDataParticle
     particle_type: dosta_abcdjm_cspp_instrument_recovered
     internal_timestamp: 3606767032.180
@@ -191,7 +175,7 @@ data:
     blue_amplitude:      1055.3
     red_amplitude:       969.1
     raw_temperature:       637.7
-  - _index: 13
+  - _index: 12
     particle_object: DostaAbcdjmCsppInstrumentRecoveredDataParticle
     particle_type: dosta_abcdjm_cspp_instrument_recovered
     internal_timestamp: 3606767033.181
@@ -207,7 +191,7 @@ data:
     blue_amplitude:      1055.8
     red_amplitude:       968.4
     raw_temperature:       637.7
-  - _index: 14
+  - _index: 13
     particle_object: DostaAbcdjmCsppInstrumentRecoveredDataParticle
     particle_type: dosta_abcdjm_cspp_instrument_recovered
     internal_timestamp: 3606767034.179
@@ -223,7 +207,7 @@ data:
     blue_amplitude:      1056.2
     red_amplitude:       967.8
     raw_temperature:       637.8
-  - _index: 15
+  - _index: 14
     particle_object: DostaAbcdjmCsppInstrumentRecoveredDataParticle
     particle_type: dosta_abcdjm_cspp_instrument_recovered
     internal_timestamp: 3606767035.180
@@ -239,7 +223,7 @@ data:
     blue_amplitude:      1056.7
     red_amplitude:       967.2
     raw_temperature:       637.7
-  - _index: 16
+  - _index: 15
     particle_object: DostaAbcdjmCsppInstrumentRecoveredDataParticle
     particle_type: dosta_abcdjm_cspp_instrument_recovered
     internal_timestamp: 3606767036.180
@@ -255,7 +239,7 @@ data:
     blue_amplitude:      1056.9
     red_amplitude:       966.6
     raw_temperature:       637.9
-  - _index: 17
+  - _index: 16
     particle_object: DostaAbcdjmCsppInstrumentRecoveredDataParticle
     particle_type: dosta_abcdjm_cspp_instrument_recovered
     internal_timestamp: 3606767037.179
@@ -271,7 +255,7 @@ data:
     blue_amplitude:      1057.0
     red_amplitude:       966.0
     raw_temperature:       637.8
-  - _index: 18
+  - _index: 17
     particle_object: DostaAbcdjmCsppInstrumentRecoveredDataParticle
     particle_type: dosta_abcdjm_cspp_instrument_recovered
     internal_timestamp: 3606767038.179
@@ -287,7 +271,7 @@ data:
     blue_amplitude:      1057.5
     red_amplitude:       965.5
     raw_temperature:       637.7
-  - _index: 19
+  - _index: 18
     particle_object: DostaAbcdjmCsppInstrumentRecoveredDataParticle
     particle_type: dosta_abcdjm_cspp_instrument_recovered
     internal_timestamp: 3606767039.178
@@ -303,7 +287,7 @@ data:
     blue_amplitude:      1057.7
     red_amplitude:       965.0
     raw_temperature:       637.9
-  - _index: 20
+  - _index: 19
     particle_object: DostaAbcdjmCsppInstrumentRecoveredDataParticle
     particle_type: dosta_abcdjm_cspp_instrument_recovered
     internal_timestamp: 3606767040.305

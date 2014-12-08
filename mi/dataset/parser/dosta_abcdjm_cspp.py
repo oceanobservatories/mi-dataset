@@ -1,7 +1,6 @@
-#!/usr/bin/env python
 
 """
-@package mi.dataset.parser.dosta_abcdjm_cspp
+@package mi.dataset.parser
 @file marine-integrations/mi/dataset/parser/dosta_abcdjm_cspp.py
 @author Mark Worden
 @brief Parser for the dosta_abcdjm_cspp dataset driver
@@ -18,20 +17,9 @@ import numpy
 from mi.core.log import get_logger
 log = get_logger()
 from mi.core.common import BaseEnum
-from mi.core.exceptions import SampleException
 from mi.core.instrument.data_particle import DataParticle
-from mi.dataset.parser.cspp_base import \
-    CsppParser, \
-    FLOAT_REGEX, \
-    INT_REGEX, \
-    MULTIPLE_TAB_REGEX, \
-    Y_OR_N_REGEX, \
-    END_OF_LINE_REGEX, \
-    CsppMetadataDataParticle, \
-    MetadataRawDataKey, \
-    PARTICLE_KEY_INDEX, \
-    DATA_MATCHES_GROUP_NUMBER_INDEX, \
-    TYPE_ENCODING_INDEX, \
+from mi.dataset.parser.common_regexes import INT_REGEX, FLOAT_REGEX, MULTIPLE_TAB_REGEX, END_OF_LINE_REGEX
+from mi.dataset.parser.cspp_base import CsppParser, Y_OR_N_REGEX, CsppMetadataDataParticle, MetadataRawDataKey, \
     encode_y_or_n
 
 
@@ -39,20 +27,20 @@ from mi.dataset.parser.cspp_base import \
 SPECIAL_CHARS_REGEX = r'(?:[\?][%])?'
 
 # A regular expression that should match a dosta_abcdjm data record
-DATA_REGEX = r'(' + FLOAT_REGEX + ')' + MULTIPLE_TAB_REGEX # Profiler Timestamp
-DATA_REGEX += '(' + FLOAT_REGEX + ')' + MULTIPLE_TAB_REGEX # Depth
-DATA_REGEX += '(' + Y_OR_N_REGEX + ')' + MULTIPLE_TAB_REGEX # Suspect Timestamp
-DATA_REGEX += SPECIAL_CHARS_REGEX + '(' + INT_REGEX + ')' + MULTIPLE_TAB_REGEX # Model Number
-DATA_REGEX += '(' + INT_REGEX + ')' + MULTIPLE_TAB_REGEX # Serial Numbe
-DATA_REGEX += '(' + FLOAT_REGEX + ')' + MULTIPLE_TAB_REGEX # oxygen content
-DATA_REGEX += '(' + FLOAT_REGEX + ')' + MULTIPLE_TAB_REGEX # ambient temperature
-DATA_REGEX += '(' + FLOAT_REGEX + ')' + MULTIPLE_TAB_REGEX # calibrated phase
-DATA_REGEX += '(' + FLOAT_REGEX + ')' + MULTIPLE_TAB_REGEX # temperature compensated phase
-DATA_REGEX += '(' + FLOAT_REGEX + ')' + MULTIPLE_TAB_REGEX # phase measurement with blue excitation
-DATA_REGEX += '(' + FLOAT_REGEX + ')' + MULTIPLE_TAB_REGEX # phase measurement with red excitation
-DATA_REGEX += '(' + FLOAT_REGEX + ')' + MULTIPLE_TAB_REGEX # amplitude measurement with blue excitation
-DATA_REGEX += '(' + FLOAT_REGEX + ')' + MULTIPLE_TAB_REGEX # amplitude measurement with red excitation
-DATA_REGEX += '(' + FLOAT_REGEX + ')' + END_OF_LINE_REGEX # raw temperature, voltage from thermistor
+DATA_REGEX = r'(' + FLOAT_REGEX + ')' + MULTIPLE_TAB_REGEX   # Profiler Timestamp
+DATA_REGEX += '(' + FLOAT_REGEX + ')' + MULTIPLE_TAB_REGEX   # Depth
+DATA_REGEX += '(' + Y_OR_N_REGEX + ')' + MULTIPLE_TAB_REGEX  # Suspect Timestamp
+DATA_REGEX += SPECIAL_CHARS_REGEX + '(' + INT_REGEX + ')' + MULTIPLE_TAB_REGEX  # Model Number
+DATA_REGEX += '(' + INT_REGEX + ')' + MULTIPLE_TAB_REGEX    # Serial Number
+DATA_REGEX += '(' + FLOAT_REGEX + ')' + MULTIPLE_TAB_REGEX  # oxygen content
+DATA_REGEX += '(' + FLOAT_REGEX + ')' + MULTIPLE_TAB_REGEX  # ambient temperature
+DATA_REGEX += '(' + FLOAT_REGEX + ')' + MULTIPLE_TAB_REGEX  # calibrated phase
+DATA_REGEX += '(' + FLOAT_REGEX + ')' + MULTIPLE_TAB_REGEX  # temperature compensated phase
+DATA_REGEX += '(' + FLOAT_REGEX + ')' + MULTIPLE_TAB_REGEX  # phase measurement with blue excitation
+DATA_REGEX += '(' + FLOAT_REGEX + ')' + MULTIPLE_TAB_REGEX  # phase measurement with red excitation
+DATA_REGEX += '(' + FLOAT_REGEX + ')' + MULTIPLE_TAB_REGEX  # amplitude measurement with blue excitation
+DATA_REGEX += '(' + FLOAT_REGEX + ')' + MULTIPLE_TAB_REGEX  # amplitude measurement with red excitation
+DATA_REGEX += '(' + FLOAT_REGEX + ')' + END_OF_LINE_REGEX   # raw temperature, voltage from thermistor
 
 
 class DataMatchesGroupNumber(BaseEnum):
@@ -92,7 +80,7 @@ class DostaAbcdjmCsppParserDataParticleKey(BaseEnum):
     PRODUCT_NUMBER = 'product_number'
     SERIAL_NUMBER = 'serial_number'
     PROFILER_TIMESTAMP = 'profiler_timestamp'
-    PRESSURE = 'pressure'
+    PRESSURE = 'pressure_depth'
     SUSPECT_TIMESTAMP = 'suspect_timestamp'
     ESTIMATED_OXYGEN_CONCENTRATION = 'estimated_oxygen_concentration'
     OPTODE_TEMPERATURE = 'optode_temperature'
@@ -139,35 +127,21 @@ class DostaAbcdjmCsppMetadataDataParticle(CsppMetadataDataParticle):
         Take something in the data format and turn it into
         an array of dictionaries defining the data in the particle
         with the appropriate tag.
-        @throws SampleException If there is a problem with sample creation
         """
 
-        results = []
+        # Set the base metadata parsed values to the results to return
+        results = self._build_metadata_parsed_values()
 
-        try:
+        data_match = self.raw_data[MetadataRawDataKey.DATA_MATCH]
 
-            # Append the base metadata parsed values to the results to return
-            results += self._build_metadata_parsed_values()
+        # Process each of the non common metadata particle parameters
+        for (name, index, encoding) in NON_COMMON_METADATA_PARTICLE_ENCODING_RULES:
+            results.append(self._encode_value(name, data_match.group(index), encoding))
 
-            data_match = self.raw_data[MetadataRawDataKey.DATA_MATCH]
-
-            # Process each of the non common metadata particle parameters
-            for rule in NON_COMMON_METADATA_PARTICLE_ENCODING_RULES:
-        
-                results.append(self._encode_value(
-                    rule[PARTICLE_KEY_INDEX],
-                    data_match.group(rule[DATA_MATCHES_GROUP_NUMBER_INDEX]),
-                    rule[TYPE_ENCODING_INDEX]))
-
-            # Set the internal timestamp
-            internal_timestamp_unix = numpy.float(data_match.group(
-                DataMatchesGroupNumber.PROFILER_TIMESTAMP))
-            self.set_internal_timestamp(unix_time=internal_timestamp_unix)
-
-        except (ValueError, TypeError, IndexError) as ex:
-            log.warn("Exception when building parsed values")
-            raise SampleException("Error (%s) while decoding parameters in data: [%s]"
-                                  % (ex, self.raw_data))
+        # Set the internal timestamp
+        internal_timestamp_unix = numpy.float(data_match.group(
+            DataMatchesGroupNumber.PROFILER_TIMESTAMP))
+        self.set_internal_timestamp(unix_time=internal_timestamp_unix)
 
         return results
 
@@ -198,32 +172,18 @@ class DostaAbcdjmCsppInstrumentDataParticle(DataParticle):
         Take something in the data format and turn it into
         an array of dictionaries defining the data in the particle
         with the appropriate tag.
-        @throws SampleException If there is a problem with sample creation
         """
 
         results = []
 
-        try:
+        # Process each of the instrument particle parameters
+        for (name, index, encoding) in INSTRUMENT_PARTICLE_ENCODING_RULES:
+            results.append(self._encode_value(name, self.raw_data.group(index), encoding))
 
-            # Process each of the instrument particle parameters
-            for rule in INSTRUMENT_PARTICLE_ENCODING_RULES:
-
-                results.append(self._encode_value(
-                    rule[PARTICLE_KEY_INDEX],
-                    self.raw_data.group(rule[DATA_MATCHES_GROUP_NUMBER_INDEX]),
-                    rule[TYPE_ENCODING_INDEX]))
-
-            # # Set the internal timestamp
-            internal_timestamp_unix = numpy.float(self.raw_data.group(
-                DataMatchesGroupNumber.PROFILER_TIMESTAMP))
-            self.set_internal_timestamp(unix_time=internal_timestamp_unix)
-
-        # We shouldn't end up with an exception due to the strongly specified regex, but we
-        # will ensure we catch any potential errors just in case
-        except (ValueError, TypeError, IndexError) as ex:
-            log.warn("Exception when building parsed values")
-            raise SampleException("Error (%s) while decoding parameters in data: [%s]"
-                                  % (ex, self.raw_data))
+        # # Set the internal timestamp
+        internal_timestamp_unix = numpy.float(self.raw_data.group(
+            DataMatchesGroupNumber.PROFILER_TIMESTAMP))
+        self.set_internal_timestamp(unix_time=internal_timestamp_unix)
 
         return results
 
@@ -248,28 +208,17 @@ class DostaAbcdjmCsppParser(CsppParser):
 
     def __init__(self,
                  config,
-                 state,
                  stream_handle,
-                 state_callback,
-                 publish_callback,
-                 exception_callback,
-                 *args, **kwargs):
+                 exception_callback):
         """
         This method is a constructor that will instantiate an DostaAbcdjmCsppParser object.
         @param config The configuration for this DostaAbcdjmCsppParser parser
-        @param state The state the DostaAbcdjmCsppParser should use to initialize itself
         @param stream_handle The handle to the data stream containing the dosta_abcdjm_cspp data
-        @param state_callback The function to call upon detecting state changes
-        @param publish_callback The function to call to provide particles
         @param exception_callback The function to call to report exceptions
         """
 
         # Call the superclass constructor
         super(DostaAbcdjmCsppParser, self).__init__(config,
-                                                    state,
                                                     stream_handle,
-                                                    state_callback,
-                                                    publish_callback,
                                                     exception_callback,
-                                                    DATA_REGEX,
-                                                    *args, **kwargs)
+                                                    DATA_REGEX)
