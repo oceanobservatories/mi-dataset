@@ -10,7 +10,10 @@ import os
 from mi.core.log import get_logger
 from mi.dataset.dataset_driver import DataSetDriver
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
-from mi.dataset.parser.adcps_jln_stc import AdcpsJlnStcParser, AdcpsJlnStcInstrumentParserDataParticle
+from mi.dataset.parser.adcps_jln_stc import AdcpsJlnStcParser, \
+    AdcpsJlnStcMetadataRecoveredDataParticle, \
+    AdcpsJlnStcInstrumentRecoveredDataParticle, \
+    AdcpsJlnStcParticleClassKey
 
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
 
@@ -20,7 +23,13 @@ def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
 
     config = {
         DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.adcps_jln_stc',
-        DataSetDriverConfigKeys.PARTICLE_CLASS: 'AdcpsJlnStcInstrumentParserDataParticle'
+        DataSetDriverConfigKeys.PARTICLE_CLASS: None,
+        DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT: {
+            AdcpsJlnStcParticleClassKey.METADATA_PARTICLE_CLASS:
+                AdcpsJlnStcMetadataRecoveredDataParticle,
+            AdcpsJlnStcParticleClassKey.INSTRUMENT_PARTICLE_CLASS:
+                AdcpsJlnStcInstrumentRecoveredDataParticle,
+        }
     }
     log.debug("My ADCPS JLN STC Config: %s", config)
 
@@ -29,8 +38,12 @@ def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
         particleDataHdlrObj.setParticleDataCaptureFailure()
 
     with open(sourceFilePath, 'rb') as file_handle:
-        parser = AdcpsJlnStcParser(config, None, file_handle, lambda state, 
-                               ingested: None, lambda data: None, exception_callback)
+        parser = AdcpsJlnStcParser(config,
+                                   None,
+                                   file_handle,
+                                   lambda state, ingested: None,
+                                   lambda data: None,
+                                   exception_callback)
                 
         driver = DataSetDriver(parser, particleDataHdlrObj)
         driver.processFileStream()  

@@ -26,10 +26,13 @@ log = get_logger()
 
 from mi.core.common import BaseEnum
 from mi.core.instrument.data_particle import DataParticle
-from mi.core.exceptions import SampleException, DatasetParserException
-from mi.core.exceptions import RecoverableSampleException, UnexpectedDataException
+from mi.core.exceptions import SampleException, \
+    DatasetParserException,\
+    RecoverableSampleException, \
+    UnexpectedDataException, \
+    ConfigurationException
 
-from mi.dataset.dataset_parser import BufferLoadingParser
+from mi.dataset.dataset_parser import BufferLoadingParser, DataSetDriverConfigKeys
 from mi.dataset.parser import utilities
 
 # *** Defining regexes for this parser ***
@@ -58,9 +61,19 @@ FOOTER_BYTES = 43
 MIN_DATA_BYTES = 36
 
 
+class AdcpsJlnStcParticleClassKey (BaseEnum):
+    """
+    An enum for the keys application to the adcps_jln_stc abc particle classes
+    """
+    METADATA_PARTICLE_CLASS = 'metadata_particle_class'
+    INSTRUMENT_PARTICLE_CLASS = 'instrument_particle_class'
+
+
 class DataParticleType(BaseEnum):
-    ADCPS_JLN_INS = 'adcps_jln_stc_instrument'
-    ADCPS_JLN_META = 'adcps_jln_stc_metadata'
+    ADCPS_JLN_INS_TELEMETERED = 'adcps_jln_stc_instrument'
+    ADCPS_JLN_META_TELEMETERED = 'adcps_jln_stc_metadata'
+    ADCPS_JLN_INS_RECOVERED = 'adcps_jln_stc_instrument_recovered'
+    ADCPS_JLN_META_RECOVERED = 'adcps_jln_stc_metadata_recovered'
 
 
 class AdcpsJlnStcInstrumentParserDataParticleKey(BaseEnum):
@@ -94,13 +107,11 @@ class StateKey(BaseEnum):
     POSITION = 'position'  # holds the file position
 
 
-class AdcpsJlnStcInstrumentParserDataParticle(DataParticle):
+class AdcpsJlnStcInstrumentDataParticle(DataParticle):
     """
-    Class for parsing data from the adcps_jln_stc data set
+    Base class for parsing data from the adcps_jln_stc instrument data set
     """
 
-    _data_particle_type = DataParticleType.ADCPS_JLN_INS
-    
     def _build_parsed_values(self):
         """
         Take something in the data format and turn it into
@@ -185,7 +196,25 @@ class AdcpsJlnStcInstrumentParserDataParticle(DataParticle):
         return zulu_ts
     
 
-class AdcpsJlnStcMetadataParserDataParticleKey(BaseEnum):
+class AdcpsJlnStcInstrumentTelemeteredDataParticle(
+    AdcpsJlnStcInstrumentDataParticle):
+    """
+    Class for parsing data from the adcps_jln_stc instrument telemetered data set
+    """
+
+    _data_particle_type = DataParticleType.ADCPS_JLN_INS_TELEMETERED
+
+
+class AdcpsJlnStcInstrumentRecoveredDataParticle(
+    AdcpsJlnStcInstrumentDataParticle):
+    """
+    Class for parsing data from the adcps_jln_stc instrument recovered data set
+    """
+
+    _data_particle_type = DataParticleType.ADCPS_JLN_INS_RECOVERED
+
+
+class AdcpsJlnStcMetadataDataParticleKey(BaseEnum):
     # params collected for adcps_jln_stc_metatdata stream:
     ADCPS_JLN_TIMESTAMP = 'adcps_jln_timestamp'
     ADCPS_JLN_ID = 'adcps_jln_id'
@@ -197,9 +226,8 @@ class AdcpsJlnStcMetadataParserDataParticleKey(BaseEnum):
     ADCPS_JLN_SAMPLES_WRITTEN = 'adcps_jln_samples_written'
     
 
-class AdcpsJlnStcMetadataParserDataParticle(DataParticle):
-    _data_particle_type = DataParticleType.ADCPS_JLN_META
-    
+class AdcpsJlnStcMetadataDataParticle(DataParticle):
+
     def _build_parsed_values(self):
         """
         Take something in the data format and turn it into
@@ -211,24 +239,36 @@ class AdcpsJlnStcMetadataParserDataParticle(DataParticle):
             raise RecoverableSampleException("AdcpsJlnStcMetadataParserDataParticle: No regex match of \
                                   parsed sample data [%s]", self.raw_data)
 
-        result = [self._encode_value(AdcpsJlnStcMetadataParserDataParticleKey.ADCPS_JLN_TIMESTAMP,
+        result = [self._encode_value(AdcpsJlnStcMetadataDataParticleKey.ADCPS_JLN_TIMESTAMP,
                                      match.group(1), str),
-                  self._encode_value(AdcpsJlnStcMetadataParserDataParticleKey.ADCPS_JLN_ID,
+                  self._encode_value(AdcpsJlnStcMetadataDataParticleKey.ADCPS_JLN_ID,
                                      match.group(2), int),
-                  self._encode_value(AdcpsJlnStcMetadataParserDataParticleKey.ADCPS_JLN_SERIAL_NUMBER,
+                  self._encode_value(AdcpsJlnStcMetadataDataParticleKey.ADCPS_JLN_SERIAL_NUMBER,
                                      match.group(3), int),
-                  self._encode_value(AdcpsJlnStcMetadataParserDataParticleKey.ADCPS_JLN_VOLTS,
+                  self._encode_value(AdcpsJlnStcMetadataDataParticleKey.ADCPS_JLN_VOLTS,
                                      match.group(4), float),
-                  self._encode_value(AdcpsJlnStcMetadataParserDataParticleKey.ADCPS_JLN_RECORDS,
+                  self._encode_value(AdcpsJlnStcMetadataDataParticleKey.ADCPS_JLN_RECORDS,
                                      match.group(5), int),
-                  self._encode_value(AdcpsJlnStcMetadataParserDataParticleKey.ADCPS_JLN_LENGTH,
+                  self._encode_value(AdcpsJlnStcMetadataDataParticleKey.ADCPS_JLN_LENGTH,
                                      match.group(6), int),
-                  self._encode_value(AdcpsJlnStcMetadataParserDataParticleKey.ADCPS_JLN_EVENTS,
+                  self._encode_value(AdcpsJlnStcMetadataDataParticleKey.ADCPS_JLN_EVENTS,
                                      match.group(7), int),
-                  self._encode_value(AdcpsJlnStcMetadataParserDataParticleKey.ADCPS_JLN_SAMPLES_WRITTEN,
+                  self._encode_value(AdcpsJlnStcMetadataDataParticleKey.ADCPS_JLN_SAMPLES_WRITTEN,
                                      match.group(8), int),
                   ]
         return result
+
+
+class AdcpsJlnStcMetadataTelemeteredDataParticle(
+    AdcpsJlnStcMetadataDataParticle):
+
+    _data_particle_type = DataParticleType.ADCPS_JLN_META_TELEMETERED
+
+
+class AdcpsJlnStcMetadataRecoveredDataParticle(
+    AdcpsJlnStcMetadataDataParticle):
+
+    _data_particle_type = DataParticleType.ADCPS_JLN_META_RECOVERED
 
 
 class AdcpsJlnStcParser(BufferLoadingParser):
@@ -251,6 +291,21 @@ class AdcpsJlnStcParser(BufferLoadingParser):
                                                 state_callback,
                                                 publish_callback,
                                                 exception_callback)
+
+        try:
+            self._metadata_class = config[
+                DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT][
+                AdcpsJlnStcParticleClassKey.METADATA_PARTICLE_CLASS]
+
+            self._instrument_class = config[
+                DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT][
+                AdcpsJlnStcParticleClassKey.INSTRUMENT_PARTICLE_CLASS]
+        except KeyError:
+            message = "Unable to access adcps jln stc data particle " + \
+                    "class types in config dictionary"
+            log.warn(message)
+            raise ConfigurationException(message)
+
         if state:
             self.set_state(state)
             if state[StateKey.POSITION] == 0:
@@ -348,7 +403,7 @@ class AdcpsJlnStcParser(BufferLoadingParser):
             
             header_footer = header_match.group(0) + footer_match.group(0) 
             
-            sample = self._extract_sample(AdcpsJlnStcMetadataParserDataParticle, HEADER_FOOTER_MATCHER,
+            sample = self._extract_sample(self._metadata_class, HEADER_FOOTER_MATCHER,
                                           header_footer, self._timestamp)  
             
             if sample:
@@ -395,7 +450,7 @@ class AdcpsJlnStcParser(BufferLoadingParser):
                 if data_match:
                     if len(data_match.group(2)) >= MIN_DATA_BYTES and self.compare_checksum(data_match.group(2)):
                         # pull out the date string from the data
-                        date_str = AdcpsJlnStcInstrumentParserDataParticle.unpack_date(data_match.group(2)[11:19])
+                        date_str = self._instrument_class.unpack_date(data_match.group(2)[11:19])
 
                         unix_time = utilities.zulu_timestamp_to_utc_time(date_str)
 
@@ -406,7 +461,7 @@ class AdcpsJlnStcParser(BufferLoadingParser):
 
                         # particle-ize the data block received, return the record
                         # set timestamp here, converted to ntp64. pull out timestamp for this record               
-                        sample = self._extract_sample(AdcpsJlnStcInstrumentParserDataParticle, DATA_MATCHER_B,
+                        sample = self._extract_sample(self._instrument_class, DATA_MATCHER_B,
                                                       chunk, self._timestamp)
 
                         if sample:
