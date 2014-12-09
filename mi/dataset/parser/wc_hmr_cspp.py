@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 """
-@package mi.dataset.parser.wc_hmr_cspp
+@package mi.dataset.parser
 @file marine-integrations/mi/dataset/parser/wc_hmr_cspp.py
 @author Jeff Roy
 @brief wc_hmr Parser for the cspp_eng_cspp dataset driver
@@ -24,16 +24,14 @@ from mi.core.instrument.data_particle import DataParticle
 
 from mi.dataset.parser.cspp_base import \
     CsppParser, \
-    FLOAT_REGEX, \
     Y_OR_N_REGEX, \
-    MULTIPLE_TAB_REGEX, \
-    END_OF_LINE_REGEX, \
     CsppMetadataDataParticle, \
     MetadataRawDataKey, \
-    PARTICLE_KEY_INDEX, \
-    DATA_MATCHES_GROUP_NUMBER_INDEX, \
-    TYPE_ENCODING_INDEX, \
     encode_y_or_n
+
+from mi.dataset.parser.common_regexes import MULTIPLE_TAB_REGEX, \
+    FLOAT_REGEX, \
+    END_OF_LINE_REGEX
 
 # Input Records are formatted as follows
 # FORMAT    DATA Type       Field               Units       Notes
@@ -56,6 +54,7 @@ DATA_REGEX += '(' + FLOAT_REGEX + ')' + END_OF_LINE_REGEX  # Roll
 class WcHmrDataTypeKey(BaseEnum):
     WC_HMR_CSPP_TELEMETERED = 'wc_hmr_cspp_telemetered'
     WC_HMR_CSPP_RECOVERED = 'wc_hmr_cspp_recovered'
+
 
 class DataMatchesGroupNumber(BaseEnum):
     """
@@ -205,29 +204,18 @@ class WcHmrCsppParser(CsppParser):
 
     def __init__(self,
                  config,
-                 state,
                  stream_handle,
-                 state_callback,
-                 publish_callback,
-                 exception_callback,
-                 *args, **kwargs):
+                 exception_callback):
         """
         This method is a constructor that will instantiate an WcHmrCsppParser object.
         @param config The configuration for this WcHmrCsppParser parser
-        @param state The state the WcHmrCsppParser should use to initialize itself
         @param stream_handle The handle to the data stream containing the cspp_eng_cspp data
-        @param state_callback The function to call upon detecting state changes
-        @param publish_callback The function to call to provide particles
         @param exception_callback The function to call to report exceptions
         """
 
         # Call the superclass constructor
         super(WcHmrCsppParser, self).__init__(config,
-                                              state,
                                               stream_handle,
-                                              state_callback,
-                                              publish_callback,
                                               exception_callback,
                                               DATA_REGEX,
-                                              ignore_matcher=None,
-                                              *args, **kwargs)
+                                              ignore_matcher=None)
