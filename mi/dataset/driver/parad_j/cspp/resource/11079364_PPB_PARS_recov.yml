@@ -5,7 +5,7 @@ data:
  - _index: 1
    particle_object: ParadJCsppMetadataRecoveredDataParticle
    particle_type: parad_j_cspp_metadata_recovered
-   internal_timestamp: 3606762494.692000
+   internal_timestamp: 3606762494.692
    last_character_controller_id: '1'
    day_of_year_number: 107
    fraction_of_day: 9364
@@ -16,9 +16,9 @@ data:
  - _index: 2
    particle_object: ParadJCsppInstrumentRecoveredDataParticle
    particle_type: parad_j_cspp_instrument_recovered
-   internal_timestamp: 3606762494.692000
-   profiler_timestamp: 1397773694.6919999122619629
-   pressure_depth: 19.2429999999999986
+   internal_timestamp: 3606762494.692
+   profiler_timestamp: 1397773694.692
+   pressure_depth: 19.243
    suspect_timestamp: 0
    date_string: '04/17/14'
    time_string: '15:22:31'
@@ -26,9 +26,9 @@ data:
  - _index: 3
    particle_object: ParadJCsppInstrumentRecoveredDataParticle
    particle_type: parad_j_cspp_instrument_recovered
-   internal_timestamp: 3606762495.829000
-   profiler_timestamp: 1397773695.8289999961853027
-   pressure_depth: 19.1200000000000010
+   internal_timestamp: 3606762495.829
+   profiler_timestamp: 1397773695.829
+   pressure_depth: 19.120
    suspect_timestamp: 0
    date_string: '04/17/14'
    time_string: '15:22:33'
@@ -36,9 +36,9 @@ data:
  - _index: 4
    particle_object: ParadJCsppInstrumentRecoveredDataParticle
    particle_type: parad_j_cspp_instrument_recovered
-   internal_timestamp: 3606762496.966000
-   profiler_timestamp: 1397773696.9660000801086426
-   pressure_depth: 19.1550000000000011
+   internal_timestamp: 3606762496.966
+   profiler_timestamp: 1397773696.966
+   pressure_depth: 19.155
    suspect_timestamp: 0
    date_string: '04/17/14'
    time_string: '15:22:34'
@@ -46,9 +46,9 @@ data:
  - _index: 5
    particle_object: ParadJCsppInstrumentRecoveredDataParticle
    particle_type: parad_j_cspp_instrument_recovered
-   internal_timestamp: 3606762498.105000
-   profiler_timestamp: 1397773698.1050000190734863
-   pressure_depth: 19.3649999999999984
+   internal_timestamp: 3606762498.105
+   profiler_timestamp: 1397773698.105
+   pressure_depth: 19.365
    suspect_timestamp: 0
    date_string: '04/17/14'
    time_string: '15:22:35'
@@ -56,9 +56,9 @@ data:
  - _index: 6
    particle_object: ParadJCsppInstrumentRecoveredDataParticle
    particle_type: parad_j_cspp_instrument_recovered
-   internal_timestamp: 3606762499.256000
-   profiler_timestamp: 1397773699.2560000419616699
-   pressure_depth: 19.6050000000000004
+   internal_timestamp: 3606762499.256
+   profiler_timestamp: 1397773699.256
+   pressure_depth: 19.605
    suspect_timestamp: 1
    date_string: '04/17/14'
    time_string: '15:22:36'
@@ -66,9 +66,9 @@ data:
  - _index: 7
    particle_object: ParadJCsppInstrumentRecoveredDataParticle
    particle_type: parad_j_cspp_instrument_recovered
-   internal_timestamp: 3606762500.380000
-   profiler_timestamp: 1397773700.3800001144409180
-   pressure_depth: 19.8260000000000005
+   internal_timestamp: 3606762500.380
+   profiler_timestamp: 1397773700.380
+   pressure_depth: 19.826
    suspect_timestamp: 0
    date_string: '04/17/14'
    time_string: '15:22:37'
@@ -76,9 +76,9 @@ data:
  - _index: 8
    particle_object: ParadJCsppInstrumentRecoveredDataParticle
    particle_type: parad_j_cspp_instrument_recovered
-   internal_timestamp: 3606762501.518000
-   profiler_timestamp: 1397773701.5179998874664307
-   pressure_depth: 19.9200000000000017
+   internal_timestamp: 3606762501.518
+   profiler_timestamp: 1397773701.518
+   pressure_depth: 19.920
    suspect_timestamp: 0
    date_string: '04/17/14'
    time_string: '15:22:38'
@@ -86,9 +86,9 @@ data:
  - _index: 9
    particle_object: ParadJCsppInstrumentRecoveredDataParticle
    particle_type: parad_j_cspp_instrument_recovered
-   internal_timestamp: 3606762502.654000
-   profiler_timestamp: 1397773702.6540000438690186
-   pressure_depth: 19.8760000000000012
+   internal_timestamp: 3606762502.654
+   profiler_timestamp: 1397773702.654
+   pressure_depth: 19.876
    suspect_timestamp: 0
    date_string: '04/17/14'
    time_string: '15:22:39'
@@ -96,9 +96,9 @@ data:
  - _index: 10
    particle_object: ParadJCsppInstrumentRecoveredDataParticle
    particle_type: parad_j_cspp_instrument_recovered
-   internal_timestamp: 3606762503.791000
-   profiler_timestamp: 1397773703.7909998893737793
-   pressure_depth: 19.6580000000000013
+   internal_timestamp: 3606762503.791
+   profiler_timestamp: 1397773703.791
+   pressure_depth: 19.658
    suspect_timestamp: 1
    date_string: '04/17/14'
    time_string: '15:22:41'
@@ -106,9 +106,9 @@ data:
  - _index: 11
    particle_object: ParadJCsppInstrumentRecoveredDataParticle
    particle_type: parad_j_cspp_instrument_recovered
-   internal_timestamp: 3606762504.930000
-   profiler_timestamp: 1397773704.9300000667572021
-   pressure_depth: 19.3790000000000013
+   internal_timestamp: 3606762504.930
+   profiler_timestamp: 1397773704.930
+   pressure_depth: 19.379
    suspect_timestamp: 0
    date_string: '04/17/14'
    time_string: '15:22:42'
@@ -116,9 +116,9 @@ data:
  - _index: 12
    particle_object: ParadJCsppInstrumentRecoveredDataParticle
    particle_type: parad_j_cspp_instrument_recovered
-   internal_timestamp: 3606762506.065000
-   profiler_timestamp: 1397773706.0650000572204590
-   pressure_depth: 19.1209999999999987
+   internal_timestamp: 3606762506.065
+   profiler_timestamp: 1397773706.065
+   pressure_depth: 19.121
    suspect_timestamp: 0
    date_string: '04/17/14'
    time_string: '15:22:43'
@@ -126,9 +126,9 @@ data:
  - _index: 13
    particle_object: ParadJCsppInstrumentRecoveredDataParticle
    particle_type: parad_j_cspp_instrument_recovered
-   internal_timestamp: 3606762507.205000
-   profiler_timestamp: 1397773707.2049999237060547
-   pressure_depth: 19.0090000000000003
+   internal_timestamp: 3606762507.205
+   profiler_timestamp: 1397773707.205
+   pressure_depth: 19.009
    suspect_timestamp: 1
    date_string: '04/17/14'
    time_string: '15:22:44'
@@ -136,9 +136,9 @@ data:
  - _index: 14
    particle_object: ParadJCsppInstrumentRecoveredDataParticle
    particle_type: parad_j_cspp_instrument_recovered
-   internal_timestamp: 3606762508.340000
-   profiler_timestamp: 1397773708.3399999141693115
-   pressure_depth: 19.0399999999999991
+   internal_timestamp: 3606762508.340
+   profiler_timestamp: 1397773708.340
+   pressure_depth: 19.040
    suspect_timestamp: 1
    date_string: '04/17/14'
    time_string: '15:22:45'
@@ -146,9 +146,9 @@ data:
  - _index: 15
    particle_object: ParadJCsppInstrumentRecoveredDataParticle
    particle_type: parad_j_cspp_instrument_recovered
-   internal_timestamp: 3606762509.478000
-   profiler_timestamp: 1397773709.4779999256134033
-   pressure_depth: 19.1400000000000006
+   internal_timestamp: 3606762509.478
+   profiler_timestamp: 1397773709.478
+   pressure_depth: 19.140
    suspect_timestamp: 0
    date_string: '04/17/14'
    time_string: '15:22:46'
@@ -156,9 +156,9 @@ data:
  - _index: 16
    particle_object: ParadJCsppInstrumentRecoveredDataParticle
    particle_type: parad_j_cspp_instrument_recovered
-   internal_timestamp: 3606762510.615000
-   profiler_timestamp: 1397773710.6150000095367432
-   pressure_depth: 19.2310000000000016
+   internal_timestamp: 3606762510.615
+   profiler_timestamp: 1397773710.615
+   pressure_depth: 19.231
    suspect_timestamp: 1
    date_string: '04/17/14'
    time_string: '15:22:47'
@@ -166,9 +166,9 @@ data:
  - _index: 17
    particle_object: ParadJCsppInstrumentRecoveredDataParticle
    particle_type: parad_j_cspp_instrument_recovered
-   internal_timestamp: 3606762511.752000
-   profiler_timestamp: 1397773711.7520000934600830
-   pressure_depth: 19.2659999999999982
+   internal_timestamp: 3606762511.752
+   profiler_timestamp: 1397773711.752
+   pressure_depth: 19.266
    suspect_timestamp: 0
    date_string: '04/17/14'
    time_string: '15:22:48'
@@ -176,9 +176,9 @@ data:
  - _index: 18
    particle_object: ParadJCsppInstrumentRecoveredDataParticle
    particle_type: parad_j_cspp_instrument_recovered
-   internal_timestamp: 3606762512.891000
-   profiler_timestamp: 1397773712.8910000324249268
-   pressure_depth: 19.2190000000000012
+   internal_timestamp: 3606762512.891
+   profiler_timestamp: 1397773712.891
+   pressure_depth: 19.219
    suspect_timestamp: 1
    date_string: '04/17/14'
    time_string: '15:22:50'
@@ -186,9 +186,9 @@ data:
  - _index: 19
    particle_object: ParadJCsppInstrumentRecoveredDataParticle
    particle_type: parad_j_cspp_instrument_recovered
-   internal_timestamp: 3606762514.027000
-   profiler_timestamp: 1397773714.0269999504089355
-   pressure_depth: 19.0859999999999985
+   internal_timestamp: 3606762514.027
+   profiler_timestamp: 1397773714.027
+   pressure_depth: 19.086
    suspect_timestamp: 1
    date_string: '04/17/14'
    time_string: '15:22:51'
@@ -196,9 +196,9 @@ data:
  - _index: 20
    particle_object: ParadJCsppInstrumentRecoveredDataParticle
    particle_type: parad_j_cspp_instrument_recovered
-   internal_timestamp: 3606762515.166000
-   profiler_timestamp: 1397773715.1659998893737793
-   pressure_depth: 18.8500000000000014
+   internal_timestamp: 3606762515.166
+   profiler_timestamp: 1397773715.166
+   pressure_depth: 18.850
    suspect_timestamp: 0
    date_string: '04/17/14'
    time_string: '15:22:52'
