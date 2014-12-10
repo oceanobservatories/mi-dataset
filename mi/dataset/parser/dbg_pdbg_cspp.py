@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 
 """
-@package mi.dataset.parser.dbg_pdbg_cspp
+@package mi.dataset.parser
 @file marine-integrations/mi/dataset/parser/dbg_pdbg_cspp.py
 @author Jeff Roy
-@brief Parser for the cspp_eng_cspp dataset driver
+@brief Parser for the dbg_pdbg_cspp dataset driver
 Release notes:
 
 initial release
@@ -25,7 +25,6 @@ log = get_logger()
 from mi.core.common import BaseEnum
 from mi.core.instrument.data_particle import DataParticle
 from mi.core.exceptions import \
-    DatasetParserException, \
     UnexpectedDataException, \
     RecoverableSampleException, \
     ConfigurationException
@@ -39,19 +38,19 @@ from mi.dataset.parser.cspp_base import \
     DEFAULT_HEADER_KEY_LIST, \
     METADATA_PARTICLE_CLASS_KEY, \
     SIEVE_MATCHER, \
-    StateKey, \
     HeaderPartMatchesGroupNumber, \
     TIMESTAMP_LINE_MATCHER, \
     HEADER_PART_MATCHER, \
     DefaultHeaderKey, \
-    INT_REGEX, \
-    FLOAT_REGEX, \
     Y_OR_N_REGEX, \
-    MULTIPLE_TAB_REGEX, \
-    END_OF_LINE_REGEX, \
     CsppMetadataDataParticle, \
     MetadataRawDataKey, \
     encode_y_or_n
+
+from mi.dataset.parser.common_regexes import INT_REGEX, \
+    FLOAT_REGEX, \
+    END_OF_LINE_REGEX, \
+    MULTIPLE_TAB_REGEX
 
 STRING_REGEX = r'.*'  # any characters except new line
 
@@ -310,18 +309,12 @@ class DbgPdbgCsppParser(BufferLoadingParser):
 
     def __init__(self,
                  config,
-                 state,
                  stream_handle,
-                 state_callback,
-                 publish_callback,
                  exception_callback):
         """
         This method is a constructor that will instantiate an DbgPdbgCsppParser object.
         @param config The configuration for this DbgPdbgCsppParser parser
-        @param state The state the DbgPdbgCsppParser should use to initialize itself
         @param stream_handle The handle to the data stream containing the cspp data
-        @param state_callback The function to call upon detecting state changes
-        @param publish_callback The function to call to provide particles
         @param exception_callback The function to call to report exceptions
         """
 
@@ -363,53 +356,14 @@ class DbgPdbgCsppParser(BufferLoadingParser):
         # Call the superclass constructor
         super(DbgPdbgCsppParser, self).__init__(config,
                                                 stream_handle,
-                                                state,
+                                                None,
                                                 partial(StringChunker.regex_sieve_function,
                                                         regex_list=[SIEVE_MATCHER]),
-                                                state_callback,
-                                                publish_callback,
+                                                lambda state, ingested: None,
+                                                lambda data: None,
                                                 exception_callback)
 
-        # If provided a state, set it.  Otherwise initialize it
-        # This needs to be done post superclass __init__
-        if state:
-            self.set_state(state)
-        else:
-            # Initialize the read state
-            self._read_state = {StateKey.POSITION: 0, StateKey.METADATA_EXTRACTED: False}
-
-    def set_state(self, state_obj):
-        """
-        Set the value of the state object for this parser
-        @param state_obj The object to set the state to.
-        @throws DatasetParserException if there is a bad state structure
-        """
-
-        #TODO add error checking for state keys being present, mention to Emily
-        if not isinstance(state_obj, dict):
-            raise DatasetParserException("Invalid state structure")
-
-        if not (StateKey.POSITION in state_obj and StateKey.METADATA_EXTRACTED in state_obj):
-            raise DatasetParserException("Invalid state structure")
-
-        self._state = state_obj
-        self._read_state = state_obj
-
-        # Clear the record buffer
-        self._record_buffer = []
-
-        # Need to seek the correct position in the file stream using the read state position.
-        self._stream_handle.seek(self._read_state[StateKey.POSITION])
-
-        # make sure we have cleaned the chunker out of old data
-        self._chunker.clean_all_chunks()
-
-    def _increment_read_state(self, increment):
-        """
-        Increment the parser state
-        @param increment The offset for the file position
-        """
-        self._read_state[StateKey.POSITION] += increment
+        self._metadata_extracted = False
 
     def _process_data_match(self, particle_class, data_match, result_particles):
         """
@@ -431,7 +385,7 @@ class DbgPdbgCsppParser(BufferLoadingParser):
         # to return and increment the state data positioning
         if data_particle:
 
-            if not self._read_state[StateKey.METADATA_EXTRACTED]:
+            if not self._metadata_extracted:
                 # once the first data particle is read, all header lines should have
                 # also been read
 
@@ -446,8 +400,7 @@ class DbgPdbgCsppParser(BufferLoadingParser):
                         # We're going to insert the metadata particle so that it is
                         # the first in the list and set the position to 0, as it cannot
                         # have the same position as the non-metadata particle
-                        result_particles.insert(0, (metadata_particle, {StateKey.POSITION: 0,
-                                                                        StateKey.METADATA_EXTRACTED: True}))
+                        result_particles.insert(0, (metadata_particle, None))
                     else:
                         # metadata particle was not created successfully
                         log.warn('Unable to create metadata particle')
@@ -461,9 +414,9 @@ class DbgPdbgCsppParser(BufferLoadingParser):
 
                 # need to set metadata extracted to true so we don't keep creating
                 # the metadata, even if it failed
-                self._read_state[StateKey.METADATA_EXTRACTED] = True
+                self._metadata_extracted = True
 
-            result_particles.append((data_particle, copy.copy(self._read_state)))
+            result_particles.append((data_particle, None))
 
     def _process_header_part_match(self, header_part_match):
         """
@@ -501,7 +454,7 @@ class DbgPdbgCsppParser(BufferLoadingParser):
         else:
 
             # OK.  We got unexpected data
-            log.warn('got unrecognized row %s at position %s', chunk, self._read_state[StateKey.POSITION])
+            log.warn('got unrecognized row %s', chunk)
             self._exception_callback(RecoverableSampleException("Found an invalid chunk: %s" % chunk))
 
     def parse_chunks(self):
@@ -527,9 +480,6 @@ class DbgPdbgCsppParser(BufferLoadingParser):
 
         # While the data chunk is not None, process the data chunk
         while chunk is not None:
-
-            # Increment the read state position now
-            self._increment_read_state(len(chunk))
 
             battery_match = BATTERY_DATA_MATCHER.match(chunk)
 
@@ -571,7 +521,6 @@ class DbgPdbgCsppParser(BufferLoadingParser):
         if non_data is not None and non_end <= start:
             log.debug("non_data: %s", non_data)
             #  send an UnexpectedDataException and increment the state
-            self._increment_read_state(len(non_data))
 
             self._exception_callback(UnexpectedDataException("Found %d bytes of un-expected non-data %s" %
                                                              (len(non_data), non_data)))
