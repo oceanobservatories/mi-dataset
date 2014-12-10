@@ -7,6 +7,7 @@
 @brief Test code for a cg_cpm_eng_cpm data parser
 """
 import os
+import pprint
 import re
 import ntplib
 
@@ -60,7 +61,7 @@ class CgParserUnitTestCase(ParserUnitTestCase):
 
             result = self.parser.get_records(1)
 
-            log.debug("Result: %s", result)
+            log.debug("Result: %s", pprint.pformat(result[0].generate_dict()))
 
             self.assertEqual(self._exceptions_detected, 0)
 

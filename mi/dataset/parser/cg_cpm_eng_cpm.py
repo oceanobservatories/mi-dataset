@@ -325,30 +325,31 @@ STATUS_ERR_CNTS_REGEX = \
 # STATUS.last_err.C_GPS=***Warning, ...
 # STATUS.last_err.C_PPS=C_PPS: W ...
 # STATUS.last_err.C_TELEM_SYS= ***...
-STATUS_ERR_MSG_REGEX = \
-    r'STATUS.last_err.(?:C_GPS=(?P<' + CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_C_GPS + \
-    '>.*)|C_PPS=(?P<' + CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_C_PPS + '>.*)|C_CTL=(?P<' + \
-    CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_C_CTL + '>.*)|C_STATUS=(?P<' + \
-    CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_C_STATUS + '>.*)|SUPERV=(?P<' + \
-    CgCpmEngCpmParserDataParticleKey.CG_ENG_ERR_SUPERV + '>.*)|C_POWER_SYS=(?P<' + \
-    CgCpmEngCpmParserDataParticleKey.CG_ENG_ERR_C_POWER_SYS + '>.*)|C_TELEM_SYS=(?P<' + \
-    CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_C_TELEM_SYS + '>.*)|C_IRID=(?P<' + \
-    CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_C_IRID + '>.*)|C_IMM=(?P<' + \
-    CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_C_IMM + '>.*)|CPM1=(?P<' + \
-    CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_CPM1 + '>.*)|D_CTL=(?P<' + \
-    CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_D_CTL + '>.*)|D_STATUS=(?P<' + \
-    CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_D_STATUS + '>.*)|DLOG_MGR=(?P<' + \
-    CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_DLOG_MGR + '>.*)|DLOGP1=(?P<' + \
-    CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_DLOGP1 + '>.*)|DLOGP2=(?P<' + \
-    CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_DLOGP2 + '>.*)|DLOGP3=(?P<' + \
-    CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_DLOGP3 + '>.*)|DLOGP4=(?P<' + \
-    CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_DLOGP4 + '>.*)|DLOGP5=(?P<' + \
-    CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_DLOGP5 + '>.*)|DLOGP6=(?P<' + \
-    CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_DLOGP6 + '>.*)|DLOGP7=(?P<' + \
-    CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_DLOGP7 + '>.*)|DLOGP8=(?P<' + \
-    CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_DLOGP8 + '>.*)|RCMD=(?P<' + \
-    CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_RCMD + '>.*)|BCMD=(?P<' + \
-    CgCpmEngCpmParserDataParticleKey.CG_ENG_ERR_BCMD + '>.*))' + END_OF_LINE_REGEX
+STATUS_ERR_FORMAT = r'STATUS.last_err.%s=(?P<%s>.*)$'
+
+STATUS_ERR_C_GPS_REGEX = STATUS_ERR_FORMAT % ('C_GPS', CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_C_GPS)
+STATUS_ERR_C_PPS_REGEX = STATUS_ERR_FORMAT % ('C_PPS', CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_C_PPS)
+STATUS_ERR_C_CTL_REGEX = STATUS_ERR_FORMAT % ('C_CTL', CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_C_CTL)
+STATUS_ERR_C_STATUS_REGEX = STATUS_ERR_FORMAT % ('C_STATUS', CgCpmEngCpmParserDataParticleKey.CG_ENG_ERR_C_STATUS)
+STATUS_ERR_SUPERV_REGEX = STATUS_ERR_FORMAT % ('SUPERV', CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_SUPERV)
+STATUS_ERR_C_POWER_SYS_REGEX = STATUS_ERR_FORMAT % ('C_POWER_SYS', CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_C_POWER_SYS)
+STATUS_ERR_C_TELEM_SYS_REGEX = STATUS_ERR_FORMAT % ('C_TELEM_SYS', CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_C_TELEM_SYS)
+STATUS_ERR_C_IRID_REGEX = STATUS_ERR_FORMAT % ('C_IRID', CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_C_IRID)
+STATUS_ERR_C_IMM_REGEX = STATUS_ERR_FORMAT % ('C_IMM', CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_C_IMM)
+STATUS_ERR_CPM1_REGEX = STATUS_ERR_FORMAT % ('CPM1', CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_CPM1)
+STATUS_ERR_D_CTL_REGEX = STATUS_ERR_FORMAT % ('D_CTL', CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_D_CTL)
+STATUS_ERR_D_STATUS_REGEX = STATUS_ERR_FORMAT % ('D_STATUS', CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_D_STATUS)
+STATUS_ERR_DLOG_MGR_REGEX = STATUS_ERR_FORMAT % ('DLOG_MGR', CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_DLOG_MGR)
+STATUS_ERR_DLOGP1_REGEX = STATUS_ERR_FORMAT % ('DLOGP1', CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_DLOGP1)
+STATUS_ERR_DLOGP2_REGEX = STATUS_ERR_FORMAT % ('DLOGP2', CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_DLOGP2)
+STATUS_ERR_DLOGP3_REGEX = STATUS_ERR_FORMAT % ('DLOGP3', CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_DLOGP3)
+STATUS_ERR_DLOGP4_REGEX = STATUS_ERR_FORMAT % ('DLOGP4', CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_DLOGP4)
+STATUS_ERR_DLOGP5_REGEX = STATUS_ERR_FORMAT % ('DLOGP5', CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_DLOGP5)
+STATUS_ERR_DLOGP6_REGEX = STATUS_ERR_FORMAT % ('DLOGP6', CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_DLOGP6)
+STATUS_ERR_DLOGP7_REGEX = STATUS_ERR_FORMAT % ('DLOGP7', CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_DLOGP7)
+STATUS_ERR_DLOGP8_REGEX = STATUS_ERR_FORMAT % ('DLOGP8', CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_DLOGP8)
+STATUS_ERR_RCMD_REGEX = STATUS_ERR_FORMAT % ('RCMD', CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_RCMD)
+STATUS_ERR_BCMD_REGEX = STATUS_ERR_FORMAT % ('BCMD', CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_BCMD)
 
 # Example:
 # CPU.uptime=0 days 00:01:56
@@ -1025,31 +1026,52 @@ PARAM_REGEX_RULES_AND_VALUES = [
       [CgCpmEngCpmParserDataParticleKey.CG_ENG_ERR_RCMD, int, None],
       [CgCpmEngCpmParserDataParticleKey.CG_ENG_ERR_BCMD, int, None],
      ), ExpectedInstancesEnum.ONE),
-    (STATUS_ERR_MSG_REGEX,
-     ([CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_C_GPS, str, None],
-      [CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_C_PPS, str, None],
-      [CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_C_CTL, str, None],
-      [CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_C_STATUS, str, None],
-      [CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_SUPERV, str, None],
-      [CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_C_POWER_SYS, str, None],
-      [CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_C_TELEM_SYS, str, None],
-      [CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_C_IRID, str, None],
-      [CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_C_IMM, str, None],
-      [CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_CPM1, str, None],
-      [CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_D_CTL, str, None],
-      [CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_D_STATUS, str, None],
-      [CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_DLOG_MGR, str, None],
-      [CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_DLOGP1, str, None],
-      [CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_DLOGP2, str, None],
-      [CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_DLOGP3, str, None],
-      [CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_DLOGP4, str, None],
-      [CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_DLOGP5, str, None],
-      [CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_DLOGP6, str, None],
-      [CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_DLOGP7, str, None],
-      [CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_DLOGP8, str, None],
-      [CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_RCMD, str, None],
-      [CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_BCMD, str, None],
-     ), ExpectedInstancesEnum.MANY),
+    (STATUS_ERR_C_GPS_REGEX, ([CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_C_GPS, str, None],),
+     ExpectedInstancesEnum.ONE),
+    (STATUS_ERR_C_PPS_REGEX, ([CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_C_PPS, str, None],),
+     ExpectedInstancesEnum.ONE),
+    (STATUS_ERR_C_CTL_REGEX, ([CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_C_CTL, str, None],),
+     ExpectedInstancesEnum.ONE),
+    (STATUS_ERR_C_STATUS_REGEX, ([CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_C_STATUS, str, None],),
+     ExpectedInstancesEnum.ONE),
+    (STATUS_ERR_SUPERV_REGEX, ([CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_SUPERV, str, None],),
+     ExpectedInstancesEnum.ONE),
+    (STATUS_ERR_C_POWER_SYS_REGEX, ([CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_C_POWER_SYS, str, None],),
+     ExpectedInstancesEnum.ONE),
+    (STATUS_ERR_C_TELEM_SYS_REGEX, ([CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_C_TELEM_SYS, str, None],),
+     ExpectedInstancesEnum.ONE),
+    (STATUS_ERR_C_IRID_REGEX, ([CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_C_IRID, str, None],),
+     ExpectedInstancesEnum.ONE),
+    (STATUS_ERR_C_IMM_REGEX, ([CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_C_IMM, str, None],),
+     ExpectedInstancesEnum.ONE),
+    (STATUS_ERR_CPM1_REGEX, ([CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_CPM1, str, None],),
+     ExpectedInstancesEnum.ONE),
+    (STATUS_ERR_D_CTL_REGEX, ([CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_D_CTL, str, None],),
+     ExpectedInstancesEnum.ONE),
+    (STATUS_ERR_D_STATUS_REGEX, ([CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_D_STATUS, str, None],),
+     ExpectedInstancesEnum.ONE),
+    (STATUS_ERR_DLOG_MGR_REGEX, ([CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_DLOG_MGR, str, None],),
+     ExpectedInstancesEnum.ONE),
+    (STATUS_ERR_DLOGP1_REGEX, ([CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_DLOGP1, str, None],),
+     ExpectedInstancesEnum.ONE),
+    (STATUS_ERR_DLOGP2_REGEX, ([CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_DLOGP2, str, None],),
+     ExpectedInstancesEnum.ONE),
+    (STATUS_ERR_DLOGP3_REGEX, ([CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_DLOGP3, str, None],),
+     ExpectedInstancesEnum.ONE),
+    (STATUS_ERR_DLOGP4_REGEX, ([CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_DLOGP4, str, None],),
+     ExpectedInstancesEnum.ONE),
+    (STATUS_ERR_DLOGP5_REGEX, ([CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_DLOGP5, str, None],),
+     ExpectedInstancesEnum.ONE),
+    (STATUS_ERR_DLOGP6_REGEX, ([CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_DLOGP6, str, None],),
+     ExpectedInstancesEnum.ONE),
+    (STATUS_ERR_DLOGP7_REGEX, ([CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_DLOGP7, str, None],),
+     ExpectedInstancesEnum.ONE),
+    (STATUS_ERR_DLOGP8_REGEX, ([CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_DLOGP8, str, None],),
+     ExpectedInstancesEnum.ONE),
+    (STATUS_ERR_RCMD_REGEX, ([CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_RCMD, str, None],),
+     ExpectedInstancesEnum.ONE),
+    (STATUS_ERR_BCMD_REGEX, ([CgCpmEngCpmParserDataParticleKey.CG_ENG_ERRMSG_BCMD, str, None],),
+     ExpectedInstancesEnum.ONE),
     (CPU_UPTIME_REGEX, ([CgCpmEngCpmParserDataParticleKey.CG_ENG_CPU_UPTIME, str, None],),
      ExpectedInstancesEnum.ONE),
     (CPU_LOAD_REGEX,
@@ -1689,16 +1711,24 @@ class CgCpmEngCpmParser(SimpleParser):
 
                     if re.match(regex, line):
                         match_found = True
-                        log.trace("Expected data to ignore: %s", line)
+                        log.trace("Expected data to ignore: %r", line)
 
             # If we still did not find a match, there was unexpected data,  Let's report that.
             if not match_found:
-                message = "Unexpected data: " + line
+                message = "Unexpected data: %r" % line
                 log.error(message)
                 self._exception_callback(UnexpectedDataException(message))
 
             # Read the next line in the file
             line = self._stream_handle.readline()
+
+        # fill in any missing expected values so long as one value was present
+        if param_rules_and_values_dict:
+            for regex, param_rules_and_values, expected_instances in param_regex_rules_and_values:
+                if expected_instances == ExpectedInstancesEnum.ONE:
+                    for param_rule_and_value in param_rules_and_values:
+                        param_name, encoding, value = param_rule_and_value
+                        param_rules_and_values_dict[param_name] = (encoding, value)
 
         # Let's attempt to extract the single record expected in the file and append it to the record
         # buffer.
