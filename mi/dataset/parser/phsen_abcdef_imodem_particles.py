@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 """
 @package mi.dataset.parser
 @file mi-dataset/mi/dataset/parser/phsen_abcdef_imodem_particles.py
@@ -73,6 +71,59 @@ class PhsenAbcdefImodemDataParticleKey(BaseEnum):
     NUM_EVENTS = 'num_events'                               # PD263
     NUM_SAMPLES = 'num_samples'                             # PD203
 
+# Encoding rules for the Science (Metadata and Control) particles
+SCIENCE_PARTICLE_ENCODING_RULES = [
+
+    (PhsenAbcdefImodemDataParticleKey.UNIQUE_ID, int),
+    (PhsenAbcdefImodemDataParticleKey.RECORD_TYPE, int),
+    (PhsenAbcdefImodemDataParticleKey.RECORD_TIME, int),
+    (PhsenAbcdefImodemDataParticleKey.PASSED_CHECKSUM, int)
+]
+
+# Encoding rules for the Instrument Data particles
+INSTRUMENT_DATA_PARTICLE_ENCODING_RULES = [
+    (PhsenAbcdefImodemDataParticleKey.THERMISTOR_START, int),
+    (PhsenAbcdefImodemDataParticleKey.REFERENCE_LIGHT_MEASUREMENTS, list),
+    (PhsenAbcdefImodemDataParticleKey.LIGHT_MEASUREMENTS, list),
+    (PhsenAbcdefImodemDataParticleKey.VOLTAGE_BATTERY, int),
+    (PhsenAbcdefImodemDataParticleKey.THERMISTOR_END, int)
+]
+
+# Encoding rules for the Control Data particles
+CONTROL_DATA_PARTICLE_ENCODING_RULES = [
+    (PhsenAbcdefImodemDataParticleKey.CLOCK_ACTIVE, int),
+    (PhsenAbcdefImodemDataParticleKey.RECORDING_ACTIVE, int),
+    (PhsenAbcdefImodemDataParticleKey.RECORD_END_ON_TIME, int),
+    (PhsenAbcdefImodemDataParticleKey.RECORD_MEMORY_FULL, int),
+    (PhsenAbcdefImodemDataParticleKey.RECORD_END_ON_ERROR, int),
+    (PhsenAbcdefImodemDataParticleKey.DATA_DOWNLOAD_OK, int),
+    (PhsenAbcdefImodemDataParticleKey.FLASH_MEMORY_OPEN, int),
+    (PhsenAbcdefImodemDataParticleKey.BATTERY_LOW_PRESTART, int),
+    (PhsenAbcdefImodemDataParticleKey.BATTERY_LOW_MEASUREMENT, int),
+    (PhsenAbcdefImodemDataParticleKey.BATTERY_LOW_BLANK, int),
+    (PhsenAbcdefImodemDataParticleKey.BATTERY_LOW_EXTERNAL, int),
+    (PhsenAbcdefImodemDataParticleKey.EXTERNAL_DEVICE1_FAULT, int),
+    (PhsenAbcdefImodemDataParticleKey.EXTERNAL_DEVICE2_FAULT, int),
+    (PhsenAbcdefImodemDataParticleKey.EXTERNAL_DEVICE3_FAULT, int),
+    (PhsenAbcdefImodemDataParticleKey.FLASH_ERASED, int),
+    (PhsenAbcdefImodemDataParticleKey.POWER_ON_INVALID, int),
+    (PhsenAbcdefImodemDataParticleKey.NUM_DATA_RECORDS, int),
+    (PhsenAbcdefImodemDataParticleKey.NUM_ERROR_RECORDS, int),
+    (PhsenAbcdefImodemDataParticleKey.NUM_BYTES_STORED, int)
+]
+
+# Encoding rules for the Metadata particle
+METADATA_PARTICLE_ENCODING_RULES = [
+    (PhsenAbcdefImodemDataParticleKey.FILE_TIME, str),
+    (PhsenAbcdefImodemDataParticleKey.INSTRUMENT_ID, str),
+    (PhsenAbcdefImodemDataParticleKey.SERIAL_NUMBER, str),
+    (PhsenAbcdefImodemDataParticleKey.VOLTAGE_FLT32, float),
+    (PhsenAbcdefImodemDataParticleKey.NUM_DATA_RECORDS, int),
+    (PhsenAbcdefImodemDataParticleKey.RECORD_LENGTH, int),
+    (PhsenAbcdefImodemDataParticleKey.NUM_EVENTS, int),
+    (PhsenAbcdefImodemDataParticleKey.NUM_SAMPLES, int)
+]
+
 
 class PhsenAbcdefImodemScienceBaseDataParticle(DataParticle):
     """
@@ -87,22 +138,9 @@ class PhsenAbcdefImodemScienceBaseDataParticle(DataParticle):
 
         particle_params = []
 
-        particle_params.append(
-            self._encode_value(PhsenAbcdefImodemDataParticleKey.UNIQUE_ID,
-                               self.raw_data[PhsenAbcdefImodemDataParticleKey.UNIQUE_ID],
-                               int))
-        particle_params.append(
-            self._encode_value(PhsenAbcdefImodemDataParticleKey.RECORD_TYPE,
-                               self.raw_data[PhsenAbcdefImodemDataParticleKey.RECORD_TYPE],
-                               int))
-        particle_params.append(
-            self._encode_value(PhsenAbcdefImodemDataParticleKey.RECORD_TIME,
-                               self.raw_data[PhsenAbcdefImodemDataParticleKey.RECORD_TIME],
-                               int))
-        particle_params.append(
-            self._encode_value(PhsenAbcdefImodemDataParticleKey.PASSED_CHECKSUM,
-                               self.raw_data[PhsenAbcdefImodemDataParticleKey.PASSED_CHECKSUM],
-                               int))
+        # Process each of science (instrument and control) particle parameters
+        for key, encoding_function in SCIENCE_PARTICLE_ENCODING_RULES:
+            particle_params.append(self._encode_value(key, self.raw_data[key], encoding_function))
 
         return particle_params
 
@@ -122,26 +160,9 @@ class PhsenAbcdefImodemInstrumentDataParticle(PhsenAbcdefImodemScienceBaseDataPa
 
         particle_params = super(PhsenAbcdefImodemInstrumentDataParticle, self)._build_parsed_values()
 
-        particle_params.append(
-            self._encode_value(PhsenAbcdefImodemDataParticleKey.THERMISTOR_START,
-                               self.raw_data[PhsenAbcdefImodemDataParticleKey.THERMISTOR_START],
-                               int))
-        particle_params.append(
-            self._encode_value(PhsenAbcdefImodemDataParticleKey.REFERENCE_LIGHT_MEASUREMENTS,
-                               self.raw_data[PhsenAbcdefImodemDataParticleKey.REFERENCE_LIGHT_MEASUREMENTS],
-                               list))
-        particle_params.append(
-            self._encode_value(PhsenAbcdefImodemDataParticleKey.LIGHT_MEASUREMENTS,
-                               self.raw_data[PhsenAbcdefImodemDataParticleKey.LIGHT_MEASUREMENTS],
-                               list))
-        particle_params.append(
-            self._encode_value(PhsenAbcdefImodemDataParticleKey.VOLTAGE_BATTERY,
-                               self.raw_data[PhsenAbcdefImodemDataParticleKey.VOLTAGE_BATTERY],
-                               int))
-        particle_params.append(
-            self._encode_value(PhsenAbcdefImodemDataParticleKey.THERMISTOR_END,
-                               self.raw_data[PhsenAbcdefImodemDataParticleKey.THERMISTOR_END],
-                               int))
+        # Process each of instrument data particle parameters
+        for key, encoding_function in INSTRUMENT_DATA_PARTICLE_ENCODING_RULES:
+            particle_params.append(self._encode_value(key, self.raw_data[key], encoding_function))
 
         return particle_params
 
@@ -161,82 +182,10 @@ class PhsenAbcdefImodemControlDataParticle(PhsenAbcdefImodemScienceBaseDataParti
 
         particle_params = super(PhsenAbcdefImodemControlDataParticle, self)._build_parsed_values()
 
-        particle_params.append(
-            self._encode_value(PhsenAbcdefImodemDataParticleKey.CLOCK_ACTIVE,
-                               self.raw_data[PhsenAbcdefImodemDataParticleKey.CLOCK_ACTIVE],
-                               int))
-        particle_params.append(
-            self._encode_value(PhsenAbcdefImodemDataParticleKey.RECORDING_ACTIVE,
-                               self.raw_data[PhsenAbcdefImodemDataParticleKey.RECORDING_ACTIVE],
-                               int))
-        particle_params.append(
-            self._encode_value(PhsenAbcdefImodemDataParticleKey.RECORD_END_ON_TIME,
-                               self.raw_data[PhsenAbcdefImodemDataParticleKey.RECORD_END_ON_TIME],
-                               int))
-        particle_params.append(
-            self._encode_value(PhsenAbcdefImodemDataParticleKey.RECORD_MEMORY_FULL,
-                               self.raw_data[PhsenAbcdefImodemDataParticleKey.RECORD_MEMORY_FULL],
-                               int))
-        particle_params.append(
-            self._encode_value(PhsenAbcdefImodemDataParticleKey.RECORD_END_ON_ERROR,
-                               self.raw_data[PhsenAbcdefImodemDataParticleKey.RECORD_END_ON_ERROR],
-                               int))
-        particle_params.append(
-            self._encode_value(PhsenAbcdefImodemDataParticleKey.DATA_DOWNLOAD_OK,
-                               self.raw_data[PhsenAbcdefImodemDataParticleKey.DATA_DOWNLOAD_OK],
-                               int))
-        particle_params.append(
-            self._encode_value(PhsenAbcdefImodemDataParticleKey.FLASH_MEMORY_OPEN,
-                               self.raw_data[PhsenAbcdefImodemDataParticleKey.FLASH_MEMORY_OPEN],
-                               int))
-        particle_params.append(
-            self._encode_value(PhsenAbcdefImodemDataParticleKey.BATTERY_LOW_PRESTART,
-                               self.raw_data[PhsenAbcdefImodemDataParticleKey.BATTERY_LOW_PRESTART],
-                               int))
-        particle_params.append(
-            self._encode_value(PhsenAbcdefImodemDataParticleKey.BATTERY_LOW_MEASUREMENT,
-                               self.raw_data[PhsenAbcdefImodemDataParticleKey.BATTERY_LOW_MEASUREMENT],
-                               int))
-        particle_params.append(
-            self._encode_value(PhsenAbcdefImodemDataParticleKey.BATTERY_LOW_BLANK,
-                               self.raw_data[PhsenAbcdefImodemDataParticleKey.BATTERY_LOW_BLANK],
-                               int))
-        particle_params.append(
-            self._encode_value(PhsenAbcdefImodemDataParticleKey.BATTERY_LOW_EXTERNAL,
-                               self.raw_data[PhsenAbcdefImodemDataParticleKey.BATTERY_LOW_EXTERNAL],
-                               int))
-        particle_params.append(
-            self._encode_value(PhsenAbcdefImodemDataParticleKey.EXTERNAL_DEVICE1_FAULT,
-                               self.raw_data[PhsenAbcdefImodemDataParticleKey.EXTERNAL_DEVICE1_FAULT],
-                               int))
-        particle_params.append(
-            self._encode_value(PhsenAbcdefImodemDataParticleKey.EXTERNAL_DEVICE2_FAULT,
-                               self.raw_data[PhsenAbcdefImodemDataParticleKey.EXTERNAL_DEVICE2_FAULT],
-                               int))
-        particle_params.append(
-            self._encode_value(PhsenAbcdefImodemDataParticleKey.EXTERNAL_DEVICE3_FAULT,
-                               self.raw_data[PhsenAbcdefImodemDataParticleKey.EXTERNAL_DEVICE3_FAULT],
-                               int))
-        particle_params.append(
-            self._encode_value(PhsenAbcdefImodemDataParticleKey.FLASH_ERASED,
-                               self.raw_data[PhsenAbcdefImodemDataParticleKey.FLASH_ERASED],
-                               int))
-        particle_params.append(
-            self._encode_value(PhsenAbcdefImodemDataParticleKey.POWER_ON_INVALID,
-                               self.raw_data[PhsenAbcdefImodemDataParticleKey.POWER_ON_INVALID],
-                               int))
-        particle_params.append(
-            self._encode_value(PhsenAbcdefImodemDataParticleKey.NUM_DATA_RECORDS,
-                               self.raw_data[PhsenAbcdefImodemDataParticleKey.NUM_DATA_RECORDS],
-                               int))
-        particle_params.append(
-            self._encode_value(PhsenAbcdefImodemDataParticleKey.NUM_ERROR_RECORDS,
-                               self.raw_data[PhsenAbcdefImodemDataParticleKey.NUM_ERROR_RECORDS],
-                               int))
-        particle_params.append(
-            self._encode_value(PhsenAbcdefImodemDataParticleKey.NUM_BYTES_STORED,
-                               self.raw_data[PhsenAbcdefImodemDataParticleKey.NUM_BYTES_STORED],
-                               int))
+        # Process each of control data particle parameters
+        for key, encoding_function in CONTROL_DATA_PARTICLE_ENCODING_RULES:
+            particle_params.append(self._encode_value(key, self.raw_data[key], encoding_function))
+
         # battery voltage is optional in control record.
         if self.raw_data[PhsenAbcdefImodemDataParticleKey.VOLTAGE_BATTERY]:
             particle_params.append(
@@ -263,38 +212,20 @@ class PhsenAbcdefImodemMetadataDataParticle(DataParticle):
 
         particle_params = []
 
-        particle_params.append(
-            self._encode_value(PhsenAbcdefImodemDataParticleKey.FILE_TIME,
-                               self.raw_data[PhsenAbcdefImodemDataParticleKey.FILE_TIME],
-                               str))
-        particle_params.append(
-            self._encode_value(PhsenAbcdefImodemDataParticleKey.INSTRUMENT_ID,
-                               self.raw_data[PhsenAbcdefImodemDataParticleKey.INSTRUMENT_ID],
-                               str))
-        particle_params.append(
-            self._encode_value(PhsenAbcdefImodemDataParticleKey.SERIAL_NUMBER,
-                               self.raw_data[PhsenAbcdefImodemDataParticleKey.SERIAL_NUMBER],
-                               str))
-        particle_params.append(
-            self._encode_value(PhsenAbcdefImodemDataParticleKey.VOLTAGE_FLT32,
-                               self.raw_data[PhsenAbcdefImodemDataParticleKey.VOLTAGE_FLT32],
-                               float))
-        particle_params.append(
-            self._encode_value(PhsenAbcdefImodemDataParticleKey.NUM_DATA_RECORDS,
-                               self.raw_data[PhsenAbcdefImodemDataParticleKey.NUM_DATA_RECORDS],
-                               int))
-        particle_params.append(
-            self._encode_value(PhsenAbcdefImodemDataParticleKey.RECORD_LENGTH,
-                               self.raw_data[PhsenAbcdefImodemDataParticleKey.RECORD_LENGTH],
-                               int))
-        particle_params.append(
-            self._encode_value(PhsenAbcdefImodemDataParticleKey.NUM_EVENTS,
-                               self.raw_data[PhsenAbcdefImodemDataParticleKey.NUM_EVENTS],
-                               int))
-        particle_params.append(
-            self._encode_value(PhsenAbcdefImodemDataParticleKey.NUM_SAMPLES,
-                               self.raw_data[PhsenAbcdefImodemDataParticleKey.NUM_SAMPLES],
-                               int))
+        # Process each of metadata particle parameters
+        for key, encoding_function in METADATA_PARTICLE_ENCODING_RULES:
+
+            key_value = self.raw_data.get(key, None)
+            log.trace("key: %s, key_value: %s", key, key_value)
+            if key_value is None:
+                particle_params.append({DataParticleKey.VALUE_ID: key,
+                                        DataParticleKey.VALUE: None})
+
+            else:
+                particle_params.append(self._encode_value(key,
+                                                          self.raw_data[key],
+                                                          encoding_function))
+
         return particle_params
 
 
