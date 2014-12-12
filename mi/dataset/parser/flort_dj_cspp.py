@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 """
-@package mi.dataset.parser.flort_dj_cspp
+@package mi.dataset.parser
 @file marine-integrations/mi/dataset/parser/flort_dj_cspp.py
 @author Jeremy Amundson
 @brief Parser for the flort_dj_cspp dataset driver
@@ -17,15 +17,18 @@ import numpy
 
 from mi.core.log import get_logger
 log = get_logger()
+
 from mi.core.common import BaseEnum
-from mi.core.exceptions import RecoverableSampleException
 import re
 
 from mi.core.instrument.data_particle import DataParticle
-from mi.dataset.parser.cspp_base import CsppParser, FLOAT_REGEX, INT_REGEX, MULTIPLE_TAB_REGEX, \
-    END_OF_LINE_REGEX, \
-    CsppMetadataDataParticle, MetadataRawDataKey, PARTICLE_KEY_INDEX, \
-    DATA_MATCHES_GROUP_NUMBER_INDEX, TYPE_ENCODING_INDEX, \
+
+from mi.dataset.parser.common_regexes import INT_REGEX, FLOAT_REGEX, MULTIPLE_TAB_REGEX, END_OF_LINE_REGEX
+
+from mi.dataset.parser.cspp_base import \
+    CsppParser, \
+    CsppMetadataDataParticle, \
+    MetadataRawDataKey, \
     Y_OR_N_REGEX, encode_y_or_n
 
 # A regex to match a date in MM/DD/YY format
@@ -48,12 +51,13 @@ DATA_REGEX += '(' + INT_REGEX + ')' + MULTIPLE_TAB_REGEX  # measurement_waveleng
 DATA_REGEX += '(' + INT_REGEX + ')' + MULTIPLE_TAB_REGEX  # raw_signal_cdom
 DATA_REGEX += '(' + INT_REGEX + ')' + END_OF_LINE_REGEX  # raw_internal_temp
 
-IGNORE_REGEX = FLOAT_REGEX + MULTIPLE_TAB_REGEX # Profiler Timestamp
-IGNORE_REGEX += FLOAT_REGEX + MULTIPLE_TAB_REGEX # Depth
-IGNORE_REGEX += Y_OR_N_REGEX + MULTIPLE_TAB_REGEX # Suspect Timestamp
-IGNORE_REGEX += r'[^\t]*' + END_OF_LINE_REGEX # any text after the Suspect
+IGNORE_REGEX = FLOAT_REGEX + MULTIPLE_TAB_REGEX  # Profiler Timestamp
+IGNORE_REGEX += FLOAT_REGEX + MULTIPLE_TAB_REGEX  # Depth
+IGNORE_REGEX += Y_OR_N_REGEX + MULTIPLE_TAB_REGEX  # Suspect Timestamp
+IGNORE_REGEX += r'[^\t]*' + END_OF_LINE_REGEX  # any text after the Suspect
 
 IGNORE_MATCHER = re.compile(IGNORE_REGEX)
+
 
 class DataMatchesGroupNumber(BaseEnum):
     """
@@ -133,20 +137,14 @@ class FlortDjCsppMetadataDataParticle(CsppMetadataDataParticle):
 
         results = []
 
-        try:
+        # Append the base metadata parsed values to the results to return
+        results += self._build_metadata_parsed_values()
 
-            # Append the base metadata parsed values to the results to return
-            results += self._build_metadata_parsed_values()
+        data_match = self.raw_data[MetadataRawDataKey.DATA_MATCH]
 
-            data_match = self.raw_data[MetadataRawDataKey.DATA_MATCH]
-
-            internal_timestamp_unix = numpy.float(data_match.group(
-                DataMatchesGroupNumber.PROFILER_TIMESTAMP))
-            self.set_internal_timestamp(unix_time=internal_timestamp_unix)
-
-        except (ValueError, TypeError, IndexError) as ex:
-            log.warn("Exception when building parsed values")
-            raise RecoverableSampleException("Error (%s) while decoding parameters in data: %s" % (ex, self.raw_data))
+        internal_timestamp_unix = numpy.float(data_match.group(
+            DataMatchesGroupNumber.PROFILER_TIMESTAMP))
+        self.set_internal_timestamp(unix_time=internal_timestamp_unix)
 
         return results
 
@@ -182,26 +180,16 @@ class FlortDjCsppInstrumentDataParticle(DataParticle):
 
         results = []
 
-        try:
+        # Process each of the instrument particle parameters
+        for (name, index, encoding) in INSTRUMENT_PARTICLE_ENCODING_RULES:
 
-            # Process each of the instrument particle parameters
-            for rule in INSTRUMENT_PARTICLE_ENCODING_RULES:
+            results.append(self._encode_value(name, self.raw_data.group(index), encoding))
 
-                results.append(self._encode_value(
-                    rule[PARTICLE_KEY_INDEX],
-                    self.raw_data.group(rule[DATA_MATCHES_GROUP_NUMBER_INDEX]),
-                    rule[TYPE_ENCODING_INDEX]))
+        # # Set the internal timestamp
+        internal_timestamp_unix = numpy.float(self.raw_data.group(
+            DataMatchesGroupNumber.PROFILER_TIMESTAMP))
+        self.set_internal_timestamp(unix_time=internal_timestamp_unix)
 
-            # # Set the internal timestamp
-            internal_timestamp_unix = numpy.float(self.raw_data.group(
-                DataMatchesGroupNumber.PROFILER_TIMESTAMP))
-            self.set_internal_timestamp(unix_time=internal_timestamp_unix)
-
-        except (ValueError, TypeError, IndexError) as ex:
-            log.warn("Exception when building parsed values")
-            raise RecoverableSampleException("Error (%s) while decoding parameters in data: %s" % (ex, self.raw_data))
-
-        log.debug('FlortDjCsppInstrumentDataParticle: particle=%s', results)
         return results
 
 
@@ -225,29 +213,18 @@ class FlortDjCsppParser(CsppParser):
 
     def __init__(self,
                  config,
-                 state,
                  stream_handle,
-                 state_callback,
-                 publish_callback,
-                 exception_callback,
-                 *args, **kwargs):
+                 exception_callback):
         """
         This method is a constructor that will instantiate an FlortDjCsppParser object.
         @param config The configuration for this FlortDjCsppParser parser
-        @param state The state the FlortDjCsppParser should use to initialize itself
         @param stream_handle The handle to the data stream containing the flort_dj_cspp data
-        @param state_callback The function to call upon detecting state changes
-        @param publish_callback The function to call to provide particles
         @param exception_callback The function to call to report exceptions
         """
 
         # Call the superclass constructor
         super(FlortDjCsppParser, self).__init__(config,
-                                                state,
                                                 stream_handle,
-                                                state_callback,
-                                                publish_callback,
                                                 exception_callback,
                                                 DATA_REGEX,
-                                                ignore_matcher=IGNORE_MATCHER,
-                                                *args, **kwargs)
+                                                ignore_matcher=IGNORE_MATCHER)
