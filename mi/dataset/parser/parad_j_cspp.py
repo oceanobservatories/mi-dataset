@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 """
 @package mi.dataset.parser.parad_j_cspp
 @file marine-integrations/mi/dataset/parser/parad_j_cspp.py
@@ -22,13 +20,15 @@ from mi.core.common import BaseEnum
 from mi.core.instrument.data_particle import DataParticle
 from mi.core.exceptions import RecoverableSampleException
 
-from mi.dataset.parser.cspp_base import \
-    CsppParser, \
+from mi.dataset.parser.common_regexes import \
+    END_OF_LINE_REGEX, \
     FLOAT_REGEX, \
     INT_REGEX, \
+    MULTIPLE_TAB_REGEX
+
+from mi.dataset.parser.cspp_base import \
+    CsppParser, \
     Y_OR_N_REGEX, \
-    MULTIPLE_TAB_REGEX, \
-    END_OF_LINE_REGEX, \
     CsppMetadataDataParticle, \
     MetadataRawDataKey, \
     encode_y_or_n
@@ -219,29 +219,18 @@ class ParadJCsppParser(CsppParser):
 
     def __init__(self,
                  config,
-                 state,
                  stream_handle,
-                 state_callback,
-                 publish_callback,
-                 exception_callback,
-                 *args, **kwargs):
+                 exception_callback):
         """
         This method is a constructor that will instantiate an ParadJCsppParser object.
         @param config The configuration for this ParadJCsppParser parser
-        @param state The state the ParadJCsppParser should use to initialize itself
         @param stream_handle The handle to the data stream containing the parad_j_cspp data
-        @param state_callback The function to call upon detecting state changes
-        @param publish_callback The function to call to provide particles
         @param exception_callback The function to call to report exceptions
         """
 
         # Call the superclass constructor
         super(ParadJCsppParser, self).__init__(config,
-                                                 state,
-                                                 stream_handle,
-                                                 state_callback,
-                                                 publish_callback,
-                                                 exception_callback,
-                                                 DATA_REGEX,
-                                                 ignore_matcher=IGNORE_MATCHER,
-                                                 *args, **kwargs)
+                                               stream_handle,
+                                               exception_callback,
+                                               DATA_REGEX,
+                                               ignore_matcher=IGNORE_MATCHER)
