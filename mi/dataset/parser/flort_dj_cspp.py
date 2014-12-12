@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 """
-@package mi.dataset.parser.flort_dj_cspp
+@package mi.dataset.parser
 @file marine-integrations/mi/dataset/parser/flort_dj_cspp.py
 @author Jeremy Amundson
 @brief Parser for the flort_dj_cspp dataset driver
@@ -17,15 +17,22 @@ import numpy
 
 from mi.core.log import get_logger
 log = get_logger()
+
 from mi.core.common import BaseEnum
 from mi.core.exceptions import RecoverableSampleException
 import re
 
 from mi.core.instrument.data_particle import DataParticle
-from mi.dataset.parser.cspp_base import CsppParser, FLOAT_REGEX, INT_REGEX, MULTIPLE_TAB_REGEX, \
-    END_OF_LINE_REGEX, \
-    CsppMetadataDataParticle, MetadataRawDataKey, PARTICLE_KEY_INDEX, \
-    DATA_MATCHES_GROUP_NUMBER_INDEX, TYPE_ENCODING_INDEX, \
+
+from mi.dataset.parser.common_regexes import INT_REGEX, FLOAT_REGEX, MULTIPLE_TAB_REGEX, END_OF_LINE_REGEX
+
+from mi.dataset.parser.cspp_base import \
+    CsppParser, \
+    CsppMetadataDataParticle, \
+    MetadataRawDataKey, \
+    PARTICLE_KEY_INDEX, \
+    DATA_MATCHES_GROUP_NUMBER_INDEX, \
+    TYPE_ENCODING_INDEX, \
     Y_OR_N_REGEX, encode_y_or_n
 
 # A regex to match a date in MM/DD/YY format
@@ -48,12 +55,19 @@ DATA_REGEX += '(' + INT_REGEX + ')' + MULTIPLE_TAB_REGEX  # measurement_waveleng
 DATA_REGEX += '(' + INT_REGEX + ')' + MULTIPLE_TAB_REGEX  # raw_signal_cdom
 DATA_REGEX += '(' + INT_REGEX + ')' + END_OF_LINE_REGEX  # raw_internal_temp
 
-IGNORE_REGEX = FLOAT_REGEX + MULTIPLE_TAB_REGEX # Profiler Timestamp
-IGNORE_REGEX += FLOAT_REGEX + MULTIPLE_TAB_REGEX # Depth
-IGNORE_REGEX += Y_OR_N_REGEX + MULTIPLE_TAB_REGEX # Suspect Timestamp
-IGNORE_REGEX += r'[^\t]*' + END_OF_LINE_REGEX # any text after the Suspect
+IGNORE_REGEX = FLOAT_REGEX + MULTIPLE_TAB_REGEX  # Profiler Timestamp
+IGNORE_REGEX += FLOAT_REGEX + MULTIPLE_TAB_REGEX  # Depth
+IGNORE_REGEX += Y_OR_N_REGEX + MULTIPLE_TAB_REGEX  # Suspect Timestamp
+IGNORE_REGEX += r'[^\t]*' + END_OF_LINE_REGEX  # any text after the Suspect
 
 IGNORE_MATCHER = re.compile(IGNORE_REGEX)
+
+
+class DataTypeKey(BaseEnum):
+
+    FLORT_DJ_CSPP_RECOVERED = 'flort_dj_cspp_recovered'
+    FLORT_DJ_CSPP_TELEMETERED = 'flort_dj_cspp_telemetered'
+
 
 class DataMatchesGroupNumber(BaseEnum):
     """
@@ -225,29 +239,18 @@ class FlortDjCsppParser(CsppParser):
 
     def __init__(self,
                  config,
-                 state,
                  stream_handle,
-                 state_callback,
-                 publish_callback,
-                 exception_callback,
-                 *args, **kwargs):
+                 exception_callback):
         """
         This method is a constructor that will instantiate an FlortDjCsppParser object.
         @param config The configuration for this FlortDjCsppParser parser
-        @param state The state the FlortDjCsppParser should use to initialize itself
         @param stream_handle The handle to the data stream containing the flort_dj_cspp data
-        @param state_callback The function to call upon detecting state changes
-        @param publish_callback The function to call to provide particles
         @param exception_callback The function to call to report exceptions
         """
 
         # Call the superclass constructor
         super(FlortDjCsppParser, self).__init__(config,
-                                                state,
                                                 stream_handle,
-                                                state_callback,
-                                                publish_callback,
                                                 exception_callback,
                                                 DATA_REGEX,
-                                                ignore_matcher=IGNORE_MATCHER,
-                                                *args, **kwargs)
+                                                ignore_matcher=IGNORE_MATCHER)
