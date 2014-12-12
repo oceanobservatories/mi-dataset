@@ -13,17 +13,14 @@ initial release
 __author__ = 'Joe Padula'
 __license__ = 'Apache 2.0'
 
-import copy
 import re
-import time
 from functools import partial
-from dateutil import parser
 
 from mi.core.log import get_logger
 log = get_logger()
 from mi.core.common import BaseEnum
 from mi.core.instrument.data_particle import DataParticle, DataParticleKey, DataParticleValue
-from mi.core.exceptions import SampleException, DatasetParserException, UnexpectedDataException
+from mi.core.exceptions import SampleException, UnexpectedDataException
 from mi.dataset.dataset_parser import BufferLoadingParser
 from mi.core.instrument.chunker import StringChunker
 from mi.dataset.parser.utilities import mac_timestamp_to_utc_timestamp
@@ -100,11 +97,6 @@ DATA_CONTROL_MSG_NUM_FIELDS = 7
 CONTROL_MSG_NUM_FIELDS = 6
 
 TIMESTAMP_FIELD = 1
-
-
-class StateKey(BaseEnum):
-    POSITION = 'position'  # hold the current file position
-    START_OF_DATA = 'start_of_data'
 
 
 class DataParticleType(BaseEnum):
@@ -324,55 +316,17 @@ class PhsenRecoveredParser(BufferLoadingParser):
 
     def __init__(self,
                  config,
-                 state,
                  stream_handle,
-                 state_callback,
-                 publish_callback,
-                 exception_callback,
-                 *args, **kwargs):
+                 exception_callback):
 
-        # noinspection PyArgumentList,PyArgumentList,PyArgumentList,PyArgumentList,PyArgumentList
-        super(PhsenRecoveredParser, self).__init__(config, stream_handle, state,
+        super(PhsenRecoveredParser, self).__init__(config, stream_handle,
+                                                   None,
                                                    partial(StringChunker.regex_sieve_function,
                                                    regex_list=[RECORD_MATCHER]),
-                                                   state_callback,
-                                                   publish_callback,
-                                                   exception_callback,
-                                                   *args,
-                                                   **kwargs)
-
-        self._read_state = {StateKey.POSITION: 0, StateKey.START_OF_DATA: False}
-
-        if state:
-            self.set_state(self._state)
-
-    def set_state(self, state_obj):
-        """
-        Set the value of the state object for this parser
-        @param state_obj The object to set the state to.
-        @throws DatasetParserException if there is a bad state structure
-        """
-        if not isinstance(state_obj, dict):
-            raise DatasetParserException("Invalid state structure")
-        if not ((StateKey.POSITION in state_obj)):
-            raise DatasetParserException("Missing state key %s" % StateKey.POSITION)
-        if not ((StateKey.START_OF_DATA in state_obj)):
-            raise DatasetParserException("Missing state key %s" % StateKey.START_OF_DATA)
-
-        self._record_buffer = []
-        self._state = state_obj
-        self._read_state = state_obj
-        self._chunker.clean_all_chunks()
-
-        # seek to the position
-        self._stream_handle.seek(state_obj[StateKey.POSITION])
-
-    def _increment_state(self, increment):
-        """
-        Increment the parser state
-        @param increment The amount to increment the position by
-        """
-        self._read_state[StateKey.POSITION] += increment
+                                                   lambda x, y: None,
+                                                   lambda x: None,
+                                                   exception_callback)
+        self._start_of_data = False
 
     def parse_chunks(self):
         """
@@ -380,7 +334,7 @@ class PhsenRecoveredParser(BufferLoadingParser):
         it is a valid data piece, build a particle, update the position and
         timestamp. Go until the chunker has no more valid data.
         @retval a list of tuples with sample particles encountered in this
-            parsing, plus the state. An empty list of nothing was parsed.
+            parsing. An empty list of nothing was parsed.
         """
         result_particles = []
         (nd_timestamp, non_data, non_start, non_end) = self._chunker.get_next_non_data_with_index(clean=False)
@@ -389,16 +343,10 @@ class PhsenRecoveredParser(BufferLoadingParser):
 
         while chunk is not None:
 
-            log.debug("Chunk: ****%s****", chunk)
-
-            self._increment_state(len(chunk))
-            if not self._read_state[StateKey.START_OF_DATA]:
-
-                log.debug("In if not self._read_state[StateKey.START_OF_DATA]")
-
+            if not self._start_of_data:
                 start_of_data = START_OF_DATA_MATCHER.match(chunk)
                 if start_of_data:
-                    self._read_state[StateKey.START_OF_DATA] = True
+                    self._start_of_data = True
             else:
 
                 # if this chunk is a data match process it, otherwise it is a metadata record which is ignored
@@ -414,7 +362,7 @@ class PhsenRecoveredParser(BufferLoadingParser):
 
                     if sample:
                         # create particle
-                        result_particles.append((sample, copy.copy(self._read_state)))
+                        result_particles.append((sample, None))
 
                 elif control_match:
                     record_type = int(control_match.group(1), 10)
@@ -447,7 +395,7 @@ class PhsenRecoveredParser(BufferLoadingParser):
 
                             if sample:
                                 # create particle
-                                result_particles.append((sample, copy.copy(self._read_state)))
+                                result_particles.append((sample, None))
                     else:
                         # Matched by REGEX but not a supported control type
                         error_str = 'Invalid Record Type %d'
@@ -477,4 +425,3 @@ class PhsenRecoveredParser(BufferLoadingParser):
             log.error("Found %d bytes of unexpected non-data:%s", len(non_data), non_data)
             self._exception_callback(UnexpectedDataException("Found %d bytes of un-expected non-data:%s" %
                                                             (len(non_data), non_data)))
-            self._increment_state(len(non_data))
