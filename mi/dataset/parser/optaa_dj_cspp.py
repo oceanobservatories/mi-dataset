@@ -1,12 +1,9 @@
-#!/usr/bin/env python
-
 """
 @package mi.dataset.parser.optaa_dj_cspp
 @file marine-integrations/mi/dataset/parser/optaa_dj_cspp.py
 @author Joe Padula
-@brief Parser for the optaa_dj_cspp dataset driver. This parser extends from certain classes
-    in cspp_base.py but not all. For instance OptaaDjCsppParser is not extended from cspp_base,
-    instead it is extended from BufferLoadingParser.
+@brief Parser for the optaa_dj_cspp dataset driver. This parser extends CsppParser
+    located in cspp_base.py.
 Release notes:
 
 Initial Release
@@ -18,20 +15,21 @@ __license__ = 'Apache 2.0'
 import numpy
 import re
 
+from mi.core.common import BaseEnum
+from mi.core.exceptions import RecoverableSampleException
+from mi.core.instrument.data_particle import DataParticle
 from mi.core.log import get_logger
 log = get_logger()
-from mi.core.common import BaseEnum
-from mi.core.instrument.data_particle import DataParticle
-from mi.core.exceptions import \
-    RecoverableSampleException
+
+from mi.dataset.parser.common_regexes import \
+    END_OF_LINE_REGEX, \
+    FLOAT_REGEX, \
+    INT_REGEX
 
 from mi.dataset.parser.cspp_base import \
     CsppParser, \
     HEADER_PART_MATCHER, \
-    FLOAT_REGEX, \
-    INT_REGEX, \
     Y_OR_N_REGEX, \
-    END_OF_LINE_REGEX, \
     CsppMetadataDataParticle, \
     MetadataRawDataKey, \
     encode_y_or_n
@@ -150,30 +148,22 @@ class OptaaDjCsppMetadataDataParticle(CsppMetadataDataParticle):
         """
         metadata_particle = []
 
-        try:
+        # Call base class to append the base metadata parsed values to the particle to return
+        metadata_particle += self._build_metadata_parsed_values()
 
-            # Call base class to append the base metadata parsed values to the particle to return
-            metadata_particle += self._build_metadata_parsed_values()
+        data_match = self.raw_data[MetadataRawDataKey.DATA_MATCH]
 
-            data_match = self.raw_data[MetadataRawDataKey.DATA_MATCH]
+        # Process the non common metadata particle parameter
 
-            # Process the non common metadata particle parameter
+        # Instrument serial number (from first record)
+        metadata_particle.append(self._encode_value(OptaaDjCsppParserDataParticleKey.SERIAL_NUMBER,
+                                                    data_match.group(DataMatchesGroupNumber.SERIAL_NUMBER),
+                                                    int))
 
-            # Instrument serial number (from first record)
-            metadata_particle.append(self._encode_value(OptaaDjCsppParserDataParticleKey.SERIAL_NUMBER,
-                                                        data_match.group(DataMatchesGroupNumber.SERIAL_NUMBER),
-                                                        int))
-
-            # Set the internal timestamp
-            internal_timestamp_unix = numpy.float(data_match.group(
-                DataMatchesGroupNumber.PROFILER_TIMESTAMP))
-            self.set_internal_timestamp(unix_time=internal_timestamp_unix)
-
-        except (ValueError, TypeError, IndexError) as ex:
-            log.warn("Exception when building metadata particle")
-            raise RecoverableSampleException(
-                "Error (%s) while decoding parameters in data: [%s]"
-                % (ex, self.raw_data))
+        # Set the internal timestamp
+        internal_timestamp_unix = numpy.float(data_match.group(
+            DataMatchesGroupNumber.PROFILER_TIMESTAMP))
+        self.set_internal_timestamp(unix_time=internal_timestamp_unix)
 
         return metadata_particle
 
@@ -209,67 +199,60 @@ class OptaaDjCsppInstrumentDataParticle(DataParticle):
 
         results = []
 
-        try:
-            # Process each of the non-list type instrument particle parameters that occur first
-            for name, group, function in INSTRUMENT_PARTICLE_ENCODING_RULES_BEGIN:
-                results.append(self._encode_value(name, self.raw_data.group(group), function))
+        # Process each of the non-list type instrument particle parameters that occur first
+        for name, group, function in INSTRUMENT_PARTICLE_ENCODING_RULES_BEGIN:
+            results.append(self._encode_value(name, self.raw_data.group(group), function))
 
-            # The following is a mix if int, followed by a list.
+        # The following is a mix if int, followed by a list.
 
-            # C-channel reference dark counts, used for diagnostic purposes.
-            results.append(self._encode_value(OptaaDjCsppParserDataParticleKey.C_REFERENCE_DARK_COUNTS,
-                                              self.raw_data.group(DataMatchesGroupNumber.C_REF_DARK),
-                                              int))
+        # C-channel reference dark counts, used for diagnostic purposes.
+        results.append(self._encode_value(OptaaDjCsppParserDataParticleKey.C_REFERENCE_DARK_COUNTS,
+                                          self.raw_data.group(DataMatchesGroupNumber.C_REF_DARK),
+                                          int))
 
-            # Array of raw c-channel reference counts
-            results.append(self._encode_value(OptaaDjCsppParserDataParticleKey.C_REFERENCE_COUNTS,
-                                              self._build_list_for_encoding(DataMatchesGroupNumber.C_REF_COUNTS),
-                                              list))
+        # Array of raw c-channel reference counts
+        results.append(self._encode_value(OptaaDjCsppParserDataParticleKey.C_REFERENCE_COUNTS,
+                                          self._build_list_for_encoding(DataMatchesGroupNumber.C_REF_COUNTS),
+                                          list))
 
-            # C-signal reference dark counts, used for diagnostic purposes.
-            results.append(self._encode_value(OptaaDjCsppParserDataParticleKey.C_SIGNAL_DARK_COUNTS,
-                                              self.raw_data.group(DataMatchesGroupNumber.C_SIG_DARK),
-                                              int))
+        # C-signal reference dark counts, used for diagnostic purposes.
+        results.append(self._encode_value(OptaaDjCsppParserDataParticleKey.C_SIGNAL_DARK_COUNTS,
+                                          self.raw_data.group(DataMatchesGroupNumber.C_SIG_DARK),
+                                          int))
 
-            # Array of raw c-channel signal counts
-            results.append(self._encode_value(OptaaDjCsppParserDataParticleKey.C_SIGNAL_COUNTS,
-                                              self._build_list_for_encoding(DataMatchesGroupNumber.C_SIG_COUNTS),
-                                              list))
+        # Array of raw c-channel signal counts
+        results.append(self._encode_value(OptaaDjCsppParserDataParticleKey.C_SIGNAL_COUNTS,
+                                          self._build_list_for_encoding(DataMatchesGroupNumber.C_SIG_COUNTS),
+                                          list))
 
-            # A-channel reference dark counts, used for diagnostic purposes.
-            results.append(self._encode_value(OptaaDjCsppParserDataParticleKey.A_REFERENCE_DARK_COUNTS,
-                                              self.raw_data.group(DataMatchesGroupNumber.A_REF_DARK),
-                                              int))
+        # A-channel reference dark counts, used for diagnostic purposes.
+        results.append(self._encode_value(OptaaDjCsppParserDataParticleKey.A_REFERENCE_DARK_COUNTS,
+                                          self.raw_data.group(DataMatchesGroupNumber.A_REF_DARK),
+                                          int))
 
-            # Array of raw a-channel reference counts
-            results.append(self._encode_value(OptaaDjCsppParserDataParticleKey.A_REFERENCE_COUNTS,
-                                              self._build_list_for_encoding(DataMatchesGroupNumber.A_REF_COUNTS),
-                                              list))
+        # Array of raw a-channel reference counts
+        results.append(self._encode_value(OptaaDjCsppParserDataParticleKey.A_REFERENCE_COUNTS,
+                                          self._build_list_for_encoding(DataMatchesGroupNumber.A_REF_COUNTS),
+                                          list))
 
-            # A-signal reference dark counts, used for diagnostic purposes.
-            results.append(self._encode_value(OptaaDjCsppParserDataParticleKey.A_SIGNAL_DARK_COUNTS,
-                                              self.raw_data.group(DataMatchesGroupNumber.A_SIG_DARK),
-                                              int))
+        # A-signal reference dark counts, used for diagnostic purposes.
+        results.append(self._encode_value(OptaaDjCsppParserDataParticleKey.A_SIGNAL_DARK_COUNTS,
+                                          self.raw_data.group(DataMatchesGroupNumber.A_SIG_DARK),
+                                          int))
 
-            # Array of raw a-channel signal counts
-            results.append(self._encode_value(OptaaDjCsppParserDataParticleKey.A_SIGNAL_COUNTS,
-                                              self._build_list_for_encoding(DataMatchesGroupNumber.A_SIG_COUNTS),
-                                              list))
+        # Array of raw a-channel signal counts
+        results.append(self._encode_value(OptaaDjCsppParserDataParticleKey.A_SIGNAL_COUNTS,
+                                          self._build_list_for_encoding(DataMatchesGroupNumber.A_SIG_COUNTS),
+                                          list))
 
-            # Process each of the non-list instrument particle parameters that occur last
-            for name, group, function in INSTRUMENT_PARTICLE_ENCODING_RULES_END:
-                results.append(self._encode_value(name, self.raw_data.group(group), function))
+        # Process each of the non-list instrument particle parameters that occur last
+        for name, group, function in INSTRUMENT_PARTICLE_ENCODING_RULES_END:
+            results.append(self._encode_value(name, self.raw_data.group(group), function))
 
-            # Set the internal timestamp
-            internal_timestamp_unix = numpy.float(self.raw_data.group(
-                                                  DataMatchesGroupNumber.PROFILER_TIMESTAMP))
-            self.set_internal_timestamp(unix_time=internal_timestamp_unix)
-
-        except (ValueError, TypeError, IndexError) as ex:
-            log.warn("Exception when building instrument parsed values")
-            raise RecoverableSampleException(
-                "Error (%s) while decoding parameters in data: [%s]"
-                % (ex, self.raw_data))
+        # Set the internal timestamp
+        internal_timestamp_unix = numpy.float(self.raw_data.group(
+                                              DataMatchesGroupNumber.PROFILER_TIMESTAMP))
+        self.set_internal_timestamp(unix_time=internal_timestamp_unix)
 
         return results
 
@@ -310,39 +293,28 @@ class OptaaDjCsppParser(CsppParser):
 
     def __init__(self,
                  config,
-                 state,
                  stream_handle,
-                 state_callback,
-                 publish_callback,
-                 exception_callback,
-                 *args, **kwargs):
+                 exception_callback):
         """
         This method is a constructor that will instantiate an OptaaDjCsppParser object.
         @param config The configuration for this OptaaDjCsppParser parser
-        @param state The state the OptaaDjCsppParser should use to initialize itself
         @param stream_handle The handle to the data stream containing the optaa_dj_cspp data
-        @param state_callback The function to call upon detecting state changes
-        @param publish_callback The function to call to provide particles
         @param exception_callback The function to call to report exceptions
         """
 
         # Call the superclass constructor
         super(OptaaDjCsppParser, self).__init__(config,
-                                                state,
                                                 stream_handle,
-                                                state_callback,
-                                                publish_callback,
                                                 exception_callback,
-                                                BEGIN_REGEX,
-                                                *args, **kwargs)
+                                                BEGIN_REGEX)
 
     def parse_chunks(self):
         """
         Parse out any pending data chunks in the chunker. If
-        it is a valid data piece, build a particle, update the position and
-        timestamp. Go until the chunker has no more valid data.
+        it is a valid data piece, build a particle, update the timestamp.
+        Go until the chunker has no more valid data.
         @retval a list of tuples with sample particles encountered in this
-        parsing, plus the state. An empty list of nothing was parsed.
+        parsing. An empty list is returned if nothing was parsed.
         """
         # Initialize the result particles list we will return
         result_particles = []
@@ -358,9 +330,6 @@ class OptaaDjCsppParser(CsppParser):
 
         # While the data chunk is not None, process the data chunk
         while chunk is not None:
-
-            # Increment the read state position now
-            self._increment_read_state(len(chunk))
 
             # Look for match in beginning part of the regex
             match = BEGIN_MATCHER.match(chunk)
