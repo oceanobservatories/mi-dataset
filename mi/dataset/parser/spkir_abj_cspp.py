@@ -25,17 +25,18 @@ from mi.core.exceptions import RecoverableSampleException
 
 from mi.dataset.parser.cspp_base import \
     CsppParser, \
-    FLOAT_REGEX, \
-    INT_REGEX, \
     Y_OR_N_REGEX, \
-    MULTIPLE_TAB_REGEX, \
-    END_OF_LINE_REGEX, \
     CsppMetadataDataParticle, \
     MetadataRawDataKey, \
     PARTICLE_KEY_INDEX, \
     DATA_MATCHES_GROUP_NUMBER_INDEX, \
     TYPE_ENCODING_INDEX, \
     encode_y_or_n
+
+from mi.dataset.parser.common_regexes import INT_REGEX, \
+    FLOAT_REGEX, \
+    MULTIPLE_TAB_REGEX, \
+    END_OF_LINE_REGEX
 
 INSTRUMENT_ID_REGEX = r'SAT\w+'  # instrument ids all begin with SAT
 CHECKSUM_REGEX = r'[0-9a-fA-F]{2}'  # hex characters
@@ -322,29 +323,18 @@ class SpkirAbjCsppParser(CsppParser):
 
     def __init__(self,
                  config,
-                 state,
                  stream_handle,
-                 state_callback,
-                 publish_callback,
-                 exception_callback,
-                 *args, **kwargs):
+                 exception_callback):
         """
         This method is a constructor that will instantiate an SpkirAbjCsppParser object.
         @param config The configuration for this SpkirAbjCsppParser parser
-        @param state The state the SpkirAbjCsppParser should use to initialize itself
         @param stream_handle The handle to the data stream containing the spkir_abj_cspp data
-        @param state_callback The function to call upon detecting state changes
-        @param publish_callback The function to call to provide particles
         @param exception_callback The function to call to report exceptions
         """
 
         # Call the superclass constructor
         super(SpkirAbjCsppParser, self).__init__(config,
-                                                 state,
                                                  stream_handle,
-                                                 state_callback,
-                                                 publish_callback,
                                                  exception_callback,
                                                  DATA_REGEX,
-                                                 ignore_matcher=IGNORE_MATCHER,
-                                                 *args, **kwargs)
+                                                 ignore_matcher=IGNORE_MATCHER)
