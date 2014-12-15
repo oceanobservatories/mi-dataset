@@ -939,6 +939,7 @@ class GliderParser(SimpleParser):
         """
         Read in the column labels, data type, number of bytes of each
         data type, and the data from an ASCII glider data file.
+        @throws SampleException if the number of columns does not match the expected number
         """
         data_dict = {}
         num_columns = self._header_dict['sensors_per_cycle']
@@ -1138,19 +1139,3 @@ class GliderEngineeringParser(GliderParser):
         header_data_dict['glider_eng_fileopen_time'] = fileopen_time_value
 
         return header_data_dict
-
-    def fileopen_str_to_timestamp(self, fileopen_str):
-        """
-        Parse the fileopen time into a timestamp
-        @param fileopen_str String parse the fileopen date from
-        @throws ValueError if the fileopen_str is unable to be parsed into a date/time
-        """
-        # if the day is only one digit, it is replaced with an _ rather than 0
-        try:
-            # first try 1 digit for the day
-            utctime = utilities.formatted_timestamp_utc_time(fileopen_str, "%a_%b__%d_%H:%M:%S_%Y")
-        except ValueError as e:
-            # date might have two digits for the day, now try that
-            utctime = utilities.formatted_timestamp_utc_time(fileopen_str, "%a_%b_%d_%H:%M:%S_%Y")
-
-        return ntplib.system_to_ntp_time(float(utctime))

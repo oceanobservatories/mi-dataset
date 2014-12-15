@@ -3,10 +3,11 @@
 #
 # #
 
-__author__ = "ehahn"
+__author__ = "pcable"
 
 import os
 import sys
+import json
 
 from mock import Mock
 import functools
@@ -84,3 +85,4 @@ p = timeit()
 
 for k in p._samples:
     print k, len(p._samples[k])
+open('samples.json', 'wb').write(json.dumps(p._samples))
