@@ -1,7 +1,6 @@
-#!/usr/bin/env python
 
 """
-@package mi.dataset.parser.spkir_abj_cspp
+@package mi.dataset.parser
 @file marine-integrations/mi/dataset/parser/spkir_abj_cspp.py
 @author Jeff Roy
 @brief Parser for the spkir_abj_cspp dataset driver
@@ -25,17 +24,18 @@ from mi.core.exceptions import RecoverableSampleException
 
 from mi.dataset.parser.cspp_base import \
     CsppParser, \
-    FLOAT_REGEX, \
-    INT_REGEX, \
     Y_OR_N_REGEX, \
-    MULTIPLE_TAB_REGEX, \
-    END_OF_LINE_REGEX, \
     CsppMetadataDataParticle, \
     MetadataRawDataKey, \
     PARTICLE_KEY_INDEX, \
     DATA_MATCHES_GROUP_NUMBER_INDEX, \
     TYPE_ENCODING_INDEX, \
     encode_y_or_n
+
+from mi.dataset.parser.common_regexes import INT_REGEX, \
+    FLOAT_REGEX, \
+    MULTIPLE_TAB_REGEX, \
+    END_OF_LINE_REGEX
 
 INSTRUMENT_ID_REGEX = r'SAT\w+'  # instrument ids all begin with SAT
 CHECKSUM_REGEX = r'[0-9a-fA-F]{2}'  # hex characters
@@ -173,30 +173,23 @@ class SpkirAbjCsppMetadataDataParticle(CsppMetadataDataParticle):
 
         results = []
 
-        try:
+        # Append the base metadata parsed values to the results to return
+        results += self._build_metadata_parsed_values()
 
-            # Append the base metadata parsed values to the results to return
-            results += self._build_metadata_parsed_values()
+        data_match = self.raw_data[MetadataRawDataKey.DATA_MATCH]
 
-            data_match = self.raw_data[MetadataRawDataKey.DATA_MATCH]
+        # Process each of the non common metadata particle parameters
+        for rule in NON_COMMON_METADATA_PARTICLE_ENCODING_RULES:
 
-            # Process each of the non common metadata particle parameters
-            for rule in NON_COMMON_METADATA_PARTICLE_ENCODING_RULES:
+            results.append(self._encode_value(
+                rule[PARTICLE_KEY_INDEX],
+                data_match.group(rule[DATA_MATCHES_GROUP_NUMBER_INDEX]),
+                rule[TYPE_ENCODING_INDEX]))
 
-                results.append(self._encode_value(
-                    rule[PARTICLE_KEY_INDEX],
-                    data_match.group(rule[DATA_MATCHES_GROUP_NUMBER_INDEX]),
-                    rule[TYPE_ENCODING_INDEX]))
-
-            # Set the internal timestamp
-            internal_timestamp_unix = numpy.float(data_match.group(
-                DataMatchesGroupNumber.PROFILER_TIMESTAMP))
-            self.set_internal_timestamp(unix_time=internal_timestamp_unix)
-
-        except (ValueError, TypeError, IndexError) as ex:
-            log.warn("Exception when building parsed values")
-            raise RecoverableSampleException("Error (%s) while decoding parameters in data: [%s]"
-                                             % (ex, self.raw_data))
+        # Set the internal timestamp
+        internal_timestamp_unix = numpy.float(data_match.group(
+            DataMatchesGroupNumber.PROFILER_TIMESTAMP))
+        self.set_internal_timestamp(unix_time=internal_timestamp_unix)
 
         return results
 
@@ -230,75 +223,60 @@ class SpkirAbjCsppInstrumentDataParticle(DataParticle):
         @throws SampleException If there is a problem with sample creation
         """
         results = []
-        channel_array = []
 
-        try:
+        results.append(self._encode_value(SpkirAbjCsppParserDataParticleKey.PROFILER_TIMESTAMP,
+                                          self.raw_data.group(DataMatchesGroupNumber.PROFILER_TIMESTAMP),
+                                          numpy.float))
 
-            results.append(self._encode_value(SpkirAbjCsppParserDataParticleKey.PROFILER_TIMESTAMP,
-                                              self.raw_data.group(DataMatchesGroupNumber.PROFILER_TIMESTAMP),
-                                              numpy.float))
+        results.append(self._encode_value(SpkirAbjCsppParserDataParticleKey.PRESSURE,
+                                          self.raw_data.group(DataMatchesGroupNumber.PRESSURE),
+                                          float))
 
-            results.append(self._encode_value(SpkirAbjCsppParserDataParticleKey.PRESSURE,
-                                              self.raw_data.group(DataMatchesGroupNumber.PRESSURE),
-                                              float))
+        results.append(self._encode_value(SpkirAbjCsppParserDataParticleKey.SUSPECT_TIMESTAMP,
+                                          self.raw_data.group(DataMatchesGroupNumber.SUSPECT_TIMESTAMP),
+                                          encode_y_or_n))
 
-            results.append(self._encode_value(SpkirAbjCsppParserDataParticleKey.SUSPECT_TIMESTAMP,
-                                              self.raw_data.group(DataMatchesGroupNumber.SUSPECT_TIMESTAMP),
-                                              encode_y_or_n))
+        results.append(self._encode_value(SpkirAbjCsppParserDataParticleKey.TIMER,
+                                          self.raw_data.group(DataMatchesGroupNumber.TIMER),
+                                          numpy.float))
 
-            results.append(self._encode_value(SpkirAbjCsppParserDataParticleKey.TIMER,
-                                              self.raw_data.group(DataMatchesGroupNumber.TIMER),
-                                              numpy.float))
+        results.append(self._encode_value(SpkirAbjCsppParserDataParticleKey.SAMPLE_DELAY,
+                                          self.raw_data.group(DataMatchesGroupNumber.SAMPLE_DELAY),
+                                          int))
 
-            results.append(self._encode_value(SpkirAbjCsppParserDataParticleKey.SAMPLE_DELAY,
-                                              self.raw_data.group(DataMatchesGroupNumber.SAMPLE_DELAY),
-                                              int))
+        channel_array = [int(self.raw_data.group(DataMatchesGroupNumber.CHANNEL_1)),
+                         int(self.raw_data.group(DataMatchesGroupNumber.CHANNEL_2)),
+                         int(self.raw_data.group(DataMatchesGroupNumber.CHANNEL_3)),
+                         int(self.raw_data.group(DataMatchesGroupNumber.CHANNEL_4)),
+                         int(self.raw_data.group(DataMatchesGroupNumber.CHANNEL_5)),
+                         int(self.raw_data.group(DataMatchesGroupNumber.CHANNEL_6)),
+                         int(self.raw_data.group(DataMatchesGroupNumber.CHANNEL_7))]
 
-            try:
+        results.append(self._encode_value(SpkirAbjCsppParserDataParticleKey.CHANNEL_ARRAY,
+                                          channel_array,
+                                          list))
 
-                channel_array = [int(self.raw_data.group(DataMatchesGroupNumber.CHANNEL_1)),
-                                 int(self.raw_data.group(DataMatchesGroupNumber.CHANNEL_2)),
-                                 int(self.raw_data.group(DataMatchesGroupNumber.CHANNEL_3)),
-                                 int(self.raw_data.group(DataMatchesGroupNumber.CHANNEL_4)),
-                                 int(self.raw_data.group(DataMatchesGroupNumber.CHANNEL_5)),
-                                 int(self.raw_data.group(DataMatchesGroupNumber.CHANNEL_6)),
-                                 int(self.raw_data.group(DataMatchesGroupNumber.CHANNEL_7))]
+        results.append(self._encode_value(SpkirAbjCsppParserDataParticleKey.VIN_SENSE,
+                                          self.raw_data.group(DataMatchesGroupNumber.VIN),
+                                          int))
 
-                results.append(self._encode_value(SpkirAbjCsppParserDataParticleKey.CHANNEL_ARRAY,
-                                                  channel_array,
-                                                  list))
-            except ValueError:
-                log.error("Data particle error encoding. Name:%s Value:%s",
-                          SpkirAbjCsppParserDataParticleKey.CHANNEL_ARRAY, channel_array)
-                self._encoding_errors.append({SpkirAbjCsppParserDataParticleKey.CHANNEL_ARRAY: channel_array})
+        results.append(self._encode_value(SpkirAbjCsppParserDataParticleKey.VA_SENSE,
+                                          self.raw_data.group(DataMatchesGroupNumber.VA),
+                                          int))
 
-            results.append(self._encode_value(SpkirAbjCsppParserDataParticleKey.VIN_SENSE,
-                                              self.raw_data.group(DataMatchesGroupNumber.VIN),
-                                              int))
+        results.append(self._encode_value(SpkirAbjCsppParserDataParticleKey.INTERNAL_TEMPERATURE,
+                                          self.raw_data.group(DataMatchesGroupNumber.VA),
+                                          int))
 
-            results.append(self._encode_value(SpkirAbjCsppParserDataParticleKey.VA_SENSE,
-                                              self.raw_data.group(DataMatchesGroupNumber.VA),
-                                              int))
+        results.append(self._encode_value(SpkirAbjCsppParserDataParticleKey.FRAME_COUNTER,
+                                          self.raw_data.group(DataMatchesGroupNumber.FRAME_COUNTER),
+                                          int))
 
-            results.append(self._encode_value(SpkirAbjCsppParserDataParticleKey.INTERNAL_TEMPERATURE,
-                                              self.raw_data.group(DataMatchesGroupNumber.VA),
-                                              int))
+        # # Set the internal timestamp
+        internal_timestamp_unix = numpy.float(self.raw_data.group(
+            DataMatchesGroupNumber.PROFILER_TIMESTAMP))
+        self.set_internal_timestamp(unix_time=internal_timestamp_unix)
 
-            results.append(self._encode_value(SpkirAbjCsppParserDataParticleKey.FRAME_COUNTER,
-                                              self.raw_data.group(DataMatchesGroupNumber.FRAME_COUNTER),
-                                              int))
-
-            # # Set the internal timestamp
-            internal_timestamp_unix = numpy.float(self.raw_data.group(
-                DataMatchesGroupNumber.PROFILER_TIMESTAMP))
-            self.set_internal_timestamp(unix_time=internal_timestamp_unix)
-
-        except (ValueError, TypeError, IndexError) as ex:
-            log.warn("Exception when building parsed values")
-            raise RecoverableSampleException("Error (%s) while decoding parameters in data: [%s]"
-                                             % (ex, self.raw_data))
-
-        #log.debug('*** instrument particle result %s', results)
         return results
 
 
@@ -322,29 +300,18 @@ class SpkirAbjCsppParser(CsppParser):
 
     def __init__(self,
                  config,
-                 state,
                  stream_handle,
-                 state_callback,
-                 publish_callback,
-                 exception_callback,
-                 *args, **kwargs):
+                 exception_callback):
         """
         This method is a constructor that will instantiate an SpkirAbjCsppParser object.
         @param config The configuration for this SpkirAbjCsppParser parser
-        @param state The state the SpkirAbjCsppParser should use to initialize itself
         @param stream_handle The handle to the data stream containing the spkir_abj_cspp data
-        @param state_callback The function to call upon detecting state changes
-        @param publish_callback The function to call to provide particles
         @param exception_callback The function to call to report exceptions
         """
 
         # Call the superclass constructor
         super(SpkirAbjCsppParser, self).__init__(config,
-                                                 state,
                                                  stream_handle,
-                                                 state_callback,
-                                                 publish_callback,
                                                  exception_callback,
                                                  DATA_REGEX,
-                                                 ignore_matcher=IGNORE_MATCHER,
-                                                 *args, **kwargs)
+                                                 ignore_matcher=IGNORE_MATCHER)
