@@ -55,7 +55,6 @@ class GliderParticleKey(BaseEnum):
     M_PRESENT_TIME = 'm_present_time'  # you need the m_ timestamps for lats & lons
     SCI_M_PRESENT_TIME = 'sci_m_present_time'
     SCI_M_PRESENT_SECS_INTO_MISSION = 'sci_m_present_secs_into_mission'
-    __sciparams = None
 
     @classmethod
     def science_parameter_list(cls):
