@@ -3,8 +3,8 @@ header:
     particle_type: 'MULTIPLE'
 data:
   - _index: 1
-    particle_object: FlortDjCsppMetadataRecoveredDataParticle
-    particle_type: flort_dj_cspp_metadata_recovered
+    particle_object: FlortDjCsppMetadataTelemeteredDataParticle
+    particle_type: flort_dj_cspp_metadata
     internal_timestamp: 3606762499.950000
     last_character_controller_id: '1'
     day_of_year_number: 107
@@ -14,8 +14,8 @@ data:
     preprocessing_software_version: '1.11'
     start_date: '04/17/2014'
   - _index: 2
-    particle_object: FlortDjCsppInstrumentRecoveredDataParticle
-    particle_type: flort_dj_cspp_instrument_recovered
+    particle_object: FlortDjCsppInstrumentTelemeteredDataParticle
+    particle_type: flort_dj_cspp_instrument
     internal_timestamp: 3606762499.950000
     profiler_timestamp: 1397773699.9500000476837158
     pressure_depth: 19.7560000000000002
@@ -30,8 +30,8 @@ data:
     raw_signal_cdom: 67
     raw_internal_temp: 67
   - _index: 3
-    particle_object: FlortDjCsppInstrumentRecoveredDataParticle
-    particle_type: flort_dj_cspp_instrument_recovered
+    particle_object: FlortDjCsppInstrumentTelemeteredDataParticle
+    particle_type: flort_dj_cspp_instrument
     internal_timestamp: 3606762511.314000
     profiler_timestamp: 1397773711.3139998912811279
     pressure_depth: 19.2659999999999982
@@ -46,8 +46,8 @@ data:
     raw_signal_cdom: 67
     raw_internal_temp: 67
   - _index: 4
-    particle_object: FlortDjCsppInstrumentRecoveredDataParticle
-    particle_type: flort_dj_cspp_instrument_recovered
+    particle_object: FlortDjCsppInstrumentTelemeteredDataParticle
+    particle_type: flort_dj_cspp_instrument
     internal_timestamp: 3606762512.449000
     profiler_timestamp: 1397773712.4489998817443848
     pressure_depth: 19.2530000000000001
