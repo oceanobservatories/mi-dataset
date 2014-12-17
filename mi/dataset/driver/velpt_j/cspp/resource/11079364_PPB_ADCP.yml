@@ -5,7 +5,7 @@ data:
   - _index: 1
     particle_object: VelptJCsppMetadataRecoveredDataParticle
     particle_type: velpt_j_cspp_metadata_recovered
-    internal_timestamp: 3606762485.111000
+    internal_timestamp: 3606762485.111
     last_character_controller_id: '1'
     day_of_year_number: 107
     fraction_of_day: 9364
@@ -16,387 +16,387 @@ data:
   - _index: 2
     particle_object: VelptJCsppInstrumentRecoveredDataParticle
     particle_type: velpt_j_cspp_instrument_recovered
-    internal_timestamp: 3606762485.111000
-    profiler_timestamp: 1397773685.1110000610351562
-    pressure_depth: 19.3870000000000005
+    internal_timestamp: 3606762485.111
+    profiler_timestamp: 1397773685.111
+    pressure_depth: 19.387
     suspect_timestamp: 1
-    speed_of_sound: 1492.4000000000000909
-    heading: 102.0000000000000000
-    pitch: -0.6000000000000000
-    roll: -2.2999999999999998
-    velpt_pressure: 18.4729999999999990
-    temperature: 10.7300000000000004
-    velocity_beam1_m_s: -0.0790000000000000
-    velocity_beam2_m_s: 0.1090000000000000
-    velocity_beam3_m_s: -0.0990000000000000
+    speed_of_sound: 1492.4
+    heading: 102.0
+    pitch: -0.6
+    roll: -2.3
+    velpt_pressure: 18.473
+    temperature: 10.73
+    velocity_beam1_m_s: -0.079
+    velocity_beam2_m_s: 0.109
+    velocity_beam3_m_s: -0.099
     amplitude_beam1: 102
     amplitude_beam2: 104
     amplitude_beam3: 101
   - _index: 3
     particle_object: VelptJCsppInstrumentRecoveredDataParticle
     particle_type: velpt_j_cspp_instrument_recovered
-    internal_timestamp: 3606762486.111000
-    profiler_timestamp: 1397773686.1110000610351562
-    pressure_depth: 19.3870000000000005
+    internal_timestamp: 3606762486.111
+    profiler_timestamp: 1397773686.111
+    pressure_depth: 19.387
     suspect_timestamp: 0
-    speed_of_sound: 1492.4000000000000909
-    heading: 101.2000000000000028
-    pitch: 0.0000000000000000
-    roll: -2.5000000000000000
-    velpt_pressure: 18.5990000000000002
-    temperature: 10.7300000000000004
-    velocity_beam1_m_s: -0.1080000000000000
-    velocity_beam2_m_s: 0.1710000000000000
-    velocity_beam3_m_s: -0.0500000000000000
+    speed_of_sound: 1492.4
+    heading: 101.2
+    pitch: 0.0
+    roll: -2.5
+    velpt_pressure: 18.599
+    temperature: 10.73
+    velocity_beam1_m_s: -0.108
+    velocity_beam2_m_s: 0.171
+    velocity_beam3_m_s: -0.05
     amplitude_beam1: 101
     amplitude_beam2: 103
     amplitude_beam3: 100
   - _index: 4
     particle_object: VelptJCsppInstrumentRecoveredDataParticle
     particle_type: velpt_j_cspp_instrument_recovered
-    internal_timestamp: 3606762487.111000
-    profiler_timestamp: 1397773687.1110000610351562
-    pressure_depth: 19.3870000000000005
+    internal_timestamp: 3606762487.111
+    profiler_timestamp: 1397773687.111
+    pressure_depth: 19.387
     suspect_timestamp: 0
-    speed_of_sound: 1492.2999999999999545
-    heading: 102.0999999999999943
-    pitch: 0.0000000000000000
-    roll: -2.7999999999999998
-    velpt_pressure: 18.7989999999999995
-    temperature: 10.7200000000000006
-    velocity_beam1_m_s: -0.1070000000000000
-    velocity_beam2_m_s: 0.1630000000000000
-    velocity_beam3_m_s: 0.0460000000000000
+    speed_of_sound: 1492.3
+    heading: 102.1
+    pitch: 0.0
+    roll: -2.8
+    velpt_pressure: 18.799
+    temperature: 10.72
+    velocity_beam1_m_s: -0.107
+    velocity_beam2_m_s: 0.163
+    velocity_beam3_m_s: 0.046
     amplitude_beam1: 101
     amplitude_beam2: 101
     amplitude_beam3: 98
   - _index: 5
     particle_object: VelptJCsppInstrumentRecoveredDataParticle
     particle_type: velpt_j_cspp_instrument_recovered
-    internal_timestamp: 3606762488.111000
-    profiler_timestamp: 1397773688.1110000610351562
-    pressure_depth: 19.3870000000000005
+    internal_timestamp: 3606762488.111
+    profiler_timestamp: 1397773688.111
+    pressure_depth: 19.387
     suspect_timestamp: 1
-    speed_of_sound: 1492.2999999999999545
-    heading: 103.4000000000000057
-    pitch: 0.0000000000000000
-    roll: -3.1000000000000001
-    velpt_pressure: 18.9989999999999988
-    temperature: 10.7200000000000006
-    velocity_beam1_m_s: -0.0890000000000000
-    velocity_beam2_m_s: 0.1980000000000000
-    velocity_beam3_m_s: 0.0590000000000000
+    speed_of_sound: 1492.3
+    heading: 103.4
+    pitch: 0.0
+    roll: -3.1
+    velpt_pressure: 18.999
+    temperature: 10.72
+    velocity_beam1_m_s: -0.089
+    velocity_beam2_m_s: 0.198
+    velocity_beam3_m_s: 0.059
     amplitude_beam1: 103
     amplitude_beam2: 100
     amplitude_beam3: 96
   - _index: 6
     particle_object: VelptJCsppInstrumentRecoveredDataParticle
     particle_type: velpt_j_cspp_instrument_recovered
-    internal_timestamp: 3606762489.111000
-    profiler_timestamp: 1397773689.1110000610351562
-    pressure_depth: 19.3870000000000005
+    internal_timestamp: 3606762489.111
+    profiler_timestamp: 1397773689.111
+    pressure_depth: 19.387
     suspect_timestamp: 0
-    speed_of_sound: 1492.2999999999999545
-    heading: 104.7000000000000028
-    pitch: -0.3000000000000000
-    roll: -3.2999999999999998
-    velpt_pressure: 19.1960000000000015
-    temperature: 10.7200000000000006
-    velocity_beam1_m_s: -0.1580000000000000
-    velocity_beam2_m_s: 0.1540000000000000
-    velocity_beam3_m_s: 0.0430000000000000
+    speed_of_sound: 1492.3
+    heading: 104.7
+    pitch: -0.3
+    roll: -3.3
+    velpt_pressure: 19.196
+    temperature: 10.72
+    velocity_beam1_m_s: -0.158
+    velocity_beam2_m_s: 0.154
+    velocity_beam3_m_s: 0.043
     amplitude_beam1: 104
     amplitude_beam2: 102
     amplitude_beam3: 111
   - _index: 7
     particle_object: VelptJCsppInstrumentRecoveredDataParticle
     particle_type: velpt_j_cspp_instrument_recovered
-    internal_timestamp: 3606762490.111000
-    profiler_timestamp: 1397773690.1110000610351562
-    pressure_depth: 19.3870000000000005
+    internal_timestamp: 3606762490.111
+    profiler_timestamp: 1397773690.111
+    pressure_depth: 19.387
     suspect_timestamp: 0
-    speed_of_sound: 1492.2999999999999545
-    heading: 105.0999999999999943
-    pitch: -1.0000000000000000
-    roll: -3.5000000000000000
-    velpt_pressure: 19.2830000000000013
-    temperature: 10.7200000000000006
-    velocity_beam1_m_s: -0.0940000000000000
-    velocity_beam2_m_s: 0.1810000000000000
-    velocity_beam3_m_s: 0.0730000000000000
+    speed_of_sound: 1492.3
+    heading: 105.1
+    pitch: -1.0
+    roll: -3.5
+    velpt_pressure: 19.283
+    temperature: 10.72
+    velocity_beam1_m_s: -0.094
+    velocity_beam2_m_s: 0.181
+    velocity_beam3_m_s: 0.073
     amplitude_beam1: 101
     amplitude_beam2: 102
     amplitude_beam3: 98
   - _index: 8
     particle_object: VelptJCsppInstrumentRecoveredDataParticle
     particle_type: velpt_j_cspp_instrument_recovered
-    internal_timestamp: 3606762491.111000
-    profiler_timestamp: 1397773691.1110000610351562
-    pressure_depth: 19.3870000000000005
+    internal_timestamp: 3606762491.111
+    profiler_timestamp: 1397773691.111
+    pressure_depth: 19.387
     suspect_timestamp: 0
-    speed_of_sound: 1492.2999999999999545
-    heading: 105.5000000000000000
-    pitch: -1.5000000000000000
-    roll: -3.6000000000000001
-    velpt_pressure: 19.2920000000000016
-    temperature: 10.7100000000000009
-    velocity_beam1_m_s: -0.0030000000000000
-    velocity_beam2_m_s: 0.1050000000000000
-    velocity_beam3_m_s: 0.0840000000000000
+    speed_of_sound: 1492.3
+    heading: 105.5
+    pitch: -1.5
+    roll: -3.6
+    velpt_pressure: 19.292
+    temperature: 10.71
+    velocity_beam1_m_s: -0.003
+    velocity_beam2_m_s: 0.105
+    velocity_beam3_m_s: 0.084
     amplitude_beam1: 101
     amplitude_beam2: 104
     amplitude_beam3: 105
   - _index: 9
     particle_object: VelptJCsppInstrumentRecoveredDataParticle
     particle_type: velpt_j_cspp_instrument_recovered
-    internal_timestamp: 3606762492.111000
-    profiler_timestamp: 1397773692.1110000610351562
-    pressure_depth: 19.3870000000000005
+    internal_timestamp: 3606762492.111
+    profiler_timestamp: 1397773692.111
+    pressure_depth: 19.387
     suspect_timestamp: 1
-    speed_of_sound: 1492.2999999999999545
-    heading: 104.7999999999999972
-    pitch: -1.8999999999999999
-    roll: -3.2999999999999998
-    velpt_pressure: 19.1849999999999987
-    temperature: 10.7100000000000009
-    velocity_beam1_m_s: -0.0390000000000000
-    velocity_beam2_m_s: 0.1750000000000000
-    velocity_beam3_m_s: 0.0640000000000000
+    speed_of_sound: 1492.3
+    heading: 104.8
+    pitch: -1.9
+    roll: -3.3
+    velpt_pressure: 19.185
+    temperature: 10.71
+    velocity_beam1_m_s: -0.039
+    velocity_beam2_m_s: 0.175
+    velocity_beam3_m_s: 0.064
     amplitude_beam1: 104
     amplitude_beam2: 104
     amplitude_beam3: 102
   - _index: 10
     particle_object: VelptJCsppInstrumentRecoveredDataParticle
     particle_type: velpt_j_cspp_instrument_recovered
-    internal_timestamp: 3606762493.111000
-    profiler_timestamp: 1397773693.1110000610351562
-    pressure_depth: 19.3870000000000005
+    internal_timestamp: 3606762493.111
+    profiler_timestamp: 1397773693.111
+    pressure_depth: 19.387
     suspect_timestamp: 0
     speed_of_sound: 1492.2999999999999545
-    heading: 103.5000000000000000
-    pitch: -2.0000000000000000
-    roll: -3.2000000000000002
+    heading: 103.5
+    pitch: -2.0
+    roll: -3.2
     velpt_pressure: 19.0259999999999998
-    temperature: 10.7100000000000009
-    velocity_beam1_m_s: 0.0460000000000000
-    velocity_beam2_m_s: 0.1350000000000000
-    velocity_beam3_m_s: 0.0200000000000000
+    temperature: 10.71
+    velocity_beam1_m_s: 0.046
+    velocity_beam2_m_s: 0.135
+    velocity_beam3_m_s: 0.02
     amplitude_beam1: 106
     amplitude_beam2: 101
     amplitude_beam3: 101
   - _index: 11
     particle_object: VelptJCsppInstrumentRecoveredDataParticle
     particle_type: velpt_j_cspp_instrument_recovered
-    internal_timestamp: 3606762494.112000
-    profiler_timestamp: 1397773694.1119999885559082
-    pressure_depth: 19.3460000000000001
+    internal_timestamp: 3606762494.112
+    profiler_timestamp: 1397773694.112
+    pressure_depth: 19.346
     suspect_timestamp: 0
     speed_of_sound: 1492.2999999999999545
-    heading: 102.5000000000000000
-    pitch: -1.6000000000000001
-    roll: -3.0000000000000000
+    heading: 102.5
+    pitch: -1.6
+    roll: -3.0
     velpt_pressure: 18.8069999999999986
     temperature: 10.6999999999999993
-    velocity_beam1_m_s: -0.0010000000000000
-    velocity_beam2_m_s: 0.1200000000000000
-    velocity_beam3_m_s: -0.0460000000000000
+    velocity_beam1_m_s: -0.001
+    velocity_beam2_m_s: 0.12
+    velocity_beam3_m_s: -0.046
     amplitude_beam1: 107
     amplitude_beam2: 106
     amplitude_beam3: 103
   - _index: 12
     particle_object: VelptJCsppInstrumentRecoveredDataParticle
     particle_type: velpt_j_cspp_instrument_recovered
-    internal_timestamp: 3606762495.112000
-    profiler_timestamp: 1397773695.1119999885559082
+    internal_timestamp: 3606762495.112
+    profiler_timestamp: 1397773695.112
     pressure_depth: 19.1759999999999984
     suspect_timestamp: 0
     speed_of_sound: 1492.2999999999999545
-    heading: 101.7000000000000028
-    pitch: -1.2000000000000000
-    roll: -2.5000000000000000
+    heading: 101.7
+    pitch: -1.2
+    roll: -2.5
     velpt_pressure: 18.5859999999999985
     temperature: 10.6999999999999993
-    velocity_beam1_m_s: -0.0130000000000000
-    velocity_beam2_m_s: 0.1570000000000000
-    velocity_beam3_m_s: -0.1110000000000000
+    velocity_beam1_m_s: -0.013
+    velocity_beam2_m_s: 0.157
+    velocity_beam3_m_s: -0.111
     amplitude_beam1: 104
     amplitude_beam2: 103
     amplitude_beam3: 103
   - _index: 13
     particle_object: VelptJCsppInstrumentRecoveredDataParticle
     particle_type: velpt_j_cspp_instrument_recovered
-    internal_timestamp: 3606762496.111000
-    profiler_timestamp: 1397773696.1110000610351562
+    internal_timestamp: 3606762496.111
+    profiler_timestamp: 1397773696.111
     pressure_depth: 19.1119999999999983
     suspect_timestamp: 0
     speed_of_sound: 1492.2999999999999545
-    heading: 101.5000000000000000
-    pitch: -1.0000000000000000
-    roll: -2.1000000000000001
+    heading: 101.5
+    pitch: -1.0
+    roll: -2.1
     velpt_pressure: 18.4759999999999991
     temperature: 10.6999999999999993
-    velocity_beam1_m_s: -0.0580000000000000
-    velocity_beam2_m_s: 0.0410000000000000
-    velocity_beam3_m_s: -0.1320000000000000
+    velocity_beam1_m_s: -0.058
+    velocity_beam2_m_s: 0.041
+    velocity_beam3_m_s: -0.132
     amplitude_beam1: 103
     amplitude_beam2: 101
     amplitude_beam3: 101
   - _index: 14
     particle_object: VelptJCsppInstrumentRecoveredDataParticle
     particle_type: velpt_j_cspp_instrument_recovered
-    internal_timestamp: 3606762497.112000
-    profiler_timestamp: 1397773697.1119999885559082
-    pressure_depth: 19.1780000000000008
+    internal_timestamp: 3606762497.112
+    profiler_timestamp: 1397773697.112
+    pressure_depth: 19.178
     suspect_timestamp: 0
-    speed_of_sound: 1492.2000000000000455
+    speed_of_sound: 1492.2
     heading: 101.5999999999999943
-    pitch: -0.4000000000000000
+    pitch: -0.4
     roll: -2.2999999999999998
-    velpt_pressure: 18.4630000000000010
+    velpt_pressure: 18.463
     temperature: 10.6899999999999995
-    velocity_beam1_m_s: -0.1090000000000000
-    velocity_beam2_m_s: 0.0940000000000000
-    velocity_beam3_m_s: -0.0890000000000000
+    velocity_beam1_m_s: -0.109
+    velocity_beam2_m_s: 0.094
+    velocity_beam3_m_s: -0.089
     amplitude_beam1: 96
     amplitude_beam2: 102
     amplitude_beam3: 104
   - _index: 15
     particle_object: VelptJCsppInstrumentRecoveredDataParticle
     particle_type: velpt_j_cspp_instrument_recovered
-    internal_timestamp: 3606762498.113000
+    internal_timestamp: 3606762498.113
     profiler_timestamp: 1397773698.1129999160766602
     pressure_depth: 19.3649999999999984
     suspect_timestamp: 0
-    speed_of_sound: 1492.2000000000000455
-    heading: 101.7000000000000028
-    pitch: 0.2000000000000000
-    roll: -2.7000000000000002
+    speed_of_sound: 1492.2
+    heading: 101.7
+    pitch: 0.2
+    roll: -2.7
     velpt_pressure: 18.5919999999999987
     temperature: 10.6899999999999995
-    velocity_beam1_m_s: -0.1610000000000000
-    velocity_beam2_m_s: 0.1190000000000000
-    velocity_beam3_m_s: -0.0570000000000000
+    velocity_beam1_m_s: -0.161
+    velocity_beam2_m_s: 0.119
+    velocity_beam3_m_s: -0.057
     amplitude_beam1: 99
     amplitude_beam2: 103
     amplitude_beam3: 97
   - _index: 16
     particle_object: VelptJCsppInstrumentRecoveredDataParticle
     particle_type: velpt_j_cspp_instrument_recovered
-    internal_timestamp: 3606762499.112000
+    internal_timestamp: 3606762499.112
     profiler_timestamp: 1397773699.1119999885559082
     pressure_depth: 19.5829999999999984
     suspect_timestamp: 0
-    speed_of_sound: 1492.2000000000000455
-    heading: 103.4000000000000057
-    pitch: 0.3000000000000000
-    roll: -3.1000000000000001
+    speed_of_sound: 1492.2
+    heading: 103.4
+    pitch: 0.3
+    roll: -3.1
     velpt_pressure: 18.8079999999999998
     temperature: 10.6899999999999995
-    velocity_beam1_m_s: -0.1430000000000000
-    velocity_beam2_m_s: 0.1690000000000000
-    velocity_beam3_m_s: 0.0100000000000000
+    velocity_beam1_m_s: -0.143
+    velocity_beam2_m_s: 0.169
+    velocity_beam3_m_s: 0.01
     amplitude_beam1: 101
     amplitude_beam2: 103
     amplitude_beam3: 98
   - _index: 17
     particle_object: VelptJCsppInstrumentRecoveredDataParticle
     particle_type: velpt_j_cspp_instrument_recovered
-    internal_timestamp: 3606762500.112000
+    internal_timestamp: 3606762500.112
     profiler_timestamp: 1397773700.1119999885559082
     pressure_depth: 19.7869999999999990
     suspect_timestamp: 1
-    speed_of_sound: 1492.2000000000000455
+    speed_of_sound: 1492.2
     heading: 105.5999999999999943
-    pitch: 0.4000000000000000
-    roll: -3.5000000000000000
+    pitch: 0.4
+    roll: -3.5
     velpt_pressure: 19.0219999999999985
     temperature: 10.6799999999999997
-    velocity_beam1_m_s: -0.0920000000000000
-    velocity_beam2_m_s: 0.1630000000000000
-    velocity_beam3_m_s: 0.0680000000000000
+    velocity_beam1_m_s: -0.092
+    velocity_beam2_m_s: 0.163
+    velocity_beam3_m_s: 0.068
     amplitude_beam1: 107
     amplitude_beam2: 101
     amplitude_beam3: 99
   - _index: 18
     particle_object: VelptJCsppInstrumentRecoveredDataParticle
     particle_type: velpt_j_cspp_instrument_recovered
-    internal_timestamp: 3606762501.111000
-    profiler_timestamp: 1397773701.1110000610351562
-    pressure_depth: 19.8990000000000009
+    internal_timestamp: 3606762501.111
+    profiler_timestamp: 1397773701.111
+    pressure_depth: 19.899
     suspect_timestamp: 0
-    speed_of_sound: 1492.2000000000000455
+    speed_of_sound: 1492.2
     heading: 107.5999999999999943
-    pitch: -0.2000000000000000
-    roll: -3.7000000000000002
-    velpt_pressure: 19.1990000000000016
+    pitch: -0.2
+    roll: -3.7
+    velpt_pressure: 19.199
     temperature: 10.6799999999999997
-    velocity_beam1_m_s: -0.1540000000000000
-    velocity_beam2_m_s: 0.1610000000000000
-    velocity_beam3_m_s: 0.0920000000000000
+    velocity_beam1_m_s: -0.154
+    velocity_beam2_m_s: 0.161
+    velocity_beam3_m_s: 0.092
     amplitude_beam1: 102
     amplitude_beam2: 102
     amplitude_beam3: 103
   - _index: 19
     particle_object: VelptJCsppInstrumentRecoveredDataParticle
     particle_type: velpt_j_cspp_instrument_recovered
-    internal_timestamp: 3606762502.111000
-    profiler_timestamp: 1397773702.1110000610351562
+    internal_timestamp: 3606762502.111
+    profiler_timestamp: 1397773702.111
     pressure_depth: 19.9149999999999991
     suspect_timestamp: 0
-    speed_of_sound: 1492.2000000000000455
+    speed_of_sound: 1492.2
     heading: 109.0999999999999943
-    pitch: -1.0000000000000000
+    pitch: -1.0
     roll: -3.7999999999999998
-    velpt_pressure: 19.2680000000000007
+    velpt_pressure: 19.268
     temperature: 10.6799999999999997
-    velocity_beam1_m_s: -0.0820000000000000
-    velocity_beam2_m_s: 0.1700000000000000
-    velocity_beam3_m_s: 0.0940000000000000
+    velocity_beam1_m_s: -0.082
+    velocity_beam2_m_s: 0.170
+    velocity_beam3_m_s: 0.094
     amplitude_beam1: 100
     amplitude_beam2: 105
     amplitude_beam3: 103
   - _index: 20
     particle_object: VelptJCsppInstrumentRecoveredDataParticle
     particle_type: velpt_j_cspp_instrument_recovered
-    internal_timestamp: 3606762503.112000
+    internal_timestamp: 3606762503.112
     profiler_timestamp: 1397773703.1119999885559082
-    pressure_depth: 19.8060000000000009
+    pressure_depth: 19.806
     suspect_timestamp: 1
     speed_of_sound: 1492.0999999999999091
-    heading: 108.2000000000000028
+    heading: 108.2
     pitch: -1.3999999999999999
-    roll: -3.7000000000000002
+    roll: -3.7
     velpt_pressure: 19.2289999999999992
     temperature: 10.6699999999999999
-    velocity_beam1_m_s: -0.0180000000000000
-    velocity_beam2_m_s: 0.2140000000000000
-    velocity_beam3_m_s: 0.0820000000000000
+    velocity_beam1_m_s: -0.018
+    velocity_beam2_m_s: 0.214
+    velocity_beam3_m_s: 0.082
     amplitude_beam1: 105
     amplitude_beam2: 104
     amplitude_beam3: 105
   - _index: 21
     particle_object: VelptJCsppInstrumentRecoveredDataParticle
     particle_type: velpt_j_cspp_instrument_recovered
-    internal_timestamp: 3606762504.111000
-    profiler_timestamp: 1397773704.1110000610351562
+    internal_timestamp: 3606762504.111
+    profiler_timestamp: 1397773704.111
     pressure_depth: 19.5859999999999985
     suspect_timestamp: 1
     speed_of_sound: 1492.0999999999999091
     heading: 108.2999999999999972
-    pitch: -1.7000000000000000
-    roll: -3.0000000000000000
+    pitch: -1.7
+    roll: -3.0
     velpt_pressure: 19.0539999999999985
     temperature: 10.6699999999999999
-    velocity_beam1_m_s: 0.0060000000000000
-    velocity_beam2_m_s: 0.1500000000000000
-    velocity_beam3_m_s: 0.0130000000000000
+    velocity_beam1_m_s: 0.006
+    velocity_beam2_m_s: 0.15
+    velocity_beam3_m_s: 0.013
     amplitude_beam1: 107
     amplitude_beam2: 102
     amplitude_beam3: 103
   - _index: 22
     particle_object: VelptJCsppInstrumentRecoveredDataParticle
     particle_type: velpt_j_cspp_instrument_recovered
-    internal_timestamp: 3606762505.112000
+    internal_timestamp: 3606762505.112
     profiler_timestamp: 1397773705.1119999885559082
     pressure_depth: 19.3309999999999995
     suspect_timestamp: 0
@@ -406,9 +406,9 @@ data:
     roll: -2.3999999999999999
     velpt_pressure: 18.8049999999999997
     temperature: 10.6699999999999999
-    velocity_beam1_m_s: -0.0740000000000000
-    velocity_beam2_m_s: 0.1380000000000000
-    velocity_beam3_m_s: -0.0670000000000000
+    velocity_beam1_m_s: -0.074
+    velocity_beam2_m_s: 0.138
+    velocity_beam3_m_s: -0.067
     amplitude_beam1: 103
     amplitude_beam2: 100
     amplitude_beam3: 100
@@ -421,32 +421,32 @@ data:
     suspect_timestamp: 0
     speed_of_sound: 1492.0999999999999091
     heading: 104.0999999999999943
-    pitch: -1.0000000000000000
+    pitch: -1.0
     roll: -2.2999999999999998
     velpt_pressure: 18.5479999999999983
-    temperature: 10.6600000000000001
-    velocity_beam1_m_s: -0.1090000000000000
-    velocity_beam2_m_s: 0.1410000000000000
-    velocity_beam3_m_s: -0.1040000000000000
+    temperature: 10.66
+    velocity_beam1_m_s: -0.109
+    velocity_beam2_m_s: 0.141
+    velocity_beam3_m_s: -0.104
     amplitude_beam1: 103
     amplitude_beam2: 105
     amplitude_beam3: 103
   - _index: 24
     particle_object: VelptJCsppInstrumentRecoveredDataParticle
     particle_type: velpt_j_cspp_instrument_recovered
-    internal_timestamp: 3606762507.111000
-    profiler_timestamp: 1397773707.1110000610351562
-    pressure_depth: 19.0120000000000005
+    internal_timestamp: 3606762507.111
+    profiler_timestamp: 1397773707.111
+    pressure_depth: 19.012
     suspect_timestamp: 1
     speed_of_sound: 1492.0999999999999091
     heading: 102.5999999999999943
-    pitch: -0.9000000000000000
-    roll: -2.1000000000000001
+    pitch: -0.9
+    roll: -2.1
     velpt_pressure: 18.3969999999999985
-    temperature: 10.6600000000000001
-    velocity_beam1_m_s: -0.0530000000000000
-    velocity_beam2_m_s: 0.1740000000000000
-    velocity_beam3_m_s: -0.1340000000000000
+    temperature: 10.66
+    velocity_beam1_m_s: -0.053
+    velocity_beam2_m_s: 0.174
+    velocity_beam3_m_s: -0.134
     amplitude_beam1: 100
     amplitude_beam2: 108
     amplitude_beam3: 103
@@ -455,36 +455,36 @@ data:
     particle_type: velpt_j_cspp_instrument_recovered
     internal_timestamp: 3606762508.111000
     profiler_timestamp: 1397773708.1110000610351562
-    pressure_depth: 19.0270000000000010
+    pressure_depth: 19.027
     suspect_timestamp: 1
     speed_of_sound: 1492.0999999999999091
-    heading: 102.2000000000000028
-    pitch: -0.5000000000000000
-    roll: -2.0000000000000000
-    velpt_pressure: 18.3470000000000013
-    temperature: 10.6600000000000001
-    velocity_beam1_m_s: -0.0870000000000000
-    velocity_beam2_m_s: 0.0970000000000000
-    velocity_beam3_m_s: -0.1680000000000000
+    heading: 102.2
+    pitch: -0.5
+    roll: -2.0
+    velpt_pressure: 18.347
+    temperature: 10.66
+    velocity_beam1_m_s: -0.087
+    velocity_beam2_m_s: 0.097
+    velocity_beam3_m_s: -0.168
     amplitude_beam1: 106
     amplitude_beam2: 95
     amplitude_beam3: 106
   - _index: 26
     particle_object: VelptJCsppInstrumentRecoveredDataParticle
     particle_type: velpt_j_cspp_instrument_recovered
-    internal_timestamp: 3606762509.112000
+    internal_timestamp: 3606762509.112
     profiler_timestamp: 1397773709.1119999885559082
-    pressure_depth: 19.1000000000000014
+    pressure_depth: 19.1
     suspect_timestamp: 0
     speed_of_sound: 1492.0999999999999091
     heading: 103.2999999999999972
-    pitch: -0.4000000000000000
+    pitch: -0.4
     roll: -2.3999999999999999
-    velpt_pressure: 18.4130000000000003
-    temperature: 10.6500000000000004
-    velocity_beam1_m_s: -0.0620000000000000
-    velocity_beam2_m_s: 0.0960000000000000
-    velocity_beam3_m_s: -0.1530000000000000
+    velpt_pressure: 18.413
+    temperature: 10.65
+    velocity_beam1_m_s: -0.062
+    velocity_beam2_m_s: 0.096
+    velocity_beam3_m_s: -0.153
     amplitude_beam1: 101
     amplitude_beam2: 102
     amplitude_beam3: 103
@@ -493,17 +493,17 @@ data:
     particle_type: velpt_j_cspp_instrument_recovered
     internal_timestamp: 3606762510.112000
     profiler_timestamp: 1397773710.1119999885559082
-    pressure_depth: 19.1920000000000002
+    pressure_depth: 19.192
     suspect_timestamp: 0
     speed_of_sound: 1492.0999999999999091
-    heading: 105.9000000000000057
-    pitch: -0.3000000000000000
+    heading: 105.9
+    pitch: -0.3
     roll: -2.7999999999999998
     velpt_pressure: 18.5019999999999989
-    temperature: 10.6500000000000004
-    velocity_beam1_m_s: -0.1730000000000000
-    velocity_beam2_m_s: 0.1350000000000000
-    velocity_beam3_m_s: -0.0640000000000000
+    temperature: 10.65
+    velocity_beam1_m_s: -0.173
+    velocity_beam2_m_s: 0.135
+    velocity_beam3_m_s: -0.064
     amplitude_beam1: 105
     amplitude_beam2: 102
     amplitude_beam3: 99
@@ -512,93 +512,93 @@ data:
     particle_type: velpt_j_cspp_instrument_recovered
     internal_timestamp: 3606762511.112000
     profiler_timestamp: 1397773711.1119999885559082
-    pressure_depth: 19.2570000000000014
+    pressure_depth: 19.257
     suspect_timestamp: 1
     speed_of_sound: 1492.0999999999999091
-    heading: 108.0000000000000000
-    pitch: -0.2000000000000000
-    roll: -2.7000000000000002
+    heading: 108.0
+    pitch: -0.2
+    roll: -2.7
     velpt_pressure: 18.5899999999999999
-    temperature: 10.6500000000000004
-    velocity_beam1_m_s: -0.1140000000000000
-    velocity_beam2_m_s: 0.1660000000000000
-    velocity_beam3_m_s: -0.0330000000000000
+    temperature: 10.65
+    velocity_beam1_m_s: -0.114
+    velocity_beam2_m_s: 0.166
+    velocity_beam3_m_s: -0.033
     amplitude_beam1: 104
     amplitude_beam2: 103
     amplitude_beam3: 98
   - _index: 29
     particle_object: VelptJCsppInstrumentRecoveredDataParticle
     particle_type: velpt_j_cspp_instrument_recovered
-    internal_timestamp: 3606762512.114000
-    profiler_timestamp: 1397773712.1140000820159912
+    internal_timestamp: 3606762512.114
+    profiler_timestamp: 1397773712.114
     pressure_depth: 19.2639999999999993
     suspect_timestamp: 1
     speed_of_sound: 1492.0999999999999091
     heading: 109.7999999999999972
-    pitch: -0.4000000000000000
-    roll: -2.6000000000000001
-    velpt_pressure: 18.6110000000000007
-    temperature: 10.6500000000000004
-    velocity_beam1_m_s: -0.1360000000000000
-    velocity_beam2_m_s: 0.0740000000000000
-    velocity_beam3_m_s: -0.1140000000000000
+    pitch: -0.4
+    roll: -2.6
+    velpt_pressure: 18.611
+    temperature: 10.65
+    velocity_beam1_m_s: -0.136
+    velocity_beam2_m_s: 0.074
+    velocity_beam3_m_s: -0.114
     amplitude_beam1: 100
     amplitude_beam2: 99
     amplitude_beam3: 102
   - _index: 30
     particle_object: VelptJCsppInstrumentRecoveredDataParticle
     particle_type: velpt_j_cspp_instrument_recovered
-    internal_timestamp: 3606762513.111000
-    profiler_timestamp: 1397773713.1110000610351562
-    pressure_depth: 19.1990000000000016
+    internal_timestamp: 3606762513.111
+    profiler_timestamp: 1397773713.111
+    pressure_depth: 19.199
     suspect_timestamp: 0
-    speed_of_sound: 1492.0000000000000000
-    heading: 109.4000000000000057
-    pitch: -0.7000000000000000
+    speed_of_sound: 1492.0
+    heading: 109.4
+    pitch: -0.7
     roll: -2.7999999999999998
-    velpt_pressure: 18.5930000000000000
-    temperature: 10.6400000000000006
-    velocity_beam1_m_s: -0.1240000000000000
-    velocity_beam2_m_s: 0.1280000000000000
-    velocity_beam3_m_s: -0.0590000000000000
+    velpt_pressure: 18.593
+    temperature: 10.64
+    velocity_beam1_m_s: -0.124
+    velocity_beam2_m_s: 0.128
+    velocity_beam3_m_s: -0.059
     amplitude_beam1: 102
     amplitude_beam2: 109
     amplitude_beam3: 104
   - _index: 31
     particle_object: VelptJCsppInstrumentRecoveredDataParticle
     particle_type: velpt_j_cspp_instrument_recovered
-    internal_timestamp: 3606762514.112000
+    internal_timestamp: 3606762514.112
     profiler_timestamp: 1397773714.1119999885559082
-    pressure_depth: 19.0650000000000013
+    pressure_depth: 19.065
     suspect_timestamp: 1
-    speed_of_sound: 1492.0000000000000000
+    speed_of_sound: 1492.0
     heading: 109.0999999999999943
-    pitch: -1.1000000000000001
-    roll: -3.1000000000000001
+    pitch: -1.1
+    roll: -3.1
     velpt_pressure: 18.4939999999999998
-    temperature: 10.6400000000000006
-    velocity_beam1_m_s: -0.1310000000000000
-    velocity_beam2_m_s: 0.0940000000000000
-    velocity_beam3_m_s: -0.0780000000000000
+    temperature: 10.64
+    velocity_beam1_m_s: -0.131
+    velocity_beam2_m_s: 0.094
+    velocity_beam3_m_s: -0.078
     amplitude_beam1: 97
     amplitude_beam2: 98
     amplitude_beam3: 101
   - _index: 32
     particle_object: VelptJCsppInstrumentRecoveredDataParticle
     particle_type: velpt_j_cspp_instrument_recovered
-    internal_timestamp: 3606762515.112000
+    internal_timestamp: 3606762515.112
     profiler_timestamp: 1397773715.1119999885559082
     pressure_depth: 18.8629999999999995
     suspect_timestamp: 0
-    speed_of_sound: 1492.0000000000000000
+    speed_of_sound: 1492.0
     heading: 109.0999999999999943
-    pitch: -1.3000000000000000
+    pitch: -1.3
     roll: -3.2999999999999998
     velpt_pressure: 18.3339999999999996
-    temperature: 10.6400000000000006
-    velocity_beam1_m_s: -0.0650000000000000
-    velocity_beam2_m_s: 0.1440000000000000
-    velocity_beam3_m_s: -0.1010000000000000
+    temperature: 10.64
+    velocity_beam1_m_s: -0.065
+    velocity_beam2_m_s: 0.144
+    velocity_beam3_m_s: -0.101
     amplitude_beam1: 103
     amplitude_beam2: 104
     amplitude_beam3: 98

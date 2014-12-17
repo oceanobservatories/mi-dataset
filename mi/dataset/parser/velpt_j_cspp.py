@@ -1,7 +1,6 @@
-#!/usr/bin/env python
 
 """
-@package mi.dataset.parser.velpt_j_cspp
+@package mi.dataset.parser
 @file marine-integrations/mi/dataset/parser/velpt_j_cspp.py
 @author Jeremy Amundson
 @brief Parser for the velpt_j_cspp dataset driver
@@ -16,16 +15,13 @@ __license__ = 'Apache 2.0'
 import numpy
 
 from mi.core.log import get_logger
-from mi.core.exceptions import RecoverableSampleException
 log = get_logger()
 from mi.core.common import BaseEnum
 
 
 from mi.core.instrument.data_particle import DataParticle
-from mi.dataset.parser.cspp_base import CsppParser, FLOAT_REGEX, INT_REGEX, MULTIPLE_TAB_REGEX, \
-    END_OF_LINE_REGEX, \
-    CsppMetadataDataParticle, MetadataRawDataKey, PARTICLE_KEY_INDEX, \
-    DATA_MATCHES_GROUP_NUMBER_INDEX, TYPE_ENCODING_INDEX, \
+from mi.dataset.parser.common_regexes import FLOAT_REGEX, INT_REGEX, MULTIPLE_TAB_REGEX, END_OF_LINE_REGEX
+from mi.dataset.parser.cspp_base import CsppParser, CsppMetadataDataParticle, MetadataRawDataKey, \
     Y_OR_N_REGEX, encode_y_or_n
 
 
@@ -134,20 +130,15 @@ class VelptJCsppMetadataDataParticle(CsppMetadataDataParticle):
 
         results = []
 
-        try:
+        # Append the base metadata parsed values to the results to return
+        results += self._build_metadata_parsed_values()
 
-            # Append the base metadata parsed values to the results to return
-            results += self._build_metadata_parsed_values()
+        data_match = self.raw_data[MetadataRawDataKey.DATA_MATCH]
 
-            data_match = self.raw_data[MetadataRawDataKey.DATA_MATCH]
+        internal_timestamp_unix = numpy.float(data_match.group(
+            DataMatchesGroupNumber.PROFILER_TIMESTAMP))
+        self.set_internal_timestamp(unix_time=internal_timestamp_unix)
 
-            internal_timestamp_unix = numpy.float(data_match.group(
-                DataMatchesGroupNumber.PROFILER_TIMESTAMP))
-            self.set_internal_timestamp(unix_time=internal_timestamp_unix)
-
-        except (ValueError, TypeError, IndexError) as ex:
-            log.warn("Exception when building parsed values")
-            raise RecoverableSampleException("Error (%s) while decoding parameters in data: %s" % (ex, self.raw_data))
         return results
 
 
@@ -182,24 +173,14 @@ class VelptJCsppInstrumentDataParticle(DataParticle):
 
         results = []
 
-        try:
+        # Process each of the instrument particle parameters
+        for (name, index, encoding) in INSTRUMENT_PARTICLE_ENCODING_RULES:
+            results.append(self._encode_value(name, self.raw_data.group(index), encoding))
 
-            # Process each of the instrument particle parameters
-            for rule in INSTRUMENT_PARTICLE_ENCODING_RULES:
-
-                results.append(self._encode_value(
-                    rule[PARTICLE_KEY_INDEX],
-                    self.raw_data.group(rule[DATA_MATCHES_GROUP_NUMBER_INDEX]),
-                    rule[TYPE_ENCODING_INDEX]))
-
-            # # Set the internal timestamp
-            internal_timestamp_unix = numpy.float(self.raw_data.group(
-                DataMatchesGroupNumber.PROFILER_TIMESTAMP))
-            self.set_internal_timestamp(unix_time=internal_timestamp_unix)
-
-        except (ValueError, TypeError, IndexError) as ex:
-            log.warn("Exception when building parsed values")
-            raise RecoverableSampleException("Error (%s) while decoding parameters in data: %s" % (ex, self.raw_data))
+        # Set the internal timestamp
+        internal_timestamp_unix = numpy.float(self.raw_data.group(
+            DataMatchesGroupNumber.PROFILER_TIMESTAMP))
+        self.set_internal_timestamp(unix_time=internal_timestamp_unix)
 
         return results
 
@@ -224,28 +205,17 @@ class VelptJCsppParser(CsppParser):
 
     def __init__(self,
                  config,
-                 state,
                  stream_handle,
-                 state_callback,
-                 publish_callback,
-                 exception_callback,
-                 *args, **kwargs):
+                 exception_callback):
         """
         This method is a constructor that will instantiate an VelptJCsppParser object.
         @param config The configuration for this VelptJCsppParser parser
-        @param state The state the VelptJCsppParser should use to initialize itself
         @param stream_handle The handle to the data stream containing the velpt_j_cspp data
-        @param state_callback The function to call upon detecting state changes
-        @param publish_callback The function to call to provide particles
         @param exception_callback The function to call to report exceptions
         """
 
         # Call the superclass constructor
         super(VelptJCsppParser, self).__init__(config,
-                                                state,
-                                                stream_handle,
-                                                state_callback,
-                                                publish_callback,
-                                                exception_callback,
-                                                DATA_REGEX,
-                                                *args, **kwargs)
+                                               stream_handle,
+                                               exception_callback,
+                                               DATA_REGEX)
