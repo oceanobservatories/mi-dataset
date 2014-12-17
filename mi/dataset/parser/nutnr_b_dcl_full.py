@@ -31,10 +31,8 @@ from mi.core.exceptions import UnexpectedDataException
 
 from mi.dataset.parser.nutnr_b_dcl_parser_base import NutnrBDclParser
 
-from mi.dataset.parser.nutnr_b_dcl_parser_base import InstrumentDataMatchGroups, \
-    INST_FULL_DATA_MATCHER, IDLE_TIME_MATCHER, NEXT_WAKEUP_MATCHER, META_MESSAGE_MATCHER, \
-    NUTR_B_DCL_IGNORE_MATCHER, INST_FULL_BASE_DATA_MATCHER, INST_PART_OF_FULL_DATA_MATCHER, \
-    FULL_FRAME_TYPES
+from mi.dataset.parser.nutnr_b_dcl_parser_base import InstrumentDataMatchGroups, INST_FULL_DATA_MATCHER, \
+    IDLE_TIME_MATCHER, NEXT_WAKEUP_MATCHER, META_MESSAGE_MATCHER, NUTR_B_DCL_IGNORE_MATCHER, FULL_FRAME_TYPES
 
 from mi.dataset.parser.nutnr_b_particles import NutnrBDclFullRecoveredInstrumentDataParticle, \
     NutnrBDclFullRecoveredMetadataDataParticle, NutnrBDclFullTelemeteredInstrumentDataParticle, \
@@ -167,115 +165,62 @@ class NutnrBDclFullParser(NutnrBDclParser):
         particles.
         """
 
-        # Initialize the instrument data buffer and flag that indicates whether
-        # or not to check for an instrument record part match
-        inst_buffer = ""
-        check_for_inst_part_match = False
-
         # Read the first line in the file
         line = self._stream_handle.readline()
 
         # While a new line in the file exists
         while line:
 
-            # if we are not checkin for part of an instrument record match
-            if not check_for_inst_part_match:
+            # Attempt to create a match for each possible line that should
+            # exist in the file
+            idle_match = IDLE_TIME_MATCHER.match(line)
+            next_wakeup_match = NEXT_WAKEUP_MATCHER.match(line)
+            meta_match = META_MESSAGE_MATCHER.match(line)
+            inst_match = INST_FULL_DATA_MATCHER.match(line)
+            ignore_match = NUTR_B_DCL_IGNORE_MATCHER.match(line)
 
-                # Attempt to create a match for each possible line that should
-                # exist in the file
-                idle_match = IDLE_TIME_MATCHER.match(line)
-                next_wakeup_match = NEXT_WAKEUP_MATCHER.match(line)
-                meta_match = META_MESSAGE_MATCHER.match(line)
-                inst_match = INST_FULL_BASE_DATA_MATCHER.match(line)
-                ignore_match = NUTR_B_DCL_IGNORE_MATCHER.match(line)
+            # Let's first check to see if we have an ignore match
+            if ignore_match is not None:
 
-                # Let's first check to see if we have an ignore match
-                if ignore_match is not None:
+                log.debug("Found ignore match - line: %s", line)
 
-                    log.debug("Found ignore match - line: %s", line)
+            # Did the line match an idle line?
+            elif idle_match is not None:
 
-                # Did the line match an idle line?
-                elif idle_match is not None:
+                log.debug("Found idle match: %s", line)
 
-                    log.debug("Found idle match: %s", line)
+                # Process the idle state metadata match
+                self._process_idle_metadata_record(idle_match)
 
-                    # Process the idle state metadata match
-                    self._process_idle_metadata_record(idle_match)
+            # Did the line match a next wakeup record?
+            elif next_wakeup_match is not None:
 
-                # Did the line match a next wakeup record?
-                elif next_wakeup_match is not None:
+                log.debug("Found next wakeup match: %s", line)
 
-                    log.debug("Found next wakeup match: %s", line)
+                self._process_next_wakeup_match()
 
-                    self._process_next_wakeup_match()
+            # Did the line match one of the possible metadata possibilities?
+            elif meta_match is not None:
 
-                # Did the line match one of the possible metadata possibilities?
-                elif meta_match is not None:
+                log.debug("Found potential metadata part match: %s", line)
 
-                    log.debug("Found potential metadata part match: %s", line)
+                # Process the metadata record match
+                self._process_metadata_record_part(line)
 
-                    # Process the metadata record match
-                    self._process_metadata_record_part(line)
+            # Did the line match one of the possible instrument lines?
+            elif inst_match is not None:
 
-                # Did the line match one of the possible instrument lines?
-                elif inst_match is not None:
+                log.debug("Found potential instrument match: %s", line)
 
-                    log.debug("Found potential instrument match: %s", line)
+                #process the instrument record match
+                self._process_instrument_record_match(inst_match)
 
-                    # Strip carriage and line feeds from the line and set the
-                    # instrument data buffer to the result
-                    inst_buffer = line.rstrip()
-
-                    # Set an indication that we are now looking for another
-                    # part of the instrument data
-                    check_for_inst_part_match = True
-
-                else:
-                    # We found a line in the file that was unexpected.  Report a
-                    # RecoverableSampleException
-                    message = "Unexpected data in file, line: " + line
-                    log.warn(message)
-                    self._exception_callback(UnexpectedDataException(message))
-
-            # OK.  We are expecting a line consisting of more instrument data
             else:
-
-                # Check for part of an instrument data match
-                inst_part_match = INST_PART_OF_FULL_DATA_MATCHER.match(line)
-
-                # Did we find a match
-                if inst_part_match:
-
-                    # Strip the whitespace from the end of the line and split the
-                    # content by the default whitespace
-                    split_fields = line.rstrip().split()
-
-                    # We are expecting the instrument data as the 3rd part
-                    # (index 2) of the split data
-                    inst_buffer += split_fields[2]
-
-                    # Check for a full instrument data match
-                    inst_full_match = INST_FULL_DATA_MATCHER.match(inst_buffer)
-
-                    # Did we find a full match
-                    if inst_full_match:
-
-                        # Process the instrument data full match
-                        self._process_instrument_record_match(inst_full_match)
-
-                        # Clear out the instrument data buffer and flag to check
-                        # for part of an instrument match
-                        inst_buffer = ""
-                        check_for_inst_part_match = False
-
-                # OK.  We found a line in the file we were not expecting.  Let's log a warning
-                # and report a unexpected data exception.
-                else:
-                    # If we did not get a match against part of an intrument
-                    # data record, we may have a bad file
-                    message = "Unexpected data in file, line: " + line
-                    log.warn(message)
-                    self._exception_callback(UnexpectedDataException(message))
+                # We found a line in the file that was unexpected.  Report a
+                # RecoverableSampleException
+                message = "Unexpected data in file, line: " + line
+                log.warn(message)
+                self._exception_callback(UnexpectedDataException(message))
 
             # Read the next line in the file
             line = self._stream_handle.readline()

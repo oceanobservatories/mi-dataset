@@ -17,7 +17,7 @@ import re
 
 import ntplib
 
-from mi.core.log import get_logger
+from mi.core.log import get_logger, get_logging_metaclass
 log = get_logger()
 
 from mi.core.exceptions import RecoverableSampleException, NotImplementedException, \
@@ -151,13 +151,10 @@ INST_CONC_DATA_REGEX += INST_COMMON_REGEX
 INST_CONC_DATA_REGEX_W_NEWLINE = INST_CONC_DATA_REGEX + END_OF_LINE_REGEX
 INST_CONC_DATA_W_NEWLINE_MATCHER = re.compile(INST_CONC_DATA_REGEX_W_NEWLINE)
 
-INST_FULL_BASE_DATA_REGEX = DCL_TIMESTAMP + SPACE_REGEX              # Record-Timestamp
-INST_FULL_BASE_DATA_REGEX += '(SAT)'                                 # frame header
-INST_FULL_BASE_DATA_REGEX += '(NLF|NDF)'                             # frame type
-INST_FULL_BASE_DATA_REGEX += INST_COMMON_REGEX + SEPARATOR
-INST_FULL_BASE_DATA_MATCHER = re.compile(INST_FULL_BASE_DATA_REGEX)
-
-INST_FULL_DATA_REGEX = INST_FULL_BASE_DATA_REGEX
+INST_FULL_DATA_REGEX = DCL_TIMESTAMP + SPACE_REGEX              # Record-Timestamp
+INST_FULL_DATA_REGEX += '(SAT)'                                 # frame header
+INST_FULL_DATA_REGEX += '(NLF|NDF)'                             # frame type
+INST_FULL_DATA_REGEX += INST_COMMON_REGEX + SEPARATOR
 INST_FULL_DATA_REGEX += '(' + FLOAT_REGEX + ')' + SEPARATOR     # decimal temp interior
 INST_FULL_DATA_REGEX += '(' + FLOAT_REGEX + ')' + SEPARATOR     # decimal temp spectrometer
 INST_FULL_DATA_REGEX += '(' + FLOAT_REGEX + ')' + SEPARATOR     # decimal temp lamp
@@ -173,11 +170,6 @@ INST_FULL_DATA_REGEX += '(' + FLOAT_REGEX + ')' + SEPARATOR     # decimal spec c
 INST_FULL_DATA_REGEX += '((?:' + INT_REGEX + SEPARATOR + '){255}' + \
                         INT_REGEX + ')'     # 256 int spectral values
 INST_FULL_DATA_MATCHER = re.compile(INST_FULL_DATA_REGEX)
-
-INST_PART_OF_FULL_DATA_REGEX = DCL_TIMESTAMP + SPACE_REGEX   # Record-Timestamp
-INST_PART_OF_FULL_DATA_REGEX += '(' + INT_REGEX + SEPARATOR + ')+' + \
-                                '(' + INT_REGEX + '[' + SEPARATOR + ']?)' + END_OF_LINE_REGEX
-INST_PART_OF_FULL_DATA_MATCHER = re.compile(INST_PART_OF_FULL_DATA_REGEX)
 
 
 class InstrumentDataMatchGroups(BaseEnum):
@@ -298,6 +290,8 @@ NUTR_B_DCL_IGNORE_MATCHER = re.compile(NUTR_B_DCL_IGNORE_REGEX)
 
 
 class NutnrBDclParser(Parser):
+
+    __metaclass__ = get_logging_metaclass(log_level='debug')
     """
     Parser for nutnr_b_dcl data.
     In addition to the standard parser constructor parameters,
