@@ -16,13 +16,9 @@ log = get_logger()
 from mi.dataset.test.test_parser import ParserUnitTestCase
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 
-from mi.dataset.parser.nutnr_b_dcl_full import \
-    NutnrBDclFullRecoveredParser, \
-    NutnrBDclFullTelemeteredParser
-from mi.dataset.parser.nutnr_b_particles import \
-    NutnrBDclFullRecoveredInstrumentDataParticle, \
-    NutnrBDclFullTelemeteredInstrumentDataParticle, \
-    NutnrBDclFullRecoveredMetadataDataParticle, \
+from mi.dataset.parser.nutnr_b_dcl_full import NutnrBDclFullRecoveredParser, NutnrBDclFullTelemeteredParser
+from mi.dataset.parser.nutnr_b_particles import  NutnrBDclFullRecoveredInstrumentDataParticle, \
+    NutnrBDclFullTelemeteredInstrumentDataParticle, NutnrBDclFullRecoveredMetadataDataParticle,  \
     NutnrBDclFullTelemeteredMetadataDataParticle
 
 from mi.idk.config import Config
@@ -37,21 +33,18 @@ HAPPY_PATH_FILE_2 = '20031129.nutnr_b_dcl_full.log'
 FILE_INVALID_FRAME_TYPE = '19990401.nutnr_b_dcl_full.log'
 FILE_MISSING_METADATA = '19980401.nutnr_b_dcl_full.log'
 FILE_INVALID_FIELDS = '19970401.nutnr_b_dcl_full.log'
-CONJECTURE_FILE = 'conjecture.20140627.nutnr.log'
 SECOND_BLOCK_IN_DATA_BLOCK_FILE = '20040901.nutnr_b_dcl_full.log'
 
 NO_PARTICLES_EXPECTED_PARTICLES = 0
 HAPPY_PATH_EXPECTED_PARTICLES_1 = 26
 HAPPY_PATH_EXPECTED_PARTICLES_2 = 42
-EXPECTED_META_PARTICLES_CONJECTURE = 1
-EXPECTED_INST_PARTICLES_CONJECTURE = 8
 
 EXPECTED_PARTICLES_INVALID_FRAME_TYPE = 3
 EXPECTED_EXCEPTIONS_INVALID_FRAME_TYPE = 4
 EXPECTED_PARTICLES_MISSING_METADATA = 4
-EXPECTED_EXCEPTIONS_MISSING_METADATA = 2
-EXPECTED_PARTICLES_INVALID_FIELDS = 3
-EXPECTED_EXCEPTIONS_INVALID_FIELDS = 78
+EXPECTED_EXCEPTIONS_MISSING_METADATA = 3
+EXPECTED_PARTICLES_INVALID_FIELDS = 2
+EXPECTED_EXCEPTIONS_INVALID_FIELDS = 100
 EXPECTED_PARTICLES_SECOND_BLOCK_IN_DATA_BLOCK = 4
 EXPECTED_EXCEPTIONS_SECOND_BLOCK_IN_DATA_BLOCK = 0
 
@@ -189,7 +182,7 @@ class NutnrBDclFullParserUnitTestCase(ParserUnitTestCase):
         input_file = FILE_INVALID_FIELDS
         expected_particles = EXPECTED_PARTICLES_INVALID_FIELDS
         expected_exceptions = EXPECTED_EXCEPTIONS_INVALID_FIELDS
-        total_records = expected_particles + expected_exceptions + 1
+        total_records = expected_particles + expected_exceptions
 
         in_file = self.open_file(input_file)
         parser = self.create_rec_parser(in_file)
@@ -347,55 +340,3 @@ class NutnrBDclFullParserUnitTestCase(ParserUnitTestCase):
         in_file.close()
 
         log.debug('===== END TEST NO PARTICLES =====')
-
-    def test_conjecture_file(self):
-        """
-        Verify that the correct number of particles are generated
-        from a real file.
-        """
-        log.debug('===== START TEST CONJECTURE FILE =====')
-
-        input_file = CONJECTURE_FILE
-        expected_inst_particles = EXPECTED_INST_PARTICLES_CONJECTURE
-        expected_meta_particles = EXPECTED_META_PARTICLES_CONJECTURE
-        expected_particles = expected_meta_particles + expected_inst_particles
-
-        in_file = self.open_file(input_file)
-        parser = self.create_rec_parser(in_file)
-        particles = parser.get_records(expected_particles)
-        self.assertEqual(len(particles), expected_particles)
-
-        inst_particles = 0
-        meta_particles = 0
-        for particle in particles:
-            if isinstance(particle, NutnrBDclFullRecoveredInstrumentDataParticle):
-                inst_particles += 1
-            elif isinstance(particle, NutnrBDclFullRecoveredMetadataDataParticle):
-                meta_particles += 1
-
-        self.assertEqual(inst_particles, expected_inst_particles)
-        self.assertEqual(meta_particles, expected_meta_particles)
-
-        self.assertEqual(self.rec_exceptions_detected, 0)
-        in_file.close()
-
-        in_file = self.open_file(input_file)
-        parser = self.create_tel_parser(in_file)
-        particles = parser.get_records(expected_particles)
-        self.assertEqual(len(particles), expected_particles)
-
-        inst_particles = 0
-        meta_particles = 0
-        for particle in particles:
-            if isinstance(particle, NutnrBDclFullTelemeteredInstrumentDataParticle):
-                inst_particles += 1
-            elif isinstance(particle, NutnrBDclFullTelemeteredMetadataDataParticle):
-                meta_particles += 1
-
-        self.assertEqual(inst_particles, expected_inst_particles)
-        self.assertEqual(meta_particles, expected_meta_particles)
-
-        self.assertEqual(self.tel_exceptions_detected, 0)
-        in_file.close()
-
-        log.debug('===== END TEST CONJECTURE FILE =====')
