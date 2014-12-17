@@ -1,7 +1,5 @@
-#!/usr/bin/env python
-
 """
-@package mi.dataset.parser.test.test_nutnr_j_cspp
+@package mi.dataset.parser.test
 @file marine-integrations/mi/dataset/parser/test/test_nutnr_j_cspp.py
 @author Emily Hahn
 @brief Test code for a nutnr_j_cspp data parser
@@ -11,28 +9,25 @@ import re
 
 from nose.plugins.attrib import attr
 
-from mi.core.log import get_logger ; log = get_logger()
-from mi.core.exceptions import UnexpectedDataException, \
-                               RecoverableSampleException, \
-                               ConfigurationException
+from mi.core.log import get_logger
+log = get_logger()
+from mi.core.exceptions import RecoverableSampleException, \
+    ConfigurationException
 from mi.core.instrument.data_particle import DataParticleKey
 
-from mi.idk.config import Config
-
-from mi.dataset.test.test_parser import ParserUnitTestCase
+from mi.dataset.test.test_parser import BASE_RESOURCE_PATH, ParserUnitTestCase
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
-from mi.dataset.parser.cspp_base import StateKey, DefaultHeaderKey, \
-                                        METADATA_PARTICLE_CLASS_KEY, \
-                                        DATA_PARTICLE_CLASS_KEY
+from mi.dataset.parser.cspp_base import DefaultHeaderKey, \
+    METADATA_PARTICLE_CLASS_KEY, \
+    DATA_PARTICLE_CLASS_KEY
 from mi.dataset.parser.nutnr_j_cspp import NutnrJCsppParser, \
-                                           NutnrJCsppMetadataTelemeteredDataParticle, \
-                                           NutnrJCsppTelemeteredDataParticle, \
-                                           NutnrJCsppMetadataRecoveredDataParticle, \
-                                           NutnrJCsppRecoveredDataParticle, \
-                                           DATA_REGEX
+    NutnrJCsppMetadataTelemeteredDataParticle, \
+    NutnrJCsppTelemeteredDataParticle, \
+    NutnrJCsppMetadataRecoveredDataParticle, \
+    NutnrJCsppRecoveredDataParticle, \
+    DATA_REGEX
 
-RESOURCE_PATH = os.path.join(Config().base_dir(),
-			     'mi', 'dataset', 'driver', 'nutnr_j', 'cspp', 'resource')
+RESOURCE_PATH = os.path.join(BASE_RESOURCE_PATH, 'nutnr_j', 'cspp', 'resource')
 
 PARTICLE_A_POS = 4444
 PARTICLE_B_POS = 6136
@@ -43,24 +38,14 @@ END_LONG_POS = 226490
 
 DATA_MATCHER = re.compile(DATA_REGEX)
 
+O_MODE = 'r'
+
 
 @attr('UNIT', group='mi')
 class NutnrJCsppParserUnitTestCase(ParserUnitTestCase):
     """
     nutnr_j_cspp Parser unit test suite
     """
-    def state_callback(self, state, file_ingested):
-        """ Call back method to watch what comes in via the position callback """
-        self.state_callback_value = state
-        self.file_ingested_value = file_ingested
-
-    def pub_callback(self, pub):
-        """ Call back method to watch what comes in via the publish callback """
-        self.publish_callback_value = pub
-
-    def exception_callback(self, exception_val):
-        """ Call back method to watch what comes in via the exception callback """
-        self.exception_callback_value.append(exception_val)
 
     def setUp(self):
         ParserUnitTestCase.setUp(self)
@@ -246,9 +231,6 @@ class NutnrJCsppParserUnitTestCase(ParserUnitTestCase):
         self.recov_particle_e = NutnrJCsppRecoveredDataParticle(particle_e_match)
         self.recov_particle_e.generate_dict()
 
-        self.file_ingested_value = None
-        self.state_callback_value = None
-        self.publish_callback_value = None
         self.exception_callback_value = []
 
     def assert_equal_regex(self, match1, match2):
@@ -259,20 +241,16 @@ class NutnrJCsppParserUnitTestCase(ParserUnitTestCase):
         """
         self.assertEqual(match1.group(0), match2.group(0))
 
-    def assert_result(self, result, position, particle, ingested, is_metadata=False):
+    def assert_result(self, result, particle, is_metadata=False):
         """
-        Assert two particles and the states after that particle are equal
+        Assert two particles
         """
-        self.assert_(isinstance(self.publish_callback_value, list))
         if is_metadata:
             self.assert_metadata(result, particle)
         else:
             self.assert_data(result, particle)
 
         self.assert_timestamp(result, particle)
-        self.assert_position(position)
-        # compare if the file is ingested
-        self.assertEqual(self.file_ingested_value, ingested)
 
     def assert_metadata(self, result, particle, result_index=0):
         """
@@ -284,18 +262,11 @@ class NutnrJCsppParserUnitTestCase(ParserUnitTestCase):
         self.assertEqual(result[result_index].raw_data[0], particle.raw_data[0])
         self.assert_equal_regex(result[result_index].raw_data[1], particle.raw_data[1])
 
-        self.assertEqual(self.publish_callback_value[result_index].raw_data[0],
-                         particle.raw_data[0])
-        self.assert_equal_regex(self.publish_callback_value[result_index].raw_data[1],
-                                particle.raw_data[1])
-
     def assert_data(self, result, particle, result_index=0):
         # the data regex match is passed in as the argument to the data particle,
         # need to pull out the string for comparison since regex results cannot be
         # directly compared
         self.assert_equal_regex(result[result_index].raw_data, particle.raw_data)
-        self.assert_equal_regex(self.publish_callback_value[result_index].raw_data,
-                                particle.raw_data)
 
     def assert_timestamp(self, result, particle, result_index=0):
         """
@@ -303,7 +274,7 @@ class NutnrJCsppParserUnitTestCase(ParserUnitTestCase):
         """
         allowed_diff = .000001
         self.assertTrue(abs(result[result_index].contents[DataParticleKey.INTERNAL_TIMESTAMP] - \
-                 particle.contents[DataParticleKey.INTERNAL_TIMESTAMP]) <= allowed_diff)
+                        particle.contents[DataParticleKey.INTERNAL_TIMESTAMP]) <= allowed_diff)
 
     def assert_data_and_timestamp(self, result, particle, result_index=0):
         """
@@ -316,15 +287,61 @@ class NutnrJCsppParserUnitTestCase(ParserUnitTestCase):
         self.assert_metadata(result, particle, result_index)
         self.assert_timestamp(result, particle, result_index)
 
-    def assert_position(self, position):
+    def particle_to_yml(self, particles, filename, mode='w'):
         """
-        Assert that the position in the parser state and state callback match
-        the expected position
+        This is added as a testing helper, not actually as part of the parser tests. Since the same particles
+        will be used for the driver test it is helpful to write them to .yml in the same form they need in the
+        results.yml fids here.
         """
-        self.assertEqual(self.parser._state[StateKey.POSITION], position)
-        self.assertEqual(self.state_callback_value[StateKey.POSITION], position)
+        # open write append, if you want to start from scratch manually delete this fid
+        fid = open(os.path.join(RESOURCE_PATH, filename), mode)
 
-    def create_parser(self, stream_handle, telem_flag=True, state=None):
+        fid.write('header:\n')
+        fid.write(" particle_object: 'MULTIPLE'\n")
+        fid.write(" particle_type: 'MULTIPLE'\n")
+        fid.write('data:\n')
+
+        for i in range(0, len(particles)):
+            particle_dict = particles[i].generate_dict()
+
+            fid.write(' - _index: %d\n' % (i+1))
+
+            fid.write('   particle_object: %s\n' % particles[i].__class__.__name__)
+            fid.write('   particle_type: %s\n' % particle_dict.get('stream_name'))
+
+            fid.write('   internal_timestamp: %16.3f\n' %
+                      particle_dict.get('internal_timestamp'))
+
+            for val in particle_dict.get('values'):
+                if isinstance(val.get('value'), float):
+                    if val.get('value_id') is "time_of_sample":
+                        fid.write('   %s: %16.5f\n' % (val.get('value_id'), val.get('value')))
+                    else:
+                        fid.write('   %s: %16.3f\n' % (val.get('value_id'), val.get('value')))
+                elif isinstance(val.get('value'), str):
+                    fid.write("   %s: '%s'\n" % (val.get('value_id'), val.get('value')))
+                else:
+                    fid.write('   %s: %s\n' % (val.get('value_id'), val.get('value')))
+        fid.close()
+
+    def create_yml(self):
+        """
+        This utility creates a yml file
+        """
+        fid = open(os.path.join(RESOURCE_PATH,
+                                '11079419_SNA_SNA.txt'),
+                   O_MODE)
+
+        stream_handle = fid
+
+        self.create_parser(stream_handle)
+
+        particles = self.parser.get_records(182)
+
+        self.particle_to_yml(particles, '11079419_SNA_SNA_telem.yml')
+        fid.close()
+
+    def create_parser(self, stream_handle, telem_flag=True):
         """
         Initialize the parser with the given stream handle, using the
         telemetered config if the flag is set, recovered if it is not
@@ -332,8 +349,6 @@ class NutnrJCsppParserUnitTestCase(ParserUnitTestCase):
         if telem_flag:
             # use telemetered config
             config = {
-                DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.nutnr_j_cspp',
-                DataSetDriverConfigKeys.PARTICLE_CLASS: None,
                 DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT: {
                     METADATA_PARTICLE_CLASS_KEY: NutnrJCsppMetadataTelemeteredDataParticle,
                     DATA_PARTICLE_CLASS_KEY: NutnrJCsppTelemeteredDataParticle
@@ -342,17 +357,14 @@ class NutnrJCsppParserUnitTestCase(ParserUnitTestCase):
         else:
             # use recovered config
             config = {
-                DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.nutnr_j_cspp',
-                DataSetDriverConfigKeys.PARTICLE_CLASS: None,
                 DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT: {
                     METADATA_PARTICLE_CLASS_KEY: NutnrJCsppMetadataRecoveredDataParticle,
                     DATA_PARTICLE_CLASS_KEY: NutnrJCsppRecoveredDataParticle
                 }
             }
 
-        self.parser = NutnrJCsppParser(config, state, stream_handle, 
-                                  self.state_callback, self.pub_callback,
-                                  self.exception_callback)
+        self.parser = NutnrJCsppParser(config, stream_handle,
+                                       self.exception_callback)
 
     def test_simple_telem(self):
         """
@@ -360,24 +372,24 @@ class NutnrJCsppParserUnitTestCase(ParserUnitTestCase):
         Assert that the results are those we expected.
         """
         stream_handle = open(os.path.join(RESOURCE_PATH,
-                                          'short_SNA_SNA.txt'), 'rb')
+                                          'short_SNA_SNA.txt'), O_MODE)
 
-	self.create_parser(stream_handle)
+        self.create_parser(stream_handle)
 
         # get and compare the metadata particle
         result = self.parser.get_records(1)
-        self.assert_result(result, 0, self.meta_telem_particle, False, is_metadata=True)
+        self.assert_result(result, self.meta_telem_particle, is_metadata=True)
         # get and compare the first data particle
         result = self.parser.get_records(1)
-        self.assert_result(result, PARTICLE_A_POS, self.telem_particle_a, False)
+        self.assert_result(result, self.telem_particle_a)
         result = self.parser.get_records(1)
-        self.assert_result(result, PARTICLE_B_POS, self.telem_particle_b, False)
+        self.assert_result(result, self.telem_particle_b)
         result = self.parser.get_records(1)
-        self.assert_result(result, PARTICLE_C_POS, self.telem_particle_c, False)
+        self.assert_result(result, self.telem_particle_c)
         result = self.parser.get_records(1)
-        self.assert_result(result, PARTICLE_D_POS, self.telem_particle_d, False)
+        self.assert_result(result, self.telem_particle_d)
         result = self.parser.get_records(1)
-        self.assert_result(result, PARTICLE_E_POS, self.telem_particle_e, True)
+        self.assert_result(result, self.telem_particle_e)
 
         # confirm no exceptions occurred
         self.assertEqual(self.exception_callback_value, [])
@@ -390,24 +402,24 @@ class NutnrJCsppParserUnitTestCase(ParserUnitTestCase):
         Assert that the results are those we expected.
         """
         stream_handle = open(os.path.join(RESOURCE_PATH,
-                                          'short_SNA_SNA.txt'), 'rb')
+                                          'short_SNA_SNA.txt'), O_MODE)
 
-	self.create_parser(stream_handle, telem_flag=False)
+        self.create_parser(stream_handle, telem_flag=False)
 
         # get and compare the metadata particle
         result = self.parser.get_records(1)
-        self.assert_result(result, 0, self.meta_recov_particle, False, is_metadata=True)
+        self.assert_result(result, self.meta_recov_particle, is_metadata=True)
         # get and compare the first data particle
         result = self.parser.get_records(1)
-        self.assert_result(result, PARTICLE_A_POS, self.recov_particle_a, False)
+        self.assert_result(result, self.recov_particle_a)
         result = self.parser.get_records(1)
-        self.assert_result(result, PARTICLE_B_POS, self.recov_particle_b, False)
+        self.assert_result(result, self.recov_particle_b)
         result = self.parser.get_records(1)
-        self.assert_result(result, PARTICLE_C_POS, self.recov_particle_c, False)
+        self.assert_result(result, self.recov_particle_c)
         result = self.parser.get_records(1)
-        self.assert_result(result, PARTICLE_D_POS, self.recov_particle_d, False)
+        self.assert_result(result, self.recov_particle_d)
         result = self.parser.get_records(1)
-        self.assert_result(result, PARTICLE_E_POS, self.recov_particle_e, True)
+        self.assert_result(result, self.recov_particle_e)
 
         # confirm no exceptions occurred
         self.assertEqual(self.exception_callback_value, [])
@@ -420,13 +432,12 @@ class NutnrJCsppParserUnitTestCase(ParserUnitTestCase):
         Assert that the results are those we expected.
         """
         stream_handle = open(os.path.join(RESOURCE_PATH,
-                                          'short_SNA_SNA.txt'), 'rb')
+                                          'short_SNA_SNA.txt'), O_MODE)
 
         self.create_parser(stream_handle)
 
         result = self.parser.get_records(6)
 
-        self.assert_(isinstance(self.publish_callback_value, list))
         # compare particle raw data values
         self.assert_metadata_and_timestamp(result, self.meta_telem_particle)
         self.assert_data_and_timestamp(result, self.telem_particle_a, result_index=1)
@@ -434,28 +445,24 @@ class NutnrJCsppParserUnitTestCase(ParserUnitTestCase):
         self.assert_data_and_timestamp(result, self.telem_particle_c, result_index=3)
         self.assert_data_and_timestamp(result, self.telem_particle_d, result_index=4)
         self.assert_data_and_timestamp(result, self.telem_particle_e, result_index=5)
-        
-        # compare position and file ingested from the state
-        self.assert_position(PARTICLE_E_POS)
-        self.assertEqual(self.file_ingested_value, True)
+
         # confirm no exceptions occurred
         self.assertEqual(self.exception_callback_value, [])
 
-	stream_handle.close()
+        stream_handle.close()
 
     def test_long_stream(self):
         """
         Test a long stream 
         """
         stream_handle = open(os.path.join(RESOURCE_PATH,
-                                          '11079419_SNA_SNA.txt'), 'rb')
+                                          '11079419_SNA_SNA.txt'), O_MODE)
 
         self.create_parser(stream_handle)
 
         result = self.parser.get_records(172)
         self.assertEqual(len(result), 172)
 
-        self.assert_(isinstance(self.publish_callback_value, list))
         # compare particle raw data values, check the particles we know from
         # the beginning, then the last particle in the file
         self.assert_metadata_and_timestamp(result, self.meta_telem_particle)
@@ -465,84 +472,6 @@ class NutnrJCsppParserUnitTestCase(ParserUnitTestCase):
         self.assert_data_and_timestamp(result, self.telem_particle_d, result_index=4)
         self.assert_data_and_timestamp(result, self.telem_particle_e, result_index=5)
         self.assert_data_and_timestamp(result, self.telem_particle_long, result_index=-1)
-
-        # compare position and file ingested from the state
-        self.assert_position(END_LONG_POS)
-        self.assertEqual(self.file_ingested_value, True)
-        # confirm no exceptions occurred
-        self.assertEqual(self.exception_callback_value, [])
-
-	stream_handle.close()
-
-    def test_mid_state_start(self):
-        """
-        Test starting the parser in a state in the middle of processing
-        """
-        # set the state so that the metadata, particle A and B have been read
-        new_state = {StateKey.POSITION: PARTICLE_B_POS,
-                     StateKey.METADATA_EXTRACTED: True}
-
-        stream_handle = open(os.path.join(RESOURCE_PATH,
-                                          'short_SNA_SNA.txt'), 'rb')
-
-        self.create_parser(stream_handle, state=new_state)
-
-        # ask for more records but should only get 3 back: c, d, and e
-        result = self.parser.get_records(6)
-        self.assertEqual(len(result), 3)
-
-        self.assert_(isinstance(self.publish_callback_value, list))
-        # compare particle raw data values
-        self.assert_data_and_timestamp(result, self.telem_particle_c, result_index=0)
-        self.assert_data_and_timestamp(result, self.telem_particle_d, result_index=1)
-        self.assert_data_and_timestamp(result, self.telem_particle_e, result_index=2)
-
-        # compare position and file ingested from the state
-        self.assert_position(PARTICLE_E_POS)
-        self.assertEqual(self.file_ingested_value, True)
-        # confirm no exceptions occurred
-        self.assertEqual(self.exception_callback_value, [])
-
-	stream_handle.close()
-
-    def test_set_state(self):
-        """
-        Test changing to a new state after initializing the parser and 
-        reading data, as if new data has been found and the state has
-        changed
-        """
-        # set the state so that the metadata, particle A, B, and C have been read
-        new_state = {StateKey.POSITION: PARTICLE_C_POS,
-                     StateKey.METADATA_EXTRACTED: True}
-
-        stream_handle = open(os.path.join(RESOURCE_PATH,
-                                          'short_SNA_SNA.txt'), 'r')
-
-        self.create_parser(stream_handle)
-
-        # get metadata and A
-        result = self.parser.get_records(2)
-
-        # compare particle raw data values and timestamp
-        self.assert_metadata_and_timestamp(result, self.meta_telem_particle)
-        self.assert_data_and_timestamp(result, self.telem_particle_a, result_index=1)
-
-        # compare position and file ingested from the state
-        self.assert_position(PARTICLE_A_POS)
-        self.assertEqual(self.file_ingested_value, False)
-
-        # now change the state to skip over B and C
-        self.parser.set_state(new_state)
-
-        # confirm we get D and E now
-        result = self.parser.get_records(2)
-        # compare particle raw data values and timestamp
-        self.assert_data_and_timestamp(result, self.telem_particle_d, result_index=0)
-        self.assert_data_and_timestamp(result, self.telem_particle_e, result_index=1)
-
-        # compare position and file ingested from the state
-        self.assert_position(PARTICLE_E_POS)
-        self.assertEqual(self.file_ingested_value, True)
 
         # confirm no exceptions occurred
         self.assertEqual(self.exception_callback_value, [])
@@ -560,22 +489,22 @@ class NutnrJCsppParserUnitTestCase(ParserUnitTestCase):
         # particle C has bad frame type
         # particle D has bad year
         stream_handle = open(os.path.join(RESOURCE_PATH,
-                                          'bad_SNA_SNA.txt'), 'r')
+                                          'bad_SNA_SNA.txt'), O_MODE)
 
         self.create_parser(stream_handle)
 
         # get E, since it is first it will generate a metadata
         result = self.parser.get_records(1)
-        self.assert_result(result, 0, self.meta_telem_e, False, is_metadata=True)
+        self.assert_result(result, self.meta_telem_e, is_metadata=True)
         result = self.parser.get_records(1)
         # bytes in file changed due to making file 'bad'
-        self.assert_result(result, 10257, self.telem_particle_e, True)
+        self.assert_result(result, self.telem_particle_e)
 
         # should have had 5 exceptions by now
         self.assertEqual(len(self.exception_callback_value), 5)
 
-	for exception in self.exception_callback_value:
-	    self.assert_(isinstance(exception, RecoverableSampleException))
+        for exception in self.exception_callback_value:
+            self.assert_(isinstance(exception, RecoverableSampleException))
 
     def test_missing_source_file(self):
         """
@@ -583,7 +512,7 @@ class NutnrJCsppParserUnitTestCase(ParserUnitTestCase):
         fails to create a metadata particle and throws an exception
         """
         stream_handle = open(os.path.join(RESOURCE_PATH,
-                                          'no_source_file_SNA_SNA.txt'), 'r')
+                                          'no_source_file_SNA_SNA.txt'), O_MODE)
 
         self.create_parser(stream_handle)
 
@@ -596,8 +525,6 @@ class NutnrJCsppParserUnitTestCase(ParserUnitTestCase):
         self.assert_data_and_timestamp(result, self.telem_particle_d, result_index=3)
         self.assert_data_and_timestamp(result, self.telem_particle_e, result_index=4)
 
-        # compare file ingested from the state
-        self.assertEqual(self.file_ingested_value, True)
         # confirm an exception occurred
         self.assertEqual(len(self.exception_callback_value), 1)
         self.assert_(isinstance(self.exception_callback_value[0], RecoverableSampleException))
@@ -610,7 +537,7 @@ class NutnrJCsppParserUnitTestCase(ParserUnitTestCase):
         fails to create a metadata particle and throws an exception
         """
         stream_handle = open(os.path.join(RESOURCE_PATH,
-                                          'no_header_SNA_SNA.txt'), 'r')
+                                          'no_header_SNA_SNA.txt'), O_MODE)
 
         self.create_parser(stream_handle)
 
@@ -623,8 +550,6 @@ class NutnrJCsppParserUnitTestCase(ParserUnitTestCase):
         self.assert_data_and_timestamp(result, self.telem_particle_d, result_index=3)
         self.assert_data_and_timestamp(result, self.telem_particle_e, result_index=4)
 
-        # compare file ingested from the state
-        self.assertEqual(self.file_ingested_value, True)
         # confirm an exception occurred
         self.assertEqual(len(self.exception_callback_value), 1)
         self.assert_(isinstance(self.exception_callback_value[0], RecoverableSampleException))
@@ -639,11 +564,10 @@ class NutnrJCsppParserUnitTestCase(ParserUnitTestCase):
         # test a config with a missing particle classes dict
         config = {}
         stream_handle = open(os.path.join(RESOURCE_PATH,
-                                          'short_SNA_SNA.txt'), 'r')
+                                          'short_SNA_SNA.txt'), O_MODE)
 
         with self.assertRaises(ConfigurationException):
-            self.parser = NutnrJCsppParser(config, None, stream_handle,
-                                           self.state_callback, self.pub_callback,
+            self.parser = NutnrJCsppParser(config, stream_handle,
                                            self.exception_callback)
 
         # test a config with a missing data particle class key
@@ -654,6 +578,46 @@ class NutnrJCsppParserUnitTestCase(ParserUnitTestCase):
         }
 
         with self.assertRaises(ConfigurationException):
-            self.parser = NutnrJCsppParser(config, None, stream_handle,
-                                           self.state_callback, self.pub_callback,
+            self.parser = NutnrJCsppParser(config, stream_handle,
                                            self.exception_callback)
+
+    def test_real_file(self):
+        """
+        Read test data from IDD and pull out multiple data particles at one time.
+        Assert that the results are those we expected.
+        """
+        log.info('===== START TEST REAL FILE =====')
+
+        # Recovered
+        file_path = os.path.join(RESOURCE_PATH, '11079364_SNA_SNA.txt')
+
+        stream_handle = open(file_path, O_MODE)
+
+        self.create_parser(stream_handle, telem_flag=False)
+
+        particles = self.parser.get_records(182)
+
+        log.debug("*** test_real_file Num particles %s", len(particles))
+
+        # check all the values against expected results.
+        self.assert_particles(particles, '11079364_SNA_SNA_recov.yml', RESOURCE_PATH)
+        self.assertEquals(self.exception_callback_value, [])
+        stream_handle.close()
+
+        # Telemetered
+        file_path = os.path.join(RESOURCE_PATH, '11079419_SNA_SNA.txt')
+
+        stream_handle = open(file_path, O_MODE)
+
+        self.create_parser(stream_handle)
+
+        particles = self.parser.get_records(172)
+
+        log.debug("*** test_real_file Num particles %s", len(particles))
+
+        # check all the values against expected results.
+        self.assert_particles(particles, '11079419_SNA_SNA_telem.yml', RESOURCE_PATH)
+        stream_handle.close()
+
+        log.info('===== END TEST REAL FILE =====')
+
