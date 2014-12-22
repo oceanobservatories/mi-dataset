@@ -27,7 +27,6 @@ from mi.dataset.parser.dofst_k_wfp_particles import DofstKWfpTelemeteredDataPart
 from mi.dataset.parser.dofst_k_wfp_particles import DofstKWfpRecoveredMetadataParticle
 from mi.dataset.parser.dofst_k_wfp_particles import DofstKWfpTelemeteredMetadataParticle
 from mi.dataset.parser.wfp_c_file_common import StateKey
-from mi.dataset.driver.dofst_k.wfp.driver import DataTypeKey
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 
 
@@ -35,28 +34,29 @@ RESOURCE_PATH = os.path.join(Config().base_dir(), 'mi',
                              'dataset', 'driver', 'dofst_k',
                              'wfp', 'resource')
 
+
 @attr('UNIT', group='mi')
 class DofstKWfpParserUnitTestCase(ParserUnitTestCase):
     TEST_DATA = b"\x00\x1a\x88\x03\xe3\x3b\x00\x03\xeb\x0a\xc8\x00\x1a\x8c\x03\xe2" + \
-    "\xc0\x00\x03\xeb\x0a\x81\x00\x1a\x90\x03\xe1\x5b\x00\x03\xeb\x0a\x65\xff\xff" + \
-    "\xff\xff\xff\xff\xff\xff\xff\xff\xff\x52\x4e\x75\x82\x52\x4e\x76\x9a"
+                "\xc0\x00\x03\xeb\x0a\x81\x00\x1a\x90\x03\xe1\x5b\x00\x03\xeb\x0a\x65\xff\xff" + \
+                "\xff\xff\xff\xff\xff\xff\xff\xff\xff\x52\x4e\x75\x82\x52\x4e\x76\x9a"
 
     TEST_DATA_PAD = b"\x00\x1a\x88\x03\xe3\x3b\x00\x03\xeb\x0a\xc8\x00\x1a\x8c\x03\xe2" + \
-    "\xc0\x00\x03\xeb\x0a\x81\x00\x1a\x90\x03\xe1\x5b\x00\x03\xeb\x0a\x65\xff\xff" + \
-    "\xff\xff\xff\xff\xff\xff\xff\xff\xff\x52\x4e\x75\x82\x52\x4e\x76\x9a\x0a"
+                    "\xc0\x00\x03\xeb\x0a\x81\x00\x1a\x90\x03\xe1\x5b\x00\x03\xeb\x0a\x65\xff\xff" + \
+                    "\xff\xff\xff\xff\xff\xff\xff\xff\xff\x52\x4e\x75\x82\x52\x4e\x76\x9a\x0a"
 
     # not enough bytes for final timestamps
     TEST_DATA_BAD_TIME = b"\x00\x1a\x88\x03\xe3\x3b\x00\x03\xeb\x0a\xc8\x00\x1a\x8c\x03\xe2" + \
-    "\xc0\x00\x03\xeb\x0a\x81\x00\x1a\x90\x03\xe1\x5b\x00\x03\xeb\x0a\x65\xff\xff" + \
-    "\xff\xff\xff\xff\xff\xff\xff\xff\xff\x52\x4e\x75\x82\x52\x4e"
+                         "\xc0\x00\x03\xeb\x0a\x81\x00\x1a\x90\x03\xe1\x5b\x00\x03\xeb\x0a\x65\xff\xff" + \
+                         "\xff\xff\xff\xff\xff\xff\xff\xff\xff\x52\x4e\x75\x82\x52\x4e"
 
     TEST_DATA_BAD_SIZE = b"\x00\x1a\x88\x03\xe3\x3b\xc8\x00\x1a\x8c\x03\xe2" + \
-    "\xc0\x00\x03\xeb\x0a\x81\x00\x1a\x90\x03\xe1\x5b\x00\x03\xeb\x0a\x65\xff\xff" + \
-    "\xff\xff\xff\xff\xff\xff\xff\xff\xff\x52\x4e\x75\x82\x52\x4e\x76\x9a"
+                         "\xc0\x00\x03\xeb\x0a\x81\x00\x1a\x90\x03\xe1\x5b\x00\x03\xeb\x0a\x65\xff\xff" + \
+                         "\xff\xff\xff\xff\xff\xff\xff\xff\xff\x52\x4e\x75\x82\x52\x4e\x76\x9a"
 
     TEST_DATA_BAD_EOP = b"\x00\x1a\x88\x03\xe3\x3b\x00\x03\xeb\x0a\xc8\x00\x1a\x8c\x03\xe2" + \
-    "\xc0\x00\x03\xeb\x0a\x81\x00\x1a\x90\x03\xe1\x5b\x00\x03\xeb\x0a\x65" + \
-    "\xff\xff\xff\xff\x52\x4e\x75\x82\x52\x4e\x76\x9a"
+                        "\xc0\x00\x03\xeb\x0a\x81\x00\x1a\x90\x03\xe1\x5b\x00\x03\xeb\x0a\x65" + \
+                        "\xff\xff\xff\xff\x52\x4e\x75\x82\x52\x4e\x76\x9a"
 
     """
     dofst_k_wfp Parser unit test suite
@@ -75,22 +75,22 @@ class DofstKWfpParserUnitTestCase(ParserUnitTestCase):
 
     def setUp(self):
         ParserUnitTestCase.setUp(self)
-        self.config = {
-            DataTypeKey.DOFST_K_WFP_RECOVERED: {
-                DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.dofst_k_wfp',
-                DataSetDriverConfigKeys.PARTICLE_CLASS: None,
-                DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT: {
-                    'instrument_data_particle_class': DofstKWfpRecoveredDataParticle,
-                    'metadata_particle_class': DofstKWfpRecoveredMetadataParticle
-                },
-            },
-            DataTypeKey.DOFST_K_WFP_TELEMETERED: {
-                DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.dofst_k_wfp',
-                DataSetDriverConfigKeys.PARTICLE_CLASS: None,
-                DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT: {
-                    'instrument_data_particle_class': DofstKWfpTelemeteredDataParticle,
-                    'metadata_particle_class': DofstKWfpTelemeteredMetadataParticle
-                }
+
+        self.config_recovered = {
+            DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.dofst_k_wfp',
+            DataSetDriverConfigKeys.PARTICLE_CLASS: None,
+            DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT: {
+                'instrument_data_particle_class': DofstKWfpRecoveredDataParticle,
+                'metadata_particle_class': DofstKWfpRecoveredMetadataParticle
+            }
+        }
+
+        self.config_telemetered = {
+            DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.dofst_k_wfp',
+            DataSetDriverConfigKeys.PARTICLE_CLASS: None,
+            DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT: {
+                'instrument_data_particle_class': DofstKWfpTelemeteredDataParticle,
+                'metadata_particle_class': DofstKWfpTelemeteredMetadataParticle
             }
         }
 
@@ -117,24 +117,24 @@ class DofstKWfpParserUnitTestCase(ParserUnitTestCase):
 
         self.start_timestamp = self.calc_timestamp(start_time, time_increment_3, 0)
         self.particle_meta = DofstKWfpTelemeteredDataParticle((b"\x52\x4e\x75\x82\x52\x4e\x76\x9a", 3.0),
-            internal_timestamp=self.start_timestamp)
+                                                              internal_timestamp=self.start_timestamp)
         self.start_timestamp_long = self.calc_timestamp(start_time, time_increment_270, 0)
         self.particle_meta_long = DofstKWfpTelemeteredDataParticle((b"\x52\x4e\x75\x82\x52\x4e\x76\x9a", 270.0),
-            internal_timestamp=self.start_timestamp_long)
+                                                                   internal_timestamp=self.start_timestamp_long)
 
         self.particle_a = DofstKWfpRecoveredDataParticle(b"\x00\x1a\x88\x03\xe3\x3b\x00\x03\xeb\x0a\xc8",
-                                                          internal_timestamp=self.start_timestamp)
+                                                         internal_timestamp=self.start_timestamp)
         self.particle_a_long = DofstKWfpRecoveredDataParticle(b"\x00\x1a\x88\x03\xe3\x3b\x00\x03\xeb\x0a\xc8",
-                                                               internal_timestamp=self.start_timestamp_long)
+                                                              internal_timestamp=self.start_timestamp_long)
         self.timestamp_2 = self.calc_timestamp(start_time, time_increment_3, 1)
         self.particle_b = DofstKWfpRecoveredDataParticle(b"\x00\x1a\x8c\x03\xe2\xc0\x00\x03\xeb\x0a\x81",
-                                                          internal_timestamp=self.timestamp_2)
+                                                         internal_timestamp=self.timestamp_2)
         self.timestamp_2_long = self.calc_timestamp(start_time, time_increment_270, 1)
         self.particle_b_long = DofstKWfpRecoveredDataParticle(b"\x00\x1a\x8c\x03\xe2\xc0\x00\x03\xeb\x0a\x81",
-                                                          internal_timestamp=self.timestamp_2_long)
+                                                              internal_timestamp=self.timestamp_2_long)
         timestamp_3 = self.calc_timestamp(start_time, time_increment_3, 2)
         self.particle_c = DofstKWfpRecoveredDataParticle(b"\x00\x1a\x90\x03\xe1\x5b\x00\x03\xeb\x0a\x65",
-                                                          internal_timestamp=timestamp_3)
+                                                         internal_timestamp=timestamp_3)
         timestamp_last = self.calc_timestamp(start_time, time_increment_270, 269)
         self.particle_last = DofstKWfpRecoveredDataParticle(b"\x00\x1a\x8f\x03\xe5\x91\x00\x03\xeb\x0bS",
                                                             internal_timestamp=timestamp_last)
@@ -174,7 +174,7 @@ class DofstKWfpParserUnitTestCase(ParserUnitTestCase):
         # Test the "recovered" version of the parser
         #********************************************
         recovered_parser = DofstKWfpParser(
-            self.config.get(DataTypeKey.DOFST_K_WFP_RECOVERED), self.recovered_start_state, stream_handle,
+            self.config_recovered, self.recovered_start_state, stream_handle,
             self.state_callback, self.pub_callback, self.exception_callback,
             len(DofstKWfpParserUnitTestCase.TEST_DATA))
         self.parser = recovered_parser
@@ -201,7 +201,7 @@ class DofstKWfpParserUnitTestCase(ParserUnitTestCase):
         # Test the "telemetered" version of the parser
         #**********************************************
         telemetered_parser = DofstKWfpParser(
-            self.config.get(DataTypeKey.DOFST_K_WFP_TELEMETERED), self.telemetered_start_state, stream_handle,
+            self.config_telemetered, self.telemetered_start_state, stream_handle,
             self.state_callback, self.pub_callback, self.exception_callback,
             len(DofstKWfpParserUnitTestCase.TEST_DATA))
         self.parser = telemetered_parser
@@ -235,7 +235,7 @@ class DofstKWfpParserUnitTestCase(ParserUnitTestCase):
         # Test the "recovered" version of the parser
         #********************************************
         recovered_parser = DofstKWfpParser(
-            self.config.get(DataTypeKey.DOFST_K_WFP_RECOVERED), self.recovered_start_state, stream_handle,
+            self.config_recovered, self.recovered_start_state, stream_handle,
             self.state_callback, self.pub_callback, self.exception_callback,
             len(DofstKWfpParserUnitTestCase.TEST_DATA_PAD))
         self.parser = recovered_parser
@@ -263,7 +263,7 @@ class DofstKWfpParserUnitTestCase(ParserUnitTestCase):
         # Test the "telemetered" version of the parser
         #**********************************************
         telemetered_parser = DofstKWfpParser(
-            self.config.get(DataTypeKey.DOFST_K_WFP_TELEMETERED), self.telemetered_start_state, stream_handle,
+            self.config_telemetered, self.telemetered_start_state, stream_handle,
             self.state_callback, self.pub_callback, self.exception_callback,
             len(DofstKWfpParserUnitTestCase.TEST_DATA_PAD))
         self.parser = telemetered_parser
@@ -295,8 +295,8 @@ class DofstKWfpParserUnitTestCase(ParserUnitTestCase):
         #********************************************
         # Test the "recovered" version of the parser
         #********************************************
-        recovered_parser =  DofstKWfpParser(
-            self.config.get(DataTypeKey.DOFST_K_WFP_RECOVERED), self.recovered_start_state, stream_handle,
+        recovered_parser = DofstKWfpParser(
+            self.config_recovered, self.recovered_start_state, stream_handle,
             self.state_callback, self.pub_callback, self.exception_callback,
             len(DofstKWfpParserUnitTestCase.TEST_DATA))
         self.parser = recovered_parser
@@ -321,15 +321,15 @@ class DofstKWfpParserUnitTestCase(ParserUnitTestCase):
         #**********************************************
         # Test the "telemetered" version of the parser
         #**********************************************
-        telemetered_parser =  DofstKWfpParser(
-            self.config.get(DataTypeKey.DOFST_K_WFP_TELEMETERED), self.telemetered_start_state, stream_handle,
+        telemetered_parser = DofstKWfpParser(
+            self.config_telemetered, self.telemetered_start_state, stream_handle,
             self.state_callback, self.pub_callback, self.exception_callback,
             len(DofstKWfpParserUnitTestCase.TEST_DATA))
         self.parser = telemetered_parser
         # next get records
         telemetered_result = telemetered_parser.get_records(4)
         self.assertEqual(telemetered_result, [self.particle_meta, self.particle_a,
-                                            self.particle_b, self.particle_c])
+                                              self.particle_b, self.particle_c])
         self.assertEqual(telemetered_parser._state[StateKey.POSITION], 33)
         self.assertEqual(self.state_callback_value[StateKey.POSITION], 33)
         self.assertEqual(self.publish_callback_value[0], self.particle_meta)
@@ -353,8 +353,8 @@ class DofstKWfpParserUnitTestCase(ParserUnitTestCase):
         #********************************************
         # Test the "recovered" version of the parser
         #********************************************
-        recovered_parser =  DofstKWfpParser(
-            self.config.get(DataTypeKey.DOFST_K_WFP_RECOVERED), self.recovered_start_state, stream_handle,
+        recovered_parser = DofstKWfpParser(
+            self.config_recovered, self.recovered_start_state, stream_handle,
             self.state_callback, self.pub_callback, self.exception_callback, filesize)
         self.parser = recovered_parser
         # next get records
@@ -371,8 +371,8 @@ class DofstKWfpParserUnitTestCase(ParserUnitTestCase):
         #**********************************************
         # Test the "telemetered" version of the parser
         #**********************************************
-        telemetered_parser =  DofstKWfpParser(
-            self.config.get(DataTypeKey.DOFST_K_WFP_TELEMETERED), self.telemetered_start_state, stream_handle,
+        telemetered_parser = DofstKWfpParser(
+            self.config_telemetered, self.telemetered_start_state, stream_handle,
             self.state_callback, self.pub_callback, self.exception_callback, filesize)
         self.parser = telemetered_parser
         # next get records
@@ -387,107 +387,6 @@ class DofstKWfpParserUnitTestCase(ParserUnitTestCase):
         self.assertEqual(self.state_callback_value[StateKey.RECORDS_READ], 270)
         self.assertEqual(self.publish_callback_value[-1], self.particle_last)
 
-    def test_mid_state_start(self):
-        """
-        Test starting the parser in a state in the middle of processing
-        """
-        stream_handle = StringIO(DofstKWfpParserUnitTestCase.TEST_DATA)
-
-        #********************************************
-        # Test the "recovered" version of the parser
-        #********************************************
-        # set the state after the metadata and first record
-        recovered_new_state = {StateKey.POSITION: 11,
-                               StateKey.RECORDS_READ: 1,
-                               StateKey.METADATA_SENT: True}
-
-        recovered_parser =  DofstKWfpParser(
-            self.config.get(DataTypeKey.DOFST_K_WFP_RECOVERED), recovered_new_state, stream_handle,
-            self.state_callback, self.pub_callback, self.exception_callback,
-            len(DofstKWfpParserUnitTestCase.TEST_DATA))
-
-        self.parser = recovered_parser
-
-        recovered_result = recovered_parser.get_records(1)
-        self.assert_result(recovered_result, 22, self.particle_b, False, 2, True)
-        recovered_result = self.parser.get_records(1)
-        self.assert_result(recovered_result, 33, self.particle_c, True, 3, True)
-
-        #**********************************************
-        # Test the "telemetered" version of the parser
-        #**********************************************
-        # set the state after the metadata and first record
-        telemetered_new_state = {StateKey.POSITION: 11,
-                                 StateKey.RECORDS_READ: 1,
-                                 StateKey.METADATA_SENT: True}
-        telemetered_parser =  DofstKWfpParser(
-            self.config.get(DataTypeKey.DOFST_K_WFP_RECOVERED), telemetered_new_state, stream_handle,
-            self.state_callback, self.pub_callback, self.exception_callback,
-            len(DofstKWfpParserUnitTestCase.TEST_DATA))
-
-        self.parser = telemetered_parser
-
-        telemetered_result = telemetered_parser.get_records(1)
-        self.assert_result(telemetered_result, 22, self.particle_b, False, 2, True)
-        telemetered_result = self.parser.get_records(1)
-        self.assert_result(telemetered_result, 33, self.particle_c, True, 3, True)
-
-    def test_set_state(self):
-        """
-        Test changing to a new state after initializing the parser and
-        reading data, as if new data has been found and the state has
-        changed
-        """
-        stream_handle = StringIO(DofstKWfpParserUnitTestCase.TEST_DATA)
-
-        #********************************************
-        # Test the "recovered" version of the parser
-        #********************************************
-        recovered_new_state = {StateKey.POSITION: 11,
-                               StateKey.RECORDS_READ: 1,
-                               StateKey.METADATA_SENT: True}
-
-        recovered_parser =  DofstKWfpParser(
-            self.config.get(DataTypeKey.DOFST_K_WFP_RECOVERED), self.recovered_start_state, stream_handle,
-            self.state_callback, self.pub_callback, self.exception_callback,
-            len(DofstKWfpParserUnitTestCase.TEST_DATA))
-
-        self.parser = recovered_parser
-
-        recovered_result = recovered_parser.get_records(1)
-        self.assert_result(recovered_result, 0, self.particle_meta, False, 0, True)
-
-        # essentially skips particle a
-        recovered_parser.set_state(recovered_new_state)
-        recovered_result = recovered_parser.get_records(1)
-        self.assert_result(recovered_result, 22, self.particle_b, False, 2, True)
-        recovered_result = recovered_parser.get_records(1)
-        self.assert_result(recovered_result, 33, self.particle_c, True, 3, True)
-
-        #**********************************************
-        # Test the "telemetered" version of the parser
-        #**********************************************
-        telemetered_new_state = {StateKey.POSITION: 11,
-                                 StateKey.RECORDS_READ: 1,
-                                 StateKey.METADATA_SENT: True}
-
-        telemetered_parser =  DofstKWfpParser(
-            self.config.get(DataTypeKey.DOFST_K_WFP_TELEMETERED), self.telemetered_start_state, stream_handle,
-            self.state_callback, self.pub_callback, self.exception_callback,
-            len(DofstKWfpParserUnitTestCase.TEST_DATA))
-
-        self.parser = telemetered_parser
-
-        telemetered_result = telemetered_parser.get_records(1)
-        self.assert_result(telemetered_result, 0, self.particle_meta, False, 0, True)
-
-        # essentially skips particle a
-        telemetered_parser.set_state(telemetered_new_state)
-        telemetered_result = telemetered_parser.get_records(1)
-        self.assert_result(telemetered_result, 22, self.particle_b, False, 2, True)
-        telemetered_result = telemetered_parser.get_records(1)
-        self.assert_result(telemetered_result, 33, self.particle_c, True, 3, True)
-
     def test_bad_time_data(self):
         """
         If the timestamps are missing, raise a sample exception and do not parse the file
@@ -497,16 +396,16 @@ class DofstKWfpParserUnitTestCase(ParserUnitTestCase):
         # Test the "recovered" version of the parser
         #********************************************
         with self.assertRaises(SampleException):
-            recovered_parser =  DofstKWfpParser(
-                self.config.get(DataTypeKey.DOFST_K_WFP_RECOVERED), self.recovered_start_state, stream_handle,
+            recovered_parser = DofstKWfpParser(
+                self.config_recovered, self.recovered_start_state, stream_handle,
                 self.state_callback, self.pub_callback, self.exception_callback,
                 len(DofstKWfpParserUnitTestCase.TEST_DATA_BAD_TIME))
         #**********************************************
         # Test the "telemetered" version of the parser
         #**********************************************
         with self.assertRaises(SampleException):
-            telemetered_parser =  DofstKWfpParser(
-                self.config.get(DataTypeKey.DOFST_K_WFP_TELEMETERED), self.telemetered_start_state, stream_handle,
+            telemetered_parser = DofstKWfpParser(
+                self.config_telemetered, self.telemetered_start_state, stream_handle,
                 self.state_callback, self.pub_callback, self.exception_callback,
                 len(DofstKWfpParserUnitTestCase.TEST_DATA_BAD_TIME))
 
@@ -520,16 +419,16 @@ class DofstKWfpParserUnitTestCase(ParserUnitTestCase):
         # Test the "recovered" version of the parser
         #********************************************
         with self.assertRaises(SampleException):
-            recovered_parser =  DofstKWfpParser(
-                self.config.get(DataTypeKey.DOFST_K_WFP_RECOVERED), self.recovered_start_state, stream_handle,
+            recovered_parser = DofstKWfpParser(
+                self.config_recovered, self.recovered_start_state, stream_handle,
                 self.state_callback, self.pub_callback, self.exception_callback,
                 len(DofstKWfpParserUnitTestCase.TEST_DATA_BAD_SIZE))
         #**********************************************
         # Test the "telemetered" version of the parser
         #**********************************************
         with self.assertRaises(SampleException):
-            telemetered_parser =  DofstKWfpParser(
-                self.config.get(DataTypeKey.DOFST_K_WFP_RECOVERED), self.telemetered_start_state, stream_handle,
+            telemetered_parser = DofstKWfpParser(
+                self.config_telemetered, self.telemetered_start_state, stream_handle,
                 self.state_callback, self.pub_callback, self.exception_callback,
                 len(DofstKWfpParserUnitTestCase.TEST_DATA_BAD_SIZE))
 
@@ -543,15 +442,15 @@ class DofstKWfpParserUnitTestCase(ParserUnitTestCase):
         # Test the "recovered" version of the parser
         #********************************************
         with self.assertRaises(SampleException):
-            recovered_parser =  DofstKWfpParser(
-                self.config.get(DataTypeKey.DOFST_K_WFP_RECOVERED), self.recovered_start_state, stream_handle,
+            recovered_parser = DofstKWfpParser(
+                self.config_recovered, self.recovered_start_state, stream_handle,
                 self.state_callback, self.pub_callback, self.exception_callback,
                 len(DofstKWfpParserUnitTestCase.TEST_DATA_BAD_EOP))
         #**********************************************
         # Test the "telemetered" version of the parser
         #**********************************************
         with self.assertRaises(SampleException):
-            telemetered_parser =  DofstKWfpParser(
-                self.config.get(DataTypeKey.DOFST_K_WFP_RECOVERED), self.telemetered_start_state, stream_handle,
+            telemetered_parser = DofstKWfpParser(
+                self.config_telemetered, self.telemetered_start_state, stream_handle,
                 self.state_callback, self.pub_callback, self.exception_callback,
                 len(DofstKWfpParserUnitTestCase.TEST_DATA_BAD_EOP))
