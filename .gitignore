@@ -22,7 +22,6 @@ downloads/
 bin/
 .installed.cfg
 .idea
-.idea
 msc.*
 reslocal/config/pyon.local.yml
 reslocal/config/logging.local.yml
@@ -46,5 +45,5 @@ coverage_results
 couchdb.stderr
 couchdb.stdout
 erl_crash.dump
-
+*.prof
 mavs4_menu_hex.txt
