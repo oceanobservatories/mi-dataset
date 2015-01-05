@@ -1002,7 +1002,7 @@ MIX_YAML_FILE = 'tel_vel3d_l_4.yml'
 REC_LOG_FILE_SIMPLE = 'rec_vel3d_l_2.dat'
 REC_YAML_FILE_SIMPLE = 'rec_vel3d_l_2.yml'
 
-REC_LOG_FILE_1 = 'A0000001.dat'
+REC_LOG_FILE_1 = 'A0000001.DAT'
 REC_YAML_FILE_1 = 'A0000001.yml'
 
 REC_LOG_FILE_2 = 'A0000001_PAPA14.dat'
@@ -1190,7 +1190,6 @@ class Vel3dLWfpParserUnitTestCase(ParserUnitTestCase):
         self.tel_expected_particle_4_meta = Vel3dLWfpSioMuleMetadataParticle(
             TEL_EXPECTED_FIELDS_RECORD_4_META, internal_timestamp=3583891131.0)
 
-
         self.tel_expected_particle_10_1 = Vel3dLWfpInstrumentParticle(
             TEL_EXPECTED_FIELDS_RECORD_10_1, internal_timestamp=3502918923.0)
 
@@ -1261,7 +1260,6 @@ class Vel3dLWfpParserUnitTestCase(ParserUnitTestCase):
         self.tel_expected_particle_2_10_2_meta = Vel3dLWfpSioMuleMetadataParticle(
             TEL_EXPECTED_FIELDS_RECORD_2_10_2_META, internal_timestamp=3583891131.0)
 
-
         self.tel_expected_particle_sio_ps_wa_wa_2_1 = Vel3dLWfpSioMuleMetadataParticle(
             TEL_EXPECTED_FIELDS_SIO_PS_WA_WA_2_1, internal_timestamp=3571355045.0)
 
@@ -1304,16 +1302,15 @@ class Vel3dLWfpParserUnitTestCase(ParserUnitTestCase):
         return parser
 
     def open_file(self, filename):
-        file = open(os.path.join(RESOURCE_PATH, filename), mode='rb')
-        return file
+        fid = open(os.path.join(RESOURCE_PATH, filename), mode='rb')
+        return fid
 
     def open_file_write(self, filename):
-        file = open(os.path.join(RESOURCE_PATH, filename), mode='w')
-        return file
+        fid = open(os.path.join(RESOURCE_PATH, filename), mode='w')
+        return fid
 
     def verify_contents(self, actual_particle, expected_particle):
         self.assertEqual(actual_particle, [expected_particle])
-        self.assert_(isinstance(self.publish_callback_value, list))
 
     def setUp(self):
         ParserUnitTestCase.setUp(self)
@@ -1337,7 +1334,6 @@ class Vel3dLWfpParserUnitTestCase(ParserUnitTestCase):
         # compared with returned results
 
         self.rec_file_ingested_value = None
-        self.publish_callback_value = []
         self.exception_callback_value = []
         self.maxDiff = None
         self.create_expected_results()
@@ -1373,18 +1369,6 @@ class Vel3dLWfpParserUnitTestCase(ParserUnitTestCase):
                                   self.rec_expected_particle_4_2,
                                   self.rec_expected_particle_4_3,
                                   self.rec_expected_particle_4_4])
-
-        self.assertEqual(self.publish_callback_value[0],
-            self.rec_expected_particle_4_1)
-
-        self.assertEqual(self.publish_callback_value[1],
-            self.rec_expected_particle_4_2)
-
-        self.assertEqual(self.publish_callback_value[2],
-            self.rec_expected_particle_4_3)
-
-        self.assertEqual(self.publish_callback_value[3],
-            self.rec_expected_particle_4_4)
 
         log.info("REC MANY VERIFY METADATA RECORD")
         result = self.parser.get_records(1)
