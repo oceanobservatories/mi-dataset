@@ -17,35 +17,37 @@ from mi.core.log import get_logger
 log = get_logger()
 
 
-from mi.dataset.parser.wfp_c_file_common import WfpCFileCommonParser, WfpMetadataParserDataParticleKey
+from mi.dataset.parser.wfp_c_file_common import WfpCFileCommonParser
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
+
+
+# The following two keys are keys to be used with the PARTICLE_CLASSES_DICT
+# The key for the metadata particle class
+METADATA_PARTICLE_CLASS_KEY = 'metadata_particle_class'
+# The key for the data particle class
+DATA_PARTICLE_CLASS_KEY = 'instrument_data_particle_class'
 
 
 class CtdpfCklWfpParser(WfpCFileCommonParser):
 
     def __init__(self,
                  config,
-                 state,
                  stream_handle,
-                 state_callback,
-                 publish_callback,
                  exception_callback,
-                 filesize,
-                 *args, **kwargs):
+                 file_size):
 
-#        log.info(config)
+        log.info(config)
         particle_classes_dict = config.get(DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT)
         self._instrument_data_particle_class = particle_classes_dict.get('instrument_data_particle_class')
         self._metadata_particle_class = particle_classes_dict.get('metadata_particle_class')
 
         super(CtdpfCklWfpParser, self).__init__(config,
-                                                state,
+                                                None,
                                                 stream_handle,
-                                                state_callback,
-                                                publish_callback,
+                                                lambda state, ingested: None,
+                                                lambda data: None,
                                                 exception_callback,
-                                                filesize,
-                                                *args, **kwargs)
+                                                file_size)
 
     def extract_metadata_particle(self, raw_data, timestamp):
         """
