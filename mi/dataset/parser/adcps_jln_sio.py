@@ -56,10 +56,10 @@ class AdcpsJlnSioDataParticleKey(BaseEnum):
     SUBSAMPLING_PARAMETER = 'subsampling_parameter'
     ADCPS_JLN_STARTBIN = 'adcps_jln_startbin'
     ADCPS_JLN_BINS = 'adcps_jln_bins'
-    ADCPS_JLN_ERR = 'adcps_jln_vel_error' 
-    ADCPS_JLN_UP = 'adcps_jln_vel_up' 
-    ADCPS_JLN_NORTH = 'adcps_jln_vel_north' 
-    ADCPS_JLN_EAST = 'adcps_jln_vel_east'
+    ADCPS_JLN_ERR = 'error_velocity'
+    ADCPS_JLN_UP = 'water_velocity_up'
+    ADCPS_JLN_NORTH = 'water_velocity_north'
+    ADCPS_JLN_EAST = 'water_velocity_east'
 
 DATA_WRAPPER_REGEX = b'<Executing/>\x0d\x0a<SampleData ID=\'0x[0-9a-f]+\' LEN=\'[0-9]+\' ' \
                      'CRC=\'(0x[0-9a-f]+)\'>([\x00-\xFF]+)</SampleData>\x0d\x0a<Executed/>\x0d\x0a'

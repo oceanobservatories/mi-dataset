@@ -97,10 +97,10 @@ class AdcpsJlnStcInstrumentParserDataParticleKey(BaseEnum):
     ADCPS_JLN_PRESSURE = 'adcps_jln_pressure'
     ADCPS_JLN_STARTBIN = 'adcps_jln_startbin'
     ADCPS_JLN_BINS = 'adcps_jln_bins'
-    ADCPS_JLN_VEL_ERROR = 'adcps_jln_vel_error'
-    ADCPS_JLN_VEL_UP = 'adcps_jln_vel_up'
-    ADCPS_JLN_VEL_NORTH = 'adcps_jln_vel_north'
-    ADCPS_JLN_VEL_EAST = 'adcps_jln_vel_east'
+    ADCPS_JLN_VEL_ERROR = 'error_velocity'
+    ADCPS_JLN_VEL_UP = 'water_velocity_up'
+    ADCPS_JLN_VEL_NORTH = 'water_velocity_north'
+    ADCPS_JLN_VEL_EAST = 'water_velocity_east'
     
 
 class StateKey(BaseEnum):
