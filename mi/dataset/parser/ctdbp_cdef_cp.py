@@ -25,16 +25,12 @@ Initial Release
 __author__ = 'Tapana Gupta'
 __license__ = 'Apache 2.0'
 
-
-import copy
 import calendar
-from functools import partial
 import re
 
-from mi.core.instrument.chunker import \
-    StringChunker
+from mi.core.log import get_logger
+log = get_logger()
 
-from mi.core.log import get_logger; log = get_logger()
 from mi.core.common import BaseEnum
 from mi.core.exceptions import \
     SampleException, \
@@ -44,14 +40,13 @@ from mi.core.instrument.data_particle import \
     DataParticle, \
     DataParticleKey
 
-from mi.dataset.dataset_parser import BufferLoadingParser
+from mi.dataset.dataset_parser import SimpleParser
 
 from mi.dataset.parser.common_regexes import \
     END_OF_LINE_REGEX
 
 from ctdbp_common import CtdbpParserDataParticleKey, \
     HEADER_MATCHER, \
-    CTDBP_RECORD_MATCHER, \
     JAN_1_2000
 
 # Basic patterns
@@ -75,10 +70,10 @@ DATA_REGEX = r"""
 (?P<press_temp> [0-9A-F]{4})
 (?P<ctd_time>   [0-9A-F]{8})"""
 
-DATA_MATCHER = re.compile(DATA_REGEX, re.VERBOSE|re.DOTALL)
+DATA_MATCHER = re.compile(DATA_REGEX, re.VERBOSE | re.DOTALL)
 
 # Sensor data record:
-#  (30 Hex Characters followed by new line)
+# (30 Hex Characters followed by new line)
 SENSOR_DATA_PATTERN = HEX_DATA_30 + END_OF_LINE_REGEX
 SENSOR_DATA_MATCHER = re.compile(SENSOR_DATA_PATTERN)
 
@@ -141,50 +136,19 @@ class CtdbpCdefCpInstrumentDataParticle(DataParticle):
         return result
 
 
-class CtdbpCdefCpParser(BufferLoadingParser):
-
+class CtdbpCdefCpParser(SimpleParser):
     """
     Parser for CTDBP_cdef_cp data.
     """
-    def __init__(self,
-                 config,
-                 stream_handle,
-                 state_callback,
-                 publish_callback,
-                 exception_callback,
-                 *args, **kwargs):
 
-        # No fancy sieve function needed for this parser.
-        # File is ASCII with records separated by newlines.
-
+    def __init__(self, config, stream_handle, exception_callback):
         super(CtdbpCdefCpParser, self).__init__(config,
-                                          stream_handle,
-                                          None,
-                                          partial(StringChunker.regex_sieve_function,
-                                                  regex_list=[CTDBP_RECORD_MATCHER]),
-                                          state_callback,
-                                          publish_callback,
-                                          exception_callback,
-                                          *args,
-                                          **kwargs)
+                                                stream_handle,
+                                                exception_callback)
 
-        self.input_file = stream_handle
+        self.stream_handle = stream_handle
 
-
-    def handle_non_data(self, non_data, non_end, start):
-        """
-        Handle any non-data that is found in the file
-        """
-        # Handle non-data here.
-        # Use the _exception_callback.
-        if non_data is not None and non_end <= start:
-
-            self._exception_callback(UnexpectedDataException(
-                "Found %d bytes of un-expected non-data %s" %
-                (len(non_data), non_data)))
-
-
-    def parse_chunks(self):
+    def parse_file(self):
         """
         Parse out any pending data chunks in the chunker.
         If it is valid data, build a particle.
@@ -192,45 +156,27 @@ class CtdbpCdefCpParser(BufferLoadingParser):
         @retval a list of tuples with sample particles encountered in this
             parsing, plus the state.
         """
-        result_particles = []
-        (nd_timestamp, non_data, non_start, non_end) = self._chunker.get_next_non_data_with_index(clean=False)
-        (timestamp, chunk, start, end) = self._chunker.get_next_data_with_index(clean=True)
-        self.handle_non_data(non_data, non_end, start)
-
-        while chunk is not None:
-
+        for line in self.stream_handle:
             # If this is a valid sensor data record,
             # use the extracted fields to generate a particle.
-
-            sensor_match = SENSOR_DATA_MATCHER.match(chunk)
+            sensor_match = SENSOR_DATA_MATCHER.match(line)
 
             if sensor_match is not None:
-
-                particle = self._extract_sample(CtdbpCdefCpInstrumentDataParticle,
-                                                None,
-                                                chunk,
-                                                None)
+                particle = self._extract_sample(CtdbpCdefCpInstrumentDataParticle, None, line, None)
 
                 if particle is not None:
-                    result_particles.append((particle, None))
+                    self._record_buffer.append(particle)
 
             # It's not a sensor data record, see if it's a header record.
-
             else:
 
                 # If it's a valid header record, ignore it.
                 # Otherwise generate warning for unknown data.
 
-                header_match = HEADER_MATCHER.match(chunk)
+                header_match = HEADER_MATCHER.match(line)
 
                 log.debug("Header match: %s", str(header_match))
                 if header_match is None:
-                    error_message = 'Unknown data found in chunk %s' % chunk
+                    error_message = 'Unknown data found in chunk %s' % line
                     log.warn(error_message)
                     self._exception_callback(UnexpectedDataException(error_message))
-
-            (nd_timestamp, non_data, non_start, non_end) = self._chunker.get_next_non_data_with_index(clean=False)
-            (timestamp, chunk, start, end) = self._chunker.get_next_data_with_index(clean=True)
-            self.handle_non_data(non_data, non_end, start)
-
-        return result_particles

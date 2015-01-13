@@ -27,14 +27,7 @@ def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
                 log.debug("Exception: %s", exception)
                 particleDataHdlrObj.setParticleDataCaptureFailure()
 
-        parser = CtdbpCdefCpParser(
-            {DataSetDriverConfigKeys.PARTICLE_MODULE: "mi.dataset.parser.ctdbp_cdef_cp",
-             DataSetDriverConfigKeys.PARTICLE_CLASS: None},
-             stream_handle,
-             lambda state, ingested: None,
-             lambda data: None,
-             exception_callback
-        )
+        parser = CtdbpCdefCpParser({}, stream_handle, exception_callback)
         driver = DataSetDriver(parser, particleDataHdlrObj)
         driver.processFileStream()
     return particleDataHdlrObj
