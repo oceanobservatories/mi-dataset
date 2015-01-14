@@ -83,8 +83,6 @@ class CtdbpCdefCpParserUnitTestCase(ParserUnitTestCase):
         """
         parser = CtdbpCdefCpParser(self.rec_config,
                                    file_handle,
-                                   lambda state, ingested: None,
-                                   self.publish_callback,
                                    self.exception_callback)
         return parser
 
