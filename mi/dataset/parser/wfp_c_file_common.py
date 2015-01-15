@@ -26,9 +26,9 @@ from mi.core.exceptions import SampleException, DatasetParserException
 
 from mi.dataset.dataset_parser import BufferLoadingParser
 
-EOP_ONLY_MATCHER = re.compile(b'\xFF{11}')
-EOP_REGEX = b'\xFF{11}([\x00-\xFF]{8})'
-EOP_MATCHER = re.compile(EOP_REGEX)
+EOP_ONLY_MATCHER = re.compile(r'\xFF{11}')
+EOP_REGEX = r'.*(\xFF{11})(.{8})'
+EOP_MATCHER = re.compile(EOP_REGEX, re.DOTALL)
 
 DATA_RECORD_BYTES = 11
 TIME_RECORD_BYTES = 8
@@ -146,10 +146,10 @@ class WfpCFileCommonParser(BufferLoadingParser):
         # make sure we are at the end of the profile marker
         match = EOP_MATCHER.search(footer)
         if match:
-            timefields = struct.unpack('>II', match.group(1))
+            timefields = struct.unpack('>II', match.group(2))
             self._start_time = int(timefields[0])
             end_time = int(timefields[1])
-            extra_end_bytes = pad_bytes - match.start(0)
+            extra_end_bytes = pad_bytes - match.start(1)
             number_samples = float(self._filesize - FOOTER_BYTES - extra_end_bytes) / float(DATA_RECORD_BYTES)
             if number_samples > 0:
                 self._time_increment = float(end_time - self._start_time) / number_samples
@@ -159,7 +159,7 @@ class WfpCFileCommonParser(BufferLoadingParser):
             if not number_samples.is_integer():
                 raise SampleException("File does not evenly fit into number of samples")
             if not self._read_state[StateKey.METADATA_SENT]:
-                self.footer_data = (match.group(1), number_samples)
+                self.footer_data = (match.group(2), number_samples)
             # reset the file handle to the beginning of the file
             self._stream_handle.seek(0)
         else:
