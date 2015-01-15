@@ -27,7 +27,7 @@ from mi.core.exceptions import SampleException, DatasetParserException
 from mi.dataset.dataset_parser import BufferLoadingParser
 
 EOP_ONLY_MATCHER = re.compile(b'\xFF{11}')
-EOP_REGEX = b'\xFF{11}([\x00-\xFF]{8})'
+EOP_REGEX = b'\xFF{11}([\x00-\xFF]{8})$'
 EOP_MATCHER = re.compile(EOP_REGEX)
 
 DATA_RECORD_BYTES = 11
