@@ -87,7 +87,7 @@ LOG9_DATA_MAP = [
     ('h_1_10', 18, float),
     ('t_1_10', 19, float),
     ('d_mean', 20, float),
-    ('num_bins', 21, float),
+    ('num_bins', 21, int),
     ('depth_level_magnitude', 22, list),
     ('depth_level_direction', 23, list),]
 
