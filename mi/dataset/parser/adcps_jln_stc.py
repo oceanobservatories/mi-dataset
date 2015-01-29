@@ -146,13 +146,13 @@ class AdcpsJlnStcInstrumentDataParticle(DataParticle):
             # create a string with the right number of shorts to unpack
             struct_format = '<'
             for i in range(0, nbins):
-                struct_format = struct_format + 'h'
+                struct_format += 'h'
 
             bin_len = nbins*2
-            adcps_jln_vel_error = struct.unpack(struct_format, match.group(2)[34:34+bin_len])
-            adcps_jln_vel_up = struct.unpack(struct_format, match.group(2)[(34+bin_len):(34+(bin_len*2))])
-            adcps_jln_vel_north = struct.unpack(struct_format, match.group(2)[(34+(bin_len*2)):(34+(bin_len*3))])
-            adcps_jln_vel_east = struct.unpack(struct_format, match.group(2)[(34+(bin_len*3)):(34+(bin_len*4))])      
+            adcps_jln_vel_east = struct.unpack(struct_format, match.group(2)[34:34+bin_len])
+            adcps_jln_vel_north = struct.unpack(struct_format, match.group(2)[(34+bin_len):(34+(bin_len*2))])
+            adcps_jln_vel_up = struct.unpack(struct_format, match.group(2)[(34+(bin_len*2)):(34+(bin_len*3))])
+            adcps_jln_vel_error = struct.unpack(struct_format, match.group(2)[(34+(bin_len*3)):(34+(bin_len*4))])
                           
         except (ValueError, TypeError, IndexError) as ex:
             raise RecoverableSampleException("Error (%s) while decoding parameters in data: [0x%s]"
