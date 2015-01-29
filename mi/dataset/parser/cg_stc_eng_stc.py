@@ -634,7 +634,7 @@ class CgStcEngStcParserDataAbstractParticle(DataParticle):
         p.add(CgStcEngStcParserDataParticleKey.CG_ENG_MPIC_WAKE_CPM,
               r'MPIC\.wake_cpm=wtc (-?\d+\.\d+) wpc (\d+)(\r\n?|\n)',
               lambda match: float(match.group(1)),
-              float)
+              int)
         p.add(CgStcEngStcParserDataParticleKey.CG_ENG_MPIC_WPC,
               r'MPIC\.wake_cpm=wtc (\d+\.\d+) wpc (\d+)(\r\n?|\n)',
               lambda match: int(match.group(2)),

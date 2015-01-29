@@ -120,7 +120,7 @@ class NutnrBDclFullParser(NutnrBDclParser):
              float),
             (NutnrBDataParticleKey.LAMP_TIME,
              inst_match.group(InstrumentDataMatchGroups.INST_GROUP_LAMP_TIME),
-             float),
+             int),
             (NutnrBDataParticleKey.HUMIDITY,
              inst_match.group(InstrumentDataMatchGroups.INST_GROUP_HUMIDITY),
              float),

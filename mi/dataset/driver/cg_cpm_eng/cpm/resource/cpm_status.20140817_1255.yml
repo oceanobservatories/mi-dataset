@@ -118,7 +118,7 @@ data:
     cg_eng_mpic_sbd_ce_msg: 0
     cg_eng_mpic_temp1:          16.0000
     cg_eng_mpic_temp2:          14.4000
-    cg_eng_mpic_wake_cpm:           0.0000
+    cg_eng_mpic_wake_cpm:       0
     cg_eng_mpic_wpc: 964
     cg_eng_mpic_wsrc: 2
     cg_eng_msg_cnts_c_gps: 138

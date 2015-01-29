@@ -1151,7 +1151,7 @@ PARAM_REGEX_RULES_AND_VALUES = [
       [CgCpmEngCpmParserDataParticleKey.CG_ENG_MPIC_HBEAT_THRESHOLD, int, None],
      ), ExpectedInstancesEnum.ONE),
     (MPIC_WAKE_CPM_REGEX,
-     ([CgCpmEngCpmParserDataParticleKey.CG_ENG_MPIC_WAKE_CPM, float, None],
+     ([CgCpmEngCpmParserDataParticleKey.CG_ENG_MPIC_WAKE_CPM, int, None],
       [CgCpmEngCpmParserDataParticleKey.CG_ENG_MPIC_WPC, int, None],
      ), ExpectedInstancesEnum.ONE),
     (MPIC_STC_EFLAG2_REGEX,
@@ -1543,6 +1543,9 @@ class CgCpmEngCpmDataParticle(DataParticle):
                             param_name == CgCpmEngCpmParserDataParticleKey.CG_ENG_SBC_BSTR or \
                             param_name == CgCpmEngCpmParserDataParticleKey.CG_ENG_SBC_WDT:\
                             value = int(value, 0)
+
+                        if param_name == CgCpmEngCpmParserDataParticleKey.CG_ENG_MPIC_WAKE_CPM:
+                            value = int(float(value))
 
                         if param_name == CgCpmEngCpmParserDataParticleKey.CG_ENG_MPIC_GF_ENA:
                             value = int('0x'+value, 0)
