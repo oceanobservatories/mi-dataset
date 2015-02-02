@@ -1,0 +1,30 @@
+header:
+    particle_object: 'MULTIPLE'
+    particle_type: 'MULTIPLE'
+data:
+  - _index: 1
+    particle_object: Vel3dCdDclDataHeaderTelemeteredParticle
+    particle_type: vel3d_cd_dcl_data_header
+    internal_timestamp: 3621699000
+    date_time_string: '2014/10/07 19:30:00'
+    number_velocity_records: 1440
+    noise_amp_beam1: 74
+    noise_amp_beam2: 94
+    noise_amp_beam3: 95
+    noise_correlation_beam1: 11
+    noise_correlation_beam2: 24
+    noise_correlation_beam3: 16
+  - _index: 2
+    particle_object: Vel3dCdDclSystemTelemeteredParticle
+    particle_type: vel3d_cd_dcl_system_data
+    internal_timestamp: 3621699002
+    date_time_string: '2014/10/07 19:30:02'
+    battery_voltage: 12.1
+    speed_of_sound: 1502.3
+    heading: 347.3
+    pitch: 22.0
+    roll: -0.1
+    temperature: 13.91
+    error_code: 0
+    status_code: 115
+    analog_input: 0
