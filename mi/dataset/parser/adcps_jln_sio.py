@@ -179,14 +179,14 @@ class AdcpsJlnSioDataParticle(DataParticle):
                     struct_format += 'h'
     
                 bin_len = nbins*2
-                vel_err = struct.unpack(struct_format,
-                                        match.group(0)[STARTING_BYTES:(STARTING_BYTES+bin_len)])
-                vel_up = struct.unpack(struct_format,
-                                       match.group(0)[(STARTING_BYTES+bin_len):(STARTING_BYTES+(bin_len*2))])
-                vel_north = struct.unpack(struct_format,
-                                          match.group(0)[(STARTING_BYTES+(bin_len*2)):(STARTING_BYTES+(bin_len*3))])
                 vel_east = struct.unpack(struct_format,
-                                         match.group(0)[(STARTING_BYTES+(bin_len*3)):(STARTING_BYTES+(bin_len*4))])
+                                         match.group(0)[STARTING_BYTES:(STARTING_BYTES+bin_len)])
+                vel_north = struct.unpack(struct_format,
+                                          match.group(0)[(STARTING_BYTES+bin_len):(STARTING_BYTES+(bin_len*2))])
+                vel_up = struct.unpack(struct_format,
+                                       match.group(0)[(STARTING_BYTES+(bin_len*2)):(STARTING_BYTES+(bin_len*3))])
+                vel_err = struct.unpack(struct_format,
+                                        match.group(0)[(STARTING_BYTES+(bin_len*3)):(STARTING_BYTES+(bin_len*4))])
     
                 checksum = struct.unpack('<H', match.group(0)[(STARTING_BYTES+(bin_len*4)):(36+(bin_len*4))])
                 calculated_checksum = AdcpsJlnSioDataParticle.calc_inner_checksum(match.group(0)[:-2])
