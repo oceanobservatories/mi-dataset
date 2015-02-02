@@ -18,7 +18,6 @@ import re
 import ntplib
 import struct
 import time
-import binascii
 import calendar
 
 from mi.core.log import get_logger
@@ -36,24 +35,24 @@ from mi.dataset.dataset_parser import BufferLoadingParser, DataSetDriverConfigKe
 from mi.dataset.parser import utilities
 
 # *** Defining regexes for this parser ***
-HEADER_REGEX = b'#UIMM Status.+DateTime: (\d{8}\s\d{6}).+#ID=(\d+).+#SN=(\d+).+#Volts=(\d+\.\d{2}).+' \
+HEADER_REGEX = r'#UIMM Status.+DateTime: (\d{8}\s\d{6}).+#ID=(\d+).+#SN=(\d+).+#Volts=(\d+\.\d{2}).+' \
                '#Records=(\d+).+#Length=(\d+).+#Events=(\d+).+UIMM Data\r\n'
 HEADER_MATCHER = re.compile(HEADER_REGEX, re.DOTALL)
 
-FOOTER_REGEX = b'#End UIMM Data, (\d+) samples written\r\n'
+FOOTER_REGEX = r'#End UIMM Data, (\d+) samples written\r\n'
 FOOTER_MATCHER = re.compile(FOOTER_REGEX)
 
-HEADER_FOOTER_REGEX = b'#UIMM Status.+DateTime: (\d{8}\s\d{6}).+#ID=(\d+).+#SN=(\d+).+#Volts=(\d+\.\d{2})' \
+HEADER_FOOTER_REGEX = r'#UIMM Status.+DateTime: (\d{8}\s\d{6}).+#ID=(\d+).+#SN=(\d+).+#Volts=(\d+\.\d{2})' \
     '.+#Records=(\d+).+#Length=(\d+).+#Events=(\d+).+UIMM Data\r\n#End UIMM Data, (\d+) samples written\r\n'
 HEADER_FOOTER_MATCHER = re.compile(HEADER_FOOTER_REGEX, re.DOTALL)
 
-DATA_REGEX = b'(Record\[\d+\]:)([\x00-\xFF]+?)\r\n(Record|#End U)'
+DATA_REGEX = r'(Record\[\d+\]:)([\x00-\xFF]+?)\r\n(Record|#End U)'
 DATA_MATCHER = re.compile(DATA_REGEX)
 
-DATA_REGEX_B = b'(Record\[\d+\]:)([\x00-\xFF]+?)\r\n'
-DATA_MATCHER_B = re.compile(DATA_REGEX_B)
+DATA_REGEX_B = r'(Record\[\d+\]:).*?(\x6e\x7f[\x00-\xFF]+?)\r\n'
+DATA_MATCHER_B = re.compile(DATA_REGEX_B, re.DOTALL)
 
-RX_FAILURE_REGEX = b'Record\[\d+\]:ReceiveFailure\r\n'
+RX_FAILURE_REGEX = r'Record\[\d+\]:ReceiveFailure\r\n'
 RX_FAILURE_MATCHER = re.compile(RX_FAILURE_REGEX)
 
 HEADER_BYTES = 200
@@ -122,7 +121,7 @@ class AdcpsJlnStcInstrumentDataParticle(DataParticle):
         match = DATA_MATCHER_B.search(self.raw_data)
         if not match:
             raise RecoverableSampleException("AdcpsJlnStcInstrumentParserDataParticle: No regex match of \
-                                  parsed sample data [%s]", self.raw_data)
+                                  parsed sample data %r", self.raw_data)
         try:            
             record_str = match.group(1).strip('Record\[').strip('\]:')
 
@@ -138,7 +137,7 @@ class AdcpsJlnStcInstrumentDataParticle(DataParticle):
                                  % (num_bytes, len(match.group(2)) - 2))
 
             nbins = fields[14]
-            if len(match.group(0)) < (36+(nbins*8)):
+            if len(match.group(0)) < (36 + (nbins * 8)):
                 raise ValueError('Number of bins %d does not fit in data length %d'
                                  % (nbins, len(match.group(0))))
             date_fields = struct.unpack('HBBBBBB', match.group(2)[11:19])
@@ -155,8 +154,9 @@ class AdcpsJlnStcInstrumentDataParticle(DataParticle):
             adcps_jln_vel_error = struct.unpack(struct_format, match.group(2)[(34+(bin_len*3)):(34+(bin_len*4))])
                           
         except (ValueError, TypeError, IndexError) as ex:
-            raise RecoverableSampleException("Error (%s) while decoding parameters in data: [0x%s]"
-                                             % (ex, binascii.hexlify(match.group(0))))
+            raise RecoverableSampleException("Error (%s) while decoding parameters in data: %r"
+                                             % (ex, (match.group(0))))
+
         result = [self._encode_value(AdcpsJlnStcInstrumentParserDataParticleKey.ADCPS_JLN_RECORD, record_str, int),
                   self._encode_value(AdcpsJlnStcInstrumentParserDataParticleKey.ADCPS_JLN_NUMBER, fields[2], int),
                   self._encode_value(AdcpsJlnStcInstrumentParserDataParticleKey.ADCPS_JLN_UNIT_ID, fields[3], int),
@@ -201,7 +201,6 @@ class AdcpsJlnStcInstrumentTelemeteredDataParticle(
     """
     Class for parsing data from the adcps_jln_stc instrument telemetered data set
     """
-
     _data_particle_type = DataParticleType.ADCPS_JLN_INS_TELEMETERED
 
 
@@ -210,7 +209,6 @@ class AdcpsJlnStcInstrumentRecoveredDataParticle(
     """
     Class for parsing data from the adcps_jln_stc instrument recovered data set
     """
-
     _data_particle_type = DataParticleType.ADCPS_JLN_INS_RECOVERED
 
 
@@ -237,36 +235,26 @@ class AdcpsJlnStcMetadataDataParticle(DataParticle):
         match = HEADER_FOOTER_MATCHER.search(self.raw_data) 
         if not match:
             raise RecoverableSampleException("AdcpsJlnStcMetadataParserDataParticle: No regex match of \
-                                  parsed sample data [%s]", self.raw_data)
+                                             parsed sample data [%r]", self.raw_data)
 
-        result = [self._encode_value(AdcpsJlnStcMetadataDataParticleKey.ADCPS_JLN_TIMESTAMP,
-                                     match.group(1), str),
-                  self._encode_value(AdcpsJlnStcMetadataDataParticleKey.ADCPS_JLN_ID,
-                                     match.group(2), int),
-                  self._encode_value(AdcpsJlnStcMetadataDataParticleKey.ADCPS_JLN_SERIAL_NUMBER,
-                                     match.group(3), int),
-                  self._encode_value(AdcpsJlnStcMetadataDataParticleKey.ADCPS_JLN_VOLTS,
-                                     match.group(4), float),
-                  self._encode_value(AdcpsJlnStcMetadataDataParticleKey.ADCPS_JLN_RECORDS,
-                                     match.group(5), int),
-                  self._encode_value(AdcpsJlnStcMetadataDataParticleKey.ADCPS_JLN_LENGTH,
-                                     match.group(6), int),
-                  self._encode_value(AdcpsJlnStcMetadataDataParticleKey.ADCPS_JLN_EVENTS,
-                                     match.group(7), int),
-                  self._encode_value(AdcpsJlnStcMetadataDataParticleKey.ADCPS_JLN_SAMPLES_WRITTEN,
-                                     match.group(8), int),
+        result = [self._encode_value(AdcpsJlnStcMetadataDataParticleKey.ADCPS_JLN_TIMESTAMP, match.group(1), str),
+                  self._encode_value(AdcpsJlnStcMetadataDataParticleKey.ADCPS_JLN_ID, match.group(2), int),
+                  self._encode_value(AdcpsJlnStcMetadataDataParticleKey.ADCPS_JLN_SERIAL_NUMBER, match.group(3), int),
+                  self._encode_value(AdcpsJlnStcMetadataDataParticleKey.ADCPS_JLN_VOLTS, match.group(4), float),
+                  self._encode_value(AdcpsJlnStcMetadataDataParticleKey.ADCPS_JLN_RECORDS, match.group(5), int),
+                  self._encode_value(AdcpsJlnStcMetadataDataParticleKey.ADCPS_JLN_LENGTH, match.group(6), int),
+                  self._encode_value(AdcpsJlnStcMetadataDataParticleKey.ADCPS_JLN_EVENTS,  match.group(7), int),
+                  self._encode_value(AdcpsJlnStcMetadataDataParticleKey.ADCPS_JLN_SAMPLES_WRITTEN, match.group(8), int),
                   ]
         return result
 
 
-class AdcpsJlnStcMetadataTelemeteredDataParticle(
-    AdcpsJlnStcMetadataDataParticle):
+class AdcpsJlnStcMetadataTelemeteredDataParticle(AdcpsJlnStcMetadataDataParticle):
 
     _data_particle_type = DataParticleType.ADCPS_JLN_META_TELEMETERED
 
 
-class AdcpsJlnStcMetadataRecoveredDataParticle(
-    AdcpsJlnStcMetadataDataParticle):
+class AdcpsJlnStcMetadataRecoveredDataParticle(AdcpsJlnStcMetadataDataParticle):
 
     _data_particle_type = DataParticleType.ADCPS_JLN_META_RECOVERED
 
@@ -301,8 +289,7 @@ class AdcpsJlnStcParser(BufferLoadingParser):
                 DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT][
                 AdcpsJlnStcParticleClassKey.INSTRUMENT_PARTICLE_CLASS]
         except KeyError:
-            message = "Unable to access adcps jln stc data particle " + \
-                    "class types in config dictionary"
+            message = "Unable to access adcps jln stc data particle class types in config dictionary"
             log.warn(message)
             raise ConfigurationException(message)
 
@@ -359,8 +346,10 @@ class AdcpsJlnStcParser(BufferLoadingParser):
         return return_list
 
     def compare_checksum(self, raw_bytes):
+
         rcv_chksum = struct.unpack('<H', raw_bytes[-2:])
         calc_chksum = self.calc_checksum(raw_bytes[:-2])
+
         if rcv_chksum[0] == calc_chksum:
             return True
         return False
@@ -433,7 +422,7 @@ class AdcpsJlnStcParser(BufferLoadingParser):
         """            
         result_particles = []
 
-         # header gets read in initialization, but need to send it back from parse_chunks
+        # header gets read in initialization, but need to send it back from parse_chunks
         if self._saved_header:
             result_particles.append(self._saved_header)
             self._saved_header = None
@@ -457,29 +446,26 @@ class AdcpsJlnStcParser(BufferLoadingParser):
                         self._timestamp = ntplib.system_to_ntp_time(unix_time)
 
                         # round to ensure the timestamps match
-                        self._timestamp = round(self._timestamp*100)/100
+                        self._timestamp = round(self._timestamp * 100) / 100
 
                         # particle-ize the data block received, return the record
                         # set timestamp here, converted to ntp64. pull out timestamp for this record               
-                        sample = self._extract_sample(self._instrument_class, DATA_MATCHER_B,
-                                                      chunk, self._timestamp)
+                        sample = self._extract_sample(self._instrument_class, DATA_MATCHER_B, chunk, self._timestamp)
 
                         if sample:
                             # create particle
-                            log.trace("Extracting sample chunk %s with read_state: %s", chunk, self._read_state)
+                            log.trace("Extracting sample chunk %r with read_state: %r", chunk, self._read_state)
                             self._increment_state(len(chunk))
                             result_particles.append((sample, copy.copy(self._read_state)))
                     else:
                         if len(data_match.group(2)) < MIN_DATA_BYTES:
-                            log.debug("Found record with not enough bytes 0x%s",
-                                      binascii.hexlify(data_match.group(0)))
-                            self._exception_callback(SampleException("Found record with not enough bytes 0x%s"
-                                                                     % binascii.hexlify(data_match.group(0))))
+                            log.debug("Found record with not enough bytes %r", data_match.group(0))
+                            self._exception_callback(SampleException("Found record with not enough bytes %r"
+                                                                     % data_match.group(0)))
                         else:
-                            log.debug("Found record whose checksum doesn't match 0x%s",
-                                      binascii.hexlify(data_match.group(0)))
-                            self._exception_callback(SampleException("Found record whose checksum doesn't match 0x%s"
-                                                                     % binascii.hexlify(data_match.group(0))))
+                            log.debug("Found record whose checksum doesn't match 0x%r", data_match.group(0))
+                            self._exception_callback(SampleException("Found record whose checksum doesn't match %r"
+                                                                     % data_match.group(0)))
             else:
                 log.info("Found RecieveFailure record, ignoring")
 
@@ -499,5 +485,5 @@ class AdcpsJlnStcParser(BufferLoadingParser):
             self._increment_state(len(non_data))
             log.debug("Found %d bytes of unexpected non-data" % len(non_data))
             # if non-data is a fatal error, directly call the exception, if it is not use the _exception_callback
-            self._exception_callback(UnexpectedDataException("Found %d bytes of un-expected non-data %s"
+            self._exception_callback(UnexpectedDataException("Found %d bytes of un-expected non-data %r"
                                                              % (len(non_data), non_data)))
