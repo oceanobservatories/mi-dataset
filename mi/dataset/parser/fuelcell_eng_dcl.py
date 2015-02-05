@@ -22,12 +22,7 @@ from mi.core.exceptions import RecoverableSampleException, ConfigurationExceptio
 from mi.core.common import BaseEnum
 from mi.dataset.dataset_parser import SimpleParser, DataSetDriverConfigKeys
 from mi.core.instrument.data_particle import DataParticle
-from mi.dataset.parser.common_regexes import UNSIGNED_INT_REGEX, \
-    INT_REGEX, \
-    SPACE_REGEX, \
-    ASCII_HEX_CHAR_REGEX, \
-    DATE_YYYY_MM_DD_REGEX, \
-    TIME_HR_MIN_SEC_MSEC_REGEX
+from mi.dataset.parser.common_regexes import SPACE_REGEX, DATE_YYYY_MM_DD_REGEX, TIME_HR_MIN_SEC_MSEC_REGEX
 """
 Composition of a properly formed line of data:
 
@@ -49,7 +44,7 @@ Composition of a properly formed line of data:
     swg 0 1.00 2.00
     cvt 1 376.78 138.00 1 18.35 00000000
 
-    This is the fuel cell data we are interested in (all values are delimited by commas:
+    This is the fuel cell data we are interested in (all values are separated by commas:
     ---------------------------------------------------------------------------------------------
     4112,33557475,4308795,31356,13465,4260,10819,589,162678,46,21,100,15778,4,906397,-147897,661,
     -142057,660,85540,643,569,479,67108864,101728580,8472576,2097216:8002
@@ -64,13 +59,8 @@ Composition of a properly formed line of data:
 # Regular expressions (regex) used to parse a line of data
 COMMA = ','
 
-FUELCELL_INPUT_REGEX = r'(' + DATE_YYYY_MM_DD_REGEX + SPACE_REGEX + TIME_HR_MIN_SEC_MSEC_REGEX + r')'
-FUELCELL_INPUT_REGEX += r'.+ ' + r'((?:' + INT_REGEX + COMMA + r'?' + r'){27})'
-FUELCELL_INPUT_REGEX += r'\:(' + UNSIGNED_INT_REGEX + r')' + SPACE_REGEX + r'(' + ASCII_HEX_CHAR_REGEX + r'+)'
-
 DATE_TIME_REGEX = r'(' + DATE_YYYY_MM_DD_REGEX + SPACE_REGEX + TIME_HR_MIN_SEC_MSEC_REGEX + r')'
 
-FUELCELL_MATCHER = re.compile(FUELCELL_INPUT_REGEX)
 DATE_MATCHER = re.compile(DATE_TIME_REGEX)
 
 NON_DATA_REGEX = r'.+ No_FC_Data'
@@ -165,200 +155,59 @@ class FuelCellEngDclParticleKey(BaseEnum):
     FUEL_CELL_ERROR_MASK = 'fuel_cell_error_mask'
 
 
-class FuelCellEngDclDataParticleRecovered(DataParticle):
-    """
-    See the IDD
-    """
+class FuelCellEngDclDataCommonParticle(DataParticle):
+
+    # dictionary for unpacking integer fields which map directly to a parameter
+    
+    UNPACK_DICT = {
+        # Start at index 1, DCL timestamp is at 0
+        'datalog_manager_version': 1,
+        'system_software_version': 2,
+        'total_run_time': 3,
+        'fuel_cell_voltage': 4,
+        'fuel_cell_current': 5,
+        'reformer_temperature': 6,
+        'fuel_cell_h2_pressure': 7,
+        'fuel_cell_temperature': 8,
+        'reformer_fuel_pressure': 9,
+        'fuel_pump_pwm_drive_percent': 10,
+        'air_pump_pwm_drive_percent': 11,
+        'coolant_pump_pwm_drive_percent': 12,
+        'air_pump_tach_count': 13,
+        'fuel_cell_state': 14,
+        'fuel_remaining': 15,
+        'power_to_battery1': 16,
+        'battery1_converter_temperature': 17,
+        'power_to_battery2': 18,
+        'battery2_converter_temperature': 19,
+        'balance_of_plant_power': 20,
+        'balance_of_plant_converter_temperature': 21,
+        'power_board_temperature': 22,
+        'control_board_temperature': 23,
+        'power_manager_status': 24,
+        'power_manager_error_mask': 25,
+        'reformer_error_mask': 26,
+        'fuel_cell_error_mask': 27
+    }
+
+    def _build_parsed_values(self):
+
+        particle_parameters = [self._encode_value('dcl_controller_timestamp',
+                                                  self.raw_data['dcl_controller_timestamp'], str)]
+
+        # Loop through the unpack dictionary and encode integers
+        for name, index in self.UNPACK_DICT.iteritems():
+            particle_parameters.append(self._encode_value(name, self.raw_data[name], int))
+
+        return particle_parameters
+
+
+class FuelCellEngDclDataParticleRecovered(FuelCellEngDclDataCommonParticle):
     _data_particle_type = FuelCellEngDataParticleType.FUELCELL_ENG_DCL_RECOVERED
     
-    def _build_parsed_values(self):
 
-        particle_parameters = []
-        
-        particle_parameters.append(self._encode_value(
-            FuelCellEngDclParticleKey.DCL_CONTROLLER_TIMESTAMP,
-            self.raw_data[FuelCellEngDclParticleKey.DCL_CONTROLLER_TIMESTAMP], str))
-        particle_parameters.append(self._encode_value(
-            FuelCellEngDclParticleKey.DATALOG_MANAGER_VERSION,
-            self.raw_data[FuelCellEngDclParticleKey.DATALOG_MANAGER_VERSION], int))
-        particle_parameters.append(self._encode_value(
-            FuelCellEngDclParticleKey.SYSTEM_SOFTWARE_VERSION,
-            self.raw_data[FuelCellEngDclParticleKey.SYSTEM_SOFTWARE_VERSION], int))
-        particle_parameters.append(self._encode_value(
-            FuelCellEngDclParticleKey.TOTAL_RUN_TIME,
-            self.raw_data[FuelCellEngDclParticleKey.TOTAL_RUN_TIME], int))
-        particle_parameters.append(self._encode_value(
-            FuelCellEngDclParticleKey.FUEL_CELL_VOLTAGE,
-            self.raw_data[FuelCellEngDclParticleKey.FUEL_CELL_VOLTAGE], int))
-        particle_parameters.append(self._encode_value(
-            FuelCellEngDclParticleKey.FUEL_CELL_CURRENT,
-            self.raw_data[FuelCellEngDclParticleKey.FUEL_CELL_CURRENT], int))
-        particle_parameters.append(self._encode_value(
-            FuelCellEngDclParticleKey.REFORMER_TEMPERATURE,
-            self.raw_data[FuelCellEngDclParticleKey.REFORMER_TEMPERATURE], int))
-        particle_parameters.append(self._encode_value(
-            FuelCellEngDclParticleKey.FUEL_CELL_H2_PRESSURE,
-            self.raw_data[FuelCellEngDclParticleKey.FUEL_CELL_H2_PRESSURE], int))
-        particle_parameters.append(self._encode_value(
-            FuelCellEngDclParticleKey.FUEL_CELL_TEMPERATURE,
-            self.raw_data[FuelCellEngDclParticleKey.FUEL_CELL_TEMPERATURE], int))
-        particle_parameters.append(self._encode_value(
-            FuelCellEngDclParticleKey.REFORMER_FUEL_PRESSURE,
-            self.raw_data[FuelCellEngDclParticleKey.REFORMER_FUEL_PRESSURE], int))
-        particle_parameters.append(self._encode_value(
-            FuelCellEngDclParticleKey.FUEL_PUMP_PWM_DRIVE_PERCENT,
-            self.raw_data[FuelCellEngDclParticleKey.FUEL_PUMP_PWM_DRIVE_PERCENT], int))
-        particle_parameters.append(self._encode_value(
-            FuelCellEngDclParticleKey.AIR_PUMP_PWM_DRIVE_PERCENT,
-            self.raw_data[FuelCellEngDclParticleKey.AIR_PUMP_PWM_DRIVE_PERCENT], int))
-        particle_parameters.append(self._encode_value(
-            FuelCellEngDclParticleKey.COOLANT_PUMP_PWM_DRIVE_PERCENT,
-            self.raw_data[FuelCellEngDclParticleKey.COOLANT_PUMP_PWM_DRIVE_PERCENT], int))
-        particle_parameters.append(self._encode_value(
-            FuelCellEngDclParticleKey.AIR_PUMP_TACH_COUNT,
-            self.raw_data[FuelCellEngDclParticleKey.AIR_PUMP_TACH_COUNT], int))
-        particle_parameters.append(self._encode_value(
-            FuelCellEngDclParticleKey.FUEL_CELL_STATE,
-            self.raw_data[FuelCellEngDclParticleKey.FUEL_CELL_STATE], int))
-        particle_parameters.append(self._encode_value(
-            FuelCellEngDclParticleKey.FUEL_REMAINING,
-            self.raw_data[FuelCellEngDclParticleKey.FUEL_REMAINING], int))
-        particle_parameters.append(self._encode_value(
-            FuelCellEngDclParticleKey.POWER_TO_BATTERY1,
-            self.raw_data[FuelCellEngDclParticleKey.POWER_TO_BATTERY1], int))
-        particle_parameters.append(self._encode_value(
-            FuelCellEngDclParticleKey.BATTERY1_CONVERTER_TEMPERATURE,
-            self.raw_data[FuelCellEngDclParticleKey.BATTERY1_CONVERTER_TEMPERATURE], int))
-        particle_parameters.append(self._encode_value(
-            FuelCellEngDclParticleKey.POWER_TO_BATTERY2,
-            self.raw_data[FuelCellEngDclParticleKey.POWER_TO_BATTERY2], int))
-        particle_parameters.append(self._encode_value(
-            FuelCellEngDclParticleKey.BATTERY2_CONVERTER_TEMPERATURE,
-            self.raw_data[FuelCellEngDclParticleKey.BATTERY2_CONVERTER_TEMPERATURE], int))
-        particle_parameters.append(self._encode_value(
-            FuelCellEngDclParticleKey.BALANCE_OF_PLANT_POWER,
-            self.raw_data[FuelCellEngDclParticleKey.BALANCE_OF_PLANT_POWER], int))
-        particle_parameters.append(self._encode_value(
-            FuelCellEngDclParticleKey.BALANCE_OF_PLANT_CONVERTER_TEMPERATURE,
-            self.raw_data[FuelCellEngDclParticleKey.BALANCE_OF_PLANT_CONVERTER_TEMPERATURE], int))
-        particle_parameters.append(self._encode_value(
-            FuelCellEngDclParticleKey.POWER_BOARD_TEMPERATURE,
-            self.raw_data[FuelCellEngDclParticleKey.POWER_BOARD_TEMPERATURE], int))
-        particle_parameters.append(self._encode_value(
-            FuelCellEngDclParticleKey.CONTROL_BOARD_TEMPERATURE,
-            self.raw_data[FuelCellEngDclParticleKey.CONTROL_BOARD_TEMPERATURE], int))
-        particle_parameters.append(self._encode_value(
-            FuelCellEngDclParticleKey.POWER_MANAGER_STATUS,
-            self.raw_data[FuelCellEngDclParticleKey.POWER_MANAGER_STATUS], int))
-        particle_parameters.append(self._encode_value(
-            FuelCellEngDclParticleKey.POWER_MANAGER_ERROR_MASK,
-            self.raw_data[FuelCellEngDclParticleKey.POWER_MANAGER_ERROR_MASK], int))
-        particle_parameters.append(self._encode_value(
-            FuelCellEngDclParticleKey.REFORMER_ERROR_MASK,
-            self.raw_data[FuelCellEngDclParticleKey.REFORMER_ERROR_MASK], int))
-        particle_parameters.append(self._encode_value(
-            FuelCellEngDclParticleKey.FUEL_CELL_ERROR_MASK,
-            self.raw_data[FuelCellEngDclParticleKey.FUEL_CELL_ERROR_MASK], int))
-
-        return particle_parameters
-
-
-class FuelCellEngDclDataParticleTelemetered(DataParticle):
-    """
-    See the IDD
-    """
+class FuelCellEngDclDataParticleTelemetered(FuelCellEngDclDataCommonParticle):
     _data_particle_type = FuelCellEngDataParticleType.FUELCELL_ENG_DCL_TELEMETERED
-
-    def _build_parsed_values(self):
-
-        particle_parameters = []
-        
-        particle_parameters.append(self._encode_value(
-            FuelCellEngDclParticleKey.DCL_CONTROLLER_TIMESTAMP,
-            self.raw_data[FuelCellEngDclParticleKey.DCL_CONTROLLER_TIMESTAMP], str))
-        particle_parameters.append(self._encode_value(
-            FuelCellEngDclParticleKey.DATALOG_MANAGER_VERSION,
-            self.raw_data[FuelCellEngDclParticleKey.DATALOG_MANAGER_VERSION], int))
-        particle_parameters.append(self._encode_value(
-            FuelCellEngDclParticleKey.SYSTEM_SOFTWARE_VERSION,
-            self.raw_data[FuelCellEngDclParticleKey.SYSTEM_SOFTWARE_VERSION], int))
-        particle_parameters.append(self._encode_value(
-            FuelCellEngDclParticleKey.TOTAL_RUN_TIME,
-            self.raw_data[FuelCellEngDclParticleKey.TOTAL_RUN_TIME], int))
-        particle_parameters.append(self._encode_value(
-            FuelCellEngDclParticleKey.FUEL_CELL_VOLTAGE,
-            self.raw_data[FuelCellEngDclParticleKey.FUEL_CELL_VOLTAGE], int))
-        particle_parameters.append(self._encode_value(
-            FuelCellEngDclParticleKey.FUEL_CELL_CURRENT,
-            self.raw_data[FuelCellEngDclParticleKey.FUEL_CELL_CURRENT], int))
-        particle_parameters.append(self._encode_value(
-            FuelCellEngDclParticleKey.REFORMER_TEMPERATURE,
-            self.raw_data[FuelCellEngDclParticleKey.REFORMER_TEMPERATURE], int))
-        particle_parameters.append(self._encode_value(
-            FuelCellEngDclParticleKey.FUEL_CELL_H2_PRESSURE,
-            self.raw_data[FuelCellEngDclParticleKey.FUEL_CELL_H2_PRESSURE], int))
-        particle_parameters.append(self._encode_value(
-            FuelCellEngDclParticleKey.FUEL_CELL_TEMPERATURE,
-            self.raw_data[FuelCellEngDclParticleKey.FUEL_CELL_TEMPERATURE], int))
-        particle_parameters.append(self._encode_value(
-            FuelCellEngDclParticleKey.REFORMER_FUEL_PRESSURE,
-            self.raw_data[FuelCellEngDclParticleKey.REFORMER_FUEL_PRESSURE], int))
-        particle_parameters.append(self._encode_value(
-            FuelCellEngDclParticleKey.FUEL_PUMP_PWM_DRIVE_PERCENT,
-            self.raw_data[FuelCellEngDclParticleKey.FUEL_PUMP_PWM_DRIVE_PERCENT], int))
-        particle_parameters.append(self._encode_value(
-            FuelCellEngDclParticleKey.AIR_PUMP_PWM_DRIVE_PERCENT,
-            self.raw_data[FuelCellEngDclParticleKey.AIR_PUMP_PWM_DRIVE_PERCENT], int))
-        particle_parameters.append(self._encode_value(
-            FuelCellEngDclParticleKey.COOLANT_PUMP_PWM_DRIVE_PERCENT,
-            self.raw_data[FuelCellEngDclParticleKey.COOLANT_PUMP_PWM_DRIVE_PERCENT], int))
-        particle_parameters.append(self._encode_value(
-            FuelCellEngDclParticleKey.AIR_PUMP_TACH_COUNT,
-            self.raw_data[FuelCellEngDclParticleKey.AIR_PUMP_TACH_COUNT], int))
-        particle_parameters.append(self._encode_value(
-            FuelCellEngDclParticleKey.FUEL_CELL_STATE,
-            self.raw_data[FuelCellEngDclParticleKey.FUEL_CELL_STATE], int))
-        particle_parameters.append(self._encode_value(
-            FuelCellEngDclParticleKey.FUEL_REMAINING,
-            self.raw_data[FuelCellEngDclParticleKey.FUEL_REMAINING], int))
-        particle_parameters.append(self._encode_value(
-            FuelCellEngDclParticleKey.POWER_TO_BATTERY1,
-            self.raw_data[FuelCellEngDclParticleKey.POWER_TO_BATTERY1], int))
-        particle_parameters.append(self._encode_value(
-            FuelCellEngDclParticleKey.BATTERY1_CONVERTER_TEMPERATURE,
-            self.raw_data[FuelCellEngDclParticleKey.BATTERY1_CONVERTER_TEMPERATURE], int))
-        particle_parameters.append(self._encode_value(
-            FuelCellEngDclParticleKey.POWER_TO_BATTERY2,
-            self.raw_data[FuelCellEngDclParticleKey.POWER_TO_BATTERY2], int))
-        particle_parameters.append(self._encode_value(
-            FuelCellEngDclParticleKey.BATTERY2_CONVERTER_TEMPERATURE,
-            self.raw_data[FuelCellEngDclParticleKey.BATTERY2_CONVERTER_TEMPERATURE], int))
-        particle_parameters.append(self._encode_value(
-            FuelCellEngDclParticleKey.BALANCE_OF_PLANT_POWER,
-            self.raw_data[FuelCellEngDclParticleKey.BALANCE_OF_PLANT_POWER], int))
-        particle_parameters.append(self._encode_value(
-            FuelCellEngDclParticleKey.BALANCE_OF_PLANT_CONVERTER_TEMPERATURE,
-            self.raw_data[FuelCellEngDclParticleKey.BALANCE_OF_PLANT_CONVERTER_TEMPERATURE], int))
-        particle_parameters.append(self._encode_value(
-            FuelCellEngDclParticleKey.POWER_BOARD_TEMPERATURE,
-            self.raw_data[FuelCellEngDclParticleKey.POWER_BOARD_TEMPERATURE], int))
-        particle_parameters.append(self._encode_value(
-            FuelCellEngDclParticleKey.CONTROL_BOARD_TEMPERATURE,
-            self.raw_data[FuelCellEngDclParticleKey.CONTROL_BOARD_TEMPERATURE], int))
-        particle_parameters.append(self._encode_value(
-            FuelCellEngDclParticleKey.POWER_MANAGER_STATUS,
-            self.raw_data[FuelCellEngDclParticleKey.POWER_MANAGER_STATUS], int))
-        particle_parameters.append(self._encode_value(
-            FuelCellEngDclParticleKey.POWER_MANAGER_ERROR_MASK,
-            self.raw_data[FuelCellEngDclParticleKey.POWER_MANAGER_ERROR_MASK], int))
-        particle_parameters.append(self._encode_value(
-            FuelCellEngDclParticleKey.REFORMER_ERROR_MASK,
-            self.raw_data[FuelCellEngDclParticleKey.REFORMER_ERROR_MASK], int))
-        particle_parameters.append(self._encode_value(
-            FuelCellEngDclParticleKey.FUEL_CELL_ERROR_MASK,
-            self.raw_data[FuelCellEngDclParticleKey.FUEL_CELL_ERROR_MASK], int))
-
-        return particle_parameters
 
 
 class FuelCellEngDclParser(SimpleParser):
@@ -394,35 +243,21 @@ class FuelCellEngDclParser(SimpleParser):
 
         super(FuelCellEngDclParser, self).__init__(config, file_handle, exception_callback)
 
-    @staticmethod
     def log_warning(self, msg_text, which_line):
         """
         :param msg_text: The text to display in the log
         :param which_line: The line number where the problem occurred
         """
-#        log.warning(msg_text + ' %d - No particle generated', which_line)
         self._exception_callback(
             RecoverableSampleException(msg_text + ' %d - No particle generated', which_line))
 
     @staticmethod
-    def valid_record(self, line_of_data):
-        """
-        If this is a non-data line ("No_FC_Data") return False, else return True
-        :param line_of_data: The data read in from the file
-        """
-        if NON_DATA_MATCHER.search(line_of_data):
-            return False
-        else:
-            return True
-
-    @staticmethod
-    def good_field(self, field_array):
+    def good_field(field_array):
         """
         Check to see if there are the correct number of fields and that
         each field in the array field contains an integer string
-        :param field_array: The comma-delimited data
+        :param field_array: The array of fuel cell data
         """
-        start_char = 0
         if len(field_array) != 27:
             return False
 
@@ -432,7 +267,7 @@ class FuelCellEngDclParser(SimpleParser):
                 # The account for the possibility of a minus sign
                 # which would make the field non-digits but would
                 # still be a valid field Example '-12345' is valid.
-                if field_array[x][0] == '-':
+                if field_array[x].startswith('-'):
                     start_char = 1
                 else:
                     start_char = 0
@@ -440,13 +275,12 @@ class FuelCellEngDclParser(SimpleParser):
                 return False
 
             if not str.isdigit(field_array[x][start_char:]):
-                log.debug('Field %d is bad content is %s', x, field_array[x])
                 return False
 
         return True
 
     @staticmethod
-    def good_checksum(self, data_array, read_checksum):
+    def good_checksum(data_array, read_checksum):
         """
         Calculate the checksum from the read in data and compare it to the
         checksum contained in the data
@@ -479,7 +313,7 @@ class FuelCellEngDclParser(SimpleParser):
         return float(ntplib.system_to_ntp_time(elapsed_seconds))
 
     @staticmethod
-    def generate_data_dict(self, datetime, data_list):
+    def generate_data_dict(datetime, data_list):
         """
         Pull the needed fields from the data line and convert them
         to the format needed for the particle per the IDD. Then put
@@ -559,12 +393,13 @@ class FuelCellEngDclParser(SimpleParser):
 
             line_count += 1
 
-            # Check to see if this is a valid record
-            if self.valid_record(self, fuelcell_input_row):
+            # Check to see if this record contains fuel cell data
+            if not NON_DATA_MATCHER.search(fuelcell_input_row):
 
-                # Get the timestamp
+                # Is the record properly time stamped?
                 found_dtg = DATE_MATCHER.search(fuelcell_input_row)
 
+                # If so, continue processing
                 if found_dtg:
 
                     # Grab the time stamp data from the data
@@ -573,19 +408,22 @@ class FuelCellEngDclParser(SimpleParser):
                     # Now get the fuel cell data from the input line
                     found_data = START_DATA_MATCHER.search(fuelcell_input_row)
 
+                    # If an integer was found, followed by a comma, the line has fuel cell data.
                     if found_data:
 
                         data_string = fuelcell_input_row[found_data.start(1)+1:]
 
                         # Need to find the colon near the end of the line which marks the
-                        # end of the actual fuel cell data.
+                        # end of the actual fuel cell data. The colon marks the end of the
+                        # fuel cell data followed by the checksum for that data. Following
+                        # that there will be a space then a hexadecimal number. If any of those
+                        # elements are missing, the data is suspect.
                         found_end = END_DATA_MATCHER.search(data_string)
 
                         if found_end:
-                            # As it's remotely possible that spaces may be in the integer
-                            # data, we need to strip those out before we "split" on spaces
-                            # Get the integer data
-                            data_part = re.split(' ', data_string)
+
+                            # First, split the data at any spaces there should be only one space!
+                            data_part = data_string.split(' ')
 
                             # If the end of the data line is properly formatted, there will only
                             # be two pieces after the split: the comma delimited data with the
@@ -600,50 +438,42 @@ class FuelCellEngDclParser(SimpleParser):
                                 for x in range(1, len(data_part) - 1):
                                     the_data += data_part[x]
 
-                            # Separate the checksum from the actual data
-                            found_colon = COLON_MATCHER.search(the_data)
-                            if found_colon:
+                            data_plus_checksum = the_data.split(':')
+                            actual_data = data_plus_checksum[0]
+                            read_checksum = int(data_plus_checksum[1])
 
-                                data_plus_checksum = re.split(':', the_data)
-                                actual_data = data_plus_checksum[0]
-                                read_checksum = int(data_plus_checksum[1])
+                            if self.good_checksum(actual_data, read_checksum):
+                                the_fields = actual_data.split(',')
 
-                                if self.good_checksum(self, actual_data, read_checksum):
-                                    the_fields = re.split(',', actual_data)
+                                if self.good_field(the_fields):
+                                    timestamp = self.get_timestamp((int(found_dtg.group(YEAR_GROUP)),
+                                                                    int(found_dtg.group(MONTH_GROUP)),
+                                                                    int(found_dtg.group(DAY_GROUP)),
+                                                                    int(found_dtg.group(HOUR_GROUP)),
+                                                                    int(found_dtg.group(MINUTE_GROUP)),
+                                                                    int(found_dtg.group(SECONDS_GROUP)),
+                                                                    int(found_dtg.group(MILLISECONDS_GROUP))))
 
-                                    if self.good_field(self, the_fields):
-                                        timestamp = self.get_timestamp((int(found_dtg.group(YEAR_GROUP)),
-                                                                        int(found_dtg.group(MONTH_GROUP)),
-                                                                        int(found_dtg.group(DAY_GROUP)),
-                                                                        int(found_dtg.group(HOUR_GROUP)),
-                                                                        int(found_dtg.group(MINUTE_GROUP)),
-                                                                        int(found_dtg.group(SECONDS_GROUP)),
-                                                                        int(found_dtg.group(MILLISECONDS_GROUP))))
+                                    fuelcell_data_dict = self.generate_data_dict(dtg, the_fields)
+                                    particle = self._extract_sample(self._fuelcell_data_class,
+                                                                    None,
+                                                                    fuelcell_data_dict,
+                                                                    timestamp)
 
-                                        fuelcell_data_dict = self.generate_data_dict(self, dtg, the_fields)
-                                        particle = self._extract_sample(self._fuelcell_data_class,
-                                                                        None,
-                                                                        fuelcell_data_dict,
-                                                                        timestamp)
+                                    self._record_buffer.append(particle)
 
-                                        self._record_buffer.append(particle)
-                                        log.debug('Particle generated for line %d', line_count)
-                                    else:
-                                        self.log_warning (self, 'Improper format line', line_count)
                                 else:
-                                    self.log_warning (self, 'Bad checksum line', line_count)
+                                    self.log_warning('Improper format line', line_count)
                             else:
-                                self.log_warning(self, 'No checksum found on line', line_count)
+                                self.log_warning('Bad checksum line', line_count)
                         else:
-                            self.log_warning(self, 'No terminator found on line', line_count)
+                            self.log_warning('No terminator found on line', line_count)
                     else:
-                        self.log_warning(self, 'No data found on line', line_count)
+                        self.log_warning('No data found on line', line_count)
                 else:
-                    self.log_warning(self, 'Bad/Missing Timestamp on line', line_count)
+                    self.log_warning('Bad/Missing Timestamp on line', line_count)
             else:
-                self.log_warning(self, 'No fuel cell data on line', line_count)
+                self.log_warning('No fuel cell data on line', line_count)
 
             # Read another line from the input file
             fuelcell_input_row = self._file_handle.readline()
-
-        log.debug('Total lines processed: %d', line_count)
