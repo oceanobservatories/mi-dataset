@@ -43,7 +43,7 @@ class FuelCellEngDclParserUnitTestCase(ParserUnitTestCase):
         ParserUnitTestCase.setUp(self)
 
         self._recovered_parser_config = {
-            DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.fuelcell_eng_dcl_particles',
+            DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.fuelcell_eng_dcl',
             DataSetDriverConfigKeys.PARTICLE_CLASS: None,
             DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT: {
                 FuelCellEngDclParticleClassKey.ENGINEERING_DATA_PARTICLE_CLASS: FuelCellEngDclDataParticleRecovered
@@ -51,7 +51,7 @@ class FuelCellEngDclParserUnitTestCase(ParserUnitTestCase):
         }
 
         self._telemetered_parser_config = {
-            DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.fuelcell_eng_dcl_particles',
+            DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.fuelcell_eng_dcl',
             DataSetDriverConfigKeys.PARTICLE_CLASS: None,
             DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT: {
                 FuelCellEngDclParticleClassKey.ENGINEERING_DATA_PARTICLE_CLASS: FuelCellEngDclDataParticleTelemetered
@@ -59,12 +59,12 @@ class FuelCellEngDclParserUnitTestCase(ParserUnitTestCase):
         }
 
         self._incomplete_parser_config = {
-            DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.fuelcell_eng_dcl_particles',
+            DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.fuelcell_eng_dcl',
             DataSetDriverConfigKeys.PARTICLE_CLASS: None
         }
 
         self._bad_parser_config = {
-            DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.fuelcell_eng_dcl_particles',
+            DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.fuelcell_eng_dcl',
             DataSetDriverConfigKeys.PARTICLE_CLASS: None,
             DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT: {}
         }
@@ -174,12 +174,15 @@ class FuelCellEngDclParserUnitTestCase(ParserUnitTestCase):
         Line 27 Improperly formatted - No particle generated
         Line 28 Bad/Missing Timestamp - No particle generated
         Line 29 Bad/Missing Timestamp - No particle generated
+        Line 30 No data found  - No particle generated
+        Line 31 No terminator found - No particle generated
+        Line 32 Improper format - No particle generated
         Only one test is run as the content of the input files
         is the same for recovered or telemetered.
         """
         log.debug('===== START TEST BADLY FORMED =====')
 
-        num_particles_to_request = 30
+        num_particles_to_request = 33
         num_expected_particles = 16
 
         with open(os.path.join(RESOURCE_PATH, '20141207_badform.pwrsys.log'), 'rU') as file_handle:
@@ -249,4 +252,3 @@ class FuelCellEngDclParserUnitTestCase(ParserUnitTestCase):
             self.assertEquals(len(particles), num_expected_particles)
 
         log.debug('===== END TEST BLANK LINE =====')
-
