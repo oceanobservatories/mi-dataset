@@ -72,7 +72,7 @@ class OsmoiASubconParserUnitTestCase(ParserUnitTestCase):
         in_file = self.open_file(LOG_FILE)
         parser = self.create_rec_parser(in_file)
 
-        #uncomment to create yml restuls file
+        #uncomment to create yml results file
         #self.create_yml_file()
 
         result = parser.get_records(NUM_RECORDS)

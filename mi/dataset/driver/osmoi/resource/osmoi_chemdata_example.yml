@@ -13,43 +13,43 @@ data:
     volume_pumped: null
     lat: 45.926213
     lon: -129.978992
-    depth: -1520
+    m_depth: -1520
     temp: 106.300000
     acidity: 4.200000
     alkalinity: -0.270000
-    hydrogen_sulfide: 4.700000
-    silicon: 17.500000
-    ammonia: 576.000000
-    chloride: 576.000000
-    sulfate: 2.470000
-    sodium: 485.000000
-    potassium: 16.000000
-    magnesium: 3.800000
-    calcium: 33.100000
-    bromide: 851.000000
-    iron: 2197.000000
-    manganese: 477.000000
-    lithium: 797.000000
-    strontium_icpaes: 114.000000
-    boron: 489.000000
-    rubidium: 9.200000
-    cesium: 102.000000
-    strontium_icpms: 183.100000
-    barium: 199.800000
-    cobalt: 133.900000
-    nickel: 176.000000
-    copper: 123.000000
-    zinc: 194.400000
-    molybdenum: 165.300000
-    silver: 190.900000
-    cadmium: 147.600000
-    titanium: 171.400000
-    aluminum: 101.300000
-    lead: 174.300000
-    vanadium: 116.600000
-    uranium: 111.000000
-    yttrium: 150.700000
-    gadolinium: 195.800000
+    hydrogen_sulfide_concentration: 4.700000
+    silicon_concentration: 17.500000
+    ammonia_concentration: 576.000000
+    chloride_concentration: 576.000000
+    sulfate_concentration: 2.470000
+    sodium_concentration: 485.000000
+    potassium_concentration: 16.000000
+    magnesium_concentration: 3.800000
+    calcium_concentration: 33.100000
+    bromide_concentration: 851.000000
+    iron_concentration: 2197.000000
+    manganese_concentration: 477.000000
+    lithium_concentration: 797.000000
+    strontium_icpaes_concentration: 114.000000
+    boron_concentration: 489.000000
+    rubidium_concentration: 9.200000
+    cesium_concentration: 102.000000
+    strontium_icpms_concentration: 183.100000
+    barium_concentration: 199.800000
+    cobalt_concentration: 133.900000
+    nickel_concentration: 176.000000
+    copper_concentration: 123.000000
+    zinc_concentration: 194.400000
+    molybdenum_concentration: 165.300000
+    silver_concentration: 190.900000
+    cadmium_concentration: 147.600000
+    titanium_concentration: 171.400000
+    aluminum_concentration: 101.300000
+    lead_concentration: 174.300000
+    vanadium_concentration: 116.600000
+    uranium_concentration: 111.000000
+    yttrium_concentration: 150.700000
+    gadolinium_concentration: 195.800000
   - _index: 2
     particle_object: OsmoiASubconInstrumentDataParticle
     particle_type: osmoi_a_subcon_instrument_recovered
@@ -61,43 +61,43 @@ data:
     volume_pumped: null
     lat: 45.926213
     lon: -129.978992
-    depth: -1520
+    m_depth: -1520
     temp: 97.900000
     acidity: 7.600000
     alkalinity: -0.320000
-    hydrogen_sulfide: 5.000000
-    silicon: 18.000000
-    ammonia: 579.000000
-    chloride: 579.000000
-    sulfate: 1.040000
-    sodium: 485.000000
-    potassium: 16.600000
-    magnesium: 2.100000
-    calcium: 33.800000
-    bromide: 851.000000
-    iron: 2466.000000
-    manganese: 486.000000
-    lithium: 840.000000
-    strontium_icpaes: 117.000000
-    boron: 535.000000
-    rubidium: 9.300000
-    cesium: 105.000000
-    strontium_icpms: 135.700000
-    barium: 124.300000
-    cobalt: 112.000000
-    nickel: 176.000000
-    copper: 139.500000
-    zinc: 108.500000
-    molybdenum: 170.200000
-    silver: 127.600000
-    cadmium: 105.500000
-    titanium: 118.200000
-    aluminum: 186.900000
-    lead: 125.200000
-    vanadium: 151.900000
-    uranium: 114.600000
-    yttrium: 121.400000
-    gadolinium: 170.800000
+    hydrogen_sulfide_concentration: 5.000000
+    silicon_concentration: 18.000000
+    ammonia_concentration: 579.000000
+    chloride_concentration: 579.000000
+    sulfate_concentration: 1.040000
+    sodium_concentration: 485.000000
+    potassium_concentration: 16.600000
+    magnesium_concentration: 2.100000
+    calcium_concentration: 33.800000
+    bromide_concentration: 851.000000
+    iron_concentration: 2466.000000
+    manganese_concentration: 486.000000
+    lithium_concentration: 840.000000
+    strontium_icpaes_concentration: 117.000000
+    boron_concentration: 535.000000
+    rubidium_concentration: 9.300000
+    cesium_concentration: 105.000000
+    strontium_icpms_concentration: 135.700000
+    barium_concentration: 124.300000
+    cobalt_concentration: 112.000000
+    nickel_concentration: 176.000000
+    copper_concentration: 139.500000
+    zinc_concentration: 108.500000
+    molybdenum_concentration: 170.200000
+    silver_concentration: 127.600000
+    cadmium_concentration: 105.500000
+    titanium_concentration: 118.200000
+    aluminum_concentration: 186.900000
+    lead_concentration: 125.200000
+    vanadium_concentration: 151.900000
+    uranium_concentration: 114.600000
+    yttrium_concentration: 121.400000
+    gadolinium_concentration: 170.800000
   - _index: 3
     particle_object: OsmoiASubconInstrumentDataParticle
     particle_type: osmoi_a_subcon_instrument_recovered
@@ -109,43 +109,43 @@ data:
     volume_pumped: null
     lat: 45.926213
     lon: -129.978992
-    depth: -1520
+    m_depth: -1520
     temp: 98.600000
     acidity: 5.900000
     alkalinity: -0.170000
-    hydrogen_sulfide: 5.600000
-    silicon: 18.500000
-    ammonia: 580.000000
-    chloride: 580.000000
-    sulfate: 0.850000
-    sodium: 486.000000
-    potassium: 16.300000
-    magnesium: 1.700000
-    calcium: 34.500000
-    bromide: 940.000000
-    iron: 2293.000000
-    manganese: 499.000000
-    lithium: 834.000000
-    strontium_icpaes: 116.000000
-    boron: 513.000000
-    rubidium: 9.500000
-    cesium: 102.000000
-    strontium_icpms: 140.700000
-    barium: 178.500000
-    cobalt: 129.000000
-    nickel: 156.500000
-    copper: 128.100000
-    zinc: 123.800000
-    molybdenum: 192.200000
-    silver: 120.900000
-    cadmium: 137.900000
-    titanium: 106.300000
-    aluminum: 193.300000
-    lead: 151.200000
-    vanadium: 161.100000
-    uranium: 104.100000
-    yttrium: 191.300000
-    gadolinium: 144.100000
+    hydrogen_sulfide_concentration: 5.600000
+    silicon_concentration: 18.500000
+    ammonia_concentration: 580.000000
+    chloride_concentration: 580.000000
+    sulfate_concentration: 0.850000
+    sodium_concentration: 486.000000
+    potassium_concentration: 16.300000
+    magnesium_concentration: 1.700000
+    calcium_concentration: 34.500000
+    bromide_concentration: 940.000000
+    iron_concentration: 2293.000000
+    manganese_concentration: 499.000000
+    lithium_concentration: 834.000000
+    strontium_icpaes_concentration: 116.000000
+    boron_concentration: 513.000000
+    rubidium_concentration: 9.500000
+    cesium_concentration: 102.000000
+    strontium_icpms_concentration: 140.700000
+    barium_concentration: 178.500000
+    cobalt_concentration: 129.000000
+    nickel_concentration: 156.500000
+    copper_concentration: 128.100000
+    zinc_concentration: 123.800000
+    molybdenum_concentration: 192.200000
+    silver_concentration: 120.900000
+    cadmium_concentration: 137.900000
+    titanium_concentration: 106.300000
+    aluminum_concentration: 193.300000
+    lead_concentration: 151.200000
+    vanadium_concentration: 161.100000
+    uranium_concentration: 104.100000
+    yttrium_concentration: 191.300000
+    gadolinium_concentration: 144.100000
   - _index: 4
     particle_object: OsmoiASubconInstrumentDataParticle
     particle_type: osmoi_a_subcon_instrument_recovered
@@ -157,43 +157,43 @@ data:
     volume_pumped: null
     lat: 45.926213
     lon: -129.978992
-    depth: -1520
+    m_depth: -1520
     temp: 104.400000
     acidity: 6.000000
     alkalinity: -0.230000
-    hydrogen_sulfide: 6.000000
-    silicon: 18.700000
-    ammonia: 580.000000
-    chloride: 580.000000
-    sulfate: 0.830000
-    sodium: 485.000000
-    potassium: 17.500000
-    magnesium: 1.600000
-    calcium: 34.000000
-    bromide: 878.000000
-    iron: 2517.000000
-    manganese: 495.000000
-    lithium: 880.000000
-    strontium_icpaes: 121.000000
-    boron: 580.000000
-    rubidium: 9.900000
-    cesium: 99.000000
-    strontium_icpms: 105.500000
-    barium: 199.800000
-    cobalt: 189.800000
-    nickel: 135.500000
-    copper: 146.200000
-    zinc: 186.300000
-    molybdenum: 128.200000
-    silver: 150.900000
-    cadmium: 128.300000
-    titanium: 107.800000
-    aluminum: 185.100000
-    lead: 180.900000
-    vanadium: 188.200000
-    uranium: 120.500000
-    yttrium: 199.800000
-    gadolinium: 171.200000
+    hydrogen_sulfide_concentration: 6.000000
+    silicon_concentration: 18.700000
+    ammonia_concentration: 580.000000
+    chloride_concentration: 580.000000
+    sulfate_concentration: 0.830000
+    sodium_concentration: 485.000000
+    potassium_concentration: 17.500000
+    magnesium_concentration: 1.600000
+    calcium_concentration: 34.000000
+    bromide_concentration: 878.000000
+    iron_concentration: 2517.000000
+    manganese_concentration: 495.000000
+    lithium_concentration: 880.000000
+    strontium_icpaes_concentration: 121.000000
+    boron_concentration: 580.000000
+    rubidium_concentration: 9.900000
+    cesium_concentration: 99.000000
+    strontium_icpms_concentration: 105.500000
+    barium_concentration: 199.800000
+    cobalt_concentration: 189.800000
+    nickel_concentration: 135.500000
+    copper_concentration: 146.200000
+    zinc_concentration: 186.300000
+    molybdenum_concentration: 128.200000
+    silver_concentration: 150.900000
+    cadmium_concentration: 128.300000
+    titanium_concentration: 107.800000
+    aluminum_concentration: 185.100000
+    lead_concentration: 180.900000
+    vanadium_concentration: 188.200000
+    uranium_concentration: 120.500000
+    yttrium_concentration: 199.800000
+    gadolinium_concentration: 171.200000
   - _index: 5
     particle_object: OsmoiASubconInstrumentDataParticle
     particle_type: osmoi_a_subcon_instrument_recovered
@@ -205,43 +205,43 @@ data:
     volume_pumped: null
     lat: 45.926213
     lon: -129.978992
-    depth: -1520
+    m_depth: -1520
     temp: 109.600000
     acidity: 3.800000
     alkalinity: -0.290000
-    hydrogen_sulfide: 5.100000
-    silicon: 18.100000
-    ammonia: 573.000000
-    chloride: 573.000000
-    sulfate: 1.240000
-    sodium: 476.000000
-    potassium: 17.300000
-    magnesium: 2.800000
-    calcium: 33.700000
-    bromide: 920.000000
-    iron: 2976.000000
-    manganese: 658.000000
-    lithium: 857.000000
-    strontium_icpaes: 121.000000
-    boron: 513.000000
-    rubidium: 8.800000
-    cesium: 94.100000
-    strontium_icpms: 156.800000
-    barium: 101.200000
-    cobalt: 197.700000
-    nickel: 183.900000
-    copper: 186.000000
-    zinc: 139.000000
-    molybdenum: 142.600000
-    silver: 165.300000
-    cadmium: 179.600000
-    titanium: 112.300000
-    aluminum: 161.300000
-    lead: 106.800000
-    vanadium: 184.500000
-    uranium: 122.100000
-    yttrium: 175.700000
-    gadolinium: 148.900000
+    hydrogen_sulfide_concentration: 5.100000
+    silicon_concentration: 18.100000
+    ammonia_concentration: 573.000000
+    chloride_concentration: 573.000000
+    sulfate_concentration: 1.240000
+    sodium_concentration: 476.000000
+    potassium_concentration: 17.300000
+    magnesium_concentration: 2.800000
+    calcium_concentration: 33.700000
+    bromide_concentration: 920.000000
+    iron_concentration: 2976.000000
+    manganese_concentration: 658.000000
+    lithium_concentration: 857.000000
+    strontium_icpaes_concentration: 121.000000
+    boron_concentration: 513.000000
+    rubidium_concentration: 8.800000
+    cesium_concentration: 94.100000
+    strontium_icpms_concentration: 156.800000
+    barium_concentration: 101.200000
+    cobalt_concentration: 197.700000
+    nickel_concentration: 183.900000
+    copper_concentration: 186.000000
+    zinc_concentration: 139.000000
+    molybdenum_concentration: 142.600000
+    silver_concentration: 165.300000
+    cadmium_concentration: 179.600000
+    titanium_concentration: 112.300000
+    aluminum_concentration: 161.300000
+    lead_concentration: 106.800000
+    vanadium_concentration: 184.500000
+    uranium_concentration: 122.100000
+    yttrium_concentration: 175.700000
+    gadolinium_concentration: 148.900000
   - _index: 6
     particle_object: OsmoiASubconInstrumentDataParticle
     particle_type: osmoi_a_subcon_instrument_recovered
@@ -253,43 +253,43 @@ data:
     volume_pumped: null
     lat: 45.926213
     lon: -129.978992
-    depth: -1520
+    m_depth: -1520
     temp: 96.900000
     acidity: 3.800000
     alkalinity: -1.560000
-    hydrogen_sulfide: 6.100000
-    silicon: 19.100000
-    ammonia: 580.000000
-    chloride: 580.000000
-    sulfate: 1.100000
-    sodium: 486.000000
-    potassium: 15.600000
-    magnesium: 2.400000
-    calcium: 32.400000
-    bromide: 865.000000
-    iron: 3644.000000
-    manganese: 700.000000
-    lithium: 781.000000
-    strontium_icpaes: 109.000000
-    boron: 504.000000
-    rubidium: 8.800000
-    cesium: 99.000000
-    strontium_icpms: 164.500000
-    barium: 149.400000
-    cobalt: 197.800000
-    nickel: 160.100000
-    copper: 176.700000
-    zinc: 184.000000
-    molybdenum: 104.600000
-    silver: 179.100000
-    cadmium: 173.100000
-    titanium: 104.200000
-    aluminum: 120.200000
-    lead: 172.700000
-    vanadium: 107.600000
-    uranium: 142.700000
-    yttrium: 104.100000
-    gadolinium: 197.600000
+    hydrogen_sulfide_concentration: 6.100000
+    silicon_concentration: 19.100000
+    ammonia_concentration: 580.000000
+    chloride_concentration: 580.000000
+    sulfate_concentration: 1.100000
+    sodium_concentration: 486.000000
+    potassium_concentration: 15.600000
+    magnesium_concentration: 2.400000
+    calcium_concentration: 32.400000
+    bromide_concentration: 865.000000
+    iron_concentration: 3644.000000
+    manganese_concentration: 700.000000
+    lithium_concentration: 781.000000
+    strontium_icpaes_concentration: 109.000000
+    boron_concentration: 504.000000
+    rubidium_concentration: 8.800000
+    cesium_concentration: 99.000000
+    strontium_icpms_concentration: 164.500000
+    barium_concentration: 149.400000
+    cobalt_concentration: 197.800000
+    nickel_concentration: 160.100000
+    copper_concentration: 176.700000
+    zinc_concentration: 184.000000
+    molybdenum_concentration: 104.600000
+    silver_concentration: 179.100000
+    cadmium_concentration: 173.100000
+    titanium_concentration: 104.200000
+    aluminum_concentration: 120.200000
+    lead_concentration: 172.700000
+    vanadium_concentration: 107.600000
+    uranium_concentration: 142.700000
+    yttrium_concentration: 104.100000
+    gadolinium_concentration: 197.600000
   - _index: 7
     particle_object: OsmoiASubconInstrumentDataParticle
     particle_type: osmoi_a_subcon_instrument_recovered
@@ -301,43 +301,43 @@ data:
     volume_pumped: null
     lat: 45.926213
     lon: -129.978992
-    depth: -1520
+    m_depth: -1520
     temp: 99.600000
     acidity: 5.300000
     alkalinity: -0.930000
-    hydrogen_sulfide: 5.200000
-    silicon: 18.400000
-    ammonia: 573.000000
-    chloride: 573.000000
-    sulfate: 1.770000
-    sodium: 480.000000
-    potassium: 17.100000
-    magnesium: 2.200000
-    calcium: 34.200000
-    bromide: 852.000000
-    iron: 2154.000000
-    manganese: 502.000000
-    lithium: 865.000000
-    strontium_icpaes: 124.000000
-    boron: 575.000000
-    rubidium: 9.500000
-    cesium: 107.000000
-    strontium_icpms: 114.100000
-    barium: 149.800000
-    cobalt: 153.100000
-    nickel: 123.300000
-    copper: 191.800000
-    zinc: 110.300000
-    molybdenum: 147.500000
-    silver: 150.800000
-    cadmium: 186.100000
-    titanium: 146.300000
-    aluminum: 175.400000
-    lead: 127.300000
-    vanadium: 188.500000
-    uranium: 167.800000
-    yttrium: 163.500000
-    gadolinium: 130.900000
+    hydrogen_sulfide_concentration: 5.200000
+    silicon_concentration: 18.400000
+    ammonia_concentration: 573.000000
+    chloride_concentration: 573.000000
+    sulfate_concentration: 1.770000
+    sodium_concentration: 480.000000
+    potassium_concentration: 17.100000
+    magnesium_concentration: 2.200000
+    calcium_concentration: 34.200000
+    bromide_concentration: 852.000000
+    iron_concentration: 2154.000000
+    manganese_concentration: 502.000000
+    lithium_concentration: 865.000000
+    strontium_icpaes_concentration: 124.000000
+    boron_concentration: 575.000000
+    rubidium_concentration: 9.500000
+    cesium_concentration: 107.000000
+    strontium_icpms_concentration: 114.100000
+    barium_concentration: 149.800000
+    cobalt_concentration: 153.100000
+    nickel_concentration: 123.300000
+    copper_concentration: 191.800000
+    zinc_concentration: 110.300000
+    molybdenum_concentration: 147.500000
+    silver_concentration: 150.800000
+    cadmium_concentration: 186.100000
+    titanium_concentration: 146.300000
+    aluminum_concentration: 175.400000
+    lead_concentration: 127.300000
+    vanadium_concentration: 188.500000
+    uranium_concentration: 167.800000
+    yttrium_concentration: 163.500000
+    gadolinium_concentration: 130.900000
   - _index: 8
     particle_object: OsmoiASubconInstrumentDataParticle
     particle_type: osmoi_a_subcon_instrument_recovered
@@ -349,43 +349,43 @@ data:
     volume_pumped: null
     lat: 45.926213
     lon: -129.978992
-    depth: -1520
+    m_depth: -1520
     temp: 100.600000
     acidity: 3.700000
     alkalinity: -0.730000
-    hydrogen_sulfide: 5.000000
-    silicon: 17.400000
-    ammonia: 571.000000
-    chloride: 571.000000
-    sulfate: 4.340000
-    sodium: 480.000000
-    potassium: 16.100000
-    magnesium: 3.700000
-    calcium: 35.000000
-    bromide: 927.000000
-    iron: 2147.000000
-    manganese: 488.000000
-    lithium: 805.000000
-    strontium_icpaes: 119.000000
-    boron: 517.000000
-    rubidium: 9.300000
-    cesium: 104.000000
-    strontium_icpms: 186.900000
-    barium: 105.100000
-    cobalt: 121.100000
-    nickel: 151.400000
-    copper: 167.200000
-    zinc: 109.000000
-    molybdenum: 157.700000
-    silver: 126.700000
-    cadmium: 105.800000
-    titanium: 137.200000
-    aluminum: 117.100000
-    lead: 183.400000
-    vanadium: 171.100000
-    uranium: 155.900000
-    yttrium: 132.300000
-    gadolinium: 109.300000
+    hydrogen_sulfide_concentration: 5.000000
+    silicon_concentration: 17.400000
+    ammonia_concentration: 571.000000
+    chloride_concentration: 571.000000
+    sulfate_concentration: 4.340000
+    sodium_concentration: 480.000000
+    potassium_concentration: 16.100000
+    magnesium_concentration: 3.700000
+    calcium_concentration: 35.000000
+    bromide_concentration: 927.000000
+    iron_concentration: 2147.000000
+    manganese_concentration: 488.000000
+    lithium_concentration: 805.000000
+    strontium_icpaes_concentration: 119.000000
+    boron_concentration: 517.000000
+    rubidium_concentration: 9.300000
+    cesium_concentration: 104.000000
+    strontium_icpms_concentration: 186.900000
+    barium_concentration: 105.100000
+    cobalt_concentration: 121.100000
+    nickel_concentration: 151.400000
+    copper_concentration: 167.200000
+    zinc_concentration: 109.000000
+    molybdenum_concentration: 157.700000
+    silver_concentration: 126.700000
+    cadmium_concentration: 105.800000
+    titanium_concentration: 137.200000
+    aluminum_concentration: 117.100000
+    lead_concentration: 183.400000
+    vanadium_concentration: 171.100000
+    uranium_concentration: 155.900000
+    yttrium_concentration: 132.300000
+    gadolinium_concentration: 109.300000
   - _index: 9
     particle_object: OsmoiASubconInstrumentDataParticle
     particle_type: osmoi_a_subcon_instrument_recovered
@@ -397,43 +397,43 @@ data:
     volume_pumped: null
     lat: 45.926213
     lon: -129.978992
-    depth: -1520
+    m_depth: -1520
     temp: 98.300000
     acidity: 4.300000
     alkalinity: -0.470000
-    hydrogen_sulfide: 6.200000
-    silicon: 21.100000
-    ammonia: 583.000000
-    chloride: 583.000000
-    sulfate: 0.820000
-    sodium: 491.000000
-    potassium: 16.300000
-    magnesium: 1.500000
-    calcium: 33.200000
-    bromide: 930.000000
-    iron: 2849.000000
-    manganese: 700.000000
-    lithium: 822.000000
-    strontium_icpaes: 111.000000
-    boron: 537.000000
-    rubidium: 9.600000
-    cesium: 98.000000
-    strontium_icpms: 128.400000
-    barium: 131.300000
-    cobalt: 146.200000
-    nickel: 190.600000
-    copper: 160.900000
-    zinc: 174.700000
-    molybdenum: 134.300000
-    silver: 192.000000
-    cadmium: 112.100000
-    titanium: 198.000000
-    aluminum: 158.300000
-    lead: 185.800000
-    vanadium: 196.600000
-    uranium: 149.900000
-    yttrium: 196.300000
-    gadolinium: 147.300000
+    hydrogen_sulfide_concentration: 6.200000
+    silicon_concentration: 21.100000
+    ammonia_concentration: 583.000000
+    chloride_concentration: 583.000000
+    sulfate_concentration: 0.820000
+    sodium_concentration: 491.000000
+    potassium_concentration: 16.300000
+    magnesium_concentration: 1.500000
+    calcium_concentration: 33.200000
+    bromide_concentration: 930.000000
+    iron_concentration: 2849.000000
+    manganese_concentration: 700.000000
+    lithium_concentration: 822.000000
+    strontium_icpaes_concentration: 111.000000
+    boron_concentration: 537.000000
+    rubidium_concentration: 9.600000
+    cesium_concentration: 98.000000
+    strontium_icpms_concentration: 128.400000
+    barium_concentration: 131.300000
+    cobalt_concentration: 146.200000
+    nickel_concentration: 190.600000
+    copper_concentration: 160.900000
+    zinc_concentration: 174.700000
+    molybdenum_concentration: 134.300000
+    silver_concentration: 192.000000
+    cadmium_concentration: 112.100000
+    titanium_concentration: 198.000000
+    aluminum_concentration: 158.300000
+    lead_concentration: 185.800000
+    vanadium_concentration: 196.600000
+    uranium_concentration: 149.900000
+    yttrium_concentration: 196.300000
+    gadolinium_concentration: 147.300000
   - _index: 10
     particle_object: OsmoiASubconInstrumentDataParticle
     particle_type: osmoi_a_subcon_instrument_recovered
@@ -445,43 +445,43 @@ data:
     volume_pumped: null
     lat: 45.926213
     lon: -129.978992
-    depth: -1520
+    m_depth: -1520
     temp: 100.000000
     acidity: 5.100000
     alkalinity: -0.570000
-    hydrogen_sulfide: 5.900000
-    silicon: 20.900000
-    ammonia: 582.000000
-    chloride: 582.000000
-    sulfate: 1.140000
-    sodium: 490.000000
-    potassium: 16.000000
-    magnesium: 2.000000
-    calcium: 33.200000
-    bromide: 934.000000
-    iron: 2748.000000
-    manganese: 688.000000
-    lithium: 802.000000
-    strontium_icpaes: 109.000000
-    boron: 506.000000
-    rubidium: 9.300000
-    cesium: 102.000000
-    strontium_icpms: 195.500000
-    barium: 115.800000
-    cobalt: 183.500000
-    nickel: 102.500000
-    copper: 114.600000
-    zinc: 145.000000
-    molybdenum: 197.900000
-    silver: 140.200000
-    cadmium: 156.700000
-    titanium: 124.900000
-    aluminum: 195.700000
-    lead: 172.000000
-    vanadium: 192.500000
-    uranium: 175.200000
-    yttrium: 151.500000
-    gadolinium: 190.100000
+    hydrogen_sulfide_concentration: 5.900000
+    silicon_concentration: 20.900000
+    ammonia_concentration: 582.000000
+    chloride_concentration: 582.000000
+    sulfate_concentration: 1.140000
+    sodium_concentration: 490.000000
+    potassium_concentration: 16.000000
+    magnesium_concentration: 2.000000
+    calcium_concentration: 33.200000
+    bromide_concentration: 934.000000
+    iron_concentration: 2748.000000
+    manganese_concentration: 688.000000
+    lithium_concentration: 802.000000
+    strontium_icpaes_concentration: 109.000000
+    boron_concentration: 506.000000
+    rubidium_concentration: 9.300000
+    cesium_concentration: 102.000000
+    strontium_icpms_concentration: 195.500000
+    barium_concentration: 115.800000
+    cobalt_concentration: 183.500000
+    nickel_concentration: 102.500000
+    copper_concentration: 114.600000
+    zinc_concentration: 145.000000
+    molybdenum_concentration: 197.900000
+    silver_concentration: 140.200000
+    cadmium_concentration: 156.700000
+    titanium_concentration: 124.900000
+    aluminum_concentration: 195.700000
+    lead_concentration: 172.000000
+    vanadium_concentration: 192.500000
+    uranium_concentration: 175.200000
+    yttrium_concentration: 151.500000
+    gadolinium_concentration: 190.100000
   - _index: 11
     particle_object: OsmoiASubconInstrumentDataParticle
     particle_type: osmoi_a_subcon_instrument_recovered
@@ -493,43 +493,43 @@ data:
     volume_pumped: null
     lat: 45.926213
     lon: -129.978992
-    depth: -1520
+    m_depth: -1520
     temp: 100.900000
     acidity: 7.100000
     alkalinity: -0.370000
-    hydrogen_sulfide: 5.100000
-    silicon: 17.600000
-    ammonia: 592.000000
-    chloride: 592.000000
-    sulfate: 4.070000
-    sodium: 497.000000
-    potassium: 16.800000
-    magnesium: 3.000000
-    calcium: 36.400000
-    bromide: 946.000000
-    iron: 2782.000000
-    manganese: 636.000000
-    lithium: 827.000000
-    strontium_icpaes: 126.000000
-    boron: 558.000000
-    rubidium: 9.700000
-    cesium: 105.000000
-    strontium_icpms: 112.300000
-    barium: 168.300000
-    cobalt: 166.000000
-    nickel: 104.900000
-    copper: 129.500000
-    zinc: 125.300000
-    molybdenum: 150.700000
-    silver: 176.500000
-    cadmium: 170.900000
-    titanium: 127.200000
-    aluminum: 102.100000
-    lead: 156.600000
-    vanadium: 150.900000
-    uranium: 181.500000
-    yttrium: 124.500000
-    gadolinium: 164.900000
+    hydrogen_sulfide_concentration: 5.100000
+    silicon_concentration: 17.600000
+    ammonia_concentration: 592.000000
+    chloride_concentration: 592.000000
+    sulfate_concentration: 4.070000
+    sodium_concentration: 497.000000
+    potassium_concentration: 16.800000
+    magnesium_concentration: 3.000000
+    calcium_concentration: 36.400000
+    bromide_concentration: 946.000000
+    iron_concentration: 2782.000000
+    manganese_concentration: 636.000000
+    lithium_concentration: 827.000000
+    strontium_icpaes_concentration: 126.000000
+    boron_concentration: 558.000000
+    rubidium_concentration: 9.700000
+    cesium_concentration: 105.000000
+    strontium_icpms_concentration: 112.300000
+    barium_concentration: 168.300000
+    cobalt_concentration: 166.000000
+    nickel_concentration: 104.900000
+    copper_concentration: 129.500000
+    zinc_concentration: 125.300000
+    molybdenum_concentration: 150.700000
+    silver_concentration: 176.500000
+    cadmium_concentration: 170.900000
+    titanium_concentration: 127.200000
+    aluminum_concentration: 102.100000
+    lead_concentration: 156.600000
+    vanadium_concentration: 150.900000
+    uranium_concentration: 181.500000
+    yttrium_concentration: 124.500000
+    gadolinium_concentration: 164.900000
   - _index: 12
     particle_object: OsmoiASubconInstrumentDataParticle
     particle_type: osmoi_a_subcon_instrument_recovered
@@ -541,43 +541,43 @@ data:
     volume_pumped: null
     lat: 45.926213
     lon: -129.978992
-    depth: -1520
+    m_depth: -1520
     temp: 92.500000
     acidity: 4.100000
     alkalinity: -0.430000
-    hydrogen_sulfide: 5.100000
-    silicon: 19.600000
-    ammonia: 588.000000
-    chloride: 588.000000
-    sulfate: 1.430000
-    sodium: 494.000000
-    potassium: 16.000000
-    magnesium: 2.900000
-    calcium: 33.600000
-    bromide: 933.000000
-    iron: 2817.000000
-    manganese: 639.000000
-    lithium: 800.000000
-    strontium_icpaes: 113.000000
-    boron: 502.000000
-    rubidium: 8.900000
-    cesium: 98.000000
-    strontium_icpms: 165.100000
-    barium: 113.900000
-    cobalt: 184.300000
-    nickel: 145.300000
-    copper: 118.500000
-    zinc: 174.300000
-    molybdenum: 140.800000
-    silver: 174.800000
-    cadmium: 122.800000
-    titanium: 140.100000
-    aluminum: 116.100000
-    lead: 198.800000
-    vanadium: 136.900000
-    uranium: 107.600000
-    yttrium: 166.900000
-    gadolinium: 172.400000
+    hydrogen_sulfide_concentration: 5.100000
+    silicon_concentration: 19.600000
+    ammonia_concentration: 588.000000
+    chloride_concentration: 588.000000
+    sulfate_concentration: 1.430000
+    sodium_concentration: 494.000000
+    potassium_concentration: 16.000000
+    magnesium_concentration: 2.900000
+    calcium_concentration: 33.600000
+    bromide_concentration: 933.000000
+    iron_concentration: 2817.000000
+    manganese_concentration: 639.000000
+    lithium_concentration: 800.000000
+    strontium_icpaes_concentration: 113.000000
+    boron_concentration: 502.000000
+    rubidium_concentration: 8.900000
+    cesium_concentration: 98.000000
+    strontium_icpms_concentration: 165.100000
+    barium_concentration: 113.900000
+    cobalt_concentration: 184.300000
+    nickel_concentration: 145.300000
+    copper_concentration: 118.500000
+    zinc_concentration: 174.300000
+    molybdenum_concentration: 140.800000
+    silver_concentration: 174.800000
+    cadmium_concentration: 122.800000
+    titanium_concentration: 140.100000
+    aluminum_concentration: 116.100000
+    lead_concentration: 198.800000
+    vanadium_concentration: 136.900000
+    uranium_concentration: 107.600000
+    yttrium_concentration: 166.900000
+    gadolinium_concentration: 172.400000
   - _index: 13
     particle_object: OsmoiASubconInstrumentDataParticle
     particle_type: osmoi_a_subcon_instrument_recovered
@@ -589,43 +589,43 @@ data:
     volume_pumped: null
     lat: 45.926213
     lon: -129.978992
-    depth: -1520
+    m_depth: -1520
     temp: 97.000000
     acidity: 6.100000
     alkalinity: 2.090000
-    hydrogen_sulfide: 0.001800
-    silicon: 1.170000
-    ammonia: 538.000000
-    chloride: 538.000000
-    sulfate: 27.020000
-    sodium: 460.000000
-    potassium: 10.300000
-    magnesium: 50.700000
-    calcium: 10.600000
-    bromide: 847.000000
-    iron: 84.000000
-    manganese: 32.000000
-    lithium: 33.000000
-    strontium_icpaes: 91.000000
-    boron: 434.000000
-    rubidium: 1.800000
-    cesium: 4.900000
-    strontium_icpms: 118.400000
-    barium: 157.100000
-    cobalt: 176.700000
-    nickel: 104.500000
-    copper: 184.000000
-    zinc: 140.500000
-    molybdenum: 171.400000
-    silver: 180.500000
-    cadmium: 127.500000
-    titanium: 158.000000
-    aluminum: 118.400000
-    lead: 112.100000
-    vanadium: 177.200000
-    uranium: 120.100000
-    yttrium: 156.300000
-    gadolinium: 182.500000
+    hydrogen_sulfide_concentration: 0.001800
+    silicon_concentration: 1.170000
+    ammonia_concentration: 538.000000
+    chloride_concentration: 538.000000
+    sulfate_concentration: 27.020000
+    sodium_concentration: 460.000000
+    potassium_concentration: 10.300000
+    magnesium_concentration: 50.700000
+    calcium_concentration: 10.600000
+    bromide_concentration: 847.000000
+    iron_concentration: 84.000000
+    manganese_concentration: 32.000000
+    lithium_concentration: 33.000000
+    strontium_icpaes_concentration: 91.000000
+    boron_concentration: 434.000000
+    rubidium_concentration: 1.800000
+    cesium_concentration: 4.900000
+    strontium_icpms_concentration: 118.400000
+    barium_concentration: 157.100000
+    cobalt_concentration: 176.700000
+    nickel_concentration: 104.500000
+    copper_concentration: 184.000000
+    zinc_concentration: 140.500000
+    molybdenum_concentration: 171.400000
+    silver_concentration: 180.500000
+    cadmium_concentration: 127.500000
+    titanium_concentration: 158.000000
+    aluminum_concentration: 118.400000
+    lead_concentration: 112.100000
+    vanadium_concentration: 177.200000
+    uranium_concentration: 120.100000
+    yttrium_concentration: 156.300000
+    gadolinium_concentration: 182.500000
   - _index: 14
     particle_object: OsmoiASubconInstrumentDataParticle
     particle_type: osmoi_a_subcon_instrument_recovered
@@ -637,43 +637,43 @@ data:
     volume_pumped: null
     lat: 45.926213
     lon: -129.978992
-    depth: -1520
+    m_depth: -1520
     temp: 99.900000
     acidity: 4.700000
     alkalinity: -0.280000
-    hydrogen_sulfide: 5.300000
-    silicon: 19.900000
-    ammonia: 583.000000
-    chloride: 583.000000
-    sulfate: 1.070000
-    sodium: 489.000000
-    potassium: 17.000000
-    magnesium: 1.800000
-    calcium: 33.800000
-    bromide: 902.000000
-    iron: 2435.000000
-    manganese: 534.000000
-    lithium: 868.000000
-    strontium_icpaes: 120.000000
-    boron: 570.000000
-    rubidium: 8.000000
-    cesium: 90.000000
-    strontium_icpms: 193.800000
-    barium: 176.900000
-    cobalt: 198.100000
-    nickel: 170.600000
-    copper: 183.100000
-    zinc: 151.000000
-    molybdenum: 167.800000
-    silver: 105.300000
-    cadmium: 140.700000
-    titanium: 138.900000
-    aluminum: 120.100000
-    lead: 120.400000
-    vanadium: 177.200000
-    uranium: 195.000000
-    yttrium: 177.200000
-    gadolinium: 172.500000
+    hydrogen_sulfide_concentration: 5.300000
+    silicon_concentration: 19.900000
+    ammonia_concentration: 583.000000
+    chloride_concentration: 583.000000
+    sulfate_concentration: 1.070000
+    sodium_concentration: 489.000000
+    potassium_concentration: 17.000000
+    magnesium_concentration: 1.800000
+    calcium_concentration: 33.800000
+    bromide_concentration: 902.000000
+    iron_concentration: 2435.000000
+    manganese_concentration: 534.000000
+    lithium_concentration: 868.000000
+    strontium_icpaes_concentration: 120.000000
+    boron_concentration: 570.000000
+    rubidium_concentration: 8.000000
+    cesium_concentration: 90.000000
+    strontium_icpms_concentration: 193.800000
+    barium_concentration: 176.900000
+    cobalt_concentration: 198.100000
+    nickel_concentration: 170.600000
+    copper_concentration: 183.100000
+    zinc_concentration: 151.000000
+    molybdenum_concentration: 167.800000
+    silver_concentration: 105.300000
+    cadmium_concentration: 140.700000
+    titanium_concentration: 138.900000
+    aluminum_concentration: 120.100000
+    lead_concentration: 120.400000
+    vanadium_concentration: 177.200000
+    uranium_concentration: 195.000000
+    yttrium_concentration: 177.200000
+    gadolinium_concentration: 172.500000
   - _index: 15
     particle_object: OsmoiASubconInstrumentDataParticle
     particle_type: osmoi_a_subcon_instrument_recovered
@@ -685,43 +685,43 @@ data:
     volume_pumped: null
     lat: 45.926213
     lon: -129.978992
-    depth: -1520
+    m_depth: -1520
     temp: 102.200000
     acidity: 5.000000
     alkalinity: -0.280000
-    hydrogen_sulfide: null
-    silicon: null
-    ammonia: null
-    chloride: null
-    sulfate: null
-    sodium: null
-    potassium: null
-    magnesium: null
-    calcium: null
-    bromide: null
-    iron: null
-    manganese: null
-    lithium: null
-    strontium_icpaes: null
-    boron: null
-    rubidium: null
-    cesium: null
-    strontium_icpms: 142.800000
-    barium: 124.200000
-    cobalt: 107.800000
-    nickel: 164.100000
-    copper: 193.900000
-    zinc: 167.500000
-    molybdenum: 110.900000
-    silver: 125.700000
-    cadmium: 100.600000
-    titanium: 105.800000
-    aluminum: 198.700000
-    lead: 124.100000
-    vanadium: 108.200000
-    uranium: 127.600000
-    yttrium: 179.900000
-    gadolinium: 107.600000
+    hydrogen_sulfide_concentration: null
+    silicon_concentration: null
+    ammonia_concentration: null
+    chloride_concentration: null
+    sulfate_concentration: null
+    sodium_concentration: null
+    potassium_concentration: null
+    magnesium_concentration: null
+    calcium_concentration: null
+    bromide_concentration: null
+    iron_concentration: null
+    manganese_concentration: null
+    lithium_concentration: null
+    strontium_icpaes_concentration: null
+    boron_concentration: null
+    rubidium_concentration: null
+    cesium_concentration: null
+    strontium_icpms_concentration: 142.800000
+    barium_concentration: 124.200000
+    cobalt_concentration: 107.800000
+    nickel_concentration: 164.100000
+    copper_concentration: 193.900000
+    zinc_concentration: 167.500000
+    molybdenum_concentration: 110.900000
+    silver_concentration: 125.700000
+    cadmium_concentration: 100.600000
+    titanium_concentration: 105.800000
+    aluminum_concentration: 198.700000
+    lead_concentration: 124.100000
+    vanadium_concentration: 108.200000
+    uranium_concentration: 127.600000
+    yttrium_concentration: 179.900000
+    gadolinium_concentration: 107.600000
   - _index: 16
     particle_object: OsmoiASubconInstrumentDataParticle
     particle_type: osmoi_a_subcon_instrument_recovered
@@ -733,43 +733,43 @@ data:
     volume_pumped: null
     lat: 45.926213
     lon: -129.978992
-    depth: -1520
+    m_depth: -1520
     temp: 91.000000
     acidity: 4.700000
     alkalinity: -0.300000
-    hydrogen_sulfide: null
-    silicon: null
-    ammonia: null
-    chloride: null
-    sulfate: null
-    sodium: null
-    potassium: null
-    magnesium: null
-    calcium: null
-    bromide: null
-    iron: null
-    manganese: null
-    lithium: null
-    strontium_icpaes: null
-    boron: null
-    rubidium: null
-    cesium: null
-    strontium_icpms: 167.600000
-    barium: 198.900000
-    cobalt: 113.700000
-    nickel: 153.300000
-    copper: 104.800000
-    zinc: 151.500000
-    molybdenum: 115.400000
-    silver: 174.300000
-    cadmium: 153.100000
-    titanium: 191.100000
-    aluminum: 181.500000
-    lead: 125.600000
-    vanadium: 182.200000
-    uranium: 196.400000
-    yttrium: 162.600000
-    gadolinium: 190.200000
+    hydrogen_sulfide_concentration: null
+    silicon_concentration: null
+    ammonia_concentration: null
+    chloride_concentration: null
+    sulfate_concentration: null
+    sodium_concentration: null
+    potassium_concentration: null
+    magnesium_concentration: null
+    calcium_concentration: null
+    bromide_concentration: null
+    iron_concentration: null
+    manganese_concentration: null
+    lithium_concentration: null
+    strontium_icpaes_concentration: null
+    boron_concentration: null
+    rubidium_concentration: null
+    cesium_concentration: null
+    strontium_icpms_concentration: 167.600000
+    barium_concentration: 198.900000
+    cobalt_concentration: 113.700000
+    nickel_concentration: 153.300000
+    copper_concentration: 104.800000
+    zinc_concentration: 151.500000
+    molybdenum_concentration: 115.400000
+    silver_concentration: 174.300000
+    cadmium_concentration: 153.100000
+    titanium_concentration: 191.100000
+    aluminum_concentration: 181.500000
+    lead_concentration: 125.600000
+    vanadium_concentration: 182.200000
+    uranium_concentration: 196.400000
+    yttrium_concentration: 162.600000
+    gadolinium_concentration: 190.200000
   - _index: 17
     particle_object: OsmoiASubconInstrumentDataParticle
     particle_type: osmoi_a_subcon_instrument_recovered
@@ -781,43 +781,43 @@ data:
     volume_pumped: null
     lat: 45.926213
     lon: -129.978992
-    depth: -1520
+    m_depth: -1520
     temp: 98.500000
     acidity: 6.900000
     alkalinity: -0.040000
-    hydrogen_sulfide: 4.700000
-    silicon: 18.000000
-    ammonia: 531.000000
-    chloride: 531.000000
-    sulfate: 1.060000
-    sodium: 422.000000
-    potassium: 16.000000
-    magnesium: 2.000000
-    calcium: 44.300000
-    bromide: 778.000000
-    iron: 264.000000
-    manganese: 386.000000
-    lithium: 594.000000
-    strontium_icpaes: 150.000000
-    boron: 595.000000
-    rubidium: 8.200000
-    cesium: 108.000000
-    strontium_icpms: 111.000000
-    barium: 186.300000
-    cobalt: 177.400000
-    nickel: 191.400000
-    copper: 101.300000
-    zinc: 156.500000
-    molybdenum: 128.000000
-    silver: 193.700000
-    cadmium: 105.800000
-    titanium: 105.900000
-    aluminum: 138.600000
-    lead: 187.900000
-    vanadium: 134.200000
-    uranium: 180.500000
-    yttrium: 101.700000
-    gadolinium: 197.300000
+    hydrogen_sulfide_concentration: 4.700000
+    silicon_concentration: 18.000000
+    ammonia_concentration: 531.000000
+    chloride_concentration: 531.000000
+    sulfate_concentration: 1.060000
+    sodium_concentration: 422.000000
+    potassium_concentration: 16.000000
+    magnesium_concentration: 2.000000
+    calcium_concentration: 44.300000
+    bromide_concentration: 778.000000
+    iron_concentration: 264.000000
+    manganese_concentration: 386.000000
+    lithium_concentration: 594.000000
+    strontium_icpaes_concentration: 150.000000
+    boron_concentration: 595.000000
+    rubidium_concentration: 8.200000
+    cesium_concentration: 108.000000
+    strontium_icpms_concentration: 111.000000
+    barium_concentration: 186.300000
+    cobalt_concentration: 177.400000
+    nickel_concentration: 191.400000
+    copper_concentration: 101.300000
+    zinc_concentration: 156.500000
+    molybdenum_concentration: 128.000000
+    silver_concentration: 193.700000
+    cadmium_concentration: 105.800000
+    titanium_concentration: 105.900000
+    aluminum_concentration: 138.600000
+    lead_concentration: 187.900000
+    vanadium_concentration: 134.200000
+    uranium_concentration: 180.500000
+    yttrium_concentration: 101.700000
+    gadolinium_concentration: 197.300000
   - _index: 18
     particle_object: OsmoiASubconInstrumentDataParticle
     particle_type: osmoi_a_subcon_instrument_recovered
@@ -829,43 +829,43 @@ data:
     volume_pumped: null
     lat: 45.926213
     lon: -129.978992
-    depth: -1520
+    m_depth: -1520
     temp: 102.300000
     acidity: 4.000000
     alkalinity: -0.280000
-    hydrogen_sulfide: 4.600000
-    silicon: 17.700000
-    ammonia: 530.000000
-    chloride: 530.000000
-    sulfate: 0.890000
-    sodium: 423.000000
-    potassium: 14.800000
-    magnesium: 1.500000
-    calcium: 44.300000
-    bromide: 787.000000
-    iron: 246.000000
-    manganese: 363.000000
-    lithium: 562.000000
-    strontium_icpaes: 140.000000
-    boron: 602.000000
-    rubidium: 8.600000
-    cesium: 109.000000
-    strontium_icpms: 171.000000
-    barium: 136.900000
-    cobalt: 154.200000
-    nickel: 139.100000
-    copper: 148.400000
-    zinc: 166.000000
-    molybdenum: 140.300000
-    silver: 114.400000
-    cadmium: 170.200000
-    titanium: 186.200000
-    aluminum: 118.400000
-    lead: 148.200000
-    vanadium: 101.600000
-    uranium: 127.400000
-    yttrium: 179.300000
-    gadolinium: 158.900000
+    hydrogen_sulfide_concentration: 4.600000
+    silicon_concentration: 17.700000
+    ammonia_concentration: 530.000000
+    chloride_concentration: 530.000000
+    sulfate_concentration: 0.890000
+    sodium_concentration: 423.000000
+    potassium_concentration: 14.800000
+    magnesium_concentration: 1.500000
+    calcium_concentration: 44.300000
+    bromide_concentration: 787.000000
+    iron_concentration: 246.000000
+    manganese_concentration: 363.000000
+    lithium_concentration: 562.000000
+    strontium_icpaes_concentration: 140.000000
+    boron_concentration: 602.000000
+    rubidium_concentration: 8.600000
+    cesium_concentration: 109.000000
+    strontium_icpms_concentration: 171.000000
+    barium_concentration: 136.900000
+    cobalt_concentration: 154.200000
+    nickel_concentration: 139.100000
+    copper_concentration: 148.400000
+    zinc_concentration: 166.000000
+    molybdenum_concentration: 140.300000
+    silver_concentration: 114.400000
+    cadmium_concentration: 170.200000
+    titanium_concentration: 186.200000
+    aluminum_concentration: 118.400000
+    lead_concentration: 148.200000
+    vanadium_concentration: 101.600000
+    uranium_concentration: 127.400000
+    yttrium_concentration: 179.300000
+    gadolinium_concentration: 158.900000
   - _index: 19
     particle_object: OsmoiASubconInstrumentDataParticle
     particle_type: osmoi_a_subcon_instrument_recovered
@@ -877,43 +877,43 @@ data:
     volume_pumped: null
     lat: 45.926213
     lon: -129.978992
-    depth: -1520
+    m_depth: -1520
     temp: 107.300000
     acidity: 5.500000
     alkalinity: 1.880000
-    hydrogen_sulfide: 0.010000
-    silicon: 1.530000
-    ammonia: 536.000000
-    chloride: 536.000000
-    sulfate: 25.800000
-    sodium: 457.000000
-    potassium: 10.600000
-    magnesium: 48.900000
-    calcium: 12.100000
-    bromide: 833.000000
-    iron: 8.000000
-    manganese: 33.000000
-    lithium: 57.000000
-    strontium_icpaes: 94.000000
-    boron: 430.000000
-    rubidium: 1.800000
-    cesium: 8.400000
-    strontium_icpms: 130.000000
-    barium: 182.600000
-    cobalt: 195.200000
-    nickel: 135.500000
-    copper: 142.600000
-    zinc: 109.500000
-    molybdenum: 103.000000
-    silver: 101.400000
-    cadmium: 141.400000
-    titanium: 162.500000
-    aluminum: 166.600000
-    lead: 165.900000
-    vanadium: 133.400000
-    uranium: 109.600000
-    yttrium: 136.700000
-    gadolinium: 154.300000
+    hydrogen_sulfide_concentration: 0.010000
+    silicon_concentration: 1.530000
+    ammonia_concentration: 536.000000
+    chloride_concentration: 536.000000
+    sulfate_concentration: 25.800000
+    sodium_concentration: 457.000000
+    potassium_concentration: 10.600000
+    magnesium_concentration: 48.900000
+    calcium_concentration: 12.100000
+    bromide_concentration: 833.000000
+    iron_concentration: 8.000000
+    manganese_concentration: 33.000000
+    lithium_concentration: 57.000000
+    strontium_icpaes_concentration: 94.000000
+    boron_concentration: 430.000000
+    rubidium_concentration: 1.800000
+    cesium_concentration: 8.400000
+    strontium_icpms_concentration: 130.000000
+    barium_concentration: 182.600000
+    cobalt_concentration: 195.200000
+    nickel_concentration: 135.500000
+    copper_concentration: 142.600000
+    zinc_concentration: 109.500000
+    molybdenum_concentration: 103.000000
+    silver_concentration: 101.400000
+    cadmium_concentration: 141.400000
+    titanium_concentration: 162.500000
+    aluminum_concentration: 166.600000
+    lead_concentration: 165.900000
+    vanadium_concentration: 133.400000
+    uranium_concentration: 109.600000
+    yttrium_concentration: 136.700000
+    gadolinium_concentration: 154.300000
   - _index: 20
     particle_object: OsmoiASubconInstrumentDataParticle
     particle_type: osmoi_a_subcon_instrument_recovered
@@ -925,43 +925,43 @@ data:
     volume_pumped: null
     lat: 45.926213
     lon: -129.978992
-    depth: -1520
+    m_depth: -1520
     temp: 103.600000
     acidity: 7.100000
     alkalinity: 1.940000
-    hydrogen_sulfide: 0.004900
-    silicon: 1.920000
-    ammonia: 536.000000
-    chloride: 536.000000
-    sulfate: 25.600000
-    sodium: 456.000000
-    potassium: 10.600000
-    magnesium: 48.600000
-    calcium: 12.700000
-    bromide: 850.000000
-    iron: 23.000000
-    manganese: 31.000000
-    lithium: 66.000000
-    strontium_icpaes: 93.000000
-    boron: 422.000000
-    rubidium: 2.000000
-    cesium: 11.000000
-    strontium_icpms: 123.400000
-    barium: 187.400000
-    cobalt: 190.700000
-    nickel: 135.300000
-    copper: 155.200000
-    zinc: 136.200000
-    molybdenum: 137.500000
-    silver: 116.500000
-    cadmium: 101.700000
-    titanium: 150.200000
-    aluminum: 132.000000
-    lead: 190.300000
-    vanadium: 111.000000
-    uranium: 143.000000
-    yttrium: 183.300000
-    gadolinium: 173.600000
+    hydrogen_sulfide_concentration: 0.004900
+    silicon_concentration: 1.920000
+    ammonia_concentration: 536.000000
+    chloride_concentration: 536.000000
+    sulfate_concentration: 25.600000
+    sodium_concentration: 456.000000
+    potassium_concentration: 10.600000
+    magnesium_concentration: 48.600000
+    calcium_concentration: 12.700000
+    bromide_concentration: 850.000000
+    iron_concentration: 23.000000
+    manganese_concentration: 31.000000
+    lithium_concentration: 66.000000
+    strontium_icpaes_concentration: 93.000000
+    boron_concentration: 422.000000
+    rubidium_concentration: 2.000000
+    cesium_concentration: 11.000000
+    strontium_icpms_concentration: 123.400000
+    barium_concentration: 187.400000
+    cobalt_concentration: 190.700000
+    nickel_concentration: 135.300000
+    copper_concentration: 155.200000
+    zinc_concentration: 136.200000
+    molybdenum_concentration: 137.500000
+    silver_concentration: 116.500000
+    cadmium_concentration: 101.700000
+    titanium_concentration: 150.200000
+    aluminum_concentration: 132.000000
+    lead_concentration: 190.300000
+    vanadium_concentration: 111.000000
+    uranium_concentration: 143.000000
+    yttrium_concentration: 183.300000
+    gadolinium_concentration: 173.600000
   - _index: 21
     particle_object: OsmoiASubconInstrumentDataParticle
     particle_type: osmoi_a_subcon_instrument_recovered
@@ -973,43 +973,43 @@ data:
     volume_pumped: null
     lat: 45.926213
     lon: -129.978992
-    depth: -1520
+    m_depth: -1520
     temp: 108.100000
     acidity: 7.200000
     alkalinity: -0.140000
-    hydrogen_sulfide: 4.400000
-    silicon: 17.100000
-    ammonia: 531.000000
-    chloride: 531.000000
-    sulfate: 2.790000
-    sodium: 427.000000
-    potassium: 14.100000
-    magnesium: 5.200000
-    calcium: 41.400000
-    bromide: 800.000000
-    iron: 226.000000
-    manganese: 356.000000
-    lithium: 514.000000
-    strontium_icpaes: 133.000000
-    boron: 530.000000
-    rubidium: 8.150000
-    cesium: 102.000000
-    strontium_icpms: 172.800000
-    barium: 192.800000
-    cobalt: 151.400000
-    nickel: 102.700000
-    copper: 156.400000
-    zinc: 195.100000
-    molybdenum: 100.100000
-    silver: 159.900000
-    cadmium: 103.300000
-    titanium: 157.000000
-    aluminum: 169.000000
-    lead: 121.400000
-    vanadium: 199.200000
-    uranium: 154.200000
-    yttrium: 113.200000
-    gadolinium: 126.500000
+    hydrogen_sulfide_concentration: 4.400000
+    silicon_concentration: 17.100000
+    ammonia_concentration: 531.000000
+    chloride_concentration: 531.000000
+    sulfate_concentration: 2.790000
+    sodium_concentration: 427.000000
+    potassium_concentration: 14.100000
+    magnesium_concentration: 5.200000
+    calcium_concentration: 41.400000
+    bromide_concentration: 800.000000
+    iron_concentration: 226.000000
+    manganese_concentration: 356.000000
+    lithium_concentration: 514.000000
+    strontium_icpaes_concentration: 133.000000
+    boron_concentration: 530.000000
+    rubidium_concentration: 8.150000
+    cesium_concentration: 102.000000
+    strontium_icpms_concentration: 172.800000
+    barium_concentration: 192.800000
+    cobalt_concentration: 151.400000
+    nickel_concentration: 102.700000
+    copper_concentration: 156.400000
+    zinc_concentration: 195.100000
+    molybdenum_concentration: 100.100000
+    silver_concentration: 159.900000
+    cadmium_concentration: 103.300000
+    titanium_concentration: 157.000000
+    aluminum_concentration: 169.000000
+    lead_concentration: 121.400000
+    vanadium_concentration: 199.200000
+    uranium_concentration: 154.200000
+    yttrium_concentration: 113.200000
+    gadolinium_concentration: 126.500000
   - _index: 22
     particle_object: OsmoiASubconInstrumentDataParticle
     particle_type: osmoi_a_subcon_instrument_recovered
@@ -1021,43 +1021,43 @@ data:
     volume_pumped: null
     lat: 45.926213
     lon: -129.978992
-    depth: -1520
+    m_depth: -1520
     temp: 92.200000
     acidity: 6.900000
     alkalinity: -0.110000
-    hydrogen_sulfide: 4.700000
-    silicon: 17.900000
-    ammonia: 531.000000
-    chloride: 531.000000
-    sulfate: 1.210000
-    sodium: 425.000000
-    potassium: 14.700000
-    magnesium: 1.500000
-    calcium: 44.300000
-    bromide: 808.000000
-    iron: 234.000000
-    manganese: 374.000000
-    lithium: 563.000000
-    strontium_icpaes: 142.000000
-    boron: 543.000000
-    rubidium: 8.590000
-    cesium: 109.000000
-    strontium_icpms: 104.100000
-    barium: 192.900000
-    cobalt: 116.600000
-    nickel: 155.600000
-    copper: 169.400000
-    zinc: 158.000000
-    molybdenum: 176.100000
-    silver: 150.200000
-    cadmium: 190.300000
-    titanium: 130.600000
-    aluminum: 105.000000
-    lead: 167.000000
-    vanadium: 101.200000
-    uranium: 126.900000
-    yttrium: 127.900000
-    gadolinium: 175.900000
+    hydrogen_sulfide_concentration: 4.700000
+    silicon_concentration: 17.900000
+    ammonia_concentration: 531.000000
+    chloride_concentration: 531.000000
+    sulfate_concentration: 1.210000
+    sodium_concentration: 425.000000
+    potassium_concentration: 14.700000
+    magnesium_concentration: 1.500000
+    calcium_concentration: 44.300000
+    bromide_concentration: 808.000000
+    iron_concentration: 234.000000
+    manganese_concentration: 374.000000
+    lithium_concentration: 563.000000
+    strontium_icpaes_concentration: 142.000000
+    boron_concentration: 543.000000
+    rubidium_concentration: 8.590000
+    cesium_concentration: 109.000000
+    strontium_icpms_concentration: 104.100000
+    barium_concentration: 192.900000
+    cobalt_concentration: 116.600000
+    nickel_concentration: 155.600000
+    copper_concentration: 169.400000
+    zinc_concentration: 158.000000
+    molybdenum_concentration: 176.100000
+    silver_concentration: 150.200000
+    cadmium_concentration: 190.300000
+    titanium_concentration: 130.600000
+    aluminum_concentration: 105.000000
+    lead_concentration: 167.000000
+    vanadium_concentration: 101.200000
+    uranium_concentration: 126.900000
+    yttrium_concentration: 127.900000
+    gadolinium_concentration: 175.900000
   - _index: 23
     particle_object: OsmoiASubconInstrumentDataParticle
     particle_type: osmoi_a_subcon_instrument_recovered
@@ -1069,43 +1069,43 @@ data:
     volume_pumped: null
     lat: 45.926213
     lon: -129.978992
-    depth: -1520
+    m_depth: -1520
     temp: 101.600000
     acidity: 6.700000
     alkalinity: -0.270000
-    hydrogen_sulfide: 4.100000
-    silicon: 18.600000
-    ammonia: 529.000000
-    chloride: 529.000000
-    sulfate: 0.830000
-    sodium: 423.000000
-    potassium: 14.700000
-    magnesium: 0.700000
-    calcium: 44.800000
-    bromide: 834.000000
-    iron: 272.000000
-    manganese: 410.000000
-    lithium: 574.000000
-    strontium_icpaes: 142.000000
-    boron: 561.000000
-    rubidium: 8.670000
-    cesium: 115.000000
-    strontium_icpms: 194.100000
-    barium: 127.600000
-    cobalt: 188.700000
-    nickel: 192.200000
-    copper: 154.100000
-    zinc: 127.100000
-    molybdenum: 141.900000
-    silver: 130.400000
-    cadmium: 170.900000
-    titanium: 111.700000
-    aluminum: 195.400000
-    lead: 108.600000
-    vanadium: 101.700000
-    uranium: 197.100000
-    yttrium: 114.000000
-    gadolinium: 114.400000
+    hydrogen_sulfide_concentration: 4.100000
+    silicon_concentration: 18.600000
+    ammonia_concentration: 529.000000
+    chloride_concentration: 529.000000
+    sulfate_concentration: 0.830000
+    sodium_concentration: 423.000000
+    potassium_concentration: 14.700000
+    magnesium_concentration: 0.700000
+    calcium_concentration: 44.800000
+    bromide_concentration: 834.000000
+    iron_concentration: 272.000000
+    manganese_concentration: 410.000000
+    lithium_concentration: 574.000000
+    strontium_icpaes_concentration: 142.000000
+    boron_concentration: 561.000000
+    rubidium_concentration: 8.670000
+    cesium_concentration: 115.000000
+    strontium_icpms_concentration: 194.100000
+    barium_concentration: 127.600000
+    cobalt_concentration: 188.700000
+    nickel_concentration: 192.200000
+    copper_concentration: 154.100000
+    zinc_concentration: 127.100000
+    molybdenum_concentration: 141.900000
+    silver_concentration: 130.400000
+    cadmium_concentration: 170.900000
+    titanium_concentration: 111.700000
+    aluminum_concentration: 195.400000
+    lead_concentration: 108.600000
+    vanadium_concentration: 101.700000
+    uranium_concentration: 197.100000
+    yttrium_concentration: 114.000000
+    gadolinium_concentration: 114.400000
   - _index: 24
     particle_object: OsmoiASubconInstrumentDataParticle
     particle_type: osmoi_a_subcon_instrument_recovered
@@ -1117,43 +1117,43 @@ data:
     volume_pumped: null
     lat: 45.926213
     lon: -129.978992
-    depth: -1520
+    m_depth: -1520
     temp: 103.000000
     acidity: 6.400000
     alkalinity: 0.020000
-    hydrogen_sulfide: 4.700000
-    silicon: 18.100000
-    ammonia: 529.000000
-    chloride: 529.000000
-    sulfate: 1.240000
-    sodium: 423.000000
-    potassium: 14.600000
-    magnesium: 2.300000
-    calcium: 43.300000
-    bromide: 865.000000
-    iron: 269.000000
-    manganese: 389.000000
-    lithium: 553.000000
-    strontium_icpaes: 139.000000
-    boron: 510.000000
-    rubidium: 8.080000
-    cesium: 103.000000
-    strontium_icpms: 140.000000
-    barium: 131.900000
-    cobalt: 117.200000
-    nickel: 134.000000
-    copper: 115.500000
-    zinc: 150.800000
-    molybdenum: 129.600000
-    silver: 172.000000
-    cadmium: 181.100000
-    titanium: 126.800000
-    aluminum: 106.500000
-    lead: 149.500000
-    vanadium: 140.600000
-    uranium: 157.500000
-    yttrium: 122.300000
-    gadolinium: 137.700000
+    hydrogen_sulfide_concentration: 4.700000
+    silicon_concentration: 18.100000
+    ammonia_concentration: 529.000000
+    chloride_concentration: 529.000000
+    sulfate_concentration: 1.240000
+    sodium_concentration: 423.000000
+    potassium_concentration: 14.600000
+    magnesium_concentration: 2.300000
+    calcium_concentration: 43.300000
+    bromide_concentration: 865.000000
+    iron_concentration: 269.000000
+    manganese_concentration: 389.000000
+    lithium_concentration: 553.000000
+    strontium_icpaes_concentration: 139.000000
+    boron_concentration: 510.000000
+    rubidium_concentration: 8.080000
+    cesium_concentration: 103.000000
+    strontium_icpms_concentration: 140.000000
+    barium_concentration: 131.900000
+    cobalt_concentration: 117.200000
+    nickel_concentration: 134.000000
+    copper_concentration: 115.500000
+    zinc_concentration: 150.800000
+    molybdenum_concentration: 129.600000
+    silver_concentration: 172.000000
+    cadmium_concentration: 181.100000
+    titanium_concentration: 126.800000
+    aluminum_concentration: 106.500000
+    lead_concentration: 149.500000
+    vanadium_concentration: 140.600000
+    uranium_concentration: 157.500000
+    yttrium_concentration: 122.300000
+    gadolinium_concentration: 137.700000
   - _index: 25
     particle_object: OsmoiASubconInstrumentDataParticle
     particle_type: osmoi_a_subcon_instrument_recovered
@@ -1165,43 +1165,43 @@ data:
     volume_pumped: null
     lat: 45.926213
     lon: -129.978992
-    depth: -1520
+    m_depth: -1520
     temp: 99.500000
     acidity: 5.000000
     alkalinity: -0.320000
-    hydrogen_sulfide: 4.500000
-    silicon: 17.500000
-    ammonia: 547.000000
-    chloride: 547.000000
-    sulfate: 1.700000
-    sodium: 443.000000
-    potassium: 15.600000
-    magnesium: 3.300000
-    calcium: 41.700000
-    bromide: 877.000000
-    iron: 305.000000
-    manganese: 309.000000
-    lithium: 578.000000
-    strontium_icpaes: 144.000000
-    boron: 567.000000
-    rubidium: 8.600000
-    cesium: 111.000000
-    strontium_icpms: 132.700000
-    barium: 179.700000
-    cobalt: 136.800000
-    nickel: 189.500000
-    copper: 113.300000
-    zinc: 129.200000
-    molybdenum: 159.000000
-    silver: 103.200000
-    cadmium: 176.700000
-    titanium: 146.900000
-    aluminum: 126.100000
-    lead: 104.100000
-    vanadium: 197.000000
-    uranium: 122.300000
-    yttrium: 184.400000
-    gadolinium: 158.500000
+    hydrogen_sulfide_concentration: 4.500000
+    silicon_concentration: 17.500000
+    ammonia_concentration: 547.000000
+    chloride_concentration: 547.000000
+    sulfate_concentration: 1.700000
+    sodium_concentration: 443.000000
+    potassium_concentration: 15.600000
+    magnesium_concentration: 3.300000
+    calcium_concentration: 41.700000
+    bromide_concentration: 877.000000
+    iron_concentration: 305.000000
+    manganese_concentration: 309.000000
+    lithium_concentration: 578.000000
+    strontium_icpaes_concentration: 144.000000
+    boron_concentration: 567.000000
+    rubidium_concentration: 8.600000
+    cesium_concentration: 111.000000
+    strontium_icpms_concentration: 132.700000
+    barium_concentration: 179.700000
+    cobalt_concentration: 136.800000
+    nickel_concentration: 189.500000
+    copper_concentration: 113.300000
+    zinc_concentration: 129.200000
+    molybdenum_concentration: 159.000000
+    silver_concentration: 103.200000
+    cadmium_concentration: 176.700000
+    titanium_concentration: 146.900000
+    aluminum_concentration: 126.100000
+    lead_concentration: 104.100000
+    vanadium_concentration: 197.000000
+    uranium_concentration: 122.300000
+    yttrium_concentration: 184.400000
+    gadolinium_concentration: 158.500000
   - _index: 26
     particle_object: OsmoiASubconInstrumentDataParticle
     particle_type: osmoi_a_subcon_instrument_recovered
@@ -1213,43 +1213,43 @@ data:
     volume_pumped: null
     lat: 45.926213
     lon: -129.978992
-    depth: -1520
+    m_depth: -1520
     temp: 102.900000
     acidity: 4.900000
     alkalinity: -0.290000
-    hydrogen_sulfide: 4.000000
-    silicon: 17.300000
-    ammonia: 549.000000
-    chloride: 549.000000
-    sulfate: 1.010000
-    sodium: 444.000000
-    potassium: 15.800000
-    magnesium: 3.500000
-    calcium: 40.900000
-    bromide: 907.000000
-    iron: 301.000000
-    manganese: 307.000000
-    lithium: 586.000000
-    strontium_icpaes: 141.000000
-    boron: 580.000000
-    rubidium: 8.680000
-    cesium: 107.000000
-    strontium_icpms: 161.800000
-    barium: 137.200000
-    cobalt: 149.300000
-    nickel: 198.200000
-    copper: 183.700000
-    zinc: 101.500000
-    molybdenum: 123.300000
-    silver: 199.400000
-    cadmium: 192.600000
-    titanium: 113.900000
-    aluminum: 161.700000
-    lead: 192.600000
-    vanadium: 102.000000
-    uranium: 143.600000
-    yttrium: 147.700000
-    gadolinium: 175.800000
+    hydrogen_sulfide_concentration: 4.000000
+    silicon_concentration: 17.300000
+    ammonia_concentration: 549.000000
+    chloride_concentration: 549.000000
+    sulfate_concentration: 1.010000
+    sodium_concentration: 444.000000
+    potassium_concentration: 15.800000
+    magnesium_concentration: 3.500000
+    calcium_concentration: 40.900000
+    bromide_concentration: 907.000000
+    iron_concentration: 301.000000
+    manganese_concentration: 307.000000
+    lithium_concentration: 586.000000
+    strontium_icpaes_concentration: 141.000000
+    boron_concentration: 580.000000
+    rubidium_concentration: 8.680000
+    cesium_concentration: 107.000000
+    strontium_icpms_concentration: 161.800000
+    barium_concentration: 137.200000
+    cobalt_concentration: 149.300000
+    nickel_concentration: 198.200000
+    copper_concentration: 183.700000
+    zinc_concentration: 101.500000
+    molybdenum_concentration: 123.300000
+    silver_concentration: 199.400000
+    cadmium_concentration: 192.600000
+    titanium_concentration: 113.900000
+    aluminum_concentration: 161.700000
+    lead_concentration: 192.600000
+    vanadium_concentration: 102.000000
+    uranium_concentration: 143.600000
+    yttrium_concentration: 147.700000
+    gadolinium_concentration: 175.800000
   - _index: 27
     particle_object: OsmoiASubconInstrumentDataParticle
     particle_type: osmoi_a_subcon_instrument_recovered
@@ -1261,43 +1261,43 @@ data:
     volume_pumped: null
     lat: 45.926213
     lon: -129.978992
-    depth: -1520
+    m_depth: -1520
     temp: 107.900000
     acidity: 5.300000
     alkalinity: -0.110000
-    hydrogen_sulfide: 3.600000
-    silicon: 19.400000
-    ammonia: 551.000000
-    chloride: 551.000000
-    sulfate: 1.250000
-    sodium: 447.000000
-    potassium: 15.400000
-    magnesium: 2.200000
-    calcium: 42.100000
-    bromide: 889.000000
-    iron: 334.000000
-    manganese: 378.000000
-    lithium: 569.000000
-    strontium_icpaes: 142.000000
-    boron: 533.000000
-    rubidium: 8.380000
-    cesium: 107.000000
-    strontium_icpms: 149.000000
-    barium: 147.000000
-    cobalt: 104.800000
-    nickel: 125.900000
-    copper: 100.900000
-    zinc: 150.900000
-    molybdenum: 145.200000
-    silver: 142.300000
-    cadmium: 112.300000
-    titanium: 182.200000
-    aluminum: 136.000000
-    lead: 151.200000
-    vanadium: 136.500000
-    uranium: 152.500000
-    yttrium: 187.300000
-    gadolinium: 176.400000
+    hydrogen_sulfide_concentration: 3.600000
+    silicon_concentration: 19.400000
+    ammonia_concentration: 551.000000
+    chloride_concentration: 551.000000
+    sulfate_concentration: 1.250000
+    sodium_concentration: 447.000000
+    potassium_concentration: 15.400000
+    magnesium_concentration: 2.200000
+    calcium_concentration: 42.100000
+    bromide_concentration: 889.000000
+    iron_concentration: 334.000000
+    manganese_concentration: 378.000000
+    lithium_concentration: 569.000000
+    strontium_icpaes_concentration: 142.000000
+    boron_concentration: 533.000000
+    rubidium_concentration: 8.380000
+    cesium_concentration: 107.000000
+    strontium_icpms_concentration: 149.000000
+    barium_concentration: 147.000000
+    cobalt_concentration: 104.800000
+    nickel_concentration: 125.900000
+    copper_concentration: 100.900000
+    zinc_concentration: 150.900000
+    molybdenum_concentration: 145.200000
+    silver_concentration: 142.300000
+    cadmium_concentration: 112.300000
+    titanium_concentration: 182.200000
+    aluminum_concentration: 136.000000
+    lead_concentration: 151.200000
+    vanadium_concentration: 136.500000
+    uranium_concentration: 152.500000
+    yttrium_concentration: 187.300000
+    gadolinium_concentration: 176.400000
   - _index: 28
     particle_object: OsmoiASubconInstrumentDataParticle
     particle_type: osmoi_a_subcon_instrument_recovered
@@ -1309,43 +1309,43 @@ data:
     volume_pumped: null
     lat: 45.926213
     lon: -129.978992
-    depth: -1520
+    m_depth: -1520
     temp: 100.300000
     acidity: 6.900000
     alkalinity: -0.120000
-    hydrogen_sulfide: 3.500000
-    silicon: 19.000000
-    ammonia: 549.000000
-    chloride: 549.000000
-    sulfate: 1.370000
-    sodium: 446.000000
-    potassium: 15.300000
-    magnesium: 2.600000
-    calcium: 41.800000
-    bromide: 874.000000
-    iron: 316.000000
-    manganese: 364.000000
-    lithium: 562.000000
-    strontium_icpaes: 141.000000
-    boron: 519.000000
-    rubidium: 8.660000
-    cesium: 112.000000
-    strontium_icpms: 183.200000
-    barium: 106.700000
-    cobalt: 151.100000
-    nickel: 198.600000
-    copper: 101.800000
-    zinc: 155.100000
-    molybdenum: 137.600000
-    silver: 158.000000
-    cadmium: 111.200000
-    titanium: 180.900000
-    aluminum: 173.300000
-    lead: 116.900000
-    vanadium: 164.900000
-    uranium: 168.000000
-    yttrium: 114.700000
-    gadolinium: 140.400000
+    hydrogen_sulfide_concentration: 3.500000
+    silicon_concentration: 19.000000
+    ammonia_concentration: 549.000000
+    chloride_concentration: 549.000000
+    sulfate_concentration: 1.370000
+    sodium_concentration: 446.000000
+    potassium_concentration: 15.300000
+    magnesium_concentration: 2.600000
+    calcium_concentration: 41.800000
+    bromide_concentration: 874.000000
+    iron_concentration: 316.000000
+    manganese_concentration: 364.000000
+    lithium_concentration: 562.000000
+    strontium_icpaes_concentration: 141.000000
+    boron_concentration: 519.000000
+    rubidium_concentration: 8.660000
+    cesium_concentration: 112.000000
+    strontium_icpms_concentration: 183.200000
+    barium_concentration: 106.700000
+    cobalt_concentration: 151.100000
+    nickel_concentration: 198.600000
+    copper_concentration: 101.800000
+    zinc_concentration: 155.100000
+    molybdenum_concentration: 137.600000
+    silver_concentration: 158.000000
+    cadmium_concentration: 111.200000
+    titanium_concentration: 180.900000
+    aluminum_concentration: 173.300000
+    lead_concentration: 116.900000
+    vanadium_concentration: 164.900000
+    uranium_concentration: 168.000000
+    yttrium_concentration: 114.700000
+    gadolinium_concentration: 140.400000
   - _index: 29
     particle_object: OsmoiASubconInstrumentDataParticle
     particle_type: osmoi_a_subcon_instrument_recovered
@@ -1357,43 +1357,43 @@ data:
     volume_pumped: null
     lat: 45.926213
     lon: -129.978992
-    depth: -1520
+    m_depth: -1520
     temp: 91.500000
     acidity: 7.400000
     alkalinity: -0.140000
-    hydrogen_sulfide: 5.000000
-    silicon: 18.000000
-    ammonia: 533.000000
-    chloride: 533.000000
-    sulfate: 0.890000
-    sodium: 425.000000
-    potassium: 15.200000
-    magnesium: 1.500000
-    calcium: 44.800000
-    bromide: 836.000000
-    iron: 291.000000
-    manganese: 344.000000
-    lithium: 574.000000
-    strontium_icpaes: 144.000000
-    boron: 593.000000
-    rubidium: 8.610000
-    cesium: 110.000000
-    strontium_icpms: 168.400000
-    barium: 161.700000
-    cobalt: 149.300000
-    nickel: 154.800000
-    copper: 177.600000
-    zinc: 137.900000
-    molybdenum: 135.500000
-    silver: 195.000000
-    cadmium: 167.200000
-    titanium: 102.100000
-    aluminum: 147.200000
-    lead: 168.600000
-    vanadium: 180.100000
-    uranium: 150.400000
-    yttrium: 169.000000
-    gadolinium: 112.800000
+    hydrogen_sulfide_concentration: 5.000000
+    silicon_concentration: 18.000000
+    ammonia_concentration: 533.000000
+    chloride_concentration: 533.000000
+    sulfate_concentration: 0.890000
+    sodium_concentration: 425.000000
+    potassium_concentration: 15.200000
+    magnesium_concentration: 1.500000
+    calcium_concentration: 44.800000
+    bromide_concentration: 836.000000
+    iron_concentration: 291.000000
+    manganese_concentration: 344.000000
+    lithium_concentration: 574.000000
+    strontium_icpaes_concentration: 144.000000
+    boron_concentration: 593.000000
+    rubidium_concentration: 8.610000
+    cesium_concentration: 110.000000
+    strontium_icpms_concentration: 168.400000
+    barium_concentration: 161.700000
+    cobalt_concentration: 149.300000
+    nickel_concentration: 154.800000
+    copper_concentration: 177.600000
+    zinc_concentration: 137.900000
+    molybdenum_concentration: 135.500000
+    silver_concentration: 195.000000
+    cadmium_concentration: 167.200000
+    titanium_concentration: 102.100000
+    aluminum_concentration: 147.200000
+    lead_concentration: 168.600000
+    vanadium_concentration: 180.100000
+    uranium_concentration: 150.400000
+    yttrium_concentration: 169.000000
+    gadolinium_concentration: 112.800000
   - _index: 30
     particle_object: OsmoiASubconInstrumentDataParticle
     particle_type: osmoi_a_subcon_instrument_recovered
@@ -1405,43 +1405,43 @@ data:
     volume_pumped: null
     lat: 45.926213
     lon: -129.978992
-    depth: -1520
+    m_depth: -1520
     temp: 93.700000
     acidity: 6.100000
     alkalinity: -0.300000
-    hydrogen_sulfide: 5.000000
-    silicon: 19.400000
-    ammonia: 528.000000
-    chloride: 528.000000
-    sulfate: 1.320000
-    sodium: 428.000000
-    potassium: 14.200000
-    magnesium: 2.200000
-    calcium: 41.200000
-    bromide: 837.000000
-    iron: 273.000000
-    manganese: 379.000000
-    lithium: 543.000000
-    strontium_icpaes: 135.000000
-    boron: 482.000000
-    rubidium: 8.230000
-    cesium: 106.000000
-    strontium_icpms: 165.500000
-    barium: 178.000000
-    cobalt: 107.500000
-    nickel: 150.000000
-    copper: 141.100000
-    zinc: 164.000000
-    molybdenum: 194.600000
-    silver: 136.500000
-    cadmium: 175.800000
-    titanium: 159.700000
-    aluminum: 145.400000
-    lead: 102.400000
-    vanadium: 125.400000
-    uranium: 125.800000
-    yttrium: 120.300000
-    gadolinium: 148.900000
+    hydrogen_sulfide_concentration: 5.000000
+    silicon_concentration: 19.400000
+    ammonia_concentration: 528.000000
+    chloride_concentration: 528.000000
+    sulfate_concentration: 1.320000
+    sodium_concentration: 428.000000
+    potassium_concentration: 14.200000
+    magnesium_concentration: 2.200000
+    calcium_concentration: 41.200000
+    bromide_concentration: 837.000000
+    iron_concentration: 273.000000
+    manganese_concentration: 379.000000
+    lithium_concentration: 543.000000
+    strontium_icpaes_concentration: 135.000000
+    boron_concentration: 482.000000
+    rubidium_concentration: 8.230000
+    cesium_concentration: 106.000000
+    strontium_icpms_concentration: 165.500000
+    barium_concentration: 178.000000
+    cobalt_concentration: 107.500000
+    nickel_concentration: 150.000000
+    copper_concentration: 141.100000
+    zinc_concentration: 164.000000
+    molybdenum_concentration: 194.600000
+    silver_concentration: 136.500000
+    cadmium_concentration: 175.800000
+    titanium_concentration: 159.700000
+    aluminum_concentration: 145.400000
+    lead_concentration: 102.400000
+    vanadium_concentration: 125.400000
+    uranium_concentration: 125.800000
+    yttrium_concentration: 120.300000
+    gadolinium_concentration: 148.900000
   - _index: 31
     particle_object: OsmoiASubconInstrumentDataParticle
     particle_type: osmoi_a_subcon_instrument_recovered
@@ -1453,43 +1453,43 @@ data:
     volume_pumped: null
     lat: 45.926213
     lon: -129.978992
-    depth: -1520
+    m_depth: -1520
     temp: 92.900000
     acidity: 7.300000
     alkalinity: -0.560000
-    hydrogen_sulfide: null
-    silicon: null
-    ammonia: null
-    chloride: null
-    sulfate: null
-    sodium: null
-    potassium: null
-    magnesium: null
-    calcium: null
-    bromide: null
-    iron: null
-    manganese: null
-    lithium: null
-    strontium_icpaes: null
-    boron: null
-    rubidium: null
-    cesium: null
-    strontium_icpms: 114.500000
-    barium: 101.900000
-    cobalt: 189.000000
-    nickel: 189.500000
-    copper: 132.800000
-    zinc: 106.400000
-    molybdenum: 138.200000
-    silver: 129.800000
-    cadmium: 189.500000
-    titanium: 156.200000
-    aluminum: 126.300000
-    lead: 175.900000
-    vanadium: 194.500000
-    uranium: 143.000000
-    yttrium: 181.600000
-    gadolinium: 182.400000
+    hydrogen_sulfide_concentration: null
+    silicon_concentration: null
+    ammonia_concentration: null
+    chloride_concentration: null
+    sulfate_concentration: null
+    sodium_concentration: null
+    potassium_concentration: null
+    magnesium_concentration: null
+    calcium_concentration: null
+    bromide_concentration: null
+    iron_concentration: null
+    manganese_concentration: null
+    lithium_concentration: null
+    strontium_icpaes_concentration: null
+    boron_concentration: null
+    rubidium_concentration: null
+    cesium_concentration: null
+    strontium_icpms_concentration: 114.500000
+    barium_concentration: 101.900000
+    cobalt_concentration: 189.000000
+    nickel_concentration: 189.500000
+    copper_concentration: 132.800000
+    zinc_concentration: 106.400000
+    molybdenum_concentration: 138.200000
+    silver_concentration: 129.800000
+    cadmium_concentration: 189.500000
+    titanium_concentration: 156.200000
+    aluminum_concentration: 126.300000
+    lead_concentration: 175.900000
+    vanadium_concentration: 194.500000
+    uranium_concentration: 143.000000
+    yttrium_concentration: 181.600000
+    gadolinium_concentration: 182.400000
   - _index: 32
     particle_object: OsmoiASubconInstrumentDataParticle
     particle_type: osmoi_a_subcon_instrument_recovered
@@ -1501,43 +1501,43 @@ data:
     volume_pumped: null
     lat: 45.926213
     lon: -129.978992
-    depth: -1520
+    m_depth: -1520
     temp: 104.900000
     acidity: 5.400000
     alkalinity: -0.360000
-    hydrogen_sulfide: null
-    silicon: null
-    ammonia: null
-    chloride: null
-    sulfate: null
-    sodium: null
-    potassium: null
-    magnesium: null
-    calcium: null
-    bromide: null
-    iron: null
-    manganese: null
-    lithium: null
-    strontium_icpaes: null
-    boron: null
-    rubidium: null
-    cesium: null
-    strontium_icpms: 101.300000
-    barium: 146.100000
-    cobalt: 149.300000
-    nickel: 119.700000
-    copper: 153.200000
-    zinc: 153.200000
-    molybdenum: 188.400000
-    silver: 101.300000
-    cadmium: 170.100000
-    titanium: 151.100000
-    aluminum: 146.000000
-    lead: 176.100000
-    vanadium: 108.500000
-    uranium: 103.300000
-    yttrium: 174.100000
-    gadolinium: 148.900000
+    hydrogen_sulfide_concentration: null
+    silicon_concentration: null
+    ammonia_concentration: null
+    chloride_concentration: null
+    sulfate_concentration: null
+    sodium_concentration: null
+    potassium_concentration: null
+    magnesium_concentration: null
+    calcium_concentration: null
+    bromide_concentration: null
+    iron_concentration: null
+    manganese_concentration: null
+    lithium_concentration: null
+    strontium_icpaes_concentration: null
+    boron_concentration: null
+    rubidium_concentration: null
+    cesium_concentration: null
+    strontium_icpms_concentration: 101.300000
+    barium_concentration: 146.100000
+    cobalt_concentration: 149.300000
+    nickel_concentration: 119.700000
+    copper_concentration: 153.200000
+    zinc_concentration: 153.200000
+    molybdenum_concentration: 188.400000
+    silver_concentration: 101.300000
+    cadmium_concentration: 170.100000
+    titanium_concentration: 151.100000
+    aluminum_concentration: 146.000000
+    lead_concentration: 176.100000
+    vanadium_concentration: 108.500000
+    uranium_concentration: 103.300000
+    yttrium_concentration: 174.100000
+    gadolinium_concentration: 148.900000
   - _index: 33
     particle_object: OsmoiASubconInstrumentDataParticle
     particle_type: osmoi_a_subcon_instrument_recovered
@@ -1549,43 +1549,43 @@ data:
     volume_pumped: null
     lat: 45.926213
     lon: -129.978992
-    depth: -1520
+    m_depth: -1520
     temp: 97.500000
     acidity: 5.000000
     alkalinity: -0.150000
-    hydrogen_sulfide: 3.300000
-    silicon: 15.600000
-    ammonia: 535.000000
-    chloride: 535.000000
-    sulfate: 2.080000
-    sodium: 433.000000
-    potassium: 22.900000
-    magnesium: 4.000000
-    calcium: 36.600000
-    bromide: 825.000000
-    iron: 238.000000
-    manganese: 430.000000
-    lithium: 587.000000
-    strontium_icpaes: 109.000000
-    boron: 628.000000
-    rubidium: null
-    cesium: null
-    strontium_icpms: 181.500000
-    barium: 143.600000
-    cobalt: 183.100000
-    nickel: 123.000000
-    copper: 195.900000
-    zinc: 166.400000
-    molybdenum: 139.000000
-    silver: 107.200000
-    cadmium: 129.600000
-    titanium: 190.300000
-    aluminum: 122.100000
-    lead: 127.700000
-    vanadium: 143.200000
-    uranium: 139.500000
-    yttrium: 164.100000
-    gadolinium: 198.900000
+    hydrogen_sulfide_concentration: 3.300000
+    silicon_concentration: 15.600000
+    ammonia_concentration: 535.000000
+    chloride_concentration: 535.000000
+    sulfate_concentration: 2.080000
+    sodium_concentration: 433.000000
+    potassium_concentration: 22.900000
+    magnesium_concentration: 4.000000
+    calcium_concentration: 36.600000
+    bromide_concentration: 825.000000
+    iron_concentration: 238.000000
+    manganese_concentration: 430.000000
+    lithium_concentration: 587.000000
+    strontium_icpaes_concentration: 109.000000
+    boron_concentration: 628.000000
+    rubidium_concentration: null
+    cesium_concentration: null
+    strontium_icpms_concentration: 181.500000
+    barium_concentration: 143.600000
+    cobalt_concentration: 183.100000
+    nickel_concentration: 123.000000
+    copper_concentration: 195.900000
+    zinc_concentration: 166.400000
+    molybdenum_concentration: 139.000000
+    silver_concentration: 107.200000
+    cadmium_concentration: 129.600000
+    titanium_concentration: 190.300000
+    aluminum_concentration: 122.100000
+    lead_concentration: 127.700000
+    vanadium_concentration: 143.200000
+    uranium_concentration: 139.500000
+    yttrium_concentration: 164.100000
+    gadolinium_concentration: 198.900000
   - _index: 34
     particle_object: OsmoiASubconInstrumentDataParticle
     particle_type: osmoi_a_subcon_instrument_recovered
@@ -1597,43 +1597,43 @@ data:
     volume_pumped: null
     lat: 45.926213
     lon: -129.978992
-    depth: -1520
+    m_depth: -1520
     temp: 97.000000
     acidity: 5.700000
     alkalinity: -0.160000
-    hydrogen_sulfide: 3.400000
-    silicon: 15.800000
-    ammonia: 534.000000
-    chloride: 534.000000
-    sulfate: 0.920000
-    sodium: 428.000000
-    potassium: 24.600000
-    magnesium: 2.300000
-    calcium: 37.900000
-    bromide: 827.000000
-    iron: 250.000000
-    manganese: 436.000000
-    lithium: 632.000000
-    strontium_icpaes: 117.000000
-    boron: 774.000000
-    rubidium: 19.600000
-    cesium: 369.000000
-    strontium_icpms: 131.100000
-    barium: 170.200000
-    cobalt: 146.700000
-    nickel: 128.900000
-    copper: 125.200000
-    zinc: 196.600000
-    molybdenum: 168.300000
-    silver: 138.700000
-    cadmium: 126.400000
-    titanium: 133.300000
-    aluminum: 107.500000
-    lead: 166.800000
-    vanadium: 146.800000
-    uranium: 166.800000
-    yttrium: 160.100000
-    gadolinium: 148.900000
+    hydrogen_sulfide_concentration: 3.400000
+    silicon_concentration: 15.800000
+    ammonia_concentration: 534.000000
+    chloride_concentration: 534.000000
+    sulfate_concentration: 0.920000
+    sodium_concentration: 428.000000
+    potassium_concentration: 24.600000
+    magnesium_concentration: 2.300000
+    calcium_concentration: 37.900000
+    bromide_concentration: 827.000000
+    iron_concentration: 250.000000
+    manganese_concentration: 436.000000
+    lithium_concentration: 632.000000
+    strontium_icpaes_concentration: 117.000000
+    boron_concentration: 774.000000
+    rubidium_concentration: 19.600000
+    cesium_concentration: 369.000000
+    strontium_icpms_concentration: 131.100000
+    barium_concentration: 170.200000
+    cobalt_concentration: 146.700000
+    nickel_concentration: 128.900000
+    copper_concentration: 125.200000
+    zinc_concentration: 196.600000
+    molybdenum_concentration: 168.300000
+    silver_concentration: 138.700000
+    cadmium_concentration: 126.400000
+    titanium_concentration: 133.300000
+    aluminum_concentration: 107.500000
+    lead_concentration: 166.800000
+    vanadium_concentration: 146.800000
+    uranium_concentration: 166.800000
+    yttrium_concentration: 160.100000
+    gadolinium_concentration: 148.900000
   - _index: 35
     particle_object: OsmoiASubconInstrumentDataParticle
     particle_type: osmoi_a_subcon_instrument_recovered
@@ -1645,43 +1645,43 @@ data:
     volume_pumped: null
     lat: 45.926213
     lon: -129.978992
-    depth: -1520
+    m_depth: -1520
     temp: 104.300000
     acidity: 6.600000
     alkalinity: 1.650000
-    hydrogen_sulfide: 0.340000
-    silicon: 2.800000
-    ammonia: 535.000000
-    chloride: 535.000000
-    sulfate: 23.600000
-    sodium: 452.000000
-    potassium: 12.500000
-    magnesium: 44.600000
-    calcium: 15.100000
-    bromide: 857.000000
-    iron: 41.000000
-    manganese: 76.000000
-    lithium: 118.000000
-    strontium_icpaes: 95.000000
-    boron: 458.000000
-    rubidium: 4.230000
-    cesium: 58.000000
-    strontium_icpms: 132.300000
-    barium: 146.600000
-    cobalt: 146.000000
-    nickel: 106.600000
-    copper: 115.900000
-    zinc: 145.500000
-    molybdenum: 161.600000
-    silver: 190.000000
-    cadmium: 138.300000
-    titanium: 171.600000
-    aluminum: 159.800000
-    lead: 145.100000
-    vanadium: 176.600000
-    uranium: 177.100000
-    yttrium: 118.900000
-    gadolinium: 181.200000
+    hydrogen_sulfide_concentration: 0.340000
+    silicon_concentration: 2.800000
+    ammonia_concentration: 535.000000
+    chloride_concentration: 535.000000
+    sulfate_concentration: 23.600000
+    sodium_concentration: 452.000000
+    potassium_concentration: 12.500000
+    magnesium_concentration: 44.600000
+    calcium_concentration: 15.100000
+    bromide_concentration: 857.000000
+    iron_concentration: 41.000000
+    manganese_concentration: 76.000000
+    lithium_concentration: 118.000000
+    strontium_icpaes_concentration: 95.000000
+    boron_concentration: 458.000000
+    rubidium_concentration: 4.230000
+    cesium_concentration: 58.000000
+    strontium_icpms_concentration: 132.300000
+    barium_concentration: 146.600000
+    cobalt_concentration: 146.000000
+    nickel_concentration: 106.600000
+    copper_concentration: 115.900000
+    zinc_concentration: 145.500000
+    molybdenum_concentration: 161.600000
+    silver_concentration: 190.000000
+    cadmium_concentration: 138.300000
+    titanium_concentration: 171.600000
+    aluminum_concentration: 159.800000
+    lead_concentration: 145.100000
+    vanadium_concentration: 176.600000
+    uranium_concentration: 177.100000
+    yttrium_concentration: 118.900000
+    gadolinium_concentration: 181.200000
   - _index: 36
     particle_object: OsmoiASubconInstrumentDataParticle
     particle_type: osmoi_a_subcon_instrument_recovered
@@ -1693,43 +1693,43 @@ data:
     volume_pumped: null
     lat: 45.926213
     lon: -129.978992
-    depth: -1520
+    m_depth: -1520
     temp: 100.600000
     acidity: 5.900000
     alkalinity: -0.230000
-    hydrogen_sulfide: 2.600000
-    silicon: 16.400000
-    ammonia: 533.000000
-    chloride: 533.000000
-    sulfate: 1.530000
-    sodium: 430.000000
-    potassium: 23.200000
-    magnesium: 2.900000
-    calcium: 37.500000
-    bromide: 846.000000
-    iron: 249.000000
-    manganese: 449.000000
-    lithium: 597.000000
-    strontium_icpaes: 110.000000
-    boron: 639.000000
-    rubidium: 18.800000
-    cesium: 366.000000
-    strontium_icpms: 191.500000
-    barium: 192.500000
-    cobalt: 128.700000
-    nickel: 138.700000
-    copper: 169.800000
-    zinc: 153.400000
-    molybdenum: 189.300000
-    silver: 180.900000
-    cadmium: 185.000000
-    titanium: 106.600000
-    aluminum: 173.000000
-    lead: 190.400000
-    vanadium: 165.000000
-    uranium: 136.100000
-    yttrium: 155.900000
-    gadolinium: 187.100000
+    hydrogen_sulfide_concentration: 2.600000
+    silicon_concentration: 16.400000
+    ammonia_concentration: 533.000000
+    chloride_concentration: 533.000000
+    sulfate_concentration: 1.530000
+    sodium_concentration: 430.000000
+    potassium_concentration: 23.200000
+    magnesium_concentration: 2.900000
+    calcium_concentration: 37.500000
+    bromide_concentration: 846.000000
+    iron_concentration: 249.000000
+    manganese_concentration: 449.000000
+    lithium_concentration: 597.000000
+    strontium_icpaes_concentration: 110.000000
+    boron_concentration: 639.000000
+    rubidium_concentration: 18.800000
+    cesium_concentration: 366.000000
+    strontium_icpms_concentration: 191.500000
+    barium_concentration: 192.500000
+    cobalt_concentration: 128.700000
+    nickel_concentration: 138.700000
+    copper_concentration: 169.800000
+    zinc_concentration: 153.400000
+    molybdenum_concentration: 189.300000
+    silver_concentration: 180.900000
+    cadmium_concentration: 185.000000
+    titanium_concentration: 106.600000
+    aluminum_concentration: 173.000000
+    lead_concentration: 190.400000
+    vanadium_concentration: 165.000000
+    uranium_concentration: 136.100000
+    yttrium_concentration: 155.900000
+    gadolinium_concentration: 187.100000
   - _index: 37
     particle_object: OsmoiASubconInstrumentDataParticle
     particle_type: osmoi_a_subcon_instrument_recovered
@@ -1741,43 +1741,43 @@ data:
     volume_pumped: null
     lat: 45.926213
     lon: -129.978992
-    depth: -1520
+    m_depth: -1520
     temp: 105.400000
     acidity: 4.200000
     alkalinity: -0.140000
-    hydrogen_sulfide: 3.200000
-    silicon: 16.700000
-    ammonia: 540.000000
-    chloride: 540.000000
-    sulfate: 1.590000
-    sodium: 435.000000
-    potassium: 24.300000
-    magnesium: 2.500000
-    calcium: 38.000000
-    bromide: 896.000000
-    iron: 261.000000
-    manganese: 453.000000
-    lithium: 630.000000
-    strontium_icpaes: 116.000000
-    boron: 688.000000
-    rubidium: 19.500000
-    cesium: 380.000000
-    strontium_icpms: 152.200000
-    barium: 182.300000
-    cobalt: 159.000000
-    nickel: 112.900000
-    copper: 146.200000
-    zinc: 196.500000
-    molybdenum: 193.400000
-    silver: 106.000000
-    cadmium: 177.500000
-    titanium: 110.500000
-    aluminum: 175.500000
-    lead: 166.000000
-    vanadium: 130.100000
-    uranium: 199.900000
-    yttrium: 141.200000
-    gadolinium: 182.800000
+    hydrogen_sulfide_concentration: 3.200000
+    silicon_concentration: 16.700000
+    ammonia_concentration: 540.000000
+    chloride_concentration: 540.000000
+    sulfate_concentration: 1.590000
+    sodium_concentration: 435.000000
+    potassium_concentration: 24.300000
+    magnesium_concentration: 2.500000
+    calcium_concentration: 38.000000
+    bromide_concentration: 896.000000
+    iron_concentration: 261.000000
+    manganese_concentration: 453.000000
+    lithium_concentration: 630.000000
+    strontium_icpaes_concentration: 116.000000
+    boron_concentration: 688.000000
+    rubidium_concentration: 19.500000
+    cesium_concentration: 380.000000
+    strontium_icpms_concentration: 152.200000
+    barium_concentration: 182.300000
+    cobalt_concentration: 159.000000
+    nickel_concentration: 112.900000
+    copper_concentration: 146.200000
+    zinc_concentration: 196.500000
+    molybdenum_concentration: 193.400000
+    silver_concentration: 106.000000
+    cadmium_concentration: 177.500000
+    titanium_concentration: 110.500000
+    aluminum_concentration: 175.500000
+    lead_concentration: 166.000000
+    vanadium_concentration: 130.100000
+    uranium_concentration: 199.900000
+    yttrium_concentration: 141.200000
+    gadolinium_concentration: 182.800000
   - _index: 38
     particle_object: OsmoiASubconInstrumentDataParticle
     particle_type: osmoi_a_subcon_instrument_recovered
@@ -1789,43 +1789,43 @@ data:
     volume_pumped: null
     lat: 45.926213
     lon: -129.978992
-    depth: -1520
+    m_depth: -1520
     temp: 95.100000
     acidity: 4.300000
     alkalinity: 2.100000
-    hydrogen_sulfide: 0.004100
-    silicon: 0.644000
-    ammonia: 535.000000
-    chloride: 535.000000
-    sulfate: 26.880000
-    sodium: 456.000000
-    potassium: 11.100000
-    magnesium: 51.000000
-    calcium: 10.900000
-    bromide: 824.000000
-    iron: 7.000000
-    manganese: 15.000000
-    lithium: 41.000000
-    strontium_icpaes: 94.000000
-    boron: 431.000000
-    rubidium: 1.870000
-    cesium: 11.800000
-    strontium_icpms: 104.400000
-    barium: 128.000000
-    cobalt: 104.400000
-    nickel: 197.000000
-    copper: 104.900000
-    zinc: 119.400000
-    molybdenum: 183.800000
-    silver: 134.700000
-    cadmium: 200.000000
-    titanium: 178.700000
-    aluminum: 104.400000
-    lead: 110.100000
-    vanadium: 144.600000
-    uranium: 100.200000
-    yttrium: 165.400000
-    gadolinium: 106.100000
+    hydrogen_sulfide_concentration: 0.004100
+    silicon_concentration: 0.644000
+    ammonia_concentration: 535.000000
+    chloride_concentration: 535.000000
+    sulfate_concentration: 26.880000
+    sodium_concentration: 456.000000
+    potassium_concentration: 11.100000
+    magnesium_concentration: 51.000000
+    calcium_concentration: 10.900000
+    bromide_concentration: 824.000000
+    iron_concentration: 7.000000
+    manganese_concentration: 15.000000
+    lithium_concentration: 41.000000
+    strontium_icpaes_concentration: 94.000000
+    boron_concentration: 431.000000
+    rubidium_concentration: 1.870000
+    cesium_concentration: 11.800000
+    strontium_icpms_concentration: 104.400000
+    barium_concentration: 128.000000
+    cobalt_concentration: 104.400000
+    nickel_concentration: 197.000000
+    copper_concentration: 104.900000
+    zinc_concentration: 119.400000
+    molybdenum_concentration: 183.800000
+    silver_concentration: 134.700000
+    cadmium_concentration: 200.000000
+    titanium_concentration: 178.700000
+    aluminum_concentration: 104.400000
+    lead_concentration: 110.100000
+    vanadium_concentration: 144.600000
+    uranium_concentration: 100.200000
+    yttrium_concentration: 165.400000
+    gadolinium_concentration: 106.100000
   - _index: 39
     particle_object: OsmoiASubconInstrumentDataParticle
     particle_type: osmoi_a_subcon_instrument_recovered
@@ -1837,43 +1837,43 @@ data:
     volume_pumped: null
     lat: 45.926213
     lon: -129.978992
-    depth: -1520
+    m_depth: -1520
     temp: 104.800000
     acidity: 4.000000
     alkalinity: 2.150000
-    hydrogen_sulfide: 0.006900
-    silicon: 0.245000
-    ammonia: 535.000000
-    chloride: 535.000000
-    sulfate: 27.110000
-    sodium: 456.000000
-    potassium: 10.600000
-    magnesium: 51.700000
-    calcium: 10.900000
-    bromide: 829.000000
-    iron: 14.000000
-    manganese: 23.000000
-    lithium: 36.000000
-    strontium_icpaes: 92.000000
-    boron: 433.000000
-    rubidium: 1.700000
-    cesium: 9.530000
-    strontium_icpms: 108.700000
-    barium: 197.200000
-    cobalt: 180.100000
-    nickel: 179.000000
-    copper: 115.700000
-    zinc: 163.300000
-    molybdenum: 145.000000
-    silver: 139.400000
-    cadmium: 160.700000
-    titanium: 146.200000
-    aluminum: 143.500000
-    lead: 193.500000
-    vanadium: 139.900000
-    uranium: 138.800000
-    yttrium: 171.200000
-    gadolinium: 158.000000
+    hydrogen_sulfide_concentration: 0.006900
+    silicon_concentration: 0.245000
+    ammonia_concentration: 535.000000
+    chloride_concentration: 535.000000
+    sulfate_concentration: 27.110000
+    sodium_concentration: 456.000000
+    potassium_concentration: 10.600000
+    magnesium_concentration: 51.700000
+    calcium_concentration: 10.900000
+    bromide_concentration: 829.000000
+    iron_concentration: 14.000000
+    manganese_concentration: 23.000000
+    lithium_concentration: 36.000000
+    strontium_icpaes_concentration: 92.000000
+    boron_concentration: 433.000000
+    rubidium_concentration: 1.700000
+    cesium_concentration: 9.530000
+    strontium_icpms_concentration: 108.700000
+    barium_concentration: 197.200000
+    cobalt_concentration: 180.100000
+    nickel_concentration: 179.000000
+    copper_concentration: 115.700000
+    zinc_concentration: 163.300000
+    molybdenum_concentration: 145.000000
+    silver_concentration: 139.400000
+    cadmium_concentration: 160.700000
+    titanium_concentration: 146.200000
+    aluminum_concentration: 143.500000
+    lead_concentration: 193.500000
+    vanadium_concentration: 139.900000
+    uranium_concentration: 138.800000
+    yttrium_concentration: 171.200000
+    gadolinium_concentration: 158.000000
   - _index: 40
     particle_object: OsmoiASubconInstrumentDataParticle
     particle_type: osmoi_a_subcon_instrument_recovered
@@ -1885,43 +1885,43 @@ data:
     volume_pumped: null
     lat: 45.926213
     lon: -129.978992
-    depth: -1520
+    m_depth: -1520
     temp: 95.300000
     acidity: 5.200000
     alkalinity: -0.120000
-    hydrogen_sulfide: 3.000000
-    silicon: 15.300000
-    ammonia: 583.000000
-    chloride: 583.000000
-    sulfate: 1.330000
-    sodium: 465.000000
-    potassium: 27.600000
-    magnesium: 2.500000
-    calcium: 43.000000
-    bromide: 934.000000
-    iron: 153.000000
-    manganese: 258.000000
-    lithium: 639.000000
-    strontium_icpaes: 140.000000
-    boron: 798.000000
-    rubidium: 22.800000
-    cesium: 402.000000
-    strontium_icpms: 100.800000
-    barium: 107.600000
-    cobalt: 169.200000
-    nickel: 189.500000
-    copper: 144.800000
-    zinc: 198.300000
-    molybdenum: 190.500000
-    silver: 144.700000
-    cadmium: 162.100000
-    titanium: 168.800000
-    aluminum: 118.900000
-    lead: 188.200000
-    vanadium: 191.800000
-    uranium: 155.600000
-    yttrium: 185.200000
-    gadolinium: 175.400000
+    hydrogen_sulfide_concentration: 3.000000
+    silicon_concentration: 15.300000
+    ammonia_concentration: 583.000000
+    chloride_concentration: 583.000000
+    sulfate_concentration: 1.330000
+    sodium_concentration: 465.000000
+    potassium_concentration: 27.600000
+    magnesium_concentration: 2.500000
+    calcium_concentration: 43.000000
+    bromide_concentration: 934.000000
+    iron_concentration: 153.000000
+    manganese_concentration: 258.000000
+    lithium_concentration: 639.000000
+    strontium_icpaes_concentration: 140.000000
+    boron_concentration: 798.000000
+    rubidium_concentration: 22.800000
+    cesium_concentration: 402.000000
+    strontium_icpms_concentration: 100.800000
+    barium_concentration: 107.600000
+    cobalt_concentration: 169.200000
+    nickel_concentration: 189.500000
+    copper_concentration: 144.800000
+    zinc_concentration: 198.300000
+    molybdenum_concentration: 190.500000
+    silver_concentration: 144.700000
+    cadmium_concentration: 162.100000
+    titanium_concentration: 168.800000
+    aluminum_concentration: 118.900000
+    lead_concentration: 188.200000
+    vanadium_concentration: 191.800000
+    uranium_concentration: 155.600000
+    yttrium_concentration: 185.200000
+    gadolinium_concentration: 175.400000
   - _index: 41
     particle_object: OsmoiASubconInstrumentDataParticle
     particle_type: osmoi_a_subcon_instrument_recovered
@@ -1933,43 +1933,43 @@ data:
     volume_pumped: null
     lat: 45.926213
     lon: -129.978992
-    depth: -1520
+    m_depth: -1520
     temp: 102.200000
     acidity: 5.200000
     alkalinity: 0.130000
-    hydrogen_sulfide: 1.800000
-    silicon: 12.700000
-    ammonia: 576.000000
-    chloride: 576.000000
-    sulfate: 6.310000
-    sodium: 467.000000
-    potassium: 25.700000
-    magnesium: 9.700000
-    calcium: 37.600000
-    bromide: 915.000000
-    iron: 124.000000
-    manganese: 224.000000
-    lithium: 552.000000
-    strontium_icpaes: 134.000000
-    boron: 759.000000
-    rubidium: 18.300000
-    cesium: 337.000000
-    strontium_icpms: 121.000000
-    barium: 119.600000
-    cobalt: 184.000000
-    nickel: 166.000000
-    copper: 150.100000
-    zinc: 197.300000
-    molybdenum: 187.500000
-    silver: 123.000000
-    cadmium: 198.700000
-    titanium: 198.200000
-    aluminum: 160.200000
-    lead: 117.700000
-    vanadium: 143.200000
-    uranium: 198.500000
-    yttrium: 134.400000
-    gadolinium: 122.800000
+    hydrogen_sulfide_concentration: 1.800000
+    silicon_concentration: 12.700000
+    ammonia_concentration: 576.000000
+    chloride_concentration: 576.000000
+    sulfate_concentration: 6.310000
+    sodium_concentration: 467.000000
+    potassium_concentration: 25.700000
+    magnesium_concentration: 9.700000
+    calcium_concentration: 37.600000
+    bromide_concentration: 915.000000
+    iron_concentration: 124.000000
+    manganese_concentration: 224.000000
+    lithium_concentration: 552.000000
+    strontium_icpaes_concentration: 134.000000
+    boron_concentration: 759.000000
+    rubidium_concentration: 18.300000
+    cesium_concentration: 337.000000
+    strontium_icpms_concentration: 121.000000
+    barium_concentration: 119.600000
+    cobalt_concentration: 184.000000
+    nickel_concentration: 166.000000
+    copper_concentration: 150.100000
+    zinc_concentration: 197.300000
+    molybdenum_concentration: 187.500000
+    silver_concentration: 123.000000
+    cadmium_concentration: 198.700000
+    titanium_concentration: 198.200000
+    aluminum_concentration: 160.200000
+    lead_concentration: 117.700000
+    vanadium_concentration: 143.200000
+    uranium_concentration: 198.500000
+    yttrium_concentration: 134.400000
+    gadolinium_concentration: 122.800000
   - _index: 42
     particle_object: OsmoiASubconInstrumentDataParticle
     particle_type: osmoi_a_subcon_instrument_recovered
@@ -1981,43 +1981,43 @@ data:
     volume_pumped: null
     lat: 45.926213
     lon: -129.978992
-    depth: -1520
+    m_depth: -1520
     temp: 105.200000
     acidity: 3.800000
     alkalinity: -0.090000
-    hydrogen_sulfide: 2.900000
-    silicon: 15.100000
-    ammonia: 549.000000
-    chloride: 549.000000
-    sulfate: 1.030000
-    sodium: 439.000000
-    potassium: 26.800000
-    magnesium: 1.700000
-    calcium: 39.600000
-    bromide: 863.000000
-    iron: 163.000000
-    manganese: 276.000000
-    lithium: 665.000000
-    strontium_icpaes: 127.000000
-    boron: 882.000000
-    rubidium: 21.500000
-    cesium: 386.000000
-    strontium_icpms: 191.300000
-    barium: 124.700000
-    cobalt: 193.200000
-    nickel: 106.400000
-    copper: 107.000000
-    zinc: 118.000000
-    molybdenum: 195.300000
-    silver: 123.900000
-    cadmium: 164.100000
-    titanium: 160.300000
-    aluminum: 102.300000
-    lead: 111.600000
-    vanadium: 149.100000
-    uranium: 151.000000
-    yttrium: 153.000000
-    gadolinium: 124.800000
+    hydrogen_sulfide_concentration: 2.900000
+    silicon_concentration: 15.100000
+    ammonia_concentration: 549.000000
+    chloride_concentration: 549.000000
+    sulfate_concentration: 1.030000
+    sodium_concentration: 439.000000
+    potassium_concentration: 26.800000
+    magnesium_concentration: 1.700000
+    calcium_concentration: 39.600000
+    bromide_concentration: 863.000000
+    iron_concentration: 163.000000
+    manganese_concentration: 276.000000
+    lithium_concentration: 665.000000
+    strontium_icpaes_concentration: 127.000000
+    boron_concentration: 882.000000
+    rubidium_concentration: 21.500000
+    cesium_concentration: 386.000000
+    strontium_icpms_concentration: 191.300000
+    barium_concentration: 124.700000
+    cobalt_concentration: 193.200000
+    nickel_concentration: 106.400000
+    copper_concentration: 107.000000
+    zinc_concentration: 118.000000
+    molybdenum_concentration: 195.300000
+    silver_concentration: 123.900000
+    cadmium_concentration: 164.100000
+    titanium_concentration: 160.300000
+    aluminum_concentration: 102.300000
+    lead_concentration: 111.600000
+    vanadium_concentration: 149.100000
+    uranium_concentration: 151.000000
+    yttrium_concentration: 153.000000
+    gadolinium_concentration: 124.800000
   - _index: 43
     particle_object: OsmoiASubconInstrumentDataParticle
     particle_type: osmoi_a_subcon_instrument_recovered
@@ -2029,40 +2029,40 @@ data:
     volume_pumped: null
     lat: 45.926213
     lon: -129.978992
-    depth: -1520
+    m_depth: -1520
     temp: 95.700000
     acidity: 5.600000
     alkalinity: 0.080000
-    hydrogen_sulfide: 2.900000
-    silicon: 15.100000
-    ammonia: 550.000000
-    chloride: 550.000000
-    sulfate: 2.100000
-    sodium: 441.000000
-    potassium: 26.800000
-    magnesium: 4.100000
-    calcium: 38.000000
-    bromide: 842.000000
-    iron: 134.000000
-    manganese: 271.000000
-    lithium: 650.000000
-    strontium_icpaes: 126.000000
-    boron: 829.000000
-    rubidium: 20.900000
-    cesium: 370.000000
-    strontium_icpms: 161.600000
-    barium: 149.800000
-    cobalt: 151.900000
-    nickel: 146.100000
-    copper: 130.000000
-    zinc: 192.800000
-    molybdenum: 167.800000
-    silver: 165.800000
-    cadmium: 105.900000
-    titanium: 113.900000
-    aluminum: 193.100000
-    lead: 194.300000
-    vanadium: 182.900000
-    uranium: 104.700000
-    yttrium: 192.100000
-    gadolinium: 113.500000
+    hydrogen_sulfide_concentration: 2.900000
+    silicon_concentration: 15.100000
+    ammonia_concentration: 550.000000
+    chloride_concentration: 550.000000
+    sulfate_concentration: 2.100000
+    sodium_concentration: 441.000000
+    potassium_concentration: 26.800000
+    magnesium_concentration: 4.100000
+    calcium_concentration: 38.000000
+    bromide_concentration: 842.000000
+    iron_concentration: 134.000000
+    manganese_concentration: 271.000000
+    lithium_concentration: 650.000000
+    strontium_icpaes_concentration: 126.000000
+    boron_concentration: 829.000000
+    rubidium_concentration: 20.900000
+    cesium_concentration: 370.000000
+    strontium_icpms_concentration: 161.600000
+    barium_concentration: 149.800000
+    cobalt_concentration: 151.900000
+    nickel_concentration: 146.100000
+    copper_concentration: 130.000000
+    zinc_concentration: 192.800000
+    molybdenum_concentration: 167.800000
+    silver_concentration: 165.800000
+    cadmium_concentration: 105.900000
+    titanium_concentration: 113.900000
+    aluminum_concentration: 193.100000
+    lead_concentration: 194.300000
+    vanadium_concentration: 182.900000
+    uranium_concentration: 104.700000
+    yttrium_concentration: 192.100000
+    gadolinium_concentration: 113.500000
