@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 
 """
-@package mi.dataset.parser.test.test_osmoi_a_subcon
-@fid marine-integrations/mi/dataset/parser/test/test_osmoi_a_subcon.py
+@package mi.dataset.parser.test.test_rasfl_a_subcon
+@fid marine-integrations/mi/dataset/parser/test/test_rasfl_a_subcon.py
 @author Rachel Manoni
-@brief Test code for OSMOI data parser
+@brief Test code for RASFL data parser
 """
 __author__ = 'Rachel Manoni'
 
@@ -13,28 +13,28 @@ from mi.core.log import get_logger
 log = get_logger()
 from nose.plugins.attrib import attr
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
-from mi.dataset.parser.osmoi_a_subcon import OsmoiASubconParser
+from mi.dataset.parser.rasfl_a_subcon import RasflASubconParser
 from mi.dataset.test.test_parser import ParserUnitTestCase
 from mi.dataset.test.test_parser import BASE_RESOURCE_PATH
 
-RESOURCE_PATH = os.path.join(BASE_RESOURCE_PATH, 'osmoi', 'resource')
-LOG_FILE = 'osmoi_chemdata_example.csv'
-YAML_FILE = 'osmoi_chemdata_example.yml'
-INVALID_DATA_FILE = 'osmoi_chemdata_bad.csv'
+RESOURCE_PATH = os.path.join(BASE_RESOURCE_PATH, 'rasfl', 'resource')
+LOG_FILE = 'rasfl_chemdata_example.csv'
+YAML_FILE = 'rasfl_chemdata_example.yml'
+INVALID_DATA_FILE = 'rasfl_chemdata_bad.csv'
 NUM_RECORDS = 43
 
 
 @attr('UNIT', group='mi')
-class OsmoiASubconParserUnitTestCase(ParserUnitTestCase):
+class RasflASubconParserUnitTestCase(ParserUnitTestCase):
     """
-    osmoi_a_subcon Parser unit test suite
+    rasfl_a_subcon Parser unit test suite
     """
 
     def setUp(self):
         ParserUnitTestCase.setUp(self)
 
         self.rec_config = {
-            DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.osmoi_a_subcon',
+            DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.rasfl_a_subcon',
             DataSetDriverConfigKeys.PARTICLE_CLASS: None
         }
 
@@ -45,7 +45,7 @@ class OsmoiASubconParserUnitTestCase(ParserUnitTestCase):
         return open(os.path.join(RESOURCE_PATH, filename), mode='w')
 
     def create_rec_parser(self, file_handle):
-        return OsmoiASubconParser(self.rec_config, file_handle, self.exception_callback)
+        return RasflASubconParser(self.rec_config, file_handle, self.exception_callback)
 
     def test_invalid_data(self):
         """
@@ -121,3 +121,4 @@ class OsmoiASubconParserUnitTestCase(ParserUnitTestCase):
                 else:
                     fid.write('    %s: %s\n' % (val.get('value_id'), val.get('value')))
         fid.close()
+

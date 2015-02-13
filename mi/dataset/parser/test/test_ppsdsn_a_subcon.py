@@ -1,11 +1,13 @@
 #!/usr/bin/env python
 
 """
-@package mi.dataset.parser.test.test_osmoi_a_subcon
-@fid marine-integrations/mi/dataset/parser/test/test_osmoi_a_subcon.py
+@package mi.dataset.parser.test.test_ppsdn_a_subcon
+@fid marine-integrations/mi/dataset/parser/test/test_ppsdn_a_subcon.py
 @author Rachel Manoni
-@brief Test code for OSMOI data parser
+@brief Test code for RASFL data parser
 """
+from mi.dataset.parser.ppsds_a_subcon import PpsdnASubconParser
+
 __author__ = 'Rachel Manoni'
 
 import os
@@ -13,28 +15,27 @@ from mi.core.log import get_logger
 log = get_logger()
 from nose.plugins.attrib import attr
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
-from mi.dataset.parser.osmoi_a_subcon import OsmoiASubconParser
 from mi.dataset.test.test_parser import ParserUnitTestCase
 from mi.dataset.test.test_parser import BASE_RESOURCE_PATH
 
-RESOURCE_PATH = os.path.join(BASE_RESOURCE_PATH, 'osmoi', 'resource')
-LOG_FILE = 'osmoi_chemdata_example.csv'
-YAML_FILE = 'osmoi_chemdata_example.yml'
-INVALID_DATA_FILE = 'osmoi_chemdata_bad.csv'
-NUM_RECORDS = 43
+RESOURCE_PATH = os.path.join(BASE_RESOURCE_PATH, 'ppsdn', 'resource')
+LOG_FILE = 'ppsdn_gendata_example.csv'
+YAML_FILE = 'ppsdn_gendata_example.yml'
+INVALID_DATA_FILE = 'ppsdn_bad_example.csv'
+NUM_RECORDS = 24
 
 
 @attr('UNIT', group='mi')
-class OsmoiASubconParserUnitTestCase(ParserUnitTestCase):
+class PpsndASubconParserUnitTestCase(ParserUnitTestCase):
     """
-    osmoi_a_subcon Parser unit test suite
+    ppsdn_a_subcon Parser unit test suite
     """
 
     def setUp(self):
         ParserUnitTestCase.setUp(self)
 
         self.rec_config = {
-            DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.osmoi_a_subcon',
+            DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.ppsdn_a_subcon',
             DataSetDriverConfigKeys.PARTICLE_CLASS: None
         }
 
@@ -45,7 +46,7 @@ class OsmoiASubconParserUnitTestCase(ParserUnitTestCase):
         return open(os.path.join(RESOURCE_PATH, filename), mode='w')
 
     def create_rec_parser(self, file_handle):
-        return OsmoiASubconParser(self.rec_config, file_handle, self.exception_callback)
+        return PpsdnASubconParser(self.rec_config, file_handle, self.exception_callback)
 
     def test_invalid_data(self):
         """
@@ -121,3 +122,5 @@ class OsmoiASubconParserUnitTestCase(ParserUnitTestCase):
                 else:
                     fid.write('    %s: %s\n' % (val.get('value_id'), val.get('value')))
         fid.close()
+
+

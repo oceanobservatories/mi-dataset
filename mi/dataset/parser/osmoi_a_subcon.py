@@ -2,7 +2,7 @@
 
 """
 @package mi.dataset.parser.osmoi_a_subcon
-@file marine-integrations/mi/dataset/parser/osmoi_a_subcon.py
+@file mi-dataset/mi/dataset/parser/osmoi_a_subcon.py
 @author Rachel Manoni
 @brief Parser for the osmoi_a_subcon dataset driver
 
@@ -32,43 +32,43 @@ OSMOI_DATA_MAP = [
     ('volume_pumped', 5, float),
     ('lat', 6, float),
     ('lon', 7, float),
-    ('depth', 8, int),
+    ('m_depth', 8, int),
     ('temp', 9, float),
     ('acidity', 10, float),
     ('alkalinity', 11, float),
-    ('hydrogen_sulfide', 12, float),
-    ('silicon', 13, float),
-    ('ammonia', 14, float),
-    ('chloride', 15, float),
-    ('sulfate', 16, float),
-    ('sodium', 17, float),
-    ('potassium', 18, float),
-    ('magnesium', 19, float),
-    ('calcium', 20, float),
-    ('bromide', 21, float),
-    ('iron', 22, float),
-    ('manganese', 23, float),
-    ('lithium', 24, float),
-    ('strontium_icpaes', 25, float),
-    ('boron', 26, float),
-    ('rubidium', 27, float),
-    ('cesium', 28, float),
-    ('strontium_icpms', 29, float),
-    ('barium', 30, float),
-    ('cobalt', 31, float),
-    ('nickel', 32, float),
-    ('copper', 33, float),
-    ('zinc', 34, float),
-    ('molybdenum', 35, float),
-    ('silver', 36, float),
-    ('cadmium', 37, float),
-    ('titanium', 38, float),
-    ('aluminum', 39, float),
-    ('lead', 40, float),
-    ('vanadium', 41, float),
-    ('uranium', 42, float),
-    ('yttrium', 43, float),
-    ('gadolinium', 44, float)
+    ('hydrogen_sulfide_concentration', 12, float),
+    ('silicon_concentration', 13, float),
+    ('ammonia_concentration', 14, float),
+    ('chloride_concentration', 15, float),
+    ('sulfate_concentration', 16, float),
+    ('sodium_concentration', 17, float),
+    ('potassium_concentration', 18, float),
+    ('magnesium_concentration', 19, float),
+    ('calcium_concentration', 20, float),
+    ('bromide_concentration', 21, float),
+    ('iron_concentration', 22, float),
+    ('manganese_concentration', 23, float),
+    ('lithium_concentration', 24, float),
+    ('strontium_icpaes_concentration', 25, float),
+    ('boron_concentration', 26, float),
+    ('rubidium_concentration', 27, float),
+    ('cesium_concentration', 28, float),
+    ('strontium_icpms_concentration', 29, float),
+    ('barium_concentration', 30, float),
+    ('cobalt_concentration', 31, float),
+    ('nickel_concentration', 32, float),
+    ('copper_concentration', 33, float),
+    ('zinc_concentration', 34, float),
+    ('molybdenum_concentration', 35, float),
+    ('silver_concentration', 36, float),
+    ('cadmium_concentration', 37, float),
+    ('titanium_concentration', 38, float),
+    ('aluminum_concentration', 39, float),
+    ('lead_concentration', 40, float),
+    ('vanadium_concentration', 41, float),
+    ('uranium_concentration', 42, float),
+    ('yttrium_concentration', 43, float),
+    ('gadolinium_concentration', 44, float)
 ]
 
 START_TIME_IDX = 2
@@ -97,7 +97,8 @@ class OsmoiASubconInstrumentDataParticle(DataParticle):
 
     def _encode_value(self, name, value, encoding_function):
         """
-        Encode a value using the encoding function, if it fails store the error in a queue
+        Encode a value using the encoding function
+        If there is an error, return None as a value for that parameter
         """
         try:
             if encoding_function is float and math.isnan(float(value)):
