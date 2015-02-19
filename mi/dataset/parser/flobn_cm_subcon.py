@@ -232,8 +232,9 @@ class FlobnMSubconParser(SimpleParser):
                 particle = self._extract_sample(FlobnMPositionY1DataParticle, None, row[5:7], None)
                 self._record_buffer.append(particle)
                 log.debug("Part of line4: %r", row[7:9])
-                particle = self._extract_sample(FlobnMPositionY1DataParticle, None, row[7:9], None)
+                particle = self._extract_sample(FlobnMPositionY2DataParticle, None, row[7:9], None)
                 self._record_buffer.append(particle)
+
                 log.debug("Part of line5: %r", row[9:17])
                 particle = self._extract_sample(FlobnMPositionZ1DataParticle, None, row[9:17], None)
                 self._record_buffer.append(particle)
@@ -254,10 +255,10 @@ class FlobnMSubconParser(SimpleParser):
                 particle = self._extract_sample(FlobnMDirectionXFlowRateDataParticle, None, row[49:51], None)
                 self._record_buffer.append(particle)
                 log.debug("Part of line11: %r", row[51:53])
-                particle = self._extract_sample(FlobnMDirectionXFlowRateDataParticle, None, row[51:53], None)
+                particle = self._extract_sample(FlobnMDirectionYFlowRateDataParticle, None, row[51:53], None)
                 self._record_buffer.append(particle)
                 log.debug("Part of line12: %r", row[53:])
-                particle = self._extract_sample(FlobnMDirectionXFlowRateDataParticle, None, row[53:], None)
+                particle = self._extract_sample(FlobnMDirectionZFlowRateDataParticle, None, row[53:], None)
                 self._record_buffer.append(particle)
 
             except:
