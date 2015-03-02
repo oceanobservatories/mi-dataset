@@ -65,7 +65,7 @@ DATA_WRAPPER_REGEX = b'<Executing/>\x0d\x0a<SampleData ID=\'0x[0-9a-f]+\' LEN=\'
                      'CRC=\'(0x[0-9a-f]+)\'>([\x00-\xFF]+)</SampleData>\x0d\x0a<Executed/>\x0d\x0a'
 DATA_WRAPPER_MATCHER = re.compile(DATA_WRAPPER_REGEX)
 
-DATA_FAIL_REGEX = b'<ERROR type=(.+) msg=(.+)/>\x0d\x0a'
+DATA_FAIL_REGEX = b'<E[rR][rR][oO][rR] type=(.+) msg=(.+)/>\x0d\x0a'
 DATA_FAIL_MATCHER = re.compile(DATA_FAIL_REGEX)
 
 DATA_REGEX = b'\x6e\x7f[\x00-\xFF]{32}([\x00-\xFF]+)([\x00-\xFF]{2})'
@@ -294,90 +294,57 @@ class AdcpsJlnSioParser(SioParser):
         while chunk is not None:
 
             header_match = SIO_HEADER_MATCHER.match(chunk)
-            sample_count = 0
 
             if header_match.group(SIO_HEADER_GROUP_ID) == 'AD':
                 log.debug("matched chunk header %s", chunk[1:32])
 
-                # start after sio header
-                chunk_idx = SIO_HEADER_BYTES
-                end_idx_okay = SIO_HEADER_BYTES
+                # start search and match after header
+                data_fail_match = DATA_FAIL_MATCHER.search(chunk[SIO_HEADER_BYTES:])
+                data_wrapper_match = DATA_WRAPPER_MATCHER.match(chunk[SIO_HEADER_BYTES:])
 
-                while chunk_idx <= len(chunk):
+                if data_fail_match:
+                    # this ignores any invalid sample data prior to the error tag
+                    msg = "Found adcps error type %s exception %s" % (data_fail_match.group(1),
+                          data_fail_match.group(2))
+                    log.warn(msg)
+                    self._exception_callback(RecoverableSampleException(msg))
 
-                    data_fail_match = DATA_FAIL_MATCHER.match(chunk[chunk_idx:])
-                    data_wrapper_match = DATA_WRAPPER_MATCHER.match(chunk[chunk_idx:])
+                elif data_wrapper_match:
 
-                    if data_wrapper_match:
+                    calculated_xml_checksum = AdcpsJlnSioParser.calc_xml_checksum(data_wrapper_match.group(2))
+                    xml_checksum = int(data_wrapper_match.group(1), 16)
 
-                        calculated_xml_checksum = AdcpsJlnSioParser.calc_xml_checksum(data_wrapper_match.group(2))
-                        xml_checksum = int(data_wrapper_match.group(1), 16)
+                    if calculated_xml_checksum == xml_checksum:
 
-                        if calculated_xml_checksum == xml_checksum:
+                        data_match = DATA_MATCHER.search(data_wrapper_match.group(2))
 
-                            data_match = DATA_MATCHER.search(data_wrapper_match.group(2))
+                        if data_match:
 
-                            if data_match:
+                            log.debug('Found data match in chunk %s', chunk[1:32])
 
-                                if end_idx_okay != chunk_idx:
+                            # particle-ize the data block received, return the record
+                            sample = self._extract_sample(AdcpsJlnSioDataParticle, None,
+                                                          header_match.group(SIO_HEADER_GROUP_TIMESTAMP) +
+                                                          data_match.group(0),
+                                                          None)
+                            if sample:
+                                # create particle
+                                result_particles.append(sample)
 
-                                    log.info("Unexpected data found from index %d to %d, %s", end_idx_okay,
-                                             chunk_idx, chunk[end_idx_okay:chunk_idx])
-
-                                    self._exception_callback(UnexpectedDataException("Unexpected data found %s" %
-                                                                                     chunk[end_idx_okay:chunk_idx]))
-
-                                log.debug('Found data match in chunk %s', chunk[1:32])
-
-                                # particle-ize the data block received, return the record
-                                sample = self._extract_sample(AdcpsJlnSioDataParticle, None,
-                                                              header_match.group(SIO_HEADER_GROUP_TIMESTAMP) +
-                                                              data_match.group(0),
-                                                              None)
-                                if sample:
-                                    # create particle
-                                    result_particles.append(sample)
-                                    sample_count += 1
-
-                            else:
-                                log.warn("Matched adcps xml wrapper but not inside data %s",
-                                         binascii.hexlify(data_wrapper_match.group(0)))
-                                self._exception_callback(RecoverableSampleException(
-                                    "Matched adcps xml wrapper but not data inside %s" %
-                                    binascii.hexlify(data_wrapper_match.group(0))))
                         else:
-                            log.warn("Xml checksum %s does not match calculated %s",
-                                     xml_checksum, calculated_xml_checksum)
-                            self._exception_callback(RecoverableSampleException(
-                                "Xml checksum %s does not match calculated %s" %
-                                (xml_checksum, calculated_xml_checksum)))
-
-                        chunk_idx += len(data_wrapper_match.group(0))
-                        end_idx_okay = chunk_idx
-
-                    elif data_fail_match:
-                        # we found an adcps failure message, no data in here just an error
-
-                        if end_idx_okay != chunk_idx:
-
-                            log.warn("Unexpected data found from index %d to %d, %s", end_idx_okay,
-                                     chunk_idx, binascii.hexlify(chunk[end_idx_okay:chunk_idx]))
-
-                            self._exception_callback(UnexpectedDataException("Unexpected data found %s" %
-                                                     binascii.hexlify(chunk[end_idx_okay:chunk_idx])))
-
-                        log.warn("Found adcps error type %s exception %s", data_fail_match.group(1),
-                                 data_fail_match.group(2))
-                        self._exception_callback(RecoverableSampleException("Found adcps error type %s exception %s" %
-                                                                            (data_fail_match.group(1),
-                                                                             data_fail_match.group(2))))
-
-                        chunk_idx += len(data_fail_match.group(0))
-                        end_idx_okay = chunk_idx
-
+                            msg = "Matched adcps xml wrapper but not inside data %s" % \
+                                  binascii.hexlify(data_wrapper_match.group(0))
+                            log.warn(msg)
+                            self._exception_callback(RecoverableSampleException(msg))
                     else:
-                        # if we have to skip bytes, we have unexplained data
-                        chunk_idx += 1
+                        msg = "Xml checksum %s does not match calculated %s" % (xml_checksum, calculated_xml_checksum)
+                        log.warn(msg)
+                        self._exception_callback(RecoverableSampleException(msg))
+
+                else:
+                    msg = "Unexpected data found within header %s: 0x%s" % (chunk[1:32], binascii.hexlify(chunk))
+                    log.warning(msg)
+                    self._exception_callback(UnexpectedDataException(msg))
 
             (timestamp, chunk) = self._chunker.get_next_data()
 
