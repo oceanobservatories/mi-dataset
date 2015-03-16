@@ -8,7 +8,6 @@
 __author__ = 'Emily Hahn'
 __license__ = 'Apache 2.0'
 
-import array
 import binascii
 import datetime
 import calendar
