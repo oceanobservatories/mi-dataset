@@ -10,7 +10,7 @@ data:
     particle_object: DostaAbcdjmSioTelemeteredMetadataDataParticle
     particle_type: dosta_abcdjm_sio_metadata
     product_number: 4831
-    serial_number: 128
+    serial_number: '128'
   - _index: 2
     internal_timestamp: '2013-07-25T06:00:02'
     particle_object: DostaAbcdjmSioTelemeteredDataParticle

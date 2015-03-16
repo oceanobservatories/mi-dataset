@@ -170,7 +170,7 @@ TEST_RESULTS = {
                                       {'value': 522393, 'value_id': 'raw_time_microseconds'},
                                       {'value': 5, 'value_id': 'packet_type'},
                                       {'value': 83, 'value_id': 'meter_type'},
-                                      {'value': 141, 'value_id': 'serial_number'},
+                                      {'value': '141', 'value_id': 'serial_number'},
                                       {'value': 467, 'value_id': 'a_reference_dark_counts'},
                                       {'value': 32623, 'value_id': 'pressure_counts'},
                                       {'value': 1812, 'value_id': 'a_signal_dark_counts'},

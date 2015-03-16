@@ -6,7 +6,7 @@
 @author Rachel Manoni
 @brief Test code for RASFL data parser
 """
-from mi.dataset.parser.ppsds_a_subcon import PpsdnASubconParser
+from mi.dataset.parser.ppsdn_a_subcon import PpsdnASubconParser
 
 __author__ = 'Rachel Manoni'
 

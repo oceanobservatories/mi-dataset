@@ -96,7 +96,7 @@ class DostaAbcdjmCsppParserDataParticleKey(BaseEnum):
 # A group of non common metadata particle encoding rules used to simplify encoding using a loop
 NON_COMMON_METADATA_PARTICLE_ENCODING_RULES = [
     (DostaAbcdjmCsppParserDataParticleKey.PRODUCT_NUMBER, DataMatchesGroupNumber.MODEL, int),
-    (DostaAbcdjmCsppParserDataParticleKey.SERIAL_NUMBER, DataMatchesGroupNumber.SERIAL_NUMBER, int)
+    (DostaAbcdjmCsppParserDataParticleKey.SERIAL_NUMBER, DataMatchesGroupNumber.SERIAL_NUMBER, str)
 ]
 
 # A group of instrument data particle encoding rules used to simplify encoding using a loop

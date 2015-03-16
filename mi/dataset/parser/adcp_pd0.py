@@ -627,7 +627,7 @@ class AdcpPd0DataParticle(DataParticle):
         self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.SYSTEM_BANDWIDTH,
                                                     system_bandwidth, int))
         self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.SERIAL_NUMBER,
-                                                    serial_number, int))
+                                                    serial_number, str))
 
         #following parameters only exist in ADCPS_JLN_INSTRUMENT particles
         if self._file_type == AdcpFileType.ADCPS_File:
@@ -636,7 +636,7 @@ class AdcpPd0DataParticle(DataParticle):
             #this is "SPARE" byte in vendor doc, see comments in IDD Record Structure section
 
             self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.CPU_SERIAL_NUM,
-                                                        cpu_serial_num, int))
+                                                        cpu_serial_num, str))
             self.final_result.append(self._encode_value(AdcpPd0ParserDataParticleKey.SYSTEM_POWER,
                                                         system_power, int))
             beam_angle = struct.unpack('<B', data[-1:])[0]  # beam angle is last byte

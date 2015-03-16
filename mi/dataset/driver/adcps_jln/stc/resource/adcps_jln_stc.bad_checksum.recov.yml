@@ -8,7 +8,7 @@ data:
     internal_timestamp: 3589435097.000000
     adcps_jln_timestamp: '20130929 091817'
     adcps_jln_id: 10
-    adcps_jln_serial_number: 70001672
+    serial_number: '70001672'
     adcps_jln_volts:          6.4
     adcps_jln_records: 5
     adcps_jln_length: 1780

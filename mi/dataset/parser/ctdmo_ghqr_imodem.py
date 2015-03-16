@@ -24,8 +24,7 @@ from mi.core.common import BaseEnum
 from mi.core.log import get_logger
 log = get_logger()
 from mi.core.instrument.data_particle import DataParticle
-from mi.core.exceptions import SampleException, \
-    ConfigurationException, UnexpectedDataException
+from mi.core.exceptions import ConfigurationException, UnexpectedDataException
 from mi.dataset.parser.utilities import time_2000_to_ntp_time, \
     formatted_timestamp_utc_time
 from mi.dataset.parser.common_regexes import END_OF_LINE_REGEX, \
@@ -42,7 +41,7 @@ class CtdmoGhqrImodemParticleClassKey(BaseEnum):
 class CtdmoGhqrImodemDataParticleKey(BaseEnum):
     # For metadata data particle
     DATE_TIME_STRING = 'date_time_string'
-    INSTRUMENT_SERIAL_NUMBER_U32 = 'instrument_serial_number_u32'
+    SERIAL_NUMBER = 'serial_number'
     BATTERY_VOLTAGE_MAIN = 'battery_voltage_main'
     BATTERY_VOLTAGE_LITHIUM = 'battery_voltage_lithium'
     SAMPLE_NUMBER = 'sample_number'
@@ -65,7 +64,7 @@ FILE_DATETIME_REGEX = r'#7370_DateTime:\s+(?P<' + \
 
 INSTRUMENT_SERIAL_NUM_REGEX = \
     r'#SBE37-IM.*SERIAL NO.\s+(?P<' + \
-    CtdmoGhqrImodemDataParticleKey.INSTRUMENT_SERIAL_NUMBER_U32 + \
+    CtdmoGhqrImodemDataParticleKey.SERIAL_NUMBER + \
     '>\d+).*' + END_OF_LINE_REGEX
 
 BATTERY_VOLTAGE_REGEX = \
@@ -135,7 +134,7 @@ INSTRUMENT_DATA_MATCHER = re.compile(INSTRUMENT_DATA_REGEX)
 # This table is used in the generation of the metadata data particle.
 METADATA_ENCODING_RULES = [
     (CtdmoGhqrImodemDataParticleKey.DATE_TIME_STRING, str),
-    (CtdmoGhqrImodemDataParticleKey.INSTRUMENT_SERIAL_NUMBER_U32, int),
+    (CtdmoGhqrImodemDataParticleKey.SERIAL_NUMBER, str),
     (CtdmoGhqrImodemDataParticleKey.BATTERY_VOLTAGE_MAIN, float),
     (CtdmoGhqrImodemDataParticleKey.BATTERY_VOLTAGE_LITHIUM, float),
     (CtdmoGhqrImodemDataParticleKey.SAMPLE_NUMBER, int),
@@ -294,8 +293,8 @@ class CtdmoGhqrImodemParser(SimpleParser):
 
         elif key == MetadataMatchKey.INSTRUMENT_SERIAL_NO_MATCH:
 
-            particle_data[CtdmoGhqrImodemDataParticleKey.INSTRUMENT_SERIAL_NUMBER_U32] = \
-                group_dict[CtdmoGhqrImodemDataParticleKey.INSTRUMENT_SERIAL_NUMBER_U32]
+            particle_data[CtdmoGhqrImodemDataParticleKey.SERIAL_NUMBER] = \
+                group_dict[CtdmoGhqrImodemDataParticleKey.SERIAL_NUMBER]
 
         elif key == MetadataMatchKey.BATTERY_VOLTAGE_MATCH:
 

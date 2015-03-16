@@ -58,9 +58,9 @@ data:
     false_target_threshold: 255
     transmit_lag_distance: 24
     system_bandwidth: 0
-    serial_number: 18225
+    serial_number: '18225'
     low_latency_trigger: 0
-    cpu_board_serial_number: 655272599126802487
+    cpu_board_serial_number: '655272599126802487'
     system_power: 255
     beam_angle: 20
     ensemble_number: 863
@@ -186,9 +186,9 @@ data:
     false_target_threshold: 255
     transmit_lag_distance: 24
     system_bandwidth: 0
-    serial_number: 18225
+    serial_number: '18225'
     low_latency_trigger: 0
-    cpu_board_serial_number: 655272599126802487
+    cpu_board_serial_number: '655272599126802487'
     system_power: 255
     beam_angle: 20
     ensemble_number: 864
@@ -314,9 +314,9 @@ data:
     false_target_threshold: 255
     transmit_lag_distance: 24
     system_bandwidth: 0
-    serial_number: 18225
+    serial_number: '18225'
     low_latency_trigger: 0
-    cpu_board_serial_number: 655272599126802487
+    cpu_board_serial_number: '655272599126802487'
     system_power: 255
     beam_angle: 20
     ensemble_number: 865
@@ -442,9 +442,9 @@ data:
     false_target_threshold: 255
     transmit_lag_distance: 24
     system_bandwidth: 0
-    serial_number: 18225
+    serial_number: '18225'
     low_latency_trigger: 0
-    cpu_board_serial_number: 655272599126802487
+    cpu_board_serial_number: '655272599126802487'
     system_power: 255
     beam_angle: 20
     ensemble_number: 866
@@ -570,9 +570,9 @@ data:
     false_target_threshold: 255
     transmit_lag_distance: 24
     system_bandwidth: 0
-    serial_number: 18225
+    serial_number: '18225'
     low_latency_trigger: 0
-    cpu_board_serial_number: 655272599126802487
+    cpu_board_serial_number: '655272599126802487'
     system_power: 255
     beam_angle: 20
     ensemble_number: 867
@@ -698,9 +698,9 @@ data:
     false_target_threshold: 255
     transmit_lag_distance: 24
     system_bandwidth: 0
-    serial_number: 18225
+    serial_number: '18225'
     low_latency_trigger: 0
-    cpu_board_serial_number: 655272599126802487
+    cpu_board_serial_number: '655272599126802487'
     system_power: 255
     beam_angle: 20
     ensemble_number: 868
@@ -826,9 +826,9 @@ data:
     false_target_threshold: 255
     transmit_lag_distance: 24
     system_bandwidth: 0
-    serial_number: 18225
+    serial_number: '18225'
     low_latency_trigger: 0
-    cpu_board_serial_number: 655272599126802487
+    cpu_board_serial_number: '655272599126802487'
     system_power: 255
     beam_angle: 20
     ensemble_number: 869
@@ -954,9 +954,9 @@ data:
     false_target_threshold: 255
     transmit_lag_distance: 24
     system_bandwidth: 0
-    serial_number: 18225
+    serial_number: '18225'
     low_latency_trigger: 0
-    cpu_board_serial_number: 655272599126802487
+    cpu_board_serial_number: '655272599126802487'
     system_power: 255
     beam_angle: 20
     ensemble_number: 875
@@ -1082,9 +1082,9 @@ data:
     false_target_threshold: 255
     transmit_lag_distance: 24
     system_bandwidth: 0
-    serial_number: 18225
+    serial_number: '18225'
     low_latency_trigger: 0
-    cpu_board_serial_number: 655272599126802487
+    cpu_board_serial_number: '655272599126802487'
     system_power: 255
     beam_angle: 20
     ensemble_number: 881
@@ -1210,9 +1210,9 @@ data:
     false_target_threshold: 255
     transmit_lag_distance: 24
     system_bandwidth: 0
-    serial_number: 18225
+    serial_number: '18225'
     low_latency_trigger: 0
-    cpu_board_serial_number: 655272599126802487
+    cpu_board_serial_number: '655272599126802487'
     system_power: 255
     beam_angle: 20
     ensemble_number: 899
@@ -1338,9 +1338,9 @@ data:
     false_target_threshold: 255
     transmit_lag_distance: 24
     system_bandwidth: 0
-    serial_number: 18225
+    serial_number: '18225'
     low_latency_trigger: 0
-    cpu_board_serial_number: 655272599126802487
+    cpu_board_serial_number: '655272599126802487'
     system_power: 255
     beam_angle: 20
     ensemble_number: 917
@@ -1466,9 +1466,9 @@ data:
     false_target_threshold: 255
     transmit_lag_distance: 24
     system_bandwidth: 0
-    serial_number: 18225
+    serial_number: '18225'
     low_latency_trigger: 0
-    cpu_board_serial_number: 655272599126802487
+    cpu_board_serial_number: '655272599126802487'
     system_power: 255
     beam_angle: 20
     ensemble_number: 935
@@ -1594,9 +1594,9 @@ data:
     false_target_threshold: 255
     transmit_lag_distance: 24
     system_bandwidth: 0
-    serial_number: 18225
+    serial_number: '18225'
     low_latency_trigger: 0
-    cpu_board_serial_number: 655272599126802487
+    cpu_board_serial_number: '655272599126802487'
     system_power: 255
     beam_angle: 20
     ensemble_number: 953
@@ -1722,9 +1722,9 @@ data:
     false_target_threshold: 255
     transmit_lag_distance: 24
     system_bandwidth: 0
-    serial_number: 18225
+    serial_number: '18225'
     low_latency_trigger: 0
-    cpu_board_serial_number: 655272599126802487
+    cpu_board_serial_number: '655272599126802487'
     system_power: 255
     beam_angle: 20
     ensemble_number: 971
@@ -1850,9 +1850,9 @@ data:
     false_target_threshold: 255
     transmit_lag_distance: 24
     system_bandwidth: 0
-    serial_number: 18225
+    serial_number: '18225'
     low_latency_trigger: 0
-    cpu_board_serial_number: 655272599126802487
+    cpu_board_serial_number: '655272599126802487'
     system_power: 255
     beam_angle: 20
     ensemble_number: 989

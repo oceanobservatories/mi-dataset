@@ -58,7 +58,7 @@ data:
     false_target_threshold: 50
     transmit_lag_distance: 22
     system_bandwidth: 0
-    serial_number: 648877
+    serial_number: '648877'
     ensemble_number: 1
     real_time_clock: [14, 4, 16, 16, 46, 17, 53]
     ensemble_start_time: 3606655577.5299997329711914
@@ -204,7 +204,7 @@ data:
     false_target_threshold: 50
     transmit_lag_distance: 22
     system_bandwidth: 0
-    serial_number: 648877
+    serial_number: '648877'
     ensemble_number: 2
     real_time_clock: [14, 4, 16, 16, 46, 20, 57]
     ensemble_start_time: 3606655580.5699996948242188
@@ -350,7 +350,7 @@ data:
     false_target_threshold: 50
     transmit_lag_distance: 22
     system_bandwidth: 0
-    serial_number: 648877
+    serial_number: '648877'
     ensemble_number: 3
     real_time_clock: [14, 4, 16, 16, 46, 24, 58]
     ensemble_start_time: 3606655584.5799999237060547
@@ -496,7 +496,7 @@ data:
     false_target_threshold: 50
     transmit_lag_distance: 22
     system_bandwidth: 0
-    serial_number: 648877
+    serial_number: '648877'
     ensemble_number: 4
     real_time_clock: [14, 4, 16, 16, 46, 27, 60]
     ensemble_start_time: 3606655587.5999999046325684
@@ -642,7 +642,7 @@ data:
     false_target_threshold: 50
     transmit_lag_distance: 22
     system_bandwidth: 0
-    serial_number: 648877
+    serial_number: '648877'
     ensemble_number: 5
     real_time_clock: [14, 4, 16, 16, 46, 31, 82]
     ensemble_start_time: 3606655591.8199996948242188
@@ -788,7 +788,7 @@ data:
     false_target_threshold: 50
     transmit_lag_distance: 22
     system_bandwidth: 0
-    serial_number: 648877
+    serial_number: '648877'
     ensemble_number: 6
     real_time_clock: [14, 4, 16, 16, 46, 35, 21]
     ensemble_start_time: 3606655595.2100000381469727
@@ -934,7 +934,7 @@ data:
     false_target_threshold: 50
     transmit_lag_distance: 22
     system_bandwidth: 0
-    serial_number: 648877
+    serial_number: '648877'
     ensemble_number: 7
     real_time_clock: [14, 4, 16, 16, 46, 39, 3]
     ensemble_start_time: 3606655599.0299997329711914
@@ -1080,7 +1080,7 @@ data:
     false_target_threshold: 50
     transmit_lag_distance: 22
     system_bandwidth: 0
-    serial_number: 648877
+    serial_number: '648877'
     ensemble_number: 8
     real_time_clock: [14, 4, 16, 16, 46, 42, 91]
     ensemble_start_time: 3606655602.9099998474121094
@@ -1226,7 +1226,7 @@ data:
     false_target_threshold: 50
     transmit_lag_distance: 22
     system_bandwidth: 0
-    serial_number: 648877
+    serial_number: '648877'
     ensemble_number: 9
     real_time_clock: [14, 4, 16, 16, 46, 46, 42]
     ensemble_start_time: 3606655606.4200000762939453
@@ -1372,7 +1372,7 @@ data:
     false_target_threshold: 50
     transmit_lag_distance: 22
     system_bandwidth: 0
-    serial_number: 648877
+    serial_number: '648877'
     ensemble_number: 10
     real_time_clock: [14, 4, 16, 16, 46, 50, 37]
     ensemble_start_time: 3606655610.3699998855590820
@@ -1518,7 +1518,7 @@ data:
     false_target_threshold: 50
     transmit_lag_distance: 22
     system_bandwidth: 0
-    serial_number: 648877
+    serial_number: '648877'
     ensemble_number: 11
     real_time_clock: [14, 4, 16, 16, 46, 53, 51]
     ensemble_start_time: 3606655613.5100002288818359
@@ -1664,7 +1664,7 @@ data:
     false_target_threshold: 50
     transmit_lag_distance: 22
     system_bandwidth: 0
-    serial_number: 648877
+    serial_number: '648877'
     ensemble_number: 12
     real_time_clock: [14, 4, 16, 16, 46, 57, 71]
     ensemble_start_time: 3606655617.7100000381469727
@@ -1810,7 +1810,7 @@ data:
     false_target_threshold: 50
     transmit_lag_distance: 22
     system_bandwidth: 0
-    serial_number: 648877
+    serial_number: '648877'
     ensemble_number: 13
     real_time_clock: [14, 4, 16, 16, 47, 1, 7]
     ensemble_start_time: 3606655621.0699996948242188
@@ -1956,7 +1956,7 @@ data:
     false_target_threshold: 50
     transmit_lag_distance: 22
     system_bandwidth: 0
-    serial_number: 648877
+    serial_number: '648877'
     ensemble_number: 14
     real_time_clock: [14, 4, 16, 16, 47, 5, 9]
     ensemble_start_time: 3606655625.0900001525878906
@@ -2102,7 +2102,7 @@ data:
     false_target_threshold: 50
     transmit_lag_distance: 22
     system_bandwidth: 0
-    serial_number: 648877
+    serial_number: '648877'
     ensemble_number: 15
     real_time_clock: [14, 4, 16, 16, 47, 8, 21]
     ensemble_start_time: 3606655628.2100000381469727
@@ -2248,7 +2248,7 @@ data:
     false_target_threshold: 50
     transmit_lag_distance: 22
     system_bandwidth: 0
-    serial_number: 648877
+    serial_number: '648877'
     ensemble_number: 16
     real_time_clock: [14, 4, 16, 16, 47, 12, 22]
     ensemble_start_time: 3606655632.2200002670288086
@@ -2394,7 +2394,7 @@ data:
     false_target_threshold: 50
     transmit_lag_distance: 22
     system_bandwidth: 0
-    serial_number: 648877
+    serial_number: '648877'
     ensemble_number: 17
     real_time_clock: [14, 4, 16, 16, 47, 15, 89]
     ensemble_start_time: 3606655635.8900003433227539
@@ -2540,7 +2540,7 @@ data:
     false_target_threshold: 50
     transmit_lag_distance: 22
     system_bandwidth: 0
-    serial_number: 648877
+    serial_number: '648877'
     ensemble_number: 18
     real_time_clock: [14, 4, 16, 16, 47, 19, 41]
     ensemble_start_time: 3606655639.4099998474121094
@@ -2686,7 +2686,7 @@ data:
     false_target_threshold: 50
     transmit_lag_distance: 22
     system_bandwidth: 0
-    serial_number: 648877
+    serial_number: '648877'
     ensemble_number: 19
     real_time_clock: [14, 4, 16, 16, 47, 23, 46]
     ensemble_start_time: 3606655643.4600000381469727
@@ -2832,7 +2832,7 @@ data:
     false_target_threshold: 50
     transmit_lag_distance: 22
     system_bandwidth: 0
-    serial_number: 648877
+    serial_number: '648877'
     ensemble_number: 20
     real_time_clock: [14, 4, 16, 16, 47, 26, 43]
     ensemble_start_time: 3606655646.4300003051757812
@@ -2978,7 +2978,7 @@ data:
     false_target_threshold: 50
     transmit_lag_distance: 22
     system_bandwidth: 0
-    serial_number: 648877
+    serial_number: '648877'
     ensemble_number: 21
     real_time_clock: [14, 4, 16, 16, 47, 30, 38]
     ensemble_start_time: 3606655650.3800001144409180
@@ -3124,7 +3124,7 @@ data:
     false_target_threshold: 50
     transmit_lag_distance: 22
     system_bandwidth: 0
-    serial_number: 648877
+    serial_number: '648877'
     ensemble_number: 22
     real_time_clock: [14, 4, 16, 16, 47, 33, 66]
     ensemble_start_time: 3606655653.6599998474121094
@@ -3270,7 +3270,7 @@ data:
     false_target_threshold: 50
     transmit_lag_distance: 22
     system_bandwidth: 0
-    serial_number: 648877
+    serial_number: '648877'
     ensemble_number: 23
     real_time_clock: [14, 4, 16, 16, 47, 37, 64]
     ensemble_start_time: 3606655657.6400003433227539
@@ -3416,7 +3416,7 @@ data:
     false_target_threshold: 50
     transmit_lag_distance: 22
     system_bandwidth: 0
-    serial_number: 648877
+    serial_number: '648877'
     ensemble_number: 24
     real_time_clock: [14, 4, 16, 16, 47, 40, 90]
     ensemble_start_time: 3606655660.9000000953674316
@@ -3562,7 +3562,7 @@ data:
     false_target_threshold: 50
     transmit_lag_distance: 22
     system_bandwidth: 0
-    serial_number: 648877
+    serial_number: '648877'
     ensemble_number: 25
     real_time_clock: [14, 4, 16, 16, 47, 45, 6]
     ensemble_start_time: 3606655665.0599999427795410
@@ -3708,7 +3708,7 @@ data:
     false_target_threshold: 50
     transmit_lag_distance: 22
     system_bandwidth: 0
-    serial_number: 648877
+    serial_number: '648877'
     ensemble_number: 26
     real_time_clock: [14, 4, 16, 16, 47, 48, 76]
     ensemble_start_time: 3606655668.7600002288818359
@@ -3854,7 +3854,7 @@ data:
     false_target_threshold: 50
     transmit_lag_distance: 22
     system_bandwidth: 0
-    serial_number: 648877
+    serial_number: '648877'
     ensemble_number: 27
     real_time_clock: [14, 4, 16, 16, 47, 52, 18]
     ensemble_start_time: 3606655672.1800003051757812
@@ -4000,7 +4000,7 @@ data:
     false_target_threshold: 50
     transmit_lag_distance: 22
     system_bandwidth: 0
-    serial_number: 648877
+    serial_number: '648877'
     ensemble_number: 28
     real_time_clock: [14, 4, 16, 16, 47, 56, 18]
     ensemble_start_time: 3606655676.1800003051757812
@@ -4146,7 +4146,7 @@ data:
     false_target_threshold: 50
     transmit_lag_distance: 22
     system_bandwidth: 0
-    serial_number: 648877
+    serial_number: '648877'
     ensemble_number: 29
     real_time_clock: [14, 4, 16, 16, 47, 59, 30]
     ensemble_start_time: 3606655679.3000001907348633
@@ -4292,7 +4292,7 @@ data:
     false_target_threshold: 50
     transmit_lag_distance: 22
     system_bandwidth: 0
-    serial_number: 648877
+    serial_number: '648877'
     ensemble_number: 30
     real_time_clock: [14, 4, 16, 16, 48, 3, 42]
     ensemble_start_time: 3606655683.4200000762939453
@@ -4438,7 +4438,7 @@ data:
     false_target_threshold: 50
     transmit_lag_distance: 22
     system_bandwidth: 0
-    serial_number: 648877
+    serial_number: '648877'
     ensemble_number: 31
     real_time_clock: [14, 4, 16, 16, 48, 6, 41]
     ensemble_start_time: 3606655686.4099998474121094
@@ -4584,7 +4584,7 @@ data:
     false_target_threshold: 50
     transmit_lag_distance: 22
     system_bandwidth: 0
-    serial_number: 648877
+    serial_number: '648877'
     ensemble_number: 32
     real_time_clock: [14, 4, 16, 16, 48, 10, 86]
     ensemble_start_time: 3606655690.8599996566772461
@@ -4730,7 +4730,7 @@ data:
     false_target_threshold: 50
     transmit_lag_distance: 22
     system_bandwidth: 0
-    serial_number: 648877
+    serial_number: '648877'
     ensemble_number: 33
     real_time_clock: [14, 4, 16, 16, 48, 14, 15]
     ensemble_start_time: 3606655694.1500000953674316
@@ -4876,7 +4876,7 @@ data:
     false_target_threshold: 50
     transmit_lag_distance: 22
     system_bandwidth: 0
-    serial_number: 648877
+    serial_number: '648877'
     ensemble_number: 34
     real_time_clock: [14, 4, 16, 16, 48, 18, 3]
     ensemble_start_time: 3606655698.0299997329711914
@@ -5022,7 +5022,7 @@ data:
     false_target_threshold: 50
     transmit_lag_distance: 22
     system_bandwidth: 0
-    serial_number: 648877
+    serial_number: '648877'
     ensemble_number: 35
     real_time_clock: [14, 4, 16, 16, 48, 21, 60]
     ensemble_start_time: 3606655701.5999999046325684
@@ -5168,7 +5168,7 @@ data:
     false_target_threshold: 50
     transmit_lag_distance: 22
     system_bandwidth: 0
-    serial_number: 648877
+    serial_number: '648877'
     ensemble_number: 36
     real_time_clock: [14, 4, 16, 16, 48, 25, 2]
     ensemble_start_time: 3606655705.0199999809265137
@@ -5314,7 +5314,7 @@ data:
     false_target_threshold: 50
     transmit_lag_distance: 22
     system_bandwidth: 0
-    serial_number: 648877
+    serial_number: '648877'
     ensemble_number: 37
     real_time_clock: [14, 4, 16, 16, 48, 29, 17]
     ensemble_start_time: 3606655709.1700000762939453
@@ -5460,7 +5460,7 @@ data:
     false_target_threshold: 50
     transmit_lag_distance: 22
     system_bandwidth: 0
-    serial_number: 648877
+    serial_number: '648877'
     ensemble_number: 38
     real_time_clock: [14, 4, 16, 16, 48, 32, 22]
     ensemble_start_time: 3606655712.2200002670288086

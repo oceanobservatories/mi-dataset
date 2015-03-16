@@ -310808,5 +310808,5 @@ data:
     internal_timestamp: 3611055177.000000
     vel3d_l_time_on: 1402056002
     vel3d_l_time_off: 1402066377
-    vel3d_l_serial_number: 1026
+    serial_number: '1026'
     vel3d_l_number_of_records: 20720

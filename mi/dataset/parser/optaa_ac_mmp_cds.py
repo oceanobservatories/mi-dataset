@@ -139,7 +139,7 @@ class OptaaAcMmpCdsParserDataParticle(MmpCdsParserDataParticle):
         # Now let's encode the serial number as an int, and add it to the list we will return
         subclass_particle_params.append(self._encode_value(OptaaAcMmpCdsParserDataParticleKey.SERIAL_NUMBER,
                                                            serial_number_int,
-                                                           int))
+                                                           str))
 
         # Set the offset to the location of the reference and signal counts
         offset = RAW_REF_AND_SIGNAL_COUNTS_BASE_OFFSET

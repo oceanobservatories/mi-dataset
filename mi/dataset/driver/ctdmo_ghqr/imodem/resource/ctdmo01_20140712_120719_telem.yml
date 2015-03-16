@@ -7,7 +7,7 @@ data:
     particle_type: ctdmo_ghqr_imodem_metadata
     internal_timestamp: 3614155639.000000
     date_time_string: '20140712 120719'
-    instrument_serial_number_u32: 11477
+    serial_number: '11477'
     battery_voltage_main:          6.91000
     battery_voltage_lithium:          3.08000
     sample_number: 4143

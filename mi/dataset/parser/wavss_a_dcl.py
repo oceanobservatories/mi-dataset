@@ -141,7 +141,7 @@ COMMON_PARTICLE_MAP = [
     ('dcl_controller_timestamp', DCL_TIMESTAMP_GROUP, str),
     ('date_string', 2, str),
     ('time_string', 3, str),
-    ('serial_number', 4, int)
+    ('serial_number', 4, str)
 ]
 
 # common particle map used by non-directional, directional, and fourier

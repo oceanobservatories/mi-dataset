@@ -308,7 +308,7 @@ data:
     internal_timestamp: 3612424859.000000
     vel3d_l_time_on: 1403427602
     vel3d_l_time_off: 1403435378
-    vel3d_l_serial_number: 1024
+    serial_number: '1024'
     vel3d_l_number_of_records: 20
     vel3d_l_decimation_factor: 800
     vel3d_l_controller_timestamp: 1403436059
@@ -603,7 +603,7 @@ data:
     internal_timestamp: 3614800373.000000
     vel3d_l_time_on: 1405803602
     vel3d_l_time_off: 1405810938
-    vel3d_l_serial_number: 1024
+    serial_number: '1024'
     vel3d_l_number_of_records: 19
     vel3d_l_decimation_factor: 800
     vel3d_l_controller_timestamp: 1405811573
@@ -898,7 +898,7 @@ data:
     internal_timestamp: 3616384594.000000
     vel3d_l_time_on: 1407387602
     vel3d_l_time_off: 1407395139
-    vel3d_l_serial_number: 1024
+    serial_number: '1024'
     vel3d_l_number_of_records: 19
     vel3d_l_decimation_factor: 800
     vel3d_l_controller_timestamp: 1407395794
@@ -1193,7 +1193,7 @@ data:
     internal_timestamp: 3618688575.000000
     vel3d_l_time_on: 1409691602
     vel3d_l_time_off: 1409699129
-    vel3d_l_serial_number: 1024
+    serial_number: '1024'
     vel3d_l_number_of_records: 19
     vel3d_l_decimation_factor: 800
     vel3d_l_controller_timestamp: 1409699775
@@ -1503,7 +1503,7 @@ data:
     internal_timestamp: 3619624961.000000
     vel3d_l_time_on: 1410627602
     vel3d_l_time_off: 1410635486
-    vel3d_l_serial_number: 1024
+    serial_number: '1024'
     vel3d_l_number_of_records: 20
     vel3d_l_decimation_factor: 800
     vel3d_l_controller_timestamp: 1410636161
@@ -1828,7 +1828,7 @@ data:
     internal_timestamp: 3621929297.000000
     vel3d_l_time_on: 1412931602
     vel3d_l_time_off: 1412939801
-    vel3d_l_serial_number: 1024
+    serial_number: '1024'
     vel3d_l_number_of_records: 21
     vel3d_l_decimation_factor: 800
     vel3d_l_controller_timestamp: 1412940497

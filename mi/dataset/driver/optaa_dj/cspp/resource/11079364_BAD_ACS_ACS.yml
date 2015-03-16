@@ -13,7 +13,7 @@ data:
    preprocessing_software_version: '1.11'
    start_date: '04/17/2014'
    processing_time: '07/18/2014 13:50:27'
-   serial_number: 137
+   serial_number: '137'
  - _index: 2
    particle_object: OptaaDjCsppInstrumentRecoveredDataParticle
    particle_type: optaa_dj_cspp_instrument_recovered

@@ -166,7 +166,7 @@ class DeepProfilerParticle(DataParticle):
         return self.timelist + [
             {DataParticleKey.VALUE_ID: ACSDataParticleKey.PACKET_TYPE, DataParticleKey.VALUE: packet_type},
             {DataParticleKey.VALUE_ID: ACSDataParticleKey.METER_TYPE, DataParticleKey.VALUE: meter_type},
-            {DataParticleKey.VALUE_ID: ACSDataParticleKey.SERIAL_NUMBER, DataParticleKey.VALUE: serial_number},
+            {DataParticleKey.VALUE_ID: ACSDataParticleKey.SERIAL_NUMBER, DataParticleKey.VALUE: str(serial_number)},
             {DataParticleKey.VALUE_ID: ACSDataParticleKey.A_REFERENCE_DARK_COUNTS, DataParticleKey.VALUE: aref_dark},
             {DataParticleKey.VALUE_ID: ACSDataParticleKey.PRESSURE_COUNTS, DataParticleKey.VALUE: pressure},
             {DataParticleKey.VALUE_ID: ACSDataParticleKey.A_SIGNAL_DARK_COUNTS, DataParticleKey.VALUE: asig_dark},
