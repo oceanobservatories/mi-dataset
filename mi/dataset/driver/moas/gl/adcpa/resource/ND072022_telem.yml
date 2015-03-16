@@ -58,7 +58,7 @@ data:
     false_target_threshold: 50
     transmit_lag_distance: 22
     system_bandwidth: 0
-    serial_number: 648292
+    serial_number: '648292'
     ensemble_number: 1
     real_time_clock: [14, 4, 7, 20, 22, 38, 53]
     ensemble_start_time: 3605890958.5299997329711914

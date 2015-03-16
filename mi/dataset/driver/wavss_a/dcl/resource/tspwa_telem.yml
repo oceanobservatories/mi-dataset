@@ -9,7 +9,7 @@ data:
     dcl_controller_timestamp: '2014/08/02 00:23:04.865'
     date_string: '20140801'
     time_string: '201818'
-    serial_number: 5311
+    serial_number: '05311'
     number_zero_crossings: 123
     average_wave_height: 0.0
     mean_spectral_period: 8.5

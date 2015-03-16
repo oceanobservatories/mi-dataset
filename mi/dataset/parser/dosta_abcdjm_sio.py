@@ -165,7 +165,7 @@ class DostaAbcdjmSioMetadataDataParticle(DataParticle):
         result = [self._encode_value(DostaAbcdjmSioMetadataDataParticleKey.PRODUCT_NUMBER,
                                      self.raw_data[1].group(1), int),
                   self._encode_value(DostaAbcdjmSioMetadataDataParticleKey.SERIAL_NUMBER,
-                                     self.raw_data[1].group(2), int)]
+                                     self.raw_data[1].group(2), str)]
         return result
 
 

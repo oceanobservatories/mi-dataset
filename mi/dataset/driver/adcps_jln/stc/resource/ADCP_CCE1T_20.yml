@@ -56,10 +56,10 @@ data:
     false_target_threshold: 50
     low_latency_trigger: 0
     transmit_lag_distance: 164
-    cpu_board_serial_number: 681103138035335206
+    cpu_board_serial_number: '681103138035335206'
     system_bandwidth: 1
     system_power: 255
-    serial_number: 17231
+    serial_number: '17231'
     beam_angle: 20
     ensemble_number: 1
     real_time_clock: [12, 9, 21, 0, 0, 0, 0]
@@ -182,10 +182,10 @@ data:
     false_target_threshold: 50
     low_latency_trigger: 0
     transmit_lag_distance: 164
-    cpu_board_serial_number: 681103138035335206
+    cpu_board_serial_number: '681103138035335206'
     system_bandwidth: 1
     system_power: 255
-    serial_number: 17231
+    serial_number: '17231'
     beam_angle: 20
     ensemble_number: 2
     real_time_clock: [12, 9, 21, 1, 0, 0, 0]
@@ -308,10 +308,10 @@ data:
     false_target_threshold: 50
     low_latency_trigger: 0
     transmit_lag_distance: 164
-    cpu_board_serial_number: 681103138035335206
+    cpu_board_serial_number: '681103138035335206'
     system_bandwidth: 1
     system_power: 255
-    serial_number: 17231
+    serial_number: '17231'
     beam_angle: 20
     ensemble_number: 3
     real_time_clock: [12, 9, 21, 2, 0, 0, 0]
@@ -434,10 +434,10 @@ data:
     false_target_threshold: 50
     low_latency_trigger: 0
     transmit_lag_distance: 163
-    cpu_board_serial_number: 681103138035335206
+    cpu_board_serial_number: '681103138035335206'
     system_bandwidth: 1
     system_power: 255
-    serial_number: 17231
+    serial_number: '17231'
     beam_angle: 20
     ensemble_number: 4
     real_time_clock: [12, 9, 21, 3, 0, 0, 0]
@@ -560,10 +560,10 @@ data:
     false_target_threshold: 50
     low_latency_trigger: 0
     transmit_lag_distance: 163
-    cpu_board_serial_number: 681103138035335206
+    cpu_board_serial_number: '681103138035335206'
     system_bandwidth: 1
     system_power: 255
-    serial_number: 17231
+    serial_number: '17231'
     beam_angle: 20
     ensemble_number: 5
     real_time_clock: [12, 9, 21, 4, 0, 0, 0]
@@ -686,10 +686,10 @@ data:
     false_target_threshold: 50
     low_latency_trigger: 0
     transmit_lag_distance: 163
-    cpu_board_serial_number: 681103138035335206
+    cpu_board_serial_number: '681103138035335206'
     system_bandwidth: 1
     system_power: 255
-    serial_number: 17231
+    serial_number: '17231'
     beam_angle: 20
     ensemble_number: 6
     real_time_clock: [12, 9, 21, 5, 0, 0, 0]
@@ -812,10 +812,10 @@ data:
     false_target_threshold: 50
     low_latency_trigger: 0
     transmit_lag_distance: 163
-    cpu_board_serial_number: 681103138035335206
+    cpu_board_serial_number: '681103138035335206'
     system_bandwidth: 1
     system_power: 255
-    serial_number: 17231
+    serial_number: '17231'
     beam_angle: 20
     ensemble_number: 7
     real_time_clock: [12, 9, 21, 6, 0, 0, 0]
@@ -938,10 +938,10 @@ data:
     false_target_threshold: 50
     low_latency_trigger: 0
     transmit_lag_distance: 164
-    cpu_board_serial_number: 681103138035335206
+    cpu_board_serial_number: '681103138035335206'
     system_bandwidth: 1
     system_power: 255
-    serial_number: 17231
+    serial_number: '17231'
     beam_angle: 20
     ensemble_number: 8
     real_time_clock: [12, 9, 21, 7, 0, 0, 0]
@@ -1064,10 +1064,10 @@ data:
     false_target_threshold: 50
     low_latency_trigger: 0
     transmit_lag_distance: 164
-    cpu_board_serial_number: 681103138035335206
+    cpu_board_serial_number: '681103138035335206'
     system_bandwidth: 1
     system_power: 255
-    serial_number: 17231
+    serial_number: '17231'
     beam_angle: 20
     ensemble_number: 9
     real_time_clock: [12, 9, 21, 8, 0, 0, 0]
@@ -1190,10 +1190,10 @@ data:
     false_target_threshold: 50
     low_latency_trigger: 0
     transmit_lag_distance: 163
-    cpu_board_serial_number: 681103138035335206
+    cpu_board_serial_number: '681103138035335206'
     system_bandwidth: 1
     system_power: 255
-    serial_number: 17231
+    serial_number: '17231'
     beam_angle: 20
     ensemble_number: 10
     real_time_clock: [12, 9, 21, 9, 0, 0, 0]
@@ -1316,10 +1316,10 @@ data:
     false_target_threshold: 50
     low_latency_trigger: 0
     transmit_lag_distance: 163
-    cpu_board_serial_number: 681103138035335206
+    cpu_board_serial_number: '681103138035335206'
     system_bandwidth: 1
     system_power: 255
-    serial_number: 17231
+    serial_number: '17231'
     beam_angle: 20
     ensemble_number: 11
     real_time_clock: [12, 9, 21, 10, 0, 0, 0]
@@ -1442,10 +1442,10 @@ data:
     false_target_threshold: 50
     low_latency_trigger: 0
     transmit_lag_distance: 163
-    cpu_board_serial_number: 681103138035335206
+    cpu_board_serial_number: '681103138035335206'
     system_bandwidth: 1
     system_power: 255
-    serial_number: 17231
+    serial_number: '17231'
     beam_angle: 20
     ensemble_number: 12
     real_time_clock: [12, 9, 21, 11, 0, 0, 0]
@@ -1568,10 +1568,10 @@ data:
     false_target_threshold: 50
     low_latency_trigger: 0
     transmit_lag_distance: 163
-    cpu_board_serial_number: 681103138035335206
+    cpu_board_serial_number: '681103138035335206'
     system_bandwidth: 1
     system_power: 255
-    serial_number: 17231
+    serial_number: '17231'
     beam_angle: 20
     ensemble_number: 13
     real_time_clock: [12, 9, 21, 12, 0, 0, 0]
@@ -1694,10 +1694,10 @@ data:
     false_target_threshold: 50
     low_latency_trigger: 0
     transmit_lag_distance: 163
-    cpu_board_serial_number: 681103138035335206
+    cpu_board_serial_number: '681103138035335206'
     system_bandwidth: 1
     system_power: 255
-    serial_number: 17231
+    serial_number: '17231'
     beam_angle: 20
     ensemble_number: 14
     real_time_clock: [12, 9, 21, 13, 0, 0, 0]
@@ -1820,10 +1820,10 @@ data:
     false_target_threshold: 50
     low_latency_trigger: 0
     transmit_lag_distance: 163
-    cpu_board_serial_number: 681103138035335206
+    cpu_board_serial_number: '681103138035335206'
     system_bandwidth: 1
     system_power: 255
-    serial_number: 17231
+    serial_number: '17231'
     beam_angle: 20
     ensemble_number: 15
     real_time_clock: [12, 9, 21, 14, 0, 0, 0]
@@ -1946,10 +1946,10 @@ data:
     false_target_threshold: 50
     low_latency_trigger: 0
     transmit_lag_distance: 163
-    cpu_board_serial_number: 681103138035335206
+    cpu_board_serial_number: '681103138035335206'
     system_bandwidth: 1
     system_power: 255
-    serial_number: 17231
+    serial_number: '17231'
     beam_angle: 20
     ensemble_number: 16
     real_time_clock: [12, 9, 21, 15, 0, 0, 0]
@@ -2072,10 +2072,10 @@ data:
     false_target_threshold: 50
     low_latency_trigger: 0
     transmit_lag_distance: 163
-    cpu_board_serial_number: 681103138035335206
+    cpu_board_serial_number: '681103138035335206'
     system_bandwidth: 1
     system_power: 255
-    serial_number: 17231
+    serial_number: '17231'
     beam_angle: 20
     ensemble_number: 17
     real_time_clock: [12, 9, 21, 16, 0, 0, 0]
@@ -2198,10 +2198,10 @@ data:
     false_target_threshold: 50
     low_latency_trigger: 0
     transmit_lag_distance: 163
-    cpu_board_serial_number: 681103138035335206
+    cpu_board_serial_number: '681103138035335206'
     system_bandwidth: 1
     system_power: 255
-    serial_number: 17231
+    serial_number: '17231'
     beam_angle: 20
     ensemble_number: 18
     real_time_clock: [12, 9, 21, 17, 0, 0, 0]
@@ -2324,10 +2324,10 @@ data:
     false_target_threshold: 50
     low_latency_trigger: 0
     transmit_lag_distance: 163
-    cpu_board_serial_number: 681103138035335206
+    cpu_board_serial_number: '681103138035335206'
     system_bandwidth: 1
     system_power: 255
-    serial_number: 17231
+    serial_number: '17231'
     beam_angle: 20
     ensemble_number: 19
     real_time_clock: [12, 9, 21, 18, 0, 0, 0]
@@ -2450,10 +2450,10 @@ data:
     false_target_threshold: 50
     low_latency_trigger: 0
     transmit_lag_distance: 163
-    cpu_board_serial_number: 681103138035335206
+    cpu_board_serial_number: '681103138035335206'
     system_bandwidth: 1
     system_power: 255
-    serial_number: 17231
+    serial_number: '17231'
     beam_angle: 20
     ensemble_number: 20
     real_time_clock: [12, 9, 21, 19, 0, 0, 0]

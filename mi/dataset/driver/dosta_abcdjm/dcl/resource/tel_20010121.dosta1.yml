@@ -9,7 +9,7 @@ data:
     internal_timestamp: '2001-01-21T03:06:02.329Z'
     dcl_controller_timestamp: '2001/01/21 03:06:02.329'
     product_number: 4831
-    serial_number: 2001
+    serial_number: '2001'
     estimated_oxygen_concentration: 0.000
     estimated_oxygen_saturation: 0.000
     optode_temperature: 0.000
@@ -26,7 +26,7 @@ data:
     internal_timestamp: '2001-01-21T03:06:15.908Z'
     dcl_controller_timestamp: '2001/01/21 03:06:15.908'
     product_number: 4831
-    serial_number: 2001
+    serial_number: '2001'
     estimated_oxygen_concentration: 25.000
     estimated_oxygen_saturation: 6.000
     optode_temperature: 5.000
@@ -43,7 +43,7 @@ data:
     internal_timestamp: '2001-01-21T03:06:29.487Z'
     dcl_controller_timestamp: '2001/01/21 03:06:29.487'
     product_number: 4831
-    serial_number: 2001
+    serial_number: '2001'
     estimated_oxygen_concentration: 50.000
     estimated_oxygen_saturation: 12.000
     optode_temperature: 10.000
@@ -60,7 +60,7 @@ data:
     internal_timestamp: '2001-01-21T03:06:43.066Z'
     dcl_controller_timestamp: '2001/01/21 03:06:43.066'
     product_number: 4831
-    serial_number: 2001
+    serial_number: '2001'
     estimated_oxygen_concentration: 75.000
     estimated_oxygen_saturation: 18.000
     optode_temperature: 15.000
@@ -77,7 +77,7 @@ data:
     internal_timestamp: '2001-01-21T03:06:56.645Z'
     dcl_controller_timestamp: '2001/01/21 03:06:56.645'
     product_number: 4831
-    serial_number: 2001
+    serial_number: '2001'
     estimated_oxygen_concentration: 100.000
     estimated_oxygen_saturation: 24.000
     optode_temperature: 20.000
@@ -94,7 +94,7 @@ data:
     internal_timestamp: '2001-01-21T03:07:10.224Z'
     dcl_controller_timestamp: '2001/01/21 03:07:10.224'
     product_number: 4831
-    serial_number: 2001
+    serial_number: '2001'
     estimated_oxygen_concentration: 125.000
     estimated_oxygen_saturation: 30.000
     optode_temperature: 25.000
@@ -111,7 +111,7 @@ data:
     internal_timestamp: '2001-01-21T03:07:23.803Z'
     dcl_controller_timestamp: '2001/01/21 03:07:23.803'
     product_number: 4831
-    serial_number: 2001
+    serial_number: '2001'
     estimated_oxygen_concentration: 150.000
     estimated_oxygen_saturation: 36.000
     optode_temperature: 30.000
@@ -128,7 +128,7 @@ data:
     internal_timestamp: '2001-01-21T03:07:37.382Z'
     dcl_controller_timestamp: '2001/01/21 03:07:37.382'
     product_number: 4831
-    serial_number: 2001
+    serial_number: '2001'
     estimated_oxygen_concentration: 175.000
     estimated_oxygen_saturation: 42.000
     optode_temperature: 35.000
@@ -145,7 +145,7 @@ data:
     internal_timestamp: '2001-01-21T03:07:50.961Z'
     dcl_controller_timestamp: '2001/01/21 03:07:50.961'
     product_number: 4831
-    serial_number: 2001
+    serial_number: '2001'
     estimated_oxygen_concentration: 200.000
     estimated_oxygen_saturation: 48.000
     optode_temperature: 40.000
@@ -162,7 +162,7 @@ data:
     internal_timestamp: '2001-01-21T03:08:04.540Z'
     dcl_controller_timestamp: '2001/01/21 03:08:04.540'
     product_number: 4831
-    serial_number: 2001
+    serial_number: '2001'
     estimated_oxygen_concentration: 225.000
     estimated_oxygen_saturation: 54.000
     optode_temperature: 45.000
@@ -179,7 +179,7 @@ data:
     internal_timestamp: '2001-01-21T03:08:18.119Z'
     dcl_controller_timestamp: '2001/01/21 03:08:18.119'
     product_number: 4831
-    serial_number: 2001
+    serial_number: '2001'
     estimated_oxygen_concentration: 250.000
     estimated_oxygen_saturation: 60.000
     optode_temperature: 50.000
@@ -196,7 +196,7 @@ data:
     internal_timestamp: '2001-01-21T03:08:31.698Z'
     dcl_controller_timestamp: '2001/01/21 03:08:31.698'
     product_number: 4831
-    serial_number: 2001
+    serial_number: '2001'
     estimated_oxygen_concentration: 275.000
     estimated_oxygen_saturation: 66.000
     optode_temperature: 55.000
@@ -213,7 +213,7 @@ data:
     internal_timestamp: '2001-01-21T03:08:45.277Z'
     dcl_controller_timestamp: '2001/01/21 03:08:45.277'
     product_number: 4831
-    serial_number: 2001
+    serial_number: '2001'
     estimated_oxygen_concentration: 300.000
     estimated_oxygen_saturation: 72.000
     optode_temperature: 60.000
@@ -230,7 +230,7 @@ data:
     internal_timestamp: '2001-01-21T03:08:58.856Z'
     dcl_controller_timestamp: '2001/01/21 03:08:58.856'
     product_number: 4831
-    serial_number: 2001
+    serial_number: '2001'
     estimated_oxygen_concentration: 325.000
     estimated_oxygen_saturation: 78.000
     optode_temperature: 65.000
@@ -247,7 +247,7 @@ data:
     internal_timestamp: '2001-01-21T03:09:12.435Z'
     dcl_controller_timestamp: '2001/01/21 03:09:12.435'
     product_number: 4831
-    serial_number: 2001
+    serial_number: '2001'
     estimated_oxygen_concentration: 350.000
     estimated_oxygen_saturation: 84.000
     optode_temperature: 70.000
@@ -264,7 +264,7 @@ data:
     internal_timestamp: '2001-01-21T03:09:26.014Z'
     dcl_controller_timestamp: '2001/01/21 03:09:26.014'
     product_number: 4831
-    serial_number: 2001
+    serial_number: '2001'
     estimated_oxygen_concentration: 375.000
     estimated_oxygen_saturation: 90.000
     optode_temperature: 75.000
@@ -281,7 +281,7 @@ data:
     internal_timestamp: '2001-01-21T03:09:39.593Z'
     dcl_controller_timestamp: '2001/01/21 03:09:39.593'
     product_number: 4831
-    serial_number: 2001
+    serial_number: '2001'
     estimated_oxygen_concentration: 400.000
     estimated_oxygen_saturation: 96.000
     optode_temperature: 80.000
@@ -298,7 +298,7 @@ data:
     internal_timestamp: '2001-01-21T03:09:53.172Z'
     dcl_controller_timestamp: '2001/01/21 03:09:53.172'
     product_number: 4831
-    serial_number: 2001
+    serial_number: '2001'
     estimated_oxygen_concentration: 425.000
     estimated_oxygen_saturation: 102.000
     optode_temperature: 85.000
@@ -315,7 +315,7 @@ data:
     internal_timestamp: '2001-01-21T03:10:06.751Z'
     dcl_controller_timestamp: '2001/01/21 03:10:06.751'
     product_number: 4831
-    serial_number: 2001
+    serial_number: '2001'
     estimated_oxygen_concentration: 450.000
     estimated_oxygen_saturation: 108.000
     optode_temperature: 90.000
@@ -332,7 +332,7 @@ data:
     internal_timestamp: '2001-01-21T03:10:20.330Z'
     dcl_controller_timestamp: '2001/01/21 03:10:20.330'
     product_number: 4831
-    serial_number: 2001
+    serial_number: '2001'
     estimated_oxygen_concentration: 475.000
     estimated_oxygen_saturation: 114.000
     optode_temperature: 95.000
@@ -349,7 +349,7 @@ data:
     internal_timestamp: '2001-01-21T03:10:33.909Z'
     dcl_controller_timestamp: '2001/01/21 03:10:33.909'
     product_number: 4831
-    serial_number: 2001
+    serial_number: '2001'
     estimated_oxygen_concentration: 500.000
     estimated_oxygen_saturation: 120.000
     optode_temperature: 100.000

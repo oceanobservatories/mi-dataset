@@ -73,7 +73,7 @@ class Issmcnsm_dostadParserDataParticle(DataParticle):
                                   parsed sample data [%s]", self.raw_data)
         try:
             prod_num = int(match.group(1))
-            serial_num = int(match.group(2))
+            serial_num = str(match.group(2))
             est_oxygen = float(match.group(3))
             air_sat = float(match.group(4))
             optode_temp = float(match.group(5))

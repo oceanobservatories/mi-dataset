@@ -132,7 +132,7 @@ SENSOR_GROUP_RAW_TEMPERATURE = 19
 INSTRUMENT_PARTICLE_MAP = [
     ('dcl_controller_timestamp',       SENSOR_GROUP_TIMESTAMP,           str),
     ('product_number',                 SENSOR_GROUP_PRODUCT,             int),
-    ('serial_number',                  SENSOR_GROUP_SERIAL,              int),
+    ('serial_number',                  SENSOR_GROUP_SERIAL,              str),
     ('estimated_oxygen_concentration', SENSOR_GROUP_OXYGEN_CONTENT,      float),
     ('estimated_oxygen_saturation',    SENSOR_GROUP_AIR_SATURATION,      float),
     ('optode_temperature',             SENSOR_GROUP_AMBIENT_TEMPERATURE, float),

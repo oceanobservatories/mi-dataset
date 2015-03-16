@@ -109,7 +109,7 @@ SIO_METADATA_PARTICLE_KEYS = \
     [None,                           None],  # Metadata timestamp handled separately
     ['vel3d_l_time_on',              int],
     ['vel3d_l_time_off',             int],
-    ['vel3d_l_serial_number',        int],
+    ['serial_number',        str],
     ['vel3d_l_number_of_records',    int],
     ['vel3d_l_decimation_factor',    int],
     ['vel3d_l_controller_timestamp', int]
@@ -120,7 +120,7 @@ WFP_METADATA_PARTICLE_KEYS = \
     [None,                        None],    # Metadata timestamp handled separately
     ['vel3d_l_time_on',           int],
     ['vel3d_l_time_off',          int],
-    ['vel3d_l_serial_number',     int],
+    ['serial_number',     str],
     ['vel3d_l_number_of_records', int]
 ]
 

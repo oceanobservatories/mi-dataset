@@ -179,7 +179,7 @@ class DataParticleType(BaseEnum):
 class CtdmoInstrumentDataParticleKey(BaseEnum):
     CONTROLLER_TIMESTAMP = "sio_controller_timestamp"
     INDUCTIVE_ID = "inductive_id"
-    SERIAL_NUMBER = "instrument_serial_number_u32"
+    SERIAL_NUMBER = "serial_number"
     TEMPERATURE = "temperature"
     CONDUCTIVITY = "conductivity"
     PRESSURE = "pressure"
@@ -223,7 +223,7 @@ class CtdmoGhqrRecoveredInstrumentDataParticle(DataParticle):
             self._encode_value(CtdmoInstrumentDataParticleKey.INDUCTIVE_ID,
                                self.raw_data[RAW_INDEX_REC_CT_ID], int),
             self._encode_value(CtdmoInstrumentDataParticleKey.SERIAL_NUMBER,
-                               self.raw_data[RAW_INDEX_REC_CT_SERIAL], int),
+                               self.raw_data[RAW_INDEX_REC_CT_SERIAL], str),
             self._encode_value(CtdmoInstrumentDataParticleKey.TEMPERATURE,
                                self.raw_data[RAW_INDEX_REC_CT_TEMPERATURE],
                                convert_hex_ascii_to_int),

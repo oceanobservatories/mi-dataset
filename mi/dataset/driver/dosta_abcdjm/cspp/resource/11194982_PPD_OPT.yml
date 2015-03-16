@@ -14,7 +14,7 @@ data:
     preprocessing_software_version: '1.11'
     start_date: '04/29/2014'
     product_number: 4831
-    serial_number: 209
+    serial_number: '209'
   - _index: 2
     particle_object: DostaAbcdjmCsppInstrumentTelemeteredDataParticle
     particle_type: dosta_abcdjm_cspp_instrument

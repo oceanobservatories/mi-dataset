@@ -520,7 +520,7 @@ class ADCPA_PD0_PARSED_DataParticle(DataParticle):
         self.final_result.append({DataParticleKey.VALUE_ID: ADCPA_PD0_PARSED_KEY.SYSTEM_BANDWIDTH,
                                   DataParticleKey.VALUE: system_bandwidth})
         self.final_result.append({DataParticleKey.VALUE_ID: ADCPA_PD0_PARSED_KEY.SERIAL_NUMBER,
-                                  DataParticleKey.VALUE: serial_number})
+                                  DataParticleKey.VALUE: str(serial_number)})
 
     def parse_variable_chunk(self, chunk):
         """

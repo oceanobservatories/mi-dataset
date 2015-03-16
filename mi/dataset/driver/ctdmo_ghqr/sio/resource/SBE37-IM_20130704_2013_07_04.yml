@@ -6,7 +6,7 @@ data:
   - _index:  1
     internal_timestamp: 3162673780.0
     inductive_id: 55
-    instrument_serial_number_u32: 20130704
+    serial_number: '20130704'
     temperature: 300018
     conductivity: 400018
     pressure: 500018
@@ -15,7 +15,7 @@ data:
   - _index:  2
     internal_timestamp: 3162674002.0
     inductive_id: 55
-    instrument_serial_number_u32: 20130704
+    serial_number: '20130704'
     temperature: 300240
     conductivity: 400240
     pressure: 500240
@@ -24,7 +24,7 @@ data:
   - _index:  3
     internal_timestamp: 3162674224.0
     inductive_id: 55
-    instrument_serial_number_u32: 20130704
+    serial_number: '20130704'
     temperature: 300462
     conductivity: 400462
     pressure: 500462
@@ -33,7 +33,7 @@ data:
   - _index:  4
     internal_timestamp: 3162674446.0
     inductive_id: 55
-    instrument_serial_number_u32: 20130704
+    serial_number: '20130704'
     temperature: 300684
     conductivity: 400684
     pressure: 500684
@@ -42,7 +42,7 @@ data:
   - _index:  5
     internal_timestamp: 3162674668.0
     inductive_id: 55
-    instrument_serial_number_u32: 20130704
+    serial_number: '20130704'
     temperature: 300906
     conductivity: 400906
     pressure: 500906
@@ -51,7 +51,7 @@ data:
   - _index:  6
     internal_timestamp: 3162674890.0
     inductive_id: 55
-    instrument_serial_number_u32: 20130704
+    serial_number: '20130704'
     temperature: 301128
     conductivity: 401128
     pressure: 501128
@@ -60,7 +60,7 @@ data:
   - _index:  7
     internal_timestamp: 3162675112.0
     inductive_id: 55
-    instrument_serial_number_u32: 20130704
+    serial_number: '20130704'
     temperature: 301350
     conductivity: 401350
     pressure: 501350
@@ -69,7 +69,7 @@ data:
   - _index:  8
     internal_timestamp: 3162675334.0
     inductive_id: 55
-    instrument_serial_number_u32: 20130704
+    serial_number: '20130704'
     temperature: 301572
     conductivity: 401572
     pressure: 501572
@@ -78,7 +78,7 @@ data:
   - _index:  9
     internal_timestamp: 3162675556.0
     inductive_id: 55
-    instrument_serial_number_u32: 20130704
+    serial_number: '20130704'
     temperature: 301794
     conductivity: 401794
     pressure: 501794
@@ -87,7 +87,7 @@ data:
   - _index:  10
     internal_timestamp: 3162675778.0
     inductive_id: 55
-    instrument_serial_number_u32: 20130704
+    serial_number: '20130704'
     temperature: 302016
     conductivity: 402016
     pressure: 502016
@@ -96,7 +96,7 @@ data:
   - _index:  11
     internal_timestamp: 3162676000.0
     inductive_id: 55
-    instrument_serial_number_u32: 20130704
+    serial_number: '20130704'
     temperature: 302238
     conductivity: 402238
     pressure: 502238
@@ -105,7 +105,7 @@ data:
   - _index:  12
     internal_timestamp: 3162676222.0
     inductive_id: 55
-    instrument_serial_number_u32: 20130704
+    serial_number: '20130704'
     temperature: 302460
     conductivity: 402460
     pressure: 502460
@@ -114,7 +114,7 @@ data:
   - _index:  13
     internal_timestamp: 3162676444.0
     inductive_id: 55
-    instrument_serial_number_u32: 20130704
+    serial_number: '20130704'
     temperature: 302682
     conductivity: 402682
     pressure: 502682
@@ -123,7 +123,7 @@ data:
   - _index:  14
     internal_timestamp: 3162676666.0
     inductive_id: 55
-    instrument_serial_number_u32: 20130704
+    serial_number: '20130704'
     temperature: 302904
     conductivity: 402904
     pressure: 502904
@@ -132,7 +132,7 @@ data:
   - _index:  15
     internal_timestamp: 3162676888.0
     inductive_id: 55
-    instrument_serial_number_u32: 20130704
+    serial_number: '20130704'
     temperature: 303126
     conductivity: 403126
     pressure: 503126
@@ -141,7 +141,7 @@ data:
   - _index:  16
     internal_timestamp: 3162677110.0
     inductive_id: 55
-    instrument_serial_number_u32: 20130704
+    serial_number: '20130704'
     temperature: 303348
     conductivity: 403348
     pressure: 503348
@@ -150,7 +150,7 @@ data:
   - _index:  17
     internal_timestamp: 3162677332.0
     inductive_id: 55
-    instrument_serial_number_u32: 20130704
+    serial_number: '20130704'
     temperature: 303570
     conductivity: 403570
     pressure: 503570
@@ -159,7 +159,7 @@ data:
   - _index:  18
     internal_timestamp: 3162677554.0
     inductive_id: 55
-    instrument_serial_number_u32: 20130704
+    serial_number: '20130704'
     temperature: 303792
     conductivity: 403792
     pressure: 503792

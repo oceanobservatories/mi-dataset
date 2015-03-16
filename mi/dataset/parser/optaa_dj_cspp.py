@@ -158,7 +158,7 @@ class OptaaDjCsppMetadataDataParticle(CsppMetadataDataParticle):
         # Instrument serial number (from first record)
         metadata_particle.append(self._encode_value(OptaaDjCsppParserDataParticleKey.SERIAL_NUMBER,
                                                     data_match.group(DataMatchesGroupNumber.SERIAL_NUMBER),
-                                                    int))
+                                                    str))
 
         # Set the internal timestamp
         internal_timestamp_unix = numpy.float(data_match.group(

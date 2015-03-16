@@ -9,7 +9,7 @@ data:
     dcl_controller_timestamp: '2014/08/25 15:09:10.100'
     date_string: '20140825'
     time_string: '150910'
-    serial_number: 5781
+    serial_number: '05781'
     number_zero_crossings: 29
     average_wave_height: 0.0
     mean_spectral_period: 8.4
@@ -31,7 +31,7 @@ data:
     dcl_controller_timestamp: '2014/08/25 15:16:42.321'
     date_string: '20140825'
     time_string: '151642'
-    serial_number: 5781
+    serial_number: '05781'
     number_zero_crossings: 27
     average_wave_height: 0.0
     mean_spectral_period: 8.7
@@ -53,7 +53,7 @@ data:
     dcl_controller_timestamp: '2014/08/25 15:16:42.432'
     date_string: '20140825'
     time_string: '151642'
-    serial_number: 5781
+    serial_number: '05781'
     number_bands: 123
     initial_frequency: 0.03
     frequency_spacing: 0.005
@@ -65,7 +65,7 @@ data:
     dcl_controller_timestamp: '2014/08/25 15:16:42.543'
     date_string: '20140825'
     time_string: '151642'
-    serial_number: 5781
+    serial_number: '05781'
     number_bands: 123
     initial_frequency: 0.03
     frequency_spacing: 0.005
@@ -80,7 +80,7 @@ data:
     dcl_controller_timestamp: '2014/08/25 15:16:42.654'
     date_string: '20140825'
     time_string: '151642'
-    serial_number: 5781
+    serial_number: '05781'
     number_bands: 86
     initial_frequency: 0.03
     frequency_spacing: 0.005
@@ -96,7 +96,7 @@ data:
     dcl_controller_timestamp: '2014/08/25 15:16:42.765'
     date_string: '20140825'
     time_string: '151642'
-    serial_number: 5781
+    serial_number: '05781'
     number_time_samples: 344
     initial_time: 15.659
     time_spacing: 0.783

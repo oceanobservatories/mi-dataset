@@ -10,4 +10,4 @@ data:
     start_date: '2014-04-11 17:37:10'
     packet_type: 5
     meter_type: 83
-    serial_number: 135
+    serial_number: '135'

@@ -10,7 +10,7 @@ data:
     start_date: '2006-12-25 06:12:25'
     packet_type: 9
     meter_type: 83
-    serial_number: 1193052
+    serial_number: '1193052'
   - _index:  2
     particle_object: OptaaDjDclRecoveredInstrumentDataParticle
     particle_type: optaa_dj_dcl_instrument_recovered

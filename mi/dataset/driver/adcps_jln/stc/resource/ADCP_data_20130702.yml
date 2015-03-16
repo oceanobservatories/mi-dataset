@@ -56,10 +56,10 @@ data:
     false_target_threshold: 50
     low_latency_trigger: 0
     transmit_lag_distance: 195
-    cpu_board_serial_number: 667707019074994391
+    cpu_board_serial_number: '667707019074994391'
     system_bandwidth: 1
     system_power: 255
-    serial_number: 18352
+    serial_number: '18352'
     beam_angle: 20
     ensemble_number: 2
     real_time_clock: [13, 7, 2, 2, 2, 50, 3]

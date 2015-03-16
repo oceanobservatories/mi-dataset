@@ -216,7 +216,7 @@ class AdcpsJlnStcMetadataDataParticleKey(BaseEnum):
     # params collected for adcps_jln_stc_metatdata stream:
     ADCPS_JLN_TIMESTAMP = 'adcps_jln_timestamp'
     ADCPS_JLN_ID = 'adcps_jln_id'
-    ADCPS_JLN_SERIAL_NUMBER = 'adcps_jln_serial_number'
+    SERIAL_NUMBER = 'serial_number'
     ADCPS_JLN_VOLTS = 'adcps_jln_volts'
     ADCPS_JLN_RECORDS = 'adcps_jln_records'
     ADCPS_JLN_LENGTH = 'adcps_jln_length'
@@ -239,7 +239,7 @@ class AdcpsJlnStcMetadataDataParticle(DataParticle):
 
         result = [self._encode_value(AdcpsJlnStcMetadataDataParticleKey.ADCPS_JLN_TIMESTAMP, match.group(1), str),
                   self._encode_value(AdcpsJlnStcMetadataDataParticleKey.ADCPS_JLN_ID, match.group(2), int),
-                  self._encode_value(AdcpsJlnStcMetadataDataParticleKey.ADCPS_JLN_SERIAL_NUMBER, match.group(3), int),
+                  self._encode_value(AdcpsJlnStcMetadataDataParticleKey.SERIAL_NUMBER, match.group(3), str),
                   self._encode_value(AdcpsJlnStcMetadataDataParticleKey.ADCPS_JLN_VOLTS, match.group(4), float),
                   self._encode_value(AdcpsJlnStcMetadataDataParticleKey.ADCPS_JLN_RECORDS, match.group(5), int),
                   self._encode_value(AdcpsJlnStcMetadataDataParticleKey.ADCPS_JLN_LENGTH, match.group(6), int),

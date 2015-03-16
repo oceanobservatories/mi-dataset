@@ -9,7 +9,7 @@ data:
     dcl_controller_timestamp: '2014/08/25 15:16:42.543'
     date_string: '20140825'
     time_string: '151642'
-    serial_number: 5781
+    serial_number: '05781'
     number_bands: 123
     initial_frequency: 0.03
     frequency_spacing: 0.005
