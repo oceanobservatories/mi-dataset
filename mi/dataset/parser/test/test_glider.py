@@ -7,21 +7,17 @@
 @brief Test code for a Glider data parser.
 """
 
+import os
 from StringIO import StringIO
-
-import numpy as np
-import ntplib
-
-from mi.core.log import get_logger, get_logging_metaclass
-
-log = get_logger()
-
 from nose.plugins.attrib import attr
 
-from mi.core.exceptions import SampleException
-from mi.dataset.test.test_parser import ParserUnitTestCase
+from mi.core.exceptions import ConfigurationException
+from mi.core.log import get_logger
+log = get_logger()
+
+from mi.dataset.test.test_parser import ParserUnitTestCase, BASE_RESOURCE_PATH
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
-from mi.dataset.parser.glider import GliderParser, GliderEngineeringParser, StateKey
+from mi.dataset.parser.glider import GliderParser, GliderEngineeringParser
 from mi.dataset.parser.glider import CtdgvRecoveredDataParticle, CtdgvTelemeteredDataParticle, CtdgvParticleKey
 from mi.dataset.parser.glider import DostaTelemeteredDataParticle, DostaTelemeteredParticleKey
 from mi.dataset.parser.glider import DostaRecoveredDataParticle, DostaRecoveredParticleKey
@@ -40,9 +36,7 @@ from mi.dataset.parser.glider import EngineeringMetadataRecoveredDataParticle
 from mi.dataset.parser.glider import EngineeringRecoveredParticleKey
 from mi.dataset.parser.glider import EngineeringRecoveredDataParticle
 from mi.dataset.parser.glider import EngineeringScienceRecoveredParticleKey
-from mi.dataset.parser.glider import EngineeringScienceRecoveredDataParticle
-
-
+from mi.dataset.parser.glider import EngineeringScienceRecoveredDataParticle, EngineeringClassKey
 
 
 HEADER = """dbd_label: DBD_ASC(dinkum_binary_data_ascii)file
@@ -118,7 +112,6 @@ c_air_pump c_ballast_pumped c_battpos c_battroll c_bsipar_on c_de_oil_vol c_dvl_
 enum cc in rad sec cc sec sec rad sec rad sec lat lon bool m bool bool enum volts m m/s bool bool bool bool timestamp m bool bool m/s m/s m/s sec m/s sec sec sec cc joules cc/sec volts volts in in/sec rad rad/sec bool bool nodim nodim nodim s bool bool bool amp-hrs nodim amp-hrs amp nodim nodim m m/s m/s m/s enum m/s bool enum m nodim nodim nodim nodim cc volts nodim nodim nodim nodim nodim nodim nodim Mbytes Mbytes m m s sec sec m m sec m m m m m m m m sec rad m/s m/s rad/sec cc volts volts cc/sec bytes m m m enum rad lat lon lat lon lat lon rad nodim bool m m m/s enum lat lat nodim byte byte byte byte nodim byte m m rad/sec rad rad-sec rad/sec rad m/s m/s nodim nodim bool enum nodim bool nodim nodim enum bool bool bool bool bool bool bool bool bool bool sec lat bool volts volts bool % nodim mins mins lon bytes bytes m/s m/s timestamp nodim rad joules rad sec timestamp bar volts volts volts m bool rad s bool bool nodim timestamp enum bytes m/s bool bool nodim nodim nodim nodim nodim nodim sec bool uT ms ms ms uT % % % bar volts cc bool enum enum enum s kjoules km nodim days inHg degC bool c m/s m/s m/s S/m m/s m/s m bar degC m/s m/s enum m m lat lon sec bool ue/m^2sec volts volts degc timestamp bool timestamp m sec m m m mm/s mm/s bool mm/s mm/s bool mm/s mm/s mm/s mm/s mm/s mm/s bool nodim nodim bool deg deg deg nodim m ppt m/s degc timestamp m sec m m m mm/s mm/s bool mm/s mm/s bool mm/s mm/s mm/s mm/s mm/s mm/s bool nodim nodim nodim nodim nodim ppb nodim nodim ug/l bool nodim timestamp mbytes mbytes bytes bytes bytes sec timestamp bool bytes bool nodim nodim nodim timestamp secs nodim bool enum s/m bar degc nodim nodim volts
 1 4 4 4 4 4 4 4 4 4 4 4 8 8 1 4 1 1 1 4 4 4 1 1 1 1 8 4 1 1 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 1 1 4 4 4 4 1 1 1 4 4 4 4 4 4 4 4 4 4 1 4 1 1 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 1 4 8 8 8 8 8 8 4 4 1 4 4 4 1 8 8 4 1 1 1 1 4 1 4 4 4 4 4 4 4 4 4 4 4 1 1 4 1 4 4 1 1 1 1 1 1 1 1 1 1 1 4 8 1 4 4 1 4 4 4 4 8 4 4 4 4 8 4 4 4 4 4 8 4 4 4 4 4 1 4 4 1 1 4 8 1 4 4 1 1 4 4 4 4 4 4 4 1 4 4 4 4 4 4 4 4 4 4 4 1 1 1 1 4 4 4 4 4 4 4 1 4 4 4 4 4 4 4 4 4 4 4 4 1 4 4 8 8 4 1 4 4 4 4 8 1 8 4 4 4 4 4 4 4 1 4 4 1 4 4 4 4 4 4 1 4 4 1 4 4 4 4 4 4 4 4 8 4 4 4 4 4 4 4 1 4 4 1 4 4 4 4 4 4 1 4 4 4 4 4 4 4 4 4 1 4 8 4 4 4 4 4 4 8 1 4 1 4 4 4 8 4 4 1 1 4 4 4 4 4 4 """
 
-
 HEADER5 = """dbd_label: DBD_ASC(dinkum_binary_data_ascii)file
 encoding_ver: 2
 num_ascii_tags: 14
@@ -141,10 +134,13 @@ FLORD_RECORD = """
 NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN 153.928 1329849722.92795 NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN 664.424 0.401911 10.572 10.25 NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN 700 139 0.000281336 460 72 2.0352 695 114 0.8349 NaN 560 1000.1 NaN NaN NaN NaN NaN 153.928 1329849722.92795 NaN NaN NaN 266.42 93.49 9.48 NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN 1000.1 700 139 0.000281 695 114 0.8349 560
 NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN 154.944 1329849723.94394 NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN 645.569 0.390792 10.572 10.25 NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN 892 NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN 700 133 0.000262988 460 73 2.12 695 115 0.847 NaN 559 1000.1 NaN NaN NaN NaN NaN 154.944 1329849723.94394 NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN 1000.1 700 133 0.000263 695 115 0.847 559"""
 
-
 ENGSCI_RECORD = """
 1 260 0.7 0 -1 260 -1 -1 4.96727 -1 0.4528 -1 4330 -12600 0 -1 1 1 2 2.44548 12.9695 -0.219681 1 0 1 0 1329843706.03265 1196.2 0 0 -0.183911 0.00699798 0.166781 155.923 0.379813 0.55692 124.082 4971.02 0 0 0 10.6873 10.7871 0.703717 0.141578 0 0 0 1 59 1 1 -1 0 1 1 40.9937 -9944 303.803 0.485094 -1634 0 0.258982 0 0.00472497 0 0 0.00136254 0 0 0.258982 8 6 21 6 259.77 1.43611 0 0 0 1022 6 0 4194300 1781.12 219.812 48926.2 -1 -1 -1 -1 0 0 -1 0 0 0 0 0 0 0 0 43.0556 0 -0.0616963 -0.144984 0 0 0 0 0 304128 0.916352 0 0 0 1.7942 4328.2816 -12523.8141 4328.2925 -12523.8189 4328.2683 -12523.7965 -0.279253 11 0 0 0 0.308667 0 4328.6173 -12513.3557 0.9 21 18 3 2 35 12 40389 -1904.23 0.0197767 0.11338 0.120462 -0.0173492 5.05447 -0.0616291 -0.145094 0 518 1 0 3323 0 0 5 99 0 0 0 0 0 0 0 0 0 0 4756.23 4328.26830007145 0 2.46526 2.45955 0 57.8052 0 0 0 -12523.7965000589 289792 270336 0.430413 0.350943 1329849569 0 0.518363 102687000 -0.0426476 0 1329849569.26294 0.0258982 0 0 0.137179 16.967 1 -0.10821 32.0756 0 0 1371 1329849561.95532 1 284672 0.348396 1 0 1 0 0 7.58463e-23 1 2 1 0 -1 0 0 0 -1 -1 -1 -1 0 0 0 0 0 3 2 -172433 0.74206 605.857 3115 5.06637 10.0444 0 0 13.1124 -0.283741 0.300996 -0.0683846 3 -0.0218157 0.0107268 -1 49.141 10 -0.0616963 -0.144984 16 40389 -1904.23 4330 -12600 -12 NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN 1000.1 1000.1 NaN NaN NaN 1000.1 1000.1 NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN 1000.1
 1 260 0.7 0 -1 260 -1 -1 4.96727 -1 0.4528 -1 4330 -12600 0 -1 1 1 2 2.44548 12.9695 -0.219681 1 0 1 0 1329843706.03265 1196.2 0 0 -0.183911 0.00699798 0.166781 155.923 0.379813 0.55692 124.082 4971.02 0 0 0 10.6806 10.6208 0.695632 0.141578 0 0 0 1 59 1 1 -1 0 1 1 40.9972 -9947 303.806 0.0955938 -322 1 0.148777 0 0.00472497 0 0 0.00136254 0 0 0.258982 3 6 21 6 259.742 1.43605 0 0 0 1023 3 0 4194310 1781.12 219.812 48926.2 -1 -1 -1 -1 0 0 -1 0 0 0 0 0 0 0 0 43.0556 0.0127162 -0.0616963 -0.144984 0 0 0 0 0 324608 0.916352 0 0 7 1.7942 4328.2816 -12523.8141 4328.2925 -12523.8189 4328.2683 -12523.7965 -0.279253 11 1 0 0 0.308667 0 4328.6173 -12513.3557 0.9 21 18 3 2 35 12 40389 -1904.23 0.0197767 0.11338 0.120462 -0.0173492 5.05447 -0.0616291 -0.145094 0 518 0 0 3323 0 0 5 99 0 0 0 0 0 0 0 0 0 0 4756.23 4328.26830007145 0 2.46386 2.45876 0 57.8047 0 0 0 -12523.7965000589 289792 270336 0.430413 0.350943 1329849569 0 0.518363 115832000 -0.0426476 49.646 1329849618.79962 0.0148777 0 0 0.137057 16.967 1 -0.10821 32.0756 1 0 59 1329849561.95532 1 283648 0.348396 0 0 1 0 0 6.63787e-23 0.875173 1.87517 1 0 -1 0 0 0 -1 -1 -1 -1 0 0 0 0 0 3 2 -172433 0.74206 605.857 3115 5.06637 7.84544 0 0 13.1954 -0.283741 0 0 3 -0.0218157 0.0107268 -1 49.141 10 -0.0616963 -0.144984 16 0 0 4330 -12600 -12 NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN 1000.2 1000.2 NaN NaN NaN 1000.2 1000.2 NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN 1000.1 """
+
+ENGSCI_BAD_LAT_RECORD = """
+1 260 0.7 0 -1 260 -1 -1 4.96727 -1 0.4528 -1 433099999 -12600 0 -1 1 1 2 2.44548 12.9695 -0.219681 1 0 1 0 1329843706.03265 1196.2 0 0 -0.183911 0.00699798 0.166781 155.923 0.379813 0.55692 124.082 4971.02 0 0 0 10.6873 10.7871 0.703717 0.141578 0 0 0 1 59 1 1 -1 0 1 1 40.9937 -9944 303.803 0.485094 -1634 0 0.258982 0 0.00472497 0 0 0.00136254 0 0 0.258982 8 6 21 6 259.77 1.43611 0 0 0 1022 6 0 4194300 1781.12 219.812 48926.2 -1 -1 -1 -1 0 0 -1 0 0 0 0 0 0 0 0 43.0556 0 -0.0616963 -0.144984 0 0 0 0 0 304128 0.916352 0 0 0 1.7942 4328.2816 -12523.8141 4328.2925 -12523.8189 4328.2683 -12523.7965 -0.279253 11 0 0 0 0.308667 0 4328.6173 -12513.3557 0.9 21 18 3 2 35 12 40389 -1904.23 0.0197767 0.11338 0.120462 -0.0173492 5.05447 -0.0616291 -0.145094 0 518 1 0 3323 0 0 5 99 0 0 0 0 0 0 0 0 0 0 4756.23 4328.26830007145 0 2.46526 2.45955 0 57.8052 0 0 0 -12523.7965000589 289792 270336 0.430413 0.350943 1329849569 0 0.518363 102687000 -0.0426476 0 1329849569.26294 0.0258982 0 0 0.137179 16.967 1 -0.10821 32.0756 0 0 1371 1329849561.95532 1 284672 0.348396 1 0 1 0 0 7.58463e-23 1 2 1 0 -1 0 0 0 -1 -1 -1 -1 0 0 0 0 0 3 2 -172433 0.74206 605.857 3115 5.06637 10.0444 0 0 13.1124 -0.283741 0.300996 -0.0683846 3 -0.0218157 0.0107268 -1 49.141 10 -0.0616963 -0.144984 16 40389 -1904.23 4330 -12600 -12 NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN 1000.1 1000.1 NaN NaN NaN 1000.1 1000.1 NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN 1000.1
+1 260 0.7 0 -1 260 -1 -1 4.96727 -1 0.4528 -1 30 -12600 0 -1 1 1 2 2.44548 12.9695 -0.219681 1 0 1 0 1329843706.03265 1196.2 0 0 -0.183911 0.00699798 0.166781 155.923 0.379813 0.55692 124.082 4971.02 0 0 0 10.6806 10.6208 0.695632 0.141578 0 0 0 1 59 1 1 -1 0 1 1 40.9972 -9947 303.806 0.0955938 -322 1 0.148777 0 0.00472497 0 0 0.00136254 0 0 0.258982 3 6 21 6 259.742 1.43605 0 0 0 1023 3 0 4194310 1781.12 219.812 48926.2 -1 -1 -1 -1 0 0 -1 0 0 0 0 0 0 0 0 43.0556 0.0127162 -0.0616963 -0.144984 0 0 0 0 0 324608 0.916352 0 0 7 1.7942 4328.2816 -12523.8141 4328.2925 -12523.8189 4328.2683 -12523.7965 -0.279253 11 1 0 0 0.308667 0 4328.6173 -12513.3557 0.9 21 18 3 2 35 12 40389 -1904.23 0.0197767 0.11338 0.120462 -0.0173492 5.05447 -0.0616291 -0.145094 0 518 0 0 3323 0 0 5 99 0 0 0 0 0 0 0 0 0 0 4756.23 4328.26830007145 0 2.46386 2.45876 0 57.8047 0 0 0 -12523.7965000589 289792 270336 0.430413 0.350943 1329849569 0 0.518363 115832000 -0.0426476 49.646 1329849618.79962 0.0148777 0 0 0.137057 16.967 1 -0.10821 32.0756 1 0 59 1329849561.95532 1 283648 0.348396 0 0 1 0 0 6.63787e-23 0.875173 1.87517 1 0 -1 0 0 0 -1 -1 -1 -1 0 0 0 0 0 3 2 -172433 0.74206 605.857 3115 5.06637 7.84544 0 0 13.1954 -0.283741 0 0 3 -0.0218157 0.0107268 -1 49.141 10 -0.0616963 -0.144984 16 0 0 4330 -12600 -12 NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN 1000.2 1000.2 NaN NaN NaN 1000.2 1000.2 NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN 1000.1 """
 
 FLORT_RECORD = """
 NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN 153.928 1329849722.92795 NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN 664.424 0.401911 10.572 10.25 NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN 700 139 0.000281336 460 72 2.0352 695 114 0.8349 NaN 560 NaN NaN NaN NaN NaN NaN 153.928 1329849722.92795 NaN NaN NaN 266.42 93.49 9.48 NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN
@@ -158,11 +154,6 @@ NaN 0 NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN Na
 
 INT_GPS_VALUE = """
 NaN 2012 NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN """
-
-CHUNKER_TEST = """
-0.273273 NaN NaN 0.335 149.608 0.114297 33.9352 -64.3506 NaN NaN NaN 5011.38113678061 -14433.5809717525 NaN 121546 1378349641.79871 NaN NaN NaN 0 NaN NaN NaN NaN NaN NaN NaN 11.00
-3 NaN NaN NaN NaN NaN NaN NaN NaN NaN 1.23569 NaN NaN -0.0820305 121379 1378349475.09927 0.236869 NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN 1
-"""
 
 CTDGV_RECORD = """
 NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN 121147 1378349241.82962 NaN NaN NaN NaN NaN NaN 121147 1378349241.82962 NaN NaN 4.03096 0.021 15.3683
@@ -183,22 +174,6 @@ class GliderParserUnitTestCase(ParserUnitTestCase):
     """
     config = {}
 
-    def state_callback(self, state, file_ingested):
-        """ Call back method to watch what comes in via the state callback """
-        self.state_callback_values.append(state)
-        self.file_ingested = file_ingested
-
-    def pub_callback(self, particle):
-        """ Call back method to watch what comes in via the publish callback """
-        self.publish_callback_values.append(particle)
-
-    def error_callback(self, error):
-        """ Call back method to watch what comes in via the state callback """
-        self.error_callback_values.append(error)
-
-    def setUp(self):
-        ParserUnitTestCase.setUp(self)
-
     def set_data(self, *args):
         """
         Accept strings of data in args[] joined together and then a file handle
@@ -212,30 +187,6 @@ class GliderParserUnitTestCase(ParserUnitTestCase):
         io.seek(0)
         self.test_data = io
 
-    def set_data_file(self, filename):
-        """
-        Set test to read from a file.
-        """
-        self.test_data = open(filename, "r")
-
-    def reset_parser(self):
-        self.state_callback_values = []
-        self.publish_callback_values = []
-        self.error_callback_values = []
-        self.parser = GliderParser(self.config, self.test_data, self.error_callback)
-
-    def reset_eng_parser(self):
-        self.state_callback_values = []
-        self.publish_callback_values = []
-        self.error_callback_values = []
-        self.parser = GliderEngineeringParser(self.config, self.test_data, self.error_callback)
-
-    def get_published_value(self):
-        return self.publish_callback_values.pop(0)
-
-    def get_state_value(self):
-        return self.state_callback_values.pop(0)
-
     def assert_no_more_data(self):
         """
         Verify we don't find any other records in the data file.
@@ -243,17 +194,12 @@ class GliderParserUnitTestCase(ParserUnitTestCase):
         records = self.parser.get_records(1)
         self.assertEqual(len(records), 0)
 
-    def assert_generate_particle(self, particle_type, values_dict = None, expected_position = None):
+    def assert_generate_particle(self, particle_type, values_dict=None):
         """
         Verify that we can generate a particle of the correct type and that
         the state is set properly.
-        @param particle_type type of particle we are producing
         @param values_dict key value pairs to test in the particle.
-        @param expected_position upon publication of the particle, what should the state position indicate.
         """
-        # ensure the callback queues are empty before we start
-        self.assertEqual(len(self.publish_callback_values), 0)
-        self.assertEqual(len(self.state_callback_values), 0)
 
         records = self.parser.get_records(1)
 
@@ -261,9 +207,13 @@ class GliderParserUnitTestCase(ParserUnitTestCase):
         self.assertIsInstance(records, list)
         self.assertEqual(len(records), 1)
 
+        self.assert_type(records, particle_type)
+
         # Verify the data
         if values_dict:
             self.assert_particle_values(records[0], values_dict)
+
+        return records
 
     def assert_particle_values(self, particle, expected_values):
         """
@@ -278,24 +228,14 @@ class GliderParserUnitTestCase(ParserUnitTestCase):
                 if value['value_id'] == key:
                     self.assertEqual(value['value'], expected_values[key])
 
-    def assert_type(self, records, particle_type):
+    def assert_type(self, records, particle_class):
         for particle in records:
             str_of_type = particle.type()
-            self.assertEqual(particle_type, str_of_type)
-
-    def assert_timestamp(self, ntp_timestamp, unix_timestamp):
-        ntp_stamp = ntplib.system_to_ntp_time(unix_timestamp)
-        assertion = np.allclose(ntp_timestamp, ntp_stamp)
-        self.assertTrue(assertion)
-
-    def test_exception(self):
-        with self.assertRaises(SampleException):
-            self.set_data("Foo")
-            self.reset_parser()
+            self.assertEqual(particle_class._data_particle_type, str_of_type)
 
 
 @attr('UNIT', group='mi')
-class CTDGV_Telemetered_GliderTest(GliderParserUnitTestCase):
+class CtdgvTelemeteredGliderTest(GliderParserUnitTestCase):
     """
     Test cases for ctdgv glider data
     """
@@ -304,36 +244,87 @@ class CTDGV_Telemetered_GliderTest(GliderParserUnitTestCase):
         DataSetDriverConfigKeys.PARTICLE_CLASS: 'CtdgvTelemeteredDataParticle'
     }
 
+    resource_path = os.path.join(BASE_RESOURCE_PATH, 'moas', 'gl', 'ctdgv', 'resource')
+
     def test_ctdgv_telemetered_particle(self):
         """
         Verify we publish particles as expected.  Ensure particle is published and
         that state is returned.
         """
         self.set_data(HEADER, CTDGV_RECORD)
-        self.reset_parser()
+        self.parser = GliderParser(self.config, self.test_data, self.exception_callback)
 
         record_1 = {CtdgvParticleKey.SCI_WATER_TEMP: 15.3683, CtdgvParticleKey.SCI_WATER_COND: 4.03096,
                     CtdgvParticleKey.SCI_WATER_PRESSURE: 0.021}
         record_2 = {CtdgvParticleKey.SCI_WATER_TEMP: 15.3703, CtdgvParticleKey.SCI_WATER_COND: 4.03113,
                     CtdgvParticleKey.SCI_WATER_PRESSURE: 0.093}
 
-        self.assert_generate_particle(CtdgvTelemeteredDataParticle, record_1, 1162)
-        self.assert_generate_particle(CtdgvTelemeteredDataParticle, record_2, 1321)
+        self.assert_generate_particle(CtdgvTelemeteredDataParticle, record_1)
+        self.assert_generate_particle(CtdgvTelemeteredDataParticle, record_2)
         self.assert_no_more_data()
 
     def test_gps(self):
         self.set_data(HEADER, ZERO_GPS_VALUE)
-        self.reset_parser()
+        self.parser = GliderParser(self.config, self.test_data, self.exception_callback)
         records = self.parser.get_records(1)
         self.assertEqual(len(records), 0)
 
         self.set_data(HEADER, INT_GPS_VALUE)
-        self.reset_parser()
+        self.parser = GliderParser(self.config, self.test_data, self.exception_callback)
         records = self.parser.get_records(1)
         self.assertEqual(len(records), 0)
 
+    def test_single_yml(self):
+        """
+        Test with a yml file with a single record
+        """
+        with open(os.path.join(self.resource_path, 'single_ctdgv_record.mrg'), 'rU') as file_handle:
+            parser = GliderParser(self.config, file_handle, self.exception_callback)
+            record = parser.get_records(1)
+            self.assert_particles(record, 'single_ctdgv_record.mrg.result.yml', self.resource_path)
+            self.assertEquals(self.exception_callback_value, [])
+
+    def test_multiple_yml(self):
+        """
+        Test with a yml file with multiple records
+        """
+        with open(os.path.join(self.resource_path, 'multiple_ctdgv_record.mrg'), 'rU') as file_handle:
+            parser = GliderParser(self.config, file_handle, self.exception_callback)
+            record = parser.get_records(4)
+            self.assert_particles(record, 'multiple_ctdgv_record.mrg.result.yml', self.resource_path)
+            self.assertEquals(self.exception_callback_value, [])
+
+    def test_real(self):
+        """
+        Test with several real files and confirm no exceptions occur
+        """
+        with open(os.path.join(self.resource_path, 'unit_363_2013_199_0_0.mrg'), 'rU') as file_handle:
+            parser = GliderParser(self.config, file_handle, self.exception_callback)
+            records = parser.get_records(1107)
+            self.assert_(len(records) > 0)
+            self.assertEquals(self.exception_callback_value, [])
+
+        with open(os.path.join(self.resource_path, 'unit_363_2013_199_5_0.mrg'), 'rU') as file_handle:
+            parser = GliderParser(self.config, file_handle, self.exception_callback)
+            records = parser.get_records(108)
+            self.assert_(len(records) > 0)
+            self.assertEquals(self.exception_callback_value, [])
+
+        with open(os.path.join(self.resource_path, 'unit_363_2013_245_6_6.mrg'), 'rU') as file_handle:
+            parser = GliderParser(self.config, file_handle, self.exception_callback)
+            records = parser.get_records(240)
+            self.assert_(len(records) > 0)
+            self.assertEquals(self.exception_callback_value, [])
+
+        with open(os.path.join(self.resource_path, 'unit_364_2013_192_1_0.mrg'), 'rU') as file_handle:
+            parser = GliderParser(self.config, file_handle, self.exception_callback)
+            records = parser.get_records(4)
+            self.assert_(len(records) > 0)
+            self.assertEquals(self.exception_callback_value, [])
+
+
 @attr('UNIT', group='mi')
-class CTDGV_Recovered_GliderTest(GliderParserUnitTestCase):
+class CtdgvRecoveredGliderTest(GliderParserUnitTestCase):
     """
     Test cases for ctdgv glider data
     """
@@ -348,27 +339,28 @@ class CTDGV_Recovered_GliderTest(GliderParserUnitTestCase):
         that state is returned.
         """
         self.set_data(HEADER, CTDGV_RECORD)
-        self.reset_parser()
+        self.parser = GliderParser(self.config, self.test_data, self.exception_callback)
 
         record_1 = {CtdgvParticleKey.SCI_WATER_TEMP: 15.3683, CtdgvParticleKey.SCI_WATER_COND: 4.03096,
                     CtdgvParticleKey.SCI_WATER_PRESSURE: 0.021}
         record_2 = {CtdgvParticleKey.SCI_WATER_TEMP: 15.3703, CtdgvParticleKey.SCI_WATER_COND: 4.03113,
                     CtdgvParticleKey.SCI_WATER_PRESSURE: 0.093}
 
-        self.assert_generate_particle(CtdgvRecoveredDataParticle, record_1, 1162)
-        self.assert_generate_particle(CtdgvRecoveredDataParticle, record_2, 1321)
+        self.assert_generate_particle(CtdgvRecoveredDataParticle, record_1)
+        self.assert_generate_particle(CtdgvRecoveredDataParticle, record_2)
         self.assert_no_more_data()
 
     def test_gps(self):
         self.set_data(HEADER, ZERO_GPS_VALUE)
-        self.reset_parser()
+        self.parser = GliderParser(self.config, self.test_data, self.exception_callback)
         records = self.parser.get_records(1)
         self.assertEqual(len(records), 0)
 
         self.set_data(HEADER, INT_GPS_VALUE)
-        self.reset_parser()
+        self.parser = GliderParser(self.config, self.test_data, self.exception_callback)
         records = self.parser.get_records(1)
         self.assertEqual(len(records), 0)
+
 
 @attr('UNIT', group='mi')
 class DOSTATelemeteredGliderTest(GliderParserUnitTestCase):
@@ -380,20 +372,44 @@ class DOSTATelemeteredGliderTest(GliderParserUnitTestCase):
         DataSetDriverConfigKeys.PARTICLE_CLASS: 'DostaTelemeteredDataParticle'
     }
 
+    resource_path = os.path.join(BASE_RESOURCE_PATH, 'moas', 'gl', 'dosta', 'resource')
+
     def test_dosta_telemetered_particle(self):
         """
         Verify we publish particles as expected.  Ensure particle is published and
         that state is returned.
         """
         self.set_data(HEADER, DOSTA_RECORD)
-        self.reset_parser()
+        self.parser = GliderParser(self.config, self.test_data, self.exception_callback)
 
-        record_1 = {DostaTelemeteredParticleKey.SCI_OXY4_OXYGEN: 242.217, DostaTelemeteredParticleKey.SCI_OXY4_SATURATION: 96.009}
-        record_2 = {DostaTelemeteredParticleKey.SCI_OXY4_OXYGEN: 242.141, DostaTelemeteredParticleKey.SCI_OXY4_SATURATION: 95.988}
+        record_1 = {DostaTelemeteredParticleKey.SCI_OXY4_OXYGEN: 242.217,
+                    DostaTelemeteredParticleKey.SCI_OXY4_SATURATION: 96.009}
+        record_2 = {DostaTelemeteredParticleKey.SCI_OXY4_OXYGEN: 242.141,
+                    DostaTelemeteredParticleKey.SCI_OXY4_SATURATION: 95.988}
 
-        self.assert_generate_particle(DostaTelemeteredDataParticle, record_1, 1159)
-        self.assert_generate_particle(DostaTelemeteredDataParticle, record_2, 1315)
+        self.assert_generate_particle(DostaTelemeteredDataParticle, record_1)
+        self.assert_generate_particle(DostaTelemeteredDataParticle, record_2)
         self.assert_no_more_data()
+
+    def test_multiple_yml(self):
+        """
+        Test with a yml file with a multiple records
+        """
+        with open(os.path.join(self.resource_path, 'multiple_dosta_record.mrg'), 'rU') as file_handle:
+            parser = GliderParser(self.config, file_handle, self.exception_callback)
+            record = parser.get_records(4)
+            self.assert_particles(record, 'multiple_dosta_record.mrg.result.yml', self.resource_path)
+            self.assertEquals(self.exception_callback_value, [])
+
+    def test_real(self):
+        """
+        Test with a real file and confirm no exceptions occur
+        """
+        with open(os.path.join(self.resource_path, 'unit_363_2013_245_6_6.mrg'), 'rU') as file_handle:
+            parser = GliderParser(self.config, file_handle, self.exception_callback)
+            records = parser.get_records(240)
+            self.assert_(len(records) > 0)
+            self.assertEquals(self.exception_callback_value, [])
 
 
 @attr('UNIT', group='mi')
@@ -412,13 +428,15 @@ class DOSTARecoveredGliderTest(GliderParserUnitTestCase):
         that state is returned.
         """
         self.set_data(HEADER, DOSTA_RECORD)
-        self.reset_parser()
+        self.parser = GliderParser(self.config, self.test_data, self.exception_callback)
 
-        record_1 = {DostaRecoveredParticleKey.SCI_OXY4_OXYGEN: 242.217, DostaRecoveredParticleKey.SCI_OXY4_SATURATION: 96.009}
-        record_2 = {DostaRecoveredParticleKey.SCI_OXY4_OXYGEN: 242.141, DostaRecoveredParticleKey.SCI_OXY4_SATURATION: 95.988}
+        record_1 = {DostaRecoveredParticleKey.SCI_OXY4_OXYGEN: 242.217,
+                    DostaRecoveredParticleKey.SCI_OXY4_SATURATION: 96.009}
+        record_2 = {DostaRecoveredParticleKey.SCI_OXY4_OXYGEN: 242.141,
+                    DostaRecoveredParticleKey.SCI_OXY4_SATURATION: 95.988}
 
-        self.assert_generate_particle(DostaRecoveredDataParticle, record_1, 1159)
-        self.assert_generate_particle(DostaRecoveredDataParticle, record_2, 1315)
+        self.assert_generate_particle(DostaRecoveredDataParticle, record_1)
+        self.assert_generate_particle(DostaRecoveredDataParticle, record_2)
         self.assert_no_more_data()
 
 
@@ -432,13 +450,15 @@ class FLORTTelemeteredGliderTest(GliderParserUnitTestCase):
         DataSetDriverConfigKeys.PARTICLE_CLASS: 'FlortTelemeteredDataParticle'
     }
 
+    resource_path = os.path.join(BASE_RESOURCE_PATH, 'moas', 'gl', 'flort_m', 'resource')
+
     def test_flort_telemetered_particle(self):
         """
         Verify we publish particles as expected.  Ensure particle is published and
         that state is returned.
         """
         self.set_data(HEADER3, FLORT_RECORD)
-        self.reset_parser()
+        self.parser = GliderParser(self.config, self.test_data, self.exception_callback)
 
         record_1 = {FlortTelemeteredParticleKey.SCI_FLBBCD_BB_UNITS: 0.000281336,
                     FlortTelemeteredParticleKey.SCI_FLBBCD_CDOM_UNITS: 2.0352,
@@ -447,9 +467,19 @@ class FLORTTelemeteredGliderTest(GliderParserUnitTestCase):
                     FlortTelemeteredParticleKey.SCI_FLBBCD_CDOM_UNITS: 2.12,
                     FlortTelemeteredParticleKey.SCI_FLBBCD_CHLOR_UNITS: 0.847}
 
-        self.assert_generate_particle(FlortTelemeteredDataParticle, record_1, 10534)
-        self.assert_generate_particle(FlortTelemeteredDataParticle, record_2, 11977)
+        self.assert_generate_particle(FlortTelemeteredDataParticle, record_1)
+        self.assert_generate_particle(FlortTelemeteredDataParticle, record_2)
         self.assert_no_more_data()
+
+    def test_multiple_yml(self):
+        """
+        Test with a yml file with multiple records
+        """
+        with open(os.path.join(self.resource_path, 'multiple_glider_record.mrg'), 'rU') as file_handle:
+            parser = GliderParser(self.config, file_handle, self.exception_callback)
+            record = parser.get_records(4)
+            self.assert_particles(record, 'multiple_flort_record.mrg.result.yml', self.resource_path)
+            self.assertEquals(self.exception_callback_value, [])
 
 
 @attr('UNIT', group='mi')
@@ -468,7 +498,7 @@ class FLORTRecoveredGliderTest(GliderParserUnitTestCase):
         that state is returned.
         """
         self.set_data(HEADER3, FLORT_RECORD)
-        self.reset_parser()
+        self.parser = GliderParser(self.config, self.test_data, self.exception_callback)
 
         record_1 = {FlortRecoveredParticleKey.SCI_FLBBCD_BB_UNITS: 0.000281336,
                     FlortRecoveredParticleKey.SCI_FLBBCD_CDOM_UNITS: 2.0352,
@@ -477,8 +507,8 @@ class FLORTRecoveredGliderTest(GliderParserUnitTestCase):
                     FlortRecoveredParticleKey.SCI_FLBBCD_CDOM_UNITS: 2.12,
                     FlortRecoveredParticleKey.SCI_FLBBCD_CHLOR_UNITS: 0.847}
 
-        self.assert_generate_particle(FlortRecoveredDataParticle, record_1, 10534)
-        self.assert_generate_particle(FlortRecoveredDataParticle, record_2, 11977)
+        self.assert_generate_particle(FlortRecoveredDataParticle, record_1)
+        self.assert_generate_particle(FlortRecoveredDataParticle, record_2)
         self.assert_no_more_data()
 
 
@@ -492,6 +522,8 @@ class PARADTelemeteredGliderTest(GliderParserUnitTestCase):
         DataSetDriverConfigKeys.PARTICLE_CLASS: 'ParadTelemeteredDataParticle'
     }
 
+    resource_path = os.path.join(BASE_RESOURCE_PATH, 'moas', 'gl', 'parad', 'resource')
+
     def test_parad_telemetered_particle(self):
         """
         Verify we publish particles as expected.  Ensure particle is published and
@@ -499,16 +531,26 @@ class PARADTelemeteredGliderTest(GliderParserUnitTestCase):
         """
         # reused the FLORT record data for this Parad test
         self.set_data(HEADER3, FLORT_RECORD)
-        self.reset_parser()
+        self.parser = GliderParser(self.config, self.test_data, self.exception_callback)
 
         record_1 = {ParadTelemeteredParticleKey.SCI_BSIPAR_PAR: 664.424}
         record_2 = {ParadTelemeteredParticleKey.SCI_BSIPAR_PAR: 645.569}
 
         # (10553 = file size up to start of last row) 10553 - 19 bytes (for 19 lines of Carriage returns above) = 10534
-        self.assert_generate_particle(ParadTelemeteredDataParticle, record_1, 10534)
+        self.assert_generate_particle(ParadTelemeteredDataParticle, record_1)
         # (11997 = file size in bytes) 11997 - 20 bytes (for 20 lines of Carriage returns above) = 11977
-        self.assert_generate_particle(ParadTelemeteredDataParticle, record_2, 11977)
+        self.assert_generate_particle(ParadTelemeteredDataParticle, record_2)
         self.assert_no_more_data()
+
+    def test_multiple_yml(self):
+        """
+        Test with a yml file with multiple records
+        """
+        with open(os.path.join(self.resource_path, 'multiple_glider_record.mrg'), 'rU') as file_handle:
+            parser = GliderParser(self.config, file_handle, self.exception_callback)
+            record = parser.get_records(4)
+            self.assert_particles(record, 'multiple_parad_record.mrg.result.yml', self.resource_path)
+            self.assertEquals(self.exception_callback_value, [])
 
 
 @attr('UNIT', group='mi')
@@ -529,20 +571,20 @@ class PARADRecoveredGliderTest(GliderParserUnitTestCase):
         """
         # reused the FLORT record data for this Parad test
         self.set_data(HEADER3, FLORT_RECORD)
-        self.reset_parser()
+        self.parser = GliderParser(self.config, self.test_data, self.exception_callback)
 
         record_1 = {ParadRecoveredParticleKey.SCI_BSIPAR_PAR: 664.424}
         record_2 = {ParadRecoveredParticleKey.SCI_BSIPAR_PAR: 645.569}
 
         # (10553 = file size up to start of last row) 10553 - 19 bytes (for 19 lines of Carriage returns above) = 10534
-        self.assert_generate_particle(ParadRecoveredDataParticle, record_1, 10534)
+        self.assert_generate_particle(ParadRecoveredDataParticle, record_1)
         # (11997 = file size in bytes) 11997 - 20 bytes (for 20 lines of Carriage returns above) = 11977
-        self.assert_generate_particle(ParadRecoveredDataParticle, record_2, 11977)
+        self.assert_generate_particle(ParadRecoveredDataParticle, record_2)
         self.assert_no_more_data()
 
 
 @attr('UNIT', group='mi')
-class FLORD_Telemetered_GliderTest(GliderParserUnitTestCase):
+class FLORDTelemeteredGliderTest(GliderParserUnitTestCase):
     """
     Test cases for flord glider data
     """
@@ -551,6 +593,8 @@ class FLORD_Telemetered_GliderTest(GliderParserUnitTestCase):
         DataSetDriverConfigKeys.PARTICLE_CLASS: 'FlordTelemeteredDataParticle'
     }
 
+    resource_path = os.path.join(BASE_RESOURCE_PATH, 'moas', 'gl', 'flord_m', 'resource')
+
     def test_flord_telemetered_particle(self):
         """
         Verify we publish particles as expected.  Ensure particle is published and
@@ -558,19 +602,39 @@ class FLORD_Telemetered_GliderTest(GliderParserUnitTestCase):
         """
         # reused the FLORT record data for this Flord test
         self.set_data(HEADER5, FLORD_RECORD)
-        self.reset_parser()
+        self.parser = GliderParser(self.config, self.test_data, self.exception_callback)
 
         record_1 = {FlordParticleKey.SCI_FLBB_BB_UNITS: 0.000281, FlordParticleKey.SCI_FLBB_CHLOR_UNITS: 0.8349}
         record_2 = {FlordParticleKey.SCI_FLBB_BB_UNITS: 0.000263, FlordParticleKey.SCI_FLBB_CHLOR_UNITS: 0.847}
 
+        self.assert_generate_particle(FlordTelemeteredDataParticle, record_1)
 
-        self.assert_generate_particle(FlordTelemeteredDataParticle, record_1, 10764)
-
-        self.assert_generate_particle(FlordTelemeteredDataParticle, record_2, 12251)
+        self.assert_generate_particle(FlordTelemeteredDataParticle, record_2)
         self.assert_no_more_data()
 
+    def test_multiple_yml(self):
+        """
+        Test with a yml file with a single record
+        """
+        with open(os.path.join(self.resource_path, 'multiple_flord_record.mrg'), 'rU') as file_handle:
+            parser = GliderParser(self.config, file_handle, self.exception_callback)
+            record = parser.get_records(4)
+            self.assert_particles(record, 'multiple_flord_record.mrg.result.yml', self.resource_path)
+            self.assertEquals(self.exception_callback_value, [])
+
+    def test_real(self):
+        """
+        Test with a real file and confirm no exceptions occur
+        """
+        with open(os.path.join(self.resource_path, 'unit_363_2013_245_6_6.mrg'), 'rU') as file_handle:
+            parser = GliderParser(self.config, file_handle, self.exception_callback)
+            records = parser.get_records(240)
+            self.assert_(len(records) > 0)
+            self.assertEquals(self.exception_callback_value, [])
+
+
 @attr('UNIT', group='mi')
-class FLORD_Recovered_GliderTest(GliderParserUnitTestCase):
+class FLORDRecoveredGliderTest(GliderParserUnitTestCase):
     """
     Test cases for flord glider data
     """
@@ -586,16 +650,16 @@ class FLORD_Recovered_GliderTest(GliderParserUnitTestCase):
         """
         # reused the FLORT record data for this Flord test
         self.set_data(HEADER5, FLORD_RECORD)
-        self.reset_parser()
+        self.parser = GliderParser(self.config, self.test_data, self.exception_callback)
 
         record_1 = {FlordParticleKey.SCI_FLBB_BB_UNITS: 0.000281, FlordParticleKey.SCI_FLBB_CHLOR_UNITS: 0.8349}
         record_2 = {FlordParticleKey.SCI_FLBB_BB_UNITS: 0.000263, FlordParticleKey.SCI_FLBB_CHLOR_UNITS: 0.847}
 
+        self.assert_generate_particle(FlordRecoveredDataParticle, record_1)
 
-        self.assert_generate_particle(FlordRecoveredDataParticle, record_1, 10764)
-
-        self.assert_generate_particle(FlordRecoveredDataParticle, record_2, 12251)
+        self.assert_generate_particle(FlordRecoveredDataParticle, record_2)
         self.assert_no_more_data()
+
 
 @attr('UNIT', group='mi')
 class ENGGliderTest(GliderParserUnitTestCase):
@@ -604,9 +668,11 @@ class ENGGliderTest(GliderParserUnitTestCase):
     """
     config = {
         DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.glider',
-        DataSetDriverConfigKeys.PARTICLE_CLASS: [EngineeringMetadataDataParticle,
-                                                 EngineeringTelemeteredDataParticle,
-                                                 EngineeringScienceTelemeteredDataParticle]
+        DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT: {
+            EngineeringClassKey.METADATA: 'EngineeringMetadataDataParticle',
+            EngineeringClassKey.DATA: 'EngineeringTelemeteredDataParticle',
+            EngineeringClassKey.SCIENCE: 'EngineeringScienceTelemeteredDataParticle'
+        }
     }
 
     def test_eng_particle(self):
@@ -615,7 +681,7 @@ class ENGGliderTest(GliderParserUnitTestCase):
         that state is returned.
         """
         self.set_data(HEADER4, ENGSCI_RECORD)
-        self.reset_eng_parser()
+        self.parser = GliderEngineeringParser(self.config, self.test_data, self.exception_callback)
 
         meta_record = {EngineeringMetadataParticleKey.GLIDER_ENG_FILENAME: 'unit_247-2012-051-0-0-dbd(01840000)',
                        EngineeringMetadataParticleKey.GLIDER_MISSION_NAME: 'ENDUR1.MI',
@@ -631,14 +697,70 @@ class ENGGliderTest(GliderParserUnitTestCase):
         record_sci_2 = {EngineeringScienceTelemeteredParticleKey.SCI_M_DISK_FREE: 1000.2,
                         EngineeringScienceTelemeteredParticleKey.SCI_M_DISK_USAGE: 1000.2}
 
-        self.assert_generate_particle(EngineeringMetadataDataParticle, meta_record, 9110)
+        self.assert_generate_particle(EngineeringMetadataDataParticle, meta_record)
         # 1 sample line generates 2 particles
-        self.assert_generate_particle(EngineeringTelemeteredDataParticle, record_1, 9110)
-        self.assert_generate_particle(EngineeringScienceTelemeteredDataParticle, record_sci_1, 10795)
+        self.assert_generate_particle(EngineeringTelemeteredDataParticle, record_1)
+        self.assert_generate_particle(EngineeringScienceTelemeteredDataParticle, record_sci_1)
         # # total file size in bytes
-        self.assert_generate_particle(EngineeringTelemeteredDataParticle, record_2, 10795)
-        self.assert_generate_particle(EngineeringScienceTelemeteredDataParticle, record_sci_2, 12479)
+        self.assert_generate_particle(EngineeringTelemeteredDataParticle, record_2)
+        self.assert_generate_particle(EngineeringScienceTelemeteredDataParticle, record_sci_2)
         self.assert_no_more_data()
+
+    def test_encode_lat(self):
+        """
+        Test that encoding a latitude value that doesn't match the regex produces an encoding exception
+        """
+        self.set_data(HEADER4, ENGSCI_BAD_LAT_RECORD)
+        self.parser = GliderEngineeringParser(self.config, self.test_data, self.exception_callback)
+
+        record_1 = {EngineeringTelemeteredParticleKey.M_BATTPOS: 0.703717,
+                    EngineeringTelemeteredParticleKey.M_HEADING: 5.05447,
+                    EngineeringTelemeteredParticleKey.C_WPT_LAT: None,
+                    EngineeringTelemeteredParticleKey.C_WPT_LON: -126.0}
+        record_2 = {EngineeringTelemeteredParticleKey.M_BATTPOS: 0.695632,
+                    EngineeringTelemeteredParticleKey.M_HEADING: 5.05447,
+                    EngineeringTelemeteredParticleKey.C_WPT_LAT: 0.5,
+                    EngineeringTelemeteredParticleKey.C_WPT_LON: -126.0}
+
+        # just check the data records, the other particle classes were checked above
+        self.assert_generate_particle(EngineeringMetadataDataParticle)
+        self.assert_generate_particle(EngineeringTelemeteredDataParticle, record_1)
+        self.assert_generate_particle(EngineeringScienceTelemeteredDataParticle)
+        self.assert_generate_particle(EngineeringTelemeteredDataParticle, record_2)
+        self.assert_generate_particle(EngineeringScienceTelemeteredDataParticle)
+        self.assert_no_more_data()
+
+    def test_bad_config(self):
+        """
+        Test that a bad config causes as exception
+        """
+
+        # bad metadata class, this one does not exist
+        bad_config = {
+            DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.glider',
+            DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT: {
+                EngineeringClassKey.METADATA: 'EngineeringDataParticle',
+                EngineeringClassKey.DATA: 'EngineeringTelemeteredDataParticle',
+                EngineeringClassKey.SCIENCE: 'EngineeringScienceTelemeteredDataParticle'
+            }
+        }
+
+        self.set_data(HEADER4, ENGSCI_RECORD)
+        with self.assertRaises(ConfigurationException):
+            self.parser = GliderEngineeringParser(bad_config, self.test_data, self.exception_callback)
+
+        # no config
+        with self.assertRaises(ConfigurationException):
+            self.parser = GliderEngineeringParser({}, self.test_data, self.exception_callback)
+
+        # no particle classes dict in config
+        bad_config = {
+            DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.glider',
+        }
+        with self.assertRaises(ConfigurationException):
+            self.parser = GliderEngineeringParser(bad_config, self.test_data, self.exception_callback)
+
+
 
 @attr('UNIT', group='mi')
 class ENGRecoveredGliderTest(GliderParserUnitTestCase):
@@ -647,10 +769,14 @@ class ENGRecoveredGliderTest(GliderParserUnitTestCase):
     """
     config = {
         DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.glider',
-        DataSetDriverConfigKeys.PARTICLE_CLASS: [EngineeringMetadataRecoveredDataParticle,
-                                                 EngineeringRecoveredDataParticle,
-                                                 EngineeringScienceRecoveredDataParticle]
+        DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT: {
+            EngineeringClassKey.METADATA: 'EngineeringMetadataRecoveredDataParticle',
+            EngineeringClassKey.DATA: 'EngineeringRecoveredDataParticle',
+            EngineeringClassKey.SCIENCE: 'EngineeringScienceRecoveredDataParticle'
+        }
     }
+
+    resource_path = os.path.join(BASE_RESOURCE_PATH, 'moas', 'gl', 'engineering', 'resource')
 
     def test_eng_recovered_particle(self):
         """
@@ -658,7 +784,7 @@ class ENGRecoveredGliderTest(GliderParserUnitTestCase):
         that state is returned.
         """
         self.set_data(HEADER4, ENGSCI_RECORD)
-        self.reset_eng_parser()
+        self.parser = GliderEngineeringParser(self.config, self.test_data, self.exception_callback)
 
         meta_record = {EngineeringMetadataParticleKey.GLIDER_ENG_FILENAME: 'unit_247-2012-051-0-0-dbd(01840000)',
                        EngineeringMetadataParticleKey.GLIDER_MISSION_NAME: 'ENDUR1.MI',
@@ -674,11 +800,32 @@ class ENGRecoveredGliderTest(GliderParserUnitTestCase):
         record_sci_2 = {EngineeringScienceRecoveredParticleKey.SCI_M_DISK_FREE: 1000.2,
                         EngineeringScienceRecoveredParticleKey.SCI_M_DISK_USAGE: 1000.2}
 
-        self.assert_generate_particle(EngineeringMetadataRecoveredDataParticle, meta_record, 9110)
+        self.assert_generate_particle(EngineeringMetadataRecoveredDataParticle, meta_record)
         # 1 sample line generates 2 particles
-        self.assert_generate_particle(EngineeringRecoveredDataParticle, record_1, 9110)
-        self.assert_generate_particle(EngineeringScienceRecoveredDataParticle, record_sci_1, 10795)
+        self.assert_generate_particle(EngineeringRecoveredDataParticle, record_1)
+        self.assert_generate_particle(EngineeringScienceRecoveredDataParticle, record_sci_1)
         # total file size in bytes
-        self.assert_generate_particle(EngineeringRecoveredDataParticle, record_2, 10795)
-        self.assert_generate_particle(EngineeringScienceRecoveredDataParticle, record_sci_2, 12479)
+        self.assert_generate_particle(EngineeringRecoveredDataParticle, record_2)
+        self.assert_generate_particle(EngineeringScienceRecoveredDataParticle, record_sci_2)
         self.assert_no_more_data()
+
+    def test_multiple_yml(self):
+        """
+        Test with a yml file with a multiple records
+        """
+        with open(os.path.join(self.resource_path, 'multiple_glider_record-engDataOnly.mrg'), 'rU') as file_handle:
+            parser = GliderEngineeringParser(self.config, file_handle, self.exception_callback)
+            record = parser.get_records(9)
+            self.assert_particles(record, 'multiple_glider_record_recovered-engDataOnly.mrg.result.yml',
+                                  self.resource_path)
+            self.assertEquals(self.exception_callback_value, [])
+
+    def test_real(self):
+        """
+        Test a real file and confirm no exceptions occur
+        """
+        with open(os.path.join(self.resource_path, 'unit_363_2013_245_6_6.mrg'), 'rU') as file_handle:
+            parser = GliderEngineeringParser(self.config, file_handle, self.exception_callback)
+            records = parser.get_records(240)
+            self.assert_(len(records) > 3)
+            self.assertEquals(self.exception_callback_value, [])

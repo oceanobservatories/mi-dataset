@@ -1,8 +1,0 @@
-driver_metadata:
-  author: Rachel Manoni 
-  driver_name: glider_flord_m
-  driver_path: moas/gl/flord_m
-  email: rachel.e.manoni@raytheon.com
-  release_notes: refactored for uFrame
-  version: 0.1.4
-  constructor: FLORDDataSetDriver

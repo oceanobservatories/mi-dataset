@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """
-@package glider.py
-@file glider.py
+@package mi/dataset/parser
+@file mi/dataset/parser/glider.py
 @author Stuart Pearce & Chris Wingard
 @brief Module containing parser scripts for glider data set agents
 """
@@ -11,19 +11,15 @@ __license__ = 'Apache 2.0'
 import re
 import ntplib
 from math import copysign, isnan
-from mi.core.log import get_logger, get_logging_metaclass
+from mi.core.log import get_logger
 from mi.core.common import BaseEnum
-from mi.core.exceptions import SampleException, UnexpectedDataException, RecoverableSampleException
+from mi.core.exceptions import SampleException, UnexpectedDataException, RecoverableSampleException, \
+    ConfigurationException, SampleEncodingException, DatasetParserException
 from mi.core.instrument.data_particle import DataParticle, DataParticleKey
-from mi.dataset.dataset_parser import SimpleParser
-from mi.dataset.parser import utilities
+from mi.dataset.dataset_parser import SimpleParser, DataSetDriverConfigKeys
 
 # start the logger
 log = get_logger()
-
-class StateKey(BaseEnum):
-    POSITION = 'position'
-    SENT_METADATA = 'sent_metadata'
 
 
 class DataParticleType(BaseEnum):
@@ -45,6 +41,7 @@ class DataParticleType(BaseEnum):
     GLIDER_ENG_SCI_TELEMETERED = 'glider_eng_sci_telemetered'
     GLIDER_ENG_SCI_RECOVERED = 'glider_eng_sci_recovered'
     GLIDER_ENG_METADATA_RECOVERED = 'glider_eng_metadata_recovered'
+    NUTNR_M_GLIDER_INSTRUMENT = 'nutnr_m_glider_instrument'
 
 
 class GliderParticleKey(BaseEnum):
@@ -86,26 +83,72 @@ class GliderParticle(DataParticle):
     common_parameters = GliderParticleKey.list()
 
     def _parsed_values(self, key_list):
-        if not isinstance(self.raw_data, dict):
-            raise SampleException(
-                "%s: Object Instance is not a Glider Parsed Data \
-                 dictionary" % self._data_particle_type)
-        empty_set = {float('nan'), None}
 
         value_list = [self.raw_data.get(key, None) for key in key_list]
-        value_set = set(value_list)
-        if value_set == empty_set:
-            log.error("No parameters from particle found in input row of Raw Data, particle cannot be created!")
-            raise SampleException("No data for particle found")
 
         result = []
         for key, value in zip(key_list, value_list):
-            if type(value) is float and isnan(value):
-                value = None
-            result.append({DataParticleKey.VALUE_ID: key,
-                           DataParticleKey.VALUE: value})
+            # encode strings into float or int
+            if value is None:
+                # this key was not present in this file, there is no value
+                result.append({DataParticleKey.VALUE_ID: key, DataParticleKey.VALUE: None})
+            elif ('_lat' in key or '_lon' in key) and value != 'NaN':
+                # special encoding for latitude and longitude
+                result.append(self._encode_value(key, value, GliderParticle._string_to_ddegrees))
+            elif value == 'NaN' or '.' in value or 'e' in value:
+                # this is a float
+                result.append(self._encode_value(key, value, GliderParticle._encode_float_or_nan))
+            else:
+                # if it is not a float it is an int
+                result.append(self._encode_value(key, value, int))
 
         return result
+
+    @staticmethod
+    def _encode_float_or_nan(value):
+        if value == 'NaN':
+            return None
+        else:
+            return float(value)
+
+    @staticmethod
+    def _string_to_ddegrees(pos_str):
+        """
+        Converts the given string from this data stream into a more
+        standard latitude/longitude value in decimal degrees.
+        @param pos_str The position (latitude or longitude) string in the
+           format "DDMM.MMMM" for latitude and "DDDMM.MMMM" for longitude. A
+           positive or negative sign to the string indicates northern/southern
+           or eastern/western hemispheres, respectively.
+        @retval The position in decimal degrees
+        """
+        # As a stop gap fix add a .0 to integers that don't contain a decimal.  This
+        # should only affect the engineering stream as the science data streams shouldn't
+        # contain lat lon
+        if not "." in pos_str:
+            pos_str += ".0"
+
+        # if there are not enough numbers to fill in DDMM, prepend zeros
+        str_words = pos_str.split('.')
+        adj_zeros = 4 - len(str_words[0])
+        if adj_zeros > 0:
+            for i in range(0, adj_zeros):
+                pos_str = '0' + pos_str
+
+        regex = r'([-+]?\d{2,3})(\d{2}\.\d+)'
+        regex_matcher = re.compile(regex)
+        latlon_match = regex_matcher.match(pos_str)
+
+        if latlon_match is None:
+            msg = "Failed to parse lat/lon value: '%s'" % pos_str
+            log.error(msg)
+            raise SampleEncodingException(msg)
+
+        degrees = float(latlon_match.group(1))
+        minutes = float(latlon_match.group(2))
+        ddegrees = copysign((abs(degrees) + minutes / 60.), degrees)
+
+        return ddegrees
 
 
 class CtdgvParticleKey(GliderParticleKey):
@@ -617,7 +660,7 @@ class EngineeringScienceRecoveredParticleKey(GliderParticleKey):
     SCI_X_SENT_DATA_FILES = 'sci_x_sent_data_files'
 
 
-class EngineeringMetadataParticleKey(GliderParticleKey):
+class EngineeringMetadataParticleKey(BaseEnum):
     # science data made available via glider recovery
     GLIDER_ENG_FILENAME = 'glider_eng_filename'
     GLIDER_MISSION_NAME = 'glider_mission_name'
@@ -688,48 +731,28 @@ class EngineeringTelemeteredDataParticle(GliderParticle):
         return self._parsed_values(EngineeringTelemeteredDataParticle.keys_exclude_sci_times)
 
 
-class EngineeringMetadataDataParticle(GliderParticle):
+class EngineeringMetadataCommonDataParticle(DataParticle):
+
+    def _build_parsed_values(self):
+        """
+        Takes a GliderParser object and extracts engineering metadata from the
+        header and puts the data into a Data Particle.
+
+        @returns result a list of dictionaries of particle data
+        @throws SampleException if the data is not a glider data dictionary
+        """
+        results = []
+        for key in EngineeringMetadataParticleKey.list():
+            results.append(self._encode_value(key, self.raw_data[key], str))
+        return results
+
+
+class EngineeringMetadataDataParticle(EngineeringMetadataCommonDataParticle):
     _data_particle_type = DataParticleType.GLIDER_ENG_METADATA
-    science_parameters = EngineeringMetadataParticleKey.science_parameter_list()
-
-    keys_exclude_times = EngineeringMetadataParticleKey.list()
-    keys_exclude_times.remove(GliderParticleKey.M_PRESENT_TIME)
-    keys_exclude_times.remove(GliderParticleKey.M_PRESENT_SECS_INTO_MISSION)
-    keys_exclude_times.remove(GliderParticleKey.SCI_M_PRESENT_TIME)
-    keys_exclude_times.remove(GliderParticleKey.SCI_M_PRESENT_SECS_INTO_MISSION)
-
-    def _build_parsed_values(self):
-        """
-        Takes a GliderParser object and extracts engineering metadata from the
-        header and puts the data into a Data Particle.
-
-        @returns result a list of dictionaries of particle data
-        @throws SampleException if the data is not a glider data dictionary
-        """
-        # need to exclude m times
-        return self._parsed_values(EngineeringMetadataDataParticle.keys_exclude_times)
 
 
-class EngineeringMetadataRecoveredDataParticle(GliderParticle):
+class EngineeringMetadataRecoveredDataParticle(EngineeringMetadataCommonDataParticle):
     _data_particle_type = DataParticleType.GLIDER_ENG_METADATA_RECOVERED
-    science_parameters = EngineeringMetadataParticleKey.science_parameter_list()
-
-    keys_exclude_times = EngineeringMetadataParticleKey.list()
-    keys_exclude_times.remove(GliderParticleKey.M_PRESENT_TIME)
-    keys_exclude_times.remove(GliderParticleKey.M_PRESENT_SECS_INTO_MISSION)
-    keys_exclude_times.remove(GliderParticleKey.SCI_M_PRESENT_TIME)
-    keys_exclude_times.remove(GliderParticleKey.SCI_M_PRESENT_SECS_INTO_MISSION)
-
-    def _build_parsed_values(self):
-        """
-        Takes a GliderParser object and extracts engineering metadata from the
-        header and puts the data into a Data Particle.
-
-        @returns result a list of dictionaries of particle data
-        @throws SampleException if the data is not a glider data dictionary
-        """
-        # need to exclude all times
-        return self._parsed_values(EngineeringMetadataDataParticle.keys_exclude_times)
 
 
 class EngineeringScienceTelemeteredDataParticle(GliderParticle):
@@ -792,6 +815,28 @@ class EngineeringScienceRecoveredDataParticle(GliderParticle):
         return self._parsed_values(EngineeringScienceRecoveredDataParticle.keys_exclude_times)
 
 
+class NutnrMParticleKey(GliderParticleKey):
+    SCI_SUNA_TIMESTAMP = 'sci_suna_timestamp'
+    SCI_SUNA_RECORD_OFFSET = 'sci_suna_record_offset'
+    SCI_SUNA_NITRATE_UM = 'sci_suna_nitrate_um'
+    SCI_SUNA_NITRATE_MG = 'sci_suna_nitrate_mg'
+
+
+class NutnrMDataParticle(GliderParticle):
+    _data_particle_type = DataParticleType.NUTNR_M_GLIDER_INSTRUMENT
+    science_parameters = NutnrMParticleKey.science_parameter_list()
+
+    def _build_parsed_values(self):
+        """
+        Takes a GliderParser object and extracts FLORT data from the
+        data dictionary and puts the data into a FLORT Data Particle.
+
+        @returns result a list of dictionaries of particle data
+        @throws SampleException if the data is not a glider data dictionary
+        """
+        return self._parsed_values(NutnrMParticleKey.list())
+
+
 class GliderParser(SimpleParser):
     """
     GliderParser parses a Slocum Electric Glider data file that has been
@@ -805,20 +850,27 @@ class GliderParser(SimpleParser):
                  stream_handle,
                  exception_callback):
 
-        self._stream_handle = stream_handle
         self._record_buffer = []  # holds tuples of (record, state)
         self._header_dict = {}
+        # only initialize particle class to None if it does not already exist
+        if not hasattr(self, '_particle_class'):
+            self._particle_class = None
+        self.num_columns = None
+
+        super(GliderParser, self).__init__(config,
+                                           stream_handle,
+                                           exception_callback)
+
+        if self._particle_class is None:
+            msg = 'particle_class was not defined in configuration %s' % config
+            log.warn(msg)
+            raise ConfigurationException(msg)
 
         # Read and store the configuration found in the 14 line header
         self._read_file_definition()
+
         # Read and store the information found in the 3 lines of column labels
         self._read_column_labels()
-
-
-        super(GliderParser, self).__init__(config,
-                                           self._stream_handle,
-                                           exception_callback)
-
 
     def _read_file_definition(self):
         """
@@ -836,12 +888,9 @@ class GliderParser(SimpleParser):
         header_pattern = r'(.*): (.*)$'
         header_re = re.compile(header_pattern)
 
-        while row_count < num_hdr_lines:
-            line = self._stream_handle.readline()
+        line = self._stream_handle.readline()
 
-            # check if this line is empty
-            if len(line) == 0:
-                raise SampleException("GliderParser._read_file_definition(): Header line is empty")
+        while line and row_count < num_hdr_lines:
 
             match = header_re.match(line)
 
@@ -849,18 +898,23 @@ class GliderParser(SimpleParser):
                 key = match.group(1)
                 value = match.group(2)
                 value = value.strip()
-                #log.debug("header key: %s, value: %s", key, value)
 
                 # update num_hdr_lines based on the header info.
-                if key in ['num_ascii_tags', 'num_label_lines', 'sensors_per_cycle']:
-                    value = int(value)
+                if key == 'num_ascii_tags':
+                    # this key has a required value of 14, otherwise we don't know how to parse the file
+                    if int(value) != num_hdr_lines:
+                        raise DatasetParserException("Header must be %d rows, but it is %s" % (num_hdr_lines, value))
 
-                    # create a dictionary of these 3 key/value pairs integers from
-                    # the header rows that need to be saved for future use
-                    self._header_dict[key] = value
+                elif key == 'num_label_lines':
+                    # this key has a required value of 3, otherwise we don't know how to parse the file
+                    if int(value) != 3:
+                        raise DatasetParserException("There must be 3 Label lines from the header for this parser")
+
+                elif key == 'sensors_per_cycle':
+                    # save for future use
+                    self._header_dict[key] = int(value)
 
                 elif key in ['filename_label', 'mission_name', 'fileopen_time']:
-
                     # create a dictionary of these 3 key/value pairs strings from
                     # the header rows that need to be saved for future use
                     self._header_dict[key] = value
@@ -869,13 +923,13 @@ class GliderParser(SimpleParser):
                 log.warn("Failed to parse header row: %s.", line)
 
             row_count += 1
+            # only read the header lines in this method so make sure we stop
+            if row_count < num_hdr_lines:
+                line = self._stream_handle.readline()
 
-        num_ascii_tags_value = self._header_dict.get('num_ascii_tags')
-
-        if num_ascii_tags_value != num_hdr_lines:
-            raise UnexpectedDataException("GliderParser._read_file_definition(): "
-                                          "Header is not 14 rows, num_ascii_tags = %s" % num_ascii_tags_value)
-
+        if row_count < num_hdr_lines:
+            log.error('Not enough data lines for a full header')
+            raise DatasetParserException('Not enough data lines for a full header')
 
     def _read_column_labels(self):
         """
@@ -885,166 +939,97 @@ class GliderParser(SimpleParser):
         2nd Row (row 16 of file) == units
         3rd Row (row 17 of file) == column byte size
 
-        Currently we are only able to support 3 label line rows. If num_label_lines != 3 then raise an exception.
+        Currently we are only able to support 3 label line rows.
         """
-        num_columns = self._header_dict['sensors_per_cycle']
 
-        num_label_lines_value = self._header_dict.get('num_label_lines')
-
-        if num_label_lines_value != 3:
-            raise SampleException("There must be 3 Label lines from the header for this parser")
-
+        # read the label line (should be at row 15 of the file at this point)
         label_list = self._stream_handle.readline().strip().split()
-        label_list_length = len(label_list)
+        self.num_columns = len(label_list)
+        self._header_dict['labels'] = label_list
 
-        if label_list_length != num_columns:
-            raise SampleException("The number of Label values must equal the number of columns defined by "
-                                  "sensors_per_cycle, %s does not equal %d"
-                                  % (label_list_length, num_label_lines_value))
-        else:
-            self._header_dict['labels'] = label_list
+        # the m_present_time label is required to generate particles, raise an exception if it is not found
+        if not GliderParticleKey.M_PRESENT_TIME in label_list:
+            raise DatasetParserException('The m_present_time label has not been found, which means the timestamp '
+                                         'cannot be determined for any particles')
 
+        # read the units line (should be at row 16 of the file at this point)
         data_unit_list = self._stream_handle.readline().strip().split()
         data_unit_list_length = len(data_unit_list)
 
-        if data_unit_list_length != num_columns:
-            raise SampleException("The number of Units values must equal the number of columns defined by "
-                                  "sensors_per_cycle, %s does not equal %d"
-                                  % (data_unit_list_length, num_label_lines_value))
-        else:
-            self._header_dict['data_units'] = data_unit_list
-
-        # read the next line from the file (should be at row 17 of the file at this point)
+        # read the number of bytes line (should be at row 17 of the file at this point)
         num_of_bytes_list = self._stream_handle.readline().strip().split()
         num_of_bytes_list_length = len(num_of_bytes_list)
 
-        if num_of_bytes_list_length != num_columns:
-            raise SampleException("The number of Byte values must equal the number of columns defined by "
-                                  "sensors_per_cycle, %s does not equal %d"
-                                  % (num_of_bytes_list_length, num_label_lines_value))
-        else:
-            # convert each number of bytes string value into an int
-            num_of_bytes_list = map(int, num_of_bytes_list)
-            self._header_dict['num_of_bytes'] = num_of_bytes_list
+        # number of labels for name, unit, and number of bytes must match
+        if data_unit_list_length != self.num_columns or self.num_columns != num_of_bytes_list_length:
+            raise DatasetParserException("The number of columns in the labels row: %d, units row: %d, "
+                                         "and number of bytes row: %d are not equal."
+                                         % (self.num_columns, data_unit_list_length, num_of_bytes_list_length))
 
-        log.debug("Label count: %d", len(self._header_dict['labels']))
-        log.trace("Labels: %s", self._header_dict['labels'])
-        log.trace("Data units: %s", self._header_dict['data_units'])
-        log.trace("Bytes: %s", self._header_dict['num_of_bytes'])
+        # if the number of columns from the header does not match that in the data, but the rest of the file
+        # has the same number of columns in each line this is not a fatal error, just parse the columns that are present
+        if self._header_dict['sensors_per_cycle'] != self.num_columns:
+            msg = 'sensors_per_cycle from header %d does not match the number of data label columns %d' % \
+                  (self._header_dict['sensors_per_cycle'], self.num_columns)
+            self._exception_callback(SampleException(msg))
 
-        log.debug("End of header, position: %d", self._stream_handle.tell())
+        log.debug("Label count: %d", self.num_columns)
 
     def _read_data(self, data_record):
         """
         Read in the column labels, data type, number of bytes of each
         data type, and the data from an ASCII glider data file.
-        @throws SampleException if the number of columns does not match the expected number
         """
         data_dict = {}
-        num_columns = self._header_dict['sensors_per_cycle']
         data_labels = self._header_dict['labels']
-        num_bytes = self._header_dict['num_of_bytes']
         data = data_record.strip().split()
 
-        if num_columns != len(data):
+        if self.num_columns != len(data):
             err_msg = "GliderParser._read_data(): Num Of Columns NOT EQUAL to Num of Data items: " + \
-                      "Expected Columns= %s vs Actual Data= %s" % (num_columns, len(data))
+                      "Expected Columns= %s vs Actual Data= %s" % (self.num_columns, len(data))
             log.error(err_msg)
-            raise SampleException(err_msg)
+            raise DatasetParserException(err_msg)
 
         # extract record to dictionary
         for ii, value in enumerate(data):
-            nbytes = num_bytes[ii]
             label = data_labels[ii]
-
-            if value == 'NaN':
-                value = float(value)
-            elif '_lat' in label or '_lon' in label:
-                value = self._string_to_ddegrees(value)
-            else:
-                if nbytes in [1, 2]:
-                    value = int(value)
-                elif nbytes in [4, 8]:
-                    value = float(value)
-
             data_dict[label] = value
 
         return data_dict
 
     def parse_file(self):
         """
-        Create particles out of chunks and raise an event
-        @retval a list of tuples with sample particles encountered in this
-            parsing, plus the state. An empty list is returned if nothing was
-            parsed.
+        Create particles from the data in the file
         """
+        # the header was already read in the init, start at the first sample line
+
         for line in self._stream_handle:
-            try:
-                # create the dictionary of key/value pairs composed of the labels and the values from the
-                # record being parsed
-                # ex: data_dict = {'sci_bsipar_temp':10.67, n1, n2, nn}
-                data_dict = self._read_data(line)
-                timestamp = ntplib.system_to_ntp_time(data_dict['m_present_time'])
 
-            except SampleException as e:
-                log.error('Exception parsing line: %s', e)
-                self._exception_callback(e)
-                continue
+            # create the dictionary of key/value pairs composed of the labels and the values from the
+            # record being parsed
+            # ex: data_dict = {'sci_bsipar_temp':10.67, n1, n2, nn}
+            data_dict = self._read_data(line)
 
-            except KeyError as e:
-                log.error('KEY ERROR: %s', e)
-                self._exception_callback(SampleException("GliderParser.parse_chunks(): unable to find timestamp in data"))
-                continue
-
-            if self._has_science_data(data_dict, self._particle_class):
+            if GliderParser._has_science_data(data_dict, self._particle_class):
+                # create the timestamp
+                timestamp = ntplib.system_to_ntp_time(float(data_dict[GliderParticleKey.M_PRESENT_TIME]))
                 # create the particle
                 self._record_buffer.append(self._extract_sample(self._particle_class, None, data_dict, timestamp))
 
-    def _has_science_data(self, data_dict, particle_class):
+    @staticmethod
+    def _has_science_data(data_dict, particle_class):
         """
         Examine the data_dict to see if it contains particle parameters
         """
         for key, value in data_dict.iteritems():
-                if not isnan(value) and key in particle_class.science_parameters:
-                    return True
+            if value != 'NaN' and key in particle_class.science_parameters:
+                return True
 
-    def _string_to_ddegrees(self, pos_str):
-        """
-        Converts the given string from this data stream into a more
-        standard latitude/longitude value in decimal degrees.
-        @param pos_str The position (latitude or longitude) string in the
-           format "DDMM.MMMM" for latitude and "DDDMM.MMMM" for longitude. A
-           positive or negative sign to the string indicates northern/southern
-           or eastern/western hemispheres, respectively.
-        @retval The position in decimal degrees
-        """
-        # As a stop gap fix add a .0 to integers that don't contain a decimal.  This
-        # should only affect the engineering stream as the science data streams shouldn't
-        # contain lat lon
-        if not "." in pos_str:
-            pos_str += ".0"
 
-        # if there are not enough numbers to fill in DDMM, prepend zeros
-        str_words = pos_str.split('.')
-        adj_zeros = 4 - len(str_words[0])
-        if adj_zeros > 0:
-            for i in range(0, adj_zeros):
-                pos_str = '0' + pos_str
-
-        regex = r'(-*\d{2,3})(\d{2}.\d+)'
-        regex_matcher = re.compile(regex)
-        latlon_match = regex_matcher.match(pos_str)
-
-        if latlon_match is None:
-            log.error("Failed to parse lat/lon value: '%s'", pos_str)
-            self._exception_callback(SampleException("GliderParser._string_to_ddegrees(): Failed to parse lat/lon value: '%s'" % pos_str))
-            ddegrees = None
-        else:
-            degrees = float(latlon_match.group(1))
-            minutes = float(latlon_match.group(2))
-            ddegrees = copysign((abs(degrees) + minutes / 60.), degrees)
-
-        return ddegrees
+class EngineeringClassKey(BaseEnum):
+    METADATA = 'engineering_metadata'
+    DATA = 'engineering_data'
+    SCIENCE = 'engineering_science'
 
 
 class GliderEngineeringParser(GliderParser):
@@ -1053,88 +1038,64 @@ class GliderEngineeringParser(GliderParser):
                  stream_handle,
                  exception_callback):
 
+        # set the class types from the config
+        particle_class_dict = config.get(DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT)
+        if particle_class_dict is not None:
+            try:
+                # get the particle module
+                module = __import__('mi.dataset.parser.glider',
+                                    fromlist=[particle_class_dict[EngineeringClassKey.METADATA],
+                                              particle_class_dict[EngineeringClassKey.DATA],
+                                              particle_class_dict[EngineeringClassKey.SCIENCE]])
+                # get the class from the string name of the class
+                self._metadata_class = getattr(module, particle_class_dict[EngineeringClassKey.METADATA])
+                self._particle_class = getattr(module, particle_class_dict[EngineeringClassKey.DATA])
+                self._science_class = getattr(module, particle_class_dict[EngineeringClassKey.SCIENCE])
+            except AttributeError:
+                raise ConfigurationException('Config provided a class which does not exist %s' % config)
+        else:
+            raise ConfigurationException('Missing particle_classes_dict in config')
+
+        self._metadata_sent = False
+
         super(GliderEngineeringParser, self).__init__(config,
                                                       stream_handle,
                                                       exception_callback)
 
-        self.list_of_particles_to_produce = config.get('particle_class', [])
-        self._metadata_sent = False
-
     def parse_file(self):
         """
-        Create particles out of chunks and raise an event
-        @retval a list of tuples with sample particles encountered in this
-            parsing, plus the state. An empty list is returned if nothing was
-            parsed.
+        Create particles out of the data in the file
         """
+        # the header was already read in the init, start at the samples
+
         for data_record in self._stream_handle:
-            try:
-                # create the dictionary of key/value pairs composed of the labels and the values from the
-                # record being parsed
-                data_dict = self._read_data(data_record)
-                timestamp = ntplib.system_to_ntp_time(data_dict['m_present_time'])
 
-            except SampleException as e:
-                self._exception_callback(e)
-                log.warn("GliderEngineeringParser.parse_chunks(): "
-                         "Sample Exception, problem creating data dict from raw data %s", e)
-                continue
+            # create the dictionary of key/value pairs composed of the labels and the values from the
+            # record being parsed
+            data_dict = self._read_data(data_record)
+            timestamp = ntplib.system_to_ntp_time(float(data_dict[GliderParticleKey.M_PRESENT_TIME]))
 
-            except KeyError:
-                self._exception_callback(SampleException(" ## ## ## GliderEngineeringParser.parse_chunks(): "
-                                                         "unable to find timestamp in data"))
-                continue
+            # handle this particle if it is an engineering metadata particle
+            if not self._metadata_sent:
+                self._record_buffer.append(self.handle_metadata_particle(timestamp))
 
-            for particle in self.list_of_particles_to_produce:
-                # handle this particle if it is an engineering metadata particle
-                if not self._metadata_sent:
-                    self._record_buffer.extend(self.handle_metadata_particle(particle, timestamp))
+            # check for the presence of particle data in the raw data row before continuing
+            if GliderParser._has_science_data(data_dict, self._particle_class):
+                self._record_buffer.append(self._extract_sample(self._particle_class, None, data_dict, timestamp))
 
-                # check for the presence of any particle data in the raw data row before continuing
-                if self._has_science_data(data_dict, particle):
-                    try:
-                        self._record_buffer.append(self._extract_sample(particle, None, data_dict, timestamp))
-                    except RecoverableSampleException:
-                        self._exception_callback(
-                            RecoverableSampleException("GliderEngineeringParser.parse_chunks(): "
-                                                       "Particle class not defined in glider module"))
+            # check for the presence of science particle data in the raw data row before continuing
+            if GliderParser._has_science_data(data_dict, self._science_class):
+                self._record_buffer.append(self._extract_sample(self._science_class, None, data_dict, timestamp))
 
-    def handle_metadata_particle(self, particle, timestamp):
+    def handle_metadata_particle(self, timestamp):
         """
         Check if this particle is an engineering metadata particle that hasn't already been produced, ensure the
         metadata particle is produced only once
         """
-        header_info_data_dict = self.get_header_info_dict()
+        # change the names in the dictionary from the name in the data file to the parameter name
+        header_data_dict = {'glider_eng_filename': self._header_dict.get('filename_label'),
+                            'glider_mission_name': self._header_dict.get('mission_name'),
+                            'glider_eng_fileopen_time': self._header_dict.get('fileopen_time')}
 
-        try:
-            particle = self._extract_sample(particle, None, header_info_data_dict, timestamp)
-            self._metadata_sent = True
-            return [particle]
-        except RecoverableSampleException:
-            self._exception_callback(
-                RecoverableSampleException("GliderEngineeringParser.handle_metadata_particle(): "
-                                           "Particle class not defined in glider module"))
-            return []
-
-
-    def get_header_info_dict(self):
-        """
-        Add the three file information attributes to the data dictionary (file name,
-        mission name, time the file was opened)
-        """
-
-        # data_dict holds key, value pairs where
-        # key = particle attribute name
-        # value = value of particle data item
-        #
-        filename_label_value = self._header_dict.get('filename_label')
-        mission_name_value = self._header_dict.get('mission_name')
-        fileopen_time_value = self._header_dict.get('fileopen_time')
-
-        # ADD the three dicts to the data dict
-        header_data_dict = {}
-        header_data_dict['glider_eng_filename'] = filename_label_value
-        header_data_dict['glider_mission_name'] = mission_name_value
-        header_data_dict['glider_eng_fileopen_time'] = fileopen_time_value
-
-        return header_data_dict
+        self._metadata_sent = True
+        return self._extract_sample(self._metadata_class, None, header_data_dict, timestamp)
