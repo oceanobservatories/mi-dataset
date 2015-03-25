@@ -125,10 +125,14 @@ class AuvCommonParser(SimpleParser):
         for line in self._stream_handle:
 
             line = line.strip()  # remove the line terminator
-            parts = line.split(',')  # split it up into parts
+            line = line.replace('"', '')  # remove the quote characters from string fields
 
             for message_id, field_count, compute_timestamp, particle_class in self._auv_message_map:
                 # Process records of interest according to map values
+
+                # split it up into parts, limit number of splits because fault messages
+                # may contain commas in the last field.
+                parts = line.split(',', field_count - 1)
 
                 if parts[0] == message_id:
                     if len(parts) != field_count:
