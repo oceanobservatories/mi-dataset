@@ -28,11 +28,7 @@ class AdcpaDriver:
                 log.debug("Exception: %s", exception)
                 self._particleDataHdlrObj.setParticleDataCaptureFailure()
 
-            parser = AdcpPd0Parser(self._parser_config,
-                                   None, file_handle,
-                                   lambda state, ingested: None,
-                                   lambda data: None,
-                                   exception_callback)
+            parser = AdcpPd0Parser(self._parser_config, file_handle, exception_callback)
 
             driver = DataSetDriver(parser, self._particleDataHdlrObj)
 

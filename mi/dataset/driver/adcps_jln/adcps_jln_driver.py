@@ -11,7 +11,6 @@ from mi.core.log import get_logger
 from mi.dataset.dataset_driver import DataSetDriver
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 from mi.dataset.parser.adcp_pd0 import AdcpPd0Parser
-from mi.dataset.parser.adcps_jln import AdcpsJlnParticle
 
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
 
@@ -30,9 +29,7 @@ def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
         particleDataHdlrObj.setParticleDataCaptureFailure()
     
     with open(sourceFilePath, 'rb') as file_handle:
-        parser = AdcpPd0Parser(config, None, file_handle,
-            lambda state, ingested: None,
-            lambda data: None, exception_callback)
+        parser = AdcpPd0Parser(config, file_handle, exception_callback)
         
         driver = DataSetDriver(parser, particleDataHdlrObj)
         driver.processFileStream() 
