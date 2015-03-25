@@ -58,7 +58,6 @@ class DataSetDriver(object):
                     break
 
                 for record in records:
-                    log.debug("Adding record %s", record.generate())
                     self._particleDataHdlrObj.addParticleSample(record.type(), record.generate())
             except Exception as e:
                 log.debug(e)

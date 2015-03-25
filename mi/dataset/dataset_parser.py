@@ -122,7 +122,7 @@ class Parser(object):
                                           preferred_timestamp=DataParticleKey.INTERNAL_TIMESTAMP)
 
                 # need to actually parse the particle fields to find out of there are errors
-                particle.generate()
+                particle.generate_dict()
                 encoding_errors = particle.get_encoding_errors()
                 if encoding_errors:
                     log.warn("Failed to encode: %s", encoding_errors)
