@@ -519,6 +519,19 @@ class AuvEngAuvTestCase(ParserUnitTestCase):
 
             self.assertEqual(self.exception_callback_value, [])
 
+        with open(os.path.join(RESOURCE_PATH, 'subset2_reduced.csv'), 'rU') as stream_handle:
+
+            # test the recovered particle stream
+            parser = AuvEngAuvParser(stream_handle,
+                                     self.exception_callback,
+                                     is_telemetered=False)
+
+            particles = parser.get_records(200)
+
+            self.assert_particles(particles, 'subset2_reduced_recov.yml', RESOURCE_PATH)
+
+            self.assertEqual(self.exception_callback_value, [])
+
     def test_long_stream(self):
         """
         Read test data and pull out data particles.
