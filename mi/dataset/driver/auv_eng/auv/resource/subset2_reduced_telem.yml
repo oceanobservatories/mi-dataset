@@ -1873,7 +1873,6 @@ data:
     particle_object: AuvEngAuvOilCompensatorTelemParticle
     particle_type: auv_eng_auv_oil_compensator
     internal_timestamp: 3627998285.043
-    time: 1075.0000
     mission_epoch: 1419009485
     auv_latitude: 41.5543
     auv_longitude: -70.7051
@@ -1886,7 +1885,6 @@ data:
     particle_object: AuvEngAuvOilCompensatorTelemParticle
     particle_type: auv_eng_auv_oil_compensator
     internal_timestamp: 3627998295.209
-    time: 1075.0000
     mission_epoch: 1419009495
     auv_latitude: 41.5543
     auv_longitude: -70.7051
@@ -1899,7 +1897,6 @@ data:
     particle_object: AuvEngAuvOilCompensatorTelemParticle
     particle_type: auv_eng_auv_oil_compensator
     internal_timestamp: 3627998305.373
-    time: 1075.0000
     mission_epoch: 1419009505
     auv_latitude: 41.5543
     auv_longitude: -70.7051
@@ -1912,7 +1909,6 @@ data:
     particle_object: AuvEngAuvOilCompensatorTelemParticle
     particle_type: auv_eng_auv_oil_compensator
     internal_timestamp: 3627998315.538
-    time: 1075.0000
     mission_epoch: 1419009515
     auv_latitude: 41.5543
     auv_longitude: -70.7051
@@ -1925,7 +1921,6 @@ data:
     particle_object: AuvEngAuvOilCompensatorTelemParticle
     particle_type: auv_eng_auv_oil_compensator
     internal_timestamp: 3627998325.657
-    time: 1075.0000
     mission_epoch: 1419009525
     auv_latitude: 41.5543
     auv_longitude: -70.7053
@@ -1938,7 +1933,6 @@ data:
     particle_object: AuvEngAuvOilCompensatorTelemParticle
     particle_type: auv_eng_auv_oil_compensator
     internal_timestamp: 3627998335.824
-    time: 1075.0000
     mission_epoch: 1419009535
     auv_latitude: 41.5543
     auv_longitude: -70.7055
@@ -1951,7 +1945,6 @@ data:
     particle_object: AuvEngAuvOilCompensatorTelemParticle
     particle_type: auv_eng_auv_oil_compensator
     internal_timestamp: 3627998345.987
-    time: 1075.0000
     mission_epoch: 1419009545
     auv_latitude: 41.5544
     auv_longitude: -70.7057
@@ -1964,7 +1957,6 @@ data:
     particle_object: AuvEngAuvOilCompensatorTelemParticle
     particle_type: auv_eng_auv_oil_compensator
     internal_timestamp: 3627998356.152
-    time: 1075.0000
     mission_epoch: 1419009556
     auv_latitude: 41.5544
     auv_longitude: -70.7059
@@ -1977,7 +1969,6 @@ data:
     particle_object: AuvEngAuvOilCompensatorTelemParticle
     particle_type: auv_eng_auv_oil_compensator
     internal_timestamp: 3627998366.317
-    time: 1075.0000
     mission_epoch: 1419009566
     auv_latitude: 41.5544
     auv_longitude: -70.7061
@@ -1990,7 +1981,6 @@ data:
     particle_object: AuvEngAuvOilCompensatorTelemParticle
     particle_type: auv_eng_auv_oil_compensator
     internal_timestamp: 3627998376.482
-    time: 1075.0000
     mission_epoch: 1419009576
     auv_latitude: 41.5544
     auv_longitude: -70.7063
@@ -2003,7 +1993,6 @@ data:
     particle_object: AuvEngAuvOilCompensatorTelemParticle
     particle_type: auv_eng_auv_oil_compensator
     internal_timestamp: 3627998386.647
-    time: 1075.0000
     mission_epoch: 1419009586
     auv_latitude: 41.5543
     auv_longitude: -70.7066
@@ -2016,7 +2005,6 @@ data:
     particle_object: AuvEngAuvOilCompensatorTelemParticle
     particle_type: auv_eng_auv_oil_compensator
     internal_timestamp: 3627998396.812
-    time: 1075.0000
     mission_epoch: 1419009596
     auv_latitude: 41.5543
     auv_longitude: -70.7068
@@ -2029,7 +2017,6 @@ data:
     particle_object: AuvEngAuvOilCompensatorTelemParticle
     particle_type: auv_eng_auv_oil_compensator
     internal_timestamp: 3627998406.978
-    time: 1075.0000
     mission_epoch: 1419009606
     auv_latitude: 41.5543
     auv_longitude: -70.7070
@@ -2042,7 +2029,6 @@ data:
     particle_object: AuvEngAuvOilCompensatorTelemParticle
     particle_type: auv_eng_auv_oil_compensator
     internal_timestamp: 3627998417.142
-    time: 1075.0000
     mission_epoch: 1419009617
     auv_latitude: 41.5543
     auv_longitude: -70.7072
@@ -2055,7 +2041,6 @@ data:
     particle_object: AuvEngAuvOilCompensatorTelemParticle
     particle_type: auv_eng_auv_oil_compensator
     internal_timestamp: 3627998427.307
-    time: 1075.0000
     mission_epoch: 1419009627
     auv_latitude: 41.5543
     auv_longitude: -70.7074
@@ -2068,7 +2053,6 @@ data:
     particle_object: AuvEngAuvOilCompensatorTelemParticle
     particle_type: auv_eng_auv_oil_compensator
     internal_timestamp: 3627998437.472
-    time: 1075.0000
     mission_epoch: 1419009637
     auv_latitude: 41.5544
     auv_longitude: -70.7077
@@ -2081,7 +2065,6 @@ data:
     particle_object: AuvEngAuvOilCompensatorTelemParticle
     particle_type: auv_eng_auv_oil_compensator
     internal_timestamp: 3627998447.637
-    time: 1075.0000
     mission_epoch: 1419009647
     auv_latitude: 41.5543
     auv_longitude: -70.7079
@@ -2094,7 +2077,6 @@ data:
     particle_object: AuvEngAuvOilCompensatorTelemParticle
     particle_type: auv_eng_auv_oil_compensator
     internal_timestamp: 3627998457.802
-    time: 1075.0000
     mission_epoch: 1419009657
     auv_latitude: 41.5543
     auv_longitude: -70.7081
@@ -2107,7 +2089,6 @@ data:
     particle_object: AuvEngAuvOilCompensatorTelemParticle
     particle_type: auv_eng_auv_oil_compensator
     internal_timestamp: 3627998467.967
-    time: 1075.0000
     mission_epoch: 1419009667
     auv_latitude: 41.5544
     auv_longitude: -70.7083
@@ -2120,7 +2101,6 @@ data:
     particle_object: AuvEngAuvOilCompensatorTelemParticle
     particle_type: auv_eng_auv_oil_compensator
     internal_timestamp: 3627998478.132
-    time: 1075.0000
     mission_epoch: 1419009678
     auv_latitude: 41.5543
     auv_longitude: -70.7085

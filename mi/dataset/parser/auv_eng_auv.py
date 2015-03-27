@@ -205,7 +205,6 @@ class AuvEngAuvEmergencyBoardRecovParticle(AuvEngAuvEmergencyBoardParticle):
 
 AUV_ENG_AUV_OIL_COMPENSATOR_PARAM_MAP = [
     # message ID is typically index 0
-    ('time', 0, float),
     ('mission_epoch', 1, int),
     ('auv_latitude', 2, float),
     ('auv_longitude', 3, float),
