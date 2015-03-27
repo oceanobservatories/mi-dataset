@@ -4,7 +4,7 @@
 @package mi.dataset.driver.winch_cspp
 @file mi-dataset/mi/dataset/driver/winch_cspp_/winch_cspp_driver.py
 @author Richard Han
-@brief Driver for the  Winch CSPP
+@brief Driver for the  Winch CSPP platform
 
 Release notes:
 
