@@ -105,40 +105,14 @@ class ConfigManager(Singleton):
 
     def rebase(self):
         """
-        @brief determine if we are in the MI working git repo.  If so set the
-               local yaml file with the path.  Note, this MUST be run from the
-               root of the local git working directory.
+        @brief set IDK configuration attributes to defaults
         """
         log.debug("Rebase IDK working repository")
         idk_repo = os.getcwd()
-        
-        # We assume we are in the root of the local repository directory because
-        # DEFAULT_CONFIG is a relative path from there
-        log.debug("Check for GIT information in: " + os.curdir);
-        # TODO add git check
 
-        ### This would be nice to ultimately pull from the repo object, but the version of gitpython
-        ### installed doesn't support remotes. 
-        origin = idk_repo
-
-        log.debug( "Does '%s' contain '%s'", origin, MI_REPO_NAME)
-        # Added second criteria as a quick fix to get buildbot working.  Need a better
-        # way of identifing the idk dir
-        if origin.find(MI_REPO_NAME) < 0 and origin.find('/build') < 0:
-            # Maybe we wound up close, so try a quick change, then fail
-            try:
-                os.chdir(MI_REPO_NAME)
-                origin = os.getcwd()
-            except:
-                raise IDKWrongRunningDirectory(msg="Please run this process from the root your local MI git repository")
-                
-            if origin.find(MI_REPO_NAME) < 0 and origin.find('/build') < 0:
-                raise IDKWrongRunningDirectory(msg="Please run this process from the root your local MI git repository")
-        
         self.set(YAML_CONFIG_WORKING_REPO, idk_repo)
         self.set(YAML_CONFIG_START_RABBIT, False)
         self.set(YAML_CONFIG_START_COUCH, False)
-           
     
     def write(self):
         """
