@@ -11,7 +11,7 @@ data:
     m_depth: -0.01
     salinity: 26.60
     product_number: 4330
-    serial_number: 1519
+    serial_number: '1519'
     estimated_oxygen_concentration: 354.62
     estimated_oxygen_saturation: 90.70
     optode_temperature: 5.78
@@ -34,7 +34,7 @@ data:
     m_depth: -0.03
     salinity: 21.67
     product_number: 4330
-    serial_number: 1519
+    serial_number: '1519'
     estimated_oxygen_concentration: 354.62
     estimated_oxygen_saturation: 90.70
     optode_temperature: 5.78
@@ -57,7 +57,7 @@ data:
     m_depth: 0.07
     salinity: 31.30
     product_number: 4330
-    serial_number: 1519
+    serial_number: '1519'
     estimated_oxygen_concentration: 354.69
     estimated_oxygen_saturation: 90.71
     optode_temperature: 5.78
@@ -80,7 +80,7 @@ data:
     m_depth: 0.08
     salinity: 31.30
     product_number: 4330
-    serial_number: 1519
+    serial_number: '1519'
     estimated_oxygen_concentration: 354.68
     estimated_oxygen_saturation: 90.72
     optode_temperature: 5.78
@@ -103,7 +103,7 @@ data:
     m_depth: -0.01
     salinity: 31.30
     product_number: 4330
-    serial_number: 1519
+    serial_number: '1519'
     estimated_oxygen_concentration: 354.66
     estimated_oxygen_saturation: 90.71
     optode_temperature: 5.78
@@ -126,7 +126,7 @@ data:
     m_depth: -0.03
     salinity: 31.29
     product_number: 4330
-    serial_number: 1519
+    serial_number: '1519'
     estimated_oxygen_concentration: 354.69
     estimated_oxygen_saturation: 90.72
     optode_temperature: 5.78
@@ -149,7 +149,7 @@ data:
     m_depth: 0.00
     salinity: 31.30
     product_number: 4330
-    serial_number: 1519
+    serial_number: '1519'
     estimated_oxygen_concentration: 354.65
     estimated_oxygen_saturation: 90.71
     optode_temperature: 5.78
@@ -172,7 +172,7 @@ data:
     m_depth: 0.05
     salinity: 31.30
     product_number: 4330
-    serial_number: 1519
+    serial_number: '1519'
     estimated_oxygen_concentration: 354.69
     estimated_oxygen_saturation: 90.72
     optode_temperature: 5.78
@@ -195,7 +195,7 @@ data:
     m_depth: 0.11
     salinity: 31.30
     product_number: 4330
-    serial_number: 1519
+    serial_number: '1519'
     estimated_oxygen_concentration: 354.70
     estimated_oxygen_saturation: 90.72
     optode_temperature: 5.78
@@ -218,7 +218,7 @@ data:
     m_depth: 0.01
     salinity: 31.30
     product_number: 4330
-    serial_number: 1519
+    serial_number: '1519'
     estimated_oxygen_concentration: 354.70
     estimated_oxygen_saturation: 90.72
     optode_temperature: 5.78
@@ -241,7 +241,7 @@ data:
     m_depth: -0.02
     salinity: 31.29
     product_number: 4330
-    serial_number: 1519
+    serial_number: '1519'
     estimated_oxygen_concentration: 354.61
     estimated_oxygen_saturation: 90.70
     optode_temperature: 5.78
@@ -264,7 +264,7 @@ data:
     m_depth: 0.02
     salinity: 31.30
     product_number: 4330
-    serial_number: 1519
+    serial_number: '1519'
     estimated_oxygen_concentration: 354.70
     estimated_oxygen_saturation: 90.73
     optode_temperature: 5.78
@@ -287,7 +287,7 @@ data:
     m_depth: -0.00
     salinity: 31.30
     product_number: 4330
-    serial_number: 1519
+    serial_number: '1519'
     estimated_oxygen_concentration: 354.62
     estimated_oxygen_saturation: 90.71
     optode_temperature: 5.78
@@ -310,7 +310,7 @@ data:
     m_depth: 0.10
     salinity: 31.30
     product_number: 4330
-    serial_number: 1519
+    serial_number: '1519'
     estimated_oxygen_concentration: 354.72
     estimated_oxygen_saturation: 90.74
     optode_temperature: 5.79
@@ -333,7 +333,7 @@ data:
     m_depth: 0.08
     salinity: 31.30
     product_number: 4330
-    serial_number: 1519
+    serial_number: '1519'
     estimated_oxygen_concentration: 354.64
     estimated_oxygen_saturation: 90.72
     optode_temperature: 5.79
@@ -356,7 +356,7 @@ data:
     m_depth: -0.05
     salinity: 31.29
     product_number: 4330
-    serial_number: 1519
+    serial_number: '1519'
     estimated_oxygen_concentration: 354.67
     estimated_oxygen_saturation: 90.72
     optode_temperature: 5.78
@@ -379,7 +379,7 @@ data:
     m_depth: -0.05
     salinity: 31.30
     product_number: 4330
-    serial_number: 1519
+    serial_number: '1519'
     estimated_oxygen_concentration: 354.68
     estimated_oxygen_saturation: 90.72
     optode_temperature: 5.78
@@ -402,7 +402,7 @@ data:
     m_depth: -0.01
     salinity: 31.30
     product_number: 4330
-    serial_number: 1519
+    serial_number: '1519'
     estimated_oxygen_concentration: 354.64
     estimated_oxygen_saturation: 90.71
     optode_temperature: 5.78

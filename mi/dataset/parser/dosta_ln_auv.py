@@ -32,7 +32,7 @@ DOSTA_LN_AUV_PARAM_MAP = [
     ('m_depth', 5, float),
     ('salinity', 6, float),
     ('product_number', 7, int),
-    ('serial_number', 8, int),
+    ('serial_number', 8, str),
     ('estimated_oxygen_concentration', 9, float),
     ('estimated_oxygen_saturation', 10, float),
     ('optode_temperature', 11, float),
