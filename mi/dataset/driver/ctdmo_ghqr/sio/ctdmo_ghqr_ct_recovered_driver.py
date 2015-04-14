@@ -14,13 +14,13 @@ from mi.core.exceptions import DatasetParserException
 
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 from mi.dataset.dataset_driver import DataSetDriver
-from mi.dataset.parser.ctdmo_ghqr_sio import CtdmoGhqrRecoveredCtParser, INDUCTIVE_ID_KEY
+from mi.dataset.parser.ctdmo_ghqr_ct_sio import CtdmoGhqrRecoveredCtParser, PARSED_SERIAL_ID_KEY
 
 FILENAME_REGEX = r'SBE37-IM_(\d+)_\d{4}_\d{2}_\d{2}.hex'
 FILENAME_MATCHER = re.compile(FILENAME_REGEX)
 
 
-def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj, serialNumToInductiveIdMapHandler):
+def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     """
     This is the method called by Uframe
     :param basePythonCodePath This is the file system location of mi-dataset
@@ -40,18 +40,10 @@ def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj, serialNumToIn
         # extract the serial number from the file name
         serial_num = get_serial_num_from_filepath(sourceFilePath)
 
-        # retrieve the inductive ID associated with the serial number
-        induct_id = serialNumToInductiveIdMapHandler.getInductiveId(serial_num)
-
-        if not induct_id:
-            raise DatasetParserException(
-                "Unable to obtain the inductive ID associated with serial num %d",
-                serial_num)
-
         parser_config = {
             DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.ctdmo_ghqr_sio',
             DataSetDriverConfigKeys.PARTICLE_CLASS: ['CtdmoGhqrRecoveredInstrumentDataParticle'],
-            INDUCTIVE_ID_KEY: induct_id
+            PARSED_SERIAL_ID_KEY: serial_num
         }
 
         parser = CtdmoGhqrRecoveredCtParser(parser_config, stream_handle, exception_callback)
