@@ -148,6 +148,7 @@ RAW_INDEX_CO_ID = 1
 RAW_INDEX_CO_TIME_OFFSET = 2
 
 INDUCTIVE_ID_KEY = 'inductive_id'
+PARSED_SERIAL_ID_KEY = 'parsed_serial_id'
 
 
 def convert_hex_ascii_to_int(int_val):
@@ -179,6 +180,16 @@ class DataParticleType(BaseEnum):
 class CtdmoInstrumentDataParticleKey(BaseEnum):
     CONTROLLER_TIMESTAMP = "sio_controller_timestamp"
     INDUCTIVE_ID = "inductive_id"
+    SERIAL_NUMBER = "serial_number"
+    TEMPERATURE = "temperature"
+    CONDUCTIVITY = "conductivity"
+    PRESSURE = "pressure"
+    PRESSURE_TEMP = "pressure_temp"
+    CTD_TIME = "ctd_time"
+
+class CtdmoCtInstrumentDataParticleKey(BaseEnum):
+    CONTROLLER_TIMESTAMP = "sio_controller_timestamp"
+    PARSED_SERIAL_ID = "parsed_serial_id"
     SERIAL_NUMBER = "serial_number"
     TEMPERATURE = "temperature"
     CONDUCTIVITY = "conductivity"
@@ -220,23 +231,23 @@ class CtdmoGhqrRecoveredInstrumentDataParticle(DataParticle):
         #   time of science data
         #
         particle = [
-            self._encode_value(CtdmoInstrumentDataParticleKey.INDUCTIVE_ID,
+            self._encode_value(CtdmoCtInstrumentDataParticleKey.PARSED_SERIAL_ID,
                                self.raw_data[RAW_INDEX_REC_CT_ID], int),
             self._encode_value(CtdmoInstrumentDataParticleKey.SERIAL_NUMBER,
                                self.raw_data[RAW_INDEX_REC_CT_SERIAL], str),
-            self._encode_value(CtdmoInstrumentDataParticleKey.TEMPERATURE,
+            self._encode_value(CtdmoCtInstrumentDataParticleKey.TEMPERATURE,
                                self.raw_data[RAW_INDEX_REC_CT_TEMPERATURE],
                                convert_hex_ascii_to_int),
-            self._encode_value(CtdmoInstrumentDataParticleKey.CONDUCTIVITY,
+            self._encode_value(CtdmoCtInstrumentDataParticleKey.CONDUCTIVITY,
                                self.raw_data[RAW_INDEX_REC_CT_CONDUCTIVITY],
                                convert_hex_ascii_to_int),
-            self._encode_value(CtdmoInstrumentDataParticleKey.PRESSURE,
+            self._encode_value(CtdmoCtInstrumentDataParticleKey.PRESSURE,
                                self.raw_data[RAW_INDEX_REC_CT_PRESSURE],
                                convert_hex_ascii_to_int),
-            self._encode_value(CtdmoInstrumentDataParticleKey.PRESSURE_TEMP,
+            self._encode_value(CtdmoCtInstrumentDataParticleKey.PRESSURE_TEMP,
                                self.raw_data[RAW_INDEX_REC_CT_PRESSURE_TEMP],
                                convert_hex_ascii_to_int),
-            self._encode_value(CtdmoInstrumentDataParticleKey.CTD_TIME,
+            self._encode_value(CtdmoCtInstrumentDataParticleKey.CTD_TIME,
                                self.raw_data[RAW_INDEX_REC_CT_TIME],
                                convert_hex_ascii_to_int)
         ]
@@ -492,8 +503,8 @@ class CtdmoGhqrRecoveredCtParser(SimpleParser):
         #
         # Verify that the required parameters are in the parser configuration.
         #
-        if not INDUCTIVE_ID_KEY in config:
-            raise DatasetParserException("Parser config is missing %s" % INDUCTIVE_ID_KEY)
+        if not PARSED_SERIAL_ID_KEY in config:
+            raise DatasetParserException("Parser config is missing %s" % PARSED_SERIAL_ID_KEY)
 
         #
         # File is ASCII with records separated by newlines.
@@ -587,7 +598,7 @@ class CtdmoGhqrRecoveredCtParser(SimpleParser):
             #   time of science data
             #
             sample = self._extract_sample(CtdmoGhqrRecoveredInstrumentDataParticle, None,
-                                         (self._config.get(INDUCTIVE_ID_KEY),
+                                         (self._config.get(PARSED_SERIAL_ID_KEY),
                                           self._serial_number,
                                           ct_match.group(REC_CT_GROUP_TEMPERATURE),
                                           ct_match.group(REC_CT_GROUP_CONDUCTIVITY),

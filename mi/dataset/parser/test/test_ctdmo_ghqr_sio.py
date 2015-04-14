@@ -48,7 +48,7 @@ from mi.dataset.parser.ctdmo_ghqr_sio import \
     CtdmoGhqrSioRecoveredCoParser, \
     CtdmoGhqrRecoveredCtParser, \
     CtdmoGhqrSioTelemeteredParser, \
-    INDUCTIVE_ID_KEY
+    PARSED_SERIAL_ID
 
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 from mi.core.exceptions import DatasetParserException, UnexpectedDataException
@@ -77,7 +77,7 @@ class CtdmoGhqrSioParserUnitTestCase(ParserUnitTestCase):
         self.config_rec_ct = {
             DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.ctdmo_ghqr_sio',
             DataSetDriverConfigKeys.PARTICLE_CLASS: 'CtdmoGhqrRecoveredInstrumentDataParticle',
-            INDUCTIVE_ID_KEY: 55
+            PARSED_SERIAL_ID: 55
         }
 
     def test_simple(self):
@@ -122,7 +122,7 @@ class CtdmoGhqrSioParserUnitTestCase(ParserUnitTestCase):
             parser = CtdmoGhqrSioTelemeteredParser(self.config, stream_handle, self.exception_callback)
 
             particles = parser.get_records(24)
-            self.assertEqual(len(particles), 24) 
+            self.assertEqual(len(particles), 24)
             self.assert_particles(particles, 'node59p1_3.ctdmo.yml', RESOURCE_PATH)
 
         self.assertEqual(self.exception_callback_value, [])
