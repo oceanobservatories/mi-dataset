@@ -479,135 +479,6 @@ class CtdmoGhqrSioRecoveredCoParser(SioParser):
         return result_particles
 
 
-class CtdmoGhqrRecoveredCtParser(SimpleParser):
-
-    """
-    Parser for Ctdmo recovered CT data.
-    """
-    def __init__(self,
-                 config,
-                 stream_handle,
-                 exception_callback):
-
-        #
-        # Verify that the required parameters are in the parser configuration.
-        #
-        if not INDUCTIVE_ID_KEY in config:
-            raise DatasetParserException("Parser config is missing %s" % INDUCTIVE_ID_KEY)
-
-        #
-        # File is ASCII with records separated by newlines.
-        #
-        super(CtdmoGhqrRecoveredCtParser, self).__init__(config, stream_handle, exception_callback)
-
-        #
-        # set flags to indicate the end of Configuration has not been reached
-        # and the serial number has not been found.
-        #
-        self._serial_number = None
-        self._end_config = False
-
-        self.input_file = stream_handle
-
-    def check_for_config_end(self, chunk):
-        """
-        This function searches the input buffer for the end of Configuration record.
-        If found, the read_state and state are updated.
-        """
-        match = REC_CT_CONFIGURATION_END_MATCHER.match(chunk)
-        if match is not None:
-            self._end_config = True
-
-    def check_for_serial_number(self, chunk):
-        """
-        This function searches the input buffer for a serial number.
-        """
-        #
-        # See if this record the serial number.
-        # If found, convert from decimal ASCII and save.
-        #
-        match = REC_CT_SERIAL_MATCHER.match(chunk)
-        if match is not None:
-            self._serial_number = int(match.group(REC_CT_SERIAL_GROUP_SERIAL_NUMBER))
-
-    def parse_file(self):
-        """
-        Parser the file for the recovered CT parser
-        :return: list of result particles
-        """
-
-        # read the first line in the file
-        line = self._stream_handle.readline()
-
-        while line:
-            #
-            # Search for serial number if not already found.
-            #
-            if self._serial_number is None:
-                self.check_for_serial_number(line)
-
-            #
-            # Once the serial number is found,
-            # search for the end of the Configuration section.
-            #
-            elif not self._end_config:
-                self.check_for_config_end(line)
-
-            #
-            # Once the end of the configuration is reached, all remaining records
-            # are supposedly CT data records.
-            # Parse the record and generate the particle for this chunk.
-            # Add it to the return list of particles.
-            #
-            else:
-                particle = self.parse_ct_record(line)
-                if particle is not None:
-                    self._record_buffer.append(particle)
-
-            # read the next line in the file
-            line = self._stream_handle.readline()
-
-    def parse_ct_record(self, ct_record):
-        """
-        This function parses a Recovered CT record and returns a data particle.
-        Parameters:
-          ct_record - the input which is being parsed
-        """
-        ct_match = REC_CT_MATCHER.match(ct_record)
-        if ct_match is not None:
-            #
-            # If this is CT record, generate the data particle.
-            # Data stored for each particle is a tuple of the following:
-            #   inductive ID (obtained from configuration data)
-            #   serial number
-            #   temperature
-            #   conductivity
-            #   pressure
-            #   pressure temperature
-            #   time of science data
-            #
-            sample = self._extract_sample(CtdmoGhqrRecoveredInstrumentDataParticle, None,
-                                         (self._config.get(INDUCTIVE_ID_KEY),
-                                          self._serial_number,
-                                          ct_match.group(REC_CT_GROUP_TEMPERATURE),
-                                          ct_match.group(REC_CT_GROUP_CONDUCTIVITY),
-                                          ct_match.group(REC_CT_GROUP_PRESSURE),
-                                          ct_match.group(REC_CT_GROUP_PRESSURE_TEMP),
-                                          ct_match.group(REC_CT_GROUP_TIME)), None)
-
-        #
-        # If there wasn't a match, the input data is messed up.
-        #
-        else:
-            error_message = 'unknown data found in CT chunk %s, leaving out the rest of chunk' \
-                            % binascii.b2a_hex(ct_record)
-            log.error(error_message)
-            self._exception_callback(SampleException(error_message))
-            sample = None
-
-        return sample
-
-
 class CtdmoGhqrSioTelemeteredParser(SioParser):
     """
     Parser for Ctdmo telemetered data (SIO Mule).
@@ -636,14 +507,7 @@ class CtdmoGhqrSioTelemeteredParser(SioParser):
                 # start looping at the end of the header
                 chunk_idx = header_match.end(0)
 
-                if header_match.group(SIO_HEADER_GROUP_ID) == ID_INSTRUMENT:
-                    #
-                    # Parse the CT record, up to but not including the end of SIO block.
-                    #
-                    particles = self.parse_ct_record(chunk[chunk_idx:-1], header_timestamp)
-                    result_particles.extend(particles)
-
-                elif header_match.group(SIO_HEADER_GROUP_ID) == ID_OFFSET:
+                if header_match.group(SIO_HEADER_GROUP_ID) == ID_OFFSET:
                     (particles, had_error) = parse_co_data(CtdmoGhqrSioTelemeteredOffsetDataParticle,
                                                            chunk[chunk_idx:-1], header_timestamp,
                                                            self._extract_sample)
@@ -666,63 +530,6 @@ class CtdmoGhqrSioTelemeteredParser(SioParser):
 
         return result_particles
 
-    def parse_ct_record(self, ct_record, sio_header_timestamp):
-        """
-        This function parses a Telemetered CT record and
-        returns a list of data particles.
-        Parameters:
-          chunk - the input which is being parsed
-          sio_header_timestamp - required for particle, passed through
-        """
-        particles = []
-        last_index = len(ct_record)
-        start_index = 0
-
-        while start_index < last_index:
-            #
-            # Look for a match in the next group of bytes
-            #
-            ct_match = TEL_CT_MATCHER.match(
-                ct_record[start_index:start_index+TEL_CT_SAMPLE_BYTES])
-
-            if ct_match is not None:
-                #
-                # Generate the data particle.
-                # Data stored for each particle is a tuple of the following:
-                #   SIO header timestamp (input parameter)
-                #   inductive ID
-                #   science data (temperature, conductivity, pressure)
-                #   time of science data
-                #
-                sample = self._extract_sample(CtdmoGhqrSioTelemeteredInstrumentDataParticle, None,
-                                              (sio_header_timestamp,
-                                               ct_match.group(TEL_CT_GROUP_ID),
-                                               ct_match.group(TEL_CT_GROUP_SCIENCE_DATA),
-                                               ct_match.group(TEL_CT_GROUP_TIME)), None)
-                if sample is not None:
-                    #
-                    # Add this particle to the list of particles generated
-                    # so far for this chunk of input data.
-                    #
-                    particles.append(sample)
-
-                start_index += TEL_CT_SAMPLE_BYTES
-
-            #
-            # If there wasn't a match, the input data is messed up.
-            #
-            else:
-                log.error('unknown data found in CT record %s at %d, leaving out the rest',
-                          binascii.b2a_hex(ct_record), start_index)
-                self._exception_callback(SampleException(
-                    'unknown data found in CT record at %d, leaving out the rest' % start_index))
-                break
-
-        #
-        # Once we reach the end of the input data,
-        # return the number of particles generated and the list of particles.
-        #
-        return particles
 
     def handle_non_data(self, non_data, non_end, start):
         """
