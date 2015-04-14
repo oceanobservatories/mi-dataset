@@ -12,21 +12,6 @@ from mi.dataset.driver.ctdmo_ghqr.sio.ctdmo_ghqr_ct_recovered_driver import pars
 
 from mi.dataset.dataset_driver import ParticleDataHandler
 
-class SerialNumToInductiveIdMapHandler(object):
-
-    def __init__(self):
-
-        self.dataDict = dict()
-
-    def addMapping(self, serialNum, inductiveId):
-
-        self.dataDict[serialNum] = inductiveId
-
-    def getInductiveId(self, serialNum):
-
-        return self.dataDict.get(serialNum)
-
-
 class SampleTest(unittest.TestCase):
 
     def setUp(self):
@@ -41,14 +26,9 @@ class SampleTest(unittest.TestCase):
                                       'resource','SBE37-IM_20141231_2014_12_31.hex')
         particle_data_hdlr_obj = ParticleDataHandler()
 
-        serial_num_to_inductive_id_map_handler = SerialNumToInductiveIdMapHandler()
-
-        serial_num_to_inductive_id_map_handler.addMapping(20141231, 55)
-
         particle_data_hdlr_obj = parse(Config().base_dir(),
                                        sourceFilePath,
-                                       particle_data_hdlr_obj,
-                                       serial_num_to_inductive_id_map_handler)
+                                       particle_data_hdlr_obj)
 
         print particle_data_hdlr_obj._samples
         print particle_data_hdlr_obj._failure
