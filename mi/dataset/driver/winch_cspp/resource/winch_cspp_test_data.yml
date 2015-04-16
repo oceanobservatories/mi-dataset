@@ -16,7 +16,7 @@ data:
     winch_status: 'Brake-On'
   - _index: 2
     particle_object: WinchCsppDataParticle
-    particle_type: winch_cspp
+    particle_type: winch_cspp_eng
     internal_timestamp: 3624982965.900000
     winch_date: '2014-11-14'
     winch_time: '19:42:45.900'
