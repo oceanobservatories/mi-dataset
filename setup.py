@@ -6,5 +6,14 @@ setup(
     description="Contains marine integrations dataset drivers and parsers",
     url="http://github.com/oceanobservatories/mi-dataset",
     license="BSD",
-    py_modules = ['mi']
+    packages=find_packages(),
+    install_requires=[
+        "pyyaml",
+        "numpy",
+        "graypy",
+        "msgpack-python",
+        "ntplib",
+        "matplotlib",
+        "nose"
+    ]
 )
