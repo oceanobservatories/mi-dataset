@@ -5,9 +5,8 @@ data:
   - _index: 1
     particle_object: AdcptAcfgmPd8DclInstrumentRecoveredParticle
     particle_type: adcpt_acfgm_pd8_dcl_instrument_recovered
-    internal_timestamp: 3594845166.487999916
-    dcl_controller_timestamp: 2013/12/01 00:06:06.488
-    dcl_controller_starting_timestamp: 2013/12/01 00:00:23.284
+    internal_timestamp: 3594845060.70000
+    dcl_controller_timestamp: 2013/12/01 00:04:20.700
     instrument_timestamp: 2013/12/01 00:00:29.99
     ensemble_number: 1
     heading: 34.8
@@ -32,9 +31,8 @@ data:
   - _index: 2
     particle_object: AdcptAcfgmPd8DclInstrumentRecoveredParticle
     particle_type: adcpt_acfgm_pd8_dcl_instrument_recovered
-    internal_timestamp: 3594848768.038000107
-    dcl_controller_timestamp: 2013/12/01 01:06:08.038
-    dcl_controller_starting_timestamp: 2013/12/01 01:00:20.797
+    internal_timestamp: 3594848658.21300
+    dcl_controller_timestamp: 2013/12/01 01:04:18.213
     instrument_timestamp: 2013/12/01 01:00:27.53
     ensemble_number: 1
     heading: 34.7
@@ -59,9 +57,8 @@ data:
   - _index: 3
     particle_object: AdcptAcfgmPd8DclInstrumentRecoveredParticle
     particle_type: adcpt_acfgm_pd8_dcl_instrument_recovered
-    internal_timestamp: 3594852367.526999950
-    dcl_controller_timestamp: 2013/12/01 02:06:07.527
-    dcl_controller_starting_timestamp: 2013/12/01 02:00:22.298
+    internal_timestamp: 3594852259.71600
+    dcl_controller_timestamp: 2013/12/01 02:04:19.716
     instrument_timestamp: 2013/12/01 02:00:29.07
     ensemble_number: 1
     heading: 34.8
@@ -86,9 +83,8 @@ data:
   - _index: 4
     particle_object: AdcptAcfgmPd8DclInstrumentRecoveredParticle
     particle_type: adcpt_acfgm_pd8_dcl_instrument_recovered
-    internal_timestamp: 3594855966.760000229
-    dcl_controller_timestamp: 2013/12/01 03:06:06.760
-    dcl_controller_starting_timestamp: 2013/12/01 03:00:21.551
+    internal_timestamp: 3594855858.95200
+    dcl_controller_timestamp: 2013/12/01 03:04:18.952
     instrument_timestamp: 2013/12/01 03:00:28.31
     ensemble_number: 1
     heading: 34.7
@@ -113,9 +109,8 @@ data:
   - _index: 5
     particle_object: AdcptAcfgmPd8DclInstrumentRecoveredParticle
     particle_type: adcpt_acfgm_pd8_dcl_instrument_recovered
-    internal_timestamp: 3594859566.536000252
-    dcl_controller_timestamp: 2013/12/01 04:06:06.536
-    dcl_controller_starting_timestamp: 2013/12/01 04:00:21.346
+    internal_timestamp: 3594859458.73700
+    dcl_controller_timestamp: 2013/12/01 04:04:18.737
     instrument_timestamp: 2013/12/01 04:00:28.10
     ensemble_number: 1
     heading: 34.9
@@ -140,9 +135,8 @@ data:
   - _index: 6
     particle_object: AdcptAcfgmPd8DclInstrumentRecoveredParticle
     particle_type: adcpt_acfgm_pd8_dcl_instrument_recovered
-    internal_timestamp: 3594863167.418999672
-    dcl_controller_timestamp: 2013/12/01 05:06:07.419
-    dcl_controller_starting_timestamp: 2013/12/01 05:00:20.233
+    internal_timestamp: 3594863057.59800
+    dcl_controller_timestamp: 2013/12/01 05:04:17.598
     instrument_timestamp: 2013/12/01 05:00:26.97
     ensemble_number: 1
     heading: 34.7
@@ -167,9 +161,8 @@ data:
   - _index: 7
     particle_object: AdcptAcfgmPd8DclInstrumentRecoveredParticle
     particle_type: adcpt_acfgm_pd8_dcl_instrument_recovered
-    internal_timestamp: 3594866767.404999733
-    dcl_controller_timestamp: 2013/12/01 06:06:07.405
-    dcl_controller_starting_timestamp: 2013/12/01 06:00:22.187
+    internal_timestamp: 3594866659.59600
+    dcl_controller_timestamp: 2013/12/01 06:04:19.596
     instrument_timestamp: 2013/12/01 06:00:29.05
     ensemble_number: 1
     heading: 34.8
@@ -194,9 +187,8 @@ data:
   - _index: 8
     particle_object: AdcptAcfgmPd8DclInstrumentRecoveredParticle
     particle_type: adcpt_acfgm_pd8_dcl_instrument_recovered
-    internal_timestamp: 3594870367.333000183
-    dcl_controller_timestamp: 2013/12/01 07:06:07.333
-    dcl_controller_starting_timestamp: 2013/12/01 07:00:20.105
+    internal_timestamp: 3594870257.51400
+    dcl_controller_timestamp: 2013/12/01 07:04:17.514
     instrument_timestamp: 2013/12/01 07:00:26.99
     ensemble_number: 1
     heading: 34.8
@@ -221,9 +213,8 @@ data:
   - _index: 9
     particle_object: AdcptAcfgmPd8DclInstrumentRecoveredParticle
     particle_type: adcpt_acfgm_pd8_dcl_instrument_recovered
-    internal_timestamp: 3594873968.316999912
-    dcl_controller_timestamp: 2013/12/01 08:06:08.317
-    dcl_controller_starting_timestamp: 2013/12/01 08:00:23.089
+    internal_timestamp: 3594873860.49800
+    dcl_controller_timestamp: 2013/12/01 08:04:20.498
     instrument_timestamp: 2013/12/01 08:00:30.00
     ensemble_number: 1
     heading: 34.9
@@ -248,9 +239,8 @@ data:
   - _index: 10
     particle_object: AdcptAcfgmPd8DclInstrumentRecoveredParticle
     particle_type: adcpt_acfgm_pd8_dcl_instrument_recovered
-    internal_timestamp: 3594877566.293000221
-    dcl_controller_timestamp: 2013/12/01 09:06:06.293
-    dcl_controller_starting_timestamp: 2013/12/01 09:00:23.073
+    internal_timestamp: 3594877460.48200
+    dcl_controller_timestamp: 2013/12/01 09:04:20.482
     instrument_timestamp: 2013/12/01 09:00:30.01
     ensemble_number: 1
     heading: 34.9
@@ -275,9 +265,8 @@ data:
   - _index: 11
     particle_object: AdcptAcfgmPd8DclInstrumentRecoveredParticle
     particle_type: adcpt_acfgm_pd8_dcl_instrument_recovered
-    internal_timestamp: 3594881166.265999794
-    dcl_controller_timestamp: 2013/12/01 10:06:06.266
-    dcl_controller_starting_timestamp: 2013/12/01 10:00:23.048
+    internal_timestamp: 3594881060.45700
+    dcl_controller_timestamp: 2013/12/01 10:04:20.457
     instrument_timestamp: 2013/12/01 10:00:30.01
     ensemble_number: 1
     heading: 34.8
@@ -302,9 +291,8 @@ data:
   - _index: 12
     particle_object: AdcptAcfgmPd8DclInstrumentRecoveredParticle
     particle_type: adcpt_acfgm_pd8_dcl_instrument_recovered
-    internal_timestamp: 3594884766.916999817
-    dcl_controller_timestamp: 2013/12/01 11:06:06.917
-    dcl_controller_starting_timestamp: 2013/12/01 11:00:19.686
+    internal_timestamp: 3594884657.10000
+    dcl_controller_timestamp: 2013/12/01 11:04:17.100
     instrument_timestamp: 2013/12/01 11:00:26.68
     ensemble_number: 1
     heading: 34.9
@@ -329,9 +317,8 @@ data:
   - _index: 13
     particle_object: AdcptAcfgmPd8DclInstrumentRecoveredParticle
     particle_type: adcpt_acfgm_pd8_dcl_instrument_recovered
-    internal_timestamp: 3594888368.105999947
-    dcl_controller_timestamp: 2013/12/01 12:06:08.106
-    dcl_controller_starting_timestamp: 2013/12/01 12:00:20.876
+    internal_timestamp: 3594888258.28400
+    dcl_controller_timestamp: 2013/12/01 12:04:18.284
     instrument_timestamp: 2013/12/01 12:00:27.89
     ensemble_number: 1
     heading: 35.0
@@ -356,9 +343,8 @@ data:
   - _index: 14
     particle_object: AdcptAcfgmPd8DclInstrumentRecoveredParticle
     particle_type: adcpt_acfgm_pd8_dcl_instrument_recovered
-    internal_timestamp: 3594891966.203999996
-    dcl_controller_timestamp: 2013/12/01 13:06:06.204
-    dcl_controller_starting_timestamp: 2013/12/01 13:00:23.002
+    internal_timestamp: 3594891860.38700
+    dcl_controller_timestamp: 2013/12/01 13:04:20.387
     instrument_timestamp: 2013/12/01 13:00:30.02
     ensemble_number: 1
     heading: 34.7
@@ -383,9 +369,8 @@ data:
   - _index: 15
     particle_object: AdcptAcfgmPd8DclInstrumentRecoveredParticle
     particle_type: adcpt_acfgm_pd8_dcl_instrument_recovered
-    internal_timestamp: 3594895567.090000153
-    dcl_controller_timestamp: 2013/12/01 14:06:07.090
-    dcl_controller_starting_timestamp: 2013/12/01 14:00:19.863
+    internal_timestamp: 3594895457.26400
+    dcl_controller_timestamp: 2013/12/01 14:04:17.264
     instrument_timestamp: 2013/12/01 14:00:26.92
     ensemble_number: 1
     heading: 34.8
@@ -410,9 +395,8 @@ data:
   - _index: 16
     particle_object: AdcptAcfgmPd8DclInstrumentRecoveredParticle
     particle_type: adcpt_acfgm_pd8_dcl_instrument_recovered
-    internal_timestamp: 3594899167.099999905
-    dcl_controller_timestamp: 2013/12/01 15:06:07.100
-    dcl_controller_starting_timestamp: 2013/12/01 15:00:23.890
+    internal_timestamp: 3594899061.28800
+    dcl_controller_timestamp: 2013/12/01 15:04:21.288
     instrument_timestamp: 2013/12/01 15:00:30.97
     ensemble_number: 1
     heading: 34.6
@@ -437,9 +421,8 @@ data:
   - _index: 17
     particle_object: AdcptAcfgmPd8DclInstrumentRecoveredParticle
     particle_type: adcpt_acfgm_pd8_dcl_instrument_recovered
-    internal_timestamp: 3594902766.098000050
-    dcl_controller_timestamp: 2013/12/01 16:06:06.098
-    dcl_controller_starting_timestamp: 2013/12/01 16:00:20.828
+    internal_timestamp: 3594902658.24300
+    dcl_controller_timestamp: 2013/12/01 16:04:18.243
     instrument_timestamp: 2013/12/01 16:00:27.95
     ensemble_number: 1
     heading: 34.7
@@ -464,9 +447,8 @@ data:
   - _index: 18
     particle_object: AdcptAcfgmPd8DclInstrumentRecoveredParticle
     particle_type: adcpt_acfgm_pd8_dcl_instrument_recovered
-    internal_timestamp: 3594906368.199999809
-    dcl_controller_timestamp: 2013/12/01 17:06:08.200
-    dcl_controller_starting_timestamp: 2013/12/01 17:00:20.980
+    internal_timestamp: 3594906258.38800
+    dcl_controller_timestamp: 2013/12/01 17:04:18.388
     instrument_timestamp: 2013/12/01 17:00:28.12
     ensemble_number: 1
     heading: 34.7
@@ -491,9 +473,8 @@ data:
   - _index: 19
     particle_object: AdcptAcfgmPd8DclInstrumentRecoveredParticle
     particle_type: adcpt_acfgm_pd8_dcl_instrument_recovered
-    internal_timestamp: 3594913568.111999989
-    dcl_controller_timestamp: 2013/12/01 19:06:08.112
-    dcl_controller_starting_timestamp: 2013/12/01 19:00:20.878
+    internal_timestamp: 3594913458.28500
+    dcl_controller_timestamp: 2013/12/01 19:04:18.285
     instrument_timestamp: 2013/12/01 19:00:28.07
     ensemble_number: 1
     heading: 34.9
@@ -518,9 +499,8 @@ data:
   - _index: 20
     particle_object: AdcptAcfgmPd8DclInstrumentRecoveredParticle
     particle_type: adcpt_acfgm_pd8_dcl_instrument_recovered
-    internal_timestamp: 3594917167.217999935
-    dcl_controller_timestamp: 2013/12/01 20:06:07.218
-    dcl_controller_starting_timestamp: 2013/12/01 20:00:19.977
+    internal_timestamp: 3594917057.39200
+    dcl_controller_timestamp: 2013/12/01 20:04:17.392
     instrument_timestamp: 2013/12/01 20:00:27.20
     ensemble_number: 1
     heading: 34.7
@@ -545,9 +525,8 @@ data:
   - _index: 21
     particle_object: AdcptAcfgmPd8DclInstrumentRecoveredParticle
     particle_type: adcpt_acfgm_pd8_dcl_instrument_recovered
-    internal_timestamp: 3594920767.288000107
-    dcl_controller_timestamp: 2013/12/01 21:06:07.288
-    dcl_controller_starting_timestamp: 2013/12/01 21:00:20.047
+    internal_timestamp: 3594920657.46400
+    dcl_controller_timestamp: 2013/12/01 21:04:17.464
     instrument_timestamp: 2013/12/01 21:00:27.30
     ensemble_number: 1
     heading: 34.8
@@ -572,9 +551,8 @@ data:
   - _index: 22
     particle_object: AdcptAcfgmPd8DclInstrumentRecoveredParticle
     particle_type: adcpt_acfgm_pd8_dcl_instrument_recovered
-    internal_timestamp: 3594924367.833000183
-    dcl_controller_timestamp: 2013/12/01 22:06:07.833
-    dcl_controller_starting_timestamp: 2013/12/01 22:00:22.592
+    internal_timestamp: 3594924259.99900
+    dcl_controller_timestamp: 2013/12/01 22:04:19.999
     instrument_timestamp: 2013/12/01 22:00:29.86
     ensemble_number: 1
     heading: 34.7
@@ -599,9 +577,8 @@ data:
   - _index: 23
     particle_object: AdcptAcfgmPd8DclInstrumentRecoveredParticle
     particle_type: adcpt_acfgm_pd8_dcl_instrument_recovered
-    internal_timestamp: 3594927967.315000057
-    dcl_controller_timestamp: 2013/12/01 23:06:07.315
-    dcl_controller_starting_timestamp: 2013/12/01 23:00:19.974
+    internal_timestamp: 3594927857.39400
+    dcl_controller_timestamp: 2013/12/01 23:04:17.394
     instrument_timestamp: 2013/12/01 23:00:27.28
     ensemble_number: 1
     heading: 34.6
