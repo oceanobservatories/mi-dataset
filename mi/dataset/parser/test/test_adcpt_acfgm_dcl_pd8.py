@@ -19,7 +19,8 @@ from mi.dataset.test.test_parser import ParserUnitTestCase
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 
 from mi.dataset.driver.adcpt_acfgm.dcl.pd8.adcpt_acfgm_dcl_pd8_driver_common import \
-    AdcptAcfgmPd8Parser, MODULE_NAME, ADCPT_ACFGM_DCL_PD8_RECOVERED_PARTICLE_CLASS, ADCPT_ACFGM_DCL_PD8_TELEMETERED_PARTICLE_CLASS
+    AdcptAcfgmPd8Parser, MODULE_NAME, ADCPT_ACFGM_DCL_PD8_RECOVERED_PARTICLE_CLASS, \
+    ADCPT_ACFGM_DCL_PD8_TELEMETERED_PARTICLE_CLASS
 
 from mi.dataset.test.test_parser import BASE_RESOURCE_PATH
 RESOURCE_PATH = os.path.join(BASE_RESOURCE_PATH, 'adcpt_acfgm', 'dcl', 'pd8', 'resource')
@@ -43,8 +44,8 @@ class AdcptAcfgmPd8ParserUnitTestCase(ParserUnitTestCase):
         return parser
 
     def open_file(self, filename):
-        file = open(os.path.join(RESOURCE_PATH, filename), mode='r')
-        return file
+        my_file = open(os.path.join(RESOURCE_PATH, filename), mode='rU')
+        return my_file
 
     def setUp(self):
         ParserUnitTestCase.setUp(self)
@@ -71,11 +72,13 @@ class AdcptAcfgmPd8ParserUnitTestCase(ParserUnitTestCase):
 
             fid.write('    particle_object: %s\n' % particles[i].__class__.__name__)
             fid.write('    particle_type: %s\n' % particle_dict.get('stream_name'))
-            fid.write('    internal_timestamp: %f\n' % particle_dict.get('internal_timestamp'))
+            fid.write('    internal_timestamp: %.5f\n' % particle_dict.get('internal_timestamp'))
 
             for val in particle_dict.get('values'):
                 if isinstance(val.get('value'), float):
                     fid.write('    %s: %.1f\n' % (val.get('value_id'), val.get('value')))
+                elif val.get('value')is None:
+                    fid.write('    %s: !!null' % (val.get('value_id')))
                 else:
                     fid.write('    %s: %s\n' % (val.get('value_id'), val.get('value')))
         fid.close()
@@ -85,15 +88,15 @@ class AdcptAcfgmPd8ParserUnitTestCase(ParserUnitTestCase):
         This utility creates a yml file
         """
         # 20131201.adcp.log has 23 records in it, 20131201.adcp_mod.log has modified BIT values
-        fid = open(os.path.join(RESOURCE_PATH, '20131201.adcp_mod.log'), 'rb')
+        fid = open(os.path.join(RESOURCE_PATH, '20141208.adcp.log'), 'r')
 
         self.stream_handle = fid
 
-        self.parser = self.create_parser(ADCPT_ACFGM_DCL_PD8_RECOVERED_PARTICLE_CLASS, fid)
+        self.parser = self.create_parser(ADCPT_ACFGM_DCL_PD8_TELEMETERED_PARTICLE_CLASS, fid)
 
         particles = self.parser.get_records(250)
 
-        self.particle_to_yml(particles, '20131201.adcp_mod.yml')
+        self.particle_to_yml(particles, '20141208.adcp.yml')
         fid.close()
 
     def test_parse_input(self):
@@ -112,7 +115,6 @@ class AdcptAcfgmPd8ParserUnitTestCase(ParserUnitTestCase):
         in_file.close()
         self.assertListEqual(self.exception_callback_value, [])
 
-
     def test_recov(self):
         """
         Read a file and pull out multiple data particles at one time.
@@ -130,7 +132,6 @@ class AdcptAcfgmPd8ParserUnitTestCase(ParserUnitTestCase):
         self.assertListEqual(self.exception_callback_value, [])
         in_file.close()
 
-
     def test_telem(self):
         """
         Read a file and pull out multiple data particles at one time.
@@ -147,7 +148,6 @@ class AdcptAcfgmPd8ParserUnitTestCase(ParserUnitTestCase):
 
         self.assertListEqual(self.exception_callback_value, [])
         in_file.close()
-
 
     def test_bad_data(self):
         """
@@ -212,3 +212,24 @@ class AdcptAcfgmPd8ParserUnitTestCase(ParserUnitTestCase):
         self.assert_(isinstance(self.exception_callback_value[0], RecoverableSampleException))
 
         fid.close()
+
+    def test_telem_3021(self):
+        """
+        Read a file and pull out multiple data particles at one time.
+        Verify that the results are those we expected.
+
+        This test uses a real file from a deployment.
+        Used to verify fixes in responses to Redmine # 3021
+        """
+        in_file = self.open_file('20141208.adcp.log')
+        parser = self.create_parser(ADCPT_ACFGM_DCL_PD8_TELEMETERED_PARTICLE_CLASS, in_file)
+
+        # In a single read, get all particles for this file.
+        result = parser.get_records(23)
+
+        self.assertEqual(len(result), 14)
+        self.assert_particles(result, '20141208.adcp.yml', RESOURCE_PATH)
+
+        self.assertListEqual(self.exception_callback_value, [])
+        in_file.close()
+
