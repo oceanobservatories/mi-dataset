@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 
 """
 @package mi.dataset.parser.presf_abc_dcl
@@ -35,8 +34,6 @@ __author__ = 'Christopher Fortin'
 __license__ = 'Apache 2.0'
 
 import re
-from datetime import datetime
-import time
 
 from mi.core.log import get_logger
 log = get_logger()
@@ -385,8 +382,7 @@ class PresfAbcDclParser(BufferLoadingParser):
                  stream_handle,
                  state_callback,
                  publish_callback,
-                 exception_callback,
-                 *args, **kwargs):
+                 exception_callback):
 
         super(PresfAbcDclParser, self).__init__(config,
                                                 stream_handle,
@@ -394,9 +390,7 @@ class PresfAbcDclParser(BufferLoadingParser):
                                                 self.sieve_function,
                                                 state_callback,
                                                 publish_callback,
-                                                exception_callback,
-                                                *args,
-                                                **kwargs)
+                                                exception_callback)
 
         self.input_file = stream_handle
 
@@ -521,7 +515,7 @@ class PresfAbcDclParser(BufferLoadingParser):
                 if test_meta is not None:
                     if wave_record_inprocess != WAVE_RECORD_NOTINPROCESS:
                         message = "Error while decoding parameters in data: wave record failed to terminate"
-                        self._exception_callback(RecoverableSampleException(message))
+                        log.debug(message)
                         wave_record_inprocess = WAVE_RECORD_NOTINPROCESS
                         wave_start_present = False
                         wave_ptfreq_present = False
@@ -536,7 +530,7 @@ class PresfAbcDclParser(BufferLoadingParser):
                 if test_tide is not None:
                     if wave_record_inprocess != WAVE_RECORD_NOTINPROCESS:
                         message = "Error while decoding parameters in data: wave record failed to terminate"
-                        self._exception_callback(RecoverableSampleException(message))
+                        log.debug(message)
                         wave_record_inprocess = WAVE_RECORD_NOTINPROCESS
                         wave_start_present = False
                         wave_ptfreq_present = False
@@ -553,7 +547,7 @@ class PresfAbcDclParser(BufferLoadingParser):
                         # received a wave start while already parsing a wave record
                         log.warn("WAVE DOUBLE START")
                         message = "Error while decoding parameters in data: [%s]" % (record_match.group(0))
-                        self._exception_callback(RecoverableSampleException(message))
+                        log.debug(message)
                         wave_ptfreq_present = False
                         wave_cont_present = False
                         
@@ -569,7 +563,7 @@ class PresfAbcDclParser(BufferLoadingParser):
                         # received a wave ptfreq not just after a start
                         log.warn("WAVE NOT IN INIT")
                         message = "Error while decoding parameters in data: [%s]" % (record_match.group(0))
-                        self._exception_callback(RecoverableSampleException(message))
+                        log.debug(message)
                         wave_start_present = False
                         wave_cont_present = False
 
@@ -585,7 +579,7 @@ class PresfAbcDclParser(BufferLoadingParser):
                         # received a wave cont not after ptfreq or another cont
                         log.warn("WAVE NOT IN PT OR CONT")
                         message = "Error while decoding parameters in data: [%s]" % (record_match.group(0))
-                        self._exception_callback(RecoverableSampleException(message))
+                        log.debug(message)
                         wave_start_present = False
                         wave_ptfreq_present = False
 
@@ -600,7 +594,7 @@ class PresfAbcDclParser(BufferLoadingParser):
                         # received a end not after a cont
                         log.warn("WAVE NOT IN CONT")
                         message = "Error while decoding parameters in data: [%s]" % (record_match.group(0))
-                        self._exception_callback(RecoverableSampleException(message))
+                        log.debug(message)
                     
                     if wave_start_present is True and \
                        wave_ptfreq_present is True and \
@@ -619,7 +613,7 @@ class PresfAbcDclParser(BufferLoadingParser):
                 # something in the data didn't match a required regex, so raise an exception and press on.
                 data_index += len(record_match.group(0))
                 message = "Error while decoding parameters in data: [%s]" % (record_match.group(0))
-                self._exception_callback(RecoverableSampleException(message))
+                log.debug(message)
 
             else:
                 log.debug("not a complete record left")
