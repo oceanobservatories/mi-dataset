@@ -234,3 +234,42 @@ class AdcpsJlnStcParserUnitTestCase(ParserUnitTestCase):
             self.assert_particles(result, 'adcpt_20140504_015742.recov.yml', RESOURCE_PATH)
 
             self.assertEquals(len(self.exception_callback_value), 0)
+
+    def test_bug_2979_1(self):
+        """
+        Read test data and pull out multiple data particles at one time.
+        Assert that the results are those we expected.
+        """
+        with open(os.path.join(RESOURCE_PATH, 'adcpt_20140613_105345.DAT')) as file_handle:
+            parser = AdcpsJlnStcParser(self._telem_config,
+                                       None,
+                                       file_handle,
+                                       lambda state, ingested: None,
+                                       lambda data: None,
+                                       self.exception_callback)
+
+            result = parser.get_records(100)
+
+            self.assertEquals(len(result), 13)
+
+            self.assertEquals(len(self.exception_callback_value), 0)
+
+    def test_bug_2979_2(self):
+        """
+        Read test data and pull out multiple data particles at one time.
+        Assert that the results are those we expected.
+        """
+        with open(os.path.join(RESOURCE_PATH, 'adcpt_20140707_200310.DAT')) as file_handle:
+            parser = AdcpsJlnStcParser(self._telem_config,
+                                       None,
+                                       file_handle,
+                                       lambda state, ingested: None,
+                                       lambda data: None,
+                                       self.exception_callback)
+
+            result = parser.get_records(100)
+
+            self.assertEquals(len(result), 0)
+
+            self.assertEquals(len(self.exception_callback_value), 0)
+
