@@ -101,6 +101,9 @@ class PresfAbcDclParserUnitTestCase(ParserUnitTestCase):
             # file has one tide particle and one wave particle
             particles = parser.get_records(2)
                 
+            # Make sure there were no errors
+            self.assertTrue(len(self.exception_callback_value) == 0)
+
             # Make sure we obtained 2 particles
             self.assertTrue(len(particles) == 2)
        
@@ -116,6 +119,9 @@ class PresfAbcDclParserUnitTestCase(ParserUnitTestCase):
             # file has one tide particle and one wave particle
             particles = parser.get_records(2)
                 
+            # Make sure there were no errors
+            self.assertTrue(len(self.exception_callback_value) == 0)
+
             # Make sure we obtained 2 particles
             self.assertTrue(len(particles) == 2)
        
@@ -139,6 +145,9 @@ class PresfAbcDclParserUnitTestCase(ParserUnitTestCase):
             
             particles = parser.get_records(20)
                 
+            # Make sure there were no errors
+            self.assertTrue(len(self.exception_callback_value) == 0)
+
             # Make sure we obtained 20 particles
             self.assertTrue(len(particles) == 20)
     
@@ -153,6 +162,9 @@ class PresfAbcDclParserUnitTestCase(ParserUnitTestCase):
             
             particles = parser.get_records(20)
                 
+            # Make sure there were no errors
+            self.assertTrue(len(self.exception_callback_value) == 0)
+
             # Make sure we obtained 20 particles
             self.assertTrue(len(particles) == 20)
     
@@ -174,6 +186,9 @@ class PresfAbcDclParserUnitTestCase(ParserUnitTestCase):
     
             particles = parser.get_records(48)
                 
+            # Make sure there were no errors
+            self.assertTrue(len(self.exception_callback_value) == 0)
+
             # Make sure we obtained 20 particles
             self.assertTrue(len(particles) == 48)
 
@@ -291,10 +306,37 @@ class PresfAbcDclParserUnitTestCase(ParserUnitTestCase):
 
             particles = parser.get_records(NUM_PARTICLES_TO_REQUEST)
 
+            # Make sure there were no errors
+            self.assertTrue(len(self.exception_callback_value) == 0)
+
             self.assertEquals(len(particles), NUM_EXPECTED_PARTICLES)
 
             self.assertEqual(self._exception_occurred, False)
 
         log.debug('===== END TEST NO PARTICLES =====')
+
+    def test_Bug_3021(self):
+        """
+        Read data from a file and pull out data particles
+        one at a time. Verify that the results are those we expected.
+        """
+        log.debug('===== START TEST SIMPLE =====')
+
+        with open(os.path.join(RESOURCE_PATH, '20141204.presf.log'), 'r') as file_handle:
+
+            parser = PresfAbcDclParser(self.config.get(DataTypeKey.PRESF_ABC_DCL_TELEMETERED),
+                                       None, file_handle,
+                                       lambda state, ingested: None, lambda data: None,
+                                       self.exception_callback)
+
+            # file has one tide particle and one wave particle
+            particles = parser.get_records(20)
+
+            # Make sure there was one error due to the "time out"
+            self.assertTrue(len(self.exception_callback_value) == 1)
+
+            # Make sure we obtained 0 particles
+            self.assertEquals(len(particles), 0)
+
 
 
