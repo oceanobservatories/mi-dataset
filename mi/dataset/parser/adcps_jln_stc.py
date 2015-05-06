@@ -49,7 +49,7 @@ HEADER_FOOTER_MATCHER = re.compile(HEADER_FOOTER_REGEX, re.DOTALL)
 DATA_REGEX = r'(Record\[\d+\]:)([\x00-\xFF]+?)\r\n(Record|#End U)'
 DATA_MATCHER = re.compile(DATA_REGEX)
 
-DATA_REGEX_B = r'(Record\[\d+\]:).*?(\x6e\x7f[\x00-\xFF]+?)\r\n'
+DATA_REGEX_B = r'(Record\[\d+\]:).*?(\x6e\x7f[\x00-\xFF]+)\r\n'
 DATA_MATCHER_B = re.compile(DATA_REGEX_B, re.DOTALL)
 
 RX_FAILURE_REGEX = r'Record\[\d+\]:ReceiveFailure\r\n'
@@ -374,8 +374,8 @@ class AdcpsJlnStcParser(BufferLoadingParser):
         # read the first bytes from the file
         header = self._stream_handle.read(HEADER_BYTES)
         if len(header) < HEADER_BYTES:
-            log.error("File is not long enough to read header")
-            raise SampleException("File is not long enough to read header")
+            log.warn("File is not long enough to read header")
+            return
 
         # read the last 43 bytes from the file     
         self._stream_handle.seek(-FOOTER_BYTES, 2)
@@ -400,8 +400,7 @@ class AdcpsJlnStcParser(BufferLoadingParser):
                 self._increment_state(len(header_match.group(0)))
                 self._saved_header = (sample, copy.copy(self._read_state))
         else:
-            log.error("File header or footer does not match header regex")
-            raise SampleException("File header or footer does not match header regex")
+            log.warn("File header or footer does not match header regex")
 
     def _increment_state(self, increment):
         """
@@ -437,6 +436,7 @@ class AdcpsJlnStcParser(BufferLoadingParser):
             if not match_rx_failure:
                 data_match = DATA_MATCHER_B.match(chunk)
                 if data_match:
+
                     if len(data_match.group(2)) >= MIN_DATA_BYTES and self.compare_checksum(data_match.group(2)):
                         # pull out the date string from the data
                         date_str = self._instrument_class.unpack_date(data_match.group(2)[11:19])
