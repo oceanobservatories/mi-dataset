@@ -20,8 +20,8 @@ import struct
 from mi.core.log import get_logger
 log = get_logger()
 from mi.core.exceptions import SampleException, DatasetParserException, UnexpectedDataException
-from mi.dataset.parser.WFP_E_file_common import WfpEFileParser, StateKey, WFP_E_COASTAL_FLAGS_HEADER_MATCHER, \
-    HEADER_BYTES, SAMPLE_BYTES, STATUS_BYTES, PROFILE_MATCHER
+from mi.dataset.parser.WFP_E_file_common import WfpEFileParser, StateKey, \
+    HEADER_BYTES, SAMPLE_BYTES, STATUS_BYTES, PROFILE_MATCHER, HEADER_MATCHER
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 
 
@@ -47,7 +47,6 @@ class WfpEngStcImodemParser(WfpEFileParser):
                                                     publish_callback,
                                                     *args, **kwargs)
 
-
     def set_state(self, state_obj):
         """
         initialize the state
@@ -71,7 +70,7 @@ class WfpEngStcImodemParser(WfpEFileParser):
         # read the first bytes from the file
         header = self._stream_handle.read(HEADER_BYTES)
 
-        match = WFP_E_COASTAL_FLAGS_HEADER_MATCHER.match(header)
+        match = HEADER_MATCHER.match(header)
 
         # parse the header
         if match is not None:

@@ -204,3 +204,28 @@ class WfpEngStcImodemParserUnitTestCase(ParserUnitTestCase):
             result = parser.get_records(5)
 
             self.assert_particles(result, 'bad_data_telem.yml', RESOURCE_PATH)
+
+    def test_bug_3241(self):
+        """
+        This test was created to validate fixes to bug #3241
+        It validates the parser can parse a file recovered from
+        Global platforms
+        """
+        file_path = os.path.join(RESOURCE_PATH, 'E0000000.DAT')
+
+        with open(file_path, 'rb') as stream_handle:
+            parser = WfpEngStcImodemParser(
+                self._recov_config,
+                None,
+                stream_handle,
+                lambda state, ingested: None,
+                lambda data: None)
+
+            result = parser.get_records(100)
+
+            # make sure we get 100 particles back
+            self.assertEquals(len(result), 100)
+
+            # make sure there are no errors
+            self.assertEquals(len(self.exception_callback_value), 0)
+

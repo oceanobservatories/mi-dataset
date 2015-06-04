@@ -20,7 +20,7 @@ log = get_logger()
 from mi.core.common import BaseEnum
 from mi.core.instrument.data_particle import DataParticle
 from mi.core.exceptions import SampleException
-from mi.dataset.parser.WFP_E_file_common import SAMPLE_BYTES, PROFILE_MATCHER, WFP_E_COASTAL_FLAGS_HEADER_MATCHER
+from mi.dataset.parser.WFP_E_file_common import SAMPLE_BYTES, PROFILE_MATCHER, HEADER_MATCHER
 
 
 class DataParticleType(BaseEnum):
@@ -110,7 +110,7 @@ class WfpEngStcImodemStartDataParticle(DataParticle):
         a particle with the appropriate tag.
         @throws SampleException If there is a problem with sample creation
         """
-        match = WFP_E_COASTAL_FLAGS_HEADER_MATCHER.match(self.raw_data)
+        match = HEADER_MATCHER.match(self.raw_data)
 
         if not match:
             raise SampleException(
