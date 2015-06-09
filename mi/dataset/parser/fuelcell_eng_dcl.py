@@ -332,8 +332,8 @@ class FuelCellEngDclParser(SimpleParser):
                         self.log_warning('No data found on line', line_count)
                 else:
                     self.log_warning('Bad/Missing Timestamp on line', line_count)
-            else:
-                self.log_warning('No fuel cell data on line', line_count)
+            else:  # No FC Data is an expected occurance, do not raise exception
+                log.debug('No fuel cell data on line %d', line_count)
 
             # Read another line from the input file
             fuelcell_input_row = self._file_handle.readline()
