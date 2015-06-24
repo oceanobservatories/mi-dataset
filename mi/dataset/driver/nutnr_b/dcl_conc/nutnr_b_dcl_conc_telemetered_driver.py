@@ -13,8 +13,10 @@ from mi.core.log import get_logger
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 from mi.dataset.dataset_driver import DataSetDriver
 from mi.dataset.parser.nutnr_b_dcl_conc import NutnrBDclConcTelemeteredParser
+from mi.core.versioning import version
 
 
+@version("15.6.0")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     
     config.add_configuration(os.path.join(basePythonCodePath, 'res', 'config', 'mi-logging.yml'))

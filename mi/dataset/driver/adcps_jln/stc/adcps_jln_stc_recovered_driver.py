@@ -14,7 +14,9 @@ from mi.dataset.parser.adcps_jln_stc import AdcpsJlnStcParser, \
     AdcpsJlnStcMetadataRecoveredDataParticle, \
     AdcpsJlnStcInstrumentRecoveredDataParticle, \
     AdcpsJlnStcParticleClassKey
+from mi.core.versioning import version
 
+@version("0.0.3")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
 
     from mi.logging import config

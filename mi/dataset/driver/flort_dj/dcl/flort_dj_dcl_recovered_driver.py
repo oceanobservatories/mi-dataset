@@ -14,8 +14,10 @@ from mi.logging import config
 from mi.dataset.parser.flort_dj_dcl import FlortDjDclRecoveredParser
 from mi.dataset.dataset_driver import DataSetDriver
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
+from mi.core.versioning import version
 
 
+@version("0.0.1")
 class FlortDjDclRecoveredDriver:
     def __init__(self, sourceFilePath, particleDataHdlrObj, parser_config):
         self._sourceFilePath = sourceFilePath

@@ -13,7 +13,9 @@ from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 from mi.dataset.driver.dofst_k.wfp.dofst_k_wfp_driver import DofstKWfpDriver
 from mi.dataset.parser.dofst_k_wfp_particles import DofstKWfpTelemeteredDataParticle, \
     DofstKWfpTelemeteredMetadataParticle
+from mi.core.versioning import version
 
+@version("0.0.1")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     
     try:

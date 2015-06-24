@@ -11,7 +11,9 @@ from mi.core.log import get_logger
 from mi.dataset.dataset_driver import DataSetDriver
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 from mi.dataset.parser.adcp_pd0 import AdcpPd0Parser
+from mi.core.versioning import version
 
+@version("0.0.3")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
 
     from mi.logging import config

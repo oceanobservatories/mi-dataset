@@ -16,8 +16,10 @@ from mi.dataset.dataset_driver import SimpleDatasetDriver
 from mi.dataset.parser.velpt_ab import VelptAbParser, VelptAbParticleClassKey
 from mi.dataset.parser.velpt_ab_particles import VelptAbInstrumentDataParticle, \
     VelptAbDiagnosticsHeaderParticle, VelptAbDiagnosticsDataParticle, VelptAbInstrumentMetadataParticle
+from mi.core.versioning import version
 
 
+@version("15.6.0")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     """
     This is the method called by Uframe

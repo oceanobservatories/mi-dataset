@@ -14,8 +14,10 @@ from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 from mi.dataset.dataset_driver import DataSetDriver
 
 from mi.dataset.parser.global_wfp_e_file_parser import GlobalWfpEFileParser
+from mi.core.versioning import version
 
 
+@version("15.6.0")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
 
     config.add_configuration(os.path.join(basePythonCodePath, 'res', 'config', 'mi-logging.yml'))

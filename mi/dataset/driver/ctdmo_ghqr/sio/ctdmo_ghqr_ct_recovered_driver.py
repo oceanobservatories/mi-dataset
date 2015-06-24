@@ -15,11 +15,13 @@ from mi.core.exceptions import DatasetParserException
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 from mi.dataset.dataset_driver import DataSetDriver
 from mi.dataset.parser.ctdmo_ghqr_sio import CtdmoGhqrRecoveredCtParser, INDUCTIVE_ID_KEY
+from mi.core.versioning import version
 
 FILENAME_REGEX = r'SBE37-IM_(\d+)_\d{4}_\d{2}_\d{2}.hex'
 FILENAME_MATCHER = re.compile(FILENAME_REGEX)
 
 
+@version("15.6.0")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     """
     This is the method called by Uframe

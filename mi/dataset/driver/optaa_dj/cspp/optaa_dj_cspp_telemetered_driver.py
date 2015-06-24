@@ -20,8 +20,10 @@ from mi.dataset.parser.optaa_dj_cspp import \
     OptaaDjCsppParser, \
     OptaaDjCsppMetadataTelemeteredDataParticle, \
     OptaaDjCsppInstrumentTelemeteredDataParticle
+from mi.core.versioning import version
 
 
+@version("15.6.0")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     """
     This is the method called by Uframe

@@ -24,8 +24,10 @@ from mi.dataset.parser.cg_dcl_eng_dcl import CgDclEngDclParser, CgDclEngDclParti
     CgDclEngDclDlogStatusTelemeteredDataParticle, \
     CgDclEngDclStatusTelemeteredDataParticle, \
     CgDclEngDclDlogAarmTelemeteredDataParticle
+from mi.core.versioning import version
 
 
+@version("15.6.0")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     """
     This is the method called by Uframe

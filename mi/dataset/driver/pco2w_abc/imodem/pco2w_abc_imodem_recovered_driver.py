@@ -21,8 +21,10 @@ from mi.dataset.parser.pco2w_abc_particles import \
     Pco2wAbcImodemPowerRecoveredDataParticle, \
     Pco2wAbcImodemControlRecoveredDataParticle, \
     Pco2wAbcImodemMetadataRecoveredDataParticle
+from mi.core.versioning import version
 
 
+@version("15.6.0")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     """
     This is the method called by Uframe

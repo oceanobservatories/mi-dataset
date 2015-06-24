@@ -12,8 +12,10 @@ from mi.logging import config
 
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 from mi.dataset.driver.moas.gl.flord_m.flord_m_glider_driver import FlordMDriver
+from mi.core.versioning import version
 
 
+@version("15.6.0")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
 
 

@@ -20,8 +20,10 @@ from mi.dataset.parser.parad_j_cspp import \
     ParadJCsppParser, \
     ParadJCsppInstrumentTelemeteredDataParticle, \
     ParadJCsppMetadataTelemeteredDataParticle
+from mi.core.versioning import version
 
 
+@version("0.0.1")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     """
     This is the method called by Uframe

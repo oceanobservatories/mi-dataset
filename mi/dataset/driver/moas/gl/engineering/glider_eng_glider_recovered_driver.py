@@ -14,7 +14,9 @@ from mi.dataset.parser.glider import EngineeringClassKey
 
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 
+from mi.core.versioning import version
 
+@version("15.6.0")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     """
     Initialize the parser configuration and build the driver

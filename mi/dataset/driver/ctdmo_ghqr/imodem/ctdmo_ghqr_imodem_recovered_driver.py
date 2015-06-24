@@ -17,8 +17,10 @@ from mi.dataset.parser.ctdmo_ghqr_imodem import CtdmoGhqrImodemParser, \
     CtdmoGhqrImodemParticleClassKey, \
     CtdmoGhqrImodemMetadataRecoveredDataParticle, \
     CtdmoGhqrImodemInstrumentRecoveredDataParticle
+from mi.core.versioning import version
 
 
+@version("15.6.0")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     """
     This is the method called by Uframe

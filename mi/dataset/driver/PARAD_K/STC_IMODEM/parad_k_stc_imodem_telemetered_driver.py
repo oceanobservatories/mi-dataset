@@ -13,7 +13,9 @@ from mi.dataset.parser.parad_k_stc_imodem import \
     Parad_k_stc_imodemParser
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 from mi.dataset.dataset_driver import DataSetDriver, ParticleDataHandler
+from mi.core.versioning import version
 
+@version("0.0.3")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
 
     config.add_configuration(os.path.join(basePythonCodePath, 'res', 'config', 'mi-logging.yml'))

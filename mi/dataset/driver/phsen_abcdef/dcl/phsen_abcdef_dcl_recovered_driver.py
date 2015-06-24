@@ -15,8 +15,10 @@ from mi.dataset.driver.phsen_abcdef.dcl.driver_common import Phsen_abcdef_dcl_Dr
 from mi.dataset.parser.phsen_abcdef_dcl import PhsenAbcdefDclMetadataRecoveredDataParticle
 from mi.dataset.parser.phsen_abcdef_dcl import PhsenAbcdefDclInstrumentRecoveredDataParticle
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
+from mi.core.versioning import version
 
 
+@version('0.0.1')
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
 
     config.add_configuration(os.path.join(basePythonCodePath, 'res', 'config', 'mi-logging.yml'))

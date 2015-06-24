@@ -14,7 +14,9 @@ from mi.dataset.driver.moas.gl.dosta.driver_common import DostaAbcdjmGliderDrive
 
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 
+from mi.core.versioning import version
 
+@version("15.6.0")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     
     config.add_configuration(os.path.join(basePythonCodePath, 'res', 'config', 'mi-logging.yml'))

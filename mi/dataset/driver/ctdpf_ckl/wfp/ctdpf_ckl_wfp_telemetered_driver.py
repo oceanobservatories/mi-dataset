@@ -16,8 +16,10 @@ from mi.dataset.parser.ctdpf_ckl_wfp import CtdpfCklWfpParser, \
 from mi.dataset.parser.ctdpf_ckl_wfp_particles import \
     CtdpfCklWfpTelemeteredDataParticle, \
     CtdpfCklWfpTelemeteredMetadataParticle
+from mi.core.versioning import version
 
 
+@version("0.0.1")
 class CtdpfCklWfpTelemeteredDriver(SimpleDatasetDriver):
     """
     Derived wc_wm_cspp driver class

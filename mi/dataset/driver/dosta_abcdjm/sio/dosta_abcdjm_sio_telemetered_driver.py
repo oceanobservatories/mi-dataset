@@ -23,8 +23,10 @@ from mi.dataset.parser.dosta_abcdjm_sio import DostaAbcdjmSioParser, \
     METADATA_PARTICLE_CLASS_KEY, \
     DostaAbcdjmSioTelemeteredMetadataDataParticle, \
     DostaAbcdjmSioTelemeteredDataParticle
+from mi.core.versioning import version
 
 
+@version("15.6.0")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     """
     This is the method called by Uframe

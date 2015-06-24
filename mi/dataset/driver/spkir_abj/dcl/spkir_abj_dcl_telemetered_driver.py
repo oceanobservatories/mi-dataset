@@ -14,8 +14,10 @@ from mi.logging import config
 from mi.dataset.parser.spkir_abj_dcl import SpkirAbjDclTelemeteredParser
 from mi.dataset.dataset_driver import DataSetDriver
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
+from mi.core.versioning import version
 
 
+@version("15.6.0")
 class SpkirAbjDclTelemeteredDriver:
     def __init__(self, sourceFilePath, particleDataHdlrObj, parser_config):
         self._sourceFilePath = sourceFilePath

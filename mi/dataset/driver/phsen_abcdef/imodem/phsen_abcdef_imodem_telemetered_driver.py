@@ -20,8 +20,10 @@ from mi.dataset.parser.phsen_abcdef_imodem_particles import \
     PhsenAbcdefImodemControlTelemeteredDataParticle, \
     PhsenAbcdefImodemInstrumentTelemeteredDataParticle,\
     PhsenAbcdefImodemMetadataTelemeteredDataParticle
+from mi.core.versioning import version
 
 
+@version("15.6.0")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     """
     This is the method called by Uframe

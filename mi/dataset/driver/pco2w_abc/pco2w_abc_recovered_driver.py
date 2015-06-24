@@ -18,6 +18,7 @@ from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 
 from mi.dataset.dataset_driver import DataSetDriver
 from mi.dataset.parser.pco2w_abc import Pco2wAbcParser, Pco2wAbcParticleClassKey
+from mi.core.versioning import version
 
 
 class Pco2wAbcDriver:
@@ -47,6 +48,7 @@ class Pco2wAbcDriver:
         return self._particleDataHdlrObj
 
 
+@version("15.6.0")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     config.add_configuration(os.path.join(basePythonCodePath, 'res', 'config', 'mi-logging.yml'))
 
