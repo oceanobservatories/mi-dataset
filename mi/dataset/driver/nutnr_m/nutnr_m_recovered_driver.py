@@ -7,8 +7,10 @@
 
 from mi.dataset.dataset_driver import SimpleDatasetDriver
 from mi.dataset.parser.nutnr_m import NutnrMParser
+from mi.core.versioning import version
 
 
+@version("15.6.0")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     """
     This is the method called by Uframe

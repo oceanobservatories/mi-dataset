@@ -8,8 +8,10 @@ __author__ = 'Jeff Roy'
 
 from mi.dataset.dataset_driver import SimpleDatasetDriver
 from mi.dataset.parser.presf_abc_dcl import PresfAbcDclParser
+from mi.core.versioning import version
 
 
+@version("15.6.0")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     """
     This is the method called by Uframe

@@ -18,8 +18,10 @@ from mi.dataset.parser.pco2w_abc_particles import Pco2wAbcDclMetadataTelemetered
     Pco2wAbcDclPowerTelemeteredDataParticle, \
     Pco2wAbcDclInstrumentTelemeteredDataParticle, \
     Pco2wAbcDclInstrumentBlankTelemeteredDataParticle
+from mi.core.versioning import version
 
 
+@version("15.6.0")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
 
     config.add_configuration(os.path.join(basePythonCodePath, 'res', 'config', 'mi-logging.yml'))

@@ -16,6 +16,7 @@ from mi.dataset.parser.ctdpf_ckl_wfp import CtdpfCklWfpParser, \
 from mi.dataset.parser.ctdpf_ckl_wfp_particles import \
     CtdpfCklWfpTelemeteredDataParticle, \
     CtdpfCklWfpTelemeteredMetadataParticle
+from mi.core.versioning import version
 
 
 class CtdpfCklWfpTelemeteredDriver(SimpleDatasetDriver):
@@ -44,6 +45,7 @@ class CtdpfCklWfpTelemeteredDriver(SimpleDatasetDriver):
         return parser
 
 
+@version("0.0.1")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     """
     This is the method called by Uframe

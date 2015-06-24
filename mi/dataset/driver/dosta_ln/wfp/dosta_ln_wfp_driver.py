@@ -17,7 +17,9 @@ from mi.dataset.parser.WFP_E_file_common import StateKey
 from mi.dataset.parser.dosta_ln_wfp import DostaLnWfpParser
 from mi.dataset.dataset_driver import DataSetDriver
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
+from mi.core.versioning import version
 
+@version("15.6.0")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
 
     log = get_logger()

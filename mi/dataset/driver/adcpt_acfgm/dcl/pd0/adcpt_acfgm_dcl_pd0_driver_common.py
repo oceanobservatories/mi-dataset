@@ -13,7 +13,9 @@ log = get_logger()
 
 from mi.dataset.dataset_driver import DataSetDriver
 from mi.dataset.parser.adcpt_acfgm_dcl_pd0 import AdcptAcfgmDclPd0Parser
+from mi.core.versioning import version
 
+@version("15.6.0")
 class AdcptAcfgmDclPd0Driver:
 
     def __init__(self, sourceFilePath, particleDataHdlrObj, parser_config):

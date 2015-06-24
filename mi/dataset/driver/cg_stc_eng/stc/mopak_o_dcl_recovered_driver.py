@@ -13,7 +13,9 @@ from mi.dataset.parser.mopak_o_dcl import \
     MopakODclAccelParserRecoveredDataParticle, \
     MopakODclRateParserRecoveredDataParticle, \
     MopakParticleClassType
+from mi.core.versioning import version
 
+@version("0.0.2")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
 
     config.add_configuration(os.path.join(basePythonCodePath, 'res', 'config', 'mi-logging.yml'))

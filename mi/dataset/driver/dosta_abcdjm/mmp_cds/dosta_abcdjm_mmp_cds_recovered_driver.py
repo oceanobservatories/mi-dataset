@@ -14,8 +14,10 @@ log = get_logger()
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 from mi.dataset.dataset_driver import DataSetDriver
 from mi.dataset.parser.dosta_abcdjm_mmp_cds import DostaAbcdjmMmpCdsParser
+from mi.core.versioning import version
 
 
+@version("0.0.1")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     
     config.add_configuration(os.path.join(basePythonCodePath, 'res', 'config', 'mi-logging.yml'))

@@ -14,8 +14,9 @@ Initial Release
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 from mi.dataset.dataset_driver import SimpleDatasetDriver
 from mi.dataset.parser.sio_eng_sio import SioEngSioParser
+from mi.core.versioning import version
 
-
+@version("15.6.0")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     """
     This is the method called by Uframe

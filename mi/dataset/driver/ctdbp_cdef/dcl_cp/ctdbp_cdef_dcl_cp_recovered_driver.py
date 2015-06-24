@@ -16,10 +16,12 @@ from mi.dataset.dataset_driver import SimpleDatasetDriver
 from mi.dataset.parser.ctdbp_cdef_dcl_cp import \
     CtdbpCdefDclCpParser, \
     CtdbpCdefDclCpRecoveredParserDataParticle
+from mi.core.versioning import version
 
 
 MODULE_NAME = 'mi.dataset.parser.ctdbp_cdef_dcl_cp'
 
+@version("15.6.0")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     """
     This is the method called by Uframe

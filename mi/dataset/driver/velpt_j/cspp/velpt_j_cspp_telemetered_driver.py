@@ -13,8 +13,10 @@ from mi.dataset.parser.velpt_j_cspp import VelptJCsppParser, VelptJCsppMetadataT
     VelptJCsppInstrumentTelemeteredDataParticle
 
 from mi.dataset.parser.cspp_base import METADATA_PARTICLE_CLASS_KEY, DATA_PARTICLE_CLASS_KEY
+from mi.core.versioning import version
 
 
+@version("15.6.0")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     """
     This is the method called by Uframe

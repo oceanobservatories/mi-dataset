@@ -1,7 +1,9 @@
 from mi.dataset.parser.flort_kn__stc_imodem import Flort_kn_stc_imodemParser
 from mi.dataset.dataset_driver import DataSetDriver
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
+from mi.core.versioning import version
 
+@version("0.0.1")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     with open(sourceFilePath,"r") as fil :
         parser = Flort_kn_stc_imodemParser(

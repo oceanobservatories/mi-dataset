@@ -15,6 +15,7 @@ from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 
 from mi.dataset.dataset_driver import DataSetDriver
 from mi.dataset.parser.dosta_abcdjm_dcl import DostaAbcdjmDclRecoveredParser
+from mi.core.versioning import version
 
 
 class DostaAbcdjmDclRecoveredDriver:
@@ -46,6 +47,7 @@ class DostaAbcdjmDclRecoveredDriver:
         return self._particleDataHdlrObj
 
 
+@version("0.0.1")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     config.add_configuration(os.path.join(basePythonCodePath, 'res', 'config', 'mi-logging.yml'))
 

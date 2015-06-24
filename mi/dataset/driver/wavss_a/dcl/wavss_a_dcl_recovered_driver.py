@@ -15,6 +15,7 @@ from mi.core.log import get_logger
 from mi.dataset.dataset_driver import DataSetDriver
 from mi.dataset.parser.wavss_a_dcl import WavssADclParser
 
+from mi.core.versioning import version
 
 class WavssADclRecoveredDriver:
 
@@ -51,6 +52,7 @@ class WavssADclRecoveredDriver:
         return self._particleDataHdlrObj
 
 
+@version("15.6.0")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     """
     Initialize the parser configuration and build the driver

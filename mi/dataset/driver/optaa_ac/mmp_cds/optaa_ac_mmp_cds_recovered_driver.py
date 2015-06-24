@@ -14,8 +14,10 @@ Initial Release
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 from mi.dataset.dataset_driver import SimpleDatasetDriver
 from mi.dataset.parser.optaa_ac_mmp_cds import OptaaAcMmpCdsParser
+from mi.core.versioning import version
 
 
+@version("0.0.1")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     """
     This is the method called by Uframe

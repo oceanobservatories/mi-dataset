@@ -18,8 +18,10 @@ from mi.dataset.parser.pco2w_abc_particles import Pco2wAbcDclMetadataRecoveredDa
     Pco2wAbcDclPowerRecoveredDataParticle, \
     Pco2wAbcDclInstrumentRecoveredDataParticle, \
     Pco2wAbcDclInstrumentBlankRecoveredDataParticle
+from mi.core.versioning import version
 
 
+@version("15.6.0")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
 
     config.add_configuration(os.path.join(basePythonCodePath, 'res', 'config', 'mi-logging.yml'))

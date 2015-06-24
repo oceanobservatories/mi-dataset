@@ -14,7 +14,7 @@ from mi.logging import config
 from mi.dataset.parser.optaa_dj_dcl import OptaaDjDclRecoveredParser
 from mi.dataset.dataset_driver import DataSetDriver
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
-
+from mi.core.versioning import version
 
 class OptaaDjDclRecoveredDriver:
     def __init__(self, sourceFilePath, particleDataHdlrObj, parser_config):
@@ -45,6 +45,7 @@ class OptaaDjDclRecoveredDriver:
         return self._particleDataHdlrObj
 
 
+@version("15.6.0")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     config.add_configuration(os.path.join(basePythonCodePath, 'res', 'config', 'mi-logging.yml'))
 

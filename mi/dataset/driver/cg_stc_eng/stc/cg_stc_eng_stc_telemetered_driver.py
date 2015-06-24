@@ -10,7 +10,9 @@ from mi.logging import config
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 from mi.dataset.parser.cg_stc_eng_stc import CgStcEngStcParser
 from mi.dataset.driver.cg_stc_eng.stc.cg_stc_eng_stc_common_driver import CgStcEngDriver
+from mi.core.versioning import version
 
+@version("0.0.2")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
 
     config.add_configuration(os.path.join(basePythonCodePath, 'res', 'config', 'mi-logging.yml'))

@@ -13,8 +13,10 @@ Initial Release
 
 from mi.dataset.dataset_driver import SimpleDatasetDriver
 from mi.dataset.parser.flort_kn_auv import FlortKnAuvParser
+from mi.core.versioning import version
 
 
+@version("15.6.0")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     """
     This is the method called by Uframe

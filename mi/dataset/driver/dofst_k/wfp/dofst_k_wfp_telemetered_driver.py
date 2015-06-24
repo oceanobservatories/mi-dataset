@@ -14,8 +14,10 @@ from mi.dataset.dataset_driver import SimpleDatasetDriver
 from mi.dataset.parser.dofst_k_wfp import DofstKWfpParser
 from mi.dataset.parser.dofst_k_wfp_particles import DofstKWfpTelemeteredDataParticle, \
     DofstKWfpTelemeteredMetadataParticle
+from mi.core.versioning import version
 
 
+@version("0.0.1")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     """
     This is the method called by Uframe

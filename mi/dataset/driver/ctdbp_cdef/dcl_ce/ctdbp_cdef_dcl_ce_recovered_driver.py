@@ -19,8 +19,10 @@ from mi.dataset.parser.ctdbp_cdef_dcl_ce import \
     PARTICLE_CLASS_KEY, \
     DOSTA_CLASS_KEY, \
     CtdbpCdefDclCeParser
+from mi.core.versioning import version
 
 
+@version("15.6.0")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     """
     This is the method called by Uframe

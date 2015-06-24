@@ -2,6 +2,7 @@
 
 import sys
 import os
+from mi.core.versioning import  version
 
 #try:
 #    if basePythonCodePath is not None:
@@ -11,6 +12,7 @@ import os
 
 #sys.path.append(basePythonCodePath)
 
+@version("0.0.3")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     from mi.logging import config
     config.add_configuration(os.path.join(basePythonCodePath, 'res', 'config', 'mi-logging.yml'))

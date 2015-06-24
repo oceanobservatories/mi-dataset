@@ -16,8 +16,10 @@ from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 from mi.dataset.parser.fuelcell_eng_dcl import FuelCellEngDclParticleClassKey,\
     FuelCellEngDclDataParticleRecovered
 from mi.dataset.parser.fuelcell_eng_dcl import FuelCellEngDclParser
+from mi.core.versioning import version
 
 
+@version("15.6.0")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     """
     This is the method called by Uframe

@@ -16,6 +16,7 @@ from mi.dataset.parser.ctdpf_ckl_wfp import CtdpfCklWfpParser, \
 from mi.dataset.parser.ctdpf_ckl_wfp_particles import \
     CtdpfCklWfpRecoveredDataParticle, \
     CtdpfCklWfpRecoveredMetadataParticle
+from mi.core.versioning import version
 
 
 class CtdpfCklWfpRecoveredDriver(SimpleDatasetDriver):
@@ -43,6 +44,7 @@ class CtdpfCklWfpRecoveredDriver(SimpleDatasetDriver):
 
         return parser
 
+@version("0.0.1")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     """
     This is the method called by Uframe
