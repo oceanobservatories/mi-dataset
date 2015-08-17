@@ -25,18 +25,13 @@ Mal-formed sensor data records and all metadata records produce no particles.
 __author__ = 'Steve Myerson'
 __license__ = 'Apache 2.0'
 
-import copy
-
-from functools import partial
 import re
 
-from mi.core.instrument.chunker import \
-    StringChunker
 
-from mi.core.log import get_logger; log = get_logger()
+from mi.core.log import get_logger
+log = get_logger()
 
-from mi.dataset.dataset_parser import \
-    BufferLoadingParser
+from mi.dataset.dataset_parser import SimpleParser
 
 from mi.dataset.parser.common_regexes import \
     DATE_YYYY_MM_DD_REGEX, \
@@ -45,9 +40,7 @@ from mi.dataset.parser.common_regexes import \
 from mi.dataset.parser.utilities import dcl_controller_timestamp_to_ntp_time
 
 from mi.core.common import BaseEnum
-from mi.core.exceptions import \
-    DatasetParserException, \
-    UnexpectedDataException
+from mi.core.exceptions import UnexpectedDataException
 
 from mi.core.instrument.data_particle import DataParticle, DataParticleKey, DataParticleValue
 
@@ -76,9 +69,9 @@ DOSTA_RECORD_MATCHER = re.compile(DOSTA_RECORD_REGEX)
 #   Timestamp [Text]MoreText newline
 METADATA_REGEX = TIMESTAMP + SPACE   # date and time
 METADATA_REGEX += START_METADATA     # Metadata record starts with '['
-METADATA_REGEX += ANY_CHARS          #   followed by text
-METADATA_REGEX += END_METADATA       #   followed by ']'
-METADATA_REGEX += ANY_CHARS          #   followed by more text
+METADATA_REGEX += ANY_CHARS          # followed by text
+METADATA_REGEX += END_METADATA       # followed by ']'
+METADATA_REGEX += ANY_CHARS          # followed by more text
 METADATA_REGEX += NEW_LINE           # Record ends with a newline
 METADATA_MATCHER = re.compile(METADATA_REGEX)
 
@@ -168,11 +161,11 @@ class DostaAbcdjmDclInstrumentDataParticle(DataParticle):
                  new_sequence=None):
 
         super(DostaAbcdjmDclInstrumentDataParticle, self).__init__(raw_data,
-                                                          port_timestamp,
-                                                          internal_timestamp,
-                                                          preferred_timestamp,
-                                                          quality_flag,
-                                                          new_sequence)
+                                                                   port_timestamp,
+                                                                   internal_timestamp,
+                                                                   preferred_timestamp,
+                                                                   quality_flag,
+                                                                   new_sequence)
 
         # The particle timestamp is the DCL Controller timestamp.
         # Convert the DCL controller timestamp string to NTP time (in seconds and microseconds).
@@ -192,7 +185,7 @@ class DostaAbcdjmDclInstrumentDataParticle(DataParticle):
         # and a function to use for data conversion.
 
         return [self._encode_value(name, self.raw_data[group], function)
-            for name, group, function in INSTRUMENT_PARTICLE_MAP]
+                for name, group, function in INSTRUMENT_PARTICLE_MAP]
 
 
 class DostaAbcdjmDclRecoveredInstrumentDataParticle(DostaAbcdjmDclInstrumentDataParticle):
@@ -209,7 +202,7 @@ class DostaAbcdjmDclTelemeteredInstrumentDataParticle(DostaAbcdjmDclInstrumentDa
     _data_particle_type = DataParticleType.TEL_INSTRUMENT_PARTICLE
 
 
-class DostaAbcdjmDclParser(BufferLoadingParser):
+class DostaAbcdjmDclParser(SimpleParser):
 
     """
     Parser for Dosta_abcdjm_dcl data.
@@ -217,127 +210,45 @@ class DostaAbcdjmDclParser(BufferLoadingParser):
     this constructor takes an additional parameter particle_class.
     """
     def __init__(self,
-                 config,
                  stream_handle,
-                 state,
-                 state_callback,
-                 publish_callback,
                  exception_callback,
                  particle_class):
 
         # No fancy sieve function needed for this parser.
         # File is ASCII with records separated by newlines.
 
-        super(DostaAbcdjmDclParser, self).__init__(config,
-                                          stream_handle,
-                                          state,
-                                          partial(StringChunker.regex_sieve_function,
-                                                  regex_list=[DOSTA_RECORD_MATCHER]),
-                                          state_callback,
-                                          publish_callback,
-                                          exception_callback)
+        super(DostaAbcdjmDclParser, self).__init__({},
+                                                   stream_handle,
+                                                   exception_callback)
 
-        # Default the position within the file to the beginning.
+        self._particle_class = particle_class
 
-        self._read_state = {DostaStateKey.POSITION: 0}
-        self.input_file = stream_handle
-        self.particle_class = particle_class
-
-        # If there's an existing state, update to it.
-
-        if state is not None:
-            self.set_state(state)
-
-    def handle_non_data(self, non_data, non_end, start):
+    def parse_file(self):
         """
-        Handle any non-data that is found in the file
+        Parse through the file, pulling single lines and comparing to the established patterns,
+        generating particles for data lines
         """
-        # Handle non-data here.
-        # Increment the position within the file.
-        # Use the _exception_callback.
-        if non_data is not None and non_end <= start:
-            self._increment_position(len(non_data))
-            self._exception_callback(UnexpectedDataException(
-                "Found %d bytes of un-expected non-data %s" %
-                (len(non_data), non_data)))
 
-    def _increment_position(self, bytes_read):
-        """
-        Increment the position within the file.
-        @param bytes_read The number of bytes just read
-        """
-        self._read_state[DostaStateKey.POSITION] += bytes_read
+        for line in self._stream_handle:
+            # check for a match against the sensor data pattern
+            match = SENSOR_DATA_MATCHER.match(line)
 
-    def parse_chunks(self):
-        """
-        Parse out any pending data chunks in the chunker.
-        If it is valid data, build a particle.
-        Go until the chunker has no more valid data.
-        @retval a list of tuples with sample particles encountered in this
-            parsing, plus the state.
-        """
-        result_particles = []
-        (nd_timestamp, non_data, non_start, non_end) = self._chunker.get_next_non_data_with_index(clean=False)
-        (timestamp, chunk, start, end) = self._chunker.get_next_data_with_index(clean=True)
-        self.handle_non_data(non_data, non_end, start)
-
-        while chunk is not None:
-            self._increment_position(len(chunk))
-
-            # If this is a valid sensor data record,
-            # use the extracted fields to generate a particle.
-
-            sensor_match = SENSOR_DATA_MATCHER.match(chunk)
-            if sensor_match is not None:
-                particle = self._extract_sample(self.particle_class,
-                                                None,
-                                                sensor_match.groups(),
-                                                None)
-                if particle is not None:
-                    result_particles.append((particle, copy.copy(self._read_state)))
-
-            # It's not a sensor data record, see if it's a metadata record.
+            if match is not None:
+                log.debug('record found')
+                data_particle = self._extract_sample(self._particle_class,
+                                                     None,
+                                                     match.groups(),
+                                                     None)
+                self._record_buffer.append(data_particle)
 
             else:
+                # check to see if this is any other expected format
+                test_meta = METADATA_MATCHER.match(line)
 
-                # If it appears to be a metadata record,
-                # look for multiple lines which have been garbled,
-                # i.e., a metadata record minus the newline
-                # plus tab-separated values from a following sensor data record.
-                # find returns -1 if not found.
-                # Valid Metadata records produce no particles and
-                # are silently ignored.
-
-                meta_match = METADATA_MATCHER.match(chunk)
-                if meta_match is None or chunk.find(TAB) != -1:
-                    error_message = 'Unknown data found in chunk %s' % chunk
-                    log.warn(error_message)
-                    self._exception_callback(UnexpectedDataException(error_message))
-
-            (nd_timestamp, non_data, non_start, non_end) = self._chunker.get_next_non_data_with_index(clean=False)
-            (timestamp, chunk, start, end) = self._chunker.get_next_data_with_index(clean=True)
-            self.handle_non_data(non_data, non_end, start)
-
-        return result_particles
-
-    def set_state(self, state_obj):
-        """
-        Set the value of the state object for this parser
-        @param state_obj The object to set the state to.
-        @throws DatasetParserException if there is a bad state structure
-        """
-        if not isinstance(state_obj, dict):
-            raise DatasetParserException("Invalid state structure")
-
-        if not (DostaStateKey.POSITION in state_obj):
-            raise DatasetParserException('%s missing in state keys' %
-                                         DostaStateKey.POSITION)
-
-        self._record_buffer = []
-        self._state = state_obj
-        self._read_state = state_obj
-
-        self.input_file.seek(state_obj[DostaStateKey.POSITION])
+                if test_meta is None or line.find(TAB) != -1:
+                    # something in the data didn't match a required regex, so raise an exception and press on.
+                    message = "Error while decoding parameters in data: [%s]" % line
+                    self._exception_callback(UnexpectedDataException(message))
 
 
 class DostaAbcdjmDclRecoveredParser(DostaAbcdjmDclParser):
@@ -345,20 +256,13 @@ class DostaAbcdjmDclRecoveredParser(DostaAbcdjmDclParser):
     This is the entry point for the Recovered Dosta_abcdjm_dcl parser.
     """
     def __init__(self,
-                 config,
                  stream_handle,
-                 state,
-                 state_callback,
-                 publish_callback,
                  exception_callback):
 
-        super(DostaAbcdjmDclRecoveredParser, self).__init__(config,
-                                          stream_handle,
-                                          state,
-                                          state_callback,
-                                          publish_callback,
-                                          exception_callback,
-                                          DostaAbcdjmDclRecoveredInstrumentDataParticle)
+        super(DostaAbcdjmDclRecoveredParser, self).__init__(
+            stream_handle,
+            exception_callback,
+            DostaAbcdjmDclRecoveredInstrumentDataParticle)
 
 
 class DostaAbcdjmDclTelemeteredParser(DostaAbcdjmDclParser):
@@ -366,17 +270,10 @@ class DostaAbcdjmDclTelemeteredParser(DostaAbcdjmDclParser):
     This is the entry point for the Telemetered Dosta_abcdjm_dcl parser.
     """
     def __init__(self,
-                 config,
                  stream_handle,
-                 state,
-                 state_callback,
-                 publish_callback,
                  exception_callback):
 
-        super(DostaAbcdjmDclTelemeteredParser, self).__init__(config,
-                                          stream_handle,
-                                          state,
-                                          state_callback,
-                                          publish_callback,
-                                          exception_callback,
-                                          DostaAbcdjmDclTelemeteredInstrumentDataParticle)
+        super(DostaAbcdjmDclTelemeteredParser, self).__init__(
+            stream_handle,
+            exception_callback,
+            DostaAbcdjmDclTelemeteredInstrumentDataParticle)

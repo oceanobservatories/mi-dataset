@@ -52,27 +52,27 @@ Files used for testing:
   15. extra floating point number in sensor data
 """
 
-import unittest
+
 import os
 from nose.plugins.attrib import attr
 
-from mi.core.log import get_logger ; log = get_logger()
+from mi.core.log import get_logger
+log = get_logger()
 
 from mi.dataset.test.test_parser import ParserUnitTestCase
 
 from mi.dataset.parser.dosta_abcdjm_dcl import \
-    DostaAbcdjmDclParser, \
     DostaAbcdjmDclRecoveredParser, \
     DostaAbcdjmDclTelemeteredParser, \
     DostaAbcdjmDclRecoveredInstrumentDataParticle, \
-    DostaAbcdjmDclTelemeteredInstrumentDataParticle, \
-    DostaStateKey
+    DostaAbcdjmDclTelemeteredInstrumentDataParticle
 
-from mi.dataset.dataset_parser import DataSetDriverConfigKeys
+from mi.core.exceptions import UnexpectedDataException
 
 from mi.idk.config import Config
+
 RESOURCE_PATH = os.path.join(Config().base_dir(), 'mi', 'dataset', 'driver',
-                 'dosta_abcdjm', 'dcl', 'resource')
+                             'dosta_abcdjm', 'dcl', 'resource')
 
 
 # Expected tuples for data in file 20010121.dosta1.log
@@ -246,86 +246,25 @@ EXPECTED_FILE6 = EXPECTED_20060207_dosta6
 @attr('UNIT', group='mi')
 class DostaAbcdjmDclParserUnitTestCase(ParserUnitTestCase):
 
-    def create_rec_parser(self, file_handle, new_state=None):
+    def create_rec_parser(self, file_handle):
         """
         This function creates a DostaAbcdjmDcl parser for recovered data.
         """
-        parser = DostaAbcdjmDclRecoveredParser(self.rec_config,
-            file_handle, new_state, self.rec_state_callback,
-            self.rec_pub_callback, self.rec_exception_callback)
+        parser = DostaAbcdjmDclRecoveredParser(
+            file_handle, self.exception_callback)
         return parser
 
-    def create_tel_parser(self, file_handle, new_state=None):
+    def create_tel_parser(self, file_handle):
         """
         This function creates a DostaAbcdjmDcl parser for telemetered data.
         """
-        parser = DostaAbcdjmDclTelemeteredParser(self.tel_config,
-            file_handle, new_state, self.rec_state_callback,
-            self.tel_pub_callback, self.tel_exception_callback)
+        parser = DostaAbcdjmDclTelemeteredParser(
+            file_handle, self.exception_callback)
         return parser
 
     def open_file(self, filename):
-        file = open(os.path.join(RESOURCE_PATH, filename), mode='r')
-        return file
-
-    def rec_state_callback(self, state, file_ingested):
-        """ Call back method to watch what comes in via the position callback """
-        self.rec_state_callback_value = state
-        self.rec_file_ingested_value = file_ingested
-
-    def tel_state_callback(self, state, file_ingested):
-        """ Call back method to watch what comes in via the position callback """
-        self.tel_state_callback_value = state
-        self.tel_file_ingested_value = file_ingested
-
-    def rec_pub_callback(self, pub):
-        """ Call back method to watch what comes in via the publish callback """
-        self.rec_publish_callback_value = pub
-
-    def tel_pub_callback(self, pub):
-        """ Call back method to watch what comes in via the publish callback """
-        self.tel_publish_callback_value = pub
-
-    def rec_exception_callback(self, exception):
-        """ Call back method to watch what comes in via the exception callback """
-        self.rec_exception_callback_value = exception
-        self.rec_exceptions_detected += 1
-
-    def tel_exception_callback(self, exception):
-        """ Call back method to watch what comes in via the exception callback """
-        self.tel_exception_callback_value = exception
-        self.tel_exceptions_detected += 1
-
-    def setUp(self):
-        ParserUnitTestCase.setUp(self)
-
-        self.rec_config = {
-            DataSetDriverConfigKeys.PARTICLE_MODULE:
-                'mi.dataset.parser.dosta_abcdjm_dcl',
-            DataSetDriverConfigKeys.PARTICLE_CLASS:
-                None
-        }
-
-        self.tel_config = {
-            DataSetDriverConfigKeys.PARTICLE_MODULE:
-                'mi.dataset.parser.dosta_abcdjm_dcl',
-            DataSetDriverConfigKeys.PARTICLE_CLASS:
-                None
-        }
-
-        self.rec_state_callback_value = None
-        self.rec_file_ingested_value = False
-        self.rec_publish_callback_value = None
-        self.rec_exception_callback_value = None
-        self.rec_exceptions_detected = 0
-
-        self.tel_state_callback_value = None
-        self.tel_file_ingested_value = False
-        self.tel_publish_callback_value = None
-        self.tel_exception_callback_value = None
-        self.tel_exceptions_detected = 0
-
-        self.maxDiff = None
+        in_file = open(os.path.join(RESOURCE_PATH, filename), mode='r')
+        return in_file
 
     def test_big_giant_input(self):
         """
@@ -345,7 +284,7 @@ class DostaAbcdjmDclParserUnitTestCase(ParserUnitTestCase):
         self.assertEqual(len(result), number_expected_results)
 
         in_file.close()
-        self.assertEqual(self.rec_exception_callback_value, None)
+        self.assertEqual(self.exception_callback_value, [])
 
         log.debug('===== START TEST BIG GIANT INPUT TELEMETERED =====')
         in_file = self.open_file(FILE4)
@@ -356,7 +295,7 @@ class DostaAbcdjmDclParserUnitTestCase(ParserUnitTestCase):
         self.assertEqual(len(result), number_expected_results)
 
         in_file.close()
-        self.assertEqual(self.tel_exception_callback_value, None)
+        self.assertEqual(self.exception_callback_value, [])
 
         log.debug('===== END TEST BIG GIANT INPUT =====')
 
@@ -379,7 +318,7 @@ class DostaAbcdjmDclParserUnitTestCase(ParserUnitTestCase):
         result = parser.get_records(len(expected_particle))
         self.assertEqual(result, expected_particle)
 
-        self.assertEqual(self.rec_exception_callback_value, None)
+        self.assertEqual(self.exception_callback_value, [])
         in_file.close()
 
         log.debug('===== START TEST GET MANY TELEMETERED =====')
@@ -396,7 +335,7 @@ class DostaAbcdjmDclParserUnitTestCase(ParserUnitTestCase):
         result = parser.get_records(len(expected_particle))
         self.assertEqual(result, expected_particle)
 
-        self.assertEqual(self.tel_exception_callback_value, None)
+        self.assertEqual(self.exception_callback_value, [])
         in_file.close()
 
         log.debug('===== END TEST GET MANY =====')
@@ -423,8 +362,10 @@ class DostaAbcdjmDclParserUnitTestCase(ParserUnitTestCase):
             result = parser.get_records(1)
             self.assertEqual(result, [expected_particle])
 
-        self.assertEqual(self.rec_exceptions_detected, 3)
+        self.assertEqual(len(self.exception_callback_value), 3)
         in_file.close()
+
+        self.exception_callback_value = []  # reset exceptions
 
         log.debug('===== START TEST INVALID METADATA TELEMETERED =====')
         in_file = self.open_file(FILE6)
@@ -440,7 +381,7 @@ class DostaAbcdjmDclParserUnitTestCase(ParserUnitTestCase):
         result = parser.get_records(len(expected_particle))
         self.assertEqual(result, expected_particle)
 
-        self.assertEqual(self.tel_exceptions_detected, 6)
+        self.assertEqual(len(self.exception_callback_value), 6)
         in_file.close()
 
         log.debug('===== END TEST INVALID METADATA =====')
@@ -460,9 +401,11 @@ class DostaAbcdjmDclParserUnitTestCase(ParserUnitTestCase):
         # Try to get records and verify that none are returned.
         result = parser.get_records(1)
         self.assertEqual(result, [])
-        self.assertEqual(self.rec_exceptions_detected, expected_exceptions)
+        self.assertEqual(len(self.exception_callback_value), expected_exceptions)
 
         in_file.close()
+
+        self.exception_callback_value = []  # reset exceptions
 
         log.debug('===== START TEST INVALID SENSOR DATA TELEMETERED =====')
         in_file = self.open_file(FILE7)
@@ -471,65 +414,11 @@ class DostaAbcdjmDclParserUnitTestCase(ParserUnitTestCase):
         # Try to get records and verify that none are returned.
         result = parser.get_records(1)
         self.assertEqual(result, [])
-        self.assertEqual(self.tel_exceptions_detected, expected_exceptions)
+        self.assertEqual(len(self.exception_callback_value), expected_exceptions)
 
         in_file.close()
 
         log.debug('===== END TEST INVALID SENSOR DATA =====')
-
-    def test_mid_state_start(self):
-        """
-        Test starting a parser with a state in the middle of processing.
-        """
-        log.debug('===== START TEST MID-STATE START RECOVERED =====')
-
-        in_file = self.open_file(FILE3)
-
-        # Start at the beginning of the 21st record (of 42 total).
-        initial_state = {
-            DostaStateKey.POSITION: 2738
-        }
-
-        parser = self.create_rec_parser(in_file, new_state=initial_state)
-
-        # Generate a list of expected result particles.
-        expected_particle = []
-        for expected in EXPECTED_FILE3[-22: ]:
-            particle = DostaAbcdjmDclRecoveredInstrumentDataParticle(expected)
-            expected_particle.append(particle)
-
-        # In a single read, get all particles for this file.
-        result = parser.get_records(len(expected_particle))
-        self.assertEqual(result, expected_particle)
-
-        self.assertEqual(self.rec_exception_callback_value, None)
-        in_file.close()
-
-        log.debug('===== START TEST MID-STATE START TELEMETERED =====')
-
-        in_file = self.open_file(FILE2)
-
-        # Start at the beginning of the 33rd record (of 44 total).
-        initial_state = {
-            DostaStateKey.POSITION: 4079
-        }
-
-        parser = self.create_tel_parser(in_file, new_state=initial_state)
-
-        # Generate a list of expected result particles.
-        expected_particle = []
-        for expected in EXPECTED_FILE2[-12: ]:
-            particle = DostaAbcdjmDclTelemeteredInstrumentDataParticle(expected)
-            expected_particle.append(particle)
-
-        # In a single read, get all particles for this file.
-        result = parser.get_records(len(expected_particle))
-        self.assertEqual(result, expected_particle)
-
-        self.assertEqual(self.tel_exception_callback_value, None)
-        in_file.close()
-
-        log.debug('===== END TEST MID-STATE START =====')
 
     def test_no_sensor_data(self):
         """
@@ -544,7 +433,7 @@ class DostaAbcdjmDclParserUnitTestCase(ParserUnitTestCase):
         result = parser.get_records(1)
         self.assertEqual(result, [])
 
-        self.assertEqual(self.rec_exception_callback_value, None)
+        self.assertEquals(self.exception_callback_value, [])
         in_file.close()
 
         log.debug('===== START TEST NO SENSOR DATA TELEMETERED =====')
@@ -555,84 +444,10 @@ class DostaAbcdjmDclParserUnitTestCase(ParserUnitTestCase):
         result = parser.get_records(1)
         self.assertEqual(result, [])
 
-        self.assertEqual(self.tel_exception_callback_value, None)
+        self.assertEquals(self.exception_callback_value, [])
         in_file.close()
 
         log.debug('===== END TEST SENSOR DATA =====')
-
-    def test_set_state(self):
-        """
-        This test verifies that the state can be changed after starting.
-        Some particles are read and then the parser state is modified to
-        skip ahead or back.
-        """
-        log.debug('===== START TEST SET STATE RECOVERED =====')
-
-        in_file = self.open_file(FILE2)
-        parser = self.create_rec_parser(in_file)
-
-        # Read and verify 5 particles (of the 44).
-        for expected in EXPECTED_FILE2[ : 5]:
-
-            # Generate expected particle
-            expected_particle = DostaAbcdjmDclRecoveredInstrumentDataParticle(expected)
-
-            # Get record and verify.
-            result = parser.get_records(1)
-            self.assertEqual(result, [expected_particle])
-
-        # Skip ahead in the file so that we get the last 10 particles.
-        new_state = {
-            DostaStateKey.POSITION: 4301
-        }
-
-        # Set the state.
-        parser.set_state(new_state)
-
-        # Read and verify the last 10 particles.
-        for expected in EXPECTED_FILE2[-10: ]:
-
-            # Generate expected particle
-            expected_particle = DostaAbcdjmDclRecoveredInstrumentDataParticle(expected)
-
-            # Get record and verify.
-            result = parser.get_records(1)
-            self.assertEqual(result, [expected_particle])
-
-        log.debug('===== START TEST SET STATE TELEMETERED =====')
-
-        in_file = self.open_file(FILE3)
-        parser = self.create_tel_parser(in_file)
-
-        # Read and verify 30 particles (of the 42).
-        for expected in EXPECTED_FILE3[ : 30]:
-
-            # Generate expected particle
-            expected_particle = DostaAbcdjmDclTelemeteredInstrumentDataParticle(expected)
-
-            # Get record and verify.
-            result = parser.get_records(1)
-            self.assertEqual(result, [expected_particle])
-
-        # Skip back in the file so that we get the last 25 particles.
-        new_state = {
-            DostaStateKey.POSITION: 2414,
-        }
-
-        # Set the state.
-        parser.set_state(new_state)
-
-        # Read and verify the last 25 particles.
-        for expected in EXPECTED_FILE3[-25: ]:
-
-            # Generate expected particle
-            expected_particle = DostaAbcdjmDclTelemeteredInstrumentDataParticle(expected)
-
-            # Get record and verify.
-            result = parser.get_records(1)
-            self.assertEqual(result, [expected_particle])
-
-        log.debug('===== END TEST SET STATE =====')
 
     def test_simple(self):
         """
@@ -652,7 +467,7 @@ class DostaAbcdjmDclParserUnitTestCase(ParserUnitTestCase):
             result = parser.get_records(1)
             self.assertEqual(result, [expected_particle])
 
-        self.assertEqual(self.rec_exception_callback_value, None)
+        self.assertEquals(self.exception_callback_value, [])
         in_file.close()
 
         log.debug('===== START TEST SIMPLE TELEMETERED =====')
@@ -668,7 +483,7 @@ class DostaAbcdjmDclParserUnitTestCase(ParserUnitTestCase):
             result = parser.get_records(1)
             self.assertEqual(result, [expected_particle])
 
-        self.assertEqual(self.tel_exception_callback_value, None)
+        self.assertEquals(self.exception_callback_value, [])
         in_file.close()
 
         log.debug('===== END TEST SIMPLE =====')
@@ -710,3 +525,26 @@ class DostaAbcdjmDclParserUnitTestCase(ParserUnitTestCase):
         in_file.close()
 
         log.debug('===== END TEST MANY WITH YML =====')
+
+    def test_Bug_4433(self):
+        """
+        Read a file and verify that all records can be read.
+        Verify that the contents of the particles are correct.
+        There should be no exceptions generated.
+        """
+
+        num_particles = 10000
+
+        in_file = self.open_file('20150330.dosta1.log')
+
+        parser = self.create_rec_parser(in_file)
+
+        particles = parser.get_records(num_particles)
+
+        log.debug("Num particles: %d", len(particles))
+
+        # make sure we only get UnexpectedDataException
+        for exception in self.exception_callback_value:
+            self.assertIsInstance(exception, UnexpectedDataException)
+
+        in_file.close()
