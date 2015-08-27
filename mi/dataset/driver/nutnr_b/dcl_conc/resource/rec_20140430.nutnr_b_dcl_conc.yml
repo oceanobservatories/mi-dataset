@@ -15,8 +15,8 @@ data:
     lamp_powered_time: 1398816017
     data_log_file: 'DATA\SCH14120.DAT'
   - _index: 2
-    particle_object: NutnrBDclConcRecoveredInstrumentDataParticle
-    particle_type: nutnr_b_dcl_conc_instrument_recovered
+    particle_object: NutnrBDclDarkConcRecoveredInstrumentDataParticle
+    particle_type: nutnr_b_dcl_dark_conc_instrument_recovered
     internal_timestamp:   3607804827.714
     dcl_controller_timestamp: '2014/04/30 01:00:27.714'
     frame_header: 'SAT'
@@ -147,8 +147,8 @@ data:
     lamp_powered_time: 1398826817
     data_log_file: 'DATA\SCH14120.DAT'
   - _index: 11
-    particle_object: NutnrBDclConcRecoveredInstrumentDataParticle
-    particle_type: nutnr_b_dcl_conc_instrument_recovered
+    particle_object: NutnrBDclDarkConcRecoveredInstrumentDataParticle
+    particle_type: nutnr_b_dcl_dark_conc_instrument_recovered
     internal_timestamp:   3607815627.678
     dcl_controller_timestamp: '2014/04/30 04:00:27.678'
     frame_header: 'SAT'
@@ -279,8 +279,8 @@ data:
     lamp_powered_time: 1398837617
     data_log_file: 'DATA\SCH14120.DAT'
   - _index: 20
-    particle_object: NutnrBDclConcRecoveredInstrumentDataParticle
-    particle_type: nutnr_b_dcl_conc_instrument_recovered
+    particle_object: NutnrBDclDarkConcRecoveredInstrumentDataParticle
+    particle_type: nutnr_b_dcl_dark_conc_instrument_recovered
     internal_timestamp:   3607826427.711
     dcl_controller_timestamp: '2014/04/30 07:00:27.711'
     frame_header: 'SAT'
@@ -411,8 +411,8 @@ data:
     lamp_powered_time: 1398848417
     data_log_file: 'DATA\SCH14120.DAT'
   - _index: 29
-    particle_object: NutnrBDclConcRecoveredInstrumentDataParticle
-    particle_type: nutnr_b_dcl_conc_instrument_recovered
+    particle_object: NutnrBDclDarkConcRecoveredInstrumentDataParticle
+    particle_type: nutnr_b_dcl_dark_conc_instrument_recovered
     internal_timestamp:   3607837227.715
     dcl_controller_timestamp: '2014/04/30 10:00:27.715'
     frame_header: 'SAT'
@@ -543,8 +543,8 @@ data:
     lamp_powered_time: 1398859217
     data_log_file: 'DATA\SCH14120.DAT'
   - _index: 38
-    particle_object: NutnrBDclConcRecoveredInstrumentDataParticle
-    particle_type: nutnr_b_dcl_conc_instrument_recovered
+    particle_object: NutnrBDclDarkConcRecoveredInstrumentDataParticle
+    particle_type: nutnr_b_dcl_dark_conc_instrument_recovered
     internal_timestamp:   3607848027.762
     dcl_controller_timestamp: '2014/04/30 13:00:27.762'
     frame_header: 'SAT'
@@ -675,8 +675,8 @@ data:
     lamp_powered_time: 1398870017
     data_log_file: 'DATA\SCH14120.DAT'
   - _index: 47
-    particle_object: NutnrBDclConcRecoveredInstrumentDataParticle
-    particle_type: nutnr_b_dcl_conc_instrument_recovered
+    particle_object: NutnrBDclDarkConcRecoveredInstrumentDataParticle
+    particle_type: nutnr_b_dcl_dark_conc_instrument_recovered
     internal_timestamp:   3607858827.763
     dcl_controller_timestamp: '2014/04/30 16:00:27.763'
     frame_header: 'SAT'
@@ -807,8 +807,8 @@ data:
     lamp_powered_time: 1398880817
     data_log_file: 'DATA\SCH14120.DAT'
   - _index: 56
-    particle_object: NutnrBDclConcRecoveredInstrumentDataParticle
-    particle_type: nutnr_b_dcl_conc_instrument_recovered
+    particle_object: NutnrBDclDarkConcRecoveredInstrumentDataParticle
+    particle_type: nutnr_b_dcl_dark_conc_instrument_recovered
     internal_timestamp:   3607869627.705
     dcl_controller_timestamp: '2014/04/30 19:00:27.705'
     frame_header: 'SAT'
@@ -939,8 +939,8 @@ data:
     lamp_powered_time: 1398891617
     data_log_file: 'DATA\SCH14120.DAT'
   - _index: 65
-    particle_object: NutnrBDclConcRecoveredInstrumentDataParticle
-    particle_type: nutnr_b_dcl_conc_instrument_recovered
+    particle_object: NutnrBDclDarkConcRecoveredInstrumentDataParticle
+    particle_type: nutnr_b_dcl_dark_conc_instrument_recovered
     internal_timestamp:   3607880427.767
     dcl_controller_timestamp: '2014/04/30 22:00:27.767'
     frame_header: 'SAT'

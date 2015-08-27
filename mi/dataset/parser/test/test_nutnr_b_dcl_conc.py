@@ -40,14 +40,16 @@ from mi.dataset.parser.nutnr_b_dcl_conc import \
     NutnrBDclConcTelemeteredParser
 from mi.dataset.parser.nutnr_b_particles import \
     NutnrBDclConcRecoveredInstrumentDataParticle, \
+    NutnrBDclDarkConcRecoveredInstrumentDataParticle, \
     NutnrBDclConcTelemeteredInstrumentDataParticle, \
+    NutnrBDclDarkConcTelemeteredInstrumentDataParticle, \
     NutnrBDclConcRecoveredMetadataDataParticle, \
     NutnrBDclConcTelemeteredMetadataDataParticle
 
 from mi.idk.config import Config
 
-RESOURCE_PATH = os.path.join(Config().base_dir(),
-    'mi', 'dataset', 'driver', 'nutnr_b', 'dcl_conc', 'resource')
+RESOURCE_PATH = os.path.join(Config().base_dir(), 'mi', 'dataset', 'driver',
+                             'nutnr_b', 'dcl_conc', 'resource')
 
 MODULE_NAME = 'mi.dataset.parser.nutnr_b_particles'
 
@@ -294,7 +296,8 @@ class NutnrBDclConcParserUnitTestCase(ParserUnitTestCase):
         inst_particles = 0
         meta_particles = 0
         for particle in particles:
-            if isinstance(particle, NutnrBDclConcRecoveredInstrumentDataParticle):
+            if isinstance(particle, NutnrBDclConcRecoveredInstrumentDataParticle) or \
+               isinstance(particle, NutnrBDclDarkConcRecoveredInstrumentDataParticle):
                 inst_particles += 1
             elif isinstance(particle, NutnrBDclConcRecoveredMetadataDataParticle):
                 meta_particles += 1
@@ -313,7 +316,8 @@ class NutnrBDclConcParserUnitTestCase(ParserUnitTestCase):
         inst_particles = 0
         meta_particles = 0
         for particle in particles:
-            if isinstance(particle, NutnrBDclConcTelemeteredInstrumentDataParticle):
+            if isinstance(particle, NutnrBDclConcTelemeteredInstrumentDataParticle) or \
+               isinstance(particle, NutnrBDclDarkConcTelemeteredInstrumentDataParticle):
                 inst_particles += 1
             elif isinstance(particle, NutnrBDclConcTelemeteredMetadataDataParticle):
                 meta_particles += 1
@@ -400,7 +404,8 @@ class NutnrBDclConcParserUnitTestCase(ParserUnitTestCase):
         inst_particles = 0
         meta_particles = 0
         for particle in particles:
-            if isinstance(particle, NutnrBDclConcRecoveredInstrumentDataParticle):
+            if isinstance(particle, NutnrBDclConcRecoveredInstrumentDataParticle) or \
+               isinstance(particle, NutnrBDclDarkConcRecoveredInstrumentDataParticle):
                 inst_particles += 1
             elif isinstance(particle, NutnrBDclConcRecoveredMetadataDataParticle):
                 meta_particles += 1
@@ -418,7 +423,8 @@ class NutnrBDclConcParserUnitTestCase(ParserUnitTestCase):
         inst_particles = 0
         meta_particles = 0
         for particle in particles:
-            if isinstance(particle, NutnrBDclConcTelemeteredInstrumentDataParticle):
+            if isinstance(particle, NutnrBDclConcTelemeteredInstrumentDataParticle) or \
+               isinstance(particle, NutnrBDclDarkConcTelemeteredInstrumentDataParticle):
                 inst_particles += 1
             elif isinstance(particle, NutnrBDclConcTelemeteredMetadataDataParticle):
                 meta_particles += 1

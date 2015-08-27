@@ -307,6 +307,7 @@ class NutnrBDclParser(Parser):
                  publish_callback,
                  exception_callback,
                  instrument_particle_class,
+                 dark_instrument_particle_class,
                  metadata_particle_class,
                  frame_types):
 
@@ -328,6 +329,7 @@ class NutnrBDclParser(Parser):
         # Save the names of the particle classes to be generated.
         self._metadata_particle_class = metadata_particle_class
         self._instrument_particle_class = instrument_particle_class
+        self._dark_instrument_particle_class = dark_instrument_particle_class
 
         # Save the input frame types
         self._frame_types = frame_types

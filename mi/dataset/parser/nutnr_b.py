@@ -17,15 +17,17 @@ import re
 from types import NoneType
 
 from mi.core.exceptions import UnexpectedDataException, \
-    RecoverableSampleException
+    RecoverableSampleException, SampleException
+
 from mi.core.common import BaseEnum
 from mi.core.log import get_logger
 log = get_logger()
 from mi.dataset.parser.nutnr_b_particles import \
     NutnrBMetadataRecoveredDataParticle, \
     NutnrBInstrumentRecoveredDataParticle, \
+    NutnrBDarkInstrumentRecoveredDataParticle, \
     NutnrBDataParticleKey
-from mi.dataset.dataset_parser import Parser, DataSetDriverConfigKeys
+from mi.dataset.dataset_parser import Parser
 from mi.dataset.parser.common_regexes import THREE_CHAR_DAY_OF_WEEK_REGEX, \
     THREE_CHAR_MONTH_REGEX, TIME_HR_MIN_SEC_REGEX, END_OF_LINE_REGEX, \
     DATE_DAY_REGEX, DATE_YEAR_REGEX, FLOAT_REGEX, INT_REGEX
@@ -52,6 +54,7 @@ FIRMWARE_VERSION_LINE_REGEX = r'SATNHR,ISUS Satlantic Firmware Version ' + \
                               END_OF_LINE_REGEX
 log.debug("%s", FIRMWARE_VERSION_LINE_REGEX)
 FIRMWARE_VERSION_LINE_MATCHER = re.compile(FIRMWARE_VERSION_LINE_REGEX)
+
 
 class MetadataStateDataKey(BaseEnum):
     FIRST_POWER_LINE_MATCH_STATE = 0x1
@@ -87,8 +90,9 @@ INSTRUMENT_LINE_REGEX += '(' + FLOAT_REGEX + ')' + SEPARATOR     # decimal ref c
 INSTRUMENT_LINE_REGEX += '(' + FLOAT_REGEX + ')' + SEPARATOR     # decimal sea water dark
 INSTRUMENT_LINE_REGEX += '(' + FLOAT_REGEX + ')' + SEPARATOR     # decimal spec channel average
 INSTRUMENT_LINE_REGEX += '((?:' + INT_REGEX + SEPARATOR + '){255}' + \
-                        INT_REGEX + ')'                     # 256 int spectral values
+                         INT_REGEX + ')'                     # 256 int spectral values
 INSTRUMENT_LINE_MATCHER = re.compile(INSTRUMENT_LINE_REGEX)
+
 
 class InstrumentDataMatchGroups(BaseEnum):
     INST_GROUP_FRAME_HEADER = 1
@@ -111,7 +115,7 @@ class InstrumentDataMatchGroups(BaseEnum):
     INST_GROUP_VOLTAGE_MAIN = 18
     INST_GROUP_REF_CHANNEL_AVERAGE = 19
     INST_GROUP_REF_CHANNEL_VARIANCE = 20
-    INST_GROUP_SEA_WATER_DARK= 21
+    INST_GROUP_SEA_WATER_DARK = 21
     INST_GROUP_SPEC_CHANNEL_AVERAGE = 22
     INST_GROUP_SPECTRAL_CHANNELS = 23
 
@@ -150,25 +154,23 @@ class NutnrBParser(Parser):
     def __init__(self,
                  config,
                  stream_handle,
-                 exception_callback,
-                 *args, **kwargs):
+                 exception_callback):
+
         super(NutnrBParser, self).__init__(config,
                                            stream_handle,
-                                           None, # State not used
-                                           None, # Sieve function not used
-                                           None, # state callback not used
-                                           None, # publish callback not used
-                                           exception_callback,
-                                           *args,
-                                           **kwargs)
+                                           None,           # State not used
+                                           None,           # Sieve function not used
+                                           None,           # state callback not used
+                                           None,           # publish callback not used
+                                           exception_callback)
 
         self._file_parsed = False
         self._record_buffer = []
         self._metadata_state = 0
-        self._metadata = { NutnrBDataParticleKey.STARTUP_TIME_STRING: None,
-                           NutnrBDataParticleKey.FIRMWARE_VERSION: None,
-                           NutnrBDataParticleKey.FIRMWARE_DATE: None
-        }
+        self._metadata = {NutnrBDataParticleKey.STARTUP_TIME_STRING: None,
+                          NutnrBDataParticleKey.FIRMWARE_VERSION: None,
+                          NutnrBDataParticleKey.FIRMWARE_DATE: None}
+
         self._metadata_particle_generated = False
         self._reported_missing_metadata = False
 
@@ -272,81 +274,98 @@ class NutnrBParser(Parser):
                     InstrumentDataMatchGroups.INST_GROUP_SERIAL_NUMBER),
                 timestamp)
 
+        frame_type = instrument_line_match.group(InstrumentDataMatchGroups.INST_GROUP_FRAME_TYPE)
+
+        # need to determine if this is a light or dark frame
+        # spectral channel parameter and stream names are
+        # different for each
+        if frame_type == 'NLF':
+            particle_class = NutnrBInstrumentRecoveredDataParticle
+            spectral_key = NutnrBDataParticleKey.SPECTRAL_CHANNELS
+        elif frame_type == "NDF":
+            particle_class = NutnrBDarkInstrumentRecoveredDataParticle
+            spectral_key = NutnrBDataParticleKey.DARK_FRAME_SPECTRAL_CHANNELS
+
+        else:  # this should never happen but just in case
+            message = "invalid frame type passed to particle"
+            log.error(message)
+            raise SampleException(message)
+
         # NutnrBInstrumentRecoveredDataParticle
         instrument_tuple = (
             (NutnrBDataParticleKey.FRAME_HEADER,
-                 instrument_line_match.group(InstrumentDataMatchGroups.INST_GROUP_FRAME_HEADER),
-                 str),
-                (NutnrBDataParticleKey.FRAME_TYPE,
-                 instrument_line_match.group(InstrumentDataMatchGroups.INST_GROUP_FRAME_TYPE),
-                 str),
-                (NutnrBDataParticleKey.SERIAL_NUMBER,
-                 instrument_line_match.group(InstrumentDataMatchGroups.INST_GROUP_SERIAL_NUMBER),
-                 str),
-                (NutnrBDataParticleKey.DATE_OF_SAMPLE,
-                 instrument_line_match.group(InstrumentDataMatchGroups.INST_GROUP_JULIAN_DATE),
-                 int),
-                (NutnrBDataParticleKey.TIME_OF_SAMPLE,
-                 instrument_line_match.group(InstrumentDataMatchGroups.INST_GROUP_TIME_OF_DAY),
-                 float),
-                (NutnrBDataParticleKey.NITRATE_CONCENTRATION,
-                 instrument_line_match.group(InstrumentDataMatchGroups.INST_GROUP_NITRATE),
-                 float),
-                (NutnrBDataParticleKey.AUX_FITTING_1,
-                 instrument_line_match.group(InstrumentDataMatchGroups.INST_GROUP_AUX_FITTING1),
-                 float),
-                (NutnrBDataParticleKey.AUX_FITTING_2,
-                 instrument_line_match.group(InstrumentDataMatchGroups.INST_GROUP_AUX_FITTING2),
-                 float),
-                (NutnrBDataParticleKey.AUX_FITTING_3,
-                 instrument_line_match.group(InstrumentDataMatchGroups.INST_GROUP_AUX_FITTING3),
-                 float),
-                (NutnrBDataParticleKey.RMS_ERROR,
-                 instrument_line_match.group(InstrumentDataMatchGroups.INST_GROUP_RMS_ERROR),
-                 float),
-                (NutnrBDataParticleKey.TEMP_INTERIOR,
-                 instrument_line_match.group(InstrumentDataMatchGroups.INST_GROUP_TEMP_INTERIOR),
-                 float),
-                (NutnrBDataParticleKey.TEMP_SPECTROMETER,
-                 instrument_line_match.group(InstrumentDataMatchGroups.INST_GROUP_TEMP_SPECTROMETER),
-                 float),
-                (NutnrBDataParticleKey.TEMP_LAMP,
-                 instrument_line_match.group(InstrumentDataMatchGroups.INST_GROUP_TEMP_LAMP),
-                 float),
-                (NutnrBDataParticleKey.LAMP_TIME,
-                 instrument_line_match.group(InstrumentDataMatchGroups.INST_GROUP_LAMP_TIME),
-                 int),
-                (NutnrBDataParticleKey.HUMIDITY,
-                 instrument_line_match.group(InstrumentDataMatchGroups.INST_GROUP_HUMIDITY),
-                 float),
-                (NutnrBDataParticleKey.VOLTAGE_LAMP,
-                 instrument_line_match.group(InstrumentDataMatchGroups.INST_GROUP_VOLTAGE_LAMP),
-                 float),
-                (NutnrBDataParticleKey.VOLTAGE_ANALOG,
-                 instrument_line_match.group(InstrumentDataMatchGroups.INST_GROUP_VOLTAGE_ANALOG),
-                 float),
-                (NutnrBDataParticleKey.VOLTAGE_MAIN,
-                 instrument_line_match.group(InstrumentDataMatchGroups.INST_GROUP_VOLTAGE_MAIN),
-                 float),
-                (NutnrBDataParticleKey.REF_CHANNEL_AVERAGE,
-                 instrument_line_match.group(InstrumentDataMatchGroups.INST_GROUP_REF_CHANNEL_AVERAGE),
-                 float),
-                (NutnrBDataParticleKey.REF_CHANNEL_VARIANCE,
-                 instrument_line_match.group(InstrumentDataMatchGroups.INST_GROUP_REF_CHANNEL_VARIANCE),
-                 float),
-                (NutnrBDataParticleKey.SEA_WATER_DARK,
-                 instrument_line_match.group(InstrumentDataMatchGroups.INST_GROUP_SEA_WATER_DARK),
-                 float),
-                (NutnrBDataParticleKey.SPEC_CHANNEL_AVERAGE,
-                 instrument_line_match.group(InstrumentDataMatchGroups.INST_GROUP_SPEC_CHANNEL_AVERAGE),
-                 float),
-                (NutnrBDataParticleKey.SPECTRAL_CHANNELS,
-                 map(int, instrument_line_match.group(
-                     InstrumentDataMatchGroups.INST_GROUP_SPECTRAL_CHANNELS).split(',')),
-                 list)
+             instrument_line_match.group(InstrumentDataMatchGroups.INST_GROUP_FRAME_HEADER),
+             str),
+            (NutnrBDataParticleKey.FRAME_TYPE,
+             instrument_line_match.group(InstrumentDataMatchGroups.INST_GROUP_FRAME_TYPE),
+             str),
+            (NutnrBDataParticleKey.SERIAL_NUMBER,
+             instrument_line_match.group(InstrumentDataMatchGroups.INST_GROUP_SERIAL_NUMBER),
+             str),
+            (NutnrBDataParticleKey.DATE_OF_SAMPLE,
+             instrument_line_match.group(InstrumentDataMatchGroups.INST_GROUP_JULIAN_DATE),
+             int),
+            (NutnrBDataParticleKey.TIME_OF_SAMPLE,
+             instrument_line_match.group(InstrumentDataMatchGroups.INST_GROUP_TIME_OF_DAY),
+             float),
+            (NutnrBDataParticleKey.NITRATE_CONCENTRATION,
+             instrument_line_match.group(InstrumentDataMatchGroups.INST_GROUP_NITRATE),
+             float),
+            (NutnrBDataParticleKey.AUX_FITTING_1,
+             instrument_line_match.group(InstrumentDataMatchGroups.INST_GROUP_AUX_FITTING1),
+             float),
+            (NutnrBDataParticleKey.AUX_FITTING_2,
+             instrument_line_match.group(InstrumentDataMatchGroups.INST_GROUP_AUX_FITTING2),
+             float),
+            (NutnrBDataParticleKey.AUX_FITTING_3,
+             instrument_line_match.group(InstrumentDataMatchGroups.INST_GROUP_AUX_FITTING3),
+             float),
+            (NutnrBDataParticleKey.RMS_ERROR,
+             instrument_line_match.group(InstrumentDataMatchGroups.INST_GROUP_RMS_ERROR),
+             float),
+            (NutnrBDataParticleKey.TEMP_INTERIOR,
+             instrument_line_match.group(InstrumentDataMatchGroups.INST_GROUP_TEMP_INTERIOR),
+             float),
+            (NutnrBDataParticleKey.TEMP_SPECTROMETER,
+             instrument_line_match.group(InstrumentDataMatchGroups.INST_GROUP_TEMP_SPECTROMETER),
+             float),
+            (NutnrBDataParticleKey.TEMP_LAMP,
+             instrument_line_match.group(InstrumentDataMatchGroups.INST_GROUP_TEMP_LAMP),
+             float),
+            (NutnrBDataParticleKey.LAMP_TIME,
+             instrument_line_match.group(InstrumentDataMatchGroups.INST_GROUP_LAMP_TIME),
+             int),
+            (NutnrBDataParticleKey.HUMIDITY,
+             instrument_line_match.group(InstrumentDataMatchGroups.INST_GROUP_HUMIDITY),
+             float),
+            (NutnrBDataParticleKey.VOLTAGE_LAMP,
+             instrument_line_match.group(InstrumentDataMatchGroups.INST_GROUP_VOLTAGE_LAMP),
+             float),
+            (NutnrBDataParticleKey.VOLTAGE_ANALOG,
+             instrument_line_match.group(InstrumentDataMatchGroups.INST_GROUP_VOLTAGE_ANALOG),
+             float),
+            (NutnrBDataParticleKey.VOLTAGE_MAIN,
+             instrument_line_match.group(InstrumentDataMatchGroups.INST_GROUP_VOLTAGE_MAIN),
+             float),
+            (NutnrBDataParticleKey.REF_CHANNEL_AVERAGE,
+             instrument_line_match.group(InstrumentDataMatchGroups.INST_GROUP_REF_CHANNEL_AVERAGE),
+             float),
+            (NutnrBDataParticleKey.REF_CHANNEL_VARIANCE,
+             instrument_line_match.group(InstrumentDataMatchGroups.INST_GROUP_REF_CHANNEL_VARIANCE),
+             float),
+            (NutnrBDataParticleKey.SEA_WATER_DARK,
+             instrument_line_match.group(InstrumentDataMatchGroups.INST_GROUP_SEA_WATER_DARK),
+             float),
+            (NutnrBDataParticleKey.SPEC_CHANNEL_AVERAGE,
+             instrument_line_match.group(InstrumentDataMatchGroups.INST_GROUP_SPEC_CHANNEL_AVERAGE),
+             float),
+            (spectral_key,
+             map(int, instrument_line_match.group(
+                 InstrumentDataMatchGroups.INST_GROUP_SPECTRAL_CHANNELS).split(',')),
+             list)
         )
         # Generate the instrument data particle
-        particle = self._extract_sample(NutnrBInstrumentRecoveredDataParticle,
+        particle = self._extract_sample(particle_class,
                                         None,
                                         instrument_tuple,
                                         timestamp)
@@ -354,7 +373,6 @@ class NutnrBParser(Parser):
         if particle is not None:
             log.debug("Instrument Particle: %s", particle.generate())
             self._record_buffer.append(particle)
-
 
     def parse_file(self):
         """
@@ -396,7 +414,7 @@ class NutnrBParser(Parser):
             # OK.  We found a line in the file we were not expecting.  Let's log a warning
             # and report a unexpected data exception.
             else:
-                # If we did not get a match against part of an intrument
+                # If we did not get a match against part of an instrument
                 # data record, we may have a bad file
                 message = "Unexpected data in file, line: " + line
                 log.warn(message)
