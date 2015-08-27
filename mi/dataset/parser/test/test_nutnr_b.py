@@ -15,12 +15,12 @@ log = get_logger()
 
 from mi.dataset.test.test_parser import ParserUnitTestCase
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
-from mi.dataset.parser.nutnr_b import NutnrBParser, ParticleClassKey
+from mi.dataset.parser.nutnr_b import NutnrBParser
 
 from mi.idk.config import Config
 
-RESOURCE_PATH = os.path.join(Config().base_dir(),
-    'mi', 'dataset', 'driver', 'nutnr_b', 'resource')
+RESOURCE_PATH = os.path.join(Config().base_dir(), 'mi', 'dataset', 'driver',
+                             'nutnr_b', 'resource')
 
 
 # Add a mixin here if needed

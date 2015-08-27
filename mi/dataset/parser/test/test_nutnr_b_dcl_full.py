@@ -16,9 +16,15 @@ log = get_logger()
 from mi.dataset.test.test_parser import ParserUnitTestCase
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 
-from mi.dataset.parser.nutnr_b_dcl_full import NutnrBDclFullRecoveredParser, NutnrBDclFullTelemeteredParser
-from mi.dataset.parser.nutnr_b_particles import  NutnrBDclFullRecoveredInstrumentDataParticle, \
-    NutnrBDclFullTelemeteredInstrumentDataParticle, NutnrBDclFullRecoveredMetadataDataParticle,  \
+from mi.dataset.parser.nutnr_b_dcl_full import NutnrBDclFullRecoveredParser, \
+    NutnrBDclFullTelemeteredParser
+
+from mi.dataset.parser.nutnr_b_particles import \
+    NutnrBDclFullRecoveredInstrumentDataParticle, \
+    NutnrBDclDarkFullRecoveredInstrumentDataParticle, \
+    NutnrBDclFullTelemeteredInstrumentDataParticle, \
+    NutnrBDclDarkFullTelemeteredInstrumentDataParticle, \
+    NutnrBDclFullRecoveredMetadataDataParticle,  \
     NutnrBDclFullTelemeteredMetadataDataParticle
 
 from mi.idk.config import Config
@@ -255,7 +261,9 @@ class NutnrBDclFullParserUnitTestCase(ParserUnitTestCase):
         inst_particles = 0
         meta_particles = 0
         for particle in particles:
-            if isinstance(particle, NutnrBDclFullRecoveredInstrumentDataParticle):
+            if isinstance(particle, NutnrBDclFullRecoveredInstrumentDataParticle) or \
+               isinstance(particle, NutnrBDclDarkFullRecoveredInstrumentDataParticle):
+
                 inst_particles += 1
             elif isinstance(particle, NutnrBDclFullRecoveredMetadataDataParticle):
                 meta_particles += 1
@@ -274,7 +282,9 @@ class NutnrBDclFullParserUnitTestCase(ParserUnitTestCase):
         inst_particles = 0
         meta_particles = 0
         for particle in particles:
-            if isinstance(particle, NutnrBDclFullTelemeteredInstrumentDataParticle):
+            if isinstance(particle, NutnrBDclFullTelemeteredInstrumentDataParticle) or \
+               isinstance(particle, NutnrBDclDarkFullTelemeteredInstrumentDataParticle):
+
                 inst_particles += 1
             elif isinstance(particle, NutnrBDclFullTelemeteredMetadataDataParticle):
                 meta_particles += 1
