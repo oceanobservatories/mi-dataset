@@ -10,6 +10,7 @@
 __author__ = 'Chris Goodrich'
 
 from mi.logging import log
+import re
 import os
 from nose.plugins.attrib import attr
 from mi.core.exceptions import ConfigurationException
@@ -691,3 +692,32 @@ class VelptAbDclParserUnitTestCase(ParserUnitTestCase):
 
         log.debug('===== END TEST FOUND BAD DIAG HDR CHECKSUM AND TOO MANY RECS =====')
 
+    def fix_yml_pressure_params(self):
+        """
+        This helper tool was used to modify the yml files in response to ticket #4341
+        """
+
+        pressure_regex = r'\s+pressure:\s+(0.\d+)'
+
+        for file_name in os.listdir(RESOURCE_PATH):
+
+            if file_name.endswith('.yml'):
+
+                with open(os.path.join(RESOURCE_PATH, file_name), 'rU') as in_file_id:
+
+                    out_file_name = file_name + '.new'
+                    log.info('fixing file %s', file_name)
+                    log.info('creating file %s', out_file_name)
+
+                    out_file_id = open(os.path.join(RESOURCE_PATH, out_file_name), 'w')
+
+                    for line in in_file_id:
+                        match = re.match(pressure_regex, line)
+                        if match is not None:
+                            new_value = float(match.group(1)) * 1000.0
+                            new_line = '    pressure_mbar:  ' + str(new_value)
+                            out_file_id.write(new_line + '\n')
+                        else:
+                            out_file_id.write(line)
+
+                    out_file_id.close()
