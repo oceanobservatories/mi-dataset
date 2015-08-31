@@ -14,7 +14,7 @@ data:
     heading: 196.4
     pitch: -1.2
     roll: -1.8
-    pressure: 0.245
+    pressure_mbar:  245.0
     status: 17
     temperature: 21.1
     velocity_beam1: 27.0
@@ -54,7 +54,7 @@ data:
     heading: 195.5
     pitch: -1.3
     roll: -1.5
-    pressure: 0.239
+    pressure_mbar:  239.0
     status: 17
     temperature: 21.07
     velocity_beam1: -153.0
@@ -75,7 +75,7 @@ data:
     heading: 195.9
     pitch: -1.3
     roll: -1.6
-    pressure: 0.231
+    pressure_mbar:  231.0
     status: 17
     temperature: 21.07
     velocity_beam1: 71.0
@@ -96,7 +96,7 @@ data:
     heading: 195.9
     pitch: -1.3
     roll: -1.6
-    pressure: 0.248
+    pressure_mbar:  248.0
     status: 17
     temperature: 21.07
     velocity_beam1: 68.0
@@ -117,7 +117,7 @@ data:
     heading: 195.9
     pitch: -1.3
     roll: -1.6
-    pressure: 0.23
+    pressure_mbar:  230.0
     status: 17
     temperature: 21.06
     velocity_beam1: -111.0
@@ -138,7 +138,7 @@ data:
     heading: 195.9
     pitch: -1.3
     roll: -1.6
-    pressure: 0.241
+    pressure_mbar:  241.0
     status: 17
     temperature: 21.06
     velocity_beam1: 39.0
@@ -159,7 +159,7 @@ data:
     heading: 195.9
     pitch: -1.3
     roll: -1.6
-    pressure: 0.248
+    pressure_mbar:  248.0
     status: 17
     temperature: 21.07
     velocity_beam1: 51.0
@@ -180,7 +180,7 @@ data:
     heading: 195.9
     pitch: -1.3
     roll: -1.5
-    pressure: 0.245
+    pressure_mbar:  245.0
     status: 17
     temperature: 21.06
     velocity_beam1: 54.0
@@ -201,7 +201,7 @@ data:
     heading: 195.9
     pitch: -1.3
     roll: -1.6
-    pressure: 0.236
+    pressure_mbar:  236.0
     status: 17
     temperature: 21.06
     velocity_beam1: -27.0
@@ -222,7 +222,7 @@ data:
     heading: 195.9
     pitch: -1.3
     roll: -1.6
-    pressure: 0.243
+    pressure_mbar:  243.0
     status: 17
     temperature: 21.06
     velocity_beam1: 41.0
@@ -243,7 +243,7 @@ data:
     heading: 195.7
     pitch: -1.3
     roll: -1.6
-    pressure: 0.238
+    pressure_mbar:  238.0
     status: 17
     temperature: 21.06
     velocity_beam1: 137.0
@@ -264,7 +264,7 @@ data:
     heading: 195.8
     pitch: -1.3
     roll: -1.6
-    pressure: 0.235
+    pressure_mbar:  235.0
     status: 17
     temperature: 21.06
     velocity_beam1: -45.0
@@ -285,7 +285,7 @@ data:
     heading: 195.9
     pitch: -1.3
     roll: -1.6
-    pressure: 0.239
+    pressure_mbar:  239.0
     status: 17
     temperature: 21.06
     velocity_beam1: 8.0
@@ -306,7 +306,7 @@ data:
     heading: 195.9
     pitch: -1.3
     roll: -1.6
-    pressure: 0.235
+    pressure_mbar:  235.0
     status: 17
     temperature: 21.06
     velocity_beam1: 61.0
@@ -327,7 +327,7 @@ data:
     heading: 195.9
     pitch: -1.3
     roll: -1.6
-    pressure: 0.247
+    pressure_mbar:  247.0
     status: 17
     temperature: 21.06
     velocity_beam1: 55.0
@@ -348,7 +348,7 @@ data:
     heading: 195.8
     pitch: -1.3
     roll: -1.6
-    pressure: 0.244
+    pressure_mbar:  244.0
     status: 17
     temperature: 21.06
     velocity_beam1: 102.0
@@ -369,7 +369,7 @@ data:
     heading: 195.8
     pitch: -1.3
     roll: -1.6
-    pressure: 0.243
+    pressure_mbar:  243.0
     status: 17
     temperature: 21.06
     velocity_beam1: 35.0
@@ -390,7 +390,7 @@ data:
     heading: 196
     pitch: -1.3
     roll: -1.6
-    pressure: 0.237
+    pressure_mbar:  237.0
     status: 17
     temperature: 21.06
     velocity_beam1: 35.0
@@ -411,7 +411,7 @@ data:
     heading: 195.9
     pitch: -1.3
     roll: -1.6
-    pressure: 0.241
+    pressure_mbar:  241.0
     status: 17
     temperature: 21.06
     velocity_beam1: 81.0
@@ -432,7 +432,7 @@ data:
     heading: 195.9
     pitch: -1.2
     roll: -1.6
-    pressure: 0.233
+    pressure_mbar:  233.0
     status: 17
     temperature: 21.06
     velocity_beam1: 64.0
@@ -453,7 +453,7 @@ data:
     heading: 196
     pitch: -1.3
     roll: -1.6
-    pressure: 0.241
+    pressure_mbar:  241.0
     status: 17
     temperature: 21.06
     velocity_beam1: 65.0
@@ -474,7 +474,7 @@ data:
     heading: 195.9
     pitch: -1.2
     roll: -1.8
-    pressure: 0.241
+    pressure_mbar:  241.0
     status: 17
     temperature: 20.93
     velocity_beam1: -20.0
@@ -495,7 +495,7 @@ data:
     heading: 195.9
     pitch: -1.2
     roll: -1.8
-    pressure: 0.239
+    pressure_mbar:  239.0
     status: 17
     temperature: 20.77
     velocity_beam1: 0.0
@@ -516,7 +516,7 @@ data:
     heading: 195.9
     pitch: -1.2
     roll: -1.7
-    pressure: 0.238
+    pressure_mbar:  238.0
     status: 17
     temperature: 20.67
     velocity_beam1: 20.0
@@ -537,7 +537,7 @@ data:
     heading: 195.9
     pitch: -1.2
     roll: -1.7
-    pressure: 0.236
+    pressure_mbar:  236.0
     status: 17
     temperature: 20.52
     velocity_beam1: 45.0
@@ -558,7 +558,7 @@ data:
     heading: 195.9
     pitch: -1.2
     roll: -1.7
-    pressure: 0.234
+    pressure_mbar:  234.0
     status: 17
     temperature: 20.42
     velocity_beam1: 36.0
@@ -579,7 +579,7 @@ data:
     heading: 195.9
     pitch: -1.2
     roll: -1.7
-    pressure: 0.232
+    pressure_mbar:  232.0
     status: 17
     temperature: 20.34
     velocity_beam1: 11.0
@@ -619,7 +619,7 @@ data:
     heading: 194.2
     pitch: -1.3
     roll: -1.5
-    pressure: 0.228
+    pressure_mbar:  228.0
     status: 17
     temperature: 20.34
     velocity_beam1: 204.0
@@ -640,7 +640,7 @@ data:
     heading: 193.9
     pitch: -1.3
     roll: -1.6
-    pressure: 0.238
+    pressure_mbar:  238.0
     status: 17
     temperature: 20.34
     velocity_beam1: 57.0
@@ -661,7 +661,7 @@ data:
     heading: 192.9
     pitch: -1.3
     roll: -1.6
-    pressure: 0.234
+    pressure_mbar:  234.0
     status: 17
     temperature: 20.34
     velocity_beam1: -12.0
@@ -682,7 +682,7 @@ data:
     heading: 192
     pitch: -1.3
     roll: -1.6
-    pressure: 0.23
+    pressure_mbar:  230.0
     status: 17
     temperature: 20.34
     velocity_beam1: -19.0
@@ -703,7 +703,7 @@ data:
     heading: 196.6
     pitch: -1.3
     roll: -1.5
-    pressure: 0.225
+    pressure_mbar:  225.0
     status: 17
     temperature: 20.34
     velocity_beam1: 100.0
@@ -724,7 +724,7 @@ data:
     heading: 203
     pitch: -1.3
     roll: -1.6
-    pressure: 0.228
+    pressure_mbar:  228.0
     status: 17
     temperature: 20.34
     velocity_beam1: 85.0
@@ -745,7 +745,7 @@ data:
     heading: 199.4
     pitch: -1.3
     roll: -1.6
-    pressure: 0.236
+    pressure_mbar:  236.0
     status: 17
     temperature: 20.34
     velocity_beam1: 96.0
@@ -766,7 +766,7 @@ data:
     heading: 196.4
     pitch: -1.2
     roll: -1.6
-    pressure: 0.231
+    pressure_mbar:  231.0
     status: 17
     temperature: 20.34
     velocity_beam1: 16.0
@@ -787,7 +787,7 @@ data:
     heading: 195.5
     pitch: -1.3
     roll: -1.6
-    pressure: 0.225
+    pressure_mbar:  225.0
     status: 17
     temperature: 20.34
     velocity_beam1: -8.0
@@ -808,7 +808,7 @@ data:
     heading: 195.4
     pitch: -1.3
     roll: -1.6
-    pressure: 0.227
+    pressure_mbar:  227.0
     status: 17
     temperature: 20.34
     velocity_beam1: 79.0
@@ -829,7 +829,7 @@ data:
     heading: 195.4
     pitch: -1.3
     roll: -1.6
-    pressure: 0.221
+    pressure_mbar:  221.0
     status: 17
     temperature: 20.34
     velocity_beam1: 32.0
@@ -850,7 +850,7 @@ data:
     heading: 195.3
     pitch: -1.3
     roll: -1.6
-    pressure: 0.225
+    pressure_mbar:  225.0
     status: 17
     temperature: 20.34
     velocity_beam1: 58.0
@@ -871,7 +871,7 @@ data:
     heading: 195.4
     pitch: -1.3
     roll: -1.6
-    pressure: 0.222
+    pressure_mbar:  222.0
     status: 17
     temperature: 20.34
     velocity_beam1: -14.0
@@ -892,7 +892,7 @@ data:
     heading: 195.3
     pitch: -1.3
     roll: -1.6
-    pressure: 0.223
+    pressure_mbar:  223.0
     status: 17
     temperature: 20.34
     velocity_beam1: 62.0
@@ -913,7 +913,7 @@ data:
     heading: 195.2
     pitch: -1.2
     roll: -1.5
-    pressure: 0.23
+    pressure_mbar:  230.0
     status: 17
     temperature: 20.34
     velocity_beam1: 79.0
@@ -934,7 +934,7 @@ data:
     heading: 195.3
     pitch: -1.3
     roll: -1.6
-    pressure: 0.219
+    pressure_mbar:  219.0
     status: 17
     temperature: 20.34
     velocity_beam1: -13.0
@@ -955,7 +955,7 @@ data:
     heading: 195.4
     pitch: -1.3
     roll: -1.6
-    pressure: 0.231
+    pressure_mbar:  231.0
     status: 17
     temperature: 20.34
     velocity_beam1: -44.0
@@ -976,7 +976,7 @@ data:
     heading: 195.3
     pitch: -1.3
     roll: -1.6
-    pressure: 0.229
+    pressure_mbar:  229.0
     status: 17
     temperature: 20.34
     velocity_beam1: 94.0
@@ -997,7 +997,7 @@ data:
     heading: 195.3
     pitch: -1.3
     roll: -1.6
-    pressure: 0.219
+    pressure_mbar:  219.0
     status: 17
     temperature: 20.34
     velocity_beam1: -16.0
@@ -1018,7 +1018,7 @@ data:
     heading: 195.4
     pitch: -1.3
     roll: -1.5
-    pressure: 0.221
+    pressure_mbar:  221.0
     status: 17
     temperature: 20.34
     velocity_beam1: 91.0
@@ -1040,7 +1040,7 @@ data:
     heading: 195.4
     pitch: -1.3
     roll: -1.5
-    pressure: 0.221
+    pressure_mbar:  221.0
     status: 17
     temperature: 20.34
     velocity_beam1: 91.0
@@ -1062,7 +1062,7 @@ data:
     heading: 195.9
     pitch: -1.2
     roll: -1.7
-    pressure: 0.231
+    pressure_mbar:  231.0
     status: 17
     temperature: 20.28
     velocity_beam1: 33.0
