@@ -19,7 +19,7 @@ from mi.dataset.parser.velpt_ab_particles import VelptAbInstrumentDataParticle, 
 from mi.core.versioning import version
 
 
-@version("15.6.0")
+@version("15.6.1")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     """
     This is the method called by Uframe
