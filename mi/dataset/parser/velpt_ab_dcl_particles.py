@@ -39,7 +39,7 @@ class VelptAbDataParticleKey(BaseEnum):
     HEADING = 'heading'                                        # PD436
     PITCH = 'pitch'                                            # PD437
     ROLL = 'roll'                                              # PD438
-    PRESSURE = 'pressure'                                      # PD2
+    PRESSURE_MBAR = 'pressure_mbar'                            # PD3248
     STATUS = 'status'                                          # PD439
     TEMPERATURE = 'temperature'                                # PD440
     VELOCITY_BEAM1 = 'velocity_beam1'                          # PD441
@@ -206,10 +206,10 @@ class VelptAbDataParticle(DataParticle):
                                            VelptAbDataParticle.roll_offset])[0] * 0.1
         roll = struct.unpack('<h', record[VelptAbDataParticle.roll_offset:
                                           VelptAbDataParticle.pressure_msb_offset])[0] * 0.1
-        pressure = (struct.unpack('B', record[VelptAbDataParticle.pressure_msb_offset:
+        pressure_mbar = (struct.unpack('B', record[VelptAbDataParticle.pressure_msb_offset:
                                               VelptAbDataParticle.status_offset])[0] * 65536.0) +\
-                   (struct.unpack('<h', record[VelptAbDataParticle.pressure_lsw_offset:
-                                               VelptAbDataParticle.temperature_offset])[0] * 0.001)
+                        (struct.unpack('<h', record[VelptAbDataParticle.pressure_lsw_offset:
+                                               VelptAbDataParticle.temperature_offset])[0])
         status = struct.unpack('B', record[VelptAbDataParticle.status_offset:
                                            VelptAbDataParticle.pressure_lsw_offset])[0]
         temperature = struct.unpack('<h', record[VelptAbDataParticle.temperature_offset:
@@ -235,7 +235,7 @@ class VelptAbDataParticle(DataParticle):
                 VelptAbDataParticleKey.HEADING: heading,
                 VelptAbDataParticleKey.PITCH: pitch,
                 VelptAbDataParticleKey.ROLL: roll,
-                VelptAbDataParticleKey.PRESSURE: pressure,
+                VelptAbDataParticleKey.PRESSURE_MBAR: pressure_mbar,
                 VelptAbDataParticleKey.STATUS: status,
                 VelptAbDataParticleKey.TEMPERATURE: temperature,
                 VelptAbDataParticleKey.VELOCITY_BEAM1: velocity_beam_1,
@@ -329,8 +329,8 @@ class VelptAbInstrumentDataParticle(VelptAbDataParticle):
                                                       self.raw_data[VelptAbDataParticleKey.PITCH], float))
         particle_parameters.append(self._encode_value(VelptAbDataParticleKey.ROLL,
                                                       self.raw_data[VelptAbDataParticleKey.ROLL], float))
-        particle_parameters.append(self._encode_value(VelptAbDataParticleKey.PRESSURE,
-                                                      self.raw_data[VelptAbDataParticleKey.PRESSURE], float))
+        particle_parameters.append(self._encode_value(VelptAbDataParticleKey.PRESSURE_MBAR,
+                                                      self.raw_data[VelptAbDataParticleKey.PRESSURE_MBAR], float))
         particle_parameters.append(self._encode_value(VelptAbDataParticleKey.STATUS,
                                                       self.raw_data[VelptAbDataParticleKey.STATUS], int))
         particle_parameters.append(self._encode_value(VelptAbDataParticleKey.TEMPERATURE,
@@ -426,8 +426,8 @@ class VelptAbDiagnosticsDataParticle(VelptAbDataParticle):
                                                       self.raw_data[VelptAbDataParticleKey.PITCH], float))
         particle_parameters.append(self._encode_value(VelptAbDataParticleKey.ROLL,
                                                       self.raw_data[VelptAbDataParticleKey.ROLL], float))
-        particle_parameters.append(self._encode_value(VelptAbDataParticleKey.PRESSURE,
-                                                      self.raw_data[VelptAbDataParticleKey.PRESSURE], float))
+        particle_parameters.append(self._encode_value(VelptAbDataParticleKey.PRESSURE_MBAR,
+                                                      self.raw_data[VelptAbDataParticleKey.PRESSURE_MBAR], float))
         particle_parameters.append(self._encode_value(VelptAbDataParticleKey.STATUS,
                                                       self.raw_data[VelptAbDataParticleKey.STATUS], int))
         particle_parameters.append(self._encode_value(VelptAbDataParticleKey.TEMPERATURE,
@@ -474,8 +474,8 @@ class VelptAbInstrumentDataParticleRecovered(VelptAbDataParticle):
                                                       self.raw_data[VelptAbDataParticleKey.PITCH], float))
         particle_parameters.append(self._encode_value(VelptAbDataParticleKey.ROLL,
                                                       self.raw_data[VelptAbDataParticleKey.ROLL], float))
-        particle_parameters.append(self._encode_value(VelptAbDataParticleKey.PRESSURE,
-                                                      self.raw_data[VelptAbDataParticleKey.PRESSURE], float))
+        particle_parameters.append(self._encode_value(VelptAbDataParticleKey.PRESSURE_MBAR,
+                                                      self.raw_data[VelptAbDataParticleKey.PRESSURE_MBAR], float))
         particle_parameters.append(self._encode_value(VelptAbDataParticleKey.STATUS,
                                                       self.raw_data[VelptAbDataParticleKey.STATUS], int))
         particle_parameters.append(self._encode_value(VelptAbDataParticleKey.TEMPERATURE,
@@ -571,8 +571,8 @@ class VelptAbDiagnosticsDataParticleRecovered(VelptAbDataParticle):
                                                       self.raw_data[VelptAbDataParticleKey.PITCH], float))
         particle_parameters.append(self._encode_value(VelptAbDataParticleKey.ROLL,
                                                       self.raw_data[VelptAbDataParticleKey.ROLL], float))
-        particle_parameters.append(self._encode_value(VelptAbDataParticleKey.PRESSURE,
-                                                      self.raw_data[VelptAbDataParticleKey.PRESSURE], float))
+        particle_parameters.append(self._encode_value(VelptAbDataParticleKey.PRESSURE_MBAR,
+                                                      self.raw_data[VelptAbDataParticleKey.PRESSURE_MBAR], float))
         particle_parameters.append(self._encode_value(VelptAbDataParticleKey.STATUS,
                                                       self.raw_data[VelptAbDataParticleKey.STATUS], int))
         particle_parameters.append(self._encode_value(VelptAbDataParticleKey.TEMPERATURE,
