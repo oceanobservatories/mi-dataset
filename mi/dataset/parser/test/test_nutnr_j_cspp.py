@@ -16,13 +16,17 @@ from mi.core.exceptions import RecoverableSampleException, \
 from mi.dataset.test.test_parser import BASE_RESOURCE_PATH, ParserUnitTestCase
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 from mi.dataset.parser.cspp_base import \
-    METADATA_PARTICLE_CLASS_KEY, \
-    DATA_PARTICLE_CLASS_KEY
+    METADATA_PARTICLE_CLASS_KEY
+
 from mi.dataset.parser.nutnr_j_cspp import NutnrJCsppParser, \
     NutnrJCsppMetadataTelemeteredDataParticle, \
     NutnrJCsppTelemeteredDataParticle, \
+    NutnrJCsppDarkTelemeteredDataParticle, \
+    NutnrJCsppDarkRecoveredDataParticle, \
     NutnrJCsppMetadataRecoveredDataParticle, \
-    NutnrJCsppRecoveredDataParticle
+    NutnrJCsppRecoveredDataParticle, \
+    LIGHT_PARTICLE_CLASS_KEY, \
+    DARK_PARTICLE_CLASS_KEY
 
 RESOURCE_PATH = os.path.join(BASE_RESOURCE_PATH, 'nutnr_j', 'cspp', 'resource')
 
@@ -77,16 +81,16 @@ class NutnrJCsppParserUnitTestCase(ParserUnitTestCase):
         This utility creates a yml file
         """
         fid = open(os.path.join(RESOURCE_PATH,
-                                'no_source_file_SNA_SNA.txt'),
+                                '11079419_SNA_SNA.txt'),
                    MODE_ASCII_READ)
 
         stream_handle = fid
 
-        self.create_parser(stream_handle)
+        self.create_parser(stream_handle, True)
 
-        particles = self.parser.get_records(182)
+        particles = self.parser.get_records(1000)
 
-        self.particle_to_yml(particles, 'no_source_file_SNA_SNA_telem.yml')
+        self.particle_to_yml(particles, '11079419_SNA_SNA_telem.yml')
         fid.close()
 
     def create_parser(self, stream_handle, telem_flag=True):
@@ -99,7 +103,8 @@ class NutnrJCsppParserUnitTestCase(ParserUnitTestCase):
             config = {
                 DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT: {
                     METADATA_PARTICLE_CLASS_KEY: NutnrJCsppMetadataTelemeteredDataParticle,
-                    DATA_PARTICLE_CLASS_KEY: NutnrJCsppTelemeteredDataParticle
+                    LIGHT_PARTICLE_CLASS_KEY: NutnrJCsppTelemeteredDataParticle,
+                    DARK_PARTICLE_CLASS_KEY: NutnrJCsppDarkTelemeteredDataParticle
                 }
             }
         else:
@@ -107,7 +112,8 @@ class NutnrJCsppParserUnitTestCase(ParserUnitTestCase):
             config = {
                 DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT: {
                     METADATA_PARTICLE_CLASS_KEY: NutnrJCsppMetadataRecoveredDataParticle,
-                    DATA_PARTICLE_CLASS_KEY: NutnrJCsppRecoveredDataParticle
+                    LIGHT_PARTICLE_CLASS_KEY: NutnrJCsppRecoveredDataParticle,
+                    DARK_PARTICLE_CLASS_KEY: NutnrJCsppDarkRecoveredDataParticle
                 }
             }
 
