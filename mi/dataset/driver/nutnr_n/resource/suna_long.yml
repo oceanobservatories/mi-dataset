@@ -1,8 +1,10 @@
 header:
-    particle_object: NutnrNDataParticle
-    particle_type: nutnr_n_instrument_recovered
+    particle_object: MULTIPLE
+    particle_type: MULTIPLE
 data:
   - _index: 1
+    particle_object: NutnrNDarkDataParticle
+    particle_type: nutnr_n_dark_instrument_recovered
     internal_timestamp: 3624127249.148437
     frame_type: 'SDB'
     serial_number: '0366'
@@ -17,7 +19,7 @@ data:
     nutnr_spectrum_average: 617
     nutnr_dark_value_used_for_fit: 0
     nutnr_integration_time_factor: 1
-    spectral_channels: [630, 607, 615, 615, 618, 621, 612, 612, 619, 620, 613, 611, 626, 609, 619, 622, 630, 633, 626, 625, 627, 616, 615, 622, 618, 624, 617, 624, 634, 614, 623, 625, 613, 621, 625, 621, 633, 622, 629, 621, 617, 621, 623, 625, 618, 619, 616, 614, 619, 613, 622, 621, 625, 619, 627, 631, 621, 630, 616, 629, 630, 625, 622, 621, 620, 634, 630, 625, 622, 614, 615, 613, 613, 614, 605, 618, 615, 612, 627, 622, 617, 628, 626, 613, 601, 601, 603, 613, 615, 620, 621, 614, 617, 621, 633, 625, 623, 633, 608, 611, 619, 617, 605, 610, 605, 626, 629, 633, 619, 627, 617, 621, 605, 613, 606, 620, 614, 608, 619, 626, 622, 617, 623, 622, 612, 611, 618, 604, 613, 611, 609, 610, 629, 622, 617, 616, 610, 602, 611, 617, 614, 602, 609, 622, 617, 614, 620, 624, 618, 619, 621, 625, 625, 630, 633, 609, 609, 622, 622, 612, 620, 612, 615, 616, 609, 597, 611, 610, 613, 625, 622, 605, 615, 615, 628, 613, 619, 615, 613, 613, 616, 616, 624, 626, 602, 603, 610, 621, 623, 615, 623, 623, 616, 597, 603, 605, 620, 621, 602, 610, 618, 609, 607, 624, 606, 613, 619, 613, 612, 626, 621, 606, 615, 625, 626, 625, 614, 631, 628, 627, 618, 613, 610, 605, 606, 598, 610, 617, 614, 612, 621, 616, 619, 615, 609, 620, 612, 622, 602, 616, 609, 610, 615, 604, 615, 617, 614, 616, 613, 611, 601, 619, 613, 616, 617, 472]
+    dark_frame_spectral_channels: [630, 607, 615, 615, 618, 621, 612, 612, 619, 620, 613, 611, 626, 609, 619, 622, 630, 633, 626, 625, 627, 616, 615, 622, 618, 624, 617, 624, 634, 614, 623, 625, 613, 621, 625, 621, 633, 622, 629, 621, 617, 621, 623, 625, 618, 619, 616, 614, 619, 613, 622, 621, 625, 619, 627, 631, 621, 630, 616, 629, 630, 625, 622, 621, 620, 634, 630, 625, 622, 614, 615, 613, 613, 614, 605, 618, 615, 612, 627, 622, 617, 628, 626, 613, 601, 601, 603, 613, 615, 620, 621, 614, 617, 621, 633, 625, 623, 633, 608, 611, 619, 617, 605, 610, 605, 626, 629, 633, 619, 627, 617, 621, 605, 613, 606, 620, 614, 608, 619, 626, 622, 617, 623, 622, 612, 611, 618, 604, 613, 611, 609, 610, 629, 622, 617, 616, 610, 602, 611, 617, 614, 602, 609, 622, 617, 614, 620, 624, 618, 619, 621, 625, 625, 630, 633, 609, 609, 622, 622, 612, 620, 612, 615, 616, 609, 597, 611, 610, 613, 625, 622, 605, 615, 615, 628, 613, 619, 615, 613, 613, 616, 616, 624, 626, 602, 603, 610, 621, 623, 615, 623, 623, 616, 597, 603, 605, 620, 621, 602, 610, 618, 609, 607, 624, 606, 613, 619, 613, 612, 626, 621, 606, 615, 625, 626, 625, 614, 631, 628, 627, 618, 613, 610, 605, 606, 598, 610, 617, 614, 612, 621, 616, 619, 615, 609, 620, 612, 622, 602, 616, 609, 610, 615, 604, 615, 617, 614, 616, 613, 611, 601, 619, 613, 616, 617, 472]
     temp_interior: 26.0
     temp_spectrometer: 25.375
     temp_lamp: 25.25
@@ -37,6 +39,8 @@ data:
     ctd_temp: -1.0
     ctd_dbar: -1.0
   - _index: 2
+    particle_object: NutnrNDataParticle
+    particle_type: nutnr_n_instrument_recovered
     internal_timestamp: 3624127252.121093
     frame_type: 'SLB'
     serial_number: '0366'
@@ -71,6 +75,8 @@ data:
     ctd_temp: -1.0
     ctd_dbar: -1.0
   - _index: 3
+    particle_object: NutnrNDataParticle
+    particle_type: nutnr_n_instrument_recovered
     internal_timestamp: 3624127253.5566398
     frame_type: 'SLB'
     serial_number: '0366'
@@ -105,6 +111,8 @@ data:
     ctd_temp: -1.0
     ctd_dbar: -1.0
   - _index: 4
+    particle_object: NutnrNDataParticle
+    particle_type: nutnr_n_instrument_recovered
     internal_timestamp: 3624127254.7119107
     frame_type: 'SLB'
     serial_number: '0366'
@@ -139,6 +147,8 @@ data:
     ctd_temp: -1.0
     ctd_dbar: -1.0
   - _index: 5
+    particle_object: NutnrNDataParticle
+    particle_type: nutnr_n_instrument_recovered
     internal_timestamp: 3624127255.8994139
     frame_type: 'SLB'
     serial_number: '0366'
@@ -173,6 +183,8 @@ data:
     ctd_temp: -1.0
     ctd_dbar: -1.0
   - _index: 6
+    particle_object: NutnrNDataParticle
+    particle_type: nutnr_n_instrument_recovered
     internal_timestamp: 3624127257.071288
     frame_type: 'SLB'
     serial_number: '0366'
@@ -207,6 +219,8 @@ data:
     ctd_temp: -1.0
     ctd_dbar: -1.0
   - _index: 7
+    particle_object: NutnrNDataParticle
+    particle_type: nutnr_n_instrument_recovered
     internal_timestamp: 3624127258.2607418
     frame_type: 'SLB'
     serial_number: '0366'
@@ -241,6 +255,8 @@ data:
     ctd_temp: -1.0
     ctd_dbar: -1.0
   - _index: 8
+    particle_object: NutnrNDataParticle
+    particle_type: nutnr_n_instrument_recovered
     internal_timestamp: 3624127259.429687
     frame_type: 'SLB'
     serial_number: '0366'

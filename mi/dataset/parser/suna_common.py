@@ -17,7 +17,7 @@ import struct
 from mi.core.log import get_logger
 log = get_logger()
 from mi.core.instrument.data_particle import DataParticle, DataParticleKey, DataParticleValue
-from mi.core.exceptions import SampleException, NotImplementedException
+from mi.core.exceptions import SampleException, NotImplementedException, RecoverableSampleException
 from mi.dataset.dataset_parser import SimpleParser
 
 # frame header is always 10 characters
@@ -106,7 +106,8 @@ class SunaParser(SimpleParser):
                  start_frame_matcher,
                  frame_size,
                  unpack_string,
-                 data_particle_class):
+                 light_particle_class,
+                 dark_particle_class):
 
         # the regex to use to match the start of a frame
         self.start_frame_matcher = start_frame_matcher
@@ -115,7 +116,8 @@ class SunaParser(SimpleParser):
         # the string to unpack the frame using struct
         self.unpack_string = unpack_string
         # the data particle class to extract
-        self.data_particle_class = data_particle_class
+        self.light_particle_class = light_particle_class
+        self.dark_particle_class = dark_particle_class
 
         # no config for this parser, pass in empty dict
         super(SunaParser, self).__init__({},
@@ -158,8 +160,20 @@ class SunaParser(SimpleParser):
                 # check for a valid timestamp, can't have a particle without a timestamp
                 if timestamp:
                     # got a valid timestamp
-                    particle = self._extract_sample(self.data_particle_class, None, fields, timestamp)
-                    self._record_buffer.append(particle)
+
+                    frame_type = fields[1]
+
+                    if frame_type.startswith('SL'):  # light frame
+
+                        particle = self._extract_sample(self.light_particle_class, None, fields, timestamp)
+                        self._record_buffer.append(particle)
+                    elif frame_type.startswith('SD'):   # dark frame
+                        particle = self._extract_sample(self.dark_particle_class, None, fields, timestamp)
+                        self._record_buffer.append(particle)
+                    else:  # unexpected frame type
+                        msg = 'got invalid frame type %sd' % frame_type
+                        log.warning(msg)
+                        self._exception_callback(RecoverableSampleException(msg))
 
         if end_idx != len(data):
             # there is unknown data at the end of the file
