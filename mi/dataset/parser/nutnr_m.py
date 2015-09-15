@@ -18,8 +18,10 @@ FRAME_SIZE = 144
 START_FRAME_REGEX = r'SATS[LD]R\d{4}'
 START_FRAME_MATCHER = re.compile(START_FRAME_REGEX)
 
-PARAMETER_MAP = PARAMETER_MAP_START + [
-    ('spectral_channels',  slice(13, 45), list),
+LIGHT_SPECTRAL_MAP = [('spectral_channels',  slice(13, 45), list)]
+DARK_SPECTRAL_MAP = [('dark_frame_spectral_channels',  slice(13, 45), list)]
+
+PARAMETER_MAP_END = [
     ('temp_spectrometer',  45,            float),
     ('temp_lamp',          46,            float),
     ('humidity',           47,            float),
@@ -30,11 +32,20 @@ PARAMETER_MAP = PARAMETER_MAP_START + [
     ('ctd_dbar',           52,            float)
 ]
 
+LIGHT_PARAMETER_MAP = PARAMETER_MAP_START + LIGHT_SPECTRAL_MAP + PARAMETER_MAP_END
+DARK_PARAMETER_MAP = PARAMETER_MAP_START + DARK_SPECTRAL_MAP + PARAMETER_MAP_END
+
 
 class NutnrMDataParticle(SunaDataParticle):
 
     _data_particle_type = 'nutnr_m_instrument_recovered'
-    _param_map = PARAMETER_MAP
+    _param_map = LIGHT_PARAMETER_MAP
+
+
+class NutnrMDarkDataParticle(SunaDataParticle):
+
+    _data_particle_type = 'nutnr_m_dark_instrument_recovered'
+    _param_map = DARK_PARAMETER_MAP
 
 
 class NutnrMParser(SunaParser):
@@ -51,4 +62,5 @@ class NutnrMParser(SunaParser):
                                            START_FRAME_MATCHER,
                                            FRAME_SIZE,
                                            unpack_string,
-                                           NutnrMDataParticle)
+                                           NutnrMDataParticle,
+                                           NutnrMDarkDataParticle)
