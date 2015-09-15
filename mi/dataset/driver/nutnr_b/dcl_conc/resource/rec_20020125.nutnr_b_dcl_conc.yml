@@ -15,8 +15,8 @@ data:
     lamp_powered_time: 1011935251
     data_log_file: 'DATA/LOG_20020125.LOG'
   - _index: 2
-    particle_object: NutnrBDclConcRecoveredInstrumentDataParticle
-    particle_type: nutnr_b_dcl_conc_instrument_recovered
+    particle_object: NutnrBDclDarkConcRecoveredInstrumentDataParticle
+    particle_type: nutnr_b_dcl_dark_conc_instrument_recovered
     internal_timestamp: 3220924055.953000
     dcl_controller_timestamp: '2002/01/25 05:07:35.953'
     frame_header: 'SAT'

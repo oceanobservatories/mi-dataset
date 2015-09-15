@@ -8,9 +8,9 @@
 
 This file contains code for the nutnr_b_dcl_conc parsers and
 code to produce data particles.  For telemetered data, there
-is one parser which produces two types of data particles.  For
-recovered data, there is one parser which produces two types
-of data particles.  Both parsers produce instrument and metadata
+is one parser which produces three types of data particles.  For
+recovered data, there is one parser which produces two three
+of data particles.  Both parsers produce light and dark frame instrument and metadata
 data particles.  There is 1 metadata data particle produced for
 each data block in a file.  There may be 1 or more data blocks
 in a file.  There is 1 instrument data particle produced for
@@ -27,17 +27,20 @@ __license__ = 'Apache 2.0'
 from mi.core.log import get_logger
 log = get_logger()
 
-from mi.core.exceptions import UnexpectedDataException
+from mi.core.exceptions import UnexpectedDataException, SampleException
 
 from mi.dataset.parser.nutnr_b_dcl_parser_base import NutnrBDclParser, \
     InstrumentDataMatchGroups, INST_CONC_DATA_W_NEWLINE_MATCHER, \
     IDLE_TIME_MATCHER, NEXT_WAKEUP_MATCHER, META_MESSAGE_MATCHER, \
-    NUTR_B_DCL_IGNORE_MATCHER, CONCENTRATE_FRAME_TYPES
+    NUTR_B_DCL_IGNORE_MATCHER, CONCENTRATE_FRAME_TYPES, \
+    NITRATE_LIGHT_CONCENTRATE, NITRATE_DARK_CONCENTRATE
 
 from mi.dataset.parser.nutnr_b_particles import \
     NutnrBDclConcRecoveredInstrumentDataParticle, \
     NutnrBDclConcRecoveredMetadataDataParticle, \
     NutnrBDclConcTelemeteredInstrumentDataParticle, \
+    NutnrBDclDarkConcRecoveredInstrumentDataParticle, \
+    NutnrBDclDarkConcTelemeteredInstrumentDataParticle, \
     NutnrBDclConcTelemeteredMetadataDataParticle, \
     NutnrBDataParticleKey
 
@@ -57,6 +60,7 @@ class NutnrBDclConcParser(NutnrBDclParser):
                  publish_callback,
                  exception_callback,
                  instrument_particle_class,
+                 dark_instrument_particle_class,
                  metadata_particle_class):
 
         super(NutnrBDclConcParser, self).__init__(config,
@@ -65,6 +69,7 @@ class NutnrBDclConcParser(NutnrBDclParser):
                                                   publish_callback,
                                                   exception_callback,
                                                   instrument_particle_class,
+                                                  dark_instrument_particle_class,
                                                   metadata_particle_class,
                                                   CONCENTRATE_FRAME_TYPES)
 
@@ -77,6 +82,20 @@ class NutnrBDclConcParser(NutnrBDclParser):
         # Obtain the ntp timestamp
         ntp_timestamp = self._extract_instrument_ntp_timestamp(inst_match)
 
+        frame_type = inst_match.group(InstrumentDataMatchGroups.INST_GROUP_FRAME_TYPE)
+
+        # need to determine if this is a light or dark frame
+        # stream names are different for
+        if frame_type == NITRATE_LIGHT_CONCENTRATE:
+            particle_class = self._instrument_particle_class
+        elif frame_type == NITRATE_DARK_CONCENTRATE:
+            particle_class = self._dark_instrument_particle_class
+
+        else:  # this should never happen but just in case
+            message = "invalid frame type passed to particle"
+            log.error(message)
+            raise SampleException(message)
+
         # Create the instrument data list of tuples from the instrument match data
         instrument_data_tuple = [
             (NutnrBDataParticleKey.DCL_CONTROLLER_TIMESTAMP,
@@ -86,7 +105,7 @@ class NutnrBDclConcParser(NutnrBDclParser):
              inst_match.group(InstrumentDataMatchGroups.INST_GROUP_FRAME_HEADER),
              str),
             (NutnrBDataParticleKey.FRAME_TYPE,
-             inst_match.group(InstrumentDataMatchGroups.INST_GROUP_FRAME_TYPE),
+             frame_type,
              str),
             (NutnrBDataParticleKey.SERIAL_NUMBER,
              inst_match.group(InstrumentDataMatchGroups.INST_GROUP_SERIAL_NUMBER),
@@ -116,7 +135,8 @@ class NutnrBDclConcParser(NutnrBDclParser):
 
         # Extract the instrument particle sample providing the instrument data
         # tuple and ntp timestamp
-        particle = self._extract_sample(self._instrument_particle_class,
+
+        particle = self._extract_sample(particle_class,
                                         None,
                                         instrument_data_tuple,
                                         ntp_timestamp)
@@ -198,7 +218,7 @@ class NutnrBDclConcParser(NutnrBDclParser):
 class NutnrBDclConcRecoveredParser(NutnrBDclConcParser):
     """
     This is the recovered version of the nutnr_b_dcl_conc parser which provides
-    the NutnrBDclConcRecoveredInstrumentDataParticle and
+    the NutnrBDclConcRecoveredInstrumentDataParticle, NutnrBDclDarkConcRecoveredInstrumentDataParticle and
     NutnrBDclConcRecoveredMetadataDataParticle particles to the super class's
     constructor
     """
@@ -215,13 +235,14 @@ class NutnrBDclConcRecoveredParser(NutnrBDclConcParser):
                                                            publish_callback,
                                                            exception_callback,
                                                            NutnrBDclConcRecoveredInstrumentDataParticle,
+                                                           NutnrBDclDarkConcRecoveredInstrumentDataParticle,
                                                            NutnrBDclConcRecoveredMetadataDataParticle)
 
 
 class NutnrBDclConcTelemeteredParser(NutnrBDclConcParser):
     """
     This is the telemetered version of the nutnr_b_dcl_conc parser which provides
-    the NutnrBDclConcTelemeteredInstrumentDataParticle and
+    the NutnrBDclConcTelemeteredInstrumentDataParticle, NutnrBDclDarkConcTelemeteredInstrumentDataParticle and
     NutnrBDclConcTelemeteredMetadataDataParticle particles to the super class's
     constructor
     """
@@ -238,4 +259,5 @@ class NutnrBDclConcTelemeteredParser(NutnrBDclConcParser):
                                                              publish_callback,
                                                              exception_callback,
                                                              NutnrBDclConcTelemeteredInstrumentDataParticle,
+                                                             NutnrBDclDarkConcTelemeteredInstrumentDataParticle,
                                                              NutnrBDclConcTelemeteredMetadataDataParticle)

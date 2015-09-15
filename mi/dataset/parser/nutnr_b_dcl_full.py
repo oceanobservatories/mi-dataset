@@ -8,9 +8,9 @@
 
 This file contains code for the nutnr_b_dcl_full parsers and
 code to produce data particles.  For telemetered data, there
-is one parser which produces two types of data particles.  For
-recovered data, there is one parser which produces two types
-of data particles.  Both parsers produce instrument and metadata
+is one parser which produces three types of data particles.  For
+recovered data, there is one parser which produces three types
+of data particles.  Both parsers produce light and dark frame instrument, and metadata
 data particles.  There is 1 metadata data particle produced for
 each data block in a file.  There may be 1 or more data blocks
 in a file.  There is 1 instrument data particle produced for
@@ -27,16 +27,29 @@ __license__ = 'Apache 2.0'
 from mi.core.log import get_logger
 log = get_logger()
 
-from mi.core.exceptions import UnexpectedDataException
+from mi.core.exceptions import UnexpectedDataException, SampleException
 
 from mi.dataset.parser.nutnr_b_dcl_parser_base import NutnrBDclParser
 
-from mi.dataset.parser.nutnr_b_dcl_parser_base import InstrumentDataMatchGroups, INST_FULL_DATA_MATCHER, \
-    IDLE_TIME_MATCHER, NEXT_WAKEUP_MATCHER, META_MESSAGE_MATCHER, NUTR_B_DCL_IGNORE_MATCHER, FULL_FRAME_TYPES
+from mi.dataset.parser.nutnr_b_dcl_parser_base import \
+    InstrumentDataMatchGroups, \
+    INST_FULL_DATA_MATCHER, \
+    IDLE_TIME_MATCHER, \
+    NEXT_WAKEUP_MATCHER, \
+    META_MESSAGE_MATCHER, \
+    NUTR_B_DCL_IGNORE_MATCHER, \
+    FULL_FRAME_TYPES, \
+    NITRATE_LIGHT_FULL, \
+    NITRATE_DARK_FULL
 
-from mi.dataset.parser.nutnr_b_particles import NutnrBDclFullRecoveredInstrumentDataParticle, \
-    NutnrBDclFullRecoveredMetadataDataParticle, NutnrBDclFullTelemeteredInstrumentDataParticle, \
-    NutnrBDclFullTelemeteredMetadataDataParticle, NutnrBDataParticleKey
+from mi.dataset.parser.nutnr_b_particles import \
+    NutnrBDclFullRecoveredInstrumentDataParticle, \
+    NutnrBDclDarkFullRecoveredInstrumentDataParticle, \
+    NutnrBDclFullTelemeteredMetadataDataParticle, \
+    NutnrBDclDarkFullTelemeteredInstrumentDataParticle, \
+    NutnrBDclFullRecoveredMetadataDataParticle, \
+    NutnrBDclFullTelemeteredInstrumentDataParticle, \
+    NutnrBDataParticleKey
 
 
 class NutnrBDclFullParser(NutnrBDclParser):
@@ -44,7 +57,8 @@ class NutnrBDclFullParser(NutnrBDclParser):
     Parser for Nutnr_b_dcl_full data.
     In addition to the standard parser constructor parameters,
     this constructor needs the following additional parameters:
-      instrument particle class
+      instrument particle class for light frame
+      instrument particle class for dark frame
       metadata particle class.
     """
     def __init__(self,
@@ -54,6 +68,7 @@ class NutnrBDclFullParser(NutnrBDclParser):
                  publish_callback,
                  exception_callback,
                  instrument_particle_class,
+                 dark_instrument_particle_class,
                  metadata_particle_class):
 
         super(NutnrBDclFullParser, self).__init__(config,
@@ -62,6 +77,7 @@ class NutnrBDclFullParser(NutnrBDclParser):
                                                   publish_callback,
                                                   exception_callback,
                                                   instrument_particle_class,
+                                                  dark_instrument_particle_class,
                                                   metadata_particle_class,
                                                   FULL_FRAME_TYPES)
 
@@ -74,6 +90,23 @@ class NutnrBDclFullParser(NutnrBDclParser):
         # Obtain the ntp timestamp
         ntp_timestamp = self._extract_instrument_ntp_timestamp(inst_match)
 
+        frame_type = inst_match.group(InstrumentDataMatchGroups.INST_GROUP_FRAME_TYPE)
+
+        # need to determine if this is a light or dark frame
+        # spectral channel parameter and stream names are
+        # different for each
+        if frame_type == NITRATE_LIGHT_FULL:
+            particle_class = self._instrument_particle_class
+            spectral_key = NutnrBDataParticleKey.SPECTRAL_CHANNELS
+        elif frame_type == NITRATE_DARK_FULL:
+            particle_class = self._dark_instrument_particle_class
+            spectral_key = NutnrBDataParticleKey.DARK_FRAME_SPECTRAL_CHANNELS
+
+        else:  # this should never happen but just in case
+            message = "invalid frame type passed to particle"
+            log.error(message)
+            raise SampleException(message)
+
         # Create the instrument data list of tuples from the instrument match data
         instrument_data_tuple = [
             (NutnrBDataParticleKey.DCL_CONTROLLER_TIMESTAMP,
@@ -83,7 +116,7 @@ class NutnrBDclFullParser(NutnrBDclParser):
              inst_match.group(InstrumentDataMatchGroups.INST_GROUP_FRAME_HEADER),
              str),
             (NutnrBDataParticleKey.FRAME_TYPE,
-             inst_match.group(InstrumentDataMatchGroups.INST_GROUP_FRAME_TYPE),
+             frame_type,
              str),
             (NutnrBDataParticleKey.SERIAL_NUMBER,
              inst_match.group(InstrumentDataMatchGroups.INST_GROUP_SERIAL_NUMBER),
@@ -145,14 +178,14 @@ class NutnrBDclFullParser(NutnrBDclParser):
             (NutnrBDataParticleKey.SPEC_CHANNEL_AVERAGE,
              inst_match.group(InstrumentDataMatchGroups.INST_GROUP_SPEC_CHANNEL_AVERAGE),
              float),
-            (NutnrBDataParticleKey.SPECTRAL_CHANNELS,
+            (spectral_key,
              map(int, inst_match.group(InstrumentDataMatchGroups.INST_GROUP_SPECTRAL_CHANNELS).split(',')),
              list),
         ]
 
         # Extract the instrument particle sample providing the instrument data
         # tuple and ntp timestamp
-        particle = self._extract_sample(self._instrument_particle_class,
+        particle = self._extract_sample(particle_class,
                                         None,
                                         instrument_data_tuple,
                                         ntp_timestamp)
@@ -212,7 +245,7 @@ class NutnrBDclFullParser(NutnrBDclParser):
 
                 log.debug("Found potential instrument match: %s", line)
 
-                #process the instrument record match
+                # process the instrument record match
                 self._process_instrument_record_match(inst_match)
 
             else:
@@ -232,7 +265,7 @@ class NutnrBDclFullParser(NutnrBDclParser):
 class NutnrBDclFullRecoveredParser(NutnrBDclFullParser):
     """
     This is the recovered version of the nutnr_b_dcl_full parser which provides
-    the NutnrBDclFullRecoveredInstrumentDataParticle and
+    the NutnrBDclFullRecoveredInstrumentDataParticle, NutnrBDclDarkFullRecoveredInstrumentDataParticle and
     NutnrBDclFullRecoveredMetadataDataParticle particles to the super class's
     constructor
     """
@@ -249,13 +282,14 @@ class NutnrBDclFullRecoveredParser(NutnrBDclFullParser):
                                                            publish_callback,
                                                            exception_callback,
                                                            NutnrBDclFullRecoveredInstrumentDataParticle,
+                                                           NutnrBDclDarkFullRecoveredInstrumentDataParticle,
                                                            NutnrBDclFullRecoveredMetadataDataParticle)
 
 
 class NutnrBDclFullTelemeteredParser(NutnrBDclFullParser):
     """
     This is the recovered version of the nutnr_b_dcl_full parser which provides
-    the NutnrBDclFullTelemeteredInstrumentDataParticle and
+    the NutnrBDclFullTelemeteredInstrumentDataParticle, NutnrBDclDarkFullTelemeteredInstrumentDataParticle and
     NutnrBDclFullTelemeteredMetadataDataParticle particles to the super class's
     constructor
     """
@@ -272,4 +306,5 @@ class NutnrBDclFullTelemeteredParser(NutnrBDclFullParser):
                                                              publish_callback,
                                                              exception_callback,
                                                              NutnrBDclFullTelemeteredInstrumentDataParticle,
+                                                             NutnrBDclDarkFullTelemeteredInstrumentDataParticle,
                                                              NutnrBDclFullTelemeteredMetadataDataParticle)

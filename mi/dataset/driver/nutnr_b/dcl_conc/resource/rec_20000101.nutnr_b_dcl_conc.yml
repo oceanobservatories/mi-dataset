@@ -17,8 +17,8 @@ data:
     data_log_file: 'DATA/LOG_20000101.LOG'
     internal_timestamp: '2000-01-01T01:03:06Z'
   - _index:  2
-    particle_object: NutnrBDclConcRecoveredInstrumentDataParticle
-    particle_type: nutnr_b_dcl_conc_instrument_recovered
+    particle_object: NutnrBDclDarkConcRecoveredInstrumentDataParticle
+    particle_type: nutnr_b_dcl_dark_conc_instrument_recovered
     internal_timestamp: '2000-01-01T01:03:31Z'
     dcl_controller_timestamp: '2000/01/01 01:03:31.949'
     frame_header: 'SAT'
@@ -60,8 +60,8 @@ data:
     data_log_file: 'DATA/LOG_20000101.LOG'
     internal_timestamp: '2000-01-01T01:03:48Z'
   - _index:  5
-    particle_object: NutnrBDclConcRecoveredInstrumentDataParticle
-    particle_type: nutnr_b_dcl_conc_instrument_recovered
+    particle_object: NutnrBDclDarkConcRecoveredInstrumentDataParticle
+    particle_type: nutnr_b_dcl_dark_conc_instrument_recovered
     internal_timestamp: '2000-01-01T01:04:14Z'
     dcl_controller_timestamp: '2000/01/01 01:04:14.393'
     frame_header: 'SAT'
@@ -103,8 +103,8 @@ data:
     data_log_file: 'DATA/LOG_20000101.LOG'
     internal_timestamp: '2000-01-01T01:04:30Z'
   - _index:  8
-    particle_object: NutnrBDclConcRecoveredInstrumentDataParticle
-    particle_type: nutnr_b_dcl_conc_instrument_recovered
+    particle_object: NutnrBDclDarkConcRecoveredInstrumentDataParticle
+    particle_type: nutnr_b_dcl_dark_conc_instrument_recovered
     internal_timestamp: '2000-01-01T01:04:56Z'
     dcl_controller_timestamp: '2000/01/01 01:04:56.837'
     frame_header: 'SAT'

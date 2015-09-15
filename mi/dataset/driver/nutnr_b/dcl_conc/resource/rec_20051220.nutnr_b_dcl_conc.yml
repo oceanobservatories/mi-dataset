@@ -15,8 +15,8 @@ data:
     lamp_powered_time: 1135077217
     data_log_file: 'DATA/LOG_20051220.LOG'
   - _index: 2
-    particle_object: NutnrBDclConcRecoveredInstrumentDataParticle
-    particle_type: nutnr_b_dcl_conc_instrument_recovered
+    particle_object: NutnrBDclDarkConcRecoveredInstrumentDataParticle
+    particle_type: nutnr_b_dcl_dark_conc_instrument_recovered
     internal_timestamp: 3344066021.959000
     dcl_controller_timestamp: '2005/12/20 11:13:41.959'
     frame_header: 'SAT'
@@ -627,8 +627,8 @@ data:
     lamp_powered_time: 1135077349
     data_log_file: 'DATA/LOG_20051220.LOG'
   - _index: 43
-    particle_object: NutnrBDclConcRecoveredInstrumentDataParticle
-    particle_type: nutnr_b_dcl_conc_instrument_recovered
+    particle_object: NutnrBDclDarkConcRecoveredInstrumentDataParticle
+    particle_type: nutnr_b_dcl_dark_conc_instrument_recovered
     internal_timestamp: 3344066154.007000
     dcl_controller_timestamp: '2005/12/20 11:15:54.007'
     frame_header: 'SAT'
