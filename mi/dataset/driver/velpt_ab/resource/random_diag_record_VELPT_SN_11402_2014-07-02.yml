@@ -56,17 +56,17 @@ data:
     date_time_string: 2013/10/01 22:45:05
     error_code: 0
     analog1: 0
-    battery_voltage: 12.3
-    sound_speed_analog2: 1528.7
-    heading: 200.2
-    pitch: 25.4
-    roll: -28.8
-    pressure_mbar:  200.0
+    battery_voltage_dV:  123
+    sound_speed_dms:  15287
+    heading_decidegree:  2002
+    pitch_decidegree:  254
+    roll_decidegree:  -288
+    pressure_mbar:  200
     status: 160
-    temperature: 22.72
-    velocity_beam1: 591.0
-    velocity_beam2: 996.0
-    velocity_beam3: 1002.0
+    temperature_centidegree:  2272
+    velocity_beam1:  591
+    velocity_beam2:  996
+    velocity_beam3:  1002
     amplitude_beam1: 19
     amplitude_beam2: 18
     amplitude_beam3: 17
@@ -77,17 +77,17 @@ data:
     date_time_string: 2013/10/01 22:45:06
     error_code: 0
     analog1: 0
-    battery_voltage: 12.3
-    sound_speed_analog2: 1528.7
-    heading: 200.2
-    pitch: 25.3
-    roll: -28.8
-    pressure_mbar:  194.0
+    battery_voltage_dV:  123
+    sound_speed_dms:  15287
+    heading_decidegree:  2002
+    pitch_decidegree:  253
+    roll_decidegree:  -288
+    pressure_mbar:  194
     status: 160
-    temperature: 22.72
-    velocity_beam1: -584.0
-    velocity_beam2: -101.0
-    velocity_beam3: -721.0
+    temperature_centidegree:  2272
+    velocity_beam1:  -584
+    velocity_beam2:  -101
+    velocity_beam3:  -721
     amplitude_beam1: 19
     amplitude_beam2: 18
     amplitude_beam3: 17
@@ -98,17 +98,17 @@ data:
     date_time_string: 2013/10/01 22:45:07
     error_code: 0
     analog1: 0
-    battery_voltage: 12.3
-    sound_speed_analog2: 1528.7
-    heading: 200.4
-    pitch: 25.4
-    roll: -28.8
-    pressure_mbar:  198.0
+    battery_voltage_dV:  123
+    sound_speed_dms:  15287
+    heading_decidegree:  2004
+    pitch_decidegree:  254
+    roll_decidegree:  -288
+    pressure_mbar:  198
     status: 160
-    temperature: 22.72
-    velocity_beam1: -322.0
-    velocity_beam2: 663.0
-    velocity_beam3: 1585.0
+    temperature_centidegree:  2272
+    velocity_beam1:  -322
+    velocity_beam2:  663
+    velocity_beam3:  1585
     amplitude_beam1: 18
     amplitude_beam2: 18
     amplitude_beam3: 17
@@ -119,17 +119,17 @@ data:
     date_time_string: 2013/10/01 22:45:08
     error_code: 0
     analog1: 0
-    battery_voltage: 12.3
-    sound_speed_analog2: 1528.7
-    heading: 200.4
-    pitch: 25.4
-    roll: -28.8
-    pressure_mbar:  195.0
+    battery_voltage_dV:  123
+    sound_speed_dms:  15287
+    heading_decidegree:  2004
+    pitch_decidegree:  254
+    roll_decidegree:  -288
+    pressure_mbar:  195
     status: 160
-    temperature: 22.72
-    velocity_beam1: 190.0
-    velocity_beam2: -733.0
-    velocity_beam3: 1078.0
+    temperature_centidegree:  2272
+    velocity_beam1:  190
+    velocity_beam2:  -733
+    velocity_beam3:  1078
     amplitude_beam1: 18
     amplitude_beam2: 18
     amplitude_beam3: 17
@@ -140,17 +140,17 @@ data:
     date_time_string: 2013/10/01 22:45:09
     error_code: 0
     analog1: 0
-    battery_voltage: 12.3
-    sound_speed_analog2: 1528.7
-    heading: 200.7
-    pitch: 25.4
-    roll: -28.8
-    pressure_mbar:  193.0
+    battery_voltage_dV:  123
+    sound_speed_dms:  15287
+    heading_decidegree:  2007
+    pitch_decidegree:  254
+    roll_decidegree:  -288
+    pressure_mbar:  193
     status: 160
-    temperature: 22.72
-    velocity_beam1: 60.0
-    velocity_beam2: 579.0
-    velocity_beam3: 1091.0
+    temperature_centidegree:  2272
+    velocity_beam1:  60
+    velocity_beam2:  579
+    velocity_beam3:  1091
     amplitude_beam1: 18
     amplitude_beam2: 18
     amplitude_beam3: 17
@@ -161,17 +161,17 @@ data:
     date_time_string: 2013/10/01 22:45:10
     error_code: 0
     analog1: 0
-    battery_voltage: 12.3
-    sound_speed_analog2: 1528.7
-    heading: 200.7
-    pitch: 25.4
-    roll: -28.8
-    pressure_mbar:  190.0
+    battery_voltage_dV:  123
+    sound_speed_dms:  15287
+    heading_decidegree:  2007
+    pitch_decidegree:  254
+    roll_decidegree:  -288
+    pressure_mbar:  190
     status: 160
-    temperature: 22.72
-    velocity_beam1: 1128.0
-    velocity_beam2: 92.0
-    velocity_beam3: 222.0
+    temperature_centidegree:  2272
+    velocity_beam1:  1128
+    velocity_beam2:  92
+    velocity_beam3:  222
     amplitude_beam1: 18
     amplitude_beam2: 18
     amplitude_beam3: 17
@@ -182,17 +182,17 @@ data:
     date_time_string: 2013/10/01 22:45:11
     error_code: 0
     analog1: 0
-    battery_voltage: 12.3
-    sound_speed_analog2: 1528.7
-    heading: 200.6
-    pitch: 25.4
-    roll: -28.7
-    pressure_mbar:  196.0
+    battery_voltage_dV:  123
+    sound_speed_dms:  15287
+    heading_decidegree:  2006
+    pitch_decidegree:  254
+    roll_decidegree:  -287
+    pressure_mbar:  196
     status: 160
-    temperature: 22.72
-    velocity_beam1: 302.0
-    velocity_beam2: 681.0
-    velocity_beam3: 1023.0
+    temperature_centidegree:  2272
+    velocity_beam1:  302
+    velocity_beam2:  681
+    velocity_beam3:  1023
     amplitude_beam1: 18
     amplitude_beam2: 18
     amplitude_beam3: 17
@@ -203,17 +203,17 @@ data:
     date_time_string: 2013/10/01 22:45:12
     error_code: 0
     analog1: 0
-    battery_voltage: 12.3
-    sound_speed_analog2: 1528.7
-    heading: 200.6
-    pitch: 25.3
-    roll: -28.8
-    pressure_mbar:  191.0
+    battery_voltage_dV:  123
+    sound_speed_dms:  15287
+    heading_decidegree:  2006
+    pitch_decidegree:  253
+    roll_decidegree:  -288
+    pressure_mbar:  191
     status: 160
-    temperature: 22.72
-    velocity_beam1: 1304.0
-    velocity_beam2: 1776.0
-    velocity_beam3: 74.0
+    temperature_centidegree:  2272
+    velocity_beam1:  1304
+    velocity_beam2:  1776
+    velocity_beam3:  74
     amplitude_beam1: 18
     amplitude_beam2: 18
     amplitude_beam3: 17
@@ -224,17 +224,17 @@ data:
     date_time_string: 2013/10/01 22:45:13
     error_code: 0
     analog1: 0
-    battery_voltage: 12.3
-    sound_speed_analog2: 1528.7
-    heading: 200.6
-    pitch: 25.3
-    roll: -28.7
-    pressure_mbar:  195.0
+    battery_voltage_dV:  123
+    sound_speed_dms:  15287
+    heading_decidegree:  2006
+    pitch_decidegree:  253
+    roll_decidegree:  -287
+    pressure_mbar:  195
     status: 160
-    temperature: 22.72
-    velocity_beam1: -33.0
-    velocity_beam2: -283.0
-    velocity_beam3: 345.0
+    temperature_centidegree:  2272
+    velocity_beam1:  -33
+    velocity_beam2:  -283
+    velocity_beam3:  345
     amplitude_beam1: 18
     amplitude_beam2: 18
     amplitude_beam3: 17
@@ -245,17 +245,17 @@ data:
     date_time_string: 2013/10/01 22:45:14
     error_code: 0
     analog1: 0
-    battery_voltage: 12.3
-    sound_speed_analog2: 1528.7
-    heading: 236.1
-    pitch: 26.0
-    roll: -29.5
-    pressure_mbar:  195.0
+    battery_voltage_dV:  123
+    sound_speed_dms:  15287
+    heading_decidegree:  2361
+    pitch_decidegree:  260
+    roll_decidegree:  -295
+    pressure_mbar:  195
     status: 160
-    temperature: 22.72
-    velocity_beam1: -321.0
-    velocity_beam2: 942.0
-    velocity_beam3: 156.0
+    temperature_centidegree:  2272
+    velocity_beam1:  -321
+    velocity_beam2:  942
+    velocity_beam3:  156
     amplitude_beam1: 18
     amplitude_beam2: 17
     amplitude_beam3: 18
@@ -266,17 +266,17 @@ data:
     date_time_string: 2013/10/01 22:45:15
     error_code: 0
     analog1: 0
-    battery_voltage: 12.3
-    sound_speed_analog2: 1528.7
-    heading: 152.9
-    pitch: 25.9
-    roll: -29.5
-    pressure_mbar:  196.0
+    battery_voltage_dV:  123
+    sound_speed_dms:  15287
+    heading_decidegree:  1529
+    pitch_decidegree:  259
+    roll_decidegree:  -295
+    pressure_mbar:  196
     status: 160
-    temperature: 22.72
-    velocity_beam1: -343.0
-    velocity_beam2: 732.0
-    velocity_beam3: 1239.0
+    temperature_centidegree:  2272
+    velocity_beam1:  -343
+    velocity_beam2:  732
+    velocity_beam3:  1239
     amplitude_beam1: 27
     amplitude_beam2: 27
     amplitude_beam3: 26
@@ -287,17 +287,17 @@ data:
     date_time_string: 2013/10/01 22:45:16
     error_code: 0
     analog1: 0
-    battery_voltage: 12.3
-    sound_speed_analog2: 1528.7
-    heading: 152.5
-    pitch: 27.8
-    roll: -31.7
-    pressure_mbar:  200.0
+    battery_voltage_dV:  123
+    sound_speed_dms:  15287
+    heading_decidegree:  1525
+    pitch_decidegree:  278
+    roll_decidegree:  -317
+    pressure_mbar:  200
     status: 168
-    temperature: 22.72
-    velocity_beam1: -233.0
-    velocity_beam2: -43.0
-    velocity_beam3: 103.0
+    temperature_centidegree:  2272
+    velocity_beam1:  -233
+    velocity_beam2:  -43
+    velocity_beam3:  103
     amplitude_beam1: 35
     amplitude_beam2: 32
     amplitude_beam3: 28
@@ -308,17 +308,17 @@ data:
     date_time_string: 2013/10/01 22:45:17
     error_code: 0
     analog1: 0
-    battery_voltage: 12.3
-    sound_speed_analog2: 1528.7
-    heading: 138.8
-    pitch: 26.0
-    roll: -29.7
-    pressure_mbar:  205.0
+    battery_voltage_dV:  123
+    sound_speed_dms:  15287
+    heading_decidegree:  1388
+    pitch_decidegree:  260
+    roll_decidegree:  -297
+    pressure_mbar:  205
     status: 160
-    temperature: 22.72
-    velocity_beam1: -766.0
-    velocity_beam2: 73.0
-    velocity_beam3: 485.0
+    temperature_centidegree:  2272
+    velocity_beam1:  -766
+    velocity_beam2:  73
+    velocity_beam3:  485
     amplitude_beam1: 36
     amplitude_beam2: 33
     amplitude_beam3: 30
@@ -329,17 +329,17 @@ data:
     date_time_string: 2013/10/01 22:45:18
     error_code: 0
     analog1: 0
-    battery_voltage: 12.3
-    sound_speed_analog2: 1528.7
-    heading: 100.9
-    pitch: 25.3
-    roll: -30.9
-    pressure_mbar:  199.0
+    battery_voltage_dV:  123
+    sound_speed_dms:  15287
+    heading_decidegree:  1009
+    pitch_decidegree:  253
+    roll_decidegree:  -309
+    pressure_mbar:  199
     status: 168
-    temperature: 22.72
-    velocity_beam1: -921.0
-    velocity_beam2: -95.0
-    velocity_beam3: 349.0
+    temperature_centidegree:  2272
+    velocity_beam1:  -921
+    velocity_beam2:  -95
+    velocity_beam3:  349
     amplitude_beam1: 38
     amplitude_beam2: 34
     amplitude_beam3: 29
@@ -350,17 +350,17 @@ data:
     date_time_string: 2013/10/01 22:45:19
     error_code: 0
     analog1: 0
-    battery_voltage: 12.3
-    sound_speed_analog2: 1528.7
-    heading: 152.1
-    pitch: 26.0
-    roll: -31.3
-    pressure_mbar:  198.0
+    battery_voltage_dV:  123
+    sound_speed_dms:  15287
+    heading_decidegree:  1521
+    pitch_decidegree:  260
+    roll_decidegree:  -313
+    pressure_mbar:  198
     status: 168
-    temperature: 22.71
-    velocity_beam1: -1279.0
-    velocity_beam2: -541.0
-    velocity_beam3: -2560.0
+    temperature_centidegree:  2271
+    velocity_beam1:  -1279
+    velocity_beam2:  -541
+    velocity_beam3:  -2560
     amplitude_beam1: 37
     amplitude_beam2: 32
     amplitude_beam3: 27
@@ -371,17 +371,17 @@ data:
     date_time_string: 2013/10/01 22:45:20
     error_code: 0
     analog1: 0
-    battery_voltage: 12.3
-    sound_speed_analog2: 1528.7
-    heading: 203.8
-    pitch: 34.1
-    roll: -17.9
-    pressure_mbar:  201.0
+    battery_voltage_dV:  123
+    sound_speed_dms:  15287
+    heading_decidegree:  2038
+    pitch_decidegree:  341
+    roll_decidegree:  -179
+    pressure_mbar:  201
     status: 165
-    temperature: 22.72
-    velocity_beam1: 243.0
-    velocity_beam2: -48.0
-    velocity_beam3: -1458.0
+    temperature_centidegree:  2272
+    velocity_beam1:  243
+    velocity_beam2:  -48
+    velocity_beam3:  -1458
     amplitude_beam1: 35
     amplitude_beam2: 30
     amplitude_beam3: 27
@@ -392,17 +392,17 @@ data:
     date_time_string: 2013/10/01 22:45:21
     error_code: 0
     analog1: 0
-    battery_voltage: 12.3
-    sound_speed_analog2: 1528.7
-    heading: 200.8
-    pitch: 32.2
-    roll: -38.0
-    pressure_mbar:  208.0
+    battery_voltage_dV:  123
+    sound_speed_dms:  15287
+    heading_decidegree:  2008
+    pitch_decidegree:  322
+    roll_decidegree:  -380
+    pressure_mbar:  208
     status: 173
-    temperature: 22.72
-    velocity_beam1: 574.0
-    velocity_beam2: -1095.0
-    velocity_beam3: -1071.0
+    temperature_centidegree:  2272
+    velocity_beam1:  574
+    velocity_beam2:  -1095
+    velocity_beam3:  -1071
     amplitude_beam1: 36
     amplitude_beam2: 32
     amplitude_beam3: 26
@@ -413,17 +413,17 @@ data:
     date_time_string: 2013/10/01 22:45:22
     error_code: 0
     analog1: 0
-    battery_voltage: 12.3
-    sound_speed_analog2: 1528.7
-    heading: 202.1
-    pitch: 33.3
-    roll: -37.9
-    pressure_mbar:  201.0
+    battery_voltage_dV:  123
+    sound_speed_dms:  15287
+    heading_decidegree:  2021
+    pitch_decidegree:  333
+    roll_decidegree:  -379
+    pressure_mbar:  201
     status: 173
-    temperature: 22.72
-    velocity_beam1: -257.0
-    velocity_beam2: -334.0
-    velocity_beam3: -301.0
+    temperature_centidegree:  2272
+    velocity_beam1:  -257
+    velocity_beam2:  -334
+    velocity_beam3:  -301
     amplitude_beam1: 39
     amplitude_beam2: 33
     amplitude_beam3: 27
@@ -434,17 +434,17 @@ data:
     date_time_string: 2013/10/01 22:45:23
     error_code: 0
     analog1: 0
-    battery_voltage: 12.3
-    sound_speed_analog2: 1528.7
-    heading: 205.5
-    pitch: 34.9
-    roll: -36.7
-    pressure_mbar:  189.0
+    battery_voltage_dV:  123
+    sound_speed_dms:  15287
+    heading_decidegree:  2055
+    pitch_decidegree:  349
+    roll_decidegree:  -367
+    pressure_mbar:  189
     status: 173
-    temperature: 22.72
-    velocity_beam1: 1252.0
-    velocity_beam2: -1159.0
-    velocity_beam3: -435.0
+    temperature_centidegree:  2272
+    velocity_beam1:  1252
+    velocity_beam2:  -1159
+    velocity_beam3:  -435
     amplitude_beam1: 36
     amplitude_beam2: 33
     amplitude_beam3: 20
@@ -455,17 +455,17 @@ data:
     date_time_string: 2013/10/01 22:45:24
     error_code: 0
     analog1: 0
-    battery_voltage: 12.3
-    sound_speed_analog2: 1528.7
-    heading: 105.0
-    pitch: 28.4
-    roll: -36.8
-    pressure_mbar:  194.0
+    battery_voltage_dV:  123
+    sound_speed_dms:  15287
+    heading_decidegree:  1050
+    pitch_decidegree:  284
+    roll_decidegree:  -368
+    pressure_mbar:  194
     status: 168
-    temperature: 22.72
-    velocity_beam1: -1629.0
-    velocity_beam2: 1010.0
-    velocity_beam3: 608.0
+    temperature_centidegree:  2272
+    velocity_beam1:  -1629
+    velocity_beam2:  1010
+    velocity_beam3:  608
     amplitude_beam1: 39
     amplitude_beam2: 37
     amplitude_beam3: 32
@@ -476,17 +476,17 @@ data:
     date_time_string: 2013/10/01 22:45:25
     error_code: 0
     analog1: 0
-    battery_voltage: 12.3
-    sound_speed_analog2: 1528.7
-    heading: 68.7
-    pitch: 25.3
-    roll: -29.6
-    pressure_mbar:  205.0
+    battery_voltage_dV:  123
+    sound_speed_dms:  15287
+    heading_decidegree:  687
+    pitch_decidegree:  253
+    roll_decidegree:  -296
+    pressure_mbar:  205
     status: 160
-    temperature: 22.72
-    velocity_beam1: -1172.0
-    velocity_beam2: -420.0
-    velocity_beam3: 716.0
+    temperature_centidegree:  2272
+    velocity_beam1:  -1172
+    velocity_beam2:  -420
+    velocity_beam3:  716
     amplitude_beam1: 19
     amplitude_beam2: 19
     amplitude_beam3: 19
@@ -497,17 +497,17 @@ data:
     date_time_string: 2013/10/01 22:45:26
     error_code: 0
     analog1: 0
-    battery_voltage: 12.3
-    sound_speed_analog2: 1528.7
-    heading: 93.8
-    pitch: 25.9
-    roll: -29.4
-    pressure_mbar:  200.0
+    battery_voltage_dV:  123
+    sound_speed_dms:  15287
+    heading_decidegree:  938
+    pitch_decidegree:  259
+    roll_decidegree:  -294
+    pressure_mbar:  200
     status: 160
-    temperature: 22.72
-    velocity_beam1: -776.0
-    velocity_beam2: -1000.0
-    velocity_beam3: -145.0
+    temperature_centidegree:  2272
+    velocity_beam1:  -776
+    velocity_beam2:  -1000
+    velocity_beam3:  -145
     amplitude_beam1: 17
     amplitude_beam2: 16
     amplitude_beam3: 16
@@ -518,17 +518,17 @@ data:
     date_time_string: 2013/10/01 22:45:27
     error_code: 0
     analog1: 0
-    battery_voltage: 12.3
-    sound_speed_analog2: 1528.7
-    heading: 93.5
-    pitch: 25.8
-    roll: -29.2
-    pressure_mbar:  198.0
+    battery_voltage_dV:  123
+    sound_speed_dms:  15287
+    heading_decidegree:  935
+    pitch_decidegree:  258
+    roll_decidegree:  -292
+    pressure_mbar:  198
     status: 160
-    temperature: 22.73
-    velocity_beam1: 1304.0
-    velocity_beam2: -773.0
-    velocity_beam3: -459.0
+    temperature_centidegree:  2273
+    velocity_beam1:  1304
+    velocity_beam2:  -773
+    velocity_beam3:  -459
     amplitude_beam1: 17
     amplitude_beam2: 16
     amplitude_beam3: 16
@@ -539,17 +539,17 @@ data:
     date_time_string: 2013/10/01 22:45:28
     error_code: 0
     analog1: 0
-    battery_voltage: 12.3
-    sound_speed_analog2: 1528.7
-    heading: 97.5
-    pitch: 25.8
-    roll: -29.1
-    pressure_mbar:  187.0
+    battery_voltage_dV:  123
+    sound_speed_dms:  15287
+    heading_decidegree:  975
+    pitch_decidegree:  258
+    roll_decidegree:  -291
+    pressure_mbar:  187
     status: 160
-    temperature: 22.73
-    velocity_beam1: -163.0
-    velocity_beam2: -711.0
-    velocity_beam3: -1382.0
+    temperature_centidegree:  2273
+    velocity_beam1:  -163
+    velocity_beam2:  -711
+    velocity_beam3:  -1382
     amplitude_beam1: 17
     amplitude_beam2: 17
     amplitude_beam3: 16
@@ -560,17 +560,17 @@ data:
     date_time_string: 2013/10/01 22:45:29
     error_code: 0
     analog1: 0
-    battery_voltage: 12.3
-    sound_speed_analog2: 1528.7
-    heading: 98.0
-    pitch: 25.7
-    roll: -29.0
-    pressure_mbar:  205.0
+    battery_voltage_dV:  123
+    sound_speed_dms:  15287
+    heading_decidegree:  980
+    pitch_decidegree:  257
+    roll_decidegree:  -290
+    pressure_mbar:  205
     status: 160
-    temperature: 22.73
-    velocity_beam1: 248.0
-    velocity_beam2: -1081.0
-    velocity_beam3: -1772.0
+    temperature_centidegree:  2273
+    velocity_beam1:  248
+    velocity_beam2:  -1081
+    velocity_beam3:  -1772
     amplitude_beam1: 17
     amplitude_beam2: 16
     amplitude_beam3: 16
@@ -600,17 +600,17 @@ data:
     date_time_string: 2013/10/01 22:45:30
     error_code: 0
     analog1: 0
-    battery_voltage: 12.3
-    sound_speed_analog2: 1528.7
-    heading: 98.9
-    pitch: 25.6
-    roll: -28.9
-    pressure_mbar:  203.0
+    battery_voltage_dV:  123
+    sound_speed_dms:  15287
+    heading_decidegree:  989
+    pitch_decidegree:  256
+    roll_decidegree:  -289
+    pressure_mbar:  203
     status: 160
-    temperature: 22.73
-    velocity_beam1: 361.0
-    velocity_beam2: 437.0
-    velocity_beam3: 224.0
+    temperature_centidegree:  2273
+    velocity_beam1:  361
+    velocity_beam2:  437
+    velocity_beam3:  224
     amplitude_beam1: 16
     amplitude_beam2: 16
     amplitude_beam3: 16
@@ -621,17 +621,17 @@ data:
     date_time_string: 2013/10/01 22:45:31
     error_code: 0
     analog1: 0
-    battery_voltage: 12.3
-    sound_speed_analog2: 1528.7
-    heading: 98.4
-    pitch: 25.6
-    roll: -29.0
-    pressure_mbar:  196.0
+    battery_voltage_dV:  123
+    sound_speed_dms:  15287
+    heading_decidegree:  984
+    pitch_decidegree:  256
+    roll_decidegree:  -290
+    pressure_mbar:  196
     status: 160
-    temperature: 22.73
-    velocity_beam1: -246.0
-    velocity_beam2: -491.0
-    velocity_beam3: 992.0
+    temperature_centidegree:  2273
+    velocity_beam1:  -246
+    velocity_beam2:  -491
+    velocity_beam3:  992
     amplitude_beam1: 17
     amplitude_beam2: 16
     amplitude_beam3: 16
@@ -642,17 +642,17 @@ data:
     date_time_string: 2013/10/01 22:45:32
     error_code: 0
     analog1: 0
-    battery_voltage: 12.3
-    sound_speed_analog2: 1528.7
-    heading: 98.9
-    pitch: 25.5
-    roll: -28.9
-    pressure_mbar:  201.0
+    battery_voltage_dV:  123
+    sound_speed_dms:  15287
+    heading_decidegree:  989
+    pitch_decidegree:  255
+    roll_decidegree:  -289
+    pressure_mbar:  201
     status: 160
-    temperature: 22.72
-    velocity_beam1: 1238.0
-    velocity_beam2: 1317.0
-    velocity_beam3: 890.0
+    temperature_centidegree:  2272
+    velocity_beam1:  1238
+    velocity_beam2:  1317
+    velocity_beam3:  890
     amplitude_beam1: 17
     amplitude_beam2: 17
     amplitude_beam3: 16
@@ -663,17 +663,17 @@ data:
     date_time_string: 2013/10/01 22:45:33
     error_code: 0
     analog1: 0
-    battery_voltage: 12.3
-    sound_speed_analog2: 1528.7
-    heading: 98.9
-    pitch: 25.5
-    roll: -28.9
-    pressure_mbar:  201.0
+    battery_voltage_dV:  123
+    sound_speed_dms:  15287
+    heading_decidegree:  989
+    pitch_decidegree:  255
+    roll_decidegree:  -289
+    pressure_mbar:  201
     status: 160
-    temperature: 22.73
-    velocity_beam1: -423.0
-    velocity_beam2: -1438.0
-    velocity_beam3: -773.0
+    temperature_centidegree:  2273
+    velocity_beam1:  -423
+    velocity_beam2:  -1438
+    velocity_beam3:  -773
     amplitude_beam1: 17
     amplitude_beam2: 17
     amplitude_beam3: 16
@@ -684,17 +684,17 @@ data:
     date_time_string: 2013/10/01 22:45:34
     error_code: 0
     analog1: 0
-    battery_voltage: 12.3
-    sound_speed_analog2: 1528.7
-    heading: 99.0
-    pitch: 25.5
-    roll: -28.9
-    pressure_mbar:  198.0
+    battery_voltage_dV:  123
+    sound_speed_dms:  15287
+    heading_decidegree:  990
+    pitch_decidegree:  255
+    roll_decidegree:  -289
+    pressure_mbar:  198
     status: 160
-    temperature: 22.74
-    velocity_beam1: 1187.0
-    velocity_beam2: -1129.0
-    velocity_beam3: -678.0
+    temperature_centidegree:  2274
+    velocity_beam1:  1187
+    velocity_beam2:  -1129
+    velocity_beam3:  -678
     amplitude_beam1: 17
     amplitude_beam2: 17
     amplitude_beam3: 16
@@ -705,17 +705,17 @@ data:
     date_time_string: 2013/10/01 22:45:35
     error_code: 0
     analog1: 0
-    battery_voltage: 12.3
-    sound_speed_analog2: 1528.7
-    heading: 99.2
-    pitch: 25.5
-    roll: -28.8
-    pressure_mbar:  196.0
+    battery_voltage_dV:  123
+    sound_speed_dms:  15287
+    heading_decidegree:  992
+    pitch_decidegree:  255
+    roll_decidegree:  -288
+    pressure_mbar:  196
     status: 160
-    temperature: 22.74
-    velocity_beam1: -1168.0
-    velocity_beam2: -97.0
-    velocity_beam3: -35.0
+    temperature_centidegree:  2274
+    velocity_beam1:  -1168
+    velocity_beam2:  -97
+    velocity_beam3:  -35
     amplitude_beam1: 17
     amplitude_beam2: 17
     amplitude_beam3: 16
@@ -726,17 +726,17 @@ data:
     date_time_string: 2013/10/01 22:45:36
     error_code: 0
     analog1: 0
-    battery_voltage: 12.3
-    sound_speed_analog2: 1528.7
-    heading: 99.1
-    pitch: 25.4
-    roll: -28.8
-    pressure_mbar:  205.0
+    battery_voltage_dV:  123
+    sound_speed_dms:  15287
+    heading_decidegree:  991
+    pitch_decidegree:  254
+    roll_decidegree:  -288
+    pressure_mbar:  205
     status: 160
-    temperature: 22.74
-    velocity_beam1: 1095.0
-    velocity_beam2: -425.0
-    velocity_beam3: -175.0
+    temperature_centidegree:  2274
+    velocity_beam1:  1095
+    velocity_beam2:  -425
+    velocity_beam3:  -175
     amplitude_beam1: 16
     amplitude_beam2: 17
     amplitude_beam3: 16
@@ -747,17 +747,17 @@ data:
     date_time_string: 2013/10/01 22:45:37
     error_code: 0
     analog1: 0
-    battery_voltage: 12.3
-    sound_speed_analog2: 1528.7
-    heading: 99.0
-    pitch: 25.5
-    roll: -28.8
-    pressure_mbar:  194.0
+    battery_voltage_dV:  123
+    sound_speed_dms:  15287
+    heading_decidegree:  990
+    pitch_decidegree:  255
+    roll_decidegree:  -288
+    pressure_mbar:  194
     status: 160
-    temperature: 22.74
-    velocity_beam1: 130.0
-    velocity_beam2: -1161.0
-    velocity_beam3: -531.0
+    temperature_centidegree:  2274
+    velocity_beam1:  130
+    velocity_beam2:  -1161
+    velocity_beam3:  -531
     amplitude_beam1: 17
     amplitude_beam2: 16
     amplitude_beam3: 16
@@ -768,17 +768,17 @@ data:
     date_time_string: 2013/10/01 22:45:38
     error_code: 0
     analog1: 0
-    battery_voltage: 12.3
-    sound_speed_analog2: 1528.7
-    heading: 99.2
-    pitch: 25.4
-    roll: -28.7
-    pressure_mbar:  200.0
+    battery_voltage_dV:  123
+    sound_speed_dms:  15287
+    heading_decidegree:  992
+    pitch_decidegree:  254
+    roll_decidegree:  -287
+    pressure_mbar:  200
     status: 160
-    temperature: 22.74
-    velocity_beam1: 805.0
-    velocity_beam2: -482.0
-    velocity_beam3: -1013.0
+    temperature_centidegree:  2274
+    velocity_beam1:  805
+    velocity_beam2:  -482
+    velocity_beam3:  -1013
     amplitude_beam1: 17
     amplitude_beam2: 17
     amplitude_beam3: 16
@@ -789,17 +789,17 @@ data:
     date_time_string: 2013/10/01 22:45:39
     error_code: 0
     analog1: 0
-    battery_voltage: 12.3
-    sound_speed_analog2: 1528.7
-    heading: 99.0
-    pitch: 25.5
-    roll: -28.8
-    pressure_mbar:  195.0
+    battery_voltage_dV:  123
+    sound_speed_dms:  15287
+    heading_decidegree:  990
+    pitch_decidegree:  255
+    roll_decidegree:  -288
+    pressure_mbar:  195
     status: 160
-    temperature: 22.75
-    velocity_beam1: -150.0
-    velocity_beam2: -981.0
-    velocity_beam3: 625.0
+    temperature_centidegree:  2275
+    velocity_beam1:  -150
+    velocity_beam2:  -981
+    velocity_beam3:  625
     amplitude_beam1: 17
     amplitude_beam2: 16
     amplitude_beam3: 16
@@ -810,17 +810,17 @@ data:
     date_time_string: 2013/10/01 22:45:40
     error_code: 0
     analog1: 0
-    battery_voltage: 12.3
-    sound_speed_analog2: 1528.7
-    heading: 99.4
-    pitch: 25.4
-    roll: -28.7
-    pressure_mbar:  201.0
+    battery_voltage_dV:  123
+    sound_speed_dms:  15287
+    heading_decidegree:  994
+    pitch_decidegree:  254
+    roll_decidegree:  -287
+    pressure_mbar:  201
     status: 160
-    temperature: 22.75
-    velocity_beam1: 62.0
-    velocity_beam2: 222.0
-    velocity_beam3: 379.0
+    temperature_centidegree:  2275
+    velocity_beam1:  62
+    velocity_beam2:  222
+    velocity_beam3:  379
     amplitude_beam1: 17
     amplitude_beam2: 16
     amplitude_beam3: 16
@@ -831,17 +831,17 @@ data:
     date_time_string: 2013/10/01 22:45:41
     error_code: 0
     analog1: 0
-    battery_voltage: 12.3
-    sound_speed_analog2: 1528.7
-    heading: 99.3
-    pitch: 25.4
-    roll: -28.7
-    pressure_mbar:  203.0
+    battery_voltage_dV:  123
+    sound_speed_dms:  15287
+    heading_decidegree:  993
+    pitch_decidegree:  254
+    roll_decidegree:  -287
+    pressure_mbar:  203
     status: 160
-    temperature: 22.75
-    velocity_beam1: -6.0
-    velocity_beam2: 192.0
-    velocity_beam3: -945.0
+    temperature_centidegree:  2275
+    velocity_beam1:  -6
+    velocity_beam2:  192
+    velocity_beam3:  -945
     amplitude_beam1: 17
     amplitude_beam2: 16
     amplitude_beam3: 16
@@ -852,17 +852,17 @@ data:
     date_time_string: 2013/10/01 22:45:42
     error_code: 0
     analog1: 0
-    battery_voltage: 12.3
-    sound_speed_analog2: 1528.7
-    heading: 99.3
-    pitch: 25.4
-    roll: -28.7
-    pressure_mbar:  205.0
+    battery_voltage_dV:  123
+    sound_speed_dms:  15287
+    heading_decidegree:  993
+    pitch_decidegree:  254
+    roll_decidegree:  -287
+    pressure_mbar:  205
     status: 160
-    temperature: 22.75
-    velocity_beam1: -1002.0
-    velocity_beam2: -883.0
-    velocity_beam3: 92.0
+    temperature_centidegree:  2275
+    velocity_beam1:  -1002
+    velocity_beam2:  -883
+    velocity_beam3:  92
     amplitude_beam1: 16
     amplitude_beam2: 16
     amplitude_beam3: 16
@@ -873,17 +873,17 @@ data:
     date_time_string: 2013/10/01 22:45:43
     error_code: 0
     analog1: 0
-    battery_voltage: 12.3
-    sound_speed_analog2: 1528.7
-    heading: 101.1
-    pitch: 25.4
-    roll: -28.6
-    pressure_mbar:  191.0
+    battery_voltage_dV:  123
+    sound_speed_dms:  15287
+    heading_decidegree:  1011
+    pitch_decidegree:  254
+    roll_decidegree:  -286
+    pressure_mbar:  191
     status: 160
-    temperature: 22.76
-    velocity_beam1: -797.0
-    velocity_beam2: -1775.0
-    velocity_beam3: 1447.0
+    temperature_centidegree:  2276
+    velocity_beam1:  -797
+    velocity_beam2:  -1775
+    velocity_beam3:  1447
     amplitude_beam1: 17
     amplitude_beam2: 17
     amplitude_beam3: 16
@@ -894,17 +894,17 @@ data:
     date_time_string: 2013/10/01 22:45:44
     error_code: 0
     analog1: 0
-    battery_voltage: 12.3
-    sound_speed_analog2: 1528.7
-    heading: 101.3
-    pitch: 25.4
-    roll: -28.6
-    pressure_mbar:  202.0
+    battery_voltage_dV:  123
+    sound_speed_dms:  15287
+    heading_decidegree:  1013
+    pitch_decidegree:  254
+    roll_decidegree:  -286
+    pressure_mbar:  202
     status: 160
-    temperature: 22.76
-    velocity_beam1: 180.0
-    velocity_beam2: -1726.0
-    velocity_beam3: -631.0
+    temperature_centidegree:  2276
+    velocity_beam1:  180
+    velocity_beam2:  -1726
+    velocity_beam3:  -631
     amplitude_beam1: 17
     amplitude_beam2: 16
     amplitude_beam3: 16
@@ -915,17 +915,17 @@ data:
     date_time_string: 2013/10/01 22:45:45
     error_code: 0
     analog1: 0
-    battery_voltage: 12.3
-    sound_speed_analog2: 1528.7
-    heading: 101.3
-    pitch: 25.4
-    roll: -28.6
-    pressure_mbar:  191.0
+    battery_voltage_dV:  123
+    sound_speed_dms:  15287
+    heading_decidegree:  1013
+    pitch_decidegree:  254
+    roll_decidegree:  -286
+    pressure_mbar:  191
     status: 160
-    temperature: 22.76
-    velocity_beam1: 42.0
-    velocity_beam2: -1319.0
-    velocity_beam3: -1570.0
+    temperature_centidegree:  2276
+    velocity_beam1:  42
+    velocity_beam2:  -1319
+    velocity_beam3:  -1570
     amplitude_beam1: 17
     amplitude_beam2: 16
     amplitude_beam3: 16
@@ -936,17 +936,17 @@ data:
     date_time_string: 2013/10/01 22:45:46
     error_code: 0
     analog1: 0
-    battery_voltage: 12.3
-    sound_speed_analog2: 1528.7
-    heading: 101.5
-    pitch: 25.4
-    roll: -28.6
-    pressure_mbar:  200.0
+    battery_voltage_dV:  123
+    sound_speed_dms:  15287
+    heading_decidegree:  1015
+    pitch_decidegree:  254
+    roll_decidegree:  -286
+    pressure_mbar:  200
     status: 160
-    temperature: 22.76
-    velocity_beam1: 825.0
-    velocity_beam2: -1030.0
-    velocity_beam3: -1928.0
+    temperature_centidegree:  2276
+    velocity_beam1:  825
+    velocity_beam2:  -1030
+    velocity_beam3:  -1928
     amplitude_beam1: 17
     amplitude_beam2: 16
     amplitude_beam3: 16
@@ -957,17 +957,17 @@ data:
     date_time_string: 2013/10/01 22:45:47
     error_code: 0
     analog1: 0
-    battery_voltage: 12.3
-    sound_speed_analog2: 1528.8
-    heading: 101.7
-    pitch: 25.3
-    roll: -28.6
-    pressure_mbar:  198.0
+    battery_voltage_dV:  123
+    sound_speed_dms:  15288
+    heading_decidegree:  1017
+    pitch_decidegree:  253
+    roll_decidegree:  -286
+    pressure_mbar:  198
     status: 160
-    temperature: 22.77
-    velocity_beam1: 181.0
-    velocity_beam2: -699.0
-    velocity_beam3: -71.0
+    temperature_centidegree:  2277
+    velocity_beam1:  181
+    velocity_beam2:  -699
+    velocity_beam3:  -71
     amplitude_beam1: 17
     amplitude_beam2: 17
     amplitude_beam3: 16
@@ -978,17 +978,17 @@ data:
     date_time_string: 2013/10/01 22:45:48
     error_code: 0
     analog1: 0
-    battery_voltage: 12.3
-    sound_speed_analog2: 1528.8
-    heading: 101.6
-    pitch: 25.3
-    roll: -28.6
-    pressure_mbar:  194.0
+    battery_voltage_dV:  123
+    sound_speed_dms:  15288
+    heading_decidegree:  1016
+    pitch_decidegree:  253
+    roll_decidegree:  -286
+    pressure_mbar:  194
     status: 160
-    temperature: 22.77
-    velocity_beam1: -879.0
-    velocity_beam2: 127.0
-    velocity_beam3: -1005.0
+    temperature_centidegree:  2277
+    velocity_beam1:  -879
+    velocity_beam2:  127
+    velocity_beam3:  -1005
     amplitude_beam1: 17
     amplitude_beam2: 17
     amplitude_beam3: 16
@@ -999,17 +999,17 @@ data:
     date_time_string: 2013/10/01 22:45:49
     error_code: 0
     analog1: 0
-    battery_voltage: 12.3
-    sound_speed_analog2: 1528.8
-    heading: 101.6
-    pitch: 25.4
-    roll: -28.6
-    pressure_mbar:  204.0
+    battery_voltage_dV:  123
+    sound_speed_dms:  15288
+    heading_decidegree:  1016
+    pitch_decidegree:  254
+    roll_decidegree:  -286
+    pressure_mbar:  204
     status: 160
-    temperature: 22.77
-    velocity_beam1: -548.0
-    velocity_beam2: 450.0
-    velocity_beam3: -412.0
+    temperature_centidegree:  2277
+    velocity_beam1:  -548
+    velocity_beam2:  450
+    velocity_beam3:  -412
     amplitude_beam1: 17
     amplitude_beam2: 16
     amplitude_beam3: 16
@@ -1020,17 +1020,17 @@ data:
     date_time_string: 2013/10/01 22:45:50
     error_code: 0
     analog1: 0
-    battery_voltage: 12.3
-    sound_speed_analog2: 1528.8
-    heading: 101.4
-    pitch: 25.4
-    roll: -28.6
-    pressure_mbar:  201.0
+    battery_voltage_dV:  123
+    sound_speed_dms:  15288
+    heading_decidegree:  1014
+    pitch_decidegree:  254
+    roll_decidegree:  -286
+    pressure_mbar:  201
     status: 160
-    temperature: 22.77
-    velocity_beam1: 127.0
-    velocity_beam2: -1249.0
-    velocity_beam3: -2196.0
+    temperature_centidegree:  2277
+    velocity_beam1:  127
+    velocity_beam2:  -1249
+    velocity_beam3:  -2196
     amplitude_beam1: 17
     amplitude_beam2: 16
     amplitude_beam3: 16
@@ -1041,17 +1041,17 @@ data:
     date_time_string: 2013/10/01 22:45:51
     error_code: 0
     analog1: 0
-    battery_voltage: 12.3
-    sound_speed_analog2: 1528.8
-    heading: 101.9
-    pitch: 25.3
-    roll: -28.6
-    pressure_mbar:  198.0
+    battery_voltage_dV:  123
+    sound_speed_dms:  15288
+    heading_decidegree:  1019
+    pitch_decidegree:  253
+    roll_decidegree:  -286
+    pressure_mbar:  198
     status: 160
-    temperature: 22.78
-    velocity_beam1: -638.0
-    velocity_beam2: -269.0
-    velocity_beam3: -94.0
+    temperature_centidegree:  2278
+    velocity_beam1:  -638
+    velocity_beam2:  -269
+    velocity_beam3:  -94
     amplitude_beam1: 17
     amplitude_beam2: 16
     amplitude_beam3: 16
@@ -1062,17 +1062,17 @@ data:
     date_time_string: 2013/10/01 22:45:52
     error_code: 0
     analog1: 0
-    battery_voltage: 12.3
-    sound_speed_analog2: 1528.8
-    heading: 101.2
-    pitch: 25.3
-    roll: -28.5
-    pressure_mbar:  193.0
+    battery_voltage_dV:  123
+    sound_speed_dms:  15288
+    heading_decidegree:  1012
+    pitch_decidegree:  253
+    roll_decidegree:  -285
+    pressure_mbar:  193
     status: 160
-    temperature: 22.78
-    velocity_beam1: -1262.0
-    velocity_beam2: -323.0
-    velocity_beam3: -680.0
+    temperature_centidegree:  2278
+    velocity_beam1:  -1262
+    velocity_beam2:  -323
+    velocity_beam3:  -680
     amplitude_beam1: 17
     amplitude_beam2: 16
     amplitude_beam3: 16
@@ -1083,17 +1083,17 @@ data:
     date_time_string: 2013/10/01 22:45:53
     error_code: 0
     analog1: 0
-    battery_voltage: 12.3
-    sound_speed_analog2: 1528.8
-    heading: 101.1
-    pitch: 25.3
-    roll: -28.5
-    pressure_mbar:  188.0
+    battery_voltage_dV:  123
+    sound_speed_dms:  15288
+    heading_decidegree:  1011
+    pitch_decidegree:  253
+    roll_decidegree:  -285
+    pressure_mbar:  188
     status: 160
-    temperature: 22.78
-    velocity_beam1: 52.0
-    velocity_beam2: -53.0
-    velocity_beam3: 38.0
+    temperature_centidegree:  2278
+    velocity_beam1:  52
+    velocity_beam2:  -53
+    velocity_beam3:  38
     amplitude_beam1: 17
     amplitude_beam2: 16
     amplitude_beam3: 16
@@ -1104,17 +1104,17 @@ data:
     date_time_string: 2013/10/01 22:45:54
     error_code: 0
     analog1: 0
-    battery_voltage: 12.3
-    sound_speed_analog2: 1528.8
-    heading: 101.0
-    pitch: 25.3
-    roll: -28.5
-    pressure_mbar:  199.0
+    battery_voltage_dV:  123
+    sound_speed_dms:  15288
+    heading_decidegree:  1010
+    pitch_decidegree:  253
+    roll_decidegree:  -285
+    pressure_mbar:  199
     status: 160
-    temperature: 22.78
-    velocity_beam1: -255.0
-    velocity_beam2: 314.0
-    velocity_beam3: -174.0
+    temperature_centidegree:  2278
+    velocity_beam1:  -255
+    velocity_beam2:  314
+    velocity_beam3:  -174
     amplitude_beam1: 17
     amplitude_beam2: 17
     amplitude_beam3: 16
@@ -1125,17 +1125,17 @@ data:
     date_time_string: 2013/10/01 22:45:55
     error_code: 0
     analog1: 0
-    battery_voltage: 12.3
-    sound_speed_analog2: 1528.8
-    heading: 101.2
-    pitch: 25.4
-    roll: -28.6
-    pressure_mbar:  197.0
+    battery_voltage_dV:  123
+    sound_speed_dms:  15288
+    heading_decidegree:  1012
+    pitch_decidegree:  254
+    roll_decidegree:  -286
+    pressure_mbar:  197
     status: 160
-    temperature: 22.79
-    velocity_beam1: -310.0
-    velocity_beam2: 281.0
-    velocity_beam3: 678.0
+    temperature_centidegree:  2279
+    velocity_beam1:  -310
+    velocity_beam2:  281
+    velocity_beam3:  678
     amplitude_beam1: 17
     amplitude_beam2: 16
     amplitude_beam3: 16
@@ -1146,17 +1146,17 @@ data:
     date_time_string: 2013/10/01 22:45:56
     error_code: 0
     analog1: 0
-    battery_voltage: 12.3
-    sound_speed_analog2: 1528.8
-    heading: 101.4
-    pitch: 25.3
-    roll: -28.5
-    pressure_mbar:  198.0
+    battery_voltage_dV:  123
+    sound_speed_dms:  15288
+    heading_decidegree:  1014
+    pitch_decidegree:  253
+    roll_decidegree:  -285
+    pressure_mbar:  198
     status: 160
-    temperature: 22.79
-    velocity_beam1: -626.0
-    velocity_beam2: 20.0
-    velocity_beam3: 38.0
+    temperature_centidegree:  2279
+    velocity_beam1:  -626
+    velocity_beam2:  20
+    velocity_beam3:  38
     amplitude_beam1: 17
     amplitude_beam2: 16
     amplitude_beam3: 16
@@ -1167,17 +1167,17 @@ data:
     date_time_string: 2013/10/01 22:45:57
     error_code: 0
     analog1: 0
-    battery_voltage: 12.3
-    sound_speed_analog2: 1528.8
-    heading: 101.2
-    pitch: 25.3
-    roll: -28.6
-    pressure_mbar:  198.0
+    battery_voltage_dV:  123
+    sound_speed_dms:  15288
+    heading_decidegree:  1012
+    pitch_decidegree:  253
+    roll_decidegree:  -286
+    pressure_mbar:  198
     status: 160
-    temperature: 22.79
-    velocity_beam1: -1987.0
-    velocity_beam2: -456.0
-    velocity_beam3: 638.0
+    temperature_centidegree:  2279
+    velocity_beam1:  -1987
+    velocity_beam2:  -456
+    velocity_beam3:  638
     amplitude_beam1: 17
     amplitude_beam2: 16
     amplitude_beam3: 16
@@ -1188,17 +1188,17 @@ data:
     date_time_string: 2013/10/01 22:45:58
     error_code: 0
     analog1: 0
-    battery_voltage: 12.3
-    sound_speed_analog2: 1528.9
-    heading: 101.4
-    pitch: 25.3
-    roll: -28.5
-    pressure_mbar:  204.0
+    battery_voltage_dV:  123
+    sound_speed_dms:  15289
+    heading_decidegree:  1014
+    pitch_decidegree:  253
+    roll_decidegree:  -285
+    pressure_mbar:  204
     status: 160
-    temperature: 22.80
-    velocity_beam1: -259.0
-    velocity_beam2: -947.0
-    velocity_beam3: -1996.0
+    temperature_centidegree:  2280
+    velocity_beam1:  -259
+    velocity_beam2:  -947
+    velocity_beam3:  -1996
     amplitude_beam1: 17
     amplitude_beam2: 16
     amplitude_beam3: 16
@@ -1209,17 +1209,17 @@ data:
     date_time_string: 2013/10/01 22:45:59
     error_code: 0
     analog1: 0
-    battery_voltage: 12.3
-    sound_speed_analog2: 1528.9
-    heading: 101.4
-    pitch: 25.3
-    roll: -28.5
-    pressure_mbar:  202.0
+    battery_voltage_dV:  123
+    sound_speed_dms:  15289
+    heading_decidegree:  1014
+    pitch_decidegree:  253
+    roll_decidegree:  -285
+    pressure_mbar:  202
     status: 160
-    temperature: 22.80
-    velocity_beam1: 204.0
-    velocity_beam2: -442.0
-    velocity_beam3: -1850.0
+    temperature_centidegree:  2280
+    velocity_beam1:  204
+    velocity_beam2:  -442
+    velocity_beam3:  -1850
     amplitude_beam1: 17
     amplitude_beam2: 16
     amplitude_beam3: 16
@@ -1230,17 +1230,17 @@ data:
     date_time_string: 2013/10/01 22:46:00
     error_code: 0
     analog1: 0
-    battery_voltage: 12.3
-    sound_speed_analog2: 1528.9
-    heading: 101.4
-    pitch: 25.3
-    roll: -28.5
-    pressure_mbar:  203.0
+    battery_voltage_dV:  123
+    sound_speed_dms:  15289
+    heading_decidegree:  1014
+    pitch_decidegree:  253
+    roll_decidegree:  -285
+    pressure_mbar:  203
     status: 160
-    temperature: 22.80
-    velocity_beam1: 36.0
-    velocity_beam2: -567.0
-    velocity_beam3: -2046.0
+    temperature_centidegree:  2280
+    velocity_beam1:  36
+    velocity_beam2:  -567
+    velocity_beam3:  -2046
     amplitude_beam1: 16
     amplitude_beam2: 16
     amplitude_beam3: 16
@@ -1251,17 +1251,17 @@ data:
     date_time_string: 2013/10/01 22:46:01
     error_code: 0
     analog1: 0
-    battery_voltage: 12.3
-    sound_speed_analog2: 1528.9
-    heading: 101.4
-    pitch: 25.3
-    roll: -28.5
-    pressure_mbar:  191.0
+    battery_voltage_dV:  123
+    sound_speed_dms:  15289
+    heading_decidegree:  1014
+    pitch_decidegree:  253
+    roll_decidegree:  -285
+    pressure_mbar:  191
     status: 160
-    temperature: 22.81
-    velocity_beam1: 1048.0
-    velocity_beam2: -1476.0
-    velocity_beam3: -1158.0
+    temperature_centidegree:  2281
+    velocity_beam1:  1048
+    velocity_beam2:  -1476
+    velocity_beam3:  -1158
     amplitude_beam1: 17
     amplitude_beam2: 16
     amplitude_beam3: 16
@@ -1272,17 +1272,17 @@ data:
     date_time_string: 2013/10/01 22:46:02
     error_code: 0
     analog1: 0
-    battery_voltage: 12.3
-    sound_speed_analog2: 1528.9
-    heading: 102.4
-    pitch: 25.4
-    roll: -28.4
-    pressure_mbar:  198.0
+    battery_voltage_dV:  123
+    sound_speed_dms:  15289
+    heading_decidegree:  1024
+    pitch_decidegree:  254
+    roll_decidegree:  -284
+    pressure_mbar:  198
     status: 160
-    temperature: 22.81
-    velocity_beam1: 405.0
-    velocity_beam2: -2340.0
-    velocity_beam3: -719.0
+    temperature_centidegree:  2281
+    velocity_beam1:  405
+    velocity_beam2:  -2340
+    velocity_beam3:  -719
     amplitude_beam1: 17
     amplitude_beam2: 17
     amplitude_beam3: 16
@@ -1293,17 +1293,17 @@ data:
     date_time_string: 2013/10/01 22:46:03
     error_code: 0
     analog1: 0
-    battery_voltage: 12.3
-    sound_speed_analog2: 1528.9
-    heading: 102.8
-    pitch: 25.3
-    roll: -28.5
-    pressure_mbar:  194.0
+    battery_voltage_dV:  123
+    sound_speed_dms:  15289
+    heading_decidegree:  1028
+    pitch_decidegree:  253
+    roll_decidegree:  -285
+    pressure_mbar:  194
     status: 160
-    temperature: 22.81
-    velocity_beam1: 230.0
-    velocity_beam2: -917.0
-    velocity_beam3: -727.0
+    temperature_centidegree:  2281
+    velocity_beam1:  230
+    velocity_beam2:  -917
+    velocity_beam3:  -727
     amplitude_beam1: 17
     amplitude_beam2: 16
     amplitude_beam3: 16
@@ -1314,17 +1314,17 @@ data:
     date_time_string: 2013/10/01 22:46:04
     error_code: 0
     analog1: 0
-    battery_voltage: 12.3
-    sound_speed_analog2: 1528.9
-    heading: 102.7
-    pitch: 25.3
-    roll: -28.4
-    pressure_mbar:  201.0
+    battery_voltage_dV:  123
+    sound_speed_dms:  15289
+    heading_decidegree:  1027
+    pitch_decidegree:  253
+    roll_decidegree:  -284
+    pressure_mbar:  201
     status: 160
-    temperature: 22.81
-    velocity_beam1: -289.0
-    velocity_beam2: -1837.0
-    velocity_beam3: 131.0
+    temperature_centidegree:  2281
+    velocity_beam1:  -289
+    velocity_beam2:  -1837
+    velocity_beam3:  131
     amplitude_beam1: 17
     amplitude_beam2: 16
     amplitude_beam3: 16
@@ -1335,17 +1335,17 @@ data:
     date_time_string: 2013/10/01 22:46:05
     error_code: 0
     analog1: 0
-    battery_voltage: 12.3
-    sound_speed_analog2: 1528.9
-    heading: 103.1
-    pitch: 25.2
-    roll: -28.5
-    pressure_mbar:  202.0
+    battery_voltage_dV:  123
+    sound_speed_dms:  15289
+    heading_decidegree:  1031
+    pitch_decidegree:  252
+    roll_decidegree:  -285
+    pressure_mbar:  202
     status: 160
-    temperature: 22.82
-    velocity_beam1: 214.0
-    velocity_beam2: -494.0
-    velocity_beam3: -195.0
+    temperature_centidegree:  2282
+    velocity_beam1:  214
+    velocity_beam2:  -494
+    velocity_beam3:  -195
     amplitude_beam1: 17
     amplitude_beam2: 16
     amplitude_beam3: 16
@@ -1356,17 +1356,17 @@ data:
     date_time_string: 2013/10/01 22:46:06
     error_code: 0
     analog1: 0
-    battery_voltage: 12.3
-    sound_speed_analog2: 1528.9
-    heading: 102.9
-    pitch: 25.3
-    roll: -28.5
-    pressure_mbar:  199.0
+    battery_voltage_dV:  123
+    sound_speed_dms:  15289
+    heading_decidegree:  1029
+    pitch_decidegree:  253
+    roll_decidegree:  -285
+    pressure_mbar:  199
     status: 160
-    temperature: 22.81
-    velocity_beam1: 364.0
-    velocity_beam2: -420.0
-    velocity_beam3: 841.0
+    temperature_centidegree:  2281
+    velocity_beam1:  364
+    velocity_beam2:  -420
+    velocity_beam3:  841
     amplitude_beam1: 16
     amplitude_beam2: 17
     amplitude_beam3: 16
@@ -1377,17 +1377,17 @@ data:
     date_time_string: 2013/10/01 22:46:07
     error_code: 0
     analog1: 0
-    battery_voltage: 12.3
-    sound_speed_analog2: 1528.9
-    heading: 102.9
-    pitch: 25.3
-    roll: -28.5
-    pressure_mbar:  197.0
+    battery_voltage_dV:  123
+    sound_speed_dms:  15289
+    heading_decidegree:  1029
+    pitch_decidegree:  253
+    roll_decidegree:  -285
+    pressure_mbar:  197
     status: 160
-    temperature: 22.82
-    velocity_beam1: 617.0
-    velocity_beam2: -894.0
-    velocity_beam3: 177.0
+    temperature_centidegree:  2282
+    velocity_beam1:  617
+    velocity_beam2:  -894
+    velocity_beam3:  177
     amplitude_beam1: 17
     amplitude_beam2: 17
     amplitude_beam3: 16
@@ -1398,17 +1398,17 @@ data:
     date_time_string: 2013/10/01 22:46:08
     error_code: 0
     analog1: 0
-    battery_voltage: 12.3
-    sound_speed_analog2: 1528.9
-    heading: 103.0
-    pitch: 25.3
-    roll: -28.5
-    pressure_mbar:  197.0
+    battery_voltage_dV:  123
+    sound_speed_dms:  15289
+    heading_decidegree:  1030
+    pitch_decidegree:  253
+    roll_decidegree:  -285
+    pressure_mbar:  197
     status: 160
-    temperature: 22.82
-    velocity_beam1: 380.0
-    velocity_beam2: -1481.0
-    velocity_beam3: -583.0
+    temperature_centidegree:  2282
+    velocity_beam1:  380
+    velocity_beam2:  -1481
+    velocity_beam3:  -583
     amplitude_beam1: 17
     amplitude_beam2: 16
     amplitude_beam3: 16
@@ -1419,17 +1419,17 @@ data:
     date_time_string: 2013/10/01 22:46:09
     error_code: 0
     analog1: 0
-    battery_voltage: 12.3
-    sound_speed_analog2: 1528.9
-    heading: 103.1
-    pitch: 25.3
-    roll: -28.4
-    pressure_mbar:  205.0
+    battery_voltage_dV:  123
+    sound_speed_dms:  15289
+    heading_decidegree:  1031
+    pitch_decidegree:  253
+    roll_decidegree:  -284
+    pressure_mbar:  205
     status: 160
-    temperature: 22.83
-    velocity_beam1: 813.0
-    velocity_beam2: -564.0
-    velocity_beam3: -1298.0
+    temperature_centidegree:  2283
+    velocity_beam1:  813
+    velocity_beam2:  -564
+    velocity_beam3:  -1298
     amplitude_beam1: 17
     amplitude_beam2: 16
     amplitude_beam3: 16
@@ -1440,17 +1440,17 @@ data:
     date_time_string: 2013/10/01 22:46:10
     error_code: 0
     analog1: 0
-    battery_voltage: 12.3
-    sound_speed_analog2: 1528.9
-    heading: 103.2
-    pitch: 25.2
-    roll: -28.5
-    pressure_mbar:  199.0
+    battery_voltage_dV:  123
+    sound_speed_dms:  15289
+    heading_decidegree:  1032
+    pitch_decidegree:  252
+    roll_decidegree:  -285
+    pressure_mbar:  199
     status: 160
-    temperature: 22.83
-    velocity_beam1: 949.0
-    velocity_beam2: -795.0
-    velocity_beam3: -2212.0
+    temperature_centidegree:  2283
+    velocity_beam1:  949
+    velocity_beam2:  -795
+    velocity_beam3:  -2212
     amplitude_beam1: 17
     amplitude_beam2: 16
     amplitude_beam3: 16
@@ -1461,17 +1461,17 @@ data:
     date_time_string: 2013/10/01 22:46:11
     error_code: 0
     analog1: 0
-    battery_voltage: 12.3
-    sound_speed_analog2: 1528.9
-    heading: 103.2
-    pitch: 25.3
-    roll: -28.5
-    pressure_mbar:  197.0
+    battery_voltage_dV:  123
+    sound_speed_dms:  15289
+    heading_decidegree:  1032
+    pitch_decidegree:  253
+    roll_decidegree:  -285
+    pressure_mbar:  197
     status: 160
-    temperature: 22.83
-    velocity_beam1: -968.0
-    velocity_beam2: -1388.0
-    velocity_beam3: -1341.0
+    temperature_centidegree:  2283
+    velocity_beam1:  -968
+    velocity_beam2:  -1388
+    velocity_beam3:  -1341
     amplitude_beam1: 17
     amplitude_beam2: 16
     amplitude_beam3: 16
@@ -1482,17 +1482,17 @@ data:
     date_time_string: 2013/10/01 22:46:12
     error_code: 0
     analog1: 0
-    battery_voltage: 12.3
-    sound_speed_analog2: 1528.9
-    heading: 103.2
-    pitch: 25.3
-    roll: -28.4
-    pressure_mbar:  201.0
+    battery_voltage_dV:  123
+    sound_speed_dms:  15289
+    heading_decidegree:  1032
+    pitch_decidegree:  253
+    roll_decidegree:  -284
+    pressure_mbar:  201
     status: 160
-    temperature: 22.83
-    velocity_beam1: -220.0
-    velocity_beam2: -926.0
-    velocity_beam3: -1548.0
+    temperature_centidegree:  2283
+    velocity_beam1:  -220
+    velocity_beam2:  -926
+    velocity_beam3:  -1548
     amplitude_beam1: 17
     amplitude_beam2: 16
     amplitude_beam3: 16
@@ -1503,17 +1503,17 @@ data:
     date_time_string: 2013/10/01 22:46:13
     error_code: 0
     analog1: 0
-    battery_voltage: 12.3
-    sound_speed_analog2: 1528.9
-    heading: 103.4
-    pitch: 25.2
-    roll: -28.4
-    pressure_mbar:  203.0
+    battery_voltage_dV:  123
+    sound_speed_dms:  15289
+    heading_decidegree:  1034
+    pitch_decidegree:  252
+    roll_decidegree:  -284
+    pressure_mbar:  203
     status: 160
-    temperature: 22.83
-    velocity_beam1: 516.0
-    velocity_beam2: 463.0
-    velocity_beam3: 870.0
+    temperature_centidegree:  2283
+    velocity_beam1:  516
+    velocity_beam2:  463
+    velocity_beam3:  870
     amplitude_beam1: 17
     amplitude_beam2: 16
     amplitude_beam3: 16
@@ -1524,17 +1524,17 @@ data:
     date_time_string: 2013/10/01 22:46:14
     error_code: 0
     analog1: 0
-    battery_voltage: 12.3
-    sound_speed_analog2: 1529.0
-    heading: 103.2
-    pitch: 25.3
-    roll: -28.4
-    pressure_mbar:  194.0
+    battery_voltage_dV:  123
+    sound_speed_dms:  15290
+    heading_decidegree:  1032
+    pitch_decidegree:  253
+    roll_decidegree:  -284
+    pressure_mbar:  194
     status: 160
-    temperature: 22.84
-    velocity_beam1: -571.0
-    velocity_beam2: 413.0
-    velocity_beam3: 1681.0
+    temperature_centidegree:  2284
+    velocity_beam1:  -571
+    velocity_beam2:  413
+    velocity_beam3:  1681
     amplitude_beam1: 17
     amplitude_beam2: 16
     amplitude_beam3: 16

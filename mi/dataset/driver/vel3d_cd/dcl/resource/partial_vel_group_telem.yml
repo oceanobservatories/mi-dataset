@@ -19,12 +19,12 @@ data:
     particle_type: vel3d_cd_dcl_system_data
     internal_timestamp: 3621699002
     date_time_string: '2014/10/07 19:30:02'
-    battery_voltage: 12.1
-    speed_of_sound: 1502.3
-    heading: 347.3
-    pitch: 22.0
-    roll: -0.1
-    temperature: 13.91
+    battery_voltage_dV:  121
+    sound_speed_dms:  15023
+    heading_decidegree:  3473
+    pitch_decidegree:  220
+    roll_decidegree:  -1
+    temperature_centidegree:  1391
     error_code: 0
     status_code: 115
     analog_input: 0
@@ -33,12 +33,12 @@ data:
     particle_type: vel3d_cd_dcl_system_data
     internal_timestamp: 3621699003
     date_time_string: '2014/10/07 19:30:03'
-    battery_voltage: 12.1
-    speed_of_sound: 1502.3
-    heading: 348.5
-    pitch: 23.2
-    roll: -1.7
-    temperature: 13.91
+    battery_voltage_dV:  121
+    sound_speed_dms:  15023
+    heading_decidegree:  3485
+    pitch_decidegree:  232
+    roll_decidegree:  -17
+    temperature_centidegree:  1391
     error_code: 0
     status_code: 115
     analog_input: 0
@@ -48,7 +48,7 @@ data:
     internal_timestamp: 3621699003.000
     analog_input_2: 0
     ensemble_counter: 0
-    seawater_pressure: 18.511
+    seawater_pressure_mbar:  18511
     analog_input_1: 0
     turbulent_velocity_east: -2411
     turbulent_velocity_north: -267
@@ -65,7 +65,7 @@ data:
     internal_timestamp: 3621699003.125
     analog_input_2: 0
     ensemble_counter: 1
-    seawater_pressure: 21.672
+    seawater_pressure_mbar:  21672
     analog_input_1: 0
     turbulent_velocity_east: -2747
     turbulent_velocity_north: -1246
@@ -82,7 +82,7 @@ data:
     internal_timestamp: 3621699003.250
     analog_input_2: 0
     ensemble_counter: 2
-    seawater_pressure: 20.769
+    seawater_pressure_mbar:  20769
     analog_input_1: 0
     turbulent_velocity_east: -2585
     turbulent_velocity_north: -854
@@ -99,7 +99,7 @@ data:
     internal_timestamp: 3621699003.375
     analog_input_2: 0
     ensemble_counter: 3
-    seawater_pressure: 19.866
+    seawater_pressure_mbar:  19866
     analog_input_1: 0
     turbulent_velocity_east: -1822
     turbulent_velocity_north: -627
@@ -116,7 +116,7 @@ data:
     internal_timestamp: 3621699003.5
     analog_input_2: 0
     ensemble_counter: 4
-    seawater_pressure: 21.220
+    seawater_pressure_mbar:  21220
     analog_input_1: 0
     turbulent_velocity_east: -1775
     turbulent_velocity_north: -1159
@@ -133,7 +133,7 @@ data:
     internal_timestamp: 3621699003.625
     analog_input_2: 0
     ensemble_counter: 5
-    seawater_pressure: 18.511
+    seawater_pressure_mbar:  18511
     analog_input_1: 0
     turbulent_velocity_east: -1060
     turbulent_velocity_north: -1860
@@ -150,7 +150,7 @@ data:
     internal_timestamp: 3621699003.75
     analog_input_2: 0
     ensemble_counter: 6
-    seawater_pressure: 19.866
+    seawater_pressure_mbar:  19866
     analog_input_1: 0
     turbulent_velocity_east: -1045
     turbulent_velocity_north: -2496
@@ -167,7 +167,7 @@ data:
     internal_timestamp: 3621699003.875
     analog_input_2: 0
     ensemble_counter: 7
-    seawater_pressure: 18.963
+    seawater_pressure_mbar:  18963
     analog_input_1: 0
     turbulent_velocity_east: -486
     turbulent_velocity_north: -3658
@@ -183,12 +183,12 @@ data:
     particle_type: vel3d_cd_dcl_system_data
     internal_timestamp: 3621699004
     date_time_string: '2014/10/07 19:30:04'
-    battery_voltage: 12.1
-    speed_of_sound: 1502.3
-    heading: 347.3
-    pitch: 23.6
-    roll: -2.1
-    temperature: 13.92
+    battery_voltage_dV:  121
+    sound_speed_dms:  15023
+    heading_decidegree:  3473
+    pitch_decidegree:  236
+    roll_decidegree:  -21
+    temperature_centidegree:  1392
     error_code: 0
     status_code: 115
     analog_input: 0
@@ -198,7 +198,7 @@ data:
     internal_timestamp: 3621699004.000
     analog_input_2: 0
     ensemble_counter: 8
-    seawater_pressure: 19.414
+    seawater_pressure_mbar:  19414
     analog_input_1: 0
     turbulent_velocity_east: -337
     turbulent_velocity_north: -3228
@@ -215,7 +215,7 @@ data:
     internal_timestamp: 3621699004.125
     analog_input_2: 0
     ensemble_counter: 9
-    seawater_pressure: 20.769
+    seawater_pressure_mbar:  20769
     analog_input_1: 0
     turbulent_velocity_east: -2096
     turbulent_velocity_north: 6901
@@ -232,7 +232,7 @@ data:
     internal_timestamp: 3621699004.25
     analog_input_2: 0
     ensemble_counter: 10
-    seawater_pressure: 18.963
+    seawater_pressure_mbar:  18963
     analog_input_1: 0
     turbulent_velocity_east: 257
     turbulent_velocity_north: -4012
