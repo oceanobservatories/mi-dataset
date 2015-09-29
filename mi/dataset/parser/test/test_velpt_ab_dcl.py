@@ -18,16 +18,16 @@ from mi.core.exceptions import ConfigurationException
 from mi.dataset.test.test_parser import ParserUnitTestCase
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 
-from mi.dataset.parser.velpt_ab_dcl import VelptAbDclParser, VelptAbParticleClassKey
-from mi.dataset.parser.velpt_ab_dcl_particles import VelptAbInstrumentDataParticle,\
-    VelptAbDiagnosticsHeaderParticle, VelptAbDiagnosticsDataParticle, VelptAbInstrumentDataParticleRecovered,\
-    VelptAbDiagnosticsHeaderParticleRecovered, VelptAbDiagnosticsDataParticleRecovered
-
+from mi.dataset.parser.velpt_ab_dcl import VelptAbDclParser, VelptAbDclParticleClassKey
+from mi.dataset.parser.velpt_ab_dcl_particles import VelptAbDclInstrumentDataParticle,\
+    VelptAbDclDiagnosticsHeaderParticle, VelptAbDclDiagnosticsDataParticle, VelptAbDclInstrumentDataParticleRecovered,\
+    VelptAbDclDiagnosticsHeaderParticleRecovered, VelptAbDclDiagnosticsDataParticleRecovered
+from mi.dataset.parser.common_regexes import FLOAT_REGEX, END_OF_LINE_REGEX
 
 from mi.idk.config import Config
 
 RESOURCE_PATH = os.path.join(Config().base_dir(),
-                             'mi', 'dataset', 'driver', 'velpt_ab', 'dcl','resource')
+                             'mi', 'dataset', 'driver', 'velpt_ab', 'dcl', 'resource')
 
 
 @attr('UNIT', group='mi')
@@ -44,9 +44,9 @@ class VelptAbDclParserUnitTestCase(ParserUnitTestCase):
             DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.velpt_ab_dcl_particles',
             DataSetDriverConfigKeys.PARTICLE_CLASS: None,
             DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT: {
-                VelptAbParticleClassKey.METADATA_PARTICLE_CLASS: VelptAbDiagnosticsHeaderParticle,
-                VelptAbParticleClassKey.DIAGNOSTICS_PARTICLE_CLASS: VelptAbDiagnosticsDataParticle,
-                VelptAbParticleClassKey.INSTRUMENT_PARTICLE_CLASS: VelptAbInstrumentDataParticle
+                VelptAbDclParticleClassKey.METADATA_PARTICLE_CLASS: VelptAbDclDiagnosticsHeaderParticle,
+                VelptAbDclParticleClassKey.DIAGNOSTICS_PARTICLE_CLASS: VelptAbDclDiagnosticsDataParticle,
+                VelptAbDclParticleClassKey.INSTRUMENT_PARTICLE_CLASS: VelptAbDclInstrumentDataParticle
             }
         }
 
@@ -54,9 +54,9 @@ class VelptAbDclParserUnitTestCase(ParserUnitTestCase):
             DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.velpt_ab_dcl_particles',
             DataSetDriverConfigKeys.PARTICLE_CLASS: None,
             DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT: {
-                VelptAbParticleClassKey.METADATA_PARTICLE_CLASS: VelptAbDiagnosticsHeaderParticleRecovered,
-                VelptAbParticleClassKey.DIAGNOSTICS_PARTICLE_CLASS: VelptAbDiagnosticsDataParticleRecovered,
-                VelptAbParticleClassKey.INSTRUMENT_PARTICLE_CLASS: VelptAbInstrumentDataParticleRecovered
+                VelptAbDclParticleClassKey.METADATA_PARTICLE_CLASS: VelptAbDclDiagnosticsHeaderParticleRecovered,
+                VelptAbDclParticleClassKey.DIAGNOSTICS_PARTICLE_CLASS: VelptAbDclDiagnosticsDataParticleRecovered,
+                VelptAbDclParticleClassKey.INSTRUMENT_PARTICLE_CLASS: VelptAbDclInstrumentDataParticleRecovered
             }
         }
 
@@ -823,3 +823,66 @@ class VelptAbDclParserUnitTestCase(ParserUnitTestCase):
             particles = parser.get_records(100)
 
             self.particle_to_yml(particles, os.path.join(RESOURCE_PATH, '20150829.velpt2.yml'))
+
+    def fix_yml_float_params(self):
+        """
+        This helper tool was used to modify the yml files in response to ticket #8564
+        """
+
+        param_change_table = [
+            ('battery_voltage', 'battery_voltage_dV', 10),
+            ('sound_speed_analog2', 'sound_speed_dms', 10),
+            ('heading', 'heading_decidegree', 10),
+            ('pitch', 'pitch_decidegree', 10),
+            ('roll', 'roll_decidegree', 10),
+            ('pressure_mbar', 'pressure_mbar', 1),
+            ('temperature', 'temperature_centidegree', 100),
+            ('velocity_beam1', 'velocity_beam1', 1),
+            ('velocity_beam2', 'velocity_beam2', 1),
+            ('velocity_beam3', 'velocity_beam3', 1)
+        ]
+
+        class_change_table = [
+            ('VelptAbInstrumentDataParticle', 'VelptAbDclInstrumentDataParticle'),
+            ('VelptAbDiagnosticsHeaderParticle', 'VelptAbDclDiagnosticsHeaderParticle'),
+            ('VelptAbDiagnosticsDataParticle', 'VelptAbDclDiagnosticsDataParticle'),
+            ('VelptAbInstrumentDataParticleRecovered', 'VelptAbDclInstrumentDataParticleRecovered'),
+            ('VelptAbDiagnosticsHeaderParticleRecovered', 'VelptAbDclDiagnosticsHeaderParticleRecovered'),
+            ('VelptAbDiagnosticsDataParticleRecovered', 'VelptAbDclDiagnosticsDataParticleRecovered')
+        ]
+
+        for file_name in os.listdir(RESOURCE_PATH):
+
+            if file_name.endswith('.yml'):
+
+                with open(os.path.join(RESOURCE_PATH, file_name), 'rU') as in_file_id:
+
+                    out_file_name = file_name + '.new'
+                    log.info('fixing file %s', file_name)
+                    log.info('creating file %s', out_file_name)
+
+                    out_file_id = open(os.path.join(RESOURCE_PATH, out_file_name), 'w')
+
+                    for line in in_file_id:
+                        new_line = line
+
+                        for param_name, new_name, mult in param_change_table:
+
+                            param_regex = r'\s+' + param_name + r':\s+(' + FLOAT_REGEX + ')' + END_OF_LINE_REGEX
+                            match = re.match(param_regex, line)
+                            if match is not None:
+                                new_value = int(float(match.group(1)) * mult)
+                                new_line = '    ' + new_name + ':  ' + str(new_value) + '\n'
+                                log.info('%s', new_line)
+
+                        for old_class, new_class in class_change_table:
+
+                            class_regex = r'\s+' + r'particle_object:\s+(' + old_class + ')' + END_OF_LINE_REGEX
+                            match = re.match(class_regex, line)
+                            if match is not None:
+                                new_line = '    ' + 'particle_object:  ' + new_class + '\n'
+                                log.info('%s', new_line)
+
+                        out_file_id.write(new_line)
+
+                    out_file_id.close()

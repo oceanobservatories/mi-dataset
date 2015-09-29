@@ -17,7 +17,7 @@ import struct
 from mi.core.exceptions import RecoverableSampleException
 from mi.core.log import get_logger
 log = get_logger()
-from mi.dataset.parser.velpt_ab_dcl_particles import VelptAbDataParticle
+from mi.dataset.parser.velpt_ab_dcl_particles import VelptAbDclDataParticle
 from mi.dataset.dataset_parser import SimpleParser
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 from mi.core.common import BaseEnum
@@ -120,7 +120,7 @@ B1F7    -> Checksum             F7B1
 """
 
 
-class VelptAbParticleClassKey (BaseEnum):
+class VelptAbDclParticleClassKey (BaseEnum):
     """
     An enum for the keys application to the pco2w abc particle classes
     """
@@ -169,16 +169,16 @@ class VelptAbDclParser(SimpleParser):
 
             # Set the metadata and data particle classes to be used later
 
-            if VelptAbParticleClassKey.METADATA_PARTICLE_CLASS in particle_classes_dict and \
-               VelptAbParticleClassKey.DIAGNOSTICS_PARTICLE_CLASS in particle_classes_dict and \
-               VelptAbParticleClassKey.INSTRUMENT_PARTICLE_CLASS in particle_classes_dict:
+            if VelptAbDclParticleClassKey.METADATA_PARTICLE_CLASS in particle_classes_dict and \
+               VelptAbDclParticleClassKey.DIAGNOSTICS_PARTICLE_CLASS in particle_classes_dict and \
+               VelptAbDclParticleClassKey.INSTRUMENT_PARTICLE_CLASS in particle_classes_dict:
 
                 self._metadata_class = config[
-                    DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT][VelptAbParticleClassKey.METADATA_PARTICLE_CLASS]
+                    DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT][VelptAbDclParticleClassKey.METADATA_PARTICLE_CLASS]
                 self._diagnostics_class = config[DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT][
-                    VelptAbParticleClassKey.DIAGNOSTICS_PARTICLE_CLASS]
+                    VelptAbDclParticleClassKey.DIAGNOSTICS_PARTICLE_CLASS]
                 self._velocity_data_class = config[DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT][
-                    VelptAbParticleClassKey.INSTRUMENT_PARTICLE_CLASS]
+                    VelptAbDclParticleClassKey.INSTRUMENT_PARTICLE_CLASS]
             else:
                 log.error(
                     'Configuration missing metadata or data particle class key in particle classes dict')
@@ -218,9 +218,6 @@ class VelptAbDclParser(SimpleParser):
     def _bad_checksum(self, length, checksum):
         """
         Determines if the stored checksum matches the actual checksum
-        :param record: the read-in record
-        :record_checksum: the checksum from the record
-        :return: boolean
         """
         # 46476 is the base value of the checksum given in the IDD as 0xB58C
         self._calculated_checksum = 46476
@@ -322,7 +319,7 @@ class VelptAbDclParser(SimpleParser):
         which should have occurred prior to receiving a velocity record did not happen.
         """
         # Get the timestamp of the velocity record in case we need it for the metadata particle.
-        timestamp = VelptAbDataParticle.get_timestamp(self._current_record)
+        timestamp = VelptAbDclDataParticle.get_timestamp(self._current_record)
 
         # If this flag is still indicating TRUE, it means we found NO diagnostic records.
         # That's an error!
@@ -355,7 +352,7 @@ class VelptAbDclParser(SimpleParser):
                     self._diagnostics_count = 0
                     self._total_diagnostic_records = 0
 
-        velocity_data_dict = VelptAbDataParticle.generate_data_dict(self._current_record)
+        velocity_data_dict = VelptAbDclDataParticle.generate_data_dict(self._current_record)
 
         particle = self._extract_sample(self._velocity_data_class,
                                         None,
@@ -372,19 +369,19 @@ class VelptAbDclParser(SimpleParser):
         # As diagnostics records have the same format as velocity records
         # you can use the same routine used to break down the velocity data
 
-        timestamp = VelptAbDataParticle.get_timestamp(self._current_record)
-        date_time_group = VelptAbDataParticle.get_date_time_string(self._current_record)
+        timestamp = VelptAbDclDataParticle.get_timestamp(self._current_record)
+        date_time_group = VelptAbDclDataParticle.get_date_time_string(self._current_record)
 
-        self._diagnostics_data_dict = VelptAbDataParticle.generate_data_dict(self._current_record)
+        self._diagnostics_data_dict = VelptAbDclDataParticle.generate_data_dict(self._current_record)
 
         # Upon encountering the first diagnostics record, use its timestamp
         # for diagnostics metadata particle. Produce that metadata particle now.
         if self._first_diagnostics_record:
             self._first_diagnostics_record = False
 
-            diagnostics_header_dict = VelptAbDataParticle.generate_diagnostics_header_dict(
+            diagnostics_header_dict = VelptAbDclDataParticle.generate_diagnostics_header_dict(
                 date_time_group, self._diagnostics_header_record)
-            self._total_diagnostic_records = VelptAbDataParticle.\
+            self._total_diagnostic_records = VelptAbDclDataParticle.\
                 get_diagnostics_count(self._diagnostics_header_record)
 
             particle = self._extract_sample(self._metadata_class,

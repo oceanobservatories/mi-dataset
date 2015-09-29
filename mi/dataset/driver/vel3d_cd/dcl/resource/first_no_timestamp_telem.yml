@@ -19,12 +19,12 @@ data:
     particle_type: vel3d_cd_dcl_system_data
     internal_timestamp: 3621699002
     date_time_string: '2014/10/07 19:30:02'
-    battery_voltage: 12.1
-    speed_of_sound: 1502.3
-    heading: 347.3
-    pitch: 22.0
-    roll: -0.1
-    temperature: 13.91
+    battery_voltage_dV:  121
+    sound_speed_dms:  15023
+    heading_decidegree:  3473
+    pitch_decidegree:  220
+    roll_decidegree:  -1
+    temperature_centidegree:  1391
     error_code: 0
     status_code: 115
     analog_input: 0

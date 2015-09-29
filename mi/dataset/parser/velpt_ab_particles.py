@@ -21,7 +21,7 @@ from mi.core.instrument.data_particle import DataParticle
 import ntplib
 
 
-class VelptDataParticleType(BaseEnum):
+class VelptAbDataParticleType(BaseEnum):
     VELPT_AB_INSTRUMENT_METADATA_RECOVERED = 'velpt_ab_instrument_metadata_recovered'
     VELPT_AB_INSTRUMENT_RECOVERED = 'velpt_ab_instrument_recovered'
     VELPT_AB_DIAGNOSTICS_METADATA_RECOVERED = 'velpt_ab_diagnostics_metadata_recovered'
@@ -34,14 +34,14 @@ class VelptAbDataParticleKey(BaseEnum):
     DATE_TIME_STRING = 'date_time_string'                                        # PD93
     ERROR_CODE = 'error_code'                                                    # PD433
     ANALOG1 = 'analog1'                                                          # PD434
-    BATTERY_VOLTAGE = 'battery_voltage'                                          # PD432
-    SOUND_SPEED_ANALOG2 = 'sound_speed_analog2'                                  # PD435
-    HEADING = 'heading'                                                          # PD436
-    PITCH = 'pitch'                                                              # PD437
-    ROLL = 'roll'                                                                # PD438
-    PRESSURE_MBAR = 'pressure_mbar'                                                   # PD3248
+    BATTERY_VOLTAGE_DV = 'battery_voltage_dV'                                    # PD3242
+    SOUND_SPEED_DMS = 'sound_speed_dms'                                          # PD3243
+    HEADING_DECIDEGREE = 'heading_decidegree'                                    # PD3244
+    PITCH_DECIDEGREE = 'pitch_decidegree'                                        # PD3246
+    ROLL_DECIDEGREE = 'roll_decidegree'                                          # PD3245
+    PRESSURE_MBAR = 'pressure_mbar'                                              # PD3248
     STATUS = 'status'                                                            # PD439
-    TEMPERATURE = 'temperature'                                                  # PD440
+    TEMPERATURE_CENTIDEGREE = 'temperature_centidegree'        # PD3247
     VELOCITY_BEAM1 = 'velocity_beam1'                                            # PD441
     VELOCITY_BEAM2 = 'velocity_beam2'                                            # PD442
     VELOCITY_BEAM3 = 'velocity_beam3'                                            # PD443
@@ -315,52 +315,37 @@ class VelptAbDataParticle(DataParticle):
 
         date_time_string = VelptAbDataParticle.get_date_time_string(record)
 
-        error_code = struct.unpack('<h', record[VelptAbDataParticle.error_code_offset:
-                                                VelptAbDataParticle.analog1_offset])[0]
-        analog_1 = struct.unpack('<h', record[VelptAbDataParticle.analog1_offset:
-                                              VelptAbDataParticle.battery_voltage_offset])[0]
-        battery_voltage = struct.unpack('<h', record[VelptAbDataParticle.battery_voltage_offset:
-                                                     VelptAbDataParticle.sound_speed_analog2_offset])[0] * 0.1
-        sound_speed_analog_2 = struct.unpack('<h', record[VelptAbDataParticle.sound_speed_analog2_offset:
-                                                          VelptAbDataParticle.heading_offset])[0] * 0.1
-        heading = struct.unpack('<h', record[VelptAbDataParticle.heading_offset:
-                                             VelptAbDataParticle.pitch_offset])[0] * 0.1
-        pitch = struct.unpack('<h', record[VelptAbDataParticle.pitch_offset:
-                                           VelptAbDataParticle.roll_offset])[0] * 0.1
-        roll = struct.unpack('<h', record[VelptAbDataParticle.roll_offset:
-                                          VelptAbDataParticle.pressure_msb_offset])[0] * 0.1
-        pressure_mbar = (struct.unpack('B', record[VelptAbDataParticle.pressure_msb_offset:
-                                       VelptAbDataParticle.status_offset])[0] * 65536.0) + \
-                        (struct.unpack('<h', record[VelptAbDataParticle.pressure_lsw_offset:
-                                       VelptAbDataParticle.temperature_offset])[0])
-        status = struct.unpack('B', record[VelptAbDataParticle.status_offset:
-                                           VelptAbDataParticle.pressure_lsw_offset])[0]
-        temperature = struct.unpack('<h', record[VelptAbDataParticle.temperature_offset:
-                                                 VelptAbDataParticle.velocity_beam1_offset])[0] * 0.01
-        velocity_beam_1 = struct.unpack('<h', record[VelptAbDataParticle.velocity_beam1_offset:
-                                                     VelptAbDataParticle.velocity_beam2_offset])[0] * 1.0
-        velocity_beam_2 = struct.unpack('<h', record[VelptAbDataParticle.velocity_beam2_offset:
-                                                     VelptAbDataParticle.velocity_beam3_offset])[0] * 1.0
-        velocity_beam_3 = struct.unpack('<h', record[VelptAbDataParticle.velocity_beam3_offset:
-                                                     VelptAbDataParticle.amplitude_beam1_offset])[0] * 1.0
-        amplitude_beam_1 = struct.unpack('B', record[VelptAbDataParticle.amplitude_beam1_offset:
-                                                     VelptAbDataParticle.amplitude_beam2_offset])[0]
-        amplitude_beam_2 = struct.unpack('B', record[VelptAbDataParticle.amplitude_beam2_offset:
-                                                     VelptAbDataParticle.amplitude_beam3_offset])[0]
-        amplitude_beam_3 = struct.unpack('B', record[VelptAbDataParticle.amplitude_beam3_offset:
-                                                     VelptAbDataParticle.amplitude_beam3_offset+1])[0]
+        error_code = struct.unpack_from('<H', record, VelptAbDataParticle.error_code_offset)[0]
+        analog_1 = struct.unpack_from('<H', record, VelptAbDataParticle.analog1_offset)[0]
+        battery_voltage = struct.unpack_from('<H', record, VelptAbDataParticle.battery_voltage_offset)[0]
+        sound_speed_analog_2 = struct.unpack_from('<H', record, VelptAbDataParticle.sound_speed_analog2_offset)[0]
+        heading = struct.unpack_from('<h', record, VelptAbDataParticle.heading_offset)[0]
+        pitch = struct.unpack_from('<h', record, VelptAbDataParticle.pitch_offset)[0]
+        roll = struct.unpack_from('<h', record, VelptAbDataParticle.roll_offset)[0]
+
+        pressure_mbar = (struct.unpack_from('B', record, VelptAbDataParticle.pressure_msb_offset)[0] << 16) + \
+                        (struct.unpack_from('<H', record, VelptAbDataParticle.pressure_lsw_offset)[0])
+
+        status = struct.unpack_from('B', record, VelptAbDataParticle.status_offset)[0]
+        temperature = struct.unpack_from('<h', record, VelptAbDataParticle.temperature_offset)[0]
+        velocity_beam_1 = struct.unpack_from('<h', record, VelptAbDataParticle.velocity_beam1_offset)[0]
+        velocity_beam_2 = struct.unpack_from('<h', record, VelptAbDataParticle.velocity_beam2_offset)[0]
+        velocity_beam_3 = struct.unpack_from('<h', record, VelptAbDataParticle.velocity_beam3_offset)[0]
+        amplitude_beam_1 = struct.unpack_from('B', record, VelptAbDataParticle.amplitude_beam1_offset)[0]
+        amplitude_beam_2 = struct.unpack_from('B', record, VelptAbDataParticle.amplitude_beam2_offset)[0]
+        amplitude_beam_3 = struct.unpack_from('B', record, VelptAbDataParticle.amplitude_beam3_offset)[0]
 
         return {VelptAbDataParticleKey.DATE_TIME_STRING: date_time_string,
                 VelptAbDataParticleKey.ERROR_CODE: error_code,
                 VelptAbDataParticleKey.ANALOG1: analog_1,
-                VelptAbDataParticleKey.BATTERY_VOLTAGE: battery_voltage,
-                VelptAbDataParticleKey.SOUND_SPEED_ANALOG2: sound_speed_analog_2,
-                VelptAbDataParticleKey.HEADING: heading,
-                VelptAbDataParticleKey.PITCH: pitch,
-                VelptAbDataParticleKey.ROLL: roll,
+                VelptAbDataParticleKey.BATTERY_VOLTAGE_DV: battery_voltage,
+                VelptAbDataParticleKey.SOUND_SPEED_DMS: sound_speed_analog_2,
+                VelptAbDataParticleKey.HEADING_DECIDEGREE: heading,
+                VelptAbDataParticleKey.PITCH_DECIDEGREE: pitch,
+                VelptAbDataParticleKey.ROLL_DECIDEGREE: roll,
                 VelptAbDataParticleKey.PRESSURE_MBAR: pressure_mbar,
                 VelptAbDataParticleKey.STATUS: status,
-                VelptAbDataParticleKey.TEMPERATURE: temperature,
+                VelptAbDataParticleKey.TEMPERATURE_CENTIDEGREE: temperature,
                 VelptAbDataParticleKey.VELOCITY_BEAM1: velocity_beam_1,
                 VelptAbDataParticleKey.VELOCITY_BEAM2: velocity_beam_2,
                 VelptAbDataParticleKey.VELOCITY_BEAM3: velocity_beam_3,
@@ -377,37 +362,25 @@ class VelptAbDataParticle(DataParticle):
         :param record: The record read from the file which contains the date and time
         :return: The dictionary
         """
-        records_to_follow = struct.unpack('<h', record[VelptAbDataParticle.records_to_follow_offset:
-                                                       VelptAbDataParticle.cell_number_diagnostics_offset])[0]
-        cell_number_diagnostics = struct.unpack('<h', record[VelptAbDataParticle.cell_number_diagnostics_offset:
-                                                             VelptAbDataParticle.noise_amplitude_beam1_offset])[0]
-        noise_amplitude_beam1 = struct.unpack('B', record[VelptAbDataParticle.noise_amplitude_beam1_offset:
-                                                          VelptAbDataParticle.noise_amplitude_beam2_offset])[0]
-        noise_amplitude_beam2 = struct.unpack('B', record[VelptAbDataParticle.noise_amplitude_beam2_offset:
-                                                          VelptAbDataParticle.noise_amplitude_beam3_offset])[0]
-        noise_amplitude_beam3 = struct.unpack('B', record[VelptAbDataParticle.noise_amplitude_beam3_offset:
-                                                          VelptAbDataParticle.noise_amplitude_beam4_offset])[0]
-        noise_amplitude_beam4 = struct.unpack('B', record[VelptAbDataParticle.noise_amplitude_beam4_offset:
-                                                          VelptAbDataParticle.processing_magnitude_beam1_offset])[0]
-        processing_magnitude_beam1 = struct.unpack('<h', record[VelptAbDataParticle.processing_magnitude_beam1_offset:
-                                                                VelptAbDataParticle.
-                                                   processing_magnitude_beam2_offset])[0]
-        processing_magnitude_beam2 = struct.unpack('<h', record[VelptAbDataParticle.processing_magnitude_beam2_offset:
-                                                                VelptAbDataParticle.
-                                                   processing_magnitude_beam3_offset])[0]
-        processing_magnitude_beam3 = struct.unpack('<h', record[VelptAbDataParticle.processing_magnitude_beam3_offset:
-                                                                VelptAbDataParticle.
-                                                   processing_magnitude_beam4_offset])[0]
-        processing_magnitude_beam4 = struct.unpack('<h', record[VelptAbDataParticle.processing_magnitude_beam4_offset:
-                                                                VelptAbDataParticle.distance_beam1_offset])[0]
-        distance_beam1 = struct.unpack('<h', record[VelptAbDataParticle.distance_beam1_offset:
-                                                    VelptAbDataParticle.distance_beam2_offset])[0]
-        distance_beam2 = struct.unpack('<h', record[VelptAbDataParticle.distance_beam2_offset:
-                                                    VelptAbDataParticle.distance_beam3_offset])[0]
-        distance_beam3 = struct.unpack('<h', record[VelptAbDataParticle.distance_beam3_offset:
-                                                    VelptAbDataParticle.distance_beam4_offset])[0]
-        distance_beam4 = struct.unpack('<h', record[VelptAbDataParticle.distance_beam4_offset:
-                                                    VelptAbDataParticle.distance_beam4_offset+2])[0]
+        records_to_follow = struct.unpack_from('<H', record, VelptAbDataParticle.records_to_follow_offset)[0]
+        cell_number_diagnostics = struct.unpack_from('<H', record,
+                                                     VelptAbDataParticle.cell_number_diagnostics_offset)[0]
+        noise_amplitude_beam1 = struct.unpack_from('B', record, VelptAbDataParticle.noise_amplitude_beam1_offset)[0]
+        noise_amplitude_beam2 = struct.unpack_from('B', record, VelptAbDataParticle.noise_amplitude_beam2_offset)[0]
+        noise_amplitude_beam3 = struct.unpack_from('B', record, VelptAbDataParticle.noise_amplitude_beam3_offset)[0]
+        noise_amplitude_beam4 = struct.unpack_from('B', record, VelptAbDataParticle.noise_amplitude_beam4_offset)[0]
+        processing_magnitude_beam1 = struct.unpack_from('<H', record,
+                                                        VelptAbDataParticle.processing_magnitude_beam1_offset)[0]
+        processing_magnitude_beam2 = struct.unpack_from('<H', record,
+                                                        VelptAbDataParticle.processing_magnitude_beam2_offset)[0]
+        processing_magnitude_beam3 = struct.unpack_from('<H', record,
+                                                        VelptAbDataParticle.processing_magnitude_beam3_offset)[0]
+        processing_magnitude_beam4 = struct.unpack_from('<H', record,
+                                                        VelptAbDataParticle.processing_magnitude_beam4_offset)[0]
+        distance_beam1 = struct.unpack_from('<H', record, VelptAbDataParticle.distance_beam1_offset)[0]
+        distance_beam2 = struct.unpack_from('<H', record, VelptAbDataParticle.distance_beam2_offset)[0]
+        distance_beam3 = struct.unpack_from('<H', record, VelptAbDataParticle.distance_beam3_offset)[0]
+        distance_beam4 = struct.unpack_from('<H', record, VelptAbDataParticle.distance_beam4_offset)[0]
 
         return {VelptAbDataParticleKey.DATE_TIME_STRING: date_time_string,
                 VelptAbDataParticleKey.RECORDS_TO_FOLLOW: records_to_follow,
@@ -493,25 +466,18 @@ class VelptAbDataParticle(DataParticle):
         """
         Builds up the metadata dict from the hardware configuration record
         """
-        instrument_type_serial_number = struct.unpack('14s', record[VelptAbDataParticle.
-                                                      instrument_type_serial_number_offset:
-                                                                    VelptAbDataParticle.
-                                                      end_instrument_serial_number_offset])[0]
+        instrument_type_serial_number = struct.unpack_from('14s', record,
+                                                           VelptAbDataParticle.instrument_type_serial_number_offset)[0]
         instrument_type_serial_number = instrument_type_serial_number.rstrip()
         instrument_type_serial_number = VelptAbDataParticle._rstrip_non_ascii(instrument_type_serial_number)
 
-        pic_version = struct.unpack('<H', record[VelptAbDataParticle.pic_version_offset:
-                                                 VelptAbDataParticle.hardware_revision_offset])[0]
-        hardware_revision = struct.unpack('<H', record[VelptAbDataParticle.hardware_revision_offset:
-                                                       VelptAbDataParticle.recorder_size_offset])[0]
-        recorder_size = struct.unpack('<H', record[VelptAbDataParticle.recorder_size_offset:
-                                                   VelptAbDataParticle.velocity_range_offset])[0] * 65536
-        velocity_range = struct.unpack('<H', record[VelptAbDataParticle.velocity_range_offset:
-                                                    VelptAbDataParticle.end_velocity_range_offset])[0] & \
+        pic_version = struct.unpack_from('<H', record, VelptAbDataParticle.pic_version_offset)[0]
+        hardware_revision = struct.unpack_from('<H', record, VelptAbDataParticle.hardware_revision_offset)[0]
+        recorder_size = struct.unpack_from('<H', record, VelptAbDataParticle.recorder_size_offset)[0] << 16
+        velocity_range = struct.unpack_from('<H', record, VelptAbDataParticle.velocity_range_offset)[0] & \
             VelptAbDataParticle.velocity_range_mask
 
-        firmware_version = struct.unpack('4s', record[VelptAbDataParticle.firmware_version_offset:
-                                                      VelptAbDataParticle.firmware_version_offset + 4])[0]
+        firmware_version = struct.unpack_from('4s', record, VelptAbDataParticle.firmware_version_offset)[0]
         firmware_version = firmware_version.rstrip()
         firmware_version = VelptAbDataParticle._rstrip_non_ascii(firmware_version)
 
@@ -527,23 +493,19 @@ class VelptAbDataParticle(DataParticle):
         """
         Builds up the metadata dict from the head configuration record
         """
-        head_config = struct.unpack('<H', record[VelptAbDataParticle.config_offset:
-                                                 VelptAbDataParticle.head_frequency_offset])[0]
+        head_config = struct.unpack_from('<H', record, VelptAbDataParticle.config_offset)[0]
         pressure_sensor = head_config & VelptAbDataParticle.pressure_sensor_mask
         magnetometer = (head_config & VelptAbDataParticle.magnetometer_mask) >> 1
         tilt_sensor = (head_config & VelptAbDataParticle.tilt_sensor_mask) >> 2
         tilt_sensor_mounting = (head_config & VelptAbDataParticle.tilt_sensor_mounting_mask) >> 3
-        head_frequency = struct.unpack('<H', record[VelptAbDataParticle.head_frequency_offset:
-                                                    VelptAbDataParticle.head_type_offset])[0]
-        head_type = struct.unpack('<H', record[VelptAbDataParticle.head_type_offset:
-                                               VelptAbDataParticle.head_serial_number_offset])[0]
-        head_serial_number = struct.unpack('12s', record[VelptAbDataParticle.head_serial_number_offset:
-                                                         VelptAbDataParticle.end_head_serial_number_offset])[0]
+
+        head_frequency = struct.unpack_from('<H', record, VelptAbDataParticle.head_frequency_offset)[0]
+        head_type = struct.unpack_from('<H', record, VelptAbDataParticle.head_type_offset)[0]
+        head_serial_number = struct.unpack_from('12s', record, VelptAbDataParticle.head_serial_number_offset)[0]
         head_serial_number = head_serial_number.rstrip()
         head_serial_number = VelptAbDataParticle._rstrip_non_ascii(head_serial_number)
 
-        number_of_beams = struct.unpack('<H', record[VelptAbDataParticle.number_of_beams_offset:
-                                                     VelptAbDataParticle.number_of_beams_offset + 2])[0]
+        number_of_beams = struct.unpack_from('<H', record, VelptAbDataParticle.number_of_beams_offset)[0]
 
         return {VelptAbDataParticleKey.PRESSURE_SENSOR: pressure_sensor,
                 VelptAbDataParticleKey.MAGNETOMETER: magnetometer,
@@ -559,55 +521,38 @@ class VelptAbDataParticle(DataParticle):
         """
         Builds up the metadata dict from the user configuration record
         """
-        transmit_pulse_length = struct.unpack('<H', record[VelptAbDataParticle.transmit_pulse_length_offset:
-                                                           VelptAbDataParticle.blanking_distance_offset])[0]
-        blanking_distance = struct.unpack('<H', record[VelptAbDataParticle.blanking_distance_offset:
-                                                       VelptAbDataParticle.receive_length_offset])[0]
-        receive_length = struct.unpack('<H', record[VelptAbDataParticle.receive_length_offset:
-                                                    VelptAbDataParticle.time_between_pings_offset])[0]
-        time_between_pings = struct.unpack('<H', record[VelptAbDataParticle.time_between_pings_offset:
-                                                        VelptAbDataParticle.time_between_bursts_offset])[0]
-        time_between_bursts = struct.unpack('<H', record[VelptAbDataParticle.time_between_bursts_offset:
-                                                         VelptAbDataParticle.number_of_beam_sequences_offset])[0]
-        number_of_beam_sequences = struct.unpack('<H', record[VelptAbDataParticle.number_of_beam_sequences_offset:
-                                                              VelptAbDataParticle.average_interval_offset])[0]
-        average_interval = struct.unpack('<H', record[VelptAbDataParticle.average_interval_offset:
-                                                      VelptAbDataParticle.end_average_interval_offset])[0]
-        compass_update_rate = struct.unpack('<H', record[VelptAbDataParticle.compass_update_rate_offset:
-                                                         VelptAbDataParticle.coordinate_system_offset])[0]
-        coordinate_system = struct.unpack('<H', record[VelptAbDataParticle.coordinate_system_offset:
-                                                       VelptAbDataParticle.number_cells_offset])[0]
-        number_cells = struct.unpack('<H', record[VelptAbDataParticle.number_cells_offset:
-                                                  VelptAbDataParticle.end_number_cells_offset])[0]
-        measurement_interval = struct.unpack('<H', record[VelptAbDataParticle.measurement_interval_offset:
-                                                          VelptAbDataParticle.deployment_name_offset])[0]
-        deployment_name = struct.unpack('6s', record[VelptAbDataParticle.deployment_name_offset:
-                                                     VelptAbDataParticle.end_deployment_name_offset])[0]
+        transmit_pulse_length = struct.unpack_from('<H', record, VelptAbDataParticle.transmit_pulse_length_offset)[0]
+        blanking_distance = struct.unpack_from('<H', record, VelptAbDataParticle.blanking_distance_offset)[0]
+        receive_length = struct.unpack_from('<H', record, VelptAbDataParticle.receive_length_offset)[0]
+        time_between_pings = struct.unpack_from('<H', record, VelptAbDataParticle.time_between_pings_offset)[0]
+        time_between_bursts = struct.unpack_from('<H', record, VelptAbDataParticle.time_between_bursts_offset)[0]
+        number_of_beam_sequences = struct.unpack_from('<H', record,
+                                                      VelptAbDataParticle.number_of_beam_sequences_offset)[0]
+        average_interval = struct.unpack_from('<H', record, VelptAbDataParticle.average_interval_offset)[0]
+        compass_update_rate = struct.unpack_from('<H', record, VelptAbDataParticle.compass_update_rate_offset)[0]
+        coordinate_system = struct.unpack_from('<H', record, VelptAbDataParticle.coordinate_system_offset)[0]
+        number_cells = struct.unpack_from('<H', record, VelptAbDataParticle.number_cells_offset)[0]
+        measurement_interval = struct.unpack_from('<H', record, VelptAbDataParticle.measurement_interval_offset)[0]
+        deployment_name = struct.unpack_from('6s', record, VelptAbDataParticle.deployment_name_offset)[0]
         deployment_name = deployment_name.rstrip()
         deployment_name = VelptAbDataParticle._rstrip_non_ascii(deployment_name)
 
-        diagnostics_interval = struct.unpack('<I', record[VelptAbDataParticle.diagnostics_interval_offset:
-                                                          VelptAbDataParticle.mode_offset])[0]
-        mode = struct.unpack('<H', record[VelptAbDataParticle.mode_offset:
-                                          VelptAbDataParticle.sound_speed_adjust_factor_offset])[0]
-        sound_speed_adjust_factor = struct.unpack('<H', record[VelptAbDataParticle.sound_speed_adjust_factor_offset:
-                                                               VelptAbDataParticle.number_diagnostic_samples_offset])[0]
-        number_diagnostic_samples = struct.unpack('<H', record[VelptAbDataParticle.number_diagnostic_samples_offset:
-                                                               VelptAbDataParticle.
-                                                  number_of_beams_in_diagnostics_mode_offset])[0]
-        number_of_beams_in_diagnostics_mode = struct.unpack('<H', record[VelptAbDataParticle.
-                                                            number_of_beams_in_diagnostics_mode_offset:
-                                                                         VelptAbDataParticle.
-                                                            number_pings_diagnostic_offset])[0]
-        number_pings_diagnostic = struct.unpack('<H', record[VelptAbDataParticle.number_pings_diagnostic_offset:
-                                                             VelptAbDataParticle.end_number_pings_diagnostic_offset])[0]
-        software_version = struct.unpack('2s', record[VelptAbDataParticle.software_version_offset:
-                                                      VelptAbDataParticle.end_software_version_offset])[0]
+        diagnostics_interval = struct.unpack_from('<I', record, VelptAbDataParticle.diagnostics_interval_offset)[0]
+        mode = struct.unpack_from('<H', record, VelptAbDataParticle.mode_offset)[0]
+        sound_speed_adjust_factor = struct.unpack_from('<H', record,
+                                                       VelptAbDataParticle.sound_speed_adjust_factor_offset)[0]
+        number_diagnostic_samples = struct.unpack_from('<H', record,
+                                                       VelptAbDataParticle.number_diagnostic_samples_offset)[0]
+        number_of_beams_in_diagnostics_mode = struct.unpack_from('<H', record,
+                                                                 VelptAbDataParticle.
+                                                                 number_of_beams_in_diagnostics_mode_offset)[0]
+        number_pings_diagnostic = struct.unpack_from('<H', record,
+                                                     VelptAbDataParticle.number_pings_diagnostic_offset)[0]
+        software_version = struct.unpack_from('2s', record, VelptAbDataParticle.software_version_offset)[0]
         software_version = software_version.rstrip()
         software_version = VelptAbDataParticle._rstrip_non_ascii(software_version)
 
-        correlation_threshold = struct.unpack('<H', record[VelptAbDataParticle.correlation_threshold_offset:
-                                                           VelptAbDataParticle.correlation_threshold_offset + 2])[0]
+        correlation_threshold = struct.unpack_from('<H', record, VelptAbDataParticle.correlation_threshold_offset)[0]
 
         use_specified_sound_speed = (mode & VelptAbDataParticle.use_specified_sound_speed_mask)
         diagnostics_mode_enable = (mode & VelptAbDataParticle.diagnostics_mode_enable_mask) >> 1
@@ -669,7 +614,7 @@ class VelptAbDiagnosticsHeaderParticle(VelptAbDataParticle):
     """
     See the IDD
     """
-    _data_particle_type = VelptDataParticleType.VELPT_AB_DIAGNOSTICS_METADATA_RECOVERED
+    _data_particle_type = VelptAbDataParticleType.VELPT_AB_DIAGNOSTICS_METADATA_RECOVERED
 
     def _build_parsed_values(self):
 
@@ -718,7 +663,7 @@ class VelptAbDiagnosticsDataParticle(VelptAbDataParticle):
     """
     See the IDD
     """
-    _data_particle_type = VelptDataParticleType.VELPT_AB_DIAGNOSTICS_RECOVERED
+    _data_particle_type = VelptAbDataParticleType.VELPT_AB_DIAGNOSTICS_RECOVERED
 
     def _build_parsed_values(self):
 
@@ -730,28 +675,29 @@ class VelptAbDiagnosticsDataParticle(VelptAbDataParticle):
                                                       self.raw_data[VelptAbDataParticleKey.ERROR_CODE], int))
         particle_parameters.append(self._encode_value(VelptAbDataParticleKey.ANALOG1,
                                                       self.raw_data[VelptAbDataParticleKey.ANALOG1], int))
-        particle_parameters.append(self._encode_value(VelptAbDataParticleKey.BATTERY_VOLTAGE,
-                                                      self.raw_data[VelptAbDataParticleKey.BATTERY_VOLTAGE], float))
-        particle_parameters.append(self._encode_value(VelptAbDataParticleKey.SOUND_SPEED_ANALOG2,
-                                                      self.raw_data[VelptAbDataParticleKey.SOUND_SPEED_ANALOG2], float))
-        particle_parameters.append(self._encode_value(VelptAbDataParticleKey.HEADING,
-                                                      self.raw_data[VelptAbDataParticleKey.HEADING], float))
-        particle_parameters.append(self._encode_value(VelptAbDataParticleKey.PITCH,
-                                                      self.raw_data[VelptAbDataParticleKey.PITCH], float))
-        particle_parameters.append(self._encode_value(VelptAbDataParticleKey.ROLL,
-                                                      self.raw_data[VelptAbDataParticleKey.ROLL], float))
+        particle_parameters.append(self._encode_value(VelptAbDataParticleKey.BATTERY_VOLTAGE_DV,
+                                                      self.raw_data[VelptAbDataParticleKey.BATTERY_VOLTAGE_DV], int))
+        particle_parameters.append(self._encode_value(VelptAbDataParticleKey.SOUND_SPEED_DMS,
+                                                      self.raw_data[VelptAbDataParticleKey.SOUND_SPEED_DMS], int))
+        particle_parameters.append(self._encode_value(VelptAbDataParticleKey.HEADING_DECIDEGREE,
+                                                      self.raw_data[VelptAbDataParticleKey.HEADING_DECIDEGREE], int))
+        particle_parameters.append(self._encode_value(VelptAbDataParticleKey.PITCH_DECIDEGREE,
+                                                      self.raw_data[VelptAbDataParticleKey.PITCH_DECIDEGREE], int))
+        particle_parameters.append(self._encode_value(VelptAbDataParticleKey.ROLL_DECIDEGREE,
+                                                      self.raw_data[VelptAbDataParticleKey.ROLL_DECIDEGREE], int))
         particle_parameters.append(self._encode_value(VelptAbDataParticleKey.PRESSURE_MBAR,
-                                                      self.raw_data[VelptAbDataParticleKey.PRESSURE_MBAR], float))
+                                                      self.raw_data[VelptAbDataParticleKey.PRESSURE_MBAR], int))
         particle_parameters.append(self._encode_value(VelptAbDataParticleKey.STATUS,
                                                       self.raw_data[VelptAbDataParticleKey.STATUS], int))
-        particle_parameters.append(self._encode_value(VelptAbDataParticleKey.TEMPERATURE,
-                                                      self.raw_data[VelptAbDataParticleKey.TEMPERATURE], float))
+        particle_parameters.append(self._encode_value(VelptAbDataParticleKey.TEMPERATURE_CENTIDEGREE,
+                                                      self.raw_data[VelptAbDataParticleKey.TEMPERATURE_CENTIDEGREE],
+                                                      int))
         particle_parameters.append(self._encode_value(VelptAbDataParticleKey.VELOCITY_BEAM1,
-                                                      self.raw_data[VelptAbDataParticleKey.VELOCITY_BEAM1], float))
+                                                      self.raw_data[VelptAbDataParticleKey.VELOCITY_BEAM1], int))
         particle_parameters.append(self._encode_value(VelptAbDataParticleKey.VELOCITY_BEAM2,
-                                                      self.raw_data[VelptAbDataParticleKey.VELOCITY_BEAM2], float))
+                                                      self.raw_data[VelptAbDataParticleKey.VELOCITY_BEAM2], int))
         particle_parameters.append(self._encode_value(VelptAbDataParticleKey.VELOCITY_BEAM3,
-                                                      self.raw_data[VelptAbDataParticleKey.VELOCITY_BEAM3], float))
+                                                      self.raw_data[VelptAbDataParticleKey.VELOCITY_BEAM3], int))
         particle_parameters.append(self._encode_value(VelptAbDataParticleKey.AMPLITUDE_BEAM1,
                                                       self.raw_data[VelptAbDataParticleKey.AMPLITUDE_BEAM1], int))
         particle_parameters.append(self._encode_value(VelptAbDataParticleKey.AMPLITUDE_BEAM2,
@@ -766,7 +712,7 @@ class VelptAbInstrumentMetadataParticle(VelptAbDataParticle):
     """
     See the IDD
     """
-    _data_particle_type = VelptDataParticleType.VELPT_AB_INSTRUMENT_METADATA_RECOVERED
+    _data_particle_type = VelptAbDataParticleType.VELPT_AB_INSTRUMENT_METADATA_RECOVERED
 
     def _build_parsed_values(self):
 
@@ -910,7 +856,7 @@ class VelptAbInstrumentDataParticle(VelptAbDataParticle):
     """
     See the IDD
     """
-    _data_particle_type = VelptDataParticleType.VELPT_AB_INSTRUMENT_RECOVERED
+    _data_particle_type = VelptAbDataParticleType.VELPT_AB_INSTRUMENT_RECOVERED
 
     def _build_parsed_values(self):
 
@@ -922,28 +868,29 @@ class VelptAbInstrumentDataParticle(VelptAbDataParticle):
                                                       self.raw_data[VelptAbDataParticleKey.ERROR_CODE], int))
         particle_parameters.append(self._encode_value(VelptAbDataParticleKey.ANALOG1,
                                                       self.raw_data[VelptAbDataParticleKey.ANALOG1], int))
-        particle_parameters.append(self._encode_value(VelptAbDataParticleKey.BATTERY_VOLTAGE,
-                                                      self.raw_data[VelptAbDataParticleKey.BATTERY_VOLTAGE], float))
-        particle_parameters.append(self._encode_value(VelptAbDataParticleKey.SOUND_SPEED_ANALOG2,
-                                                      self.raw_data[VelptAbDataParticleKey.SOUND_SPEED_ANALOG2], float))
-        particle_parameters.append(self._encode_value(VelptAbDataParticleKey.HEADING,
-                                                      self.raw_data[VelptAbDataParticleKey.HEADING], float))
-        particle_parameters.append(self._encode_value(VelptAbDataParticleKey.PITCH,
-                                                      self.raw_data[VelptAbDataParticleKey.PITCH], float))
-        particle_parameters.append(self._encode_value(VelptAbDataParticleKey.ROLL,
-                                                      self.raw_data[VelptAbDataParticleKey.ROLL], float))
+        particle_parameters.append(self._encode_value(VelptAbDataParticleKey.BATTERY_VOLTAGE_DV,
+                                                      self.raw_data[VelptAbDataParticleKey.BATTERY_VOLTAGE_DV], int))
+        particle_parameters.append(self._encode_value(VelptAbDataParticleKey.SOUND_SPEED_DMS,
+                                                      self.raw_data[VelptAbDataParticleKey.SOUND_SPEED_DMS], int))
+        particle_parameters.append(self._encode_value(VelptAbDataParticleKey.HEADING_DECIDEGREE,
+                                                      self.raw_data[VelptAbDataParticleKey.HEADING_DECIDEGREE], int))
+        particle_parameters.append(self._encode_value(VelptAbDataParticleKey.PITCH_DECIDEGREE,
+                                                      self.raw_data[VelptAbDataParticleKey.PITCH_DECIDEGREE], int))
+        particle_parameters.append(self._encode_value(VelptAbDataParticleKey.ROLL_DECIDEGREE,
+                                                      self.raw_data[VelptAbDataParticleKey.ROLL_DECIDEGREE], int))
         particle_parameters.append(self._encode_value(VelptAbDataParticleKey.PRESSURE_MBAR,
-                                                      self.raw_data[VelptAbDataParticleKey.PRESSURE_MBAR], float))
+                                                      self.raw_data[VelptAbDataParticleKey.PRESSURE_MBAR], int))
         particle_parameters.append(self._encode_value(VelptAbDataParticleKey.STATUS,
                                                       self.raw_data[VelptAbDataParticleKey.STATUS], int))
-        particle_parameters.append(self._encode_value(VelptAbDataParticleKey.TEMPERATURE,
-                                                      self.raw_data[VelptAbDataParticleKey.TEMPERATURE], float))
+        particle_parameters.append(self._encode_value(VelptAbDataParticleKey.TEMPERATURE_CENTIDEGREE,
+                                                      self.raw_data[VelptAbDataParticleKey.TEMPERATURE_CENTIDEGREE],
+                                                      int))
         particle_parameters.append(self._encode_value(VelptAbDataParticleKey.VELOCITY_BEAM1,
-                                                      self.raw_data[VelptAbDataParticleKey.VELOCITY_BEAM1], float))
+                                                      self.raw_data[VelptAbDataParticleKey.VELOCITY_BEAM1], int))
         particle_parameters.append(self._encode_value(VelptAbDataParticleKey.VELOCITY_BEAM2,
-                                                      self.raw_data[VelptAbDataParticleKey.VELOCITY_BEAM2], float))
+                                                      self.raw_data[VelptAbDataParticleKey.VELOCITY_BEAM2], int))
         particle_parameters.append(self._encode_value(VelptAbDataParticleKey.VELOCITY_BEAM3,
-                                                      self.raw_data[VelptAbDataParticleKey.VELOCITY_BEAM3], float))
+                                                      self.raw_data[VelptAbDataParticleKey.VELOCITY_BEAM3], int))
         particle_parameters.append(self._encode_value(VelptAbDataParticleKey.AMPLITUDE_BEAM1,
                                                       self.raw_data[VelptAbDataParticleKey.AMPLITUDE_BEAM1], int))
         particle_parameters.append(self._encode_value(VelptAbDataParticleKey.AMPLITUDE_BEAM2,

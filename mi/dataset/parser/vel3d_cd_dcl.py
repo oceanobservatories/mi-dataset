@@ -343,14 +343,14 @@ class Vel3dCdDclVelocityCommonParticle(DataParticle):
         analog_2_lsb = unpacked_data[2]
         analog_2_msb = unpacked_data[5]
         # combine least and most significant byte
-        analog_2 = analog_2_msb * 255 + analog_2_lsb
+        analog_2 = (analog_2_msb << 8) + analog_2_lsb
         parameters.append(self._encode_value('analog_input_2', analog_2, int))
 
         pressure_msb = unpacked_data[4]
         pressure_lsw = unpacked_data[6]
-        # combine least significiant word and byte, and convert from .001 dbar to dbar
-        pressure = (pressure_msb * 65535 + pressure_lsw) * .001
-        parameters.append(self._encode_value('seawater_pressure', pressure, float))
+        # combine least significant word and byte,
+        pressure = (pressure_msb << 16) + pressure_lsw
+        parameters.append(self._encode_value('seawater_pressure_mbar', pressure, int))
 
         return parameters
 
@@ -376,12 +376,12 @@ class Vel3dCdDclSystemCommonParticle(DataParticle):
         date_time_string = vel3d_velpt_common.get_date_time_string(self.raw_data)
 
         parameters = [self._encode_value('date_time_string', date_time_string, str),
-                      self._encode_value('battery_voltage', unpacked_data[0] * .1, float),
-                      self._encode_value('speed_of_sound', unpacked_data[1] * .1, float),
-                      self._encode_value('heading', unpacked_data[2] * .1, float),
-                      self._encode_value('pitch', unpacked_data[3] * .1, float),
-                      self._encode_value('roll', unpacked_data[4] * .1, float),
-                      self._encode_value('temperature', unpacked_data[5] * .01, float),
+                      self._encode_value('battery_voltage_dV', unpacked_data[0], int),
+                      self._encode_value('sound_speed_dms', unpacked_data[1], int),
+                      self._encode_value('heading_decidegree', unpacked_data[2], int),
+                      self._encode_value('pitch_decidegree', unpacked_data[3] , int),
+                      self._encode_value('roll_decidegree', unpacked_data[4], int),
+                      self._encode_value('temperature_centidegree', unpacked_data[5], int),
                       self._encode_value('error_code', unpacked_data[6], int),
                       self._encode_value('status_code', unpacked_data[7], int),
                       self._encode_value('analog_input', unpacked_data[8], int)]

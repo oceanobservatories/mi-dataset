@@ -14,14 +14,14 @@ Initial Release
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 from mi.dataset.dataset_driver import SimpleDatasetDriver
 from mi.dataset.parser.velpt_ab_dcl import VelptAbDclParser, \
-    VelptAbParticleClassKey
-from mi.dataset.parser.velpt_ab_dcl_particles import VelptAbDiagnosticsDataParticleRecovered, \
-    VelptAbInstrumentDataParticleRecovered, \
-    VelptAbDiagnosticsHeaderParticleRecovered
+    VelptAbDclParticleClassKey
+from mi.dataset.parser.velpt_ab_dcl_particles import VelptAbDclDiagnosticsDataParticleRecovered, \
+    VelptAbDclInstrumentDataParticleRecovered, \
+    VelptAbDclDiagnosticsHeaderParticleRecovered
 from mi.core.versioning import version
 
 
-@version("15.6.1")
+@version("15.7.0")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     """
     This is the method called by Uframe
@@ -52,9 +52,9 @@ class VelptAbDclRecoveredDriver(SimpleDatasetDriver):
             DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.velpt_ab_dcl_particles',
             DataSetDriverConfigKeys.PARTICLE_CLASS: None,
             DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT: {
-                VelptAbParticleClassKey.METADATA_PARTICLE_CLASS: VelptAbDiagnosticsHeaderParticleRecovered,
-                VelptAbParticleClassKey.DIAGNOSTICS_PARTICLE_CLASS: VelptAbDiagnosticsDataParticleRecovered,
-                VelptAbParticleClassKey.INSTRUMENT_PARTICLE_CLASS: VelptAbInstrumentDataParticleRecovered
+                VelptAbDclParticleClassKey.METADATA_PARTICLE_CLASS: VelptAbDclDiagnosticsHeaderParticleRecovered,
+                VelptAbDclParticleClassKey.DIAGNOSTICS_PARTICLE_CLASS: VelptAbDclDiagnosticsDataParticleRecovered,
+                VelptAbDclParticleClassKey.INSTRUMENT_PARTICLE_CLASS: VelptAbDclInstrumentDataParticleRecovered
             }
         }
 
