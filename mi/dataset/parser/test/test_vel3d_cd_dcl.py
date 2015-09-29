@@ -10,12 +10,14 @@ __license__ = 'Apache 2.0'
 
 import os
 from nose.plugins.attrib import attr
+import re
 
 from mi.core.log import get_logger
 log = get_logger()
-from mi.core.exceptions import UnexpectedDataException, SampleException, RecoverableSampleException
+from mi.core.exceptions import UnexpectedDataException, SampleException
 from mi.dataset.test.test_parser import ParserUnitTestCase, BASE_RESOURCE_PATH
 from mi.dataset.parser.vel3d_cd_dcl import Vel3dCdDclParser
+from mi.dataset.parser.common_regexes import FLOAT_REGEX, END_OF_LINE_REGEX
 
 RESOURCE_PATH = os.path.join(BASE_RESOURCE_PATH, 'vel3d_cd', 'dcl', 'resource')
 
@@ -197,3 +199,46 @@ class Vel3dCdDclParserUnitTestCase(ParserUnitTestCase):
             self.assertEqual(len(self.exception_callback_value), 1)
             # Exception from not being able to calculate timestamps
             self.assertIsInstance(self.exception_callback_value[0], SampleException)
+
+    def fix_yml_float_params(self):
+        """
+        This helper tool was used to modify the yml files in response to ticket #8564
+        """
+
+        param_change_table = [
+            ('battery_voltage', 'battery_voltage_dV', 10),
+            ('speed_of_sound', 'sound_speed_dms', 10),
+            ('heading', 'heading_decidegree', 10),
+            ('pitch', 'pitch_decidegree', 10),
+            ('roll', 'roll_decidegree', 10),
+            ('seawater_pressure', 'seawater_pressure_mbar', 1000),
+            ('temperature', 'temperature_centidegree', 100)
+        ]
+
+        for file_name in os.listdir(RESOURCE_PATH):
+
+            if file_name.endswith('.yml'):
+
+                with open(os.path.join(RESOURCE_PATH, file_name), 'rU') as in_file_id:
+
+                    out_file_name = file_name + '.new'
+                    log.info('fixing file %s', file_name)
+                    log.info('creating file %s', out_file_name)
+
+                    out_file_id = open(os.path.join(RESOURCE_PATH, out_file_name), 'w')
+
+                    for line in in_file_id:
+                        new_line = line
+
+                        for param_name, new_name, mult in param_change_table:
+
+                            param_regex = r'\s+' + param_name + r':\s+(' + FLOAT_REGEX + ')' + END_OF_LINE_REGEX
+                            match = re.match(param_regex, line)
+                            if match is not None:
+                                new_value = int(float(match.group(1)) * mult)
+                                new_line = '    ' + new_name + ':  ' + str(new_value) + '\n'
+                                log.info('%s', new_line)
+
+                        out_file_id.write(new_line)
+
+                    out_file_id.close()
