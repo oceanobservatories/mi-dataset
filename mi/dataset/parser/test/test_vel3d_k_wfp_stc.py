@@ -23,8 +23,7 @@ from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 from mi.dataset.parser.vel3d_k_wfp_stc import \
     Vel3dKWfpStcParser, \
     Vel3dKWfpStcMetadataParticle, \
-    Vel3dKWfpStcInstrumentParticle, \
-    Vel3dKWfpStcStateKey
+    Vel3dKWfpStcInstrumentParticle
 from mi.dataset.test.test_parser import ParserUnitTestCase
 
 FLAG_RECORD_SIZE = 26 
@@ -135,15 +134,9 @@ class Vel3dKWfpStcParserUnitTestCase(ParserUnitTestCase):
         # Define test data particles and their associated timestamps 
         # which will be compared with returned results
 
-        self.state_callback_value = None
-        self.publish_callback_value = None
-        self.state = {Vel3dKWfpStcStateKey.POSITION: 0,
-            Vel3dKWfpStcStateKey.FIRST_RECORD: True,
-            Vel3dKWfpStcStateKey.VELOCITY_END: False}
-
-        ##
-        ## This parser stores the groups from the data matcher in raw_data.
-        ##
+        #
+        # This parser stores the groups from the data matcher in raw_data.
+        #
         ntp_time = ntplib.system_to_ntp_time(1380470402.0)
         self.expected_particle1 = Vel3dKWfpStcInstrumentParticle(
             VELOCITY_1_GROUPS, internal_timestamp=ntp_time)
@@ -173,8 +166,8 @@ class Vel3dKWfpStcParserUnitTestCase(ParserUnitTestCase):
             TIME_8_GROUPS, internal_timestamp=ntp_time)
 
     def verify_contents(self, actual_particle, expected_particle):
-        ## log.debug('EXP %s XXX', dir(expected_particle))
-        ## log.debug('ACT %s YYY', dir(actual_particle))
+        # log.debug('EXP %s XXX', dir(expected_particle))
+        # log.debug('ACT %s YYY', dir(actual_particle))
         self.assertEqual(actual_particle, [expected_particle])
 
     def test_simple(self):
@@ -245,12 +238,12 @@ class Vel3dKWfpStcParserUnitTestCase(ParserUnitTestCase):
         self.assertEqual(result, [self.expected_particle2,
             self.expected_particle3, self.expected_particle4])
 
-        ## Skip over the next 4 velocity records.
+        # Skip over the next 4 velocity records.
         log.info("MANY SKIPPING")
         skip_result = self.parser.get_records(4)
         expected_file_position += 4 * VELOCITY_RECORD_SIZE
 
-        ## We should now be at the time record.
+        # We should now be at the time record.
         log.info("MANY VERIFY TIME RECORD")
         result = self.parser.get_records(1)
         self.verify_contents(result, self.expected_time8)
@@ -266,8 +259,14 @@ class Vel3dKWfpStcParserUnitTestCase(ParserUnitTestCase):
         log.info("START BAD FLAG")
         log.info("Bad Flag length %d", len(TEST_DATA_BAD_FLAG_RECORD))
         input_file = StringIO(TEST_DATA_BAD_FLAG_RECORD)
-        with self.assertRaises(SampleException):
-            self.parser = self.create_parser(input_file)
+
+        self.parser = self.create_parser(input_file)
+        particles = self.parser.get_records(1)
+
+        self.assertEquals(len(particles), 0)
+        self.assertEquals(len(self.exception_callback_value), 1)
+        self.assert_(isinstance(self.exception_callback_value[0], SampleException))
+
         log.info("END BAD FLAG")
 
     def test_short_flag_record(self):
@@ -279,8 +278,13 @@ class Vel3dKWfpStcParserUnitTestCase(ParserUnitTestCase):
         log.info("START SHORT FLAG")
         log.info("Short Flag length %d", len(TEST_DATA_SHORT_FLAG_RECORD))
         input_file = StringIO(TEST_DATA_SHORT_FLAG_RECORD)
-        with self.assertRaises(SampleException):
-            self.parser = self.create_parser(input_file)
+
+        self.parser = self.create_parser(input_file)
+        particles = self.parser.get_records(1)
+
+        self.assertEquals(len(particles), 0)
+        self.assertEquals(len(self.exception_callback_value), 1)
+        self.assert_(isinstance(self.exception_callback_value[0], SampleException))
         log.info("END SHORT FLAG")
 
     def test_real_file_1(self):
@@ -354,3 +358,25 @@ class Vel3dKWfpStcParserUnitTestCase(ParserUnitTestCase):
             self.assert_particles(particles, 'valid_A0000004.yml', RESOURCE_PATH)
 
         log.info("END REAL FILE 4")
+
+    def test_bug_8637(self):
+        """
+        Ensure that data is skipped when flag record is too short.
+        This should raise an exception indicating that end of file was
+        reached while reading the Flag record.
+        """
+        log.info("START Bug 8637")
+
+        with open(os.path.join(RESOURCE_PATH, 'A0000015.DEC')) as file_handle:
+
+            self.parser = self.create_parser(file_handle)
+
+            particles = self.parser.get_records(1000)
+
+            # unless told otherwise, should return nothing
+            # when there is no valid end record found
+            self.assertEquals(len(particles), 0)
+            self.assertEquals(len(self.exception_callback_value), 1)
+            self.assert_(isinstance(self.exception_callback_value[0], SampleException))
+
+        log.info("END Bug 8637")

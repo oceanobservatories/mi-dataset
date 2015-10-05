@@ -8,12 +8,16 @@
 """
 
 import ntplib
+import os
 
 from nose.plugins.attrib import attr
 from StringIO import StringIO
 
-from mi.core.log import get_logger; log = get_logger()
-from mi.core.exceptions import SampleException
+from mi.core.log import get_logger
+log = get_logger()
+
+from mi.core.exceptions import SampleException, RecoverableSampleException
+from mi.idk.config import Config
 
 from mi.dataset.test.test_parser import ParserUnitTestCase
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
@@ -22,8 +26,10 @@ from mi.dataset.parser.vel3d_k_wfp import \
     Vel3dKWfpParser, \
     Vel3dKWfpInstrumentParticle, \
     Vel3dKWfpMetadataParticle, \
-    Vel3dKWfpStringParticle, \
-    Vel3dKWfpStateKey
+    Vel3dKWfpStringParticle
+
+RESOURCE_PATH = os.path.join(Config().base_dir(), 'mi', 'dataset', 'driver',
+                             'vel3d_k', 'wfp', 'resource')
 
 FILE_HEADER_SIZE = 4
 DATA_RECORD_SIZE = 90
@@ -249,36 +255,18 @@ class Vel3dKWfpParserUnitTestCase(ParserUnitTestCase):
         self.expected_particle4 = Vel3dKWfpInstrumentParticle(
             RECORD_4_FIELDS, internal_timestamp=ntp_time)
 
-    def create_parser(self, file_handle, new_state):
+    def create_parser(self, file_handle):
         """
         This function creates a Vel3d_k_Wfp parser.
         """
-        if new_state is None:
-            new_state = self.state
-        parser = Vel3dKWfpParser(self.config, new_state, file_handle,
-            self.state_callback, self.pub_callback, self.exception_callback)
+        parser = Vel3dKWfpParser(self.config, file_handle, self.exception_callback)
         return parser
-
-    def exception_callback(self, exception):
-        """ Callback method to watch what comes in via the exception callback """
-        self.exception_callback_value = exception
-        log.info("EXCEPTION RECEIVED %s", exception)
-
-    def state_callback(self, state, file_ingested):
-        """ Call back method to watch what comes in via the position callback """
-        self.state_callback_value = state
-        self.file_ingested_value = file_ingested
-
-    def pub_callback(self, pub):
-        """ Call back method to watch what comes in via the publish callback """
-        self.publish_callback_value = pub
 
     def setUp(self):
         ParserUnitTestCase.setUp(self)
         self.config = {
-            DataSetDriverConfigKeys.PARTICLE_MODULE: \
-                'mi.dataset.parser.vel3d_k_wfp',
-            DataSetDriverConfigKeys.PARTICLE_CLASS: \
+            DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.vel3d_k_wfp',
+            DataSetDriverConfigKeys.PARTICLE_CLASS:
                 ['Vel3dKWfpInstrumentParticle',
                  'Vel3dKWfpMetadataParticle',
                  'Vel3dKWfpStringParticle']
@@ -300,148 +288,108 @@ class Vel3dKWfpParserUnitTestCase(ParserUnitTestCase):
         Read test data and pull out multiple data particles at one time.
         Assert that the results are those we expected.
         """
-        log.info("=================== START MANY ======================")
-        log.info("Many length %d", len(RECORD_4_DATA))
+        log.debug("=================== START MANY ======================")
+        log.debug("Many length %d", len(RECORD_4_DATA))
         input_file = StringIO(RECORD_4_DATA)
-        self.parser = self.create_parser(input_file, self.state)
+        self.parser = self.create_parser(input_file)
 
-        log.info("MANY VERIFY RECORD 1")
+        log.debug("MANY VERIFY RECORD 1")
         result = self.parser.get_records(1)
         self.verify_contents(result, self.expected_particle1)
 
-        expected_file_position = FILE_HEADER_SIZE + DATA_RECORD_SIZE
-        self.verify_file_info(False, expected_file_position)
         self.verify_contents(result, self.expected_particle1)
 
-        log.info("MANY VERIFY RECORDS 2-4")
+        log.debug("MANY VERIFY RECORDS 2-4")
         result = self.parser.get_records(3)
         self.assertEqual(result, [self.expected_particle2,
-            self.expected_particle3, self.expected_particle4])
+                         self.expected_particle3, self.expected_particle4])
 
-        self.assertEqual(self.publish_callback_value[0],
-            self.expected_particle2)
-
-        self.assertEqual(self.publish_callback_value[1],
-            self.expected_particle3)
-
-        self.assertEqual(self.publish_callback_value[2],
-            self.expected_particle4)
-
-        expected_file_position += 3 * DATA_RECORD_SIZE
-        self.verify_file_info(False, expected_file_position)
-
-        log.info("MANY VERIFY TIME RECORD")
+        log.debug("MANY VERIFY TIME RECORD")
         result = self.parser.get_records(1)
-        expected_file_position += TIME_RECORD_SIZE
-        self.verify_file_info(True, expected_file_position)
         self.verify_contents(result, self.expected_time)
 
-        log.info("=================== END MANY ======================")
+        log.debug("=================== END MANY ======================")
 
     def test_invalid_family(self):
         """
         Ensure that a Sample Exception is raised when the family field is invalid.
         """
-        log.info("================= START INVALID FAMILY ======================")
-        log.info("Invalid Family length %d", len(RECORD_INVALID_FAMILY))
+        log.debug("================= START INVALID FAMILY ======================")
+        log.debug("Invalid Family length %d", len(RECORD_INVALID_FAMILY))
         input_file = StringIO(RECORD_INVALID_FAMILY)
-        self.parser = self.create_parser(input_file, self.state)
+        self.parser = self.create_parser(input_file)
 
-        log.info("INVALID FAMILY GET 1 RECORD")
-        with self.assertRaises(SampleException):
-            result = self.parser.get_records(1)
+        log.debug("INVALID FAMILY GET 1 RECORD")
+        result = self.parser.get_records(1)
+        self.assertEquals(len(result), 0)
+        self.assertEquals(len(self.exception_callback_value), 1)
+        self.assert_(isinstance(self.exception_callback_value[0], SampleException))
 
-        log.info("================= END INVALID FAMILY ======================")
+        log.debug("================= END INVALID FAMILY ======================")
 
     def test_invalid_header_checksum(self):
         """
         Ensure that a data record is skipped when the header checksum is invalid.
         This should result in a non-data exception.
         """
-        log.info("============== START INVALID HEADER CHECKSUM ==================")
-        log.info("Invalid Header Checksum length %d",
-            len(RECORD_INVALID_HEADER_CHECKSUM))
+        log.debug("============== START INVALID HEADER CHECKSUM ==================")
+        log.debug("Invalid Header Checksum length %d",
+                  len(RECORD_INVALID_HEADER_CHECKSUM))
         input_file = StringIO(RECORD_INVALID_HEADER_CHECKSUM)
-        self.parser = self.create_parser(input_file, self.state)
+        self.parser = self.create_parser(input_file)
 
-        log.info("INVALID HEADER CHECKSUM GET 1 RECORD")
+        log.debug("INVALID HEADER CHECKSUM GET 1 RECORD")
         result = self.parser.get_records(1)
 
-        # Since the 1st record has a checksum error,
-        # the record we get back should be the 2nd record in the file.
-        expected_file_position = FILE_HEADER_SIZE + (2 * DATA_RECORD_SIZE)
-        log.info("INVALID HEADER CHECKSUM VERIFY POSITION %d",
-            expected_file_position)
-        self.verify_file_info(False, expected_file_position)
+        # Per IDD processing should stop once a header with
+        # and invalid checksum is encountered.  No data can
+        # be trusted at that point
 
-        log.info("INVALID HEADER CHECKSUM VERIFY CONTENTS")
-        self.verify_contents(result, self.expected_particle2_header_checksum)
+        self.assertEquals(len(result), 0)
+        self.assertEquals(len(self.exception_callback_value), 1)
+        self.assert_(isinstance(self.exception_callback_value[0], SampleException))
 
-        log.info("============== END INVALID HEADER CHECKSUM ==================")
+        log.debug("============== END INVALID HEADER CHECKSUM ==================")
 
     def test_invalid_payload_checksum(self):
         """
         Ensure that a data record is skipped when the payload checksum is invalid.
         This should result in a non-data exception.
         """
-        log.info("============== START INVALID PAYLOAD CHECKSUM ==================")
-        log.info("Invalid Payload Checksum length %d",
-            len(RECORD_INVALID_PAYLOAD_CHECKSUM))
+        log.debug("============== START INVALID PAYLOAD CHECKSUM ==================")
+        log.debug("Invalid Payload Checksum length %d",
+                 len(RECORD_INVALID_PAYLOAD_CHECKSUM))
         input_file = StringIO(RECORD_INVALID_PAYLOAD_CHECKSUM)
-        self.parser = self.create_parser(input_file, self.state)
+        self.parser = self.create_parser(input_file)
 
-        log.info("INVALID PAYLOAD CHECKSUM GET 1 RECORD")
+        log.debug("INVALID PAYLOAD CHECKSUM GET 1 RECORD")
         result = self.parser.get_records(1)
 
-        # Since the 1st record has a checksum error,
-        # the record we get back should be the 2nd record in the file.
-        expected_file_position = FILE_HEADER_SIZE + (2 * DATA_RECORD_SIZE)
-        log.info("INVALID PAYLOAD CHECKSUM VERIFY POSITION %d",
-            expected_file_position)
-        self.verify_file_info(False, expected_file_position)
-
-        log.info("INVALID PAYLOAD CHECKSUM VERIFY CONTENTS")
+        log.debug("INVALID PAYLOAD CHECKSUM VERIFY CONTENTS")
         self.verify_contents(result, self.expected_particle2_header_checksum)
 
-        log.info("============== END INVALID PAYLOAD CHECKSUM ==================")
+        self.assertEquals(len(result), 1)
+        self.assertEquals(len(self.exception_callback_value), 1)
+        self.assert_(isinstance(self.exception_callback_value[0], RecoverableSampleException))
+
+        log.debug("============== END INVALID PAYLOAD CHECKSUM ==================")
 
     def test_invalid_id(self):
         """
         Ensure that a Sample Exception is raised when the ID field is invalid.
         """
-        log.info("================= START INVALID ID ======================")
-        log.info("Invalid ID length %d", len(RECORD_INVALID_ID))
+        log.debug("================= START INVALID ID ======================")
+        log.debug("Invalid ID length %d", len(RECORD_INVALID_ID))
         input_file = StringIO(RECORD_INVALID_ID)
-        self.parser = self.create_parser(input_file, self.state)
+        self.parser = self.create_parser(input_file)
 
-        log.info("INVALID ID GET 1 RECORD")
-        with self.assertRaises(SampleException):
-            result = self.parser.get_records(1)
-
-        log.info("================= END INVALID ID ======================")
-
-    def test_mid_state_start(self):
-        """
-        Test starting the parser in a state in the middle of processing
-        """
-        log.info("=================== START MID-STATE ======================")
-        log.info("Mid-state length %d", len(RECORD_4_DATA))
-        input_file = StringIO(RECORD_4_DATA)
-
-        ## Skip past the file header record and the first 2 data records.
-        position = FILE_HEADER_SIZE + (2 * DATA_RECORD_SIZE)
-        new_state = {Vel3dKWfpStateKey.POSITION: position,
-                     Vel3dKWfpStateKey.RECORD_NUMBER: 2}
-
-        self.parser = self.create_parser(input_file, new_state)
-
-        ## This should get record 3.
-        log.info("MID-STATE AFTER RECORD 2, POSITION %d",
-            self.parser._read_state[Vel3dKWfpStateKey.POSITION])
+        log.debug("INVALID ID GET 1 RECORD")
         result = self.parser.get_records(1)
-        self.verify_contents(result, self.expected_particle3)
+        self.assertEquals(len(result), 0)
+        self.assertEquals(len(self.exception_callback_value), 1)
+        self.assert_(isinstance(self.exception_callback_value[0], SampleException))
 
-        log.info("=================== END MID-STATE ======================")
+        log.debug("================= END INVALID ID ======================")
 
     def test_missing_sync(self):
         """
@@ -450,109 +398,80 @@ class Vel3dKWfpParserUnitTestCase(ParserUnitTestCase):
           A single byte at the start of the file.
           An entire data record (2nd record in the file).
         """
-        log.info("=================== START MISSING SYNC ======================")
-        log.info("Missing Sync length %d", len(RECORD_4_MISSING_SYNC))
+        log.debug("=================== START MISSING SYNC ======================")
+        log.debug("Missing Sync length %d", len(RECORD_4_MISSING_SYNC))
         input_file = StringIO(RECORD_4_MISSING_SYNC)
-        self.parser = self.create_parser(input_file, self.state)
+        self.parser = self.create_parser(input_file)
 
-        log.info("MISSING GET 3 RECORDS")
+        log.debug("MISSING GET 3 RECORDS")
         result = self.parser.get_records(3)
 
-        # Expected position needs to account for the 1 extra byte before record 1
-        # plus the invalid second record.
-        expected_file_position = FILE_HEADER_SIZE + 1 + (4 * DATA_RECORD_SIZE)
-        log.info("MISSING VERIFY POSITION of %d", expected_file_position)
-        self.verify_file_info(False, expected_file_position)
+        # Per IDD processing should stop once a header with
+        # and invalid sync byte is encountered.
 
-        log.info("MISSING VERIFY CONTENTS")
-        self.assertEqual(result, [self.expected_particle1,
-            self.expected_particle3_missing, self.expected_particle4_missing])
+        self.assertEquals(len(result), 0)
+        self.assertEquals(len(self.exception_callback_value), 1)
+        self.assert_(isinstance(self.exception_callback_value[0], SampleException))
 
-        log.info("=================== END MISSING SYNC ======================")
-
-    def test_set_state(self):
-        """
-        Test changing to a new state after initializing the parser and
-        reading data, as if new data has been found and the state has
-        changed
-        """
-        log.info("=================== START SET STATE ======================")
-        log.info("Set State length %d", len(RECORD_4_DATA))
-        input_file = StringIO(RECORD_4_DATA)
-        self.parser = self.create_parser(input_file, self.state)
-
-        log.info("SET STATE VERIFY VELOCITY RECORD 1")
-        result = self.parser.get_records(1)
-        self.verify_contents(result, self.expected_particle1)
-
-        expected_file_position = FILE_HEADER_SIZE + DATA_RECORD_SIZE
-        self.verify_file_info(False, expected_file_position)
-
-        # Skip to data record 4.
-        position = FILE_HEADER_SIZE + (3 * DATA_RECORD_SIZE)
-        log.info("SET STATE SKIPPING TO POSITION %d", position)
-        new_state = {Vel3dKWfpStateKey.POSITION: position,
-                     Vel3dKWfpStateKey.RECORD_NUMBER: 3}
-        self.parser.set_state(new_state)
-
-        log.info("SET STATE VERIFY DATA RECORD 4")
-        result = self.parser.get_records(1)
-        self.verify_contents(result, self.expected_particle4)
-
-        expected_file_position = position + DATA_RECORD_SIZE
-        self.verify_file_info(False, expected_file_position)
-
-        log.info("=================== END SET STATE ======================")
+        log.debug("=================== END MISSING SYNC ======================")
 
     def test_simple(self):
         """
         Read test data and pull out data particles one at a time.
         Assert that the results are those we expected.
         File is valid.  Has 1 velocity record.
-	    """
-        log.info("=================== START SIMPLE ======================")
-        log.info("Simple length %d", len(RECORD_1_DATA))
+        """
+        log.debug("=================== START SIMPLE ======================")
+        log.debug("Simple length %d", len(RECORD_1_DATA))
         input_file = StringIO(RECORD_1_DATA)
-        self.parser = self.create_parser(input_file, self.state)
+        self.parser = self.create_parser(input_file)
 
-        log.info("SIMPLE VERIFY RECORD 1")
+        log.debug("SIMPLE VERIFY RECORD 1")
         result = self.parser.get_records(1)
-        expected_file_position = FILE_HEADER_SIZE + DATA_RECORD_SIZE
-        self.verify_file_info(False, expected_file_position)
         self.verify_contents(result, self.expected_particle1)
 
-        log.info("SIMPLE VERIFY TIME RECORD")
+        log.debug("SIMPLE VERIFY TIME RECORD")
         result = self.parser.get_records(1)
-        expected_file_position += TIME_RECORD_SIZE
-        self.verify_file_info(True, expected_file_position)
         self.verify_contents(result, self.expected_time)
 
-        log.info("=================== END SIMPLE ======================")
+        log.debug("=================== END SIMPLE ======================")
 
     def test_string_record(self):
         """
         This function verifies that a string record can be processed.
         """
-        log.info("=================== START STRING ======================")
-        log.info("String record length %d", len(STRING_RECORD))
+        log.debug("=================== START STRING ======================")
+        log.debug("String record length %d", len(STRING_RECORD))
         input_file = StringIO(STRING_RECORD)
-        self.parser = self.create_parser(input_file, self.state)
+        self.parser = self.create_parser(input_file)
 
-        log.info("STRING VERIFY RECORD 1")
+        log.debug("STRING VERIFY RECORD 1")
         result = self.parser.get_records(1)
         self.verify_contents(result, self.expected_string_particle)
 
-        log.info("=================== END STRING ======================")
+        log.debug("=================== END STRING ======================")
 
     def verify_contents(self, actual_particle, expected_particle):
-        ##log.debug('==== ACT raw %s', actual_particle.raw_data)
-        ##log.debug('==== EXP raw %s', expected_particle.raw_data)
+        # log.debug('==== ACT raw %s', actual_particle.raw_data)
+        # log.debug('==== EXP raw %s', expected_particle.raw_data)
 
         self.assertEqual(actual_particle, [expected_particle])
-        self.assert_(isinstance(self.publish_callback_value, list))
-        self.assertEqual(self.publish_callback_value[0], expected_particle)
 
-    def verify_file_info(self, expected_end_of_file, expected_file_position):
-        self.assertEqual(self.file_ingested_value, expected_end_of_file)
-        self.assertEqual(self.parser._state[Vel3dKWfpStateKey.POSITION],
-            expected_file_position)
+    def test_real_file(self):
+        """
+        Ensure that data is skipped when flag record is too short.
+        This should raise an exception indicating that end of file was
+        reached while reading the Flag record.
+        """
+        log.info("START REAL FILE")
+
+        with open(os.path.join(RESOURCE_PATH, 'A0000010_5.DAT')) as file_handle:
+
+            self.parser = self.create_parser(file_handle)
+
+            particles = self.parser.get_records(1000)
+
+            self.assert_particles(particles, 'A0000010_5_1_5.yml', RESOURCE_PATH)
+            self.assertEquals(len(self.exception_callback_value), 0)
+
+        log.info("END REAL FILE 4")
