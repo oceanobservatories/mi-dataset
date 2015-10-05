@@ -19,7 +19,7 @@ from mi.dataset.parser.vel3d_l_wfp import Vel3dLWfpParser
 from mi.core.versioning import version
 
 
-@version("0.0.1")
+@version("0.1.0")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     """
     This is the method called by Uframe

@@ -13,7 +13,9 @@ import os
 
 from mi.dataset.test.test_parser import BASE_RESOURCE_PATH
 
-from mi.core.log import get_logger; log = get_logger()
+from mi.core.log import get_logger
+log = get_logger()
+
 from mi.core.exceptions import SampleException
 from StringIO import StringIO
 
@@ -21,7 +23,6 @@ from mi.dataset.test.test_parser import ParserUnitTestCase
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 
 from mi.dataset.parser.vel3d_l_wfp import \
-    Vel3dLWfpStateKey, \
     Vel3dLWfpParser, \
     Vel3dLWfpSioParser, \
     Vel3dLWfpInstrumentParticle, \
@@ -368,16 +369,16 @@ REC_RECORD_2_10 = \
 
 # Expected results for Recovered record #2-10.
 REC_EXPECTED_FIELDS_RECORD_2_10_1_1 = (1, 2, 3, 1, 2, 2002, 101.0, 201.0, 301.0,
-                                      1001.0, 2001.0, 3001.0,
-                                      10001.0, 20001.0, 30001.0, 40001.0)
+                                       1001.0, 2001.0, 3001.0,
+                                       10001.0, 20001.0, 30001.0, 40001.0)
 
 REC_EXPECTED_FIELDS_RECORD_2_10_1_2 = (2, 3, 4, 2, 3, 2002, 102.0, 202.0, 302.0,
-                                      1002.0, 2002.0, 3002.0,
-                                      10002.0, 20002.0, 30002.0, 40002.0)
+                                       1002.0, 2002.0, 3002.0,
+                                       10002.0, 20002.0, 30002.0, 40002.0)
 
 REC_EXPECTED_FIELDS_RECORD_2_10_1_3 = (3, 4, 5, 3, 4, 2002, 103.0, 203.0, 303.0,
-                                      1003.0, 2003.0, 3003.0,
-                                      10003.0, 20003.0, 30003.0, 40003.0)
+                                       1003.0, 2003.0, 3003.0,
+                                       10003.0, 20003.0, 30003.0, 40003.0)
 
 REC_EXPECTED_FIELDS_RECORD_2_10_1_4 = (4, 5, 6, 4, 5, 2002, 104.0, 204.0, 304.0,
                                        1004.0, 2004.0, 3004.0,
@@ -387,12 +388,12 @@ REC_EXPECTED_FIELDS_RECORD_2_10_1_META = (1390826719, 1390820402, 1390826719, 65
 
 
 REC_EXPECTED_FIELDS_RECORD_2_10_2_1 = (5, 6, 7, 5, 6, 2002, 105.0, 205.0, 305.0,
-                                      1005.0, 2005.0, 3005.0,
-                                      10005.0, 20005.0, 30005.0, 40005.0)
+                                       1005.0, 2005.0, 3005.0,
+                                       10005.0, 20005.0, 30005.0, 40005.0)
 
 REC_EXPECTED_FIELDS_RECORD_2_10_2_2 = (6, 7, 8, 6, 7, 2002, 106.0, 206.0, 306.0,
-                                      1006.0, 2006.0, 3006.0,
-                                      10006.0, 20006.0, 30006.0, 40006.0)
+                                       1006.0, 2006.0, 3006.0,
+                                       10006.0, 20006.0, 30006.0, 40006.0)
 
 REC_EXPECTED_FIELDS_RECORD_2_10_2_3 = (7, 8, 9, 7, 8, 2002, 107.0, 207.0, 307.0,
                                        1007.0, 2007.0, 3007.0,
@@ -801,32 +802,32 @@ TEL_RECORD_2_10 = \
 
 # Expected results for Telemetered record #2-10.
 TEL_EXPECTED_FIELDS_RECORD_2_10_1_1 = (1, 2, 3, 1, 2, 2012, 101.0, 201.0, 301.0,
-                                      1001.0, 2001.0, 3001.0,
-                                      10001.0, 20001.0, 30001.0, 40001.0)
+                                       1001.0, 2001.0, 3001.0,
+                                       10001.0, 20001.0, 30001.0, 40001.0)
 
 TEL_EXPECTED_FIELDS_RECORD_2_10_1_2 = (2, 3, 4, 2, 3, 2012, 102.0, 202.0, 302.0,
-                                      1002.0, 2002.0, 3002.0,
-                                      10002.0, 20002.0, 30002.0, 40002.0)
+                                       1002.0, 2002.0, 3002.0,
+                                       10002.0, 20002.0, 30002.0, 40002.0)
 
 TEL_EXPECTED_FIELDS_RECORD_2_10_1_3 = (3, 4, 5, 3, 4, 2012, 103.0, 203.0, 303.0,
-                                      1003.0, 2003.0, 3003.0,
-                                      10003.0, 20003.0, 30003.0, 40003.0)
+                                       1003.0, 2003.0, 3003.0,
+                                       10003.0, 20003.0, 30003.0, 40003.0)
 
 TEL_EXPECTED_FIELDS_RECORD_2_10_1_4 = (4, 5, 6, 4, 5, 2012, 104.0, 204.0, 304.0,
-                                      1004.0, 2004.0, 3004.0,
-                                      10004.0, 20004.0, 30004.0, 40004.0)
+                                       1004.0, 2004.0, 3004.0,
+                                       10004.0, 20004.0, 30004.0, 40004.0)
 
 TEL_EXPECTED_FIELDS_RECORD_2_10_1_META = (1374902331, 1390820402, 1390826719, 65535,
                                           4, 10, 1374902331)
 
 
 TEL_EXPECTED_FIELDS_RECORD_2_10_2_1 = (5, 6, 7, 5, 6, 2012, 105.0, 205.0, 305.0,
-                                      1005.0, 2005.0, 3005.0,
-                                      10005.0, 20005.0, 30005.0, 40005.0)
+                                       1005.0, 2005.0, 3005.0,
+                                       10005.0, 20005.0, 30005.0, 40005.0)
 
 TEL_EXPECTED_FIELDS_RECORD_2_10_2_2 = (6, 7, 8, 6, 7, 2012, 106.0, 206.0, 306.0,
-                                      1006.0, 2006.0, 3006.0,
-                                      10006.0, 20006.0, 30006.0, 40006.0)
+                                       1006.0, 2006.0, 3006.0,
+                                       10006.0, 20006.0, 30006.0, 40006.0)
 
 TEL_EXPECTED_FIELDS_RECORD_2_10_2_3 = (7, 8, 9, 7, 8, 2012, 107.0, 207.0, 307.0,
                                        1007.0, 2007.0, 3007.0,
@@ -982,7 +983,7 @@ TEL_EXPECTED_FIELDS_SIO_PS_WA_WA_3_META = (1374902331, 1390820404, 1390826721,
                                            65535, 4, 12, 1374902331)
 
 
-### NEW STUFF DEFS
+#  NEW STUFF DEFS
 
 RESOURCE_PATH = os.path.join(BASE_RESOURCE_PATH, 'vel3d_l', 'wfp', 'resource')
 
@@ -1008,7 +1009,7 @@ REC_YAML_FILE_1 = 'A0000001.yml'
 REC_LOG_FILE_2 = 'A0000001_PAPA14.dat'
 REC_YAML_FILE_2 = 'A0000001_PAPA14.yml'
 
-### END NEW STUFF DEFS
+# END NEW STUFF DEFS
 
 
 # The list of generated tests are the suggested tests, but there may
@@ -1070,7 +1071,7 @@ class Vel3dLWfpParserUnitTestCase(ParserUnitTestCase):
         self.rec_expected_particle_4_meta = Vel3dLWfpMetadataRecoveredParticle(
             REC_EXPECTED_FIELDS_RECORD_4_META, internal_timestamp=3599815522.0)
 
-
+        #
         self.rec_expected_particle_10_1 = Vel3dLWfpInstrumentRecoveredParticle(
             REC_EXPECTED_FIELDS_RECORD_10_1, internal_timestamp=3187386123.0)
 
@@ -1104,7 +1105,6 @@ class Vel3dLWfpParserUnitTestCase(ParserUnitTestCase):
         self.rec_expected_particle_10_meta = Vel3dLWfpMetadataRecoveredParticle(
             REC_EXPECTED_FIELDS_RECORD_10_META, internal_timestamp=3599815519.0)
 
-        
         # The following are for the multiple block file.
         self.rec_expected_particle_2_10_1_1 = Vel3dLWfpInstrumentRecoveredParticle(
             REC_EXPECTED_FIELDS_RECORD_2_10_1_1, internal_timestamp=3218922123.0)
@@ -1343,45 +1343,48 @@ class Vel3dLWfpParserUnitTestCase(ParserUnitTestCase):
         This test verifies that excess bytes at the end of the metadata record
         are detected and a sample exception is raised.
         """
-        log.info("============== START RECOVERED EXCESS DATA ==================")
-        log.info("Recovered Excess Data length %d", len(REC_EXCESS_METADATA))
+        log.debug("============== START RECOVERED EXCESS DATA ==================")
+        log.debug("Recovered Excess Data length %d", len(REC_EXCESS_METADATA))
         input_file = StringIO(REC_EXCESS_METADATA)
         self.parser = self.create_rec_parser(input_file)
 
-        with self.assertRaises(SampleException):
-            result = self.parser.get_records(1)
+        result = self.parser.get_records(1)
 
-        log.info("============== END RECOVERED EXCESS DATA ==================")
+        self.assertEquals(len(result), 1)
+        self.assertEquals(len(self.exception_callback_value), 1)
+        self.assert_(isinstance(self.exception_callback_value[0], SampleException))
+
+        log.debug("============== END RECOVERED EXCESS DATA ==================")
 
     def test_rec_get_many(self):
         """
         Read test data and pull out multiple data particles at one time.
         Assert that the results are those we expected.
         """
-        log.info("=================== START RECOVERED MANY ======================")
-        log.info("Recovered Many length %d", len(REC_RECORD_4))
+        log.debug("=================== START RECOVERED MANY ======================")
+        log.debug("Recovered Many length %d", len(REC_RECORD_4))
         input_file = StringIO(REC_RECORD_4)
         self.parser = self.create_rec_parser(input_file)
 
-        log.info("REC MANY VERIFY RECORDS 1-4")
+        log.debug("REC MANY VERIFY RECORDS 1-4")
         result = self.parser.get_records(4)
         self.assertEqual(result, [self.rec_expected_particle_4_1,
                                   self.rec_expected_particle_4_2,
                                   self.rec_expected_particle_4_3,
                                   self.rec_expected_particle_4_4])
 
-        log.info("REC MANY VERIFY METADATA RECORD")
+        log.debug("REC MANY VERIFY METADATA RECORD")
         result = self.parser.get_records(1)
         self.verify_contents(result, self.rec_expected_particle_4_meta)
 
-        log.info("=================== END RECOVERED MANY ======================")
+        log.debug("=================== END RECOVERED MANY ======================")
 
     def test_rec_long_stream(self):
         """
         Test a long stream
         """
-        log.info("============== START RECOVERED LONG STREAM ==================")
-        log.info("Recovered Long Stream length %d", len(REC_RECORD_10))
+        log.debug("============== START RECOVERED LONG STREAM ==================")
+        log.debug("Recovered Long Stream length %d", len(REC_RECORD_10))
         input_file = StringIO(REC_RECORD_10)
         self.parser = self.create_rec_parser(input_file)
 
@@ -1397,21 +1400,20 @@ class Vel3dLWfpParserUnitTestCase(ParserUnitTestCase):
                                   self.rec_expected_particle_10_9,
                                   self.rec_expected_particle_10_10])
 
-        log.info("REC LONG STREAM VERIFY METADATA RECORD")
+        log.debug("REC LONG STREAM VERIFY METADATA RECORD")
         result = self.parser.get_records(1)
         self.verify_contents(result, self.rec_expected_particle_10_meta)
 
         self.assertEqual(self.exception_callback_value, [])
 
-        log.info("============== END RECOVERED LONG STREAM ==================")
-
+        log.debug("============== END RECOVERED LONG STREAM ==================")
 
     def test_rec_multiple_blocks(self):
         """
         This function verifies that multiple blocks can be read.
         """
-        log.info("============ START RECOVERED MULTIPLE BLOCKS ================")
-        log.info("Recovered Multiple Blocks length %d", len(REC_RECORD_2_10))
+        log.debug("============ START RECOVERED MULTIPLE BLOCKS ================")
+        log.debug("Recovered Multiple Blocks length %d", len(REC_RECORD_2_10))
         input_file = StringIO(REC_RECORD_2_10)
         self.parser = self.create_rec_parser(input_file)
 
@@ -1429,42 +1431,42 @@ class Vel3dLWfpParserUnitTestCase(ParserUnitTestCase):
                                   self.rec_expected_particle_2_10_2_6,
                                   self.rec_expected_particle_2_10_2_meta])
 
-        log.info("============ END RECOVERED MULTIPLE BLOCKS ================")
+        log.debug("============ END RECOVERED MULTIPLE BLOCKS ================")
 
     def test_rec_simple_no_decimation(self):
         """
         Read test data and pull out data particles one at a time.
         Assert that the results are those we expected.
         """
-        log.info("========== START RECOVERED SIMPLE WITHOUT DECIMATION ==========")
-        log.info("Recovered Simple length %d", len(REC_RECORD_3))
+        log.debug("========== START RECOVERED SIMPLE WITHOUT DECIMATION ==========")
+        log.debug("Recovered Simple length %d", len(REC_RECORD_3))
         input_file = StringIO(REC_RECORD_3)
         self.parser = self.create_rec_parser(input_file)
 
-        log.info("REC SIMPLE WITHOUT DECIMATION VERIFY RECORD 1")
+        log.debug("REC SIMPLE WITHOUT DECIMATION VERIFY RECORD 1")
         result = self.parser.get_records(1)
         self.verify_contents(result, self.rec_expected_particle_3_1)
 
-        log.info("REC SIMPLE WITHOUT DECIMATION VERIFY RECORD 2")
+        log.debug("REC SIMPLE WITHOUT DECIMATION VERIFY RECORD 2")
         result = self.parser.get_records(1)
         self.verify_contents(result, self.rec_expected_particle_3_2)
 
-        log.info("REC SIMPLE WITHOUT DECIMATION VERIFY RECORD 3")
+        log.debug("REC SIMPLE WITHOUT DECIMATION VERIFY RECORD 3")
         result = self.parser.get_records(1)
         self.verify_contents(result, self.rec_expected_particle_3_3)
 
-        log.info("REC SIMPLE WITHOUT DECIMATION VERIFY METADATA RECORD")
+        log.debug("REC SIMPLE WITHOUT DECIMATION VERIFY METADATA RECORD")
         result = self.parser.get_records(1)
         self.verify_contents(result, self.rec_expected_particle_3_meta)
 
-        log.info("========== END RECOVERED SIMPLE WITHOUT DECIMATION ==========")
+        log.debug("========== END RECOVERED SIMPLE WITHOUT DECIMATION ==========")
 
     def test_tel_multiple_sio_blocks(self):
         """
         This function verifies that multiple SIO blocks can be read.
         """
-        log.info("========== START TELEMETERED MULTIPLE SIO BLOCKS ==============")
-        log.info("Telemetered Multiple SIO Blocks length %d", len(TEL_RECORD_2_10))
+        log.debug("========== START TELEMETERED MULTIPLE SIO BLOCKS ==============")
+        log.debug("Telemetered Multiple SIO Blocks length %d", len(TEL_RECORD_2_10))
         input_file = StringIO(TEL_RECORD_2_10)
         self.parser = self.create_tel_parser(input_file)
 
@@ -1482,14 +1484,14 @@ class Vel3dLWfpParserUnitTestCase(ParserUnitTestCase):
                                   self.tel_expected_particle_2_10_2_6,
                                   self.tel_expected_particle_2_10_2_meta])
 
-        log.info("========== END TELEMETERED MULTIPLE SIO BLOCKS ==============")
+        log.debug("========== END TELEMETERED MULTIPLE SIO BLOCKS ==============")
 
     def test_tel_not_my_sio_block(self):
         """
         This function verifies that non-WA SIO blocks are successfully ignored.
         """
-        log.info("========== START TELEMETERED NOT MY SIO BLOCK ==============")
-        log.info("Not my SIO Block length %d", len(TEL_SIO_PS_WA_WA))
+        log.debug("========== START TELEMETERED NOT MY SIO BLOCK ==============")
+        log.debug("Not my SIO Block length %d", len(TEL_SIO_PS_WA_WA))
         input_file = StringIO(TEL_SIO_PS_WA_WA)
         self.parser = self.create_tel_parser(input_file)
 
@@ -1504,8 +1506,7 @@ class Vel3dLWfpParserUnitTestCase(ParserUnitTestCase):
                                   self.tel_expected_particle_sio_ps_wa_wa_3_4,
                                   self.tel_expected_particle_sio_ps_wa_wa_3_meta])
 
-        log.info("========== END TELEMETERED NOT MY SIO BLOCK ==============")
-
+        log.debug("========== END TELEMETERED NOT MY SIO BLOCK ==============")
 
     def test_tel_simple_no_decimation(self):
         """
@@ -1513,20 +1514,20 @@ class Vel3dLWfpParserUnitTestCase(ParserUnitTestCase):
         Assert that the results are those we expected.
         This test verifies that a missing decimation factor is handled correctly.
         """
-        log.info("========= START TELEMETERED SIMPLE NO DECIMATION =============")
-        log.info("Telemetered Simple length %d", len(TEL_RECORD_1))
+        log.debug("========= START TELEMETERED SIMPLE NO DECIMATION =============")
+        log.debug("Telemetered Simple length %d", len(TEL_RECORD_1))
         input_file = StringIO(TEL_RECORD_1)
         self.parser = self.create_tel_parser(input_file)
 
-        log.info("TEL SIMPLE NO DECIMATION VERIFY RECORD 1")
+        log.debug("TEL SIMPLE NO DECIMATION VERIFY RECORD 1")
         result = self.parser.get_records(1)
         self.verify_contents(result, self.tel_expected_particle_1_1)
 
-        log.info("TEL SIMPLE NO DECIMATION VERIFY METADATA RECORD")
+        log.debug("TEL SIMPLE NO DECIMATION VERIFY METADATA RECORD")
         result = self.parser.get_records(1)
         self.verify_contents(result, self.tel_expected_particle_1_meta)
 
-        log.info("========= END TELEMETERED SIMPLE NO DECIMATION ==============")
+        log.debug("========= END TELEMETERED SIMPLE NO DECIMATION ==============")
 
     def test_tel_simple_with_decimation(self):
         """
@@ -1534,33 +1535,33 @@ class Vel3dLWfpParserUnitTestCase(ParserUnitTestCase):
         Assert that the results are those we expected.
         This test verifies that a decimation factor is handled correctly.
         """
-        log.info("========= START TELEMETERED SIMPLE WITH DECIMATION ===========")
-        log.info("Simple length %d", len(TEL_RECORD_2))
+        log.debug("========= START TELEMETERED SIMPLE WITH DECIMATION ===========")
+        log.debug("Simple length %d", len(TEL_RECORD_2))
         input_file = StringIO(TEL_RECORD_2)
         self.parser = self.create_tel_parser(input_file)
 
-        log.info("SIMPLE WITH DECIMATION VERIFY RECORD 1")
+        log.debug("SIMPLE WITH DECIMATION VERIFY RECORD 1")
         result = self.parser.get_records(1)
         self.verify_contents(result, self.tel_expected_particle_2_1)
 
-        log.info("SIMPLE WITH DECIMATION VERIFY RECORD 2")
+        log.debug("SIMPLE WITH DECIMATION VERIFY RECORD 2")
         result = self.parser.get_records(1)
         self.verify_contents(result, self.tel_expected_particle_2_2)
 
-        log.info("SIMPLE WITH DECIMATION VERIFY METADATA RECORD")
+        log.debug("SIMPLE WITH DECIMATION VERIFY METADATA RECORD")
         result = self.parser.get_records(1)
         self.verify_contents(result, self.tel_expected_particle_2_meta)
 
-        log.info("========= END TELEMETERED SIMPLE WITH DECIMATION =============")
+        log.debug("========= END TELEMETERED SIMPLE WITH DECIMATION =============")
 
-    ################## END OLDER TESTS -- START NEW TESTS #########################
+    # ************* END OLDER TESTS -- START NEW TESTS ***********************
 
     def test_rec_parser_simple(self):
         """
         Read data from a file and pull out data particles
         one at a time. Verify that the results are those we expected.
         """
-        log.info('===== START YAML TEST =====')
+        log.debug('===== START YAML TEST =====')
         in_file = self.open_file(REC_LOG_FILE_SIMPLE)
         parser = self.create_rec_parser(in_file)
 
@@ -1571,14 +1572,14 @@ class Vel3dLWfpParserUnitTestCase(ParserUnitTestCase):
         in_file.close()
         self.assertListEqual(self.exception_callback_value, [])
 
-        log.info('===== END YAML TEST =====')
+        log.debug('===== END YAML TEST =====')
 
     def test_rec_parser_yaml(self):
         """
         Read data from a file and pull out data particles
         one at a time. Verify that the results are those we expected.
         """
-        log.info('===== START YAML TEST =====')
+        log.debug('===== START YAML TEST =====')
         in_file = self.open_file(REC_LOG_FILE_1)
         parser = self.create_rec_parser(in_file)
 
@@ -1589,14 +1590,14 @@ class Vel3dLWfpParserUnitTestCase(ParserUnitTestCase):
         in_file.close()
         self.assertListEqual(self.exception_callback_value, [])
 
-        log.info('===== END YAML TEST =====')
+        log.debug('===== END YAML TEST =====')
 
     def test_rec_parser_large_yaml(self):
         """
         Read data from a file and pull out data particles
         one at a time. Verify that the results are those we expected.
         """
-        log.info('===== START YAML TEST =====')
+        log.debug('===== START YAML TEST =====')
         in_file = self.open_file(REC_LOG_FILE_2)
         parser = self.create_rec_parser(in_file)
 
@@ -1607,14 +1608,14 @@ class Vel3dLWfpParserUnitTestCase(ParserUnitTestCase):
         in_file.close()
         self.assertListEqual(self.exception_callback_value, [])
 
-        log.info('===== END YAML TEST =====')
+        log.debug('===== END YAML TEST =====')
 
     def test_tel_parser_yaml_simple(self):
         """
         Read data from a file and pull out data particles
         one at a time. Verify that the results are those we expected.
         """
-        log.info('===== START YAML TEST =====')
+        log.debug('===== START YAML TEST =====')
         in_file = self.open_file(SIMPLE_LOG_FILE)
         parser = self.create_tel_parser(in_file)
 
@@ -1626,14 +1627,14 @@ class Vel3dLWfpParserUnitTestCase(ParserUnitTestCase):
         in_file.close()
         self.assertListEqual(self.exception_callback_value, [])
 
-        log.info('===== END YAML TEST =====')
+        log.debug('===== END YAML TEST =====')
 
     def test_tel_parser_yaml_no_decimation(self):
         """
         Read data from a log file with no decimation.
         Verify that the results are those we expected.
         """
-        log.info('===== START NO DEC TEST =====')
+        log.debug('===== START NO DEC TEST =====')
         in_file = self.open_file(LARGE_LOG_FILE)
         parser = self.create_tel_parser(in_file)
 
@@ -1644,14 +1645,14 @@ class Vel3dLWfpParserUnitTestCase(ParserUnitTestCase):
         in_file.close()
         self.assertListEqual(self.exception_callback_value, [])
 
-        log.info('===== END NO DEC TEST =====')
+        log.debug('===== END NO DEC TEST =====')
 
     def test_tel_parser_yaml_with_decimation(self):
         """
         Read data from a log file with a decimation factor.
         Verify that the results are those we expected.
         """
-        log.info('===== START DEC TEST =====')
+        log.debug('===== START DEC TEST =====')
         in_file = self.open_file(DEC_LOG_FILE)
         parser = self.create_tel_parser(in_file)
 
@@ -1662,14 +1663,14 @@ class Vel3dLWfpParserUnitTestCase(ParserUnitTestCase):
         in_file.close()
         self.assertListEqual(self.exception_callback_value, [])
 
-        log.info('===== END DEC TEST =====')
+        log.debug('===== END DEC TEST =====')
 
     def test_tel_parser_yaml_decimation_mix(self):
         """
         Some records have a decimation factor, others don't.
         Verify that the results are those we expected.
         """
-        log.info('===== START MIX TEST =====')
+        log.debug('===== START MIX TEST =====')
         in_file = self.open_file(MIX_LOG_FILE)
         parser = self.create_tel_parser(in_file)
 
@@ -1680,7 +1681,7 @@ class Vel3dLWfpParserUnitTestCase(ParserUnitTestCase):
         in_file.close()
         self.assertListEqual(self.exception_callback_value, [])
 
-        log.info('===== END MIX TEST =====')
+        log.debug('===== END MIX TEST =====')
 
     def create_rec_yml_file(self):
         """
