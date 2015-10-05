@@ -16,7 +16,7 @@ from mi.dataset.dataset_driver import DataSetDriver, ParticleDataHandler
 from mi.dataset.parser.vel3d_k_wfp import Vel3dKWfpParser
 from mi.core.versioning import version
 
-@version("0.0.1")
+@version("0.1.0")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
 
     config.add_configuration(os.path.join(basePythonCodePath, 'res', 'config', 'mi-logging.yml'))
@@ -36,14 +36,10 @@ def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
 
     with open(sourceFilePath, 'rb') as stream_handle:
         parser = Vel3dKWfpParser(parser_config,
-                                 None,
                                  stream_handle,
-                                 lambda state,file : None,
-                                 lambda data : None,
                                  exception_callback)
 
         driver = DataSetDriver(parser, particleDataHdlrObj)
         driver.processFileStream()
-
 
     return particleDataHdlrObj
