@@ -60,7 +60,7 @@ class DataSetDriver(object):
                 for record in records:
                     self._particleDataHdlrObj.addParticleSample(record.type(), record.generate())
             except Exception as e:
-                log.debug(e)
+                log.error(e)
                 self._particleDataHdlrObj.setParticleDataCaptureFailure()
                 break
 
@@ -70,24 +70,24 @@ class SimpleDatasetDriver(DataSetDriver):
     Abstract class to simplify driver writing.  Derived classes simply need to provide
     the _build_parser method
     """
-    
+
     def __init__(self, basePythonCodePath, stream_handle, particleDataHdlrObj):
-        
+
         #configure the mi logger
         config.add_configuration(os.path.join(basePythonCodePath, 'res', 'config', 'mi-logging.yml'))
         parser = self._build_parser(stream_handle)
-        
+
         super(SimpleDatasetDriver, self).__init__(parser, particleDataHdlrObj)
-        
+
     def _build_parser(self, stream_handle):
         """
         abstract method that must be provided by derived classes to build a parser
         :param stream_handle: an open fid created from the sourceFilePath passed in from edex
         :return: A properly configured parser object
         """
-        
+
         raise NotImplementedException("_build_parser must be implemented")
-    
+
     def _exception_callback(self, exception):
         """
         A common exception callback method that can be used by _build_parser methods to
@@ -98,4 +98,4 @@ class SimpleDatasetDriver(DataSetDriver):
 
         log.debug("ERROR: %r", exception)
         self._particleDataHdlrObj.setParticleDataCaptureFailure()
-    
+
