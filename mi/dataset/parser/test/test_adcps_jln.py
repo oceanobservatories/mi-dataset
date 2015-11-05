@@ -9,6 +9,8 @@ Parts of this test code were taken from test_adcpa.py
 Due to the nature of the records in PD0 files, (large binary records with hundreds of parameters)
 this code verifies select items in the parsed data particle
 """
+import copy
+import pprint
 
 from nose.plugins.attrib import attr
 import yaml
@@ -35,8 +37,17 @@ class AdcpsJlnParserUnitTestCase(ParserUnitTestCase):
 
     def setUp(self):
         ParserUnitTestCase.setUp(self)
-        self.config = {DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.adcps_jln',
-                       DataSetDriverConfigKeys.PARTICLE_CLASS: 'AdcpsJlnParticle'}
+        self.config = {
+            DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.adcps_jln',
+            DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT: {
+                'velocity': 'Pd0EarthParticle',
+                'engineering': 'AdcpPd0AdcpsEngineeringParticle',
+                'config': 'AdcpPd0AdcpsConfigParticle',
+                'error_status': 'AdcpPd0AdcpsErrorStatusParticle',
+                'bottom_track': 'AdcpPd0BottomTrackEarthParticle',
+                'bottom_track_eng': 'AdcpPd0BottomTrackEngParticle',
+            }
+        }
         # Define test data particles and their associated timestamps which will be
         # compared with returned results
 
@@ -44,7 +55,7 @@ class AdcpsJlnParserUnitTestCase(ParserUnitTestCase):
         # and double checked with PD0decoder_v2 MATLAB tool
         self.test01 = {}
         self.test01['internal_timestamp'] = 3581719370.030000
-        self.test01['ensemble_start_time'] = 3581719370.0299997329711914
+        #self.test01['ensemble_start_time'] = 3581719370.0299997329711914
         self.test01['echo_intensity_beam1'] = [89, 51, 44, 43, 43, 43, 43, 44, 43, 44, 43, 43, 44, 44, 44,
                                                43, 43, 44, 43, 44, 44, 43, 43, 44, 44, 44, 44, 44, 44, 44,
                                                43, 43, 43, 43, 43, 43, 43, 44, 44, 43, 44, 44, 43, 43, 44,
@@ -88,7 +99,7 @@ class AdcpsJlnParserUnitTestCase(ParserUnitTestCase):
         # ensemble 1 of file ADCP_CCE1T_20.000
         self.test02 = {}
         self.test02['ensemble_number'] = 1
-        self.test02['real_time_clock'] = [12, 9, 21, 0, 0, 0, 0]
+        #self.test02['real_time_clock'] = [12, 9, 21, 0, 0, 0, 0]
         self.test02['heading'] = 21348
         self.test02['pitch'] = 4216
         self.test02['roll'] = 3980
@@ -97,7 +108,7 @@ class AdcpsJlnParserUnitTestCase(ParserUnitTestCase):
         # ensemble 20 of file ADCP_CCE1T_20.000
         self.test03 = {}
         self.test03['ensemble_number'] = 20
-        self.test03['real_time_clock'] = [12, 9, 21, 19, 0, 0, 0]
+        #self.test03['real_time_clock'] = [12, 9, 21, 19, 0, 0, 0]
         self.test03['heading'] = 538
         self.test03['pitch'] = 147
         self.test03['roll'] = 221
@@ -160,7 +171,7 @@ class AdcpsJlnParserUnitTestCase(ParserUnitTestCase):
 
             parser = AdcpPd0Parser(self.config, stream_handle, self.exception_callback)
 
-            particles = parser.get_records(1)
+            particles = parser.get_records(4)
 
             # this simple test shows the 2 ways to verify results
             self.assert_result(self.test01, particles[0])
@@ -179,10 +190,10 @@ class AdcpsJlnParserUnitTestCase(ParserUnitTestCase):
 
             parser = AdcpPd0Parser(self.config, stream_handle, self.exception_callback)
 
-            particles = parser.get_records(20)
+            particles = parser.get_records(31)
 
             self.assert_result(self.test02, particles[0])
-            self.assert_result(self.test03, particles[19])
+            self.assert_result(self.test03, particles[30])
 
     def test_bad_data(self):
         """
@@ -204,7 +215,226 @@ class AdcpsJlnParserUnitTestCase(ParserUnitTestCase):
 
             parser = AdcpPd0Parser(self.config, stream_handle, self.exception_callback)
 
-            particles = parser.get_records(20)
+            particles = parser.get_records(47)
 
             self.assert_particles(particles, 'ADCP_CCE1T_20.yml', RESOURCE_PATH)
             self.assertEqual(self.exception_callback_value, [])
+
+
+def convert_yml(input_file):
+    earth = [
+        'num_cells',
+        'cell_length',
+        'bin_1_distance',
+        'ensemble_number',
+        'heading',
+        'pitch',
+        'roll',
+        'salinity',
+        'temperature',
+        'transducer_depth',
+        'pressure',
+        'sysconfig_vertical_orientation',
+        'water_velocity_east',
+        'water_velocity_north',
+        'water_velocity_up',
+        'error_velocity',
+        'water_velocity_forward',
+        'water_velocity_starboard',
+        'water_velocity_vertical',
+        'correlation_magnitude_beam1',
+        'correlation_magnitude_beam2',
+        'correlation_magnitude_beam3',
+        'correlation_magnitude_beam4',
+        'echo_intensity_beam1',
+        'echo_intensity_beam2',
+        'echo_intensity_beam3',
+        'echo_intensity_beam4',
+        'percent_good_3beam',
+        'percent_transforms_reject',
+        'percent_bad_beams',
+        'percent_good_4beam',
+    ]
+
+    config = [
+        'firmware_version',
+        'firmware_revision',
+        'data_flag',
+        'lag_length',
+        'num_beams',
+        'num_cells',
+        'pings_per_ensemble',
+        'cell_length',
+        'blank_after_transmit',
+        'signal_processing_mode',
+        'low_corr_threshold',
+        'num_code_repetitions',
+        'percent_good_min',
+        'error_vel_threshold',
+        'time_per_ping_minutes',
+        'time_per_ping_seconds',
+        'heading_alignment',
+        'heading_bias',
+        'reference_layer_start',
+        'reference_layer_stop',
+        'false_target_threshold',
+        'low_latency_trigger',
+        'transmit_lag_distance',
+        'cpu_board_serial_number',
+        'system_bandwidth',
+        'system_power',
+        'serial_number',
+        'beam_angle',
+        'sysconfig_frequency',
+        'sysconfig_beam_pattern',
+        'sysconfig_sensor_config',
+        'sysconfig_head_attached',
+        'sysconfig_vertical_orientation',
+        'sysconfig_beam_angle',
+        'sysconfig_beam_config',
+        'coord_transform_type',
+        'coord_transform_tilts',
+        'coord_transform_beams',
+        'coord_transform_mapping',
+        'sensor_source_speed',
+        'sensor_source_depth',
+        'sensor_source_heading',
+        'sensor_source_pitch',
+        'sensor_source_roll',
+        'sensor_source_conductivity',
+        'sensor_source_temperature',
+        'sensor_source_temperature_eu',
+        'sensor_available_speed',
+        'sensor_available_depth',
+        'sensor_available_heading',
+        'sensor_available_pitch',
+        'sensor_available_roll',
+        'sensor_available_conductivity',
+        'sensor_available_temperature',
+        'sensor_available_temperature_eu',
+    ]
+
+    engineering = [
+        'transmit_pulse_length',
+        'speed_of_sound',
+        'mpt_minutes',
+        'mpt_seconds',
+        'heading_stdev',
+        'pitch_stdev',
+        'roll_stdev',
+        'pressure_variance',
+        'adc_ambient_temp',
+        'adc_attitude',
+        'adc_attitude_temp',
+        'adc_contamination_sensor',
+        'adc_pressure_minus',
+        'adc_pressure_plus',
+        'adc_transmit_current',
+        'adc_transmit_voltage',
+    ]
+
+    error = [
+        'bit_error_number',
+        'bit_error_count',
+        'address_error_exception',
+        'battery_saver_power',
+        'bit_result_demod_0',
+        'bit_result_demod_1',
+        'bit_result_timing',
+        'bus_error_exception',
+        'clock_jump_backward',
+        'clock_jump_forward',
+        'clock_read_error',
+        'cold_wakeup_occurred',
+        'emulator_exception',
+        'illegal_instruction_exception',
+        'level_7_interrupt',
+        'pinging',
+        'power_fail',
+        'spurious_clock_interrupt',
+        'spurious_dsp_interrupt',
+        'spurious_uart_interrupt',
+        'unassigned_exception',
+        'unexpected_alarm',
+        'unknown_wakeup_occurred',
+        'watchdog_restart_occurred',
+        'zero_divide_instruction',
+    ]
+
+    stream_map = {
+        'adcp_velocity_earth': ('Pd0EarthParticle', earth),
+        'adcp_config': ('AdcpPd0AdcpsConfigParticle', config),
+        'adcp_engineering': ('AdcpPd0AdcpsEngineeringParticle', engineering),
+        'adcp_error_status': ('AdcpPd0AdcpsErrorStatusParticle', error),
+    }
+
+    streams = [
+        'adcp_velocity_earth',
+        'adcp_config',
+        'adcp_engineering',
+        'adcp_error_status',
+    ]
+
+    always = streams[:1]
+
+    last = {}
+
+    def create_particle(record, index, stream):
+        klass, fields = stream_map.get(stream)
+        particle = {field: record.get(field) for field in fields if field in record}
+        particle['_index'] = index
+        particle['particle_object'] = klass
+        particle['particle_type'] = stream
+        particle['internal_timestamp'] = record['internal_timestamp']
+
+        if 'time_per_ping_seconds' in fields:
+            seconds = particle['time_per_ping_seconds']
+            int_seconds = int(seconds)
+            hundredths = int(100 * (seconds - int_seconds))
+            particle['time_per_ping_hundredths'] = hundredths
+            particle['time_per_ping_seconds'] = int_seconds
+
+        if 'mpt_seconds' in fields:
+            seconds = particle['mpt_seconds']
+            int_seconds = int(seconds)
+            hundredths = int(100 * (seconds - int_seconds))
+            particle['mpt_hundredths'] = hundredths
+            particle['mpt_seconds'] = int_seconds
+
+        return particle
+
+    def changed(particle):
+        particle = copy.deepcopy(particle)
+        stream = particle.pop('particle_type')
+        particle.pop('particle_object')
+        particle.pop('_index')
+        particle.pop('internal_timestamp')
+        last_values = last.get(stream)
+        if last_values == particle:
+            return False
+
+        last[stream] = particle
+        return True
+
+    out_records = []
+    records = yaml.load(open(input_file))
+    index = 1
+    for record in records['data']:
+        for stream in streams:
+            particle = create_particle(record, index, stream)
+            if stream in always or changed(particle):
+                out_records.append(particle)
+                index += 1
+
+    records['data'] = out_records
+    yaml.dump(records, open(input_file, 'w'), default_flow_style=False)
+
+
+def convert_all():
+    yml_files = [
+        'ADCP_data_20130702.yml',
+        'ADCP_CCE1T_20.yml',
+    ]
+
+    for f in yml_files:
+        convert_yml(os.path.join(RESOURCE_PATH, f))

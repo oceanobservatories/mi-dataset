@@ -10,7 +10,6 @@ setup(
     install_requires=[
         "pyyaml",
         "numpy",
-        "graypy",
         "msgpack-python",
         "ntplib",
         "matplotlib",
