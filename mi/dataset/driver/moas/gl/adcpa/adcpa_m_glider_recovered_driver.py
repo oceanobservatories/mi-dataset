@@ -15,14 +15,19 @@ from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 from mi.core.versioning import version
 
 
-@version("0.0.1")
+@version("0.1.0")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
 
     config.add_configuration(os.path.join(basePythonCodePath, 'res', 'config', 'mi-logging.yml'))
 
     parser_config = {
-        DataSetDriverConfigKeys.PARTICLE_MODULE:  'mi.dataset.parser.adcpa_m_glider',
-        DataSetDriverConfigKeys.PARTICLE_CLASS: 'AdcpaMGliderRecoveredParticle',
+        DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT: {
+            'velocity': 'VelocityGlider',
+            'engineering': 'GliderEngineering',
+            'config': 'GliderConfig',
+            'bottom_track': 'EarthBottom',
+            'bottom_track_config': 'BottomConfig',
+        }
     }
 
     driver = AdcpaDriver(sourceFilePath, particleDataHdlrObj, parser_config)

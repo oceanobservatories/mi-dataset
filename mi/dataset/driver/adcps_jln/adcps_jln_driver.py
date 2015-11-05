@@ -13,7 +13,8 @@ from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 from mi.dataset.parser.adcp_pd0 import AdcpPd0Parser
 from mi.core.versioning import version
 
-@version("0.0.3")
+
+@version("0.1.0")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
 
     from mi.logging import config
@@ -21,19 +22,24 @@ def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     log = get_logger()
 
     config = {
-            DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.adcps_jln',
-            DataSetDriverConfigKeys.PARTICLE_CLASS: 'AdcpsJlnParticle'
+        DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT: {
+            'velocity': 'VelocityEarth',
+            'engineering': 'AdcpsEngineering',
+            'config': 'AdcpsConfig',
+            'bottom_track': 'EarthBottom',
+            'bottom_track_config': 'BottomConfig',
         }
+    }
     log.trace("My ADCPS JLN Config: %s", config)
 
     def exception_callback(exception):
-        log.debug("ERROR: %r", exception)
+        log.error("ERROR: %r", exception)
         particleDataHdlrObj.setParticleDataCaptureFailure()
-    
+
     with open(sourceFilePath, 'rb') as file_handle:
         parser = AdcpPd0Parser(config, file_handle, exception_callback)
-        
+
         driver = DataSetDriver(parser, particleDataHdlrObj)
-        driver.processFileStream() 
-  
+        driver.processFileStream()
+
     return particleDataHdlrObj

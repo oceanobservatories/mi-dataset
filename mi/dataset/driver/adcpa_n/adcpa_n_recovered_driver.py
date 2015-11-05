@@ -17,7 +17,7 @@ from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 from mi.core.versioning import version
 
 
-@version("15.6.0")
+@version("15.7.0")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     """
     This is the method called by Uframe
@@ -44,8 +44,15 @@ class AdcpaNRecoveredDriver(SimpleDatasetDriver):
 
     def _build_parser(self, stream_handle):
 
-        config = {DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.adcpa_n',
-                  DataSetDriverConfigKeys.PARTICLE_CLASS: 'AdcpaNInstrumentParticle'}
+        config = {
+            DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT: {
+                'velocity': 'VelocityInst',
+                'engineering': 'AuvEngineering',
+                'config': 'AuvConfig',
+                'bottom_track': 'InstBottom',
+                'bottom_track_config': 'BottomConfig',
+            }
+        }
 
         parser = AdcpPd0Parser(config, stream_handle, self._exception_callback)
 

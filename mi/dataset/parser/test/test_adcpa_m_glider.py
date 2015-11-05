@@ -9,7 +9,9 @@ Parts of this test code were taken from test_adcpa.py
 Due to the nature of the records in PD0 files, (large binary records with hundreds of parameters)
 this code verifies select items in the parsed data particle
 """
+import copy
 
+import yaml
 from nose.plugins.attrib import attr
 import os
 
@@ -36,11 +38,17 @@ class AdcpsMGliderParserUnitTestCase(ParserUnitTestCase):
     def setUp(self):
         ParserUnitTestCase.setUp(self)
 
-        self.config_recov = {DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.adcpa_m_glider',
-                             DataSetDriverConfigKeys.PARTICLE_CLASS: 'AdcpaMGliderRecoveredParticle'}
+        self.config_recov = {
+            DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT: {
+                'velocity': 'VelocityGlider',
+                'engineering': 'GliderEngineering',
+                'config': 'GliderConfig',
+                'bottom_track': 'EarthBottom',
+                'bottom_track_config': 'BottomConfig',
+            }
+        }
 
-        self.config_telem = {DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.adcpa_m_glider',
-                             DataSetDriverConfigKeys.PARTICLE_CLASS: 'AdcpaMGliderInstrumentParticle'}
+        self.config_telem = self.config_recov
 
     def test_simple_recov(self):
         """
@@ -55,10 +63,10 @@ class AdcpsMGliderParserUnitTestCase(ParserUnitTestCase):
         with open(os.path.join(RESOURCE_PATH, 'ND072022.PD0'), 'rb') as stream_handle:
 
             parser = AdcpPd0Parser(self.config_recov, stream_handle, self.exception_callback)
-            particles = parser.get_records(1)
-    
+            particles = parser.get_records(6)
+
             log.debug('got back %d particles', len(particles))
-    
+
             self.assert_particles(particles, 'ND072022_recov.yml', RESOURCE_PATH)
 
     def test_simple_telem(self):
@@ -75,7 +83,7 @@ class AdcpsMGliderParserUnitTestCase(ParserUnitTestCase):
 
             parser = AdcpPd0Parser(self.config_telem, stream_handle, self.exception_callback)
 
-            particles = parser.get_records(1)
+            particles = parser.get_records(6)
 
             log.debug('got back %d particles', len(particles))
 
@@ -91,7 +99,7 @@ class AdcpsMGliderParserUnitTestCase(ParserUnitTestCase):
 
             parser = AdcpPd0Parser(self.config_recov, stream_handle, self.exception_callback)
 
-            particles = parser.get_records(54)
+            particles = parser.get_records(195)
             log.debug('got back %d records', len(particles))
 
             self.assert_particles(particles, 'ND072023_recov.yml', RESOURCE_PATH)
@@ -128,4 +136,264 @@ class AdcpsMGliderParserUnitTestCase(ParserUnitTestCase):
 
             self.assertEqual(len(self.exception_callback_value), 1)
             self.assert_(isinstance(self.exception_callback_value[0], RecoverableSampleException))
+
+
+def convert_yml(input_file):
+    bottom_config = [
+        'bt_pings_per_ensemble',
+        'bt_delay_before_reacquire',
+        'bt_corr_magnitude_min',
+        'bt_eval_magnitude_min',
+        'bt_percent_good_min',
+        'bt_mode',
+        'bt_error_velocity_max',
+        'bt_max_depth',
+        ]
+
+    bottom = [
+        'bt_beam1_range',
+        'bt_beam2_range',
+        'bt_beam3_range',
+        'bt_beam4_range',
+        'bt_eastward_velocity',
+        'bt_northward_velocity',
+        'bt_upward_velocity',
+        'bt_error_velocity',
+        'bt_beam1_correlation',
+        'bt_beam2_correlation',
+        'bt_beam3_correlation',
+        'bt_beam4_correlation',
+        'bt_beam1_eval_amp',
+        'bt_beam2_eval_amp',
+        'bt_beam3_eval_amp',
+        'bt_beam4_eval_amp',
+        'bt_beam1_percent_good',
+        'bt_beam2_percent_good',
+        'bt_beam3_percent_good',
+        'bt_beam4_percent_good',
+        'bt_eastward_ref_layer_velocity',
+        'bt_northward_ref_layer_velocity',
+        'bt_upward_ref_layer_velocity',
+        'bt_error_ref_layer_velocity',
+        'bt_beam1_ref_correlation',
+        'bt_beam2_ref_correlation',
+        'bt_beam3_ref_correlation',
+        'bt_beam4_ref_correlation',
+        'bt_beam1_ref_intensity',
+        'bt_beam2_ref_intensity',
+        'bt_beam3_ref_intensity',
+        'bt_beam4_ref_intensity',
+        'bt_beam1_ref_percent_good',
+        'bt_beam2_ref_percent_good',
+        'bt_beam3_ref_percent_good',
+        'bt_beam4_ref_percent_good',
+        'bt_beam1_rssi_amplitude',
+        'bt_beam2_rssi_amplitude',
+        'bt_beam3_rssi_amplitude',
+        'bt_beam4_rssi_amplitude',
+        'bt_ref_layer_min',
+        'bt_ref_layer_near',
+        'bt_ref_layer_far',
+        'bt_gain',
+    ]
+
+    earth = [
+        'num_cells',
+        'cell_length',
+        'bin_1_distance',
+        'ensemble_number',
+        'heading',
+        'pitch',
+        'roll',
+        'salinity',
+        'temperature',
+        'transducer_depth',
+        'pressure',
+        'sysconfig_vertical_orientation',
+        'water_velocity_east',
+        'water_velocity_north',
+        'water_velocity_up',
+        'error_velocity',
+        'water_velocity_forward',
+        'water_velocity_starboard',
+        'water_velocity_vertical',
+        'correlation_magnitude_beam1',
+        'correlation_magnitude_beam2',
+        'correlation_magnitude_beam3',
+        'correlation_magnitude_beam4',
+        'echo_intensity_beam1',
+        'echo_intensity_beam2',
+        'echo_intensity_beam3',
+        'echo_intensity_beam4',
+        'percent_good_3beam',
+        'percent_transforms_reject',
+        'percent_bad_beams',
+        'percent_good_4beam',
+    ]
+
+    config = [
+        'firmware_version',
+        'firmware_revision',
+        'data_flag',
+        'lag_length',
+        'num_beams',
+        'num_cells',
+        'pings_per_ensemble',
+        'cell_length',
+        'blank_after_transmit',
+        'signal_processing_mode',
+        'low_corr_threshold',
+        'num_code_repetitions',
+        'percent_good_min',
+        'error_vel_threshold',
+        'time_per_ping_minutes',
+        'time_per_ping_seconds',
+        'heading_alignment',
+        'heading_bias',
+        'reference_layer_start',
+        'reference_layer_stop',
+        'false_target_threshold',
+        'low_latency_trigger',
+        'transmit_lag_distance',
+        'cpu_board_serial_number',
+        'system_bandwidth',
+        'system_power',
+        'serial_number',
+        'beam_angle',
+        'sysconfig_frequency',
+        'sysconfig_beam_pattern',
+        'sysconfig_sensor_config',
+        'sysconfig_head_attached',
+        'sysconfig_vertical_orientation',
+        'sysconfig_beam_angle',
+        'sysconfig_beam_config',
+        'coord_transform_type',
+        'coord_transform_tilts',
+        'coord_transform_beams',
+        'coord_transform_mapping',
+        'sensor_source_speed',
+        'sensor_source_depth',
+        'sensor_source_heading',
+        'sensor_source_pitch',
+        'sensor_source_roll',
+        'sensor_source_conductivity',
+        'sensor_source_temperature',
+        'sensor_source_temperature_eu',
+        'sensor_available_speed',
+        'sensor_available_depth',
+        'sensor_available_heading',
+        'sensor_available_pitch',
+        'sensor_available_roll',
+        'sensor_available_conductivity',
+        'sensor_available_temperature',
+        'sensor_available_temperature_eu',
+    ]
+
+    engineering = [
+        'transmit_pulse_length',
+        'speed_of_sound',
+        'mpt_minutes',
+        'mpt_seconds',
+        'heading_stdev',
+        'pitch_stdev',
+        'roll_stdev',
+        'pressure_variance',
+        'adc_ambient_temp',
+        'adc_attitude',
+        'adc_attitude_temp',
+        'adc_contamination_sensor',
+        'adc_pressure_minus',
+        'adc_pressure_plus',
+        'adc_transmit_current',
+        'adc_transmit_voltage',
+    ]
+
+    stream_map = {
+        'adcp_velocity_glider': ('VelocityGlider', earth),
+        'adcp_config': ('GliderConfig', config),
+        'adcp_engineering': ('GliderEngineering', engineering),
+        'adcp_bottom_track_earth': ('EarthBottom', bottom),
+        'adcp_bottom_track_config': ('BottomConfig', bottom_config),
+    }
+
+    streams = [
+        'adcp_velocity_glider',
+        'adcp_config',
+        'adcp_engineering',
+        'adcp_bottom_track_earth',
+        'adcp_bottom_track_config'
+    ]
+
+    always = ['adcp_velocity_earth', 'adcp_bottom_track_earth']
+
+    last = {}
+
+    def create_particle(record, index, stream):
+        klass, fields = stream_map.get(stream)
+        particle = {field: record.get(field) for field in fields if field in record}
+        particle['_index'] = index
+        particle['particle_object'] = klass
+        particle['particle_type'] = stream
+        particle['internal_timestamp'] = record['internal_timestamp']
+
+        if 'time_per_ping_seconds' in fields:
+            seconds = particle['time_per_ping_seconds']
+            int_seconds = int(seconds)
+            hundredths = int(100 * (seconds - int_seconds))
+            particle['time_per_ping_hundredths'] = hundredths
+            particle['time_per_ping_seconds'] = int_seconds
+
+        if 'mpt_seconds' in fields:
+            seconds = particle['mpt_seconds']
+            int_seconds = int(seconds)
+            hundredths = int(100 * (seconds - int_seconds))
+            particle['mpt_hundredths'] = hundredths
+            particle['mpt_seconds'] = int_seconds
+
+        if stream == 'adcp_engineering':
+            bit = (record['bit_error_count'] << 8) + record['bit_error_number']
+            particle['bit_result'] = bit
+
+        return particle
+
+    def changed(particle):
+        particle = copy.deepcopy(particle)
+        stream = particle.pop('particle_type')
+        particle.pop('particle_object')
+        particle.pop('_index')
+        particle.pop('internal_timestamp')
+        last_values = last.get(stream)
+        if last_values == particle:
+            return False
+
+        last[stream] = particle
+        return True
+
+    out_records = []
+    records = yaml.load(open(input_file))
+    index = 1
+    for record in records['data']:
+        for stream in streams:
+            particle = create_particle(record, index, stream)
+            if stream in always or changed(particle):
+                out_records.append(particle)
+                index += 1
+
+    records['data'] = out_records
+    yaml.dump(records, open(input_file, 'w'))
+
+
+def convert_all():
+    yml_files = [
+        'ND072023_recov.yml',
+        'ND072022_recov.yml',
+        'ND072022_telem.yml',
+        'ND072023_telem.yml',
+        'ND161646.yml',
+        'NE051351.yml',
+        'NE051400.yml',
+    ]
+
+    for f in yml_files:
+        convert_yml(os.path.join(RESOURCE_PATH, f))
 
