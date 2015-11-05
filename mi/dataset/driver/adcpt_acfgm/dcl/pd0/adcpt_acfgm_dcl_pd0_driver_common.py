@@ -5,27 +5,24 @@
 #
 # Copyright 2014 Raytheon Co.
 ##
-
-__author__ = "Jeff Roy"
-
 from mi.core.log import get_logger
-log = get_logger()
-
 from mi.dataset.dataset_driver import DataSetDriver
 from mi.dataset.parser.adcpt_acfgm_dcl_pd0 import AdcptAcfgmDclPd0Parser
-from mi.core.versioning import version
 
-@version("15.6.0")
+
+__author__ = "Jeff Roy"
+log = get_logger()
+
+
 class AdcptAcfgmDclPd0Driver:
-
     def __init__(self, sourceFilePath, particleDataHdlrObj, parser_config):
-        
+
         self._sourceFilePath = sourceFilePath
         self._particleDataHdlrObj = particleDataHdlrObj
         self._parser_config = parser_config
 
     def process(self):
-        
+
         with open(self._sourceFilePath, "r") as file_handle:
 
             def exception_callback(exception):
@@ -43,4 +40,3 @@ class AdcptAcfgmDclPd0Driver:
             driver.processFileStream()
 
         return self._particleDataHdlrObj
-
