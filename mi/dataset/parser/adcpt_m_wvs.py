@@ -792,7 +792,7 @@ class AdcptMWVSParser(BufferLoadingParser):
 
         # Also catch any possible exceptions thrown from unpacking data
         except (RecoverableSampleException, SampleEncodingException, struct.error) as e:
-            log.error("Sample exception detected: %s raw data: %s", e, raw_data)
+            log.error("Sample exception detected: %s raw data: %r", e, raw_data)
             if self._exception_callback:
                 self._exception_callback(e)
             else:

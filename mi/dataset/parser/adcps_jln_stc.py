@@ -100,7 +100,7 @@ class AdcpsJlnStcInstrumentParserDataParticleKey(BaseEnum):
     ADCPS_JLN_VEL_UP = 'water_velocity_up'
     ADCPS_JLN_VEL_NORTH = 'water_velocity_north'
     ADCPS_JLN_VEL_EAST = 'water_velocity_east'
-    
+
 
 class StateKey(BaseEnum):
     POSITION = 'position'  # holds the file position
@@ -122,7 +122,7 @@ class AdcpsJlnStcInstrumentDataParticle(DataParticle):
         if not match:
             raise RecoverableSampleException("AdcpsJlnStcInstrumentParserDataParticle: No regex match of \
                                   parsed sample data %r", self.raw_data)
-        try:            
+        try:
             record_str = match.group(1).strip('Record\[').strip('\]:')
 
             fields = struct.unpack('<HHIBBBdHhhHIBBB', match.group(2)[0:34])
@@ -137,22 +137,19 @@ class AdcpsJlnStcInstrumentDataParticle(DataParticle):
                                  % (num_bytes, len(match.group(2)) - 2))
 
             nbins = fields[14]
-            if len(match.group(0)) < (36 + (nbins * 8)):
+            if len(match.group(2)) < (36 + (nbins * 8)):
                 raise ValueError('Number of bins %d does not fit in data length %d'
                                  % (nbins, len(match.group(0))))
             date_fields = struct.unpack('HBBBBBB', match.group(2)[11:19])
 
-            # create a string with the right number of shorts to unpack
-            struct_format = '<'
-            for i in range(0, nbins):
-                struct_format += 'h'
+            velocity_data = struct.unpack_from('<%dh' % (nbins * 4),
+                                               match.group(2), 34)
 
-            bin_len = nbins*2
-            adcps_jln_vel_east = struct.unpack(struct_format, match.group(2)[34:34+bin_len])
-            adcps_jln_vel_north = struct.unpack(struct_format, match.group(2)[(34+bin_len):(34+(bin_len*2))])
-            adcps_jln_vel_up = struct.unpack(struct_format, match.group(2)[(34+(bin_len*2)):(34+(bin_len*3))])
-            adcps_jln_vel_error = struct.unpack(struct_format, match.group(2)[(34+(bin_len*3)):(34+(bin_len*4))])
-                          
+            adcps_jln_vel_east = velocity_data[:nbins]
+            adcps_jln_vel_north = velocity_data[nbins:nbins*2]
+            adcps_jln_vel_up = velocity_data[nbins*2:nbins*3]
+            adcps_jln_vel_error = velocity_data[nbins*3:]
+
         except (ValueError, TypeError, IndexError) as ex:
             raise RecoverableSampleException("Error (%s) while decoding parameters in data: %r"
                                              % (ex, (match.group(0))))
@@ -186,7 +183,7 @@ class AdcpsJlnStcInstrumentDataParticle(DataParticle):
                                      adcps_jln_vel_east, list)]
 
         return result
-    
+
     @staticmethod
     def unpack_date(data):
         fields = struct.unpack('HBBBBBB', data)
@@ -194,7 +191,7 @@ class AdcpsJlnStcInstrumentDataParticle(DataParticle):
             fields[0], fields[1], fields[2], fields[3],
             fields[4], fields[5], fields[6])
         return zulu_ts
-    
+
 
 class AdcpsJlnStcInstrumentTelemeteredDataParticle(
     AdcpsJlnStcInstrumentDataParticle):
@@ -222,7 +219,7 @@ class AdcpsJlnStcMetadataDataParticleKey(BaseEnum):
     ADCPS_JLN_LENGTH = 'adcps_jln_length'
     ADCPS_JLN_EVENTS = 'adcps_jln_events'
     ADCPS_JLN_SAMPLES_WRITTEN = 'adcps_jln_samples_written'
-    
+
 
 class AdcpsJlnStcMetadataDataParticle(DataParticle):
 
@@ -232,7 +229,7 @@ class AdcpsJlnStcMetadataDataParticle(DataParticle):
         a particle with the appropriate tag.
         @throws SampleException If there is a problem with sample creation
         """
-        match = HEADER_FOOTER_MATCHER.search(self.raw_data) 
+        match = HEADER_FOOTER_MATCHER.search(self.raw_data)
         if not match:
             raise RecoverableSampleException("AdcpsJlnStcMetadataParserDataParticle: No regex match of \
                                              parsed sample data [%r]", self.raw_data)
@@ -303,7 +300,7 @@ class AdcpsJlnStcParser(BufferLoadingParser):
     def set_state(self, state_obj):
         """
         Set the value of the state object for this parser
-        @param state_obj The object to set the state to. 
+        @param state_obj The object to set the state to.
         @throws DatasetParserException if there is a bad state structure
         """
         if not isinstance(state_obj, dict):
@@ -325,7 +322,7 @@ class AdcpsJlnStcParser(BufferLoadingParser):
         """
         return_list = []
         st_idx = 0
-        while st_idx < len(raw_data): 
+        while st_idx < len(raw_data):
             # Find a match, then advance
             fail_match = RX_FAILURE_MATCHER.match(raw_data[st_idx:])
             match = DATA_MATCHER.match(raw_data[st_idx:])
@@ -340,9 +337,9 @@ class AdcpsJlnStcParser(BufferLoadingParser):
                 if end_packet_idx < len(raw_data):
                     # Record "ReceiveFailure" and checksum are checked in parse_chunks
                     return_list.append((match.start(0) + st_idx, end_packet_idx))
-                st_idx = end_packet_idx         
+                st_idx = end_packet_idx
             else:
-                st_idx += 1    
+                st_idx += 1
         return return_list
 
     def compare_checksum(self, raw_bytes):
@@ -377,26 +374,26 @@ class AdcpsJlnStcParser(BufferLoadingParser):
             log.warn("File is not long enough to read header")
             return
 
-        # read the last 43 bytes from the file     
+        # read the last 43 bytes from the file
         self._stream_handle.seek(-FOOTER_BYTES, 2)
-        footer = self._stream_handle.read() 
+        footer = self._stream_handle.read()
         footer_match = FOOTER_MATCHER.search(footer)
-        
+
         # parse the header to get the timestamp
         if footer_match and HEADER_MATCHER.search(header):
             header_match = HEADER_MATCHER.search(header)
-            self._stream_handle.seek(len(header_match.group(0)))        
-            timestamp_struct = time.strptime(header_match.group(1), "%Y%m%d %H%M%S") 
-            timestamp_s = calendar.timegm(timestamp_struct) 
+            self._stream_handle.seek(len(header_match.group(0)))
+            timestamp_struct = time.strptime(header_match.group(1), "%Y%m%d %H%M%S")
+            timestamp_s = calendar.timegm(timestamp_struct)
             self._timestamp = float(ntplib.system_to_ntp_time(timestamp_s))
-            
-            header_footer = header_match.group(0) + footer_match.group(0) 
-            
+
+            header_footer = header_match.group(0) + footer_match.group(0)
+
             sample = self._extract_sample(self._metadata_class, HEADER_FOOTER_MATCHER,
-                                          header_footer, self._timestamp)  
-            
+                                          header_footer, self._timestamp)
+
             if sample:
-                # increment by the length of the matched header and save the header          
+                # increment by the length of the matched header and save the header
                 self._increment_state(len(header_match.group(0)))
                 self._saved_header = (sample, copy.copy(self._read_state))
         else:
@@ -418,7 +415,7 @@ class AdcpsJlnStcParser(BufferLoadingParser):
         timestamp. Go until the chunker has no more valid data.
         @retval a list of tuples with sample particles encountered in this
             parsing, plus the state. An empty list of nothing was parsed.
-        """            
+        """
         result_particles = []
 
         # header gets read in initialization, but need to send it back from parse_chunks
@@ -449,7 +446,7 @@ class AdcpsJlnStcParser(BufferLoadingParser):
                         self._timestamp = round(self._timestamp * 100) / 100
 
                         # particle-ize the data block received, return the record
-                        # set timestamp here, converted to ntp64. pull out timestamp for this record               
+                        # set timestamp here, converted to ntp64. pull out timestamp for this record
                         sample = self._extract_sample(self._instrument_class, DATA_MATCHER_B, chunk, self._timestamp)
 
                         if sample:
