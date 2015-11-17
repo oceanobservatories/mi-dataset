@@ -58,7 +58,7 @@ class ZplscBParticleKey(BaseEnum):
     Class that defines fields that need to be extracted from the data
     """
     FILE_TIME = "zplsc_timestamp"               # raw file timestamp
-    FILE_NAME = "zplsc_echogram"                # output echogram plot .png/s path and filename
+    FILE_PATH = "filepath"                      # output echogram plot .png/s path and filename
     CHANNEL = "zplsc_channel"
     TRANSDUCER_DEPTH = "zplsc_transducer_depth" # five digit floating point number (%.5f, in meters)
     FREQUENCY = "zplsc_frequency"               # six digit fixed point integer (in Hz)
@@ -75,7 +75,7 @@ class ZplscBParticleKey(BaseEnum):
 # (parameter name, encoding function)
 METADATA_ENCODING_RULES = [
     (ZplscBParticleKey.FILE_TIME,           str),
-    (ZplscBParticleKey.FILE_NAME,           lambda x: [str(y) for y in x]),
+    (ZplscBParticleKey.FILE_PATH,           lambda x: [str(y) for y in x]),
     (ZplscBParticleKey.CHANNEL,             lambda x: [int(y) for y in x]),
     (ZplscBParticleKey.TRANSDUCER_DEPTH,    lambda x: [float(y) for y in x]),
     (ZplscBParticleKey.FREQUENCY,           lambda x: [float(y) for y in x]),
@@ -126,7 +126,8 @@ BLOCK_SIZE = 1024*4             # Block size read in from binary file to search 
 TIMESTAMP_FORMAT = "%Y%m%d%H%M%S"
 
 # Regex to extract the timestamp from the *.raw filename (path/to/OOI-DYYYYmmdd-THHMMSS.raw)
-FILE_NAME_MATCHER = re.compile(r'.+-D(?P<Date>\d{4}\d{2}\d{2})-T(?P<Time>\d{2}\d{2}\d{2})\.raw')
+FILE_NAME_MATCHER = re.compile(
+    r'.+-D(?P<Date>(\d{4})(\d{2})(\d{2}))-T(?P<Time>\d{2}\d{2}\d{2})\.raw')
 
 
 class DataParticleType(BaseEnum):
@@ -197,8 +198,13 @@ class ZplscBParser(SimpleParser):
         match = FILE_NAME_MATCHER.match(input_file_name)
         if match:
             file_time = match.group('Date') + match.group('Time')
+            rel_file_path = os.path.join(*match.groups()[1:-1])
+            full_file_path = os.path.join(self.output_file_path, rel_file_path)
+            if not os.path.exists(full_file_path):
+                os.makedirs(full_file_path)
         else:
             file_time = ""
+            rel_file_path = ""
             # Files retrieved from the instrument should always match the timestamp naming convention
             self.recov_exception_callback("Unable to extract file time from input file name: %s."
                                           "Expected format *-DYYYYmmdd-THHMMSS.raw" % input_file_name)
@@ -308,11 +314,11 @@ class ZplscBParser(SimpleParser):
 
             # Gather metadata once per transducer channel number
             if not trans_array[channel]:
-                file_name = self.output_file_path + '/' + outfile + '_' + \
-                            str(int(sample_data['frequency'])/1000) + 'k.png'
+                file_path = os.path.join(
+                    rel_file_path, outfile + '_' + str(int(sample_data['frequency'])/1000) + 'k.png')
 
                 first_ping_metadata[ZplscBParticleKey.FILE_TIME] = file_time
-                first_ping_metadata[ZplscBParticleKey.FILE_NAME].append(file_name)
+                first_ping_metadata[ZplscBParticleKey.FILE_PATH].append(file_path)
                 first_ping_metadata[ZplscBParticleKey.CHANNEL].append(channel)
                 first_ping_metadata[ZplscBParticleKey.TRANSDUCER_DEPTH].append(sample_data['transducer_depth'][0])
                 first_ping_metadata[ZplscBParticleKey.FREQUENCY].append(sample_data['frequency'][0])
@@ -384,7 +390,9 @@ class ZplscBParser(SimpleParser):
                 process = Process(target=self.generate_echogram_plot,
                                   args=(trans_array_time[channel], trans_array[channel],
                                         td_f[channel], td_dR[channel], channel,
-                                        first_ping_metadata[ZplscBParticleKey.FILE_NAME][channel-1]))
+                                        os.path.join(
+                                            self.output_file_path,
+                                            first_ping_metadata[ZplscBParticleKey.FILE_PATH][channel-1])))
                 process.start()
                 processes.append(process)
 
