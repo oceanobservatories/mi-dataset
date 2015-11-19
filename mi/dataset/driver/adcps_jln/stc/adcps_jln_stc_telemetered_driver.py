@@ -16,7 +16,7 @@ from mi.dataset.parser.adcps_jln_stc import AdcpsJlnStcParser, \
     AdcpsJlnStcParticleClassKey
 from mi.core.versioning import version
 
-@version("0.0.3")
+@version("0.0.4")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
 
     from mi.logging import config
@@ -46,8 +46,8 @@ def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
                                    lambda state, ingested: None,
                                    lambda data: None,
                                    exception_callback)
-                
+
         driver = DataSetDriver(parser, particleDataHdlrObj)
-        driver.processFileStream()  
-        
+        driver.processFileStream()
+
     return particleDataHdlrObj
