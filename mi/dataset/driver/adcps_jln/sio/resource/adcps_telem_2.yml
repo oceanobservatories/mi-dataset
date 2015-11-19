@@ -1,96 +1,105 @@
-header:
-  particle_object: AdcpsJlnSioDataParticle
-  particle_type: adcps_jln_sio_mule_instrument
-
 data:
-  - _index: 1
-    internal_timestamp: '2013-07-25T09:26:16.97'
-    sio_controller_timestamp: 1374747611
-    ensemble_number: 111
-    unit_id: 0
-    firmware_version: 50
-    firmware_revision: 40
-    adcps_jln_year: 2013
-    adcps_jln_month: 7
-    adcps_jln_day: 25
-    adcps_jln_hour: 9
-    adcps_jln_minute: 26
-    adcps_jln_second: 16
-    adcps_jln_hsec: 97
-    adcps_jln_heading: 14975
-    adcps_jln_pitch: -159
-    adcps_jln_roll: 10
-    adcps_jln_temp: 365
-    adcps_jln_pressure: 10331
-    velocity_po_error_flag: 1
-    velocity_po_up_flag: 1
-    velocity_po_north_flag: 1
-    velocity_po_east_flag: 1
-    subsampling_parameter: 2
-    adcps_jln_startbin: 1
-    adcps_jln_bins: 28
-    water_velocity_east: [-5377, -6913, -5889, -20225, -16385, -26369, -15617, -8705, -12545, -10241, -21761, -28161, -29953, -26881, -31745, -9473, -32257, -18689, -13569, 23807, 19455, -31233, 15104, -17408, 2560, -27648, -14337, 8192]
-    water_velocity_north: [4096, 5376, 16640, 14592, 8192, 6912, 32512, 20992, 25344, 21248, 17408, 24832, 22528, 29696, -22528, 13056, 7168, 18944, 29440, 23808, -29440, 17408, 25087, -3845, -12806, -25093, -20227, 1535]
-    water_velocity_up: [-257, -1537, -2305, 1280, -257, 1280, 512, 5120, 3072, 2560, 4864, 2304, 1536, 2560, 4864, 3072, 3328, 6400, 2816, 4352, 3072, 1024, 9472, -4865, -9985, -13313, 8448, 9472]
-    error_velocity: [-1281, -2049, -2817, -1, -4353, -3585, 768, -7425, -7937, 4608, -6657, -3073, -8705, -7681, 768, 2304, 1280, 4608, 2816, 512, -4865, 5632, -16384, 18176, -2049, -12033, -10753, 128]
-  - _index: 2
-    internal_timestamp: '2013-07-25T11:26:16.97'
-    sio_controller_timestamp: 1374754811
-    ensemble_number: 113
-    unit_id: 0
-    firmware_version: 50
-    firmware_revision: 40
-    adcps_jln_year: 2013
-    adcps_jln_month: 7
-    adcps_jln_day: 25
-    adcps_jln_hour: 11
-    adcps_jln_minute: 26
-    adcps_jln_second: 16
-    adcps_jln_hsec: 97
-    adcps_jln_heading: 9209
-    adcps_jln_pitch: -162
-    adcps_jln_roll: 5
-    adcps_jln_temp: 366
-    adcps_jln_pressure: 10337
-    velocity_po_error_flag: 1
-    velocity_po_up_flag: 1
-    velocity_po_north_flag: 1
-    velocity_po_east_flag: 1
-    subsampling_parameter: 2
-    adcps_jln_startbin: 1
-    adcps_jln_bins: 28
-    water_velocity_east: [-11777, -513, -8193, 3840, -9217, 8960, 15616, 11776, 2048, 1280, 10496, 256, 1024, 0, -1025, -4353, -21249, -26113, -11521, -28417, -9729, -27649, -17665, 4864, -9729, 21503, 23039, 17663]
-    water_velocity_north: [4864, 18176, 12288, 18944, 16128, 24320, 15616, 15872, 12800, 25600, 24576, -29952, 32256, -22272, -28672, 1536, 2816, 4608, -1025, 3584, 6912, -1537, -9729, 5886, -18435, 19967, -6657, 22272]
-    water_velocity_up: [4352, 0, -513, -2049, -1025, -1537, -257, -769, -257, 768, -2305, -2049, 256, -2305, -513, 512, 1536, -3585, -1537, 1280, -257, -1, 4096, -1, -1281, 1024, -1793, -3841]
-    error_velocity: [4096, -4865, -2817, 7680, -1793, 1536, -2561, -8193, -3329, 768, -3073, -4097, 2304, 7936, -12801, -3073, -7681, 6144, 1536, -769, -6401, 7424, 16896, -19457, -18433, 4352, -23808, 128]
-  - _index: 3
-    internal_timestamp: '2013-07-25T13:26:16.97'
-    sio_controller_timestamp: 1374762011
-    ensemble_number: 115
-    unit_id: 0
-    firmware_version: 50
-    firmware_revision: 40
-    adcps_jln_year: 2013
-    adcps_jln_month: 7
-    adcps_jln_day: 25
-    adcps_jln_hour: 13
-    adcps_jln_minute: 26
-    adcps_jln_second: 16
-    adcps_jln_hsec: 97
-    adcps_jln_heading: 12497
-    adcps_jln_pitch: -174
-    adcps_jln_roll: 6
-    adcps_jln_temp: 363
-    adcps_jln_pressure: 10309
-    velocity_po_error_flag: 1
-    velocity_po_up_flag: 1
-    velocity_po_north_flag: 1
-    velocity_po_east_flag: 1
-    subsampling_parameter: 2
-    adcps_jln_startbin: 1
-    adcps_jln_bins: 28
-    water_velocity_east: [6912, 7168, 1280, 5376, 9472, 9728, 12800, 15104, 24320, 20992, 8960, 19200, 19712, 26880, 23040, 22016, 4352, 7168, 17920, 7936, 19456, -8961, 9728, -29951, 31489, -13312, 1537, -6656]
-    water_velocity_north: [-3841, -12033, -10753, -1793, -9729, -8705, -14849, -18689, -13825, -4865, -3841, -2305, 256, 14848, 12544, 8704, 13824, -3073, -7937, -14593, -24321, -10497, 30975, 8701, 18428, -4612, 29437, -11778]
-    water_velocity_up: [2304, 2560, -1025, -1537, -257, -1537, -257, 0, -2305, 256, -257, -3073, -2049, -1793, -8705, -11521, -5377, 512, 512, 3328, 5888, 3840, 7168, -2561, 256, -3329, 7680, 5632]
-    error_velocity: [-3585, -6401, -1537, -4097, -3841, -1, -6401, -769, -2817, 8448, 768, -1281, -6145, -4353, 3072, 4096, -2817, 6144, 2048, 4864, -4609, 4096, 18944, -257, 4608, 27391, -29953, 128]
-
+- _index: 1
+  adcps_jln_bins: 28
+  adcps_jln_day: 25
+  adcps_jln_heading: 14975
+  adcps_jln_hour: 9
+  adcps_jln_hsec: 97
+  adcps_jln_minute: 26
+  adcps_jln_month: 7
+  adcps_jln_pitch: -159
+  adcps_jln_pressure: 10331
+  adcps_jln_roll: 10
+  adcps_jln_second: 16
+  adcps_jln_startbin: 1
+  adcps_jln_temp: 365
+  adcps_jln_year: 2013
+  ensemble_number: 111
+  error_velocity: [-6, -9, -12, -1, -18, -15, 3, -30, -32, 18, -27, -13, -35, -31,
+    3, 9, 5, 18, 11, 2, -20, 22, 192, 71, -9, -48, -43, -32768]
+  firmware_revision: 40
+  firmware_version: 50
+  internal_timestamp: '2013-07-25T09:26:16.97'
+  sio_controller_timestamp: 1374747611
+  subsampling_parameter: 2
+  unit_id: 0
+  velocity_po_east_flag: 1
+  velocity_po_error_flag: 1
+  velocity_po_north_flag: 1
+  velocity_po_up_flag: 1
+  water_velocity_east: [-22, -28, -24, -80, -65, -104, -62, -35, -50, -41, -86, -111,
+    -118, -106, -125, -38, -127, -74, -54, -164, -181, -123, 59, 188, 10, 148, -57,
+    32]
+  water_velocity_north: [16, 21, 65, 57, 32, 27, 127, 82, 99, 83, 68, 97, 88, 116,
+    168, 51, 28, 74, 115, 93, 141, 68, -159, -1040, -1331, -1123, -592, -251]
+  water_velocity_up: [-2, -7, -10, 5, -2, 5, 2, 20, 12, 10, 19, 9, 6, 10, 19, 12,
+    13, 25, 11, 17, 12, 4, 37, -20, -40, -53, 33, 37]
+- _index: 2
+  adcps_jln_bins: 28
+  adcps_jln_day: 25
+  adcps_jln_heading: 9209
+  adcps_jln_hour: 11
+  adcps_jln_hsec: 97
+  adcps_jln_minute: 26
+  adcps_jln_month: 7
+  adcps_jln_pitch: -162
+  adcps_jln_pressure: 10337
+  adcps_jln_roll: 5
+  adcps_jln_second: 16
+  adcps_jln_startbin: 1
+  adcps_jln_temp: 366
+  adcps_jln_year: 2013
+  ensemble_number: 113
+  error_velocity: [16, -20, -12, 30, -8, 6, -11, -33, -14, 3, -13, -17, 9, 31, -51,
+    -13, -31, 24, 6, -4, -26, 29, 66, -77, -73, 17, 163, -32768]
+  firmware_revision: 40
+  firmware_version: 50
+  internal_timestamp: '2013-07-25T11:26:16.97'
+  sio_controller_timestamp: 1374754811
+  subsampling_parameter: 2
+  unit_id: 0
+  velocity_po_east_flag: 1
+  velocity_po_error_flag: 1
+  velocity_po_north_flag: 1
+  velocity_po_up_flag: 1
+  water_velocity_east: [-47, -3, -33, 15, -37, 35, 61, 46, 8, 5, 41, 1, 4, 0, -5,
+    -18, -84, -103, -46, -112, -39, -109, -70, 19, -39, -173, -167, -188]
+  water_velocity_north: [19, 71, 48, 74, 63, 95, 61, 62, 50, 100, 96, 139, 126, 169,
+    144, 6, 11, 18, -5, 14, 27, -7, -39, -490, -585, -179, -27, 87]
+  water_velocity_up: [17, 0, -3, -9, -5, -7, -2, -4, -2, 3, -10, -9, 1, -10, -3, 2,
+    6, -15, -7, 5, -2, -1, 16, -1, -6, 4, -8, -16]
+- _index: 3
+  adcps_jln_bins: 28
+  adcps_jln_day: 25
+  adcps_jln_heading: 12497
+  adcps_jln_hour: 13
+  adcps_jln_hsec: 97
+  adcps_jln_minute: 26
+  adcps_jln_month: 7
+  adcps_jln_pitch: -174
+  adcps_jln_pressure: 10309
+  adcps_jln_roll: 6
+  adcps_jln_second: 16
+  adcps_jln_startbin: 1
+  adcps_jln_temp: 363
+  adcps_jln_year: 2013
+  ensemble_number: 115
+  error_velocity: [-15, -26, -7, -17, -16, -1, -26, -4, -12, 33, 3, -6, -25, -18,
+    12, 16, -12, 24, 8, 19, -19, 16, 74, -2, 18, -150, -118, -32768]
+  firmware_revision: 40
+  firmware_version: 50
+  internal_timestamp: '2013-07-25T13:26:16.97'
+  sio_controller_timestamp: 1374762011
+  subsampling_parameter: 2
+  unit_id: 0
+  velocity_po_east_flag: 1
+  velocity_po_error_flag: 1
+  velocity_po_north_flag: 1
+  velocity_po_up_flag: 1
+  water_velocity_east: [27, 28, 5, 21, 37, 38, 50, 59, 95, 82, 35, 75, 77, 105, 90,
+    86, 17, 28, 70, 31, 76, -36, 38, 395, 379, 204, 262, 230]
+  water_velocity_north: [-16, -48, -43, -8, -39, -35, -59, -74, -55, -20, -16, -10,
+    1, 58, 49, 34, 54, -13, -32, -58, -96, -42, -136, -735, -953, -787, -654, -303]
+  water_velocity_up: [9, 10, -5, -7, -2, -7, -2, 0, -10, 1, -2, -13, -9, -8, -35,
+    -46, -22, 2, 2, 13, 23, 15, 28, -11, 1, -14, 30, 22]
+header: {particle_object: AdcpsJlnSioDataParticle, particle_type: adcps_jln_sio_mule_instrument}
