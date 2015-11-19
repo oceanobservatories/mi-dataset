@@ -17,7 +17,7 @@ from mi.dataset.parser.adcps_jln_sio import AdcpsJlnSioParser
 from mi.core.versioning import version
 
 
-@version("15.6.0")
+@version("15.6.1")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     """
     This is the method called by Uframe

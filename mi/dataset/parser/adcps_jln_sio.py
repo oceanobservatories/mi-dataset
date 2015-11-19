@@ -112,9 +112,9 @@ class AdcpsJlnSioDataParticle(DataParticle):
     """
     Class for parsing data from the ADCPS instrument on a MSFM platform node
     """
-    
+
     _data_particle_type = DataParticleType.SAMPLE
-    
+
     def __init__(self, raw_data,
                  port_timestamp=None,
                  internal_timestamp=None,
@@ -171,24 +171,17 @@ class AdcpsJlnSioDataParticle(DataParticle):
                                                                                            len(match.group(0))))
 
                 date_fields = struct.unpack('HBBBBBB', match.group(0)[11:19])
-    
-                # create a string with the right number of shorts to unpack
-                struct_format = '>'
 
-                for i in range(0, nbins):
-                    struct_format += 'h'
-    
-                bin_len = nbins*2
-                vel_east = struct.unpack(struct_format,
-                                         match.group(0)[STARTING_BYTES:(STARTING_BYTES+bin_len)])
-                vel_north = struct.unpack(struct_format,
-                                          match.group(0)[(STARTING_BYTES+bin_len):(STARTING_BYTES+(bin_len*2))])
-                vel_up = struct.unpack(struct_format,
-                                       match.group(0)[(STARTING_BYTES+(bin_len*2)):(STARTING_BYTES+(bin_len*3))])
-                vel_err = struct.unpack(struct_format,
-                                        match.group(0)[(STARTING_BYTES+(bin_len*3)):(STARTING_BYTES+(bin_len*4))])
-    
-                checksum = struct.unpack('<H', match.group(0)[(STARTING_BYTES+(bin_len*4)):(36+(bin_len*4))])
+                velocity_data = struct.unpack_from('<%dh' % (nbins * 4),
+                                              match.group(0)[STARTING_BYTES:])
+
+                vel_east = velocity_data[:nbins]
+                vel_north = velocity_data[nbins:nbins*2]
+                vel_up = velocity_data[nbins*2:nbins*3]
+                vel_err = velocity_data[nbins*3:]
+
+                CHECKSUM_INDEX = STARTING_BYTES + nbins * 8
+                checksum = struct.unpack_from('<H', match.group(0)[CHECKSUM_INDEX:])
                 calculated_checksum = AdcpsJlnSioDataParticle.calc_inner_checksum(match.group(0)[:-2])
 
                 if checksum[0] != calculated_checksum:
@@ -197,9 +190,9 @@ class AdcpsJlnSioDataParticle(DataParticle):
             except (ValueError, TypeError, IndexError) as ex:
                 # we can recover and read additional samples after this, just this one is missed
                 log.warn("Error %s while decoding parameters in data [%s]", ex, match.group(0))
-                raise RecoverableSampleException("Error (%s) while decoding parameters in data: [%s]" % 
+                raise RecoverableSampleException("Error (%s) while decoding parameters in data: [%s]" %
                                                 (ex, match.group(0)))
-    
+
             result = [self._encode_value(AdcpsJlnSioDataParticleKey.CONTROLLER_TIMESTAMP, self.raw_data[0:8],
                                          AdcpsJlnSioDataParticle.encode_int_16),
                       self._encode_value(AdcpsJlnSioDataParticleKey.ENSEMBLE_NUMBER, fields[2], int),
