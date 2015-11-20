@@ -12,16 +12,16 @@ log = get_logger()
 from mi.dataset.dataset_driver import DataSetDriver
 from mi.dataset.parser.adcp_pd0 import AdcpPd0Parser
 
-class AdcpaDriver:
 
+class AdcpaDriver:
     def __init__(self, sourceFilePath, particleDataHdlrObj, parser_config):
-        
+
         self._sourceFilePath = sourceFilePath
         self._particleDataHdlrObj = particleDataHdlrObj
         self._parser_config = parser_config
 
     def process(self):
-        
+
         with open(self._sourceFilePath, "rb") as file_handle:
 
             def exception_callback(exception):

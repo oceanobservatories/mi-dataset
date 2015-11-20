@@ -6,6 +6,8 @@
 @author Emily Hahn
 @brief An set of tests for the adcps jln series through the sio dataset agent parser
 """
+import struct
+import yaml
 
 __author__ = 'Emily Hahn'
 __license__ = 'Apache 2.0'
@@ -114,3 +116,39 @@ class AdcpsJlnSioParserUnitTestCase(ParserUnitTestCase):
                     self.assertIsInstance(self.exception_callback_value[i], UnexpectedDataException)
                 else:
                     self.assertIsInstance(self.exception_callback_value[i], RecoverableSampleException)
+
+
+def swap(val):
+    return struct.unpack('<h', struct.pack('>h', val))[0]
+
+
+def swap_list(values):
+    return [swap(v) for v in values]
+
+
+def convert_yml(input_file):
+    records = yaml.load(open(input_file))
+    fields = [
+        'error_velocity',
+        'water_velocity_up',
+        'water_velocity_north',
+        'water_velocity_east',
+    ]
+
+    for record in records['data']:
+        for field in fields:
+            values = record[field]
+            record[field] = swap_list(values)
+
+    yaml.dump(records, open(input_file, 'w'))
+
+
+def convert_all():
+    files = [
+        'adcps_telem_1.yml',
+        'adcps_telem_2.yml',
+    ]
+
+    for f in files:
+        convert_yml(os.path.join(RESOURCE_PATH, f))
+

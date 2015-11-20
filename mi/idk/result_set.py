@@ -174,7 +174,7 @@ class ResultSet(object):
         """
 
         if len(self._result_set_data) != len(particles):
-            log.error("result set records != particles to verify (%d != %d)" %
+            log.debug("result set records != particles to verify (%d != %d)" %
                       (len(self._result_set_data), len(particles)))
             return False
 
@@ -314,7 +314,10 @@ class ResultSet(object):
                 return False
 
         expected_keys = particle_expected.keys()
-        ignore_list = [INDEX, DataParticleKey.NEW_SEQUENCE, DataParticleKey.INTERNAL_TIMESTAMP, OBJECT_KEY, TYPE_KEY]
+        ignore_list = [INDEX, DataParticleKey.NEW_SEQUENCE,
+                       DataParticleKey.INTERNAL_TIMESTAMP,
+                       DataParticleKey.PORT_TIMESTAMP,
+                       OBJECT_KEY, TYPE_KEY]
         # remove keys in ignore list from expected_keys, these are specifically ignored or were already handled
         expected_keys = filter(lambda x: x not in ignore_list, expected_keys)
 
