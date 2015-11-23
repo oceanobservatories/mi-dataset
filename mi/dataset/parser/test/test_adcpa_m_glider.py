@@ -324,7 +324,7 @@ def convert_yml(input_file):
         'adcp_bottom_track_config'
     ]
 
-    always = ['adcp_velocity_earth', 'adcp_bottom_track_earth']
+    always = ['adcp_velocity_glider', 'adcp_bottom_track_earth']
 
     last = {}
 

@@ -25,8 +25,8 @@ data:
   heading: 10719
   internal_timestamp: 3281904004.77
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 50, 90, 100, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 50, 40, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,

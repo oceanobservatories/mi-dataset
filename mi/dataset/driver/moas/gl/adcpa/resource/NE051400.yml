@@ -25,8 +25,8 @@ data:
   heading: 21240
   internal_timestamp: 3281904004.91
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 10, 10, 80, 80, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 10, 40, 50, 20, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -115,8 +115,8 @@ data:
   heading: 20600
   internal_timestamp: 3281904007.84
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 10, 10, 50, 90, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 90, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 40, 50, 40, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -184,8 +184,8 @@ data:
   heading: 21349
   internal_timestamp: 3281904011.73
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 10, 20, 70, 90, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 90, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 50, 60, 10, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -254,8 +254,8 @@ data:
   heading: 23339
   internal_timestamp: 3281904014.69
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 40, 80, 100, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 90, 90, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 10, 10, 30, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -323,8 +323,8 @@ data:
   heading: 22389
   internal_timestamp: 3281904018.5
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 30, 70, 100, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 90, 90, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 10, 20, 40, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -392,8 +392,8 @@ data:
   heading: 22389
   internal_timestamp: 3281904022.43
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 10, 70, 100, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 90, 90, 90, 100, 100, 90, 90, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 70, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0,
@@ -457,8 +457,8 @@ data:
   heading: 21509
   internal_timestamp: 3281904026.15
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 30, 70, 90, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 90, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 10, 50, 30, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0,
@@ -526,8 +526,8 @@ data:
   heading: 19930
   internal_timestamp: 3281904029.5
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 10, 80, 70, 80, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 30, 60, 20, 30, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -595,8 +595,8 @@ data:
   heading: 20570
   internal_timestamp: 3281904032.8
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 20, 80, 70, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 40, 40, 10, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -664,8 +664,8 @@ data:
   heading: 18479
   internal_timestamp: 3281904036.56
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 10, 60, 90, 90, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 80, 80, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 40, 90, 30, 10, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -733,8 +733,8 @@ data:
   heading: 18479
   internal_timestamp: 3281904039.5
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 10, 20, 100, 60, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 90, 90, 90, 90, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 10, 50, 0, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -798,8 +798,8 @@ data:
   heading: 18030
   internal_timestamp: 3281904043.6
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 20, 60, 90, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 20, 20, 30, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -868,8 +868,8 @@ data:
   heading: 16429
   internal_timestamp: 3281904046.56
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 10, 40, 70, 90, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 90, 90, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 20, 40, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -937,8 +937,8 @@ data:
   heading: 14299
   internal_timestamp: 3281904050.58
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 20, 60, 80, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 30, 40, 30, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -1006,8 +1006,8 @@ data:
   heading: 13659
   internal_timestamp: 3281904053.88
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 20, 30, 100, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 90, 100, 100, 90, 90, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 10, 10, 40, 40, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -1075,8 +1075,8 @@ data:
   heading: 13659
   internal_timestamp: 3281904057.55
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 20, 70, 90, 90, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 90, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 20, 20, 50, 20, 10, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -1140,8 +1140,8 @@ data:
   heading: 16909
   internal_timestamp: 3281904061.0
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 20, 60, 80, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 80, 70, 90, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 40, 70, 40, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -1209,8 +1209,8 @@ data:
   heading: 19860
   internal_timestamp: 3281904064.42
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 10, 80, 100, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 10, 20, 60, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -1279,8 +1279,8 @@ data:
   heading: 21459
   internal_timestamp: 3281904068.49
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 10, 60, 100, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 20, 70, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -1348,8 +1348,8 @@ data:
   heading: 21459
   internal_timestamp: 3281904071.35
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 30, 100, 80, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 30, 60, 70, 0, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -1413,8 +1413,8 @@ data:
   heading: 21669
   internal_timestamp: 3281904075.36
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 40, 90, 100, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 20, 60, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -1483,8 +1483,8 @@ data:
   heading: 21069
   internal_timestamp: 3281904078.57
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 30, 60, 90, 100, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 90, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 30, 60, 40, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10,
@@ -1553,8 +1553,8 @@ data:
   heading: 18789
   internal_timestamp: 3281904082.38
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 90, 80, 80, 100, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 100, 10, 20, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -1622,8 +1622,8 @@ data:
   heading: 21159
   internal_timestamp: 3281904085.5
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 40, 80, 60, 100, 100, 100, 90, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 50, 50, 20, 40, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -1691,8 +1691,8 @@ data:
   heading: 21159
   internal_timestamp: 3281904089.17
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 20, 60, 90, 90, 90, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 50, 40, 10, 10, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -1756,8 +1756,8 @@ data:
   heading: 20640
   internal_timestamp: 3281904092.59
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 40, 50, 40, 90, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 40, 20, 30, 40, 60, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -1825,8 +1825,8 @@ data:
   heading: 21940
   internal_timestamp: 3281904096.1
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 10, 30, 60, 100, 50, 20, 70, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 60, 70, 40, 0, 50, 80, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -1894,8 +1894,8 @@ data:
   heading: 21130
   internal_timestamp: 3281904100.19
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 30, 0, 10, 20, 30, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 30, 70, 90, 90, 70, 70, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -1963,8 +1963,8 @@ data:
   heading: 21489
   internal_timestamp: 3281904103.38
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 30, 20, 0, 0, 0, 90, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 30, 20, 60, 20, 80, 100, 10, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -2032,8 +2032,8 @@ data:
   heading: 20250
   internal_timestamp: 3281904107.21
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 10, 10, 0, 0, 0, 50, 100, 100, 100, 100, 100, 100, 90,
     90, 80, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 60, 30, 40, 60, 80, 50, 0, 0, 0, 0, 0, 0, 10, 10, 20,
@@ -2097,8 +2097,8 @@ data:
   heading: 20250
   internal_timestamp: 3281904110.35
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 10, 0, 0, 0, 10, 20, 100, 100, 100, 100, 100, 100, 100,
     80, 80, 80, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 10, 10, 0, 20, 0, 90, 80, 0, 0, 0, 0, 0, 0, 0, 10, 20, 20,
@@ -2167,8 +2167,8 @@ data:
   heading: 19770
   internal_timestamp: 3281904114.65
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 10, 0, 0, 0, 0, 20, 100, 100, 100, 80, 80, 90, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 30, 20, 0, 10, 0, 70, 80, 0, 0, 0, 20, 0, 10, 0, 0, 0, 0,
@@ -2238,8 +2238,8 @@ data:
   heading: 19120
   internal_timestamp: 3281904119.1
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 20, 0, 0, 0, 0, 20, 100, 100, 100, 100, 100, 100, 100,
     100, 80, 80, 80, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 20, 40, 0, 0, 0, 20, 60, 0, 0, 0, 0, 0, 0, 0, 0, 20, 0,
@@ -2308,8 +2308,8 @@ data:
   heading: 18150
   internal_timestamp: 3281904123.63
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 0, 0, 30, 100, 100, 100, 90, 90, 80, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 20, 10, 0, 0, 0, 0, 30, 0, 0, 0, 10, 10, 20, 0, 0, 0, 0,
@@ -2379,8 +2379,8 @@ data:
   heading: 17599
   internal_timestamp: 3281904128.41
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 0, 0, 50, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 10, 0, 0, 0, 0, 10, 40, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -2449,8 +2449,8 @@ data:
   heading: 16830
   internal_timestamp: 3281904132.72
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 0, 0, 40, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 30, 0, 0, 0, 0, 40, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -2520,8 +2520,8 @@ data:
   heading: 16160
   internal_timestamp: 3281904137.24
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 0, 0, 60, 100, 100, 100, 100, 100, 100, 100,
     80, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 20, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 20, 0, 0, 0,
@@ -2591,8 +2591,8 @@ data:
   heading: 15310
   internal_timestamp: 3281904141.7
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 0, 0, 70, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 0, 0, 30, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -2662,8 +2662,8 @@ data:
   heading: 14850
   internal_timestamp: 3281904146.28
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 0, 10, 90, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 0, 20, 60, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -2732,8 +2732,8 @@ data:
   heading: 14080
   internal_timestamp: 3281904150.53
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 0, 20, 90, 100, 100, 100, 100, 100, 100, 80,
     90, 80, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 0, 10, 60, 10, 0, 0, 0, 0, 0, 0, 20, 10, 20, 0,
@@ -2803,8 +2803,8 @@ data:
   heading: 13390
   internal_timestamp: 3281904155.01
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 0, 0, 100, 100, 90, 100, 100, 90, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 0, 0, 90, 0, 0, 10, 0, 0, 10, 0, 0, 0, 0, 0, 0,
@@ -2874,8 +2874,8 @@ data:
   heading: 12440
   internal_timestamp: 3281904159.2
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 0, 0, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 0, 0, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -2945,8 +2945,8 @@ data:
   heading: 11809
   internal_timestamp: 3281904163.36
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 0, 20, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 0, 0, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -3015,8 +3015,8 @@ data:
   heading: 10949
   internal_timestamp: 3281904167.55
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 0, 0, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 0, 20, 40, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -3086,8 +3086,8 @@ data:
   heading: 10850
   internal_timestamp: 3281904171.62
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 0, 50, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 0, 10, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -3156,8 +3156,8 @@ data:
   heading: 10309
   internal_timestamp: 3281904175.69
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 10, 80, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 0, 40, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -3227,8 +3227,8 @@ data:
   heading: 10600
   internal_timestamp: 3281904180.07
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 0, 90, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 0, 30, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -3297,8 +3297,8 @@ data:
   heading: 10169
   internal_timestamp: 3281904184.45
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 0, 100, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 0]
   percent_good_3beam: [0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -3368,8 +3368,8 @@ data:
   heading: 10009
   internal_timestamp: 3281904188.62
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 0, 100, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 0]
   percent_good_3beam: [0, 0, 0, 0, 0, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -3439,8 +3439,8 @@ data:
   heading: 9580
   internal_timestamp: 3281904192.65
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 0, 100, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 70, 0]
   percent_good_3beam: [0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -3509,8 +3509,8 @@ data:
   heading: 9000
   internal_timestamp: 3281904196.82
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 0, 60, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 70, 0]
   percent_good_3beam: [0, 0, 0, 0, 0, 20, 40, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -3579,8 +3579,8 @@ data:
   heading: 8569
   internal_timestamp: 3281904200.85
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 0, 30, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 0, 0]
   percent_good_3beam: [0, 0, 0, 0, 0, 20, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -3649,8 +3649,8 @@ data:
   heading: 8220
   internal_timestamp: 3281904204.86
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 60, 90, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 0, 0]
   percent_good_3beam: [0, 0, 0, 0, 0, 20, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -3720,8 +3720,8 @@ data:
   heading: 8030
   internal_timestamp: 3281904209.19
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 20, 80, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 50, 10, 20]
   percent_good_3beam: [0, 0, 0, 0, 0, 40, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -3790,8 +3790,8 @@ data:
   heading: 7730
   internal_timestamp: 3281904213.18
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 20, 50, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 20, 0, 0]
   percent_good_3beam: [0, 0, 0, 0, 40, 60, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -3860,8 +3860,8 @@ data:
   heading: 7800
   internal_timestamp: 3281904217.27
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 0, 80, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 0, 0, 80]
   percent_good_3beam: [0, 0, 0, 0, 30, 80, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -3930,8 +3930,8 @@ data:
   heading: 8030
   internal_timestamp: 3281904221.49
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 30, 30, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 0, 0, 100]
   percent_good_3beam: [0, 0, 0, 0, 40, 40, 70, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -4000,8 +4000,8 @@ data:
   heading: 8560
   internal_timestamp: 3281904225.37
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 10, 70, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 0, 0, 100]
   percent_good_3beam: [0, 0, 0, 0, 20, 70, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -4070,8 +4070,8 @@ data:
   heading: 9309
   internal_timestamp: 3281904229.47
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 0, 30, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 0, 0, 100, 100]
   percent_good_3beam: [0, 0, 0, 20, 0, 0, 70, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -4140,8 +4140,8 @@ data:
   heading: 10049
   internal_timestamp: 3281904233.37
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 10, 80, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 0, 0, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 20, 70, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -4206,8 +4206,8 @@ data:
   heading: 10049
   internal_timestamp: 3281904237.46
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 0, 90, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 70, 0, 30, 100, 100]
   percent_good_3beam: [0, 0, 0, 10, 0, 50, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -4276,8 +4276,8 @@ data:
   heading: 13880
   internal_timestamp: 3281904241.33
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 10, 50, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 90, 0, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 40, 20, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -4346,8 +4346,8 @@ data:
   heading: 12109
   internal_timestamp: 3281904245.32
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 0, 90, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 20, 20, 0, 100, 100]
   percent_good_3beam: [0, 0, 0, 10, 0, 40, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -4416,8 +4416,8 @@ data:
   heading: 11849
   internal_timestamp: 3281904249.17
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 0, 40, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 0, 0, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 10, 50, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -4486,8 +4486,8 @@ data:
   heading: 11590
   internal_timestamp: 3281904253.15
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 10, 80, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 0, 70, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 0, 20, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -4556,8 +4556,8 @@ data:
   heading: 11450
   internal_timestamp: 3281904257.02
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 0, 70, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 20, 0, 0, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 0, 10, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -4626,8 +4626,8 @@ data:
   heading: 11170
   internal_timestamp: 3281904261.04
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 0, 100, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 0, 0, 0, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 0, 40, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -4696,8 +4696,8 @@ data:
   heading: 11100
   internal_timestamp: 3281904264.81
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 80, 100, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 0, 0, 20, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 20, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -4766,8 +4766,8 @@ data:
   heading: 10690
   internal_timestamp: 3281904268.79
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 60, 100, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 0, 0, 10, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 30, 0, 40, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -4836,8 +4836,8 @@ data:
   heading: 10509
   internal_timestamp: 3281904272.61
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 50, 100, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 0, 0, 30, 100, 100, 100]
   percent_good_3beam: [0, 0, 10, 0, 30, 40, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -4902,8 +4902,8 @@ data:
   heading: 10509
   internal_timestamp: 3281904276.72
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 10, 100, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 50, 0, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 0, 90, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -4972,8 +4972,8 @@ data:
   heading: 10300
   internal_timestamp: 3281904280.51
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 50, 100, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 0, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 40, 40, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -5043,8 +5043,8 @@ data:
   heading: 10029
   internal_timestamp: 3281904284.55
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 50, 70, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 0, 20, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 10, 10, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -5113,8 +5113,8 @@ data:
   heading: 9900
   internal_timestamp: 3281904288.31
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 70, 100, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 0, 0, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 80, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -5183,8 +5183,8 @@ data:
   heading: 9970
   internal_timestamp: 3281904292.45
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 0, 100, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 0, 0, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 20, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -5253,8 +5253,8 @@ data:
   heading: 10289
   internal_timestamp: 3281904296.21
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 50, 90, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 60, 0, 70, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 10, 70, 50, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -5323,8 +5323,8 @@ data:
   heading: 10390
   internal_timestamp: 3281904300.4
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 20, 90, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 0, 0, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 20, 40, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -5393,8 +5393,8 @@ data:
   heading: 10690
   internal_timestamp: 3281904304.16
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 80, 80, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 0, 20, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 20, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -5463,8 +5463,8 @@ data:
   heading: 10640
   internal_timestamp: 3281904308.3
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 20, 90, 90, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 10, 0, 0, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 30, 60, 10, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -5533,8 +5533,8 @@ data:
   heading: 10579
   internal_timestamp: 3281904312.11
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 10, 90, 50, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 10, 0, 0, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 20, 30, 10, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -5603,8 +5603,8 @@ data:
   heading: 10620
   internal_timestamp: 3281904316.24
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 60, 30, 30, 90, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 0, 0, 0, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 40, 40, 30, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -5673,8 +5673,8 @@ data:
   heading: 10579
   internal_timestamp: 3281904320.11
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 0, 70, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 0, 0, 10, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 10, 0, 60, 20, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -5739,8 +5739,8 @@ data:
   heading: 10579
   internal_timestamp: 3281904324.09
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 20, 70, 80, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 0, 0, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 10, 10, 50, 20, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -5809,8 +5809,8 @@ data:
   heading: 10640
   internal_timestamp: 3281904327.74
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 20, 90, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 0, 0, 70, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 60, 20, 80, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -5879,8 +5879,8 @@ data:
   heading: 10710
   internal_timestamp: 3281904331.71
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 0, 100, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 10, 0, 0, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 0, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -5949,8 +5949,8 @@ data:
   heading: 10789
   internal_timestamp: 3281904335.35
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 30, 100, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 10, 10, 0, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 0, 70, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -6019,8 +6019,8 @@ data:
   heading: 10719
   internal_timestamp: 3281904339.01
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 10, 100, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 0, 0, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 0, 70, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -6089,8 +6089,8 @@ data:
   heading: 10850
   internal_timestamp: 3281904342.64
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 10, 100, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 0, 0, 0, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 0, 40, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -6159,8 +6159,8 @@ data:
   heading: 10949
   internal_timestamp: 3281904346.55
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 10, 100, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 0, 0, 30, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 10, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -6229,8 +6229,8 @@ data:
   heading: 10920
   internal_timestamp: 3281904350.27
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 90, 100, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 10, 0, 0, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 10, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -6295,8 +6295,8 @@ data:
   heading: 10920
   internal_timestamp: 3281904353.88
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 70, 100, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 0, 20, 0, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 10, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -6365,8 +6365,8 @@ data:
   heading: 10929
   internal_timestamp: 3281904357.67
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 20, 100, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 0, 10, 50, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 0, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100,
@@ -6435,8 +6435,8 @@ data:
   heading: 10730
   internal_timestamp: 3281904361.24
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 70, 100, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 0, 20, 0, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 10, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -6505,8 +6505,8 @@ data:
   heading: 11029
   internal_timestamp: 3281904364.8
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 50, 100, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 0, 40, 40, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 20, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -6575,8 +6575,8 @@ data:
   heading: 10999
   internal_timestamp: 3281904368.36
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 100, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 80, 0, 0, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 20, 100,
@@ -6645,8 +6645,8 @@ data:
   heading: 11220
   internal_timestamp: 3281904372.27
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 100, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 0, 30, 0, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 10, 80, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10,
@@ -6715,8 +6715,8 @@ data:
   heading: 11220
   internal_timestamp: 3281904375.83
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 40, 70, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 0, 50, 0, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 40, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 50,
@@ -6781,8 +6781,8 @@ data:
   heading: 11279
   internal_timestamp: 3281904379.4
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 20, 20, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 0, 90, 0, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 70, 70, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100,
@@ -6851,8 +6851,8 @@ data:
   heading: 11470
   internal_timestamp: 3281904382.98
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 70, 100, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 0, 60, 0, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 0, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100,
@@ -6921,8 +6921,8 @@ data:
   heading: 11699
   internal_timestamp: 3281904386.48
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 90, 100, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 0, 50, 0, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 20, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100,
@@ -6991,8 +6991,8 @@ data:
   heading: 11680
   internal_timestamp: 3281904390.35
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 70, 100, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 90, 0, 0, 80, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 100,
@@ -7061,8 +7061,8 @@ data:
   heading: 11640
   internal_timestamp: 3281904393.86
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 50, 100, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 10, 80, 0, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 60, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 90, 20,
@@ -7131,8 +7131,8 @@ data:
   heading: 11640
   internal_timestamp: 3281904397.3
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 100, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 0, 90, 0, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 80, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 20, 10,
@@ -7197,8 +7197,8 @@ data:
   heading: 11389
   internal_timestamp: 3281904400.76
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 20, 100, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 0, 90, 0, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 70, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0,
@@ -7267,8 +7267,8 @@ data:
   heading: 10999
   internal_timestamp: 3281904404.23
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 50, 100, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 0, 80, 0, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 40, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0,
@@ -7337,8 +7337,8 @@ data:
   heading: 10539
   internal_timestamp: 3281904407.66
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 30, 50, 90, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 20, 30, 50, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 20, 40, 40, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 80,
@@ -7407,8 +7407,8 @@ data:
   heading: 9950
   internal_timestamp: 3281904411.14
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 30, 100, 80, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 70, 0, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 70, 0, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30, 70,
@@ -7477,8 +7477,8 @@ data:
   heading: 9950
   internal_timestamp: 3281904414.55
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 20, 60, 100, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 0, 100, 0, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 80, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 70, 0, 100,
@@ -7543,8 +7543,8 @@ data:
   heading: 9460
   internal_timestamp: 3281904418.08
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 10, 100, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 0, 100, 0, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 20, 30, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30, 0, 100,
@@ -7613,8 +7613,8 @@ data:
   heading: 9100
   internal_timestamp: 3281904421.75
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 20, 60, 70, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 0, 100, 0, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 20, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 100,
@@ -7679,8 +7679,8 @@ data:
   heading: 8779
   internal_timestamp: 3281904425.29
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 70, 90, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 30, 90, 10, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 10, 0, 30, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 70, 0, 90,
@@ -7749,8 +7749,8 @@ data:
   heading: 8619
   internal_timestamp: 3281904428.73
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 30, 90, 90, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 70, 90, 30, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 40, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30, 0, 70,
@@ -7819,8 +7819,8 @@ data:
   heading: 8619
   internal_timestamp: 3281904432.24
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 50, 100, 100, 100, 100, 100, 100, 100, 100, 100,
     70, 100, 0, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 10, 20, 70, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30, 0, 90,
@@ -7885,8 +7885,8 @@ data:
   heading: 8380
   internal_timestamp: 3281904435.56
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 20, 100, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 0, 100, 0, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 10, 30, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 100,
@@ -7955,8 +7955,8 @@ data:
   heading: 8360
   internal_timestamp: 3281904438.87
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 100, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 0, 100, 0, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 20, 70, 90, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100,
@@ -8025,8 +8025,8 @@ data:
   heading: 8279
   internal_timestamp: 3281904442.36
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 100, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 0, 90, 10, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 50, 30, 60, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 90,
@@ -8095,8 +8095,8 @@ data:
   heading: 8369
   internal_timestamp: 3281904445.66
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 40, 40, 50, 10, 70, 100, 100, 100, 100, 100, 100, 100, 100,
     70, 90, 10, 40, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 30, 60, 40, 70, 30, 0, 0, 0, 0, 0, 0, 0, 0, 30, 10, 0, 60,
@@ -8161,8 +8161,8 @@ data:
   heading: 8369
   internal_timestamp: 3281904449.0
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 70, 70, 0, 0, 20, 100, 100, 100, 100, 100, 100, 100, 100,
     90, 100, 0, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 20, 30, 20, 0, 80, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 40, 0,
@@ -8231,8 +8231,8 @@ data:
   heading: 8560
   internal_timestamp: 3281904452.42
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 20, 20, 0, 0, 70, 100, 100, 100, 100, 100, 100, 100, 100,
     40, 100, 0, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 70, 80, 40, 40, 30, 0, 0, 0, 0, 0, 0, 0, 0, 60, 0, 100,
@@ -8301,8 +8301,8 @@ data:
   heading: 8549
   internal_timestamp: 3281904455.64
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 70, 100, 100, 100, 100, 100, 100, 100, 100, 0,
     100, 0, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 100, 20, 0, 20, 30, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 100,
@@ -8371,8 +8371,8 @@ data:
   heading: 8639
   internal_timestamp: 3281904459.09
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 30, 0, 0, 70, 100, 100, 100, 100, 100, 100, 100, 100,
     0, 100, 0, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 30, 10, 40, 20, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0,
@@ -8441,8 +8441,8 @@ data:
   heading: 8639
   internal_timestamp: 3281904462.49
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 20, 100, 100, 100, 100, 100, 100, 100, 100, 100,
     60, 60, 80, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 40, 20, 70, 0, 0, 0, 0, 0, 0, 0, 0, 0, 40, 0, 20, 0,
@@ -8507,8 +8507,8 @@ data:
   heading: 8520
   internal_timestamp: 3281904465.73
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 90, 100, 100, 100, 100, 100, 100, 100, 40, 100,
     0, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 30, 0, 10, 10, 0, 0, 0, 0, 0, 0, 0, 60, 0, 0, 0, 0, 0,
@@ -8577,8 +8577,8 @@ data:
   heading: 8549
   internal_timestamp: 3281904469.1
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 20, 100, 100, 100, 100, 100, 100, 100, 100, 30,
     100, 0, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 20, 0, 40, 0, 0, 0, 0, 0, 0, 0, 0, 70, 0, 30, 0, 0, 0,
@@ -8647,8 +8647,8 @@ data:
   heading: 8720
   internal_timestamp: 3281904472.55
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 50, 60, 100, 100, 100, 100, 100, 100, 100, 0, 100,
     0, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 30, 0, 40, 40, 0, 0, 0, 0, 0, 0, 0, 100, 0, 100, 0, 0,
@@ -8717,8 +8717,8 @@ data:
   heading: 9059
   internal_timestamp: 3281904475.91
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 70, 100, 100, 100, 100, 100, 100, 100, 100, 0, 100,
     0, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 10, 30, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 100, 0, 0,
@@ -8783,8 +8783,8 @@ data:
   heading: 9059
   internal_timestamp: 3281904479.24
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 90, 100, 100, 100, 100, 100, 100, 100, 100, 10,
     100, 10, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 70, 10, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 90, 0, 0, 0,
@@ -8853,8 +8853,8 @@ data:
   heading: 9400
   internal_timestamp: 3281904482.54
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 80, 100, 100, 100, 100, 100, 100, 100, 80, 100,
     30, 70, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 70, 20, 0, 0, 0, 0, 0, 0, 0, 20, 0, 0, 30, 0, 0, 0,
@@ -8923,8 +8923,8 @@ data:
   heading: 9499
   internal_timestamp: 3281904485.91
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 10, 20, 70, 100, 100, 100, 100, 100, 100, 40, 100,
     0, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 40, 20, 30, 0, 0, 0, 0, 0, 0, 60, 0, 0, 0, 0, 0, 0,
@@ -8993,8 +8993,8 @@ data:
   heading: 9720
   internal_timestamp: 3281904489.39
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 20, 80, 100, 100, 100, 100, 100, 100, 0, 100, 0,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 10, 70, 20, 0, 0, 0, 0, 0, 0, 100, 0, 50, 0, 0, 0,
@@ -9063,8 +9063,8 @@ data:
   heading: 9720
   internal_timestamp: 3281904492.66
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 10, 0, 100, 100, 100, 100, 100, 100, 100, 0, 100, 0,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 40, 60, 0, 0, 0, 0, 0, 0, 0, 100, 0, 90, 0, 0, 0,
@@ -9129,8 +9129,8 @@ data:
   heading: 9920
   internal_timestamp: 3281904496.16
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 100, 100, 100, 100, 100, 100, 100, 0, 100, 20,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 60, 0, 70, 0, 0, 0, 0,
@@ -9199,8 +9199,8 @@ data:
   heading: 10099
   internal_timestamp: 3281904499.43
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 90, 100, 100, 100, 100, 100, 80, 80, 60, 60,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 10, 0, 30, 10, 0, 0, 0, 0, 0, 20, 0, 40, 40, 0, 0, 0,
@@ -9269,8 +9269,8 @@ data:
   heading: 10259
   internal_timestamp: 3281904502.75
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 100, 100, 100, 100, 100, 100, 0, 100, 0, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 40, 0, 0, 0, 0, 0,
@@ -9339,8 +9339,8 @@ data:
   heading: 10259
   internal_timestamp: 3281904506.08
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 90, 100, 100, 100, 100, 100, 0, 100, 0, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 10, 10, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0,
@@ -9405,8 +9405,8 @@ data:
   heading: 10460
   internal_timestamp: 3281904509.11
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 10, 70, 90, 100, 100, 100, 100, 0, 100, 0, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 90, 30, 10, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0,
@@ -9475,8 +9475,8 @@ data:
   heading: 10559
   internal_timestamp: 3281904512.12
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 70, 100, 100, 100, 100, 100, 100, 0, 90, 10, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 10, 10, 30, 0, 0, 0, 0, 0, 0, 100, 10, 50, 0, 0, 0, 0,
@@ -9545,8 +9545,8 @@ data:
   heading: 10660
   internal_timestamp: 3281904515.34
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 100, 100, 100, 100, 100, 100, 0, 50, 50, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 30, 40, 0, 0, 0, 0, 0, 0, 80, 50, 50, 0, 0, 0, 0,
@@ -9615,8 +9615,8 @@ data:
   heading: 10660
   internal_timestamp: 3281904518.5
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 100, 100, 100, 100, 100, 70, 100, 30, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 20, 0, 0, 0, 0, 0, 0, 0, 40, 0, 0, 0, 0, 0, 0,
@@ -9681,8 +9681,8 @@ data:
   heading: 10640
   internal_timestamp: 3281904521.42
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 10, 100, 100, 100, 100, 100, 0, 100, 0, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 10, 20, 60, 0, 0, 0, 0, 0, 70, 0, 10, 0, 0, 0, 0, 0,
@@ -9751,8 +9751,8 @@ data:
   heading: 10530
   internal_timestamp: 3281904524.36
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 10, 100, 100, 100, 100, 100, 0, 100, 0, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 10, 60, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -9821,8 +9821,8 @@ data:
   heading: 10530
   internal_timestamp: 3281904527.5
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 10, 0, 80, 100, 100, 100, 100, 0, 100, 0, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 20, 50, 20, 0, 0, 0, 0, 100, 0, 10, 0, 0, 0, 0, 0,
@@ -9887,8 +9887,8 @@ data:
   heading: 10429
   internal_timestamp: 3281904530.42
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 10, 100, 100, 100, 100, 100, 0, 100, 20, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 10, 30, 0, 0, 0, 0, 0, 100, 0, 60, 0, 0, 0, 0, 0,
@@ -9957,8 +9957,8 @@ data:
   heading: 10359
   internal_timestamp: 3281904533.34
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 20, 100, 100, 100, 100, 100, 0, 90, 80, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 20, 30, 0, 0, 0, 0, 0, 100, 10, 10, 0, 0, 0, 0, 0,
@@ -10027,8 +10027,8 @@ data:
   heading: 10359
   internal_timestamp: 3281904536.54
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 20, 100, 100, 100, 100, 100, 50, 70, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 10, 30, 0, 0, 0, 0, 0, 50, 30, 0, 0, 0, 0, 0, 0, 0,
@@ -10093,8 +10093,8 @@ data:
   heading: 10180
   internal_timestamp: 3281904539.43
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 10, 100, 100, 100, 100, 70, 100, 20, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 10, 90, 0, 0, 0, 0, 30, 0, 50, 0, 0, 0, 0, 0, 0, 0,
@@ -10163,8 +10163,8 @@ data:
   heading: 10049
   internal_timestamp: 3281904542.31
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 50, 100, 100, 100, 100, 0, 100, 0, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 10, 30, 0, 0, 0, 0, 60, 0, 10, 0, 0, 0, 0, 0, 0, 0,
@@ -10233,8 +10233,8 @@ data:
   heading: 9959
   internal_timestamp: 3281904545.52
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 10, 10, 10, 100, 100, 100, 100, 0, 100, 0, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 60, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -10303,8 +10303,8 @@ data:
   heading: 9959
   internal_timestamp: 3281904548.4
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 60, 100, 100, 100, 100, 0, 100, 0, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 30, 0, 0, 0, 0, 100, 0, 10, 0, 0, 0, 0, 0, 0, 0,
@@ -10369,8 +10369,8 @@ data:
   heading: 9849
   internal_timestamp: 3281904551.33
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 30, 100, 100, 100, 100, 0, 100, 20, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 50, 0, 0, 0, 0, 100, 0, 50, 0, 0, 0, 0, 0, 0, 0,
@@ -10439,8 +10439,8 @@ data:
   heading: 9749
   internal_timestamp: 3281904554.51
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 10, 100, 100, 100, 100, 80, 70, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 30, 30, 0, 0, 0, 0, 20, 30, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -10509,8 +10509,8 @@ data:
   heading: 9749
   internal_timestamp: 3281904557.42
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 100, 100, 100, 100, 100, 0, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 60, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -10576,8 +10576,8 @@ data:
   heading: 9679
   internal_timestamp: 3281904560.29
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 80, 100, 100, 100, 0, 100, 0, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 10, 20, 0, 0, 0, 100, 0, 10, 0, 0, 0, 0, 0, 0, 0,
@@ -10647,8 +10647,8 @@ data:
   heading: 9470
   internal_timestamp: 3281904563.74
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 100, 100, 100, 10, 20, 0, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 60, 0, 0, 0, 50, 80, 40, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -10717,8 +10717,8 @@ data:
   heading: 9470
   internal_timestamp: 3281904566.88
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 20, 20, 100, 100, 100, 20, 20, 0, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 60, 70, 0, 0, 0, 80, 80, 30, 0, 0, 0, 0, 0, 0, 0,
@@ -10787,8 +10787,8 @@ data:
   heading: 9239
   internal_timestamp: 3281904569.8
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 30, 100, 100, 100, 0, 10, 90, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 30, 40, 0, 0, 0, 100, 60, 10, 0, 0, 0, 0, 0, 0, 0,
@@ -10857,8 +10857,8 @@ data:
   heading: 9030
   internal_timestamp: 3281904572.75
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 100, 100, 100, 0, 80, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 30, 0, 0, 0, 100, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -10927,8 +10927,8 @@ data:
   heading: 8910
   internal_timestamp: 3281904575.87
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 90, 90, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 10, 20, 60, 10, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -10993,8 +10993,8 @@ data:
   heading: 8910
   internal_timestamp: 3281904578.69
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 60, 90, 100, 20, 100, 10, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 10, 30, 10, 0, 80, 0, 90, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -11063,8 +11063,8 @@ data:
   heading: 8669
   internal_timestamp: 3281904581.63
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 40, 50, 90, 0, 0, 50, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 40, 40, 10, 0, 50, 50, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -11133,8 +11133,8 @@ data:
   heading: 8560
   internal_timestamp: 3281904584.47
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 20, 100, 100, 0, 0, 90, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 10, 30, 0, 0, 100, 90, 10, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -11199,8 +11199,8 @@ data:
   heading: 8560
   internal_timestamp: 3281904587.27
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 90, 100, 0, 0, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 10, 30, 10, 0, 100, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -11269,8 +11269,8 @@ data:
   heading: 8529
   internal_timestamp: 3281904590.05
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 100, 100, 0, 0, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 50, 0, 0, 100, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -11340,8 +11340,8 @@ data:
   heading: 8529
   internal_timestamp: 3281904592.93
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 100, 100, 20, 50, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 10, 0, 0, 80, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -11406,8 +11406,8 @@ data:
   heading: 8560
   internal_timestamp: 3281904595.74
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 10, 40, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 50, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -11477,8 +11477,8 @@ data:
   heading: 8650
   internal_timestamp: 3281904598.5
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 10, 40, 0, 0, 40, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 20, 30, 60, 0, 40, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -11547,8 +11547,8 @@ data:
   heading: 8650
   internal_timestamp: 3281904601.31
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 10, 0, 0, 0, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 20, 60, 100, 0, 90, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -11613,8 +11613,8 @@ data:
   heading: 8709
   internal_timestamp: 3281904604.11
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 10, 0, 0, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 10, 90, 10, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -11683,8 +11683,8 @@ data:
   heading: 8660
   internal_timestamp: 3281904606.96
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 100, 0, 0, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 70, 0, 100, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -11754,8 +11754,8 @@ data:
   heading: 8660
   internal_timestamp: 3281904609.74
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 10, 100, 0, 0, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 30, 0, 100, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -11821,8 +11821,8 @@ data:
   heading: 8579
   internal_timestamp: 3281904612.51
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 100, 10, 40, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 0, 0, 90, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -11892,8 +11892,8 @@ data:
   heading: 8520
   internal_timestamp: 3281904615.41
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 0, 10, 50, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 10, 40, 10, 0, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -11962,8 +11962,8 @@ data:
   heading: 8520
   internal_timestamp: 3281904618.18
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 0, 0, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 0, 0, 90, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -12028,8 +12028,8 @@ data:
   heading: 8439
   internal_timestamp: 3281904621.05
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 0, 0, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -12098,8 +12098,8 @@ data:
   heading: 8139
   internal_timestamp: 3281904623.81
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 0, 0, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 10, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -12168,8 +12168,8 @@ data:
   heading: 8139
   internal_timestamp: 3281904626.57
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 20, 0, 0, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 80, 20, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -12235,8 +12235,8 @@ data:
   heading: 8019
   internal_timestamp: 3281904629.31
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 80, 0, 0, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 20, 80, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -12305,8 +12305,8 @@ data:
   heading: 7859
   internal_timestamp: 3281904632.21
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 100, 0, 10, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 0, 100, 80, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -12372,8 +12372,8 @@ data:
   heading: 7859
   internal_timestamp: 3281904635.01
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 30, 20, 70, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 10, 70, 50, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -12442,8 +12442,8 @@ data:
   heading: 7809
   internal_timestamp: 3281904637.79
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 0, 100, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 100, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -12513,8 +12513,8 @@ data:
   heading: 7809
   internal_timestamp: 3281904640.51
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 0, 100, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 100, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -12580,8 +12580,8 @@ data:
   heading: 7609
   internal_timestamp: 3281904643.41
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 0, 100, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 100, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -12651,8 +12651,8 @@ data:
   heading: 7369
   internal_timestamp: 3281904646.13
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 0, 100, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 10, 100, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -12722,8 +12722,8 @@ data:
   heading: 7369
   internal_timestamp: 3281904649.09
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 0, 100, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 100, 10, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -12789,8 +12789,8 @@ data:
   heading: 7250
   internal_timestamp: 3281904651.78
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 90, 100, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -12860,8 +12860,8 @@ data:
   heading: 7279
   internal_timestamp: 3281904654.6
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 100, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -12932,8 +12932,8 @@ data:
   heading: 7279
   internal_timestamp: 3281904657.28
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 100, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -13000,8 +13000,8 @@ data:
   heading: 7309
   internal_timestamp: 3281904660.21
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 100, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -13072,8 +13072,8 @@ data:
   heading: 7579
   internal_timestamp: 3281904662.94
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 100, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -13144,8 +13144,8 @@ data:
   heading: 7579
   internal_timestamp: 3281904665.8
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 0, 100, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -13212,8 +13212,8 @@ data:
   heading: 7870
   internal_timestamp: 3281904668.46
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 80, 100, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -13283,8 +13283,8 @@ data:
   heading: 7870
   internal_timestamp: 3281904671.42
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -13351,8 +13351,8 @@ data:
   heading: 8089
   internal_timestamp: 3281904674.07
   num_cells: 30
-  particle_object: VelocityEarth
-  particle_type: adcp_velocity_earth
+  particle_object: VelocityGlider
+  particle_type: adcp_velocity_glider
   percent_bad_beams: [0, 0, 0, 0, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100,
     100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]
   percent_good_3beam: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
