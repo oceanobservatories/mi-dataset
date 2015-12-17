@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="mi-dataset",
-    version="0.1.0",
+    version="0.1.1",
     description="Contains marine integrations dataset drivers and parsers",
     url="http://github.com/oceanobservatories/mi-dataset",
     license="BSD",
@@ -12,7 +12,7 @@ setup(
         "numpy",
         "msgpack-python",
         "ntplib",
-        #"matplotlib",
+        "matplotlib",
         "nose"
     ]
 )
