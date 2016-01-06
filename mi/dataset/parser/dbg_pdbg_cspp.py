@@ -31,7 +31,7 @@ from mi.core.exceptions import \
 
 
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
-from mi.dataset.dataset_parser import BufferLoadingParser
+from mi.dataset.dataset_parser import SimpleParser
 from mi.core.instrument.chunker import StringChunker
 
 from mi.dataset.parser.cspp_base import \
@@ -300,7 +300,7 @@ class DbgPdbgTelemeteredGpsParticle(DbgPdbgGpsParticle):
     _data_particle_type = DbgPdbgDataParticleType.GPS_TELEMETERED
 
 
-class DbgPdbgCsppParser(BufferLoadingParser):
+class DbgPdbgCsppParser(SimpleParser):
     """
     Parser for the dbg_pdbg engineering data part of the cspp_eng_cspp driver
     This Parser is based on the cspp_base parser, modified to handle
@@ -310,7 +310,8 @@ class DbgPdbgCsppParser(BufferLoadingParser):
     def __init__(self,
                  config,
                  stream_handle,
-                 exception_callback):
+                 exception_callback,
+                 is_telemetered):
         """
         This method is a constructor that will instantiate an DbgPdbgCsppParser object.
         @param config The configuration for this DbgPdbgCsppParser parser
@@ -318,52 +319,82 @@ class DbgPdbgCsppParser(BufferLoadingParser):
         @param exception_callback The function to call to report exceptions
         """
 
+        if is_telemetered:
+            self._metadata_particle_class = DbgPdbgMetadataTelemeteredDataParticle
+            self._battery_status_class = DbgPdbgTelemeteredBatteryParticle
+            self._gps_adjustment_class = DbgPdbgTelemeteredGpsParticle
+        else:
+            self._metadata_particle_class = DbgPdbgMetadataRecoveredDataParticle
+            self._battery_status_class = DbgPdbgRecoveredBatteryParticle
+            self._gps_adjustment_class = DbgPdbgRecoveredGpsParticle
+
+
         # Build up the header state dictionary using the default header key list
         self._header_state = {}
 
-        header_key_list = DEFAULT_HEADER_KEY_LIST
+        # header_key_list = DEFAULT_HEADER_KEY_LIST
+        #
+        # for header_key in header_key_list:
+        #     self._header_state[header_key] = None
+        #
+        # # # Obtain the particle classes dictionary from the config data
+        # if DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT in config:
+        #     particle_classes_dict = config.get(DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT)
+        #
+        #     # Set the metadata and data particle classes to be used later
+        #
+        #     if METADATA_PARTICLE_CLASS_KEY in particle_classes_dict and \
+        #        BATTERY_STATUS_CLASS_KEY in particle_classes_dict and \
+        #        GPS_ADJUSTMENT_CLASS_KEY in particle_classes_dict:
+        #
+        #         self._metadata_particle_class = particle_classes_dict.get(METADATA_PARTICLE_CLASS_KEY)
+        #
+        #         self._battery_status_class = particle_classes_dict.get(BATTERY_STATUS_CLASS_KEY)
+        #         self._gps_adjustment_class = particle_classes_dict.get(GPS_ADJUSTMENT_CLASS_KEY)
+        #
+        #     else:
+        #         log.warning(
+        #             'Configuration missing metadata or data particle class key in particle classes dict')
+        #         raise ConfigurationException(
+        #             'Configuration missing metadata or data particle class key in particle classes dict')
+        # else:
+        #     log.warning('Configuration missing particle classes dict')
+        #     raise ConfigurationException('Configuration missing particle classes dict')
 
-        for header_key in header_key_list:
-            self._header_state[header_key] = None
-
-        # Obtain the particle classes dictionary from the config data
-        if DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT in config:
-            particle_classes_dict = config.get(DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT)
-
-            # Set the metadata and data particle classes to be used later
-
-            if METADATA_PARTICLE_CLASS_KEY in particle_classes_dict and \
-               BATTERY_STATUS_CLASS_KEY in particle_classes_dict and \
-               GPS_ADJUSTMENT_CLASS_KEY in particle_classes_dict:
-
-                self._metadata_particle_class = particle_classes_dict.get(METADATA_PARTICLE_CLASS_KEY)
-
-                self._battery_status_class = particle_classes_dict.get(BATTERY_STATUS_CLASS_KEY)
-                self._gps_adjustment_class = particle_classes_dict.get(GPS_ADJUSTMENT_CLASS_KEY)
-
-            else:
-                log.warning(
-                    'Configuration missing metadata or data particle class key in particle classes dict')
-                raise ConfigurationException(
-                    'Configuration missing metadata or data particle class key in particle classes dict')
-        else:
-            log.warning('Configuration missing particle classes dict')
-            raise ConfigurationException('Configuration missing particle classes dict')
-
-        # Initialize the record buffer to an empty list
-        self._record_buffer = []
 
         # Call the superclass constructor
         super(DbgPdbgCsppParser, self).__init__(config,
                                                 stream_handle,
-                                                None,
-                                                partial(StringChunker.regex_sieve_function,
-                                                        regex_list=[SIEVE_MATCHER]),
-                                                lambda state, ingested: None,
-                                                lambda data: None,
                                                 exception_callback)
 
         self._metadata_extracted = False
+
+    def parse_file(self):
+
+        for line in self._stream_handle:
+
+            battery_match = BATTERY_DATA_MATCHER.match(line)
+
+            gps_match = GPS_DATA_MATCHER.match(line)
+
+            # If we found a data match, let's process it
+            if battery_match is not None:
+                self._process_data_match(self._battery_status_class, battery_match, self._record_buffer)
+
+            elif gps_match is not None:
+                self._process_data_match(self._gps_adjustment_class, gps_match, self._record_buffer)
+
+            else:
+                # Check for head part match
+                header_part_match = HEADER_PART_MATCHER.match(line)
+
+                if header_part_match is not None:
+                    self._process_header_part_match(header_part_match)
+
+                else:
+                    self._process_chunk_not_containing_data_record_or_header_part(line)
+
+
 
     def _process_data_match(self, particle_class, data_match, result_particles):
         """
@@ -416,7 +447,7 @@ class DbgPdbgCsppParser(BufferLoadingParser):
                 # the metadata, even if it failed
                 self._metadata_extracted = True
 
-            result_particles.append((data_particle, None))
+            self._record_buffer.append((data_particle, None))
 
     def _process_header_part_match(self, header_part_match):
         """
@@ -457,61 +488,61 @@ class DbgPdbgCsppParser(BufferLoadingParser):
             log.warn('got unrecognized row %s', chunk)
             self._exception_callback(RecoverableSampleException("Found an invalid chunk: %s" % chunk))
 
-    def parse_chunks(self):
-        """
-        Parse out any pending data chunks in the chunker. If
-        it is a valid data piece, build a particle, update the position and
-        timestamp. Go until the chunker has no more valid data.
-        @retval a list of tuples with sample particles encountered in this
-            parsing, plus the state. An empty list of nothing was parsed.
-        """
-
-        # Initialize the result particles list we will return
-        result_particles = []
-
-        # Retrieve the next non data chunk
-        (nd_timestamp, non_data, non_start, non_end) = self._chunker.get_next_non_data_with_index(clean=False)
-
-        # Retrieve the next data chunk
-        (timestamp, chunk, start, end) = self._chunker.get_next_data_with_index(clean=True)
-
-        # Process the non data
-        self.handle_non_data(non_data, non_end, start)
-
-        # While the data chunk is not None, process the data chunk
-        while chunk is not None:
-
-            battery_match = BATTERY_DATA_MATCHER.match(chunk)
-
-            gps_match = GPS_DATA_MATCHER.match(chunk)
-
-            # If we found a data match, let's process it
-            if battery_match is not None:
-                self._process_data_match(self._battery_status_class, battery_match, result_particles)
-
-            elif gps_match is not None:
-                self._process_data_match(self._gps_adjustment_class, gps_match, result_particles)
-
-            else:
-                # Check for head part match
-                header_part_match = HEADER_PART_MATCHER.match(chunk)
-
-                if header_part_match is not None:
-                    self._process_header_part_match(header_part_match)
-
-                else:
-                    self._process_chunk_not_containing_data_record_or_header_part(chunk)
-
-            # Retrieve the next non data chunk
-            (nd_timestamp, non_data, non_start, non_end) = self._chunker.get_next_non_data_with_index(clean=False)
-
-            # Retrieve the next data chunk
-            (timestamp, chunk, start, end) = self._chunker.get_next_data_with_index(clean=True)
-
-            # Process the non data
-            self.handle_non_data(non_data, non_end, start)
-
-        return result_particles
+    # def parse_chunks(self):
+    #     """
+    #     Parse out any pending data chunks in the chunker. If
+    #     it is a valid data piece, build a particle, update the position and
+    #     timestamp. Go until the chunker has no more valid data.
+    #     @retval a list of tuples with sample particles encountered in this
+    #         parsing, plus the state. An empty list of nothing was parsed.
+    #     """
+    #
+    #     # Initialize the result particles list we will return
+    #     result_particles = []
+    #
+    #     # Retrieve the next non data chunk
+    #     (nd_timestamp, non_data, non_start, non_end) = self._chunker.get_next_non_data_with_index(clean=False)
+    #
+    #     # Retrieve the next data chunk
+    #     (timestamp, chunk, start, end) = self._chunker.get_next_data_with_index(clean=True)
+    #
+    #     # Process the non data
+    #     self.handle_non_data(non_data, non_end, start)
+    #
+    #     # While the data chunk is not None, process the data chunk
+    #     while chunk is not None:
+    #
+    #         battery_match = BATTERY_DATA_MATCHER.match(chunk)
+    #
+    #         gps_match = GPS_DATA_MATCHER.match(chunk)
+    #
+    #         # If we found a data match, let's process it
+    #         if battery_match is not None:
+    #             self._process_data_match(self._battery_status_class, battery_match, result_particles)
+    #
+    #         elif gps_match is not None:
+    #             self._process_data_match(self._gps_adjustment_class, gps_match, result_particles)
+    #
+    #         else:
+    #             # Check for head part match
+    #             header_part_match = HEADER_PART_MATCHER.match(chunk)
+    #
+    #             if header_part_match is not None:
+    #                 self._process_header_part_match(header_part_match)
+    #
+    #             else:
+    #                 self._process_chunk_not_containing_data_record_or_header_part(chunk)
+    #
+    #         # Retrieve the next non data chunk
+    #         (nd_timestamp, non_data, non_start, non_end) = self._chunker.get_next_non_data_with_index(clean=False)
+    #
+    #         # Retrieve the next data chunk
+    #         (timestamp, chunk, start, end) = self._chunker.get_next_data_with_index(clean=True)
+    #
+    #         # Process the non data
+    #         self.handle_non_data(non_data, non_end, start)
+    #
+    #     return result_particles
 
     def handle_non_data(self, non_data, non_end, start):
         """
