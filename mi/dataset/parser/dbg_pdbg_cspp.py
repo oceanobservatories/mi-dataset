@@ -31,7 +31,7 @@ from mi.core.exceptions import \
 
 
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
-from mi.dataset.dataset_parser import BufferLoadingParser
+from mi.dataset.dataset_parser import SimpleParser
 from mi.core.instrument.chunker import StringChunker
 
 from mi.dataset.parser.cspp_base import \
@@ -41,6 +41,7 @@ from mi.dataset.parser.cspp_base import \
     HeaderPartMatchesGroupNumber, \
     TIMESTAMP_LINE_MATCHER, \
     HEADER_PART_MATCHER, \
+    HEX_ASCII_LINE_MATCHER, \
     DefaultHeaderKey, \
     Y_OR_N_REGEX, \
     CsppMetadataDataParticle, \
@@ -300,7 +301,7 @@ class DbgPdbgTelemeteredGpsParticle(DbgPdbgGpsParticle):
     _data_particle_type = DbgPdbgDataParticleType.GPS_TELEMETERED
 
 
-class DbgPdbgCsppParser(BufferLoadingParser):
+class DbgPdbgCsppParser(SimpleParser):
     """
     Parser for the dbg_pdbg engineering data part of the cspp_eng_cspp driver
     This Parser is based on the cspp_base parser, modified to handle
@@ -322,11 +323,11 @@ class DbgPdbgCsppParser(BufferLoadingParser):
         self._header_state = {}
 
         header_key_list = DEFAULT_HEADER_KEY_LIST
-
+        #
         for header_key in header_key_list:
             self._header_state[header_key] = None
 
-        # Obtain the particle classes dictionary from the config data
+        # # Obtain the particle classes dictionary from the config data
         if DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT in config:
             particle_classes_dict = config.get(DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT)
 
@@ -350,22 +351,44 @@ class DbgPdbgCsppParser(BufferLoadingParser):
             log.warning('Configuration missing particle classes dict')
             raise ConfigurationException('Configuration missing particle classes dict')
 
-        # Initialize the record buffer to an empty list
-        self._record_buffer = []
-
         # Call the superclass constructor
         super(DbgPdbgCsppParser, self).__init__(config,
                                                 stream_handle,
-                                                None,
-                                                partial(StringChunker.regex_sieve_function,
-                                                        regex_list=[SIEVE_MATCHER]),
-                                                lambda state, ingested: None,
-                                                lambda data: None,
                                                 exception_callback)
 
         self._metadata_extracted = False
 
-    def _process_data_match(self, particle_class, data_match, result_particles):
+    def parse_file(self):
+
+        for line in self._stream_handle:
+
+            battery_match = BATTERY_DATA_MATCHER.match(line)
+
+            gps_match = GPS_DATA_MATCHER.match(line)
+
+            # If we found a data match, let's process it
+            if battery_match is not None:
+                self._process_data_match(self._battery_status_class, battery_match)
+
+            elif gps_match is not None:
+                self._process_data_match(self._gps_adjustment_class, gps_match)
+
+            else:
+                # Check for head part match
+                header_part_match = HEADER_PART_MATCHER.match(line)
+
+                if header_part_match is not None:
+                    self._process_header_part_match(header_part_match)
+
+                else:
+                    if HEX_ASCII_LINE_MATCHER.match(line):
+                        self._process_line_not_containing_data_record_or_header_part(line)
+                    elif not TIMESTAMP_LINE_MATCHER.match(line) and not \
+                            (IGNORE_MATCHER is not None and IGNORE_MATCHER.match(line)):
+                        log.warn("non_data: %s", line)
+                        self._exception_callback(RecoverableSampleException("Found d bytes"))
+
+    def _process_data_match(self, particle_class, data_match):
         """
         This method processes a data match.  It will extract a metadata particle and insert it into
          result_particles when we have not already extracted the metadata and all header values exist.
@@ -400,7 +423,7 @@ class DbgPdbgCsppParser(BufferLoadingParser):
                         # We're going to insert the metadata particle so that it is
                         # the first in the list and set the position to 0, as it cannot
                         # have the same position as the non-metadata particle
-                        result_particles.insert(0, (metadata_particle, None))
+                        self._record_buffer.insert(0, metadata_particle)
                     else:
                         # metadata particle was not created successfully
                         log.warn('Unable to create metadata particle')
@@ -416,7 +439,7 @@ class DbgPdbgCsppParser(BufferLoadingParser):
                 # the metadata, even if it failed
                 self._metadata_extracted = True
 
-            result_particles.append((data_particle, None))
+            self._record_buffer.append(data_particle)
 
     def _process_header_part_match(self, header_part_match):
         """
@@ -434,93 +457,24 @@ class DbgPdbgCsppParser(BufferLoadingParser):
         if header_part_key in self._header_state.keys():
             self._header_state[header_part_key] = string.rstrip(header_part_value)
 
-    def _process_chunk_not_containing_data_record_or_header_part(self, chunk):
+    def _process_line_not_containing_data_record_or_header_part(self, line):
         """
         This method processes a chunk that does not contain a data record or header.  This case is
         not applicable to "non_data".  For cspp file streams, we expect some lines in the file that
         we do not care about, and we will not consider them "non_data".
-        @param chunk A regular expression match object for a cspp header row
         """
 
         # Check for the expected timestamp line we will ignore
-        timestamp_line_match = TIMESTAMP_LINE_MATCHER.match(chunk)
+        # timestamp_line_match = TIMESTAMP_LINE_MATCHER.match(chunk)
         # Check for other status messages we can ignore
-        ignore_match = IGNORE_MATCHER.match(chunk)
+        ignore_match = IGNORE_MATCHER.match(line)
 
-        if timestamp_line_match is not None or ignore_match is not None:
+        if ignore_match is not None:
             # Ignore
             pass
 
         else:
 
             # OK.  We got unexpected data
-            log.warn('got unrecognized row %s', chunk)
-            self._exception_callback(RecoverableSampleException("Found an invalid chunk: %s" % chunk))
-
-    def parse_chunks(self):
-        """
-        Parse out any pending data chunks in the chunker. If
-        it is a valid data piece, build a particle, update the position and
-        timestamp. Go until the chunker has no more valid data.
-        @retval a list of tuples with sample particles encountered in this
-            parsing, plus the state. An empty list of nothing was parsed.
-        """
-
-        # Initialize the result particles list we will return
-        result_particles = []
-
-        # Retrieve the next non data chunk
-        (nd_timestamp, non_data, non_start, non_end) = self._chunker.get_next_non_data_with_index(clean=False)
-
-        # Retrieve the next data chunk
-        (timestamp, chunk, start, end) = self._chunker.get_next_data_with_index(clean=True)
-
-        # Process the non data
-        self.handle_non_data(non_data, non_end, start)
-
-        # While the data chunk is not None, process the data chunk
-        while chunk is not None:
-
-            battery_match = BATTERY_DATA_MATCHER.match(chunk)
-
-            gps_match = GPS_DATA_MATCHER.match(chunk)
-
-            # If we found a data match, let's process it
-            if battery_match is not None:
-                self._process_data_match(self._battery_status_class, battery_match, result_particles)
-
-            elif gps_match is not None:
-                self._process_data_match(self._gps_adjustment_class, gps_match, result_particles)
-
-            else:
-                # Check for head part match
-                header_part_match = HEADER_PART_MATCHER.match(chunk)
-
-                if header_part_match is not None:
-                    self._process_header_part_match(header_part_match)
-
-                else:
-                    self._process_chunk_not_containing_data_record_or_header_part(chunk)
-
-            # Retrieve the next non data chunk
-            (nd_timestamp, non_data, non_start, non_end) = self._chunker.get_next_non_data_with_index(clean=False)
-
-            # Retrieve the next data chunk
-            (timestamp, chunk, start, end) = self._chunker.get_next_data_with_index(clean=True)
-
-            # Process the non data
-            self.handle_non_data(non_data, non_end, start)
-
-        return result_particles
-
-    def handle_non_data(self, non_data, non_end, start):
-        """
-        Handle any non-data that is found in the file
-        """
-        # non-data is not expected, if found it is an error
-        if non_data is not None and non_end <= start:
-            log.debug("non_data: %s", non_data)
-            #  send an UnexpectedDataException and increment the state
-
-            self._exception_callback(UnexpectedDataException("Found %d bytes of un-expected non-data %s" %
-                                                             (len(non_data), non_data)))
+            log.warn('got unrecognized row %s', line)
+            self._exception_callback(RecoverableSampleException("Found an invalid line: %s" % line))
