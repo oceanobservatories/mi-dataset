@@ -154,8 +154,6 @@ class OptaaAcMmpCdsParserUnitTestCase(ParserUnitTestCase):
 
         particles = parser.get_records(4)
 
-        log.info(len(particles))
-
         # Should end up with 4 particles
         self.assertTrue(len(particles) == 4)
 
@@ -185,16 +183,12 @@ class OptaaAcMmpCdsParserUnitTestCase(ParserUnitTestCase):
         # Should end up with 4 particles
         self.assertTrue(len(particles) == 4)
 
-        log.info(parser._state)
-
         test_data = self.get_dict_from_yml('set_state.yml')
 
         for i in range(len(particles)):
             self.assert_result(test_data['data'][i], particles[i])
 
         state = copy.copy(parser._state)
-
-        log.info(state)
 
         # Re-create the parser with a state of None
         parser = OptaaAcMmpCdsParser(self.config, None, stream_handle,
@@ -329,12 +323,8 @@ class OptaaAcMmpCdsParserUnitTestCase(ParserUnitTestCase):
                 particle_data = particle.get_value('internal_timestamp')
                 #the timestamp is in the header part of the particle
 
-                log.info("internal_timestamp %.10f", particle_data)
-
             elif key == StateKey.PARTICLES_RETURNED:
                 particle_data = self.state_callback_value[StateKey.PARTICLES_RETURNED]
-
-                log.info("particles returned %d", particle_data)
 
             else:
                 particle_data = particle_values.get(key)
@@ -345,11 +335,6 @@ class OptaaAcMmpCdsParserUnitTestCase(ParserUnitTestCase):
 
                 log.warning("\nWarning: assert_result ignoring test key %s, does not exist in particle", key)
             else:
-                # log.info(key)
-                # log.info(type(test_data))
-                # log.info(test_data)
-                # log.info(type(particle_data))
-                # log.info(particle_data)
                 if isinstance(test_data, float):
                     # slightly different test for these values as they are floats.
                     compare = numpy.abs(test_data - particle_data) <= 1e-5

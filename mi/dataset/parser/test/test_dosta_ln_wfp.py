@@ -52,7 +52,7 @@ class DostaLnWfpParserUnitTestCase(ParserUnitTestCase):
             DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.dosta_ln_wfp',
             DataSetDriverConfigKeys.PARTICLE_CLASS: 'DostaLnWfpInstrumentParserDataParticle'
         }
-        # Define test data particles and their associated timestamps which will be 
+        # Define test data particles and their associated timestamps which will be
         # compared with returned results
 
         self.start_state = {StateKey.POSITION: 0}
@@ -107,9 +107,6 @@ class DostaLnWfpParserUnitTestCase(ParserUnitTestCase):
                                      self.state_callback, self.pub_callback, self.exception_callback)
 
         particles = self.parser.get_records(6)
-
-        for particle in particles:
-            log.info(particle.generate_dict())
 
         # Make sure the fifth particle has the correct values
         self.assert_result(self.test_particle1, particles[5])
@@ -212,7 +209,7 @@ class DostaLnWfpParserUnitTestCase(ParserUnitTestCase):
 
     def test_long_stream(self):
         """
-        Test a long stream 
+        Test a long stream
         """
         file_path = os.path.join(RESOURCE_PATH, 'E0000002.DAT')
         self.stream_handle = open(file_path, 'rb')
@@ -251,7 +248,7 @@ class DostaLnWfpParserUnitTestCase(ParserUnitTestCase):
 
     def test_set_state(self):
         """
-        Test changing to a new state after initializing the parser and 
+        Test changing to a new state after initializing the parser and
         reading data, as if new data has been found and the state has
         changed
         """
@@ -354,13 +351,9 @@ class DostaLnWfpParserUnitTestCase(ParserUnitTestCase):
                 particle_data = particle.get_value('internal_timestamp')
                 #the timestamp is in the header part of the particle
 
-                log.info("internal_timestamp %d", particle_data)
-
             elif key == 'position':
                 particle_data = self.state_callback_value['position']
                 #position corresponds to the position in the file
-
-                log.info("position %d", particle_data)
 
             else:
                 particle_data = particle_values.get(key)

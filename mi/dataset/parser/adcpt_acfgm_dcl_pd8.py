@@ -243,7 +243,7 @@ class AdcptAcfgmPd8Parser(SimpleParser):
 
             line_match = SENSOR_TIME_MATCHER.match(line)
             if line_match is None:
-                self.recov_exception_callback("Expected starting DCL Timestamp, received: %s" % line)
+                self.recov_exception_callback("Expected starting DCL Timestamp, received: %r" % line)
                 continue  # skip to next line in outer loop
 
             matches = line_match.groups()
@@ -260,7 +260,7 @@ class AdcptAcfgmPd8Parser(SimpleParser):
 
             line_match = SENSOR_HEAD_MATCHER.match(line)
             if line_match is None:
-                self.recov_exception_callback("Expecting Heading, Pitch, & Roll data, received: %s" % line)
+                self.recov_exception_callback("Expecting Heading, Pitch, & Roll data, received: %r" % line)
                 continue  # skip to next line in outer loop
 
             matches = line_match.groups()
@@ -274,7 +274,7 @@ class AdcptAcfgmPd8Parser(SimpleParser):
             line_match = SENSOR_TEMP_MATCHER.match(line)
             if line_match is None:
                 self.recov_exception_callback("Expecting Temperature, Speed of Sound, & BIT data,"
-                                              " received: %s" % line)
+                                              " received: %r" % line)
                 continue  # skip to next line in outer loop
 
             matches = line_match.groups()

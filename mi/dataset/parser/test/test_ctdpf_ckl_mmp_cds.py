@@ -18,7 +18,7 @@ from mi.core.log import get_logger
 from mi.idk.config import Config
 
 log = get_logger()
-from mi.core.exceptions import SampleException, DatasetParserException
+from mi.core.exceptions import SampleException
 
 from mi.dataset.test.test_parser import ParserUnitTestCase
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
@@ -32,6 +32,7 @@ MSGPACK_TEST_FILE_LENGTH = 5278
 
 # The list of generated tests are the suggested tests, but there may
 # be other tests needed to fully test your parser
+
 
 @attr('UNIT', group='mi')
 class CtdpfCklMmpCdsParserUnitTestCase(ParserUnitTestCase):
@@ -133,10 +134,8 @@ class CtdpfCklMmpCdsParserUnitTestCase(ParserUnitTestCase):
         # Attempt to retrieve 200 particles, but we will retrieve less
         particles = parser.get_records(200)
 
-        log.info(len(particles))
-
         # Should end up with 172 particles
-        self.assertTrue(len(particles) == 172)
+        self.assertEqual(len(particles), 172)
 
         stream_handle.close()
 
@@ -160,10 +159,8 @@ class CtdpfCklMmpCdsParserUnitTestCase(ParserUnitTestCase):
 
         particles = parser.get_records(4)
 
-        log.info(len(particles))
-
         # Should end up with 4 particles
-        self.assertTrue(len(particles) == 4)
+        self.assertEqual(len(particles), 4)
 
         test_data = self.get_dict_from_yml('set_state.yml')
         self.assert_result(test_data['data'][23], particles[3])
@@ -192,16 +189,12 @@ class CtdpfCklMmpCdsParserUnitTestCase(ParserUnitTestCase):
         # Should end up with 4 particles
         self.assertTrue(len(particles) == 4)
 
-        log.info(parser._state)
-
         stat_info = os.stat(file_path)
 
         test_data = self.get_dict_from_yml('set_state.yml')
         self.assert_result(test_data['data'][3], particles[3])
 
         state = copy.copy(parser._state)
-
-        log.info(state)
 
         parser = CtdpfCklMmpCdsParser(self.config, state, stream_handle,
                                       self.state_callback, self.pub_callback)
@@ -308,8 +301,6 @@ class CtdpfCklMmpCdsParserUnitTestCase(ParserUnitTestCase):
                 particle_data = particle.get_value('internal_timestamp')
                 #the timestamp is in the header part of the particle
 
-                log.info("internal_timestamp %.10f", particle_data)
-
             elif key == StateKey.PARTICLES_RETURNED:
                 particle_data = self.state_callback_value[StateKey.PARTICLES_RETURNED]
 
@@ -324,8 +315,6 @@ class CtdpfCklMmpCdsParserUnitTestCase(ParserUnitTestCase):
 
                 log.warning("\nWarning: assert_result ignoring test key %s, does not exist in particle", key)
             else:
-                log.info(key)
-                log.info(type(test_data))
                 if isinstance(test_data, float):
                     # slightly different test for these values as they are floats.
                     compare = numpy.abs(test_data - particle_data) <= 1e-5

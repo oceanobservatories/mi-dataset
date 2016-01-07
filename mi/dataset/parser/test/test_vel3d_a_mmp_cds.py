@@ -129,8 +129,6 @@ class Vel3dAMmpCdsParserUnitTestCase(ParserUnitTestCase):
         # Attempt to retrieve 400 particles, but we will retrieve less
         particles = parser.get_records(400)
 
-        log.info(len(particles))
-
         # Should end up with 386 particles
         self.assertTrue(len(particles) == 386)
 
@@ -155,8 +153,6 @@ class Vel3dAMmpCdsParserUnitTestCase(ParserUnitTestCase):
                                     self.state_callback, self.pub_callback)
 
         particles = parser.get_records(4)
-
-        log.info(len(particles))
 
         # Should end up with 4 particles
         self.assertTrue(len(particles) == 4)
@@ -189,8 +185,6 @@ class Vel3dAMmpCdsParserUnitTestCase(ParserUnitTestCase):
         # Should end up with 4 particles
         self.assertTrue(len(particles) == 4)
 
-        log.info(parser._state)
-
         stat_info = os.stat(file_path)
 
         test_data = self.get_dict_from_yml('second_data.yml')
@@ -198,8 +192,6 @@ class Vel3dAMmpCdsParserUnitTestCase(ParserUnitTestCase):
             self.assert_result(test_data['data'][n], particles[n])
 
         state = copy.copy(parser._state)
-
-        log.info(state)
 
         parser = Vel3dAMmpCdsParser(self.config, state, stream_handle,
                                       self.state_callback, self.pub_callback)
@@ -295,12 +287,8 @@ class Vel3dAMmpCdsParserUnitTestCase(ParserUnitTestCase):
                 particle_data = particle.get_value('internal_timestamp')
                 #the timestamp is in the header part of the particle
 
-                log.info("internal_timestamp %.10f", particle_data)
-
             elif key == StateKey.PARTICLES_RETURNED:
                 particle_data = self.state_callback_value[StateKey.PARTICLES_RETURNED]
-
-                log.info("particles returned %d", particle_data)
 
             else:
                 particle_data = particle_values.get(key)
@@ -311,8 +299,6 @@ class Vel3dAMmpCdsParserUnitTestCase(ParserUnitTestCase):
 
                 log.warning("\nWarning: assert_result ignoring test key %s, does not exist in particle", key)
             else:
-                log.info(key)
-                log.info(type(test_data))
                 if isinstance(test_data, float):
                     # slightly different test for these values as they are floats.
                     compare = numpy.abs(test_data - particle_data) <= 1e-5
