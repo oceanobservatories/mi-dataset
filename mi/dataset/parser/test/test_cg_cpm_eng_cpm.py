@@ -8,26 +8,24 @@
 """
 import os
 import pprint
-import re
-import ntplib
 
 from nose.plugins.attrib import attr
 
 from mi.core.log import get_logger
-log = get_logger()
 from mi.core.exceptions import SampleException
-from mi.core.instrument.data_particle import DataParticleKey
 
 from mi.dataset.test.test_parser import ParserUnitTestCase
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
-from mi.dataset.parser.cg_cpm_eng_cpm import CgCpmEngCpmParser, \
-    CgCpmEngCpmDataParticleType, CgCpmEngCpmDataParticle, \
-    CgCpmEngCpmRecoveredDataParticle, CgCpmEngCpmTelemeteredDataParticle
+from mi.dataset.parser.cg_cpm_eng_cpm import CgCpmEngCpmParser
 
 from mi.idk.config import Config
+
+log = get_logger()
+
 RESOURCE_PATH = os.path.join(Config().base_dir(), 'mi',
                              'dataset', 'driver', 'cg_cpm_eng',
                              'cpm', 'resource')
+
 
 @attr('UNIT', group='mi')
 class CgParserUnitTestCase(ParserUnitTestCase):
@@ -112,5 +110,6 @@ class CgParserUnitTestCase(ParserUnitTestCase):
                 self.parser = CgCpmEngCpmParser(self.config, file_handle,
                                                 self.exception_callback)
                 result = self.parser.get_records(1)
+                self.assertTrue(len(result) == 0)
 
         log.debug('===== END TEST NO PARTICLES =====')
