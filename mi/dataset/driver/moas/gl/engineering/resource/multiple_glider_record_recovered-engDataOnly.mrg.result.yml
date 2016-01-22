@@ -141,12 +141,6 @@ data:
     m_gps_ignored_lon: -125.39690166666666
     m_gps_invalid_lat: 43.47154166666667
     m_gps_invalid_lon: -125.39698166666666
-    m_gps_lat:
-      value: 43.47114
-      round: 5
-    m_gps_lon:
-      value: -125.39661
-      round: 5
     m_gps_mag_var: -0.279253
     m_gps_num_satellites: 11.0
     m_gps_on: 0
@@ -284,6 +278,16 @@ data:
     x_last_wpt_lon: -126.0
     x_system_clock_adjusted: -12.0
   - _index: 3
+    particle_object: GpsPositionDataParticle
+    particle_type: glider_gps_position
+    internal_timestamp: '2012-02-21T18:39:29.262940Z'
+    m_gps_lat:
+      value: 43.47114
+      round: 5
+    m_gps_lon:
+      value: -125.39661
+      round: 5
+  - _index: 4
     particle_object: EngineeringScienceRecoveredDataParticle
     particle_type: glider_eng_sci_recovered
     internal_timestamp: '2012-02-21T18:39:29.262940Z'
@@ -308,7 +312,7 @@ data:
     sci_wants_surface: 1
     sci_x_disk_files_removed: 1000.1
     sci_x_sent_data_files: 1000.1
-  - _index: 4
+  - _index: 5
     particle_object: EngineeringRecoveredDataParticle
     particle_type: glider_eng_recovered
     internal_timestamp: '2012-02-21T18:40:18.799620Z'
@@ -437,8 +441,6 @@ data:
     m_gps_ignored_lon: -125.39690166666666
     m_gps_invalid_lat: 43.47154166666667
     m_gps_invalid_lon: -125.39698166666666
-    m_gps_lat: 43.471138333333336
-    m_gps_lon: -125.39660833333333
     m_gps_mag_var: -0.279253
     m_gps_num_satellites: 11.0
     m_gps_on: 1
@@ -579,7 +581,13 @@ data:
       value: -126.00000
       round: 5
     x_system_clock_adjusted: -12.0
-  - _index: 5
+  - _index: 6
+    particle_object: GpsPositionDataParticle
+    particle_type: glider_gps_position
+    internal_timestamp: '2012-02-21T18:40:18.799620Z'
+    m_gps_lat: 43.471138333333336
+    m_gps_lon: -125.39660833333333
+  - _index: 7
     particle_object: EngineeringScienceRecoveredDataParticle
     particle_type: glider_eng_sci_recovered
     internal_timestamp: '2012-02-21T18:40:18.799620Z'
@@ -604,7 +612,7 @@ data:
     sci_wants_surface: 2
     sci_x_disk_files_removed: 1000.1
     sci_x_sent_data_files: 1000.1
-  - _index: 6
+  - _index: 8
     particle_object: EngineeringRecoveredDataParticle
     particle_type: glider_eng_recovered
     internal_timestamp: '2012-02-21T18:41:43.758150Z'
@@ -733,8 +741,6 @@ data:
     m_gps_ignored_lon: !!null
     m_gps_invalid_lat: !!null
     m_gps_invalid_lon: !!null
-    m_gps_lat: 43.46955333333333
-    m_gps_lon: -125.39484
     m_gps_mag_var: -0.279253
     m_gps_num_satellites: 10.0
     m_gps_on: 1
@@ -871,7 +877,13 @@ data:
     x_last_wpt_lat: !!null
     x_last_wpt_lon: !!null
     x_system_clock_adjusted: !!null
-  - _index: 7
+  - _index: 9
+    particle_object: GpsPositionDataParticle
+    particle_type: glider_gps_position
+    internal_timestamp: '2012-02-21T18:41:43.758150Z'
+    m_gps_lat: 43.46955333333333
+    m_gps_lon: -125.39484
+  - _index: 10
     particle_object: EngineeringScienceRecoveredDataParticle
     particle_type: glider_eng_sci_recovered
     internal_timestamp: '2012-02-21T18:41:43.758150Z'
@@ -896,7 +908,7 @@ data:
     sci_wants_surface: 3
     sci_x_disk_files_removed: 1000.1
     sci_x_sent_data_files: 1000.1
-  - _index: 8
+  - _index: 11
     particle_object: EngineeringRecoveredDataParticle
     particle_type: glider_eng_recovered
     internal_timestamp: '2012-02-21T18:42:02.245270Z'
@@ -1021,8 +1033,6 @@ data:
     m_gps_ignored_lon: !!null
     m_gps_invalid_lat: !!null
     m_gps_invalid_lon: !!null
-    m_gps_lat: 43.469525
-    m_gps_lon: -125.39477833333333
     m_gps_mag_var: -0.279253
     m_gps_num_satellites: 8.0
     m_gps_on: 1
@@ -1159,7 +1169,13 @@ data:
     x_last_wpt_lat: !!null
     x_last_wpt_lon: !!null
     x_system_clock_adjusted: !!null
-  - _index: 9
+  - _index: 12
+    particle_object: GpsPositionDataParticle
+    particle_type: glider_gps_position
+    internal_timestamp: '2012-02-21T18:42:02.245270Z'
+    m_gps_lat: 43.469525
+    m_gps_lon: -125.39477833333333
+  - _index: 13
     particle_object: EngineeringScienceRecoveredDataParticle
     particle_type: glider_eng_sci_recovered
     internal_timestamp: '2012-02-21T18:42:02.245270Z'

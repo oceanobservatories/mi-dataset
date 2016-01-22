@@ -3,8 +3,6 @@
 #
 # #
 
-__author__ = "ehahn"
-
 import os
 
 from mi.logging import config
@@ -16,7 +14,10 @@ from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 
 from mi.core.versioning import version
 
-@version("15.6.0")
+__author__ = "ehahn"
+
+
+@version("15.7.0")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     """
     Initialize the parser configuration and build the driver
@@ -31,7 +32,8 @@ def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
         DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT: {
             EngineeringClassKey.METADATA: 'EngineeringMetadataDataParticle',
             EngineeringClassKey.DATA: 'EngineeringTelemeteredDataParticle',
-            EngineeringClassKey.SCIENCE: 'EngineeringScienceTelemeteredDataParticle'
+            EngineeringClassKey.SCIENCE: 'EngineeringScienceTelemeteredDataParticle',
+            EngineeringClassKey.GPS: 'GpsPositionDataParticle'
         }
     }
 
