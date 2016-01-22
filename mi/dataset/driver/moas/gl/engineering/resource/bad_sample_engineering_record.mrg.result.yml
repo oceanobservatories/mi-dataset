@@ -11,12 +11,6 @@ data:
     internal_timestamp: '2012-02-21T18:41:43.758150Z'
     m_present_time: 1329849703.75815
     m_present_secs_into_mission: 134.605
-    m_gps_lat:
-      value: 43.46955
-      round: 5
-    m_gps_lon:
-      value: -125.39484
-      round: 5
     m_lat:
       value: 43.46955
       round: 5
@@ -58,6 +52,16 @@ data:
     m_water_vx: null
     m_water_vy: null
   - _index: 2
+    particle_object: GpsPositionDataParticle
+    particle_type: glider_gps_position
+    internal_timestamp: '2012-02-21T18:41:43.758150Z'
+    m_gps_lat:
+      value: 43.46955
+      round: 5
+    m_gps_lon:
+      value: -125.39484
+      round: 5
+  - _index: 3
     particle_object: EngineeringScienceTelemeteredDataParticle
     particle_type: glider_eng_sci_telemetered
     internal_timestamp: '2012-02-21T18:41:43.758150Z'
