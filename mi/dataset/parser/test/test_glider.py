@@ -13,7 +13,6 @@ from nose.plugins.attrib import attr
 
 from mi.core.exceptions import ConfigurationException
 from mi.core.log import get_logger
-log = get_logger()
 
 from mi.dataset.test.test_parser import ParserUnitTestCase, BASE_RESOURCE_PATH
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
@@ -37,7 +36,9 @@ from mi.dataset.parser.glider import EngineeringRecoveredParticleKey
 from mi.dataset.parser.glider import EngineeringRecoveredDataParticle
 from mi.dataset.parser.glider import EngineeringScienceRecoveredParticleKey
 from mi.dataset.parser.glider import EngineeringScienceRecoveredDataParticle, EngineeringClassKey
+from mi.dataset.parser.glider import GpsPositionDataParticle, GpsPositionParticleKey
 
+log = get_logger()
 
 HEADER = """dbd_label: DBD_ASC(dinkum_binary_data_ascii)file
 encoding_ver: 2
@@ -167,6 +168,7 @@ ENG_RECORD = """
 0.273273 NaN NaN 0.335 149.608 0.114297 33.9352 -64.3506 NaN NaN NaN 5011.38113678061 -14433.5809717525 NaN 121546 1378349641.79871 NaN NaN NaN 0 NaN NaN NaN NaN NaN NaN NaN NaN NaN
 NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN 1.23569 NaN NaN -0.0820305 121379 1378349475.09927 0.236869 NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN """
 
+
 @attr('UNIT', group='mi')
 class GliderParserUnitTestCase(ParserUnitTestCase):
     """
@@ -183,7 +185,7 @@ class GliderParserUnitTestCase(ParserUnitTestCase):
         for count, data in enumerate(args):
             io.write(data)
 
-        #log.debug("Test data file: %s", io.getvalue())
+        # log.debug("Test data file: %s", io.getvalue())
         io.seek(0)
         self.test_data = io
 
@@ -671,7 +673,8 @@ class ENGGliderTest(GliderParserUnitTestCase):
         DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT: {
             EngineeringClassKey.METADATA: 'EngineeringMetadataDataParticle',
             EngineeringClassKey.DATA: 'EngineeringTelemeteredDataParticle',
-            EngineeringClassKey.SCIENCE: 'EngineeringScienceTelemeteredDataParticle'
+            EngineeringClassKey.SCIENCE: 'EngineeringScienceTelemeteredDataParticle',
+            EngineeringClassKey.GPS: 'GpsPositionDataParticle'
         }
     }
 
@@ -697,12 +700,19 @@ class ENGGliderTest(GliderParserUnitTestCase):
         record_sci_2 = {EngineeringScienceTelemeteredParticleKey.SCI_M_DISK_FREE: 1000.2,
                         EngineeringScienceTelemeteredParticleKey.SCI_M_DISK_USAGE: 1000.2}
 
+        record_gps_1 = {GpsPositionParticleKey.M_GPS_LAT: 43.471138333333336,
+                        GpsPositionParticleKey.M_GPS_LON: -125.39660833333333}
+        record_gps_2 = {GpsPositionParticleKey.M_GPS_LAT: 43.471138333333336,
+                        GpsPositionParticleKey.M_GPS_LON: -125.39660833333333}
+
         self.assert_generate_particle(EngineeringMetadataDataParticle, meta_record)
-        # 1 sample line generates 2 particles
+        # 1 sample line generates 3 particles
         self.assert_generate_particle(EngineeringTelemeteredDataParticle, record_1)
+        self.assert_generate_particle(GpsPositionDataParticle, record_gps_1)
         self.assert_generate_particle(EngineeringScienceTelemeteredDataParticle, record_sci_1)
-        # # total file size in bytes
+
         self.assert_generate_particle(EngineeringTelemeteredDataParticle, record_2)
+        self.assert_generate_particle(GpsPositionDataParticle, record_gps_2)
         self.assert_generate_particle(EngineeringScienceTelemeteredDataParticle, record_sci_2)
         self.assert_no_more_data()
 
@@ -725,8 +735,10 @@ class ENGGliderTest(GliderParserUnitTestCase):
         # just check the data records, the other particle classes were checked above
         self.assert_generate_particle(EngineeringMetadataDataParticle)
         self.assert_generate_particle(EngineeringTelemeteredDataParticle, record_1)
+        self.assert_generate_particle(GpsPositionDataParticle)
         self.assert_generate_particle(EngineeringScienceTelemeteredDataParticle)
         self.assert_generate_particle(EngineeringTelemeteredDataParticle, record_2)
+        self.assert_generate_particle(GpsPositionDataParticle)
         self.assert_generate_particle(EngineeringScienceTelemeteredDataParticle)
         self.assert_no_more_data()
 
@@ -761,7 +773,6 @@ class ENGGliderTest(GliderParserUnitTestCase):
             self.parser = GliderEngineeringParser(bad_config, self.test_data, self.exception_callback)
 
 
-
 @attr('UNIT', group='mi')
 class ENGRecoveredGliderTest(GliderParserUnitTestCase):
     """
@@ -772,7 +783,8 @@ class ENGRecoveredGliderTest(GliderParserUnitTestCase):
         DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT: {
             EngineeringClassKey.METADATA: 'EngineeringMetadataRecoveredDataParticle',
             EngineeringClassKey.DATA: 'EngineeringRecoveredDataParticle',
-            EngineeringClassKey.SCIENCE: 'EngineeringScienceRecoveredDataParticle'
+            EngineeringClassKey.SCIENCE: 'EngineeringScienceRecoveredDataParticle',
+            EngineeringClassKey.GPS: 'GpsPositionDataParticle'
         }
     }
 
@@ -800,12 +812,19 @@ class ENGRecoveredGliderTest(GliderParserUnitTestCase):
         record_sci_2 = {EngineeringScienceRecoveredParticleKey.SCI_M_DISK_FREE: 1000.2,
                         EngineeringScienceRecoveredParticleKey.SCI_M_DISK_USAGE: 1000.2}
 
+        record_gps_1 = {GpsPositionParticleKey.M_GPS_LAT: 43.471138333333336,
+                        GpsPositionParticleKey.M_GPS_LON: -125.39660833333333}
+        record_gps_2 = {GpsPositionParticleKey.M_GPS_LAT: 43.471138333333336,
+                        GpsPositionParticleKey.M_GPS_LON: -125.39660833333333}
+
         self.assert_generate_particle(EngineeringMetadataRecoveredDataParticle, meta_record)
         # 1 sample line generates 2 particles
         self.assert_generate_particle(EngineeringRecoveredDataParticle, record_1)
+        self.assert_generate_particle(GpsPositionDataParticle, record_gps_1)
         self.assert_generate_particle(EngineeringScienceRecoveredDataParticle, record_sci_1)
         # total file size in bytes
         self.assert_generate_particle(EngineeringRecoveredDataParticle, record_2)
+        self.assert_generate_particle(GpsPositionDataParticle, record_gps_2)
         self.assert_generate_particle(EngineeringScienceRecoveredDataParticle, record_sci_2)
         self.assert_no_more_data()
 
@@ -815,8 +834,8 @@ class ENGRecoveredGliderTest(GliderParserUnitTestCase):
         """
         with open(os.path.join(self.resource_path, 'multiple_glider_record-engDataOnly.mrg'), 'rU') as file_handle:
             parser = GliderEngineeringParser(self.config, file_handle, self.exception_callback)
-            record = parser.get_records(9)
-            self.assert_particles(record, 'multiple_glider_record_recovered-engDataOnly.mrg.result.yml',
+            particles = parser.get_records(13)
+            self.assert_particles(particles, 'multiple_glider_record_recovered-engDataOnly.mrg.result.yml',
                                   self.resource_path)
             self.assertEquals(self.exception_callback_value, [])
 
