@@ -13,7 +13,6 @@ from nose.plugins.attrib import attr
 
 from mi.core.exceptions import ConfigurationException
 from mi.core.log import get_logger
-log = get_logger()
 
 from mi.dataset.test.test_parser import ParserUnitTestCase, BASE_RESOURCE_PATH
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
@@ -37,7 +36,9 @@ from mi.dataset.parser.glider import EngineeringRecoveredParticleKey
 from mi.dataset.parser.glider import EngineeringRecoveredDataParticle
 from mi.dataset.parser.glider import EngineeringScienceRecoveredParticleKey
 from mi.dataset.parser.glider import EngineeringScienceRecoveredDataParticle, EngineeringClassKey
+from mi.dataset.parser.glider import GpsPositionDataParticle, GpsPositionParticleKey
 
+log = get_logger()
 
 HEADER = """dbd_label: DBD_ASC(dinkum_binary_data_ascii)file
 encoding_ver: 2
@@ -139,7 +140,7 @@ ENGSCI_RECORD = """
 1 260 0.7 0 -1 260 -1 -1 4.96727 -1 0.4528 -1 4330 -12600 0 -1 1 1 2 2.44548 12.9695 -0.219681 1 0 1 0 1329843706.03265 1196.2 0 0 -0.183911 0.00699798 0.166781 155.923 0.379813 0.55692 124.082 4971.02 0 0 0 10.6806 10.6208 0.695632 0.141578 0 0 0 1 59 1 1 -1 0 1 1 40.9972 -9947 303.806 0.0955938 -322 1 0.148777 0 0.00472497 0 0 0.00136254 0 0 0.258982 3 6 21 6 259.742 1.43605 0 0 0 1023 3 0 4194310 1781.12 219.812 48926.2 -1 -1 -1 -1 0 0 -1 0 0 0 0 0 0 0 0 43.0556 0.0127162 -0.0616963 -0.144984 0 0 0 0 0 324608 0.916352 0 0 7 1.7942 4328.2816 -12523.8141 4328.2925 -12523.8189 4328.2683 -12523.7965 -0.279253 11 1 0 0 0.308667 0 4328.6173 -12513.3557 0.9 21 18 3 2 35 12 40389 -1904.23 0.0197767 0.11338 0.120462 -0.0173492 5.05447 -0.0616291 -0.145094 0 518 0 0 3323 0 0 5 99 0 0 0 0 0 0 0 0 0 0 4756.23 4328.26830007145 0 2.46386 2.45876 0 57.8047 0 0 0 -12523.7965000589 289792 270336 0.430413 0.350943 1329849569 0 0.518363 115832000 -0.0426476 49.646 1329849618.79962 0.0148777 0 0 0.137057 16.967 1 -0.10821 32.0756 1 0 59 1329849561.95532 1 283648 0.348396 0 0 1 0 0 6.63787e-23 0.875173 1.87517 1 0 -1 0 0 0 -1 -1 -1 -1 0 0 0 0 0 3 2 -172433 0.74206 605.857 3115 5.06637 7.84544 0 0 13.1954 -0.283741 0 0 3 -0.0218157 0.0107268 -1 49.141 10 -0.0616963 -0.144984 16 0 0 4330 -12600 -12 NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN 1000.2 1000.2 NaN NaN NaN 1000.2 1000.2 NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN 1000.1 """
 
 ENGSCI_BAD_LAT_RECORD = """
-1 260 0.7 0 -1 260 -1 -1 4.96727 -1 0.4528 -1 433099999 -12600 0 -1 1 1 2 2.44548 12.9695 -0.219681 1 0 1 0 1329843706.03265 1196.2 0 0 -0.183911 0.00699798 0.166781 155.923 0.379813 0.55692 124.082 4971.02 0 0 0 10.6873 10.7871 0.703717 0.141578 0 0 0 1 59 1 1 -1 0 1 1 40.9937 -9944 303.803 0.485094 -1634 0 0.258982 0 0.00472497 0 0 0.00136254 0 0 0.258982 8 6 21 6 259.77 1.43611 0 0 0 1022 6 0 4194300 1781.12 219.812 48926.2 -1 -1 -1 -1 0 0 -1 0 0 0 0 0 0 0 0 43.0556 0 -0.0616963 -0.144984 0 0 0 0 0 304128 0.916352 0 0 0 1.7942 4328.2816 -12523.8141 4328.2925 -12523.8189 4328.2683 -12523.7965 -0.279253 11 0 0 0 0.308667 0 4328.6173 -12513.3557 0.9 21 18 3 2 35 12 40389 -1904.23 0.0197767 0.11338 0.120462 -0.0173492 5.05447 -0.0616291 -0.145094 0 518 1 0 3323 0 0 5 99 0 0 0 0 0 0 0 0 0 0 4756.23 4328.26830007145 0 2.46526 2.45955 0 57.8052 0 0 0 -12523.7965000589 289792 270336 0.430413 0.350943 1329849569 0 0.518363 102687000 -0.0426476 0 1329849569.26294 0.0258982 0 0 0.137179 16.967 1 -0.10821 32.0756 0 0 1371 1329849561.95532 1 284672 0.348396 1 0 1 0 0 7.58463e-23 1 2 1 0 -1 0 0 0 -1 -1 -1 -1 0 0 0 0 0 3 2 -172433 0.74206 605.857 3115 5.06637 10.0444 0 0 13.1124 -0.283741 0.300996 -0.0683846 3 -0.0218157 0.0107268 -1 49.141 10 -0.0616963 -0.144984 16 40389 -1904.23 4330 -12600 -12 NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN 1000.1 1000.1 NaN NaN NaN 1000.1 1000.1 NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN 1000.1
+1 260 0.7 0 -1 260 -1 -1 4.96727 -1 0.4528 -1 433X -12600 0 -1 1 1 2 2.44548 12.9695 -0.219681 1 0 1 0 1329843706.03265 1196.2 0 0 -0.183911 0.00699798 0.166781 155.923 0.379813 0.55692 124.082 4971.02 0 0 0 10.6873 10.7871 0.703717 0.141578 0 0 0 1 59 1 1 -1 0 1 1 40.9937 -9944 303.803 0.485094 -1634 0 0.258982 0 0.00472497 0 0 0.00136254 0 0 0.258982 8 6 21 6 259.77 1.43611 0 0 0 1022 6 0 4194300 1781.12 219.812 48926.2 -1 -1 -1 -1 0 0 -1 0 0 0 0 0 0 0 0 43.0556 0 -0.0616963 -0.144984 0 0 0 0 0 304128 0.916352 0 0 0 1.7942 4328.2816 -12523.8141 4328.2925 -12523.8189 4328.2683 -12523.7965 -0.279253 11 0 0 0 0.308667 0 4328.6173 -12513.3557 0.9 21 18 3 2 35 12 40389 -1904.23 0.0197767 0.11338 0.120462 -0.0173492 5.05447 -0.0616291 -0.145094 0 518 1 0 3323 0 0 5 99 0 0 0 0 0 0 0 0 0 0 4756.23 4328.26830007145 0 2.46526 2.45955 0 57.8052 0 0 0 -12523.7965000589 289792 270336 0.430413 0.350943 1329849569 0 0.518363 102687000 -0.0426476 0 1329849569.26294 0.0258982 0 0 0.137179 16.967 1 -0.10821 32.0756 0 0 1371 1329849561.95532 1 284672 0.348396 1 0 1 0 0 7.58463e-23 1 2 1 0 -1 0 0 0 -1 -1 -1 -1 0 0 0 0 0 3 2 -172433 0.74206 605.857 3115 5.06637 10.0444 0 0 13.1124 -0.283741 0.300996 -0.0683846 3 -0.0218157 0.0107268 -1 49.141 10 -0.0616963 -0.144984 16 40389 -1904.23 4330 -12600 -12 NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN 1000.1 1000.1 NaN NaN NaN 1000.1 1000.1 NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN 1000.1
 1 260 0.7 0 -1 260 -1 -1 4.96727 -1 0.4528 -1 30 -12600 0 -1 1 1 2 2.44548 12.9695 -0.219681 1 0 1 0 1329843706.03265 1196.2 0 0 -0.183911 0.00699798 0.166781 155.923 0.379813 0.55692 124.082 4971.02 0 0 0 10.6806 10.6208 0.695632 0.141578 0 0 0 1 59 1 1 -1 0 1 1 40.9972 -9947 303.806 0.0955938 -322 1 0.148777 0 0.00472497 0 0 0.00136254 0 0 0.258982 3 6 21 6 259.742 1.43605 0 0 0 1023 3 0 4194310 1781.12 219.812 48926.2 -1 -1 -1 -1 0 0 -1 0 0 0 0 0 0 0 0 43.0556 0.0127162 -0.0616963 -0.144984 0 0 0 0 0 324608 0.916352 0 0 7 1.7942 4328.2816 -12523.8141 4328.2925 -12523.8189 4328.2683 -12523.7965 -0.279253 11 1 0 0 0.308667 0 4328.6173 -12513.3557 0.9 21 18 3 2 35 12 40389 -1904.23 0.0197767 0.11338 0.120462 -0.0173492 5.05447 -0.0616291 -0.145094 0 518 0 0 3323 0 0 5 99 0 0 0 0 0 0 0 0 0 0 4756.23 4328.26830007145 0 2.46386 2.45876 0 57.8047 0 0 0 -12523.7965000589 289792 270336 0.430413 0.350943 1329849569 0 0.518363 115832000 -0.0426476 49.646 1329849618.79962 0.0148777 0 0 0.137057 16.967 1 -0.10821 32.0756 1 0 59 1329849561.95532 1 283648 0.348396 0 0 1 0 0 6.63787e-23 0.875173 1.87517 1 0 -1 0 0 0 -1 -1 -1 -1 0 0 0 0 0 3 2 -172433 0.74206 605.857 3115 5.06637 7.84544 0 0 13.1954 -0.283741 0 0 3 -0.0218157 0.0107268 -1 49.141 10 -0.0616963 -0.144984 16 0 0 4330 -12600 -12 NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN 1000.2 1000.2 NaN NaN NaN 1000.2 1000.2 NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN 1000.1 """
 
 FLORT_RECORD = """
@@ -167,6 +168,7 @@ ENG_RECORD = """
 0.273273 NaN NaN 0.335 149.608 0.114297 33.9352 -64.3506 NaN NaN NaN 5011.38113678061 -14433.5809717525 NaN 121546 1378349641.79871 NaN NaN NaN 0 NaN NaN NaN NaN NaN NaN NaN NaN NaN
 NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN 1.23569 NaN NaN -0.0820305 121379 1378349475.09927 0.236869 NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN """
 
+
 @attr('UNIT', group='mi')
 class GliderParserUnitTestCase(ParserUnitTestCase):
     """
@@ -183,7 +185,7 @@ class GliderParserUnitTestCase(ParserUnitTestCase):
         for count, data in enumerate(args):
             io.write(data)
 
-        #log.debug("Test data file: %s", io.getvalue())
+        # log.debug("Test data file: %s", io.getvalue())
         io.seek(0)
         self.test_data = io
 
@@ -671,7 +673,8 @@ class ENGGliderTest(GliderParserUnitTestCase):
         DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT: {
             EngineeringClassKey.METADATA: 'EngineeringMetadataDataParticle',
             EngineeringClassKey.DATA: 'EngineeringTelemeteredDataParticle',
-            EngineeringClassKey.SCIENCE: 'EngineeringScienceTelemeteredDataParticle'
+            EngineeringClassKey.SCIENCE: 'EngineeringScienceTelemeteredDataParticle',
+            EngineeringClassKey.GPS: 'GpsPositionDataParticle'
         }
     }
 
@@ -697,12 +700,19 @@ class ENGGliderTest(GliderParserUnitTestCase):
         record_sci_2 = {EngineeringScienceTelemeteredParticleKey.SCI_M_DISK_FREE: 1000.2,
                         EngineeringScienceTelemeteredParticleKey.SCI_M_DISK_USAGE: 1000.2}
 
+        record_gps_1 = {GpsPositionParticleKey.M_GPS_LAT: 43.47113833333333,
+                        GpsPositionParticleKey.M_GPS_LON: -125.39660833333333}
+        record_gps_2 = {GpsPositionParticleKey.M_GPS_LAT: 43.47113833333333,
+                        GpsPositionParticleKey.M_GPS_LON: -125.39660833333333}
+
         self.assert_generate_particle(EngineeringMetadataDataParticle, meta_record)
-        # 1 sample line generates 2 particles
+        # 1 sample line generates 3 particles
         self.assert_generate_particle(EngineeringTelemeteredDataParticle, record_1)
+        self.assert_generate_particle(GpsPositionDataParticle, record_gps_1)
         self.assert_generate_particle(EngineeringScienceTelemeteredDataParticle, record_sci_1)
-        # # total file size in bytes
+
         self.assert_generate_particle(EngineeringTelemeteredDataParticle, record_2)
+        self.assert_generate_particle(GpsPositionDataParticle, record_gps_2)
         self.assert_generate_particle(EngineeringScienceTelemeteredDataParticle, record_sci_2)
         self.assert_no_more_data()
 
@@ -725,8 +735,10 @@ class ENGGliderTest(GliderParserUnitTestCase):
         # just check the data records, the other particle classes were checked above
         self.assert_generate_particle(EngineeringMetadataDataParticle)
         self.assert_generate_particle(EngineeringTelemeteredDataParticle, record_1)
+        self.assert_generate_particle(GpsPositionDataParticle)
         self.assert_generate_particle(EngineeringScienceTelemeteredDataParticle)
         self.assert_generate_particle(EngineeringTelemeteredDataParticle, record_2)
+        self.assert_generate_particle(GpsPositionDataParticle)
         self.assert_generate_particle(EngineeringScienceTelemeteredDataParticle)
         self.assert_no_more_data()
 
@@ -761,7 +773,6 @@ class ENGGliderTest(GliderParserUnitTestCase):
             self.parser = GliderEngineeringParser(bad_config, self.test_data, self.exception_callback)
 
 
-
 @attr('UNIT', group='mi')
 class ENGRecoveredGliderTest(GliderParserUnitTestCase):
     """
@@ -772,7 +783,8 @@ class ENGRecoveredGliderTest(GliderParserUnitTestCase):
         DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT: {
             EngineeringClassKey.METADATA: 'EngineeringMetadataRecoveredDataParticle',
             EngineeringClassKey.DATA: 'EngineeringRecoveredDataParticle',
-            EngineeringClassKey.SCIENCE: 'EngineeringScienceRecoveredDataParticle'
+            EngineeringClassKey.SCIENCE: 'EngineeringScienceRecoveredDataParticle',
+            EngineeringClassKey.GPS: 'GpsPositionDataParticle'
         }
     }
 
@@ -800,12 +812,19 @@ class ENGRecoveredGliderTest(GliderParserUnitTestCase):
         record_sci_2 = {EngineeringScienceRecoveredParticleKey.SCI_M_DISK_FREE: 1000.2,
                         EngineeringScienceRecoveredParticleKey.SCI_M_DISK_USAGE: 1000.2}
 
+        record_gps_1 = {GpsPositionParticleKey.M_GPS_LAT: 43.47113833333333,
+                        GpsPositionParticleKey.M_GPS_LON: -125.39660833333333}
+        record_gps_2 = {GpsPositionParticleKey.M_GPS_LAT: 43.47113833333333,
+                        GpsPositionParticleKey.M_GPS_LON: -125.39660833333333}
+
         self.assert_generate_particle(EngineeringMetadataRecoveredDataParticle, meta_record)
         # 1 sample line generates 2 particles
         self.assert_generate_particle(EngineeringRecoveredDataParticle, record_1)
+        self.assert_generate_particle(GpsPositionDataParticle, record_gps_1)
         self.assert_generate_particle(EngineeringScienceRecoveredDataParticle, record_sci_1)
         # total file size in bytes
         self.assert_generate_particle(EngineeringRecoveredDataParticle, record_2)
+        self.assert_generate_particle(GpsPositionDataParticle, record_gps_2)
         self.assert_generate_particle(EngineeringScienceRecoveredDataParticle, record_sci_2)
         self.assert_no_more_data()
 
@@ -815,8 +834,8 @@ class ENGRecoveredGliderTest(GliderParserUnitTestCase):
         """
         with open(os.path.join(self.resource_path, 'multiple_glider_record-engDataOnly.mrg'), 'rU') as file_handle:
             parser = GliderEngineeringParser(self.config, file_handle, self.exception_callback)
-            record = parser.get_records(9)
-            self.assert_particles(record, 'multiple_glider_record_recovered-engDataOnly.mrg.result.yml',
+            particles = parser.get_records(13)
+            self.assert_particles(particles, 'multiple_glider_record_recovered-engDataOnly.mrg.result.yml',
                                   self.resource_path)
             self.assertEquals(self.exception_callback_value, [])
 

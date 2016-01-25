@@ -5,21 +5,23 @@
 @author Stuart Pearce & Chris Wingard
 @brief Module containing parser scripts for glider data set agents
 """
-__author__ = 'Stuart Pearce, Chris Wingard, Nick Almonte'
-__license__ = 'Apache 2.0'
-
 import re
 import ntplib
-from math import copysign, isnan
+from math import copysign
 from mi.core.log import get_logger
 from mi.core.common import BaseEnum
-from mi.core.exceptions import SampleException, UnexpectedDataException, RecoverableSampleException, \
-    ConfigurationException, SampleEncodingException, DatasetParserException
+from mi.core.exceptions import SampleException, \
+    ConfigurationException, \
+    SampleEncodingException, \
+    DatasetParserException
 from mi.core.instrument.data_particle import DataParticle, DataParticleKey
 from mi.dataset.dataset_parser import SimpleParser, DataSetDriverConfigKeys
 
 # start the logger
 log = get_logger()
+
+__author__ = 'Stuart Pearce, Chris Wingard, Nick Almonte'
+__license__ = 'Apache 2.0'
 
 
 class DataParticleType(BaseEnum):
@@ -41,6 +43,7 @@ class DataParticleType(BaseEnum):
     GLIDER_ENG_SCI_TELEMETERED = 'glider_eng_sci_telemetered'
     GLIDER_ENG_SCI_RECOVERED = 'glider_eng_sci_recovered'
     GLIDER_ENG_METADATA_RECOVERED = 'glider_eng_metadata_recovered'
+    GLIDER_GPS_POSITON = 'glider_gps_position'
     NUTNR_M_GLIDER_INSTRUMENT = 'nutnr_m_glider_instrument'
 
 
@@ -77,11 +80,6 @@ class GliderParticle(DataParticle):
     associated with the glider.
     """
 
-    # It is possible that record could be parsed, but they don't
-    # contain actual science data for this instrument. This flag
-    # will be set to true if we have found data when parsed.
-    common_parameters = GliderParticleKey.list()
-
     def _parsed_values(self, key_list):
 
         value_list = [self.raw_data.get(key, None) for key in key_list]
@@ -112,44 +110,12 @@ class GliderParticle(DataParticle):
             return float(value)
 
     @staticmethod
-    def _string_to_ddegrees(pos_str):
-        """
-        Converts the given string from this data stream into a more
-        standard latitude/longitude value in decimal degrees.
-        @param pos_str The position (latitude or longitude) string in the
-           format "DDMM.MMMM" for latitude and "DDDMM.MMMM" for longitude. A
-           positive or negative sign to the string indicates northern/southern
-           or eastern/western hemispheres, respectively.
-        @retval The position in decimal degrees
-        """
-        # As a stop gap fix add a .0 to integers that don't contain a decimal.  This
-        # should only affect the engineering stream as the science data streams shouldn't
-        # contain lat lon
-        if not "." in pos_str:
-            pos_str += ".0"
-
-        # if there are not enough numbers to fill in DDMM, prepend zeros
-        str_words = pos_str.split('.')
-        adj_zeros = 4 - len(str_words[0])
-        if adj_zeros > 0:
-            for i in range(0, adj_zeros):
-                pos_str = '0' + pos_str
-
-        regex = r'([-+]?\d{2,3})(\d{2}\.\d+)'
-        regex_matcher = re.compile(regex)
-        latlon_match = regex_matcher.match(pos_str)
-
-        if latlon_match is None:
-            msg = "Failed to parse lat/lon value: '%s'" % pos_str
-            log.error(msg)
-            raise SampleEncodingException(msg)
-
-        degrees = float(latlon_match.group(1))
-        minutes = float(latlon_match.group(2))
-        ddegrees = copysign((abs(degrees) + minutes / 60.), degrees)
-
-        return ddegrees
-
+    def _string_to_ddegrees(value):
+        float_val = float(value)
+        absval = abs(float_val)
+        degrees = int(absval / 100)
+        minutes = absval - degrees * 100
+        return copysign(degrees + minutes / 60, float_val)
 
 class CtdgvParticleKey(GliderParticleKey):
     # science data made available via telemetry or Glider recovery
@@ -384,8 +350,6 @@ class EngineeringRecoveredParticleKey(GliderParticleKey):
     # engineering data made available via glider recovery
     M_ALTITUDE = 'm_altitude'
     M_DEPTH = 'm_depth'
-    M_GPS_LAT = 'm_gps_lat'
-    M_GPS_LON = 'm_gps_lon'
     M_LAT = 'm_lat'
     M_LON = 'm_lon'
     C_AIR_PUMP = 'c_air_pump'
@@ -669,8 +633,6 @@ class EngineeringMetadataParticleKey(BaseEnum):
 
 class EngineeringTelemeteredParticleKey(GliderParticleKey):
     # engineering data made available via telemetry
-    M_GPS_LAT = 'm_gps_lat'
-    M_GPS_LON = 'm_gps_lon'
     M_LAT = 'm_lat'
     M_LON = 'm_lon'
     C_BATTPOS = 'c_battpos'
@@ -709,6 +671,35 @@ class EngineeringScienceTelemeteredParticleKey(GliderParticleKey):
     # engineering data made available via telemetry
     SCI_M_DISK_FREE = 'sci_m_disk_free'
     SCI_M_DISK_USAGE = 'sci_m_disk_usage'
+
+
+class GpsPositionParticleKey(GliderParticleKey):
+    M_GPS_LAT = 'm_gps_lat'
+    M_GPS_LON = 'm_gps_lon'
+
+
+class GpsPositionDataParticle(GliderParticle):
+    _data_particle_type = DataParticleType.GLIDER_GPS_POSITON
+    science_parameters = GpsPositionParticleKey.science_parameter_list()
+
+    keys_exclude_all_times = GpsPositionParticleKey.list()
+
+    # Exclude all the "common" parameters, all we want is GPS data
+    keys_exclude_all_times.remove(GliderParticleKey.M_PRESENT_SECS_INTO_MISSION)
+    keys_exclude_all_times.remove(GliderParticleKey.M_PRESENT_TIME)
+    keys_exclude_all_times.remove(GliderParticleKey.SCI_M_PRESENT_TIME)
+    keys_exclude_all_times.remove(GliderParticleKey.SCI_M_PRESENT_SECS_INTO_MISSION)
+
+    def _build_parsed_values(self):
+        """
+        Takes a GliderParser object and extracts engineering data from the
+        data dictionary and puts the data into a engineering Data Particle.
+
+        @returns result a list of dictionaries of particle data
+        @throws SampleException if the data is not a glider data dictionary
+        """
+        # need to exclude sci times
+        return self._parsed_values(GpsPositionDataParticle.keys_exclude_all_times)
 
 
 class EngineeringTelemeteredDataParticle(GliderParticle):
@@ -837,6 +828,7 @@ class NutnrMDataParticle(GliderParticle):
         return self._parsed_values(NutnrMParticleKey.list())
 
 
+# noinspection PyPackageRequirements
 class GliderParser(SimpleParser):
     """
     GliderParser parses a Slocum Electric Glider data file that has been
@@ -948,7 +940,7 @@ class GliderParser(SimpleParser):
         self._header_dict['labels'] = label_list
 
         # the m_present_time label is required to generate particles, raise an exception if it is not found
-        if not GliderParticleKey.M_PRESENT_TIME in label_list:
+        if GliderParticleKey.M_PRESENT_TIME not in label_list:
             raise DatasetParserException('The m_present_time label has not been found, which means the timestamp '
                                          'cannot be determined for any particles')
 
@@ -975,6 +967,7 @@ class GliderParser(SimpleParser):
 
         log.debug("Label count: %d", self.num_columns)
 
+    # noinspection PyPackageRequirements
     def _read_data(self, data_record):
         """
         Read in the column labels, data type, number of bytes of each
@@ -1030,6 +1023,7 @@ class EngineeringClassKey(BaseEnum):
     METADATA = 'engineering_metadata'
     DATA = 'engineering_data'
     SCIENCE = 'engineering_science'
+    GPS = 'gps_position'
 
 
 class GliderEngineeringParser(GliderParser):
@@ -1051,6 +1045,7 @@ class GliderEngineeringParser(GliderParser):
                 self._metadata_class = getattr(module, particle_class_dict[EngineeringClassKey.METADATA])
                 self._particle_class = getattr(module, particle_class_dict[EngineeringClassKey.DATA])
                 self._science_class = getattr(module, particle_class_dict[EngineeringClassKey.SCIENCE])
+                self._gps_class = getattr(module, particle_class_dict[EngineeringClassKey.GPS])
             except AttributeError:
                 raise ConfigurationException('Config provided a class which does not exist %s' % config)
         else:
@@ -1076,14 +1071,22 @@ class GliderEngineeringParser(GliderParser):
             timestamp = ntplib.system_to_ntp_time(float(data_dict[GliderParticleKey.M_PRESENT_TIME]))
 
             # handle this particle if it is an engineering metadata particle
+            # this is the glider_eng_metadata* particle
             if not self._metadata_sent:
                 self._record_buffer.append(self.handle_metadata_particle(timestamp))
 
-            # check for the presence of particle data in the raw data row before continuing
+            # check for the presence of engineering data in the raw data row before continuing
+            # This is the glider_eng* particle
             if GliderParser._has_science_data(data_dict, self._particle_class):
                 self._record_buffer.append(self._extract_sample(self._particle_class, None, data_dict, timestamp))
 
+            # check for the presence of GPS data in the raw data row before continuing
+            # This is the glider_gps_position particle
+            if GliderParser._has_science_data(data_dict, self._gps_class):
+                self._record_buffer.append(self._extract_sample(self._gps_class, None, data_dict, timestamp))
+
             # check for the presence of science particle data in the raw data row before continuing
+            # This is the glider_eng_sci* particle
             if GliderParser._has_science_data(data_dict, self._science_class):
                 self._record_buffer.append(self._extract_sample(self._science_class, None, data_dict, timestamp))
 
@@ -1091,6 +1094,7 @@ class GliderEngineeringParser(GliderParser):
         """
         Check if this particle is an engineering metadata particle that hasn't already been produced, ensure the
         metadata particle is produced only once
+        :param timestamp - timestamp to put on particle
         """
         # change the names in the dictionary from the name in the data file to the parameter name
         header_data_dict = {'glider_eng_filename': self._header_dict.get('filename_label'),
