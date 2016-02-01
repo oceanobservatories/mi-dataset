@@ -12,8 +12,9 @@ import ntplib
 
 from nose.plugins.attrib import attr
 
-from mi.core.log import get_logger ; log = get_logger()
-from mi.core.exceptions import SampleException, SampleEncodingException
+from mi.core.log import get_logger
+
+from mi.core.exceptions import SampleException
 from mi.core.instrument.data_particle import DataParticleKey
 
 from mi.dataset.test.test_parser import ParserUnitTestCase
@@ -22,9 +23,12 @@ from mi.dataset.parser.cg_stc_eng_stc import CgStcEngStcParser, CgStcEngStcParse
 from mi.dataset.parser.cg_stc_eng_stc import CgStcEngStcParserDataParticleKey
 
 from mi.idk.config import Config
+
+log = get_logger()
 RESOURCE_PATH = os.path.join(Config().base_dir(), 'mi',
-			     'dataset', 'driver', 'cg_stc_eng',
-			     'stc', 'resource')
+                             'dataset', 'driver', 'cg_stc_eng',
+                             'stc', 'resource')
+
 
 @attr('UNIT', group='mi')
 class CgParserUnitTestCase(ParserUnitTestCase):
@@ -39,17 +43,17 @@ class CgParserUnitTestCase(ParserUnitTestCase):
     def pub_callback(self, pub):
         """ Call back method to watch what comes in via the publish callback """
         self.publish_callback_value = pub
-        
+
     def exception_callback(self, exception):
         """ Callback method to watch what comes in via the exception callback """
         self.exception_callback_value = exception
 
-    def setUp(self): 
+    def setUp(self):
         ParserUnitTestCase.setUp(self)
         self.config = {
             DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.cg_stc_eng_stc',
             DataSetDriverConfigKeys.PARTICLE_CLASS: 'CgStcEngStcParserDataParticle'
-            }
+        }
         # Define test data particles and their associated timestamps which will be 
         # compared with returned results
         fid = open(os.path.join(RESOURCE_PATH, 'stc_status.txt'))
@@ -59,94 +63,94 @@ class CgParserUnitTestCase(ParserUnitTestCase):
         self.timestamp_a = ntplib.system_to_ntp_time(float(utime_grp.group(1)))
         self.particle_a = CgStcEngStcParserDataParticle(data, internal_timestamp=self.timestamp_a)
 
-	self.comparison_list = [{DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_PLATFORM_TIME,
-				 DataParticleKey.VALUE: '2013/10/04 16:07:02.253'},
-				{DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_PLATFORM_UTIME,
-				 DataParticleKey.VALUE: 1380902822.253},
-				{DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_MSG_CNTS_C_GPS,
-				 DataParticleKey.VALUE: 83},
-				{DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_MSG_CNTS_C_NTP,
-				 DataParticleKey.VALUE: 0},
-				{DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_MSG_CNTS_C_PPS,
-				 DataParticleKey.VALUE: 4},
-				{DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_MSG_CNTS_C_POWER_SYS,
-				 DataParticleKey.VALUE: 0},
-				{DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_MSG_CNTS_C_SUPERV,
-				 DataParticleKey.VALUE: 7},
-				{DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_MSG_CNTS_C_TELEM,
-				 DataParticleKey.VALUE: 0},
-				{DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_ERR_C_GPS,
-				 DataParticleKey.VALUE: 1},
-				{DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_ERR_C_PPS,
-				 DataParticleKey.VALUE: 1},
-				{DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_ERR_C_TELEM_SYS,
-				 DataParticleKey.VALUE: 3},
-				{DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_ERRMSG_C_GPS,
-				 DataParticleKey.VALUE: '***Warning, BAD GPS CHECKSUM'},
-				{DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_ERRMSG_C_PPS,
-				 DataParticleKey.VALUE: 'C_PPS: Warning: Pulse delta [790] above warning level [500], still within window [900]'},
-				{DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_ERRMSG_C_TELEM_SYS,
-				 DataParticleKey.VALUE: ' "***Error turning on fb1 [ret=No Device]'},
-				{DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_CPU_UPTIME,
-				 DataParticleKey.VALUE: '0 days 00:01:22'},
-				{DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_CPU_LOAD1,
-				 DataParticleKey.VALUE: 1.03},
-				{DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_CPU_LOAD5,
-				 DataParticleKey.VALUE: 0.36},
-				{DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_CPU_LOAD15,
-				 DataParticleKey.VALUE: 0.12},
-				{DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_MEMORY_RAM,
-				 DataParticleKey.VALUE: 127460},
-				{DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_MEMORY_FREE,
-				 DataParticleKey.VALUE: 93396},
-				{DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_NPROC,
-				 DataParticleKey.VALUE: 76},
-				{DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_MPIC_EFLAG,
-				 DataParticleKey.VALUE: 0},
-				{DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_MPIC_MAIN_V,
-				 DataParticleKey.VALUE: 17.90},
-				{DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_MPIC_MAIN_C,
-				 DataParticleKey.VALUE: 379.20},
-				{DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_MPIC_BAT_V,
-				 DataParticleKey.VALUE: 0.0},
-				{DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_MPIC_BAT_C,
-				 DataParticleKey.VALUE: 0.0},
-				{DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_MPIC_TEMP1,
-				 DataParticleKey.VALUE: 25.0},
-				{DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_MPIC_TEMP2,
-				 DataParticleKey.VALUE: 23.3},
-				{DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_MPIC_HUMID,
-				 DataParticleKey.VALUE: 31.6},
-				{DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_MPIC_PRESS,
-				 DataParticleKey.VALUE: 14.7},
-				{DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_MPIC_GF_ENA,
-				 DataParticleKey.VALUE: 15},
-				{DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_MPIC_GFLT1,
-				 DataParticleKey.VALUE: 7.7},
-				{DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_MPIC_GFLT2,
-				 DataParticleKey.VALUE: 5.2},
-				{DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_MPIC_GFLT3,
-				 DataParticleKey.VALUE: 2.8},
-				{DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_MPIC_GFLT4,
-				 DataParticleKey.VALUE: 4.0},
-				{DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_MPIC_LD_ENA,
-				 DataParticleKey.VALUE: 3},
-				{DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_GPS_DATE,
-				 DataParticleKey.VALUE: 41013},
-				{DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_GPS_TIME,
-				 DataParticleKey.VALUE: 160701},
-				{DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_GPS_LATSTR,
-				 DataParticleKey.VALUE: '4132.1353 N'},
-				{DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_GPS_LONSTR,
-				 DataParticleKey.VALUE: '07038.8306 W'},
-				{DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_GPS_LAT,
-				 DataParticleKey.VALUE: 41.535588},
-				{DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_GPS_LON,
-				 DataParticleKey.VALUE: -70.647177},
-				{DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_GPS_SPD,
-				 DataParticleKey.VALUE: 0.0}]
-	# uncomment the following to write the above comparison list in yml format to a file
-	#self.write_comparison_to_yml()
+        self.comparison_list = [{DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_PLATFORM_TIME,
+                                 DataParticleKey.VALUE: '2013/10/04 16:07:02.253'},
+                                {DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_PLATFORM_UTIME,
+                                 DataParticleKey.VALUE: 1380902822.253},
+                                {DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_MSG_CNTS_C_GPS,
+                                 DataParticleKey.VALUE: 83},
+                                {DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_MSG_CNTS_C_NTP,
+                                 DataParticleKey.VALUE: 0},
+                                {DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_MSG_CNTS_C_PPS,
+                                 DataParticleKey.VALUE: 4},
+                                {DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_MSG_CNTS_C_POWER_SYS,
+                                 DataParticleKey.VALUE: 0},
+                                {DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_MSG_CNTS_C_SUPERV,
+                                 DataParticleKey.VALUE: 7},
+                                {DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_MSG_CNTS_C_TELEM,
+                                 DataParticleKey.VALUE: 0},
+                                {DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_ERR_C_GPS,
+                                 DataParticleKey.VALUE: 1},
+                                {DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_ERR_C_PPS,
+                                 DataParticleKey.VALUE: 1},
+                                {DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_ERR_C_TELEM_SYS,
+                                 DataParticleKey.VALUE: 3},
+                                {DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_ERRMSG_C_GPS,
+                                 DataParticleKey.VALUE: '***Warning, BAD GPS CHECKSUM'},
+                                {DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_ERRMSG_C_PPS,
+                                 DataParticleKey.VALUE: 'C_PPS: Warning: Pulse delta [790] above warning level [500], still within window [900]'},
+                                {DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_ERRMSG_C_TELEM_SYS,
+                                 DataParticleKey.VALUE: ' "***Error turning on fb1 [ret=No Device]'},
+                                {DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_CPU_UPTIME,
+                                 DataParticleKey.VALUE: '0 days 00:01:22'},
+                                {DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_CPU_LOAD1,
+                                 DataParticleKey.VALUE: 1.03},
+                                {DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_CPU_LOAD5,
+                                 DataParticleKey.VALUE: 0.36},
+                                {DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_CPU_LOAD15,
+                                 DataParticleKey.VALUE: 0.12},
+                                {DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_MEMORY_RAM,
+                                 DataParticleKey.VALUE: 127460},
+                                {DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_MEMORY_FREE,
+                                 DataParticleKey.VALUE: 93396},
+                                {DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_NPROC,
+                                 DataParticleKey.VALUE: 76},
+                                {DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_MPIC_EFLAG,
+                                 DataParticleKey.VALUE: 0},
+                                {DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_MPIC_MAIN_V,
+                                 DataParticleKey.VALUE: 17.90},
+                                {DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_MPIC_MAIN_C,
+                                 DataParticleKey.VALUE: 379.20},
+                                {DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_MPIC_BAT_V,
+                                 DataParticleKey.VALUE: 0.0},
+                                {DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_MPIC_BAT_C,
+                                 DataParticleKey.VALUE: 0.0},
+                                {DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_MPIC_TEMP1,
+                                 DataParticleKey.VALUE: 25.0},
+                                {DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_MPIC_TEMP2,
+                                 DataParticleKey.VALUE: 23.3},
+                                {DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_MPIC_HUMID,
+                                 DataParticleKey.VALUE: 31.6},
+                                {DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_MPIC_PRESS,
+                                 DataParticleKey.VALUE: 14.7},
+                                {DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_MPIC_GF_ENA,
+                                 DataParticleKey.VALUE: 15},
+                                {DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_MPIC_GFLT1,
+                                 DataParticleKey.VALUE: 7.7},
+                                {DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_MPIC_GFLT2,
+                                 DataParticleKey.VALUE: 5.2},
+                                {DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_MPIC_GFLT3,
+                                 DataParticleKey.VALUE: 2.8},
+                                {DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_MPIC_GFLT4,
+                                 DataParticleKey.VALUE: 4.0},
+                                {DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_MPIC_LD_ENA,
+                                 DataParticleKey.VALUE: 3},
+                                {DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_GPS_DATE,
+                                 DataParticleKey.VALUE: 41013},
+                                {DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_GPS_TIME,
+                                 DataParticleKey.VALUE: 160701},
+                                {DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_GPS_LATSTR,
+                                 DataParticleKey.VALUE: '4132.1353 N'},
+                                {DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_GPS_LONSTR,
+                                 DataParticleKey.VALUE: '07038.8306 W'},
+                                {DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_GPS_LAT,
+                                 DataParticleKey.VALUE: 41.535588},
+                                {DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_GPS_LON,
+                                 DataParticleKey.VALUE: -70.647177},
+                                {DataParticleKey.VALUE_ID: CgStcEngStcParserDataParticleKey.CG_ENG_GPS_SPD,
+                                 DataParticleKey.VALUE: 0.0}]
+        # uncomment the following to write the above comparison list in yml format to a file
+        # self.write_comparison_to_yml()
 
         self.file_ingested_value = None
         self.state_callback_value = None
@@ -195,11 +199,25 @@ class CgParserUnitTestCase(ParserUnitTestCase):
         result = self.parser.get_records(1)
         self.assert_result(result, self.particle_a, True)
 
-        # no data left, dont move the position
+        # no data left, do not move the position
         result = self.parser.get_records(1)
         self.assertEqual(result, [])
         self.assert_(isinstance(self.publish_callback_value, list))
         self.assertEqual(self.publish_callback_value[0], self.particle_a)
+        self.assertEqual(self.exception_callback_value, None)
+
+    def test_simple_particles(self):
+        """
+        Read test data and pull out data particles one at a time.
+        Assert that the results are those we expected.
+        """
+        stream_handle = open(os.path.join(RESOURCE_PATH, 'stc_status2.txt'))
+        self.parser = CgStcEngStcParser(self.config, None, stream_handle,
+                                        self.state_callback, self.pub_callback,
+                                        self.exception_callback)
+
+        result = self.parser.get_records(1)
+        self.assert_particles(result, 'stc_first2.result.yml', RESOURCE_PATH)
         self.assertEqual(self.exception_callback_value, None)
 
     def test_get_many(self):
@@ -217,7 +235,7 @@ class CgParserUnitTestCase(ParserUnitTestCase):
         self.assert_result(result, self.particle_a, True)
         self.assertEqual(len(self.publish_callback_value), 1)
 
-        # no data left, dont move the position
+        # no data left, do not move the position
         result = self.parser.get_records(1)
         self.assertEqual(result, [])
         self.assert_(isinstance(self.publish_callback_value, list))
@@ -228,8 +246,6 @@ class CgParserUnitTestCase(ParserUnitTestCase):
         """
         Ensure we can generate the particle dictionary and compare it to expected ones
         """
-        a_dict = self.particle_a.generate_dict()
-        
         stream_handle = open(os.path.join(RESOURCE_PATH, 'stc_status.txt'))
         self.parser = CgStcEngStcParser(self.config, None, stream_handle,
                                         self.state_callback, self.pub_callback,
@@ -243,8 +259,8 @@ class CgParserUnitTestCase(ParserUnitTestCase):
                 if cdict.get('value_id') == rdict.get('value_id'):
                     if cdict.get('value') != rdict.get('value'):
                         log.error("mismatch for key %s, values '%s' '%s'", cdict.get('value_id'),
-                                                                           cdict.get('value'),
-                                                                           rdict.get('value'))
+                                  cdict.get('value'),
+                                  rdict.get('value'))
                         self.fail("mismatch for key %s, values '%s', '%s'" % (cdict.get('value_id'),
                                                                               cdict.get('value'),
                                                                               rdict.get('value')))
@@ -258,18 +274,17 @@ class CgParserUnitTestCase(ParserUnitTestCase):
             self.parser = CgStcEngStcParser(self.config, None, stream_handle,
                                             self.state_callback, self.pub_callback,
                                             self.exception_callback)
-            result = self.parser.get_records(1)
+            self.parser.get_records(1)
 
     def test_encoding(self):
         """
         Create an encoding error in the data and make sure an encoding error shows up
         """
-	stream_handle = open(os.path.join(RESOURCE_PATH, 'stc_status_bad_encode.txt'))
-	self.parser = CgStcEngStcParser(self.config, None, stream_handle,
-					self.state_callback, self.pub_callback,
-					self.exception_callback)
-	result = self.parser.get_records(1)
-	res_dict = result[0].generate_dict()
-	errors = result[0].get_encoding_errors()
-	log.debug("encoding errors: %s", errors)
-	self.assertNotEqual(errors, [])
+        stream_handle = open(os.path.join(RESOURCE_PATH, 'stc_status_bad_encode.txt'))
+        self.parser = CgStcEngStcParser(self.config, None, stream_handle,
+                                        self.state_callback, self.pub_callback,
+                                        self.exception_callback)
+        result = self.parser.get_records(1)
+        errors = result[0].get_encoding_errors()
+        log.debug("encoding errors: %s", errors)
+        self.assertNotEqual(errors, [])
