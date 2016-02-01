@@ -37,9 +37,9 @@ data:
     x_accel_min: 0.32
     y_accel_min: -0.13
     z_accel_min: 9.77
-    x_ang_rate: 0.0
-    y_ang_rate: 0.0
-    z_ang_rate: 0.0
+    x_ang_rate_avg: 0.0
+    y_ang_rate_avg: 0.0
+    z_ang_rate_avg: 0.0
     x_ang_rate_std: 0.0 
     y_ang_rate_std: 0.0
     z_ang_rate_std: 0.0
@@ -107,9 +107,9 @@ data:
     x_accel_min: 0.32
     y_accel_min: -0.14
     z_accel_min: 9.77
-    x_ang_rate: 0.0
-    y_ang_rate: 0.0
-    z_ang_rate: 0.0
+    x_ang_rate_avg: 0.0
+    y_ang_rate_avg: 0.0
+    z_ang_rate_avg: 0.0
     x_ang_rate_std: 0.0
     y_ang_rate_std: 0.0
     z_ang_rate_std: 0.0
@@ -177,9 +177,9 @@ data:
     x_accel_min: 0.33
     y_accel_min: -0.13
     z_accel_min: 9.77
-    x_ang_rate: 0.0
-    y_ang_rate: 0.0
-    z_ang_rate: 0.0
+    x_ang_rate_avg: 0.0
+    y_ang_rate_avg: 0.0
+    z_ang_rate_avg: 0.0
     x_ang_rate_std: 0.0
     y_ang_rate_std: 0.0
     z_ang_rate_std: 0.0
@@ -247,9 +247,9 @@ data:
     x_accel_min: 0.33
     y_accel_min: -0.13
     z_accel_min: 9.78
-    x_ang_rate: 0.0
-    y_ang_rate: 0.0
-    z_ang_rate: 0.0
+    x_ang_rate_avg: 0.0
+    y_ang_rate_avg: 0.0
+    z_ang_rate_avg: 0.0
     x_ang_rate_std: 0.0
     y_ang_rate_std: 0.0
     z_ang_rate_std: 0.0

@@ -15,9 +15,9 @@ data:
     fdchp_wind_y: 191
     fdchp_wind_z: -77
     fdchp_speed_of_sound_sonic: 33730
-    x_ang_rate: 0.00363489
-    y_ang_rate: -0.00053609
-    z_ang_rate: 0.0019078
+    fdchp_x_ang_rate: 0.00363489
+    fdchp_y_ang_rate: -0.00053609
+    fdchp_z_ang_rate: 0.0019078
     fdchp_x_accel_g: 0.0480265
     fdchp_y_accel_g: -0.030993847
     fdchp_z_accel_g: -0.998862206
@@ -39,9 +39,9 @@ data:
     fdchp_wind_y: 207
     fdchp_wind_z: -126
     fdchp_speed_of_sound_sonic: 33735
-    x_ang_rate: 0.00688958
-    y_ang_rate: -0.0105706239
-    z_ang_rate: 0.00161630
+    fdchp_x_ang_rate: 0.00688958
+    fdchp_y_ang_rate: -0.0105706239
+    fdchp_z_ang_rate: 0.00161630
     fdchp_x_accel_g: 0.048232011
     fdchp_y_accel_g: -0.032856453
     fdchp_z_accel_g: -0.999408304
@@ -63,9 +63,9 @@ data:
     fdchp_wind_y: 154
     fdchp_wind_z: -127
     fdchp_speed_of_sound_sonic: 33733
-    x_ang_rate: 0.006186683
-    y_ang_rate: -0.003767073
-    z_ang_rate: 0.001990124
+    fdchp_x_ang_rate: 0.006186683
+    fdchp_y_ang_rate: -0.003767073
+    fdchp_z_ang_rate: 0.001990124
     fdchp_x_accel_g: 0.0464804582
     fdchp_y_accel_g: -0.033379081
     fdchp_z_accel_g: -1.000367164
@@ -87,9 +87,9 @@ data:
     fdchp_wind_y: 119
     fdchp_wind_z: -148
     fdchp_speed_of_sound_sonic: 33739
-    x_ang_rate: 0.0024341566
-    y_ang_rate: -0.0107737965
-    z_ang_rate: 0.002103932
+    fdchp_x_ang_rate: 0.0024341566
+    fdchp_y_ang_rate: -0.0107737965
+    fdchp_z_ang_rate: 0.002103932
     fdchp_x_accel_g: 0.0474535413
     fdchp_y_accel_g: -0.03205856680
     fdchp_z_accel_g: -0.9999784827
@@ -111,9 +111,9 @@ data:
     fdchp_wind_y: 104
     fdchp_wind_z: -182
     fdchp_speed_of_sound_sonic: 33736
-    x_ang_rate: 0.0010883122
-    y_ang_rate: -0.0066145868
-    z_ang_rate: -0.000604674
+    fdchp_x_ang_rate: 0.0010883122
+    fdchp_y_ang_rate: -0.0066145868
+    fdchp_z_ang_rate: -0.000604674
     fdchp_x_accel_g: 0.047215618
     fdchp_y_accel_g: -0.032946344
     fdchp_z_accel_g: -0.998873293

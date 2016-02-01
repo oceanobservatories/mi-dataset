@@ -37,9 +37,9 @@ data:
     x_accel_min: -6.73
     y_accel_min: -8.41
     z_accel_min: 6.11
-    x_ang_rate: 0.0
-    y_ang_rate: 0.0
-    z_ang_rate: 0.0
+    x_ang_rate_avg: 0.0
+    y_ang_rate_avg: 0.0
+    z_ang_rate_avg: 0.0
     x_ang_rate_std: 0.2 
     y_ang_rate_std: 0.19
     z_ang_rate_std: 0.07
