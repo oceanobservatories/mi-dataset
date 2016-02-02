@@ -90,6 +90,9 @@ class GliderParticle(DataParticle):
             if value is None:
                 # this key was not present in this file, there is no value
                 result.append({DataParticleKey.VALUE_ID: key, DataParticleKey.VALUE: None})
+            elif 'inf' in value:
+                # guard against 'inf' parameter values found in some datasets
+                result.append({DataParticleKey.VALUE_ID: key, DataParticleKey.VALUE: None})
             elif ('_lat' in key or '_lon' in key) and value != 'NaN':
                 # special encoding for latitude and longitude
                 result.append(self._encode_value(key, value, GliderParticle._string_to_ddegrees))

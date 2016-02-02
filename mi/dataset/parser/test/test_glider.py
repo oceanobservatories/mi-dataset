@@ -848,3 +848,18 @@ class ENGRecoveredGliderTest(GliderParserUnitTestCase):
             records = parser.get_records(240)
             self.assert_(len(records) > 3)
             self.assertEquals(self.exception_callback_value, [])
+
+    def test_ingest_errors(self):
+        """
+        Test with a yml file with a multiple records
+        """
+        with open(os.path.join(self.resource_path, 'cp_388_2014_280_0_245.full.mrg'), 'rU') as file_handle:
+            parser = GliderEngineeringParser(self.config, file_handle, self.exception_callback)
+            particles = parser.get_records(32000)
+
+            for particle in particles:
+                data_dict = particle.generate_dict()
+
+            # self.assert_particles(particles, 'multiple_glider_record_recovered-engDataOnly.mrg.result.yml',
+            #                       self.resource_path)
+            self.assertEquals(self.exception_callback_value, [])
