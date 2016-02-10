@@ -37,9 +37,9 @@ data:
     x_accel_min: -6.73
     y_accel_min: -8.41
     z_accel_min: 6.11
-    x_ang_rate: 0.0
-    y_ang_rate: 0.0
-    z_ang_rate: 0.0
+    x_ang_rate_avg: 0.0
+    y_ang_rate_avg: 0.0
+    z_ang_rate_avg: 0.0
     x_ang_rate_std: 0.2 
     y_ang_rate_std: 0.19
     z_ang_rate_std: 0.07
@@ -107,9 +107,9 @@ data:
     x_accel_min: -6.95
     y_accel_min: -8.49
     z_accel_min: 6.19
-    x_ang_rate: 0.0
-    y_ang_rate: 0.01
-    z_ang_rate: 0.0
+    x_ang_rate_avg: 0.0
+    y_ang_rate_avg: 0.01
+    z_ang_rate_avg: 0.0
     x_ang_rate_std: 0.19
     y_ang_rate_std: 0.18
     z_ang_rate_std: 0.06
@@ -177,9 +177,9 @@ data:
     x_accel_min: -6.51
     y_accel_min: -7.65
     z_accel_min: 6.14
-    x_ang_rate: 0.0
-    y_ang_rate: 0.01
-    z_ang_rate: 0.0
+    x_ang_rate_avg: 0.0
+    y_ang_rate_avg: 0.01
+    z_ang_rate_avg: 0.0
     x_ang_rate_std: 0.19
     y_ang_rate_std: 0.19
     z_ang_rate_std: 0.06
@@ -247,9 +247,9 @@ data:
     x_accel_min: -7.06
     y_accel_min: -8.77
     z_accel_min: 5.48
-    x_ang_rate: 0.0
-    y_ang_rate: 0.01
-    z_ang_rate: 0.0
+    x_ang_rate_avg: 0.0
+    y_ang_rate_avg: 0.01
+    z_ang_rate_avg: 0.0
     x_ang_rate_std: 0.2
     y_ang_rate_std: 0.2
     z_ang_rate_std: 0.07
@@ -317,9 +317,9 @@ data:
     x_accel_min: -8.41
     y_accel_min: -8.97
     z_accel_min: 5.97
-    x_ang_rate: 0.0
-    y_ang_rate: 0.0
-    z_ang_rate: 0.0
+    x_ang_rate_avg: 0.0
+    y_ang_rate_avg: 0.0
+    z_ang_rate_avg: 0.0
     x_ang_rate_std: 0.21
     y_ang_rate_std: 0.21
     z_ang_rate_std: 0.08
@@ -387,9 +387,9 @@ data:
     x_accel_min: -7.41
     y_accel_min: -7.49
     z_accel_min: 5.67
-    x_ang_rate: 0.0
-    y_ang_rate: 0.01
-    z_ang_rate: 0.0
+    x_ang_rate_avg: 0.0
+    y_ang_rate_avg: 0.01
+    z_ang_rate_avg: 0.0
     x_ang_rate_std: 0.21
     y_ang_rate_std: 0.23
     z_ang_rate_std: 0.08
@@ -457,9 +457,9 @@ data:
     x_accel_min: -7.73
     y_accel_min: -8.34
     z_accel_min: 5.3
-    x_ang_rate: 0.0
-    y_ang_rate: 0.0
-    z_ang_rate: 0.0
+    x_ang_rate_avg: 0.0
+    y_ang_rate_avg: 0.0
+    z_ang_rate_avg: 0.0
     x_ang_rate_std: 0.18
     y_ang_rate_std: 0.21
     z_ang_rate_std: 0.06
@@ -527,9 +527,9 @@ data:
     x_accel_min: -8.55
     y_accel_min: -7.57
     z_accel_min: 5.54
-    x_ang_rate: 0.0
-    y_ang_rate: 0.0
-    z_ang_rate: 0.0
+    x_ang_rate_avg: 0.0
+    y_ang_rate_avg: 0.0
+    z_ang_rate_avg: 0.0
     x_ang_rate_std: 0.19
     y_ang_rate_std: 0.19
     z_ang_rate_std: 0.07

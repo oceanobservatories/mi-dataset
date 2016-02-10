@@ -12,7 +12,7 @@ from mi.dataset.parser.fdchp_a_dcl import FdchpADclParser
 from mi.core.versioning import version
 
 
-@version("15.6.0")
+@version("15.7.0")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     """
     This is the method called by Uframe

@@ -5,19 +5,19 @@
 @brief A parser for the fdchp series a instrument through a DCL
 """
 
-__author__ = 'Emily Hahn'
-__license__ = 'Apache 2.0'
-
 
 import re
 
 from mi.core.log import get_logger
-log = get_logger()
 from mi.core.common import BaseEnum
 from mi.core.exceptions import SampleException, UnexpectedDataException
 from mi.core.instrument.data_particle import DataParticle
 
 from mi.dataset.dataset_parser import SimpleParser
+log = get_logger()
+
+__author__ = 'Emily Hahn'
+__license__ = 'Apache 2.0'
 
 # the common regexes were not used here due to desire to have one group containing the
 # full date time rather than each number in a group
@@ -84,9 +84,9 @@ class FdchpADclCommonParticle(DataParticle):
         'x_accel_min': 30,
         'y_accel_min': 31,
         'z_accel_min': 32,
-        'x_ang_rate': 33,
-        'y_ang_rate': 34,
-        'z_ang_rate': 35,
+        'x_ang_rate_avg': 33,
+        'y_ang_rate_avg': 34,
+        'z_ang_rate_avg': 35,
         'x_ang_rate_std': 36,
         'y_ang_rate_std': 37,
         'z_ang_rate_std': 38,
