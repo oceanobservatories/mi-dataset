@@ -22,7 +22,7 @@ class ParticleDataHandler(object):
     def addParticleSample(self, sample_type, sample):
         log.debug("Sample type: %s, Sample data: %s", sample_type, sample)
         if sample_type not in self._samples.keys():
-            self._samples[sample_type] = [sample]
+            self._samples[sample_type] = [sample, ]
         else:
             self._samples[sample_type].append(sample)
 
