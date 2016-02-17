@@ -863,3 +863,23 @@ class ENGRecoveredGliderTest(GliderParserUnitTestCase):
             # self.assert_particles(particles, 'multiple_glider_record_recovered-engDataOnly.mrg.result.yml',
             #                       self.resource_path)
             self.assertEquals(self.exception_callback_value, [])
+
+    def test_for_69_fills(self):
+        """
+        Test a real file and confirm no exceptions occur
+        """
+        with open(os.path.join(self.resource_path, 'cp_388_2016_012_0_0.mrg'), 'rU') as file_handle:
+            parser = GliderEngineeringParser(self.config, file_handle, self.exception_callback)
+            records = parser.get_records(2000)
+            self.assert_(len(records) > 3)
+            self.assertEquals(self.exception_callback_value, [])
+
+    def test_for_nan_NaN(self):
+        """
+        Test a real file and confirm no exceptions occur
+        """
+        with open(os.path.join(self.resource_path, 'cp_388_2016_012_1_0.mrg'), 'rU') as file_handle:
+            parser = GliderEngineeringParser(self.config, file_handle, self.exception_callback)
+            records = parser.get_records(2000)
+            self.assert_(len(records) > 3)
+            self.assertEquals(self.exception_callback_value, [])
