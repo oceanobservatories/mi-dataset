@@ -12,7 +12,6 @@ from mi.core.log import get_logger
 from mi.core.common import BaseEnum
 from mi.core.exceptions import SampleException, \
     ConfigurationException, \
-    SampleEncodingException, \
     DatasetParserException
 from mi.core.instrument.data_particle import DataParticle, DataParticleKey
 from mi.dataset.dataset_parser import SimpleParser, DataSetDriverConfigKeys
@@ -93,6 +92,9 @@ class GliderParticle(DataParticle):
             elif 'inf' in value:
                 # guard against 'inf' parameter values found in some datasets
                 result.append({DataParticleKey.VALUE_ID: key, DataParticleKey.VALUE: None})
+            elif value is '69696969':
+                # guard against '69696969' parameter values used as fill values
+                result.append({DataParticleKey.VALUE_ID: key, DataParticleKey.VALUE: None})
             elif ('_lat' in key or '_lon' in key) and value != 'NaN':
                 # special encoding for latitude and longitude
                 result.append(self._encode_value(key, value, GliderParticle._string_to_ddegrees))
@@ -119,6 +121,7 @@ class GliderParticle(DataParticle):
         degrees = int(absval / 100)
         minutes = absval - degrees * 100
         return copysign(degrees + minutes / 60, float_val)
+
 
 class CtdgvParticleKey(GliderParticleKey):
     # science data made available via telemetry or Glider recovery
@@ -177,9 +180,6 @@ class DostaRecoveredParticleKey(GliderParticleKey):
     SCI_OXY4_RAWTEMP = 'sci_oxy4_rawtemp'
     SCI_OXY4_TCPHASE = 'sci_oxy4_tcphase'
     SCI_OXY4_TEMP = 'sci_oxy4_temp'
-    SCI_WATER_COND = 'sci_water_cond'
-    SCI_WATER_PRESSURE = 'sci_water_pressure'
-    SCI_WATER_TEMP = 'sci_water_temp'
 
 
 class DostaTelemeteredDataParticle(GliderParticle):
