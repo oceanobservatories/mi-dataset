@@ -9,22 +9,24 @@ Release notes:
 Initial Release
 """
 
-__author__ = 'jpadula'
 
 from mi.dataset.dataset_driver import SimpleDatasetDriver
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 
-from mi.dataset.parser.cspp_base import \
-    DATA_PARTICLE_CLASS_KEY, \
-    METADATA_PARTICLE_CLASS_KEY
+from mi.dataset.parser.cspp_base import METADATA_PARTICLE_CLASS_KEY
 from mi.dataset.parser.nutnr_j_cspp import \
     NutnrJCsppMetadataTelemeteredDataParticle, \
     NutnrJCsppTelemeteredDataParticle, \
-    NutnrJCsppParser
+    NutnrJCsppDarkTelemeteredDataParticle, \
+    NutnrJCsppParser, \
+    LIGHT_PARTICLE_CLASS_KEY, \
+    DARK_PARTICLE_CLASS_KEY
 from mi.core.versioning import version
 
+__author__ = 'jpadula'
 
-@version("15.7.0")
+
+@version("15.7.1")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     """
     This is the method called by Uframe
@@ -53,8 +55,9 @@ class NutnrJCsppTelemeteredDriver(SimpleDatasetDriver):
 
         parser_config = {
             DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT: {
-                METADATA_PARTICLE_CLASS_KEY: NutnrJCsppMetadataTelemeteredDataParticle,
-                DATA_PARTICLE_CLASS_KEY: NutnrJCsppTelemeteredDataParticle
+                    METADATA_PARTICLE_CLASS_KEY: NutnrJCsppMetadataTelemeteredDataParticle,
+                    LIGHT_PARTICLE_CLASS_KEY: NutnrJCsppTelemeteredDataParticle,
+                    DARK_PARTICLE_CLASS_KEY: NutnrJCsppDarkTelemeteredDataParticle
             }
         }
 
