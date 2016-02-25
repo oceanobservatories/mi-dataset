@@ -7,12 +7,11 @@
 """
 import re
 import ntplib
-from math import copysign
+from math import copysign, isnan
 from mi.core.log import get_logger
 from mi.core.common import BaseEnum
 from mi.core.exceptions import SampleException, \
     ConfigurationException, \
-    SampleEncodingException, \
     DatasetParserException
 from mi.core.instrument.data_particle import DataParticle, DataParticleKey
 from mi.dataset.dataset_parser import SimpleParser, DataSetDriverConfigKeys
@@ -93,10 +92,13 @@ class GliderParticle(DataParticle):
             elif 'inf' in value:
                 # guard against 'inf' parameter values found in some datasets
                 result.append({DataParticleKey.VALUE_ID: key, DataParticleKey.VALUE: None})
-            elif ('_lat' in key or '_lon' in key) and value != 'NaN':
+            elif value == '69696969':
+                # guard against '69696969' parameter values used as fill values
+                result.append({DataParticleKey.VALUE_ID: key, DataParticleKey.VALUE: None})
+            elif '_lat' in key or '_lon' in key:
                 # special encoding for latitude and longitude
                 result.append(self._encode_value(key, value, GliderParticle._string_to_ddegrees))
-            elif value == 'NaN' or '.' in value or 'e' in value:
+            elif isnan(float(value)) or '.' in value or 'e' in value:
                 # this is a float
                 result.append(self._encode_value(key, value, GliderParticle._encode_float_or_nan))
             else:
@@ -107,7 +109,7 @@ class GliderParticle(DataParticle):
 
     @staticmethod
     def _encode_float_or_nan(value):
-        if value == 'NaN':
+        if isnan(float(value)):
             return None
         else:
             return float(value)
@@ -115,10 +117,13 @@ class GliderParticle(DataParticle):
     @staticmethod
     def _string_to_ddegrees(value):
         float_val = float(value)
+        if isnan(float_val):
+            return None
         absval = abs(float_val)
         degrees = int(absval / 100)
         minutes = absval - degrees * 100
         return copysign(degrees + minutes / 60, float_val)
+
 
 class CtdgvParticleKey(GliderParticleKey):
     # science data made available via telemetry or Glider recovery
@@ -177,9 +182,6 @@ class DostaRecoveredParticleKey(GliderParticleKey):
     SCI_OXY4_RAWTEMP = 'sci_oxy4_rawtemp'
     SCI_OXY4_TCPHASE = 'sci_oxy4_tcphase'
     SCI_OXY4_TEMP = 'sci_oxy4_temp'
-    SCI_WATER_COND = 'sci_water_cond'
-    SCI_WATER_PRESSURE = 'sci_water_pressure'
-    SCI_WATER_TEMP = 'sci_water_temp'
 
 
 class DostaTelemeteredDataParticle(GliderParticle):
@@ -1018,7 +1020,7 @@ class GliderParser(SimpleParser):
         Examine the data_dict to see if it contains particle parameters
         """
         for key, value in data_dict.iteritems():
-            if value != 'NaN' and key in particle_class.science_parameters:
+            if not(isnan(float(value))) and key in particle_class.science_parameters:
                 return True
 
 
