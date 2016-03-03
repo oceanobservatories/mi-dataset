@@ -12,8 +12,10 @@ __author__ = 'Joe Padula'
 __license__ = 'Apache 2.0'
 
 from datetime import datetime
+import time
 import ntplib
 import calendar
+import string
 
 from mi.core.log import get_logger
 log = get_logger()
@@ -26,11 +28,21 @@ ZULU_TIMESTAMP_FORMAT = "%Y-%m-%dT%H:%M:%S.%fZ"
 # Example: 2014/08/17 00:57:10.648
 DCL_CONTROLLER_TIMESTAMP_FORMAT = "%Y/%m/%d %H:%M:%S.%f"
 
+
 def formatted_timestamp_utc_time(timestamp_str, format_str):
+    """
+    Converts a formatted timestamp timestamp string to UTC time
+    NOTE: will not handle seconds >59 correctly due to limitation in
+    datetime module.
+    :param timestamp_str: a formatted timestamp string
+    :param format_str: format string used to decode the timestamp_str
+    :return: utc time value
+    """
 
     dt = datetime.strptime(timestamp_str, format_str)
 
     return calendar.timegm(dt.timetuple()) + (dt.microsecond / 1000000.0)
+
 
 def zulu_timestamp_to_utc_time(zulu_timestamp_str):
     """
@@ -74,9 +86,14 @@ def dcl_controller_timestamp_to_utc_time(dcl_controller_timestamp_str):
     :return: UTC time in seconds and microseconds precision
     """
 
+    no_frac_timestamp_str, frac_timestamp_str = dcl_controller_timestamp_str.split('.')
+    no_frac_format_str, frac_format_str = DCL_CONTROLLER_TIMESTAMP_FORMAT.split('.')
 
-    return formatted_timestamp_utc_time(dcl_controller_timestamp_str,
-                                        DCL_CONTROLLER_TIMESTAMP_FORMAT)
+    tt = time.strptime(no_frac_timestamp_str, no_frac_format_str)
+
+    frac_of_sec = float('.' + frac_timestamp_str)
+
+    return calendar.timegm(tt) + frac_of_sec
 
 
 def dcl_controller_timestamp_to_ntp_time(dcl_controller_timestamp_str):

@@ -26,6 +26,8 @@ from mi.core.instrument.data_particle import DataParticle
 from mi.core.exceptions import SampleException, DatasetParserException, UnexpectedDataException
 from mi.dataset.dataset_parser import BufferLoadingParser
 from mi.core.instrument.chunker import StringChunker
+from mi.dataset.parser.utilities import \
+    dcl_controller_timestamp_to_ntp_time
 
 # This is an example of the input string
 #             2013/11/16 20:46:24.989 Coulombs = 1.1110C,
@@ -167,19 +169,10 @@ class RteODclParser(BufferLoadingParser):
         if not match:
             raise ValueError("Invalid time format: %s" % ts_str)
 
-        zulu_ts = "%04d-%02d-%02dT%02d:%02d:%fZ" % (
-            int(match.group(1)), int(match.group(2)), int(match.group(3)),
-            int(match.group(4)), int(match.group(5)), float(match.group(6))
-        )
-        log.trace("converted ts '%s' to '%s'", ts_str[match.start(0):(match.start(0) + 24)], zulu_ts)
+        time_string = match.group(0)
 
-        format = "%Y-%m-%dT%H:%M:%S.%fZ"
-        dt = datetime.strptime(zulu_ts, format)
-        unix_timestamp = calendar.timegm(dt.timetuple()) + (dt.microsecond / 1000000.0)
+        ntptime = dcl_controller_timestamp_to_ntp_time(time_string)
 
-        ntptime = ntplib.system_to_ntp_time(unix_timestamp)
-
-        log.trace("Converted time \"%s\" (unix: %s) into %s", ts_str, unix_timestamp, ntptime)
         return ntptime
 
     def parse_chunks(self):

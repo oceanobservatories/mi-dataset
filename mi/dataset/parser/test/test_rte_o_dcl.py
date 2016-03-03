@@ -10,6 +10,8 @@
 import calendar
 from datetime import datetime
 import ntplib
+import os
+
 
 from nose.plugins.attrib import attr
 from StringIO import StringIO
@@ -19,6 +21,9 @@ from mi.core.log import get_logger ; log = get_logger()
 from mi.dataset.test.test_parser import ParserUnitTestCase
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 from mi.dataset.parser.rte_o_dcl import RteODclParser, RteODclParserDataParticle, StateKey, LOG_TIME_MATCHER
+from mi.dataset.test.test_parser import BASE_RESOURCE_PATH
+
+RESOURCE_PATH = os.path.join(BASE_RESOURCE_PATH, 'cg_stc_eng', 'stc', 'resource')
 
 @attr('UNIT', group='mi')
 class RteODclParserUnitTestCase(ParserUnitTestCase):
@@ -220,4 +225,19 @@ class RteODclParserUnitTestCase(ParserUnitTestCase):
  
         result = self.parser.get_records(1)
         self.assert_result(result, 703, self.timestamp3, self.particle_c)
+
+    def test_bug_9692(self):
+        """
+        Test to verify change made works with DCL
+        timestamps containing seconds >59
+        """
+
+        with open(os.path.join(RESOURCE_PATH, '20131115A.rte.log'), 'rU') as file_handle:
+            parser = RteODclParser(self.config, self.start_state, file_handle,
+                                   self.state_callback, self.pub_callback, self.exception_callback)
+
+            result = parser.get_records(10)
+            self.assertEqual(len(result), 5)
+            self.assertListEqual(self.exception_callback_value, [])
+
 

@@ -10,15 +10,11 @@ Release notes:
 initial release
 """
 
-__author__ = 'Ronald Ronquillo'
-__license__ = 'Apache 2.0'
-
 import calendar
 import re
 from functools import partial
 
 from mi.core.log import get_logger
-log = get_logger()
 from mi.core.instrument.chunker import StringChunker
 from mi.core.instrument.data_particle import DataParticle
 from mi.core.exceptions import UnexpectedDataException, InstrumentParameterException
@@ -27,6 +23,12 @@ from mi.dataset.dataset_parser import BufferLoadingParser, DataSetDriverConfigKe
 from mi.dataset.parser.common_regexes import END_OF_LINE_REGEX, SPACE_REGEX, \
     ANY_CHARS_REGEX, DATE_YYYY_MM_DD_REGEX, TIME_HR_MIN_SEC_MSEC_REGEX
 
+from mi.dataset.parser.utilities import dcl_controller_timestamp_to_ntp_time
+
+__author__ = 'Ronald Ronquillo'
+__license__ = 'Apache 2.0'
+
+log = get_logger()
 
 # Basic patterns
 SPACES = SPACE_REGEX + "+"
@@ -37,7 +39,7 @@ END_GROUP = ')'
 # Metadata fields:  [text] more text
 # Sensor data has space-delimited fields (date, time, integers)
 # All records end with newlines.
-TIME = r'(\d{2}):(\d{2}):(\d{2}\.\d{3})'    # Time: HH:MM:SS.mmm
+
 TIMESTAMP = START_GROUP + DATE_YYYY_MM_DD_REGEX + SPACE_REGEX + \
             TIME_HR_MIN_SEC_MSEC_REGEX + END_GROUP
 START_METADATA = r'\['
@@ -68,19 +70,11 @@ class DclInstrumentDataParticle(DataParticle):
         super(DclInstrumentDataParticle, self).__init__(raw_data, *args, **kwargs)
 
         # The particle timestamp is the DCL Controller timestamp.
-        # The individual fields have already been extracted by the parser.
-        timestamp = (
-            int(self.raw_data[SENSOR_GROUP_YEAR]),
-            int(self.raw_data[SENSOR_GROUP_MONTH]),
-            int(self.raw_data[SENSOR_GROUP_DAY]),
-            int(self.raw_data[SENSOR_GROUP_HOUR]),
-            int(self.raw_data[SENSOR_GROUP_MINUTE]),
-            float(self.raw_data[SENSOR_GROUP_SECOND] + "." +
-                  self.raw_data[SENSOR_GROUP_MILLISECOND]),
-            0, 0, 0)
+        # Convert the DCL controller timestamp string to NTP time (in seconds and microseconds).
+        dcl_controller_timestamp = self.raw_data[SENSOR_GROUP_TIMESTAMP]
+        elapsed_seconds_useconds = dcl_controller_timestamp_to_ntp_time(dcl_controller_timestamp)
+        self.set_internal_timestamp(elapsed_seconds_useconds)
 
-        elapsed_seconds = calendar.timegm(timestamp)
-        self.set_internal_timestamp(unix_time=elapsed_seconds)
         self.instrument_particle_map = instrument_particle_map
 
     def _build_parsed_values(self):

@@ -39,7 +39,7 @@ class ZplscCDclParserUnitTestCase(ParserUnitTestCase):
         return ZplscCDclParser(self.config, file_handle, self.rec_exception_callback)
 
     def file_path(self, filename):
-        log.info('resource path = %s, file name = %s', RESOURCE_PATH, filename)
+        log.debug('resource path = %s, file name = %s', RESOURCE_PATH, filename)
         return os.path.join(RESOURCE_PATH, filename)
 
     def rec_exception_callback(self, exception):
@@ -65,7 +65,7 @@ class ZplscCDclParserUnitTestCase(ParserUnitTestCase):
         Test Zplsc C DCL parser
         Just test that it is able to parse the file and records are generated.
         """
-        log.info('===== START TEST ZPLSC_C_DCL Parser =====')
+        log.debug('===== START TEST ZPLSC_C_DCL Parser =====')
 
         with open(self.file_path('20150406.zplsc.log')) as in_file:
 
@@ -77,7 +77,7 @@ class ZplscCDclParserUnitTestCase(ParserUnitTestCase):
             self.assertEqual(len(result), 1)
             self.assertListEqual(self.exception_callback_value, [])
 
-        log.info('===== END TEST ZPLSC_C_DCL Parser  =====')
+        log.debug('===== END TEST ZPLSC_C_DCL Parser  =====')
 
     def test_telem(self):
         """
@@ -85,7 +85,7 @@ class ZplscCDclParserUnitTestCase(ParserUnitTestCase):
         Verify that the results are those we expected.
         """
 
-        log.info('===== START TEST TELEM  =====')
+        log.debug('===== START TEST TELEM  =====')
 
         with open(self.file_path('20150407.zplsc.log')) as in_file:
 
@@ -98,7 +98,7 @@ class ZplscCDclParserUnitTestCase(ParserUnitTestCase):
             self.assert_particles(result, '20150407.zplsc.yml', RESOURCE_PATH)
             self.assertListEqual(self.exception_callback_value, [])
 
-        log.info('===== END TEST TELEM  =====')
+        log.debug('===== END TEST TELEM  =====')
 
     def test_variable_num_of_channels(self):
         """
@@ -108,7 +108,7 @@ class ZplscCDclParserUnitTestCase(ParserUnitTestCase):
         This tests a manually edited log file to exercise the logic for handling a variable
         number of channels and number of bins.
         """
-        log.info('===== START TEST VARIABLE NUM OF CHANNELS =====')
+        log.debug('===== START TEST VARIABLE NUM OF CHANNELS =====')
 
         with open(self.file_path('20150407.zplsc_var_channels.log')) as in_file:
 
@@ -121,14 +121,14 @@ class ZplscCDclParserUnitTestCase(ParserUnitTestCase):
             self.assert_particles(result, '20150407.zplsc_var_channels.yml', RESOURCE_PATH)
             self.assertListEqual(self.exception_callback_value, [])
 
-        log.info('===== END TEST VARIABLE NUM OF CHANNELS =====')
+        log.debug('===== END TEST VARIABLE NUM OF CHANNELS =====')
 
     def test_bad_data(self):
         """
         Ensure that bad data is skipped when it exists.
         See '20150407.zplsc_corrupt.log' file for line by line details of expected errors.
         """
-        log.info('===== START TEST BAD DATA  =====')
+        log.debug('===== START TEST BAD DATA  =====')
 
         with open(self.file_path('20150407.zplsc_corrupt.log')) as in_file:
 
@@ -141,9 +141,9 @@ class ZplscCDclParserUnitTestCase(ParserUnitTestCase):
             self.assertEqual(len(self.exception_callback_value), 6)
 
             for i in range(len(self.exception_callback_value)):
-                log.info('Exception: %s', self.exception_callback_value[i])
+                log.debug('Exception: %s', self.exception_callback_value[i])
 
-        log.info('===== END TEST BAD DATA  =====')
+        log.debug('===== END TEST BAD DATA  =====')
 
     def create_large_yml(self):
         """
@@ -159,7 +159,7 @@ class ZplscCDclParserUnitTestCase(ParserUnitTestCase):
             date, name, ext = in_file.name.split('.')
             date = date.split('/')[-1]
             out_file = '.'.join([date, name, 'yml'])
-            log.info(out_file)
+            log.debug(out_file)
 
             # In a single read, get all particles in this file.
             result = parser.get_records(1000)
@@ -193,4 +193,20 @@ class ZplscCDclParserUnitTestCase(ParserUnitTestCase):
                         fid.write("    %s: '%s'\n" % (val.get('value_id'), val.get('value')))
                     else:
                         fid.write('    %s: %s\n' % (val.get('value_id'), val.get('value')))
+
+    def test_bug_9692(self):
+        """
+        Test to verify change made works with DCL
+        timestamps containing seconds >59
+        """
+
+        with open(self.file_path('20150407A.zplsc.log')) as in_file:
+
+            parser = self.create_zplsc_c_dcl_parser(in_file)
+
+            # In a single read, get all particles for this file.
+            result = parser.get_records(5)
+
+            self.assertEqual(len(result), 3)
+            self.assertListEqual(self.exception_callback_value, [])
 
