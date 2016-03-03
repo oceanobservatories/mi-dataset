@@ -77,7 +77,7 @@ from mi.core.exceptions import RecoverableSampleException
 from mi.core.instrument.data_particle import DataParticle, DataParticleKey
 from mi.core.log import get_logging_metaclass
 from mi.dataset.dataset_parser import SimpleParser
-from mi.dataset.parser import utilities
+from mi.dataset.parser.utilities import dcl_controller_timestamp_to_ntp_time
 from mi.dataset.parser.common_regexes import UNSIGNED_INT_REGEX, END_OF_LINE_REGEX, \
     DATE_YYYY_MM_DD_REGEX, TIME_HR_MIN_SEC_MSEC_REGEX
 
@@ -274,9 +274,7 @@ class ZplscCDclParser(SimpleParser):
                     continue
 
                 # Convert the DCL timestamp into the particle timestamp
-                time_stamp = ntplib.system_to_ntp_time(
-                    utilities.formatted_timestamp_utc_time(
-                        match.group('dcl_timestamp'), utilities.DCL_CONTROLLER_TIMESTAMP_FORMAT))
+                time_stamp = dcl_controller_timestamp_to_ntp_time(match.group('dcl_timestamp'))
 
                 # Extract a particle and append it to the record buffer
                 particle = self._extract_sample(

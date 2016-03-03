@@ -233,3 +233,19 @@ class AdcptAcfgmPd8ParserUnitTestCase(ParserUnitTestCase):
         self.assertListEqual(self.exception_callback_value, [])
         in_file.close()
 
+    def test_telem_9692(self):
+        """
+        Test to verify change made to dcl_file_common.py works with DCL
+        timestamps containing seconds >59
+        """
+        in_file = self.open_file('20131201.adcpA.log')
+        parser = self.create_parser(ADCPT_ACFGM_DCL_PD8_TELEMETERED_PARTICLE_CLASS, in_file)
+
+        # In a single read, get all particles for this file.
+        result = parser.get_records(20)
+
+        self.assertEqual(len(result), 1)
+
+        self.assertListEqual(self.exception_callback_value, [])
+        in_file.close()
+

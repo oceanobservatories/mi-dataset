@@ -773,3 +773,22 @@ class FlortDjDclParserUnitTestCase(ParserUnitTestCase):
         in_file.close()
 
         log.debug('===== END TEST MANY WITH YML =====')
+
+    def test_bug_9692(self):
+        """
+        This test verifies a fix to accommodate DCL timestamps with Seconds >59
+        The test file is a trimmed down copy of a recovered file from a real deployment
+        """
+
+        in_file = self.open_file('20151023.flort.log')
+
+        parser = self.create_rec_parser(in_file)
+
+        particles = parser.get_records(5)
+
+        log.debug("Num particles: %d", len(particles))
+
+        self.assertEquals(len(particles), 3)
+        self.assertEquals(self.exception_callback_value, [])
+        in_file.close()
+

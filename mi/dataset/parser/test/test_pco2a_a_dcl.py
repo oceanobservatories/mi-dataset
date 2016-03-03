@@ -232,3 +232,18 @@ class Pco2aADclParserUnitTestCase(ParserUnitTestCase):
 
         in_file.close()
         log.debug('===== END TEST failure verify_parser RECOVERED =====')
+
+    def test_bug_9692(self):
+        """
+        Test to verify change made to dcl_file_common.py works with DCL
+        timestamps containing seconds >59
+        """
+        in_file = self.open_file('20140217.pco2aA.log')
+        parser = self.create_parser(RECOVERED_PARTICLE_CLASSES, in_file)
+
+        result = parser.get_records(10)
+        self.assertEqual(len(result), 4)
+
+        self.assertListEqual(self.exception_callback_value, [])
+
+        in_file.close()
