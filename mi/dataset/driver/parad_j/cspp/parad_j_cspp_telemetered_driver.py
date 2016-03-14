@@ -23,7 +23,7 @@ from mi.dataset.parser.parad_j_cspp import \
 from mi.core.versioning import version
 
 
-@version("0.0.1")
+@version("0.0.2")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     """
     This is the method called by Uframe

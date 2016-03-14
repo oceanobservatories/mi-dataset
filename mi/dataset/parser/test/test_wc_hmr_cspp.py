@@ -16,9 +16,6 @@ import os
 from nose.plugins.attrib import attr
 
 from mi.core.log import get_logger
-log = get_logger()
-
-from mi.idk.config import Config
 
 from mi.dataset.test.test_parser import ParserUnitTestCase, BASE_RESOURCE_PATH
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
@@ -36,6 +33,8 @@ from mi.dataset.parser.wc_hmr_cspp import \
     WcHmrMetadataRecoveredDataParticle, \
     WcHmrMetadataTelemeteredDataParticle, \
     WcHmrDataTypeKey
+
+log = get_logger()
 
 RESOURCE_PATH = os.path.join(BASE_RESOURCE_PATH, 'wc_hmr', 'cspp', 'resource')
 
@@ -74,7 +73,7 @@ class WcHmrCsppParserUnitTestCase(ParserUnitTestCase):
         Assert that the results are those we expected.
         """
         file_path = os.path.join(RESOURCE_PATH, '11079364_WC_HMR.txt')
-        stream_handle = open(file_path, 'r')
+        stream_handle = open(file_path, 'rU')
 
         # Note: since the recovered and telemetered parser and particles are common
         # to each other, testing one is sufficient, will be completely tested
@@ -98,7 +97,7 @@ class WcHmrCsppParserUnitTestCase(ParserUnitTestCase):
         Assert that the results are those we expected.
         """
         file_path = os.path.join(RESOURCE_PATH, '11079364_WC_HMR.txt')
-        stream_handle = open(file_path, 'r')
+        stream_handle = open(file_path, 'rU')
 
         # Note: since the recovered and telemetered parser and particles are common
         # to each other, testing one is sufficient, will be completely tested
@@ -128,7 +127,7 @@ class WcHmrCsppParserUnitTestCase(ParserUnitTestCase):
         # data records
 
         file_path = os.path.join(RESOURCE_PATH, '11079364_BAD_WC_HMR.txt')
-        stream_handle = open(file_path, 'r')
+        stream_handle = open(file_path, 'rU')
 
         log.info(self.exception_callback_value)
 
@@ -158,7 +157,7 @@ class WcHmrCsppParserUnitTestCase(ParserUnitTestCase):
 
         file_path = os.path.join(RESOURCE_PATH, '11079364_EXTRA_DATA_WC_HMR.txt')
 
-        stream_handle = open(file_path, 'r')
+        stream_handle = open(file_path, 'rU')
 
         log.info(self.exception_callback_value)
 

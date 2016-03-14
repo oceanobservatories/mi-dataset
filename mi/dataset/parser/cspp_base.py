@@ -10,30 +10,26 @@ Release notes:
 initial release
 """
 
-__author__ = 'Mark Worden'
-__license__ = 'Apache 2.0'
-
-from functools import partial
 import copy
 import re
 import string
 
 from mi.core.log import get_logger
-log = get_logger()
+
 from mi.core.common import BaseEnum
 from mi.core.exceptions import DatasetParserException, \
-    UnexpectedDataException, RecoverableSampleException, \
+    RecoverableSampleException, \
     ConfigurationException
-from mi.core.instrument.chunker import StringChunker
 from mi.core.instrument.data_particle import DataParticle
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
-from mi.dataset.dataset_parser import BufferLoadingParser
+from mi.dataset.dataset_parser import SimpleParser
 from mi.dataset.parser.common_regexes import END_OF_LINE_REGEX, \
     FLOAT_REGEX, ASCII_HEX_CHAR_REGEX
 
-# The following defines a regular expression for one or more
-# instances of a carriage return and line feed or just line feed
-SIEVE_MATCHER = re.compile(r'.*' + END_OF_LINE_REGEX)
+log = get_logger()
+
+__author__ = 'Mark Worden'
+__license__ = 'Apache 2.0'
 
 HEADER_PART_REGEX = r'(.*):\s+(.*)' + END_OF_LINE_REGEX
 HEADER_PART_MATCHER = re.compile(HEADER_PART_REGEX)
@@ -194,7 +190,7 @@ class CsppMetadataDataParticle(DataParticle):
         return results
 
 
-class CsppParser(BufferLoadingParser):
+class CsppParser(SimpleParser):
     """
     Class for a common cspp data file parser
     """
@@ -264,11 +260,6 @@ class CsppParser(BufferLoadingParser):
         # Call the superclass constructor
         super(CsppParser, self).__init__(config,
                                          stream_handle,
-                                         None,
-                                         partial(StringChunker.regex_sieve_function,
-                                                 regex_list=[SIEVE_MATCHER]),
-                                         lambda state, ingested: None,
-                                         lambda data: None,
                                          exception_callback)
 
     def _process_data_match(self, data_match, result_particles):
@@ -305,7 +296,7 @@ class CsppParser(BufferLoadingParser):
                         # We're going to insert the metadata particle so that it is 
                         # the first in the list and set the position to 0, as it cannot 
                         # have the same position as the non-metadata particle
-                        result_particles.insert(0, (metadata_particle, None))
+                        result_particles.insert(0, metadata_particle)
                     else:
                         # metadata particle was not created successfully
                         log.warn('Unable to create metadata particle')
@@ -321,7 +312,7 @@ class CsppParser(BufferLoadingParser):
                 # the metadata, even if it failed
                 self._metadata_extracted = True
 
-            result_particles.append((data_particle, None))
+            result_particles.append(data_particle)
 
     def _process_header_part_match(self, header_part_match):
         """
@@ -339,88 +330,50 @@ class CsppParser(BufferLoadingParser):
         if header_part_key in self._header_state.keys():
             self._header_state[header_part_key] = string.rstrip(header_part_value)
 
-    def _process_chunk_not_containing_data_record_or_header_part(self, chunk):
+    def _process_line_not_containing_data_record_or_header_part(self, line):
         """
-        This method processes a chunk that does not contain a data record or header.  This case is
+        This method processes a line that does not contain a data record or header.  This case is
         not applicable to "non_data".  For cspp file streams, we expect some lines in the file that
         we do not care about, and we will not consider them "non_data".
-        @param chunk A regular expression match object for a cspp header row
+        @param line A regular expression match object for a cspp header row
         """
 
-        if HEX_ASCII_LINE_MATCHER.match(chunk):
+        if HEX_ASCII_LINE_MATCHER.match(line):
             # we found a line starting with the timestamp, depth, and
             # suspect timestamp, followed by all hex ascii chars
-            log.warn('got hex ascii corrupted data %s ', chunk)
+            log.warn('got hex ascii corrupted data %s ', line)
             self._exception_callback(RecoverableSampleException(
-                "Found hex ascii corrupted data: %s" % chunk))
+                "Found hex ascii corrupted data: %s" % line))
 
         # ignore the expected timestamp line and any lines matching the ignore regex,
         # otherwise data is unexpected
-        elif not TIMESTAMP_LINE_MATCHER.match(chunk) and not \
-                (self._ignore_matcher is not None and self._ignore_matcher.match(chunk)):
+        elif not TIMESTAMP_LINE_MATCHER.match(line) and not \
+                (self._ignore_matcher is not None and self._ignore_matcher.match(line)):
             # Unexpected data was found 
-            log.warn('got unrecognized row %s', chunk)
-            self._exception_callback(RecoverableSampleException("Found an invalid chunk: %s" % chunk))
+            log.warn('got unrecognized row %s', line)
+            self._exception_callback(RecoverableSampleException("Found an invalid line: %s" % line))
 
-    def parse_chunks(self):
+    def parse_file(self):
         """
-        Parse out any pending data chunks in the chunker. If
-        it is a valid data piece, build a particle, update the position and
-        timestamp. Go until the chunker has no more valid data.
-        @retval a list of tuples with sample particles encountered in this
-            parsing, plus the state. An empty list of nothing was parsed.
+        Parse through the file, pulling single lines and comparing to the established patterns,
+        generating particles for data lines
         """
 
-        # Initialize the result particles list we will return
-        result_particles = []
+        for line in self._stream_handle:
 
-        # Retrieve the next non data chunk
-        (nd_timestamp, non_data, non_start, non_end) = self._chunker.get_next_non_data_with_index(clean=False)
-
-        # Retrieve the next data chunk
-        (timestamp, chunk, start, end) = self._chunker.get_next_data_with_index(clean=True)
-
-        # Process the non data
-        self.handle_non_data(non_data, non_end, start)
-
-        # While the data chunk is not None, process the data chunk
-        while chunk is not None:
-
-            # See if the chunk matches a data record
-            data_match = self._data_record_matcher.match(chunk)
+            data_match = self._data_record_matcher.match(line)
 
             # If we found a data match, let's process it
             if data_match is not None:
-                self._process_data_match(data_match, result_particles)
+                self._process_data_match(data_match, self._record_buffer)
 
             else:
                 # Check for head part match
-                header_part_match = HEADER_PART_MATCHER.match(chunk)
+                header_part_match = HEADER_PART_MATCHER.match(line)
 
                 if header_part_match is not None:
                     self._process_header_part_match(header_part_match)
 
                 else:
-                    self._process_chunk_not_containing_data_record_or_header_part(chunk)
+                    self._process_line_not_containing_data_record_or_header_part(line)
 
-            # Retrieve the next non data chunk
-            (nd_timestamp, non_data, non_start, non_end) = self._chunker.get_next_non_data_with_index(clean=False)
-
-            # Retrieve the next data chunk
-            (timestamp, chunk, start, end) = self._chunker.get_next_data_with_index(clean=True)
-
-            # Process the non data
-            self.handle_non_data(non_data, non_end, start)
-
-        return result_particles
-
-    def handle_non_data(self, non_data, non_end, start):
-        """
-        Handle any non-data that is found in the file
-        """
-        # if non-data is expected, handle it here, otherwise it is an error
-        if non_data is not None and non_end <= start:
-            log.debug("non_data: %s", non_data)
-            # if non-data is a fatal error, directly call the exception, if it is not use the _exception_callback
-            self._exception_callback(UnexpectedDataException("Found %d bytes of un-expected non-data %s" %
-                                                             (len(non_data), non_data)))

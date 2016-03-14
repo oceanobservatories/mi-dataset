@@ -16,8 +16,6 @@ import os
 from nose.plugins.attrib import attr
 
 from mi.core.log import get_logger
-log = get_logger()
-
 from mi.idk.config import Config
 
 from mi.dataset.test.test_parser import ParserUnitTestCase
@@ -36,6 +34,8 @@ from mi.dataset.parser.wc_wm_cspp import \
     WcWmMetadataRecoveredDataParticle, \
     WcWmMetadataTelemeteredDataParticle, \
     WcWmDataTypeKey
+
+log = get_logger()
 
 RESOURCE_PATH = os.path.join(Config().base_dir(), 'mi', 'dataset', 'driver', 'wc_wm', 'cspp', 'resource')
 
@@ -104,7 +104,7 @@ class WcWmCsppParserUnitTestCase(ParserUnitTestCase):
         Be sure to verify the results by eye before trusting!
         """
 
-        fid = open(os.path.join(RESOURCE_PATH, '11079364_WC_WM.txt'), 'r')
+        fid = open(os.path.join(RESOURCE_PATH, '11079364_WC_WM.txt'), 'rU')
 
         stream_handle = fid
         parser = WcWmCsppParser(self.config.get(WcWmDataTypeKey.WC_WM_CSPP_RECOVERED),
@@ -122,7 +122,7 @@ class WcWmCsppParserUnitTestCase(ParserUnitTestCase):
         Assert that the results are those we expected.
         """
         file_path = os.path.join(RESOURCE_PATH, '11079364_WC_WM.txt')
-        stream_handle = open(file_path, 'r')
+        stream_handle = open(file_path, 'rU')
 
         parser = WcWmCsppParser(self.config.get(WcWmDataTypeKey.WC_WM_CSPP_RECOVERED),
                                 stream_handle,
@@ -140,7 +140,7 @@ class WcWmCsppParserUnitTestCase(ParserUnitTestCase):
         Assert that the results are those we expected.
         """
         file_path = os.path.join(RESOURCE_PATH, '11079364_WC_WM.txt')
-        stream_handle = open(file_path, 'r')
+        stream_handle = open(file_path, 'rU')
 
         parser = WcWmCsppParser(self.config.get(WcWmDataTypeKey.WC_WM_CSPP_TELEMETERED),
                                 stream_handle,
@@ -158,7 +158,7 @@ class WcWmCsppParserUnitTestCase(ParserUnitTestCase):
         Assert that the results are those we expected.
         """
         file_path = os.path.join(RESOURCE_PATH, '11079364_WC_WM.txt')
-        stream_handle = open(file_path, 'r')
+        stream_handle = open(file_path, 'rU')
 
         # Note: since the recovered and telemetered parser and particles are common
         # to each other, testing one is sufficient, will be completely tested
@@ -185,7 +185,7 @@ class WcWmCsppParserUnitTestCase(ParserUnitTestCase):
         # the 4th data record in this file are corrupted and will be ignored
 
         file_path = os.path.join(RESOURCE_PATH, '11079364_BAD_WC_WM.txt')
-        stream_handle = open(file_path, 'r')
+        stream_handle = open(file_path, 'rU')
 
         parser = WcWmCsppParser(self.config.get(WcWmDataTypeKey.WC_WM_CSPP_RECOVERED),
                                 stream_handle,

@@ -9,9 +9,6 @@ Release notes:
 Initial Release
 """
 
-__author__ = 'Joe Padula'
-__license__ = 'Apache 2.0'
-
 import numpy
 import re
 
@@ -19,8 +16,6 @@ from mi.core.common import BaseEnum
 from mi.core.exceptions import RecoverableSampleException
 from mi.core.instrument.data_particle import DataParticle
 from mi.core.log import get_logger
-log = get_logger()
-
 from mi.dataset.parser.common_regexes import \
     END_OF_LINE_REGEX, \
     FLOAT_REGEX, \
@@ -33,6 +28,11 @@ from mi.dataset.parser.cspp_base import \
     CsppMetadataDataParticle, \
     MetadataRawDataKey, \
     encode_y_or_n
+
+log = get_logger()
+
+__author__ = 'Joe Padula'
+__license__ = 'Apache 2.0'
 
 TAB_REGEX = r'\t'
 # This is the beginning part of the REGEX, the rest of it varies
@@ -308,66 +308,6 @@ class OptaaDjCsppParser(CsppParser):
                                                 exception_callback,
                                                 BEGIN_REGEX)
 
-    def parse_chunks(self):
-        """
-        Parse out any pending data chunks in the chunker. If
-        it is a valid data piece, build a particle, update the timestamp.
-        Go until the chunker has no more valid data.
-        @retval a list of tuples with sample particles encountered in this
-        parsing. An empty list is returned if nothing was parsed.
-        """
-        # Initialize the result particles list we will return
-        result_particles = []
-
-        # Retrieve the next non data chunk
-        (nd_timestamp, non_data, non_start, non_end) = self._chunker.get_next_non_data_with_index(clean=False)
-
-        # Retrieve the next data chunk
-        (timestamp, chunk, start, end) = self._chunker.get_next_data_with_index(clean=True)
-
-        # Process the non data
-        self.handle_non_data(non_data, non_end, start)
-
-        # While the data chunk is not None, process the data chunk
-        while chunk is not None:
-
-            # Look for match in beginning part of the regex
-            match = BEGIN_MATCHER.match(chunk)
-
-            if match is not None:
-
-                count = match.group(DataMatchesGroupNumber.NUM_WAVELENGTHS)
-
-                data_regex = self._build_data_regex(BEGIN_REGEX, count)
-
-                fields = re.match(data_regex, chunk)
-
-                if fields is not None:
-                    self._process_data_match(fields, result_particles)
-                else:  # did not match the regex
-                    log.warn("chunk did not match regex %s", chunk)
-                    self._exception_callback(RecoverableSampleException("Found an invalid chunk: %s" % chunk))
-
-            else:
-                # Check for head part match
-                header_part_match = HEADER_PART_MATCHER.match(chunk)
-
-                if header_part_match is not None:
-                    self._process_header_part_match(header_part_match)
-                else:
-                    self._process_chunk_not_containing_data_record_or_header_part(chunk)
-
-            # Retrieve the next non data chunk
-            (nd_timestamp, non_data, non_start, non_end) = self._chunker.get_next_non_data_with_index(clean=False)
-
-            # Retrieve the next data chunk
-            (timestamp, chunk, start, end) = self._chunker.get_next_data_with_index(clean=True)
-
-            # Process the non data
-            self.handle_non_data(non_data, non_end, start)
-
-        return result_particles
-
     @staticmethod
     def _build_data_regex(regex, count):
         """
@@ -398,3 +338,36 @@ class OptaaDjCsppParser(CsppParser):
         data_regex += r'\t*' + END_OF_LINE_REGEX
 
         return data_regex
+
+    def parse_file(self):
+        """
+        Parse through the file, pulling single lines and comparing to the established patterns,
+        generating particles for data lines
+        """
+
+        for line in self._stream_handle:
+
+            match = BEGIN_MATCHER.match(line)
+
+            if match is not None:
+
+                count = match.group(DataMatchesGroupNumber.NUM_WAVELENGTHS)
+
+                data_regex = self._build_data_regex(BEGIN_REGEX, count)
+
+                fields = re.match(data_regex, line)
+
+                if fields is not None:
+                    self._process_data_match(fields, self._record_buffer)
+                else:  # did not match the regex
+                    log.warn("line did not match regex %s", line)
+                    self._exception_callback(RecoverableSampleException("Found an invalid line: %s" % line))
+
+            else:
+                # Check for head part match
+                header_part_match = HEADER_PART_MATCHER.match(line)
+
+                if header_part_match is not None:
+                    self._process_header_part_match(header_part_match)
+                else:
+                    self._process_line_not_containing_data_record_or_header_part(line)

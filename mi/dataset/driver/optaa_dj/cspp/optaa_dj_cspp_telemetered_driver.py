@@ -23,7 +23,7 @@ from mi.dataset.parser.optaa_dj_cspp import \
 from mi.core.versioning import version
 
 
-@version("15.6.0")
+@version("15.6.1")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     """
     This is the method called by Uframe
@@ -33,7 +33,7 @@ def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     :return particleDataHdlrObj
     """
 
-    with open(sourceFilePath, 'r') as stream_handle:
+    with open(sourceFilePath, 'rU') as stream_handle:
 
         # create an instance of the concrete driver class defined below
         driver = OptaaDjCsppTelemeteredDriver(basePythonCodePath, stream_handle, particleDataHdlrObj)

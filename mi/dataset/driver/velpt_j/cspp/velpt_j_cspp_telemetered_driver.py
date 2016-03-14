@@ -16,7 +16,7 @@ from mi.dataset.parser.cspp_base import METADATA_PARTICLE_CLASS_KEY, DATA_PARTIC
 from mi.core.versioning import version
 
 
-@version("15.6.0")
+@version("15.6.1")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     """
     This is the method called by Uframe
@@ -26,7 +26,7 @@ def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     :return particleDataHdlrObj
     """
 
-    with open(sourceFilePath, 'r') as stream_handle:
+    with open(sourceFilePath, 'rU') as stream_handle:
 
         # create and instance of the concrete driver class defined below
         driver = VelptJCsppTelemeteredDriver(basePythonCodePath, stream_handle, particleDataHdlrObj)

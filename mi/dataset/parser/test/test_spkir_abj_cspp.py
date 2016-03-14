@@ -15,8 +15,6 @@ import os
 from nose.plugins.attrib import attr
 
 from mi.core.log import get_logger
-log = get_logger()
-
 from mi.idk.config import Config
 
 from mi.dataset.test.test_parser import ParserUnitTestCase
@@ -35,6 +33,8 @@ from mi.dataset.parser.spkir_abj_cspp import \
     SpkirAbjCsppInstrumentRecoveredDataParticle, \
     SpkirAbjCsppMetadataRecoveredDataParticle
 
+
+log = get_logger()
 
 RESOURCE_PATH = os.path.join(Config().base_dir(), 'mi', 'dataset', 'driver', 'spkir_abj', 'cspp', 'resource')
 
@@ -70,7 +70,7 @@ class SpkirAbjCsppParserUnitTestCase(ParserUnitTestCase):
         Assert that the results are those we expected.
         """
 
-        with open(os.path.join(RESOURCE_PATH, '11079364_PPD_OCR.txt'), 'r') as file_handle:
+        with open(os.path.join(RESOURCE_PATH, '11079364_PPD_OCR.txt'), 'rU') as file_handle:
             # Note: since the recovered and teelemetered parser and particles are common
             # to each other, testing one is sufficient, will be completely tested
             # in driver tests
@@ -85,7 +85,7 @@ class SpkirAbjCsppParserUnitTestCase(ParserUnitTestCase):
 
             self.assert_particles(particles, '11079364_PPD_OCR_recov.yml', RESOURCE_PATH)
 
-        with open(os.path.join(RESOURCE_PATH, '11079364_PPD_OCR.txt'), 'r') as file_handle:
+        with open(os.path.join(RESOURCE_PATH, '11079364_PPD_OCR.txt'), 'rU') as file_handle:
             # Note: since the recovered and teelemetered parser and particles are common
             # to each other, testing one is sufficient, will be completely tested
             # in driver tests
@@ -105,7 +105,7 @@ class SpkirAbjCsppParserUnitTestCase(ParserUnitTestCase):
         Read test data and pull out multiple data particles at one time.
         Assert that the results are those we expected.
         """
-        with open(os.path.join(RESOURCE_PATH, '11079419_PPB_OCR.txt'), 'r') as file_handle:
+        with open(os.path.join(RESOURCE_PATH, '11079419_PPB_OCR.txt'), 'rU') as file_handle:
             # Note: since the recovered and teelemetered parser and particles are common
             # to each other, testing one is sufficient, will be completely tested
             # in driver tests
@@ -122,7 +122,7 @@ class SpkirAbjCsppParserUnitTestCase(ParserUnitTestCase):
 
             self.assert_particles(particles, '11079419_PPB_OCR_recov.yml', RESOURCE_PATH)
 
-        with open(os.path.join(RESOURCE_PATH, '11079419_PPB_OCR.txt'), 'r') as file_handle:
+        with open(os.path.join(RESOURCE_PATH, '11079419_PPB_OCR.txt'), 'rU') as file_handle:
             # Note: since the recovered and teelemetered parser and particles are common
             # to each other, testing one is sufficient, will be completely tested
             # in driver tests
@@ -147,9 +147,9 @@ class SpkirAbjCsppParserUnitTestCase(ParserUnitTestCase):
         # the first data record in this file is corrupted and will be ignored
         # we expect the first 2 particles to be the metadata particle and the
         # intrument particle from the data record after the corrupted one
-        with open(os.path.join(RESOURCE_PATH, '11079419_BAD_PPB_OCR.txt'), 'r') as file_handle:
+        with open(os.path.join(RESOURCE_PATH, '11079419_BAD_PPB_OCR.txt'), 'rU') as file_handle:
 
-            log.info(self.exception_callback_value)
+            log.debug(self.exception_callback_value)
 
             parser = SpkirAbjCsppParser(self._recov_config,
                                         file_handle,
@@ -159,9 +159,9 @@ class SpkirAbjCsppParserUnitTestCase(ParserUnitTestCase):
 
             self.assert_particles(particles, 'bad_data_record_recov.yml', RESOURCE_PATH)
 
-        with open(os.path.join(RESOURCE_PATH, '11079419_BAD_PPB_OCR.txt'), 'r') as file_handle:
+        with open(os.path.join(RESOURCE_PATH, '11079419_BAD_PPB_OCR.txt'), 'rU') as file_handle:
 
-            log.info(self.exception_callback_value)
+            log.debug(self.exception_callback_value)
 
             parser = SpkirAbjCsppParser(self._telem_config,
                                         file_handle,
@@ -181,9 +181,9 @@ class SpkirAbjCsppParserUnitTestCase(ParserUnitTestCase):
         # data vlaues separated by tabs and will be ignored
         # we expect the first 2 particles to be the metadata particle and the
         # intrument particle from the data record after the corrupted one
-        with open(os.path.join(RESOURCE_PATH, '11079364_EXTRA_DATA_PPD_OCR.txt'), 'r') as file_handle:
+        with open(os.path.join(RESOURCE_PATH, '11079364_EXTRA_DATA_PPD_OCR.txt'), 'rU') as file_handle:
 
-            log.info(self.exception_callback_value)
+            log.debug(self.exception_callback_value)
 
             parser = SpkirAbjCsppParser(self._recov_config,
                                         file_handle,
@@ -203,9 +203,9 @@ class SpkirAbjCsppParserUnitTestCase(ParserUnitTestCase):
 
             self.exception_callback_value = []
 
-        with open(os.path.join(RESOURCE_PATH, '11079364_EXTRA_DATA_PPD_OCR.txt'), 'r') as file_handle:
+        with open(os.path.join(RESOURCE_PATH, '11079364_EXTRA_DATA_PPD_OCR.txt'), 'rU') as file_handle:
 
-            log.info(self.exception_callback_value)
+            log.debug(self.exception_callback_value)
 
             parser = SpkirAbjCsppParser(self._telem_config,
                                         file_handle,

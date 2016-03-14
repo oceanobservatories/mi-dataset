@@ -16,7 +16,6 @@ import os
 from nose.plugins.attrib import attr
 
 from mi.core.log import get_logger
-log = get_logger()
 
 from mi.dataset.test.test_parser import ParserUnitTestCase, BASE_RESOURCE_PATH
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
@@ -35,6 +34,7 @@ from mi.dataset.parser.wc_sbe_cspp import \
     WcSbeMetadataTelemeteredDataParticle, \
     WcSbeDataTypeKey
 
+log = get_logger()
 RESOURCE_PATH = os.path.join(BASE_RESOURCE_PATH, 'wc_sbe', 'cspp', 'resource')
 
 
@@ -69,7 +69,7 @@ class WcSbeCsppParserUnitTestCase(ParserUnitTestCase):
         Assert that the results are those we expected.
         """
         file_path = os.path.join(RESOURCE_PATH, '11079364_WC_SBE.txt')
-        stream_handle = open(file_path, 'r')
+        stream_handle = open(file_path, 'rU')
 
         # Note: since the recovered and telemetered parser and particles are common
         # to each other, testing one is sufficient, will be completely tested
@@ -93,7 +93,7 @@ class WcSbeCsppParserUnitTestCase(ParserUnitTestCase):
         Assert that the results are those we expected.
         """
         file_path = os.path.join(RESOURCE_PATH, '11079364_WC_SBE.txt')
-        stream_handle = open(file_path, 'r')
+        stream_handle = open(file_path, 'rU')
 
         # Note: since the recovered and telemetered parser and particles are common
         # to each other, testing one is sufficient, will be completely tested
@@ -118,7 +118,7 @@ class WcSbeCsppParserUnitTestCase(ParserUnitTestCase):
         Assert that the results are those we expected.
         """
         file_path = os.path.join(RESOURCE_PATH, '11079364_WC_SBE.txt')
-        stream_handle = open(file_path, 'r')
+        stream_handle = open(file_path, 'rU')
 
         # Note: since the recovered and telemetered parser and particles are common
         # to each other, testing one is sufficient, will be completely tested
@@ -148,7 +148,7 @@ class WcSbeCsppParserUnitTestCase(ParserUnitTestCase):
         # data records
 
         file_path = os.path.join(RESOURCE_PATH, '11079364_BAD_WC_SBE.txt')
-        stream_handle = open(file_path, 'r')
+        stream_handle = open(file_path, 'rU')
 
         log.info(self.exception_callback_value)
 

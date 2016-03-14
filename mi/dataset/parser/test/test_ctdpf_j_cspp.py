@@ -16,7 +16,6 @@ import os
 from nose.plugins.attrib import attr
 from mi.core.common import BaseEnum
 from mi.core.log import get_logger
-log = get_logger()
 
 from mi.core.exceptions import RecoverableSampleException
 
@@ -35,6 +34,8 @@ from mi.dataset.parser.ctdpf_j_cspp import \
     CtdpfJCsppMetadataRecoveredDataParticle
 
 from mi.dataset.test.test_parser import BASE_RESOURCE_PATH
+
+log = get_logger()
 
 
 class DataTypeKey(BaseEnum):
@@ -73,12 +74,6 @@ class CtdpfJCsppParserUnitTestCase(ParserUnitTestCase):
                 }
             },
         }
-        # Define test data particles and their associated timestamps which will be
-        # compared with returned results
-
-        self.file_ingested_value = None
-        self.exception_callback_value = []
-        self.count = 0
 
     def particle_to_yml(self, particles, filename, mode='w'):
         """
@@ -117,7 +112,7 @@ class CtdpfJCsppParserUnitTestCase(ParserUnitTestCase):
         This utility creates a yml file
         """
 
-        fid = open(os.path.join(RESOURCE_PATH, TELEMETERED_SAMPLE_DATA), 'r')
+        fid = open(os.path.join(RESOURCE_PATH, TELEMETERED_SAMPLE_DATA), 'rU')
 
         stream_handle = fid
         parser = CtdpfJCsppParser(self.config.get(DataTypeKey.CTDPF_J_CSPP_TELEMETERED),
@@ -135,7 +130,7 @@ class CtdpfJCsppParserUnitTestCase(ParserUnitTestCase):
         Assert that the results are those we expected.
         """
         file_path = os.path.join(RESOURCE_PATH, RECOVERED_SAMPLE_DATA)
-        stream_handle = open(file_path, 'r')
+        stream_handle = open(file_path, 'rU')
 
         # Note: since the recovered and telemetered parser and particles are common
         # to each other, testing one is sufficient, will be completely tested
@@ -155,7 +150,7 @@ class CtdpfJCsppParserUnitTestCase(ParserUnitTestCase):
 
         # Now do the same for the telemetered version
         file_path = os.path.join(RESOURCE_PATH, TELEMETERED_SAMPLE_DATA)
-        stream_handle = open(file_path, 'r')
+        stream_handle = open(file_path, 'rU')
 
         # Note: since the recovered and telemetered parser and particles are common
         # to each other, testing one is sufficient, will be completely tested
@@ -179,7 +174,7 @@ class CtdpfJCsppParserUnitTestCase(ParserUnitTestCase):
         Assert that we have the correct number of particles
         """
         file_path = os.path.join(RESOURCE_PATH, RECOVERED_SAMPLE_DATA)
-        stream_handle = open(file_path, 'r')
+        stream_handle = open(file_path, 'rU')
 
         parser = CtdpfJCsppParser(self.config.get(DataTypeKey.CTDPF_J_CSPP_RECOVERED),
                                   stream_handle,
@@ -194,7 +189,7 @@ class CtdpfJCsppParserUnitTestCase(ParserUnitTestCase):
 
         # Now do the same for the telemetered version
         file_path = os.path.join(RESOURCE_PATH, TELEMETERED_SAMPLE_DATA)
-        stream_handle = open(file_path, 'r')
+        stream_handle = open(file_path, 'rU')
 
         parser = CtdpfJCsppParser(self.config.get(DataTypeKey.CTDPF_J_CSPP_TELEMETERED),
                                   stream_handle,
@@ -214,9 +209,9 @@ class CtdpfJCsppParserUnitTestCase(ParserUnitTestCase):
         """
 
         file_path = os.path.join(RESOURCE_PATH, '11079364_BAD_PPB_CTD.txt')
-        stream_handle = open(file_path, 'r')
+        stream_handle = open(file_path, 'rU')
 
-        log.info(self.exception_callback_value)
+        log.debug(self.exception_callback_value)
 
         parser = CtdpfJCsppParser(self.config.get(DataTypeKey.CTDPF_J_CSPP_RECOVERED),
                                   stream_handle,
@@ -224,7 +219,7 @@ class CtdpfJCsppParserUnitTestCase(ParserUnitTestCase):
 
         parser.get_records(1)
 
-        log.info("Exception callback value: %s", self.exception_callback_value)
+        log.debug("Exception callback value: %s", self.exception_callback_value)
 
         self.assertTrue(self.exception_callback_value is not None)
 

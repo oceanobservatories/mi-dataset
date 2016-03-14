@@ -19,8 +19,6 @@ from nose.plugins.attrib import attr
 
 from mi.core.exceptions import RecoverableSampleException
 from mi.core.log import get_logger
-log = get_logger()
-
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 
 from mi.dataset.parser.cspp_base import \
@@ -36,13 +34,15 @@ from mi.dataset.parser.optaa_dj_cspp import \
 
 from mi.dataset.test.test_parser import BASE_RESOURCE_PATH, ParserUnitTestCase
 
+log = get_logger()
+
 RESOURCE_PATH = os.path.join(BASE_RESOURCE_PATH,
                              'optaa_dj', 'cspp', 'resource')
 
 RECOVERED_SAMPLE_DATA = '11079364_ACS_ACS.txt'
 TELEMETERED_SAMPLE_DATA = '11079364_ACD_ACS.txt'
 
-O_MODE = 'r'
+O_MODE = 'rU'
 
 
 @attr('UNIT', group='mi')
@@ -129,7 +129,7 @@ class OptaaDjCsppParserUnitTestCase(ParserUnitTestCase):
         Read test data and pull out the first particle (metadata).
         Assert that the results are those we expected.
         """
-        log.info('===== START TEST HAPPY PATH SINGLE =====')
+        log.debug('===== START TEST HAPPY PATH SINGLE =====')
 
         file_path = os.path.join(RESOURCE_PATH, '11079364_ACS_ACS_one_data_record.txt')
 
@@ -152,14 +152,14 @@ class OptaaDjCsppParserUnitTestCase(ParserUnitTestCase):
         self.assertEquals(self.exception_callback_value, [])
         stream_handle.close()
 
-        log.info('===== END TEST HAPPY PATH SINGLE =====')
+        log.debug('===== END TEST HAPPY PATH SINGLE =====')
 
     def test_real_file(self):
         """
         Read test data and pull out multiple data particles at one time.
         Assert that the results are those we expected.
         """
-        log.info('===== START TEST REAL FILE =====')
+        log.debug('===== START TEST REAL FILE =====')
 
         # Recovered
         file_path = os.path.join(RESOURCE_PATH, RECOVERED_SAMPLE_DATA)
@@ -196,7 +196,7 @@ class OptaaDjCsppParserUnitTestCase(ParserUnitTestCase):
         self.assert_particles(particles, '11079364_ACD_ACS_telem.yml', RESOURCE_PATH)
         stream_handle.close()
 
-        log.info('===== END TEST REAL FILE =====')
+        log.debug('===== END TEST REAL FILE =====')
 
     def test_real_file_2(self):
         """
@@ -204,7 +204,7 @@ class OptaaDjCsppParserUnitTestCase(ParserUnitTestCase):
         and pull out multiple data particles at one time.
         Assert that the results are those we expected.
         """
-        log.info('===== START TEST REAL FILE 2 =====')
+        log.debug('===== START TEST REAL FILE 2 =====')
 
         # Recovered
         file_path = os.path.join(RESOURCE_PATH, "11079419_ACS_ACS.txt")
@@ -224,14 +224,14 @@ class OptaaDjCsppParserUnitTestCase(ParserUnitTestCase):
         self.assertEquals(self.exception_callback_value, [])
         stream_handle.close()
 
-        log.info('===== END TEST REAL FILE 2 =====')
+        log.debug('===== END TEST REAL FILE 2 =====')
 
     def test_long_stream(self):
         """
         Read test data and pull out multiple data particles
         Assert that we have the correct number of particles
         """
-        log.info('===== START TEST LONG STREAM =====')
+        log.debug('===== START TEST LONG STREAM =====')
 
         file_path = os.path.join(RESOURCE_PATH, RECOVERED_SAMPLE_DATA)
         stream_handle = open(file_path, O_MODE)
@@ -247,12 +247,12 @@ class OptaaDjCsppParserUnitTestCase(ParserUnitTestCase):
         # try to get 1044 particles, 1043 data records plus one metadata
         particles = parser.get_records(1044)
 
-        log.info("*** test_long_stream Num particles is: %s", len(particles))
+        log.debug("*** test_long_stream Num particles is: %s", len(particles))
         self.assertEqual(len(particles), 1044)
         self.assertEquals(self.exception_callback_value, [])
         stream_handle.close()
 
-        log.info('===== END TEST LONG STREAM =====')
+        log.debug('===== END TEST LONG STREAM =====')
 
     def test_bad_data(self):
         """
@@ -286,13 +286,13 @@ class OptaaDjCsppParserUnitTestCase(ParserUnitTestCase):
         Particles will still get created for the metadata and valid instrument records.
 
         """
-        log.info('===== START TEST BAD DATA =====')
+        log.debug('===== START TEST BAD DATA =====')
 
         file_path = os.path.join(RESOURCE_PATH, '11079364_BAD_ACS_ACS.txt')
 
         stream_handle = open(file_path, O_MODE)
 
-        log.info(self.exception_callback_value)
+        log.debug(self.exception_callback_value)
 
         parser = OptaaDjCsppParser(self._recovered_parser_config,
                                    stream_handle,
@@ -300,7 +300,7 @@ class OptaaDjCsppParserUnitTestCase(ParserUnitTestCase):
 
         particles = parser.get_records(25)
 
-        log.info("Exception callback value: %s", self.exception_callback_value)
+        log.debug("Exception callback value: %s", self.exception_callback_value)
 
         self.assertTrue(self.exception_callback_value is not None)
 
@@ -315,7 +315,7 @@ class OptaaDjCsppParserUnitTestCase(ParserUnitTestCase):
 
         stream_handle.close()
 
-        log.info('===== END TEST BAD DATA =====')
+        log.debug('===== END TEST BAD DATA =====')
 
     def test_missing_source_file(self):
         """
@@ -324,12 +324,12 @@ class OptaaDjCsppParserUnitTestCase(ParserUnitTestCase):
         instrument particle should still get created.
         """
 
-        log.info('===== START TEST MISSING SOURCE FILE =====')
+        log.debug('===== START TEST MISSING SOURCE FILE =====')
 
         file_path = os.path.join(RESOURCE_PATH, '11079364_ACS_ACS_missing_source_file_record.txt')
         stream_handle = open(file_path, O_MODE)
 
-        log.info(self.exception_callback_value)
+        log.debug(self.exception_callback_value)
 
         parser = OptaaDjCsppParser(self._recovered_parser_config,
                                    stream_handle,
@@ -337,7 +337,7 @@ class OptaaDjCsppParserUnitTestCase(ParserUnitTestCase):
 
         particles = parser.get_records(10)
 
-        log.info("Exception callback value: %s", self.exception_callback_value)
+        log.debug("Exception callback value: %s", self.exception_callback_value)
 
         self.assertTrue(self.exception_callback_value is not None)
 
@@ -352,7 +352,7 @@ class OptaaDjCsppParserUnitTestCase(ParserUnitTestCase):
 
         stream_handle.close()
 
-        log.info('===== END TEST MISSING SOURCE FILE =====')
+        log.debug('===== END TEST MISSING SOURCE FILE =====')
 
     def test_no_header(self):
         """
@@ -361,12 +361,12 @@ class OptaaDjCsppParserUnitTestCase(ParserUnitTestCase):
         instrument particle should still get created.
         """
 
-        log.info('===== START TEST NO HEADER =====')
+        log.debug('===== START TEST NO HEADER =====')
 
         file_path = os.path.join(RESOURCE_PATH, '11079364_ACS_ACS_no_header.txt')
         stream_handle = open(file_path, O_MODE)
 
-        log.info(self.exception_callback_value)
+        log.debug(self.exception_callback_value)
 
         parser = OptaaDjCsppParser(self._recovered_parser_config,
                                    stream_handle,
@@ -374,7 +374,7 @@ class OptaaDjCsppParserUnitTestCase(ParserUnitTestCase):
 
         particles = parser.get_records(10)
 
-        log.info("Exception callback value: %s", self.exception_callback_value)
+        log.debug("Exception callback value: %s", self.exception_callback_value)
 
         self.assertTrue(self.exception_callback_value is not None)
 
@@ -389,7 +389,7 @@ class OptaaDjCsppParserUnitTestCase(ParserUnitTestCase):
 
         stream_handle.close()
 
-        log.info('===== END TEST NO HEADER =====')
+        log.debug('===== END TEST NO HEADER =====')
 
     def test_no_trailing_tab(self):
         """
@@ -398,7 +398,7 @@ class OptaaDjCsppParserUnitTestCase(ParserUnitTestCase):
         The second and fourth data records do not have trailing tabs.
         """
 
-        log.info('===== START TEST NO TRAILING TAB =====')
+        log.debug('===== START TEST NO TRAILING TAB =====')
 
         # This test file has some records with a trailing tab, and others do not
         no_trailing_tab_file = '11079364_ACS_ACS_no_trailing_tab.txt'
@@ -425,4 +425,4 @@ class OptaaDjCsppParserUnitTestCase(ParserUnitTestCase):
         self.assertEquals(self.exception_callback_value, [])
         stream_handle.close()
 
-        log.info('===== END TEST NO TRAILING TAB =====')
+        log.debug('===== END TEST NO TRAILING TAB =====')

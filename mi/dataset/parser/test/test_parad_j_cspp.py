@@ -10,8 +10,6 @@ import os
 from nose.plugins.attrib import attr
 
 from mi.core.log import get_logger
-log = get_logger()
-
 from mi.dataset.test.test_parser import BASE_RESOURCE_PATH, ParserUnitTestCase
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 
@@ -25,6 +23,8 @@ from mi.dataset.parser.parad_j_cspp import \
     ParadJCsppMetadataTelemeteredDataParticle, \
     ParadJCsppInstrumentRecoveredDataParticle, \
     ParadJCsppMetadataRecoveredDataParticle
+
+log = get_logger()
 
 RESOURCE_PATH = os.path.join(BASE_RESOURCE_PATH,
                              'parad_j', 'cspp', 'resource')
@@ -189,7 +189,7 @@ class ParadJCsppParserUnitTestCase(ParserUnitTestCase):
         file_path = os.path.join(RESOURCE_PATH, '11079364_BAD_PPB_PARS.txt')
         stream_handle = open(file_path, O_MODE)
 
-        log.info(self.exception_callback_value)
+        log.debug(self.exception_callback_value)
 
         parser = ParadJCsppParser(self._recovered_parser_config,
                                   stream_handle,
@@ -197,7 +197,7 @@ class ParadJCsppParserUnitTestCase(ParserUnitTestCase):
 
         parser.get_records(1)
 
-        log.info("Exception callback value: %s", self.exception_callback_value)
+        log.debug("Exception callback value: %s", self.exception_callback_value)
 
         self.assertTrue(self.exception_callback_value is not None)
         # 14 bad records
@@ -212,7 +212,7 @@ class ParadJCsppParserUnitTestCase(ParserUnitTestCase):
         file_path = os.path.join(RESOURCE_PATH, '11079364_PPB_PARS_ADDED_COLUMN.txt')
         stream_handle = open(file_path, O_MODE)
 
-        log.info(self.exception_callback_value)
+        log.debug(self.exception_callback_value)
 
         parser = ParadJCsppParser(self._recovered_parser_config,
                                   stream_handle,
@@ -220,7 +220,7 @@ class ParadJCsppParserUnitTestCase(ParserUnitTestCase):
 
         parser.get_records(1)
 
-        log.info("Exception callback value: %s", self.exception_callback_value)
+        log.debug("Exception callback value: %s", self.exception_callback_value)
 
         self.assertTrue(self.exception_callback_value is not None)
 

@@ -21,7 +21,7 @@ from mi.dataset.parser.cspp_base import \
 from mi.core.versioning import version
 
 
-@version("0.0.1")
+@version("0.0.2")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     """
     This is the method called by Uframe
@@ -31,7 +31,7 @@ def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     :return particleDataHdlrObj
     """
 
-    with open(sourceFilePath, 'r') as stream_handle:
+    with open(sourceFilePath, 'rU') as stream_handle:
 
         # create and instance of the concrete driver class defined below
         driver = CtdpfJCsppRecoveredDriver(basePythonCodePath, stream_handle, particleDataHdlrObj)

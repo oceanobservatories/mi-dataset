@@ -12,8 +12,6 @@ import os
 from nose.plugins.attrib import attr
 
 from mi.core.log import get_logger
-log = get_logger()
-
 from mi.dataset.test.test_parser import ParserUnitTestCase
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 from mi.dataset.parser.cspp_base import METADATA_PARTICLE_CLASS_KEY, DATA_PARTICLE_CLASS_KEY
@@ -26,6 +24,8 @@ from mi.dataset.parser.flort_dj_cspp import \
 from mi.core.exceptions import RecoverableSampleException
 
 from mi.idk.config import Config
+
+log = get_logger()
 
 RESOURCE_PATH = os.path.join(Config().base_dir(), 'mi', 'dataset', 'driver', 'flort_dj', 'cspp', 'resource')
 
@@ -62,7 +62,7 @@ class FlortDjCsppParserUnitTestCase(ParserUnitTestCase):
         retrieves and verifies the first 6 particles
         """
         file_path = os.path.join(RESOURCE_PATH, 'first_data.txt')
-        stream_handle = open(file_path, 'r')
+        stream_handle = open(file_path, 'rU')
 
         parser = FlortDjCsppParser(self._recovered_config,
                                    stream_handle,
@@ -81,7 +81,7 @@ class FlortDjCsppParserUnitTestCase(ParserUnitTestCase):
         retrieves and verifies the first 6 particles
         """
         file_path = os.path.join(RESOURCE_PATH, 'first_data.txt')
-        stream_handle = open(file_path, 'r')
+        stream_handle = open(file_path, 'rU')
 
         parser = FlortDjCsppParser(self._telemetered_config,
                                    stream_handle,
@@ -100,13 +100,12 @@ class FlortDjCsppParserUnitTestCase(ParserUnitTestCase):
         retrieve all of particles, verify the expected number, confirm results
         """
         file_path = os.path.join(RESOURCE_PATH, 'first_data.txt')
-        stream_handle = open(file_path, 'r')
+        stream_handle = open(file_path, 'rU')
 
         parser = FlortDjCsppParser(self._recovered_config,
                                    stream_handle,
                                    self.exception_callback)
 
-        #take in
         particles = parser.get_records(1000)
 
         self.assertTrue(len(particles) == 193)
@@ -122,13 +121,12 @@ class FlortDjCsppParserUnitTestCase(ParserUnitTestCase):
         retrieve all of particles, verify the expected number, confirm results
         """
         file_path = os.path.join(RESOURCE_PATH, 'first_data.txt')
-        stream_handle = open(file_path, 'r')
+        stream_handle = open(file_path, 'rU')
 
         parser = FlortDjCsppParser(self._telemetered_config,
                                    stream_handle,
                                    self.exception_callback)
 
-        #take in
         particles = parser.get_records(1000)
 
         self.assertTrue(len(particles) == 193)
@@ -146,7 +144,7 @@ class FlortDjCsppParserUnitTestCase(ParserUnitTestCase):
         """
 
         file_path = os.path.join(RESOURCE_PATH, 'BAD.txt')
-        stream_handle = open(file_path, 'r')
+        stream_handle = open(file_path, 'rU')
 
         parser = FlortDjCsppParser(self._recovered_config,
                                    stream_handle,
@@ -167,7 +165,7 @@ class FlortDjCsppParserUnitTestCase(ParserUnitTestCase):
         """
 
         file_path = os.path.join(RESOURCE_PATH, 'BAD.txt')
-        stream_handle = open(file_path, 'r')
+        stream_handle = open(file_path, 'rU')
 
         parser = FlortDjCsppParser(self._telemetered_config,
                                    stream_handle,

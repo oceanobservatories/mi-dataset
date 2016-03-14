@@ -11,8 +11,6 @@ import os
 from nose.plugins.attrib import attr
 
 from mi.core.log import get_logger
-log = get_logger()
-
 from mi.core.exceptions import RecoverableSampleException, SampleEncodingException
 from mi.dataset.test.test_parser import ParserUnitTestCase, BASE_RESOURCE_PATH
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
@@ -21,6 +19,8 @@ from mi.dataset.parser.dosta_abcdjm_cspp import DostaAbcdjmCsppParser
 from mi.dataset.parser.dosta_abcdjm_cspp import DostaAbcdjmCsppMetadataRecoveredDataParticle, \
     DostaAbcdjmCsppInstrumentRecoveredDataParticle, DostaAbcdjmCsppMetadataTelemeteredDataParticle, \
     DostaAbcdjmCsppInstrumentTelemeteredDataParticle
+
+log = get_logger()
 
 RESOURCE_PATH = os.path.join(BASE_RESOURCE_PATH, 'dosta_abcdjm', 'cspp', 'resource')
 
@@ -57,7 +57,7 @@ class DostaAbcdjmCsppParserUnitTestCase(ParserUnitTestCase):
         Assert that the results are those we expected.
         """
 
-        with open(os.path.join(RESOURCE_PATH, '11194982_PPD_OPT.txt'), 'r') as stream_handle:
+        with open(os.path.join(RESOURCE_PATH, '11194982_PPD_OPT.txt'), 'rU') as stream_handle:
 
             parser = DostaAbcdjmCsppParser(self.config_telemetered, stream_handle, self.exception_callback)
 
@@ -77,7 +77,7 @@ class DostaAbcdjmCsppParserUnitTestCase(ParserUnitTestCase):
         Assert that the results are those we expected.
         """
 
-        with open(os.path.join(RESOURCE_PATH, '11079894_PPB_OPT.txt'), 'r') as stream_handle:
+        with open(os.path.join(RESOURCE_PATH, '11079894_PPB_OPT.txt'), 'rU') as stream_handle:
 
             parser = DostaAbcdjmCsppParser(self.config_recovered, stream_handle, self.exception_callback)
 
@@ -97,7 +97,7 @@ class DostaAbcdjmCsppParserUnitTestCase(ParserUnitTestCase):
         Assert that the results are those we expected.
         """
 
-        with open(os.path.join(RESOURCE_PATH, '11079419_PPB_OPT.txt'), 'r') as stream_handle:
+        with open(os.path.join(RESOURCE_PATH, '11079419_PPB_OPT.txt'), 'rU') as stream_handle:
 
             parser = DostaAbcdjmCsppParser(self.config_recovered, stream_handle, self.exception_callback)
 
@@ -119,7 +119,7 @@ class DostaAbcdjmCsppParserUnitTestCase(ParserUnitTestCase):
         """
         Test a long stream 
         """
-        with open(os.path.join(RESOURCE_PATH, '11079364_PPB_OPT.txt'), 'r') as stream_handle:
+        with open(os.path.join(RESOURCE_PATH, '11079364_PPB_OPT.txt'), 'rU') as stream_handle:
 
             parser = DostaAbcdjmCsppParser(self.config_recovered, stream_handle, self.exception_callback)
 
@@ -136,7 +136,7 @@ class DostaAbcdjmCsppParserUnitTestCase(ParserUnitTestCase):
         Ensure that bad data creates a recoverable sample exception and parsing continues
         """
 
-        with open(os.path.join(RESOURCE_PATH, 'BadDataRecord_PPB_OPT.txt'), 'r') as stream_handle:
+        with open(os.path.join(RESOURCE_PATH, 'BadDataRecord_PPB_OPT.txt'), 'rU') as stream_handle:
 
             parser = DostaAbcdjmCsppParser(self.config_recovered, stream_handle, self.exception_callback)
 
@@ -152,7 +152,7 @@ class DostaAbcdjmCsppParserUnitTestCase(ParserUnitTestCase):
         Ensure that bad source file name produces an error
         """
 
-        with open(os.path.join(RESOURCE_PATH, 'BadHeaderSourceFileName_PPB_OPT.txt'), 'r') as stream_handle:
+        with open(os.path.join(RESOURCE_PATH, 'BadHeaderSourceFileName_PPB_OPT.txt'), 'rU') as stream_handle:
 
             parser = DostaAbcdjmCsppParser(self.config_recovered, stream_handle, self.exception_callback)
 
@@ -166,7 +166,7 @@ class DostaAbcdjmCsppParserUnitTestCase(ParserUnitTestCase):
         Ensure that bad data is skipped when it exists.
         """
 
-        with open(os.path.join(RESOURCE_PATH, 'BadHeaderProcessedData_PPB_OPT.txt'), 'r') as stream_handle:
+        with open(os.path.join(RESOURCE_PATH, 'BadHeaderProcessedData_PPB_OPT.txt'), 'rU') as stream_handle:
 
             parser = DostaAbcdjmCsppParser(self.config_recovered, stream_handle, self.exception_callback)
 
@@ -178,7 +178,7 @@ class DostaAbcdjmCsppParserUnitTestCase(ParserUnitTestCase):
         """
         Read linux source path test data and assert that the results are those we expected.
         """
-        with open(os.path.join(RESOURCE_PATH, 'linux_11079894_PPB_OPT.txt'), 'r') as stream_handle:
+        with open(os.path.join(RESOURCE_PATH, 'linux_11079894_PPB_OPT.txt'), 'rU') as stream_handle:
 
             parser = DostaAbcdjmCsppParser(self.config_recovered, stream_handle, self.exception_callback)
 
