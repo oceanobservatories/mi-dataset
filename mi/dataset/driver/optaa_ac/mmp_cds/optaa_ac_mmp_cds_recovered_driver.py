@@ -13,11 +13,11 @@ Initial Release
 
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 from mi.dataset.dataset_driver import SimpleDatasetDriver
-from mi.dataset.parser.optaa_ac_mmp_cds import OptaaAcMmpCdsParser
+from mi.dataset.parser.mmp_cds_base import MmpCdsParser
 from mi.core.versioning import version
 
 
-@version("0.0.1")
+@version("0.0.2")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     """
     This is the method called by Uframe
@@ -48,12 +48,7 @@ class OptaaAcMmpCdsRecoveredDriver(SimpleDatasetDriver):
             DataSetDriverConfigKeys.PARTICLE_CLASS: 'OptaaAcMmpCdsParserDataParticle'
         }
 
-        parser = OptaaAcMmpCdsParser(parser_config,
-                                    None,
-                                    stream_handle,
-                                    lambda state, ingested: None,
-                                    lambda data: None,
-                                    self._exception_callback)
+        parser = MmpCdsParser(parser_config, stream_handle, self._exception_callback)
 
         return parser
 

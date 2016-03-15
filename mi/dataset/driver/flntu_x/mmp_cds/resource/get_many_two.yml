@@ -6,5 +6,5 @@ data:
   raw_time_microseconds: 381412
   raw_time_seconds: 1385254265
 header:
-  particle object: FlntuXMmpCdsParserDataParticle
+  particle_object: FlntuXMmpCdsParserDataParticle
   particle_type: flntu_x_mmp_cds_instrument
