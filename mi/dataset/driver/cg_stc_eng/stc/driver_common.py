@@ -4,12 +4,12 @@
 # Copyright 2014 Raytheon Co.
 ##
 
-__author__ = "jpadula"
-
 from mi.core.log import get_logger
 from mi.dataset.dataset_driver import DataSetDriver
 
 from mi.dataset.parser.rte_o_dcl import RteODclParser
+
+__author__ = "jpadula"
 
 
 class RteODclDriver:
@@ -30,11 +30,7 @@ class RteODclDriver:
                 log.debug("Exception: %s", exception)
                 self._particleDataHdlrObj.setParticleDataCaptureFailure()
 
-            parser = RteODclParser(self._parser_config,
-                                   None, file_handle,
-                                   lambda state, ingested: None,
-                                   lambda data: None,
-                                   exception_callback)
+            parser = RteODclParser(self._parser_config, file_handle, exception_callback)
 
             driver = DataSetDriver(parser, self._particleDataHdlrObj)
 
