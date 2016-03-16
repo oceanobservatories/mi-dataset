@@ -10,20 +10,20 @@ Release notes:
 initial release
 """
 
-__author__ = 'Mark Worden'
-__license__ = 'Apache 2.0'
-
 import struct
 
 from mi.core.log import get_logger
 
-log = get_logger()
 from mi.core.common import BaseEnum
-from mi.dataset.parser.mmp_cds_base import MmpCdsParserDataParticle, MmpCdsParser
+from mi.dataset.parser.mmp_cds_base import MmpCdsParserDataParticle
+log = get_logger()
 
 
 class DataParticleType(BaseEnum):
     INSTRUMENT = 'optaa_ac_mmp_cds_instrument'
+
+__author__ = 'Mark Worden'
+__license__ = 'Apache 2.0'
 
 
 class OptaaAcMmpCdsParserDataParticleKey(BaseEnum):
@@ -179,35 +179,3 @@ class OptaaAcMmpCdsParserDataParticle(MmpCdsParserDataParticle):
 
         # We have all we need, let's return the list
         return subclass_particle_params
-
-
-class OptaaAcMmpCdsParser(MmpCdsParser):
-
-    """
-    Class for parsing data obtain from a OPTAA sensor, series A and C, as received from McLane Moored
-    Profiler connected to the cabled docking station.
-    """
-
-    def __init__(self,
-                 config,
-                 state,
-                 stream_handle,
-                 state_callback,
-                 publish_callback,
-                 *args, **kwargs):
-        """
-        This method is a constructor that will instantiate a OptaaAcMmpCdsParser object.
-        @param config The configuration for this MmpCdsParser parser
-        @param state The state the OptaaAcMmpCdsParser should use to initialize itself
-        @param stream_handle The handle to the data stream containing the MmpCds data
-        @param state_callback The function to call upon detecting state changes
-        @param publish_callback The function to call to provide particles
-        """
-
-        # Call the superclass constructor
-        super(OptaaAcMmpCdsParser, self).__init__(config,
-                                                  state,
-                                                  stream_handle,
-                                                  state_callback,
-                                                  publish_callback,
-                                                  *args, **kwargs)
