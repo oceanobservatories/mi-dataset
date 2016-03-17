@@ -38,200 +38,28 @@ Files used for testing:
   20 metadata records, 47 sensor data records
 """
 
-import unittest
 import os
 from nose.plugins.attrib import attr
 
-from mi.core.log import get_logger; log = get_logger()
+from mi.core.log import get_logger
 
 from mi.dataset.test.test_parser import ParserUnitTestCase
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 
 from mi.dataset.parser.flort_dj_dcl import \
-    FlortDjDclRecoveredParser, \
-    FlortDjDclTelemeteredParser, \
+    FlortDjDclParser, \
     FlortDjDclRecoveredInstrumentDataParticle, \
-    FlortDjDclTelemeteredInstrumentDataParticle, \
-    FlortStateKey
+    FlortDjDclTelemeteredInstrumentDataParticle
 
 from mi.idk.config import Config
+
+log = get_logger()
+
 RESOURCE_PATH = os.path.join(Config().base_dir(), 'mi', 'dataset', 'driver',
                              'flort_dj', 'dcl', 'resource')
 
 MODULE_NAME = 'mi.dataset.parser.flort_dj_dcl'
 
-
-# Expected tuples for data in file 20020215.flort2.log
-EXPECTED_20020215_flort2 = [
-    ('2002/02/15 05:07:17.089', '2002', '02', '15', '05', '07', '17',
-    '02/15/01', '17:07:17', '0', '1', '2', '3', '4', '5', '6'),
-    ('2002/02/15 05:07:19.447', '2002', '02', '15', '05', '07', '19',
-    '02/15/01', '17:07:19', '2259', '2260', '2261', '2262', '2263', '2264', '2265'),
-    ('2002/02/15 05:07:21.805', '2002', '02', '15', '05', '07', '21',
-    '02/15/01', '17:07:21', '4518', '4519', '4520', '4521', '4522', '4523', '4524'),
-    ('2002/02/15 05:07:24.163', '2002', '02', '15', '05', '07', '24',
-    '02/15/01', '17:07:24', '6777', '6778', '6779', '6780', '6781', '6782', '6783'),
-    ('2002/02/15 05:07:26.521', '2002', '02', '15', '05', '07', '26',
-    '02/15/01', '17:07:26', '9036', '9037', '9038', '9039', '9040', '9041', '9042'),
-    ('2002/02/15 05:07:28.879', '2002', '02', '15', '05', '07', '28',
-    '02/15/01', '17:07:28', '11295', '11296', '11297', '11298', '11299', '11300', '11301'),
-    ('2002/02/15 05:07:31.237', '2002', '02', '15', '05', '07', '31',
-    '02/15/01', '17:07:31', '13554', '13555', '13556', '13557', '13558', '13559', '13560'),
-    ('2002/02/15 05:07:33.595', '2002', '02', '15', '05', '07', '33',
-    '02/15/01', '17:07:33', '15813', '15814', '15815', '15816', '15817', '15818', '15819'),
-    ('2002/02/15 05:07:35.953', '2002', '02', '15', '05', '07', '35',
-    '02/15/01', '17:07:35', '18072', '18073', '18074', '18075', '18076', '18077', '18078'),
-    ('2002/02/15 05:07:38.311', '2002', '02', '15', '05', '07', '38',
-    '02/15/01', '17:07:38', '20331', '20332', '20333', '20334', '20335', '20336', '20337'),
-    ('2002/02/15 05:07:40.669', '2002', '02', '15', '05', '07', '40',
-    '02/15/01', '17:07:40', '22590', '22591', '22592', '22593', '22594', '22595', '22596'),
-    ('2002/02/15 05:07:43.027', '2002', '02', '15', '05', '07', '43',
-    '02/15/01', '17:07:43', '24849', '24850', '24851', '24852', '24853', '24854', '24855'),
-    ('2002/02/15 05:07:45.385', '2002', '02', '15', '05', '07', '45',
-    '02/15/01', '17:07:45', '27108', '27109', '27110', '27111', '27112', '27113', '27114'),
-    ('2002/02/15 05:07:47.743', '2002', '02', '15', '05', '07', '47',
-    '02/15/01', '17:07:47', '29367', '29368', '29369', '29370', '29371', '29372', '29373'),
-    ('2002/02/15 05:07:50.101', '2002', '02', '15', '05', '07', '50',
-    '02/15/01', '17:07:50', '31626', '31627', '31628', '31629', '31630', '31631', '31632'),
-    ('2002/02/15 05:07:59.533', '2002', '02', '15', '05', '07', '59',
-    '02/15/01', '17:07:59', '33885', '33886', '33887', '33888', '33889', '33890', '33891'),
-    ('2002/02/15 05:08:01.891', '2002', '02', '15', '05', '08', '01',
-    '02/15/01', '17:08:01', '36144', '36145', '36146', '36147', '36148', '36149', '36150'),
-    ('2002/02/15 05:08:04.249', '2002', '02', '15', '05', '08', '04',
-    '02/15/01', '17:08:04', '38403', '38404', '38405', '38406', '38407', '38408', '38409'),
-    ('2002/02/15 05:08:06.607', '2002', '02', '15', '05', '08', '06',
-    '02/15/01', '17:08:06', '40662', '40663', '40664', '40665', '40666', '40667', '40668'),
-    ('2002/02/15 05:08:08.965', '2002', '02', '15', '05', '08', '08',
-    '02/15/01', '17:08:08', '42921', '42922', '42923', '42924', '42925', '42926', '42927'),
-    ('2002/02/15 05:08:11.323', '2002', '02', '15', '05', '08', '11',
-    '02/15/01', '17:08:11', '45180', '45181', '45182', '45183', '45184', '45185', '45186'),
-    ('2002/02/15 05:08:13.681', '2002', '02', '15', '05', '08', '13',
-    '02/15/01', '17:08:13', '47439', '47440', '47441', '47442', '47443', '47444', '47445'),
-    ('2002/02/15 05:08:16.039', '2002', '02', '15', '05', '08', '16',
-    '02/15/01', '17:08:16', '49698', '49699', '49700', '49701', '49702', '49703', '49704'),
-    ('2002/02/15 05:08:18.397', '2002', '02', '15', '05', '08', '18',
-    '02/15/01', '17:08:18', '51957', '51958', '51959', '51960', '51961', '51962', '51963'),
-    ('2002/02/15 05:08:20.755', '2002', '02', '15', '05', '08', '20',
-    '02/15/01', '17:08:20', '54216', '54217', '54218', '54219', '54220', '54221', '54222'),
-    ('2002/02/15 05:08:23.113', '2002', '02', '15', '05', '08', '23',
-    '02/15/01', '17:08:23', '56475', '56476', '56477', '56478', '56479', '56480', '56481'),
-    ('2002/02/15 05:08:25.471', '2002', '02', '15', '05', '08', '25',
-    '02/15/01', '17:08:25', '58734', '58735', '58736', '58737', '58738', '58739', '58740'),
-    ('2002/02/15 05:08:27.829', '2002', '02', '15', '05', '08', '27',
-    '02/15/01', '17:08:27', '60993', '60994', '60995', '60996', '60997', '60998', '60999'),
-    ('2002/02/15 05:08:30.187', '2002', '02', '15', '05', '08', '30',
-    '02/15/01', '17:08:30', '63252', '63253', '63254', '63255', '63256', '63257', '63258'),
-    ('2002/02/15 05:08:32.545', '2002', '02', '15', '05', '08', '32',
-    '02/15/01', '17:08:32', '65511', '65512', '65513', '65514', '65515', '65516', '65517')
-]
-
-# Expected tuples for data in file 20030413.flort3.log
-EXPECTED_20030413_flort3 = [
-    ('2003/04/13 07:09:19.091', '2003', '04', '13', '07', '09', '19',
-    '04/13/02', '19:09:19', '0', '1', '2', '3', '4', '5', '6'),
-    ('2003/04/13 07:09:21.449', '2003', '04', '13', '07', '09', '21',
-    '04/13/02', '19:09:21', '1284', '1285', '1286', '1287', '1288', '1289', '1290'),
-    ('2003/04/13 07:09:23.807', '2003', '04', '13', '07', '09', '23',
-    '04/13/02', '19:09:23', '2568', '2569', '2570', '2571', '2572', '2573', '2574'),
-    ('2003/04/13 07:09:26.165', '2003', '04', '13', '07', '09', '26',
-    '04/13/02', '19:09:26', '3852', '3853', '3854', '3855', '3856', '3857', '3858'),
-    ('2003/04/13 07:09:28.523', '2003', '04', '13', '07', '09', '28',
-    '04/13/02', '19:09:28', '5136', '5137', '5138', '5139', '5140', '5141', '5142'),
-    ('2003/04/13 07:09:30.881', '2003', '04', '13', '07', '09', '30',
-    '04/13/02', '19:09:30', '6420', '6421', '6422', '6423', '6424', '6425', '6426'),
-    ('2003/04/13 07:09:33.239', '2003', '04', '13', '07', '09', '33',
-    '04/13/02', '19:09:33', '7704', '7705', '7706', '7707', '7708', '7709', '7710'),
-    ('2003/04/13 07:09:35.597', '2003', '04', '13', '07', '09', '35',
-    '04/13/02', '19:09:35', '8988', '8989', '8990', '8991', '8992', '8993', '8994'),
-    ('2003/04/13 07:09:37.955', '2003', '04', '13', '07', '09', '37',
-    '04/13/02', '19:09:37', '10272', '10273', '10274', '10275', '10276', '10277', '10278'),
-    ('2003/04/13 07:09:40.313', '2003', '04', '13', '07', '09', '40',
-    '04/13/02', '19:09:40', '11556', '11557', '11558', '11559', '11560', '11561', '11562'),
-    ('2003/04/13 07:09:42.671', '2003', '04', '13', '07', '09', '42',
-    '04/13/02', '19:09:42', '12840', '12841', '12842', '12843', '12844', '12845', '12846'),
-    ('2003/04/13 07:09:45.029', '2003', '04', '13', '07', '09', '45',
-    '04/13/02', '19:09:45', '14124', '14125', '14126', '14127', '14128', '14129', '14130'),
-    ('2003/04/13 07:09:47.387', '2003', '04', '13', '07', '09', '47',
-    '04/13/02', '19:09:47', '15408', '15409', '15410', '15411', '15412', '15413', '15414'),
-    ('2003/04/13 07:09:56.819', '2003', '04', '13', '07', '09', '56',
-    '04/13/02', '19:09:56', '16692', '16693', '16694', '16695', '16696', '16697', '16698'),
-    ('2003/04/13 07:09:59.177', '2003', '04', '13', '07', '09', '59',
-    '04/13/02', '19:09:59', '17976', '17977', '17978', '17979', '17980', '17981', '17982'),
-    ('2003/04/13 07:10:01.535', '2003', '04', '13', '07', '10', '01',
-    '04/13/02', '19:10:01', '19260', '19261', '19262', '19263', '19264', '19265', '19266'),
-    ('2003/04/13 07:10:03.893', '2003', '04', '13', '07', '10', '03',
-    '04/13/02', '19:10:03', '20544', '20545', '20546', '20547', '20548', '20549', '20550'),
-    ('2003/04/13 07:10:06.251', '2003', '04', '13', '07', '10', '06',
-    '04/13/02', '19:10:06', '21828', '21829', '21830', '21831', '21832', '21833', '21834'),
-    ('2003/04/13 07:10:08.609', '2003', '04', '13', '07', '10', '08',
-    '04/13/02', '19:10:08', '23112', '23113', '23114', '23115', '23116', '23117', '23118'),
-    ('2003/04/13 07:10:10.967', '2003', '04', '13', '07', '10', '10',
-    '04/13/02', '19:10:10', '24396', '24397', '24398', '24399', '24400', '24401', '24402'),
-    ('2003/04/13 07:10:13.325', '2003', '04', '13', '07', '10', '13',
-    '04/13/02', '19:10:13', '25680', '25681', '25682', '25683', '25684', '25685', '25686'),
-    ('2003/04/13 07:10:15.683', '2003', '04', '13', '07', '10', '15',
-    '04/13/02', '19:10:15', '26964', '26965', '26966', '26967', '26968', '26969', '26970'),
-    ('2003/04/13 07:10:18.041', '2003', '04', '13', '07', '10', '18',
-    '04/13/02', '19:10:18', '28248', '28249', '28250', '28251', '28252', '28253', '28254'),
-    ('2003/04/13 07:10:20.399', '2003', '04', '13', '07', '10', '20',
-    '04/13/02', '19:10:20', '29532', '29533', '29534', '29535', '29536', '29537', '29538'),
-    ('2003/04/13 07:10:22.757', '2003', '04', '13', '07', '10', '22',
-    '04/13/02', '19:10:22', '30816', '30817', '30818', '30819', '30820', '30821', '30822'),
-    ('2003/04/13 07:10:25.115', '2003', '04', '13', '07', '10', '25',
-    '04/13/02', '19:10:25', '32100', '32101', '32102', '32103', '32104', '32105', '32106'),
-    ('2003/04/13 07:10:34.547', '2003', '04', '13', '07', '10', '34',
-    '04/13/02', '19:10:34', '33384', '33385', '33386', '33387', '33388', '33389', '33390'),
-    ('2003/04/13 07:10:36.905', '2003', '04', '13', '07', '10', '36',
-    '04/13/02', '19:10:36', '34668', '34669', '34670', '34671', '34672', '34673', '34674'),
-    ('2003/04/13 07:10:39.263', '2003', '04', '13', '07', '10', '39',
-    '04/13/02', '19:10:39', '35952', '35953', '35954', '35955', '35956', '35957', '35958'),
-    ('2003/04/13 07:10:41.621', '2003', '04', '13', '07', '10', '41',
-    '04/13/02', '19:10:41', '37236', '37237', '37238', '37239', '37240', '37241', '37242'),
-    ('2003/04/13 07:10:43.979', '2003', '04', '13', '07', '10', '43',
-    '04/13/02', '19:10:43', '38520', '38521', '38522', '38523', '38524', '38525', '38526'),
-    ('2003/04/13 07:10:46.337', '2003', '04', '13', '07', '10', '46',
-    '04/13/02', '19:10:46', '39804', '39805', '39806', '39807', '39808', '39809', '39810'),
-    ('2003/04/13 07:10:48.695', '2003', '04', '13', '07', '10', '48',
-    '04/13/02', '19:10:48', '41088', '41089', '41090', '41091', '41092', '41093', '41094'),
-    ('2003/04/13 07:10:51.053', '2003', '04', '13', '07', '10', '51',
-    '04/13/02', '19:10:51', '42372', '42373', '42374', '42375', '42376', '42377', '42378'),
-    ('2003/04/13 07:10:53.411', '2003', '04', '13', '07', '10', '53',
-    '04/13/02', '19:10:53', '43656', '43657', '43658', '43659', '43660', '43661', '43662'),
-    ('2003/04/13 07:10:55.769', '2003', '04', '13', '07', '10', '55',
-    '04/13/02', '19:10:55', '44940', '44941', '44942', '44943', '44944', '44945', '44946'),
-    ('2003/04/13 07:10:58.127', '2003', '04', '13', '07', '10', '58',
-    '04/13/02', '19:10:58', '46224', '46225', '46226', '46227', '46228', '46229', '46230'),
-    ('2003/04/13 07:11:00.485', '2003', '04', '13', '07', '11', '00',
-    '04/13/02', '19:11:00', '47508', '47509', '47510', '47511', '47512', '47513', '47514'),
-    ('2003/04/13 07:11:02.843', '2003', '04', '13', '07', '11', '02',
-    '04/13/02', '19:11:02', '48792', '48793', '48794', '48795', '48796', '48797', '48798'),
-    ('2003/04/13 07:11:12.275', '2003', '04', '13', '07', '11', '12',
-    '04/13/02', '19:11:12', '50076', '50077', '50078', '50079', '50080', '50081', '50082'),
-    ('2003/04/13 07:11:14.633', '2003', '04', '13', '07', '11', '14',
-    '04/13/02', '19:11:14', '51360', '51361', '51362', '51363', '51364', '51365', '51366'),
-    ('2003/04/13 07:11:16.991', '2003', '04', '13', '07', '11', '16',
-    '04/13/02', '19:11:16', '52644', '52645', '52646', '52647', '52648', '52649', '52650'),
-    ('2003/04/13 07:11:19.349', '2003', '04', '13', '07', '11', '19',
-    '04/13/02', '19:11:19', '53928', '53929', '53930', '53931', '53932', '53933', '53934'),
-    ('2003/04/13 07:11:21.707', '2003', '04', '13', '07', '11', '21',
-    '04/13/02', '19:11:21', '55212', '55213', '55214', '55215', '55216', '55217', '55218'),
-    ('2003/04/13 07:11:24.065', '2003', '04', '13', '07', '11', '24',
-    '04/13/02', '19:11:24', '56496', '56497', '56498', '56499', '56500', '56501', '56502'),
-    ('2003/04/13 07:11:26.423', '2003', '04', '13', '07', '11', '26',
-    '04/13/02', '19:11:26', '57780', '57781', '57782', '57783', '57784', '57785', '57786'),
-    ('2003/04/13 07:11:28.781', '2003', '04', '13', '07', '11', '28',
-    '04/13/02', '19:11:28', '59064', '59065', '59066', '59067', '59068', '59069', '59070'),
-    ('2003/04/13 07:11:31.139', '2003', '04', '13', '07', '11', '31',
-    '04/13/02', '19:11:31', '60348', '60349', '60350', '60351', '60352', '60353', '60354'),
-    ('2003/04/13 07:11:33.497', '2003', '04', '13', '07', '11', '33',
-    '04/13/02', '19:11:33', '61632', '61633', '61634', '61635', '61636', '61637', '61638'),
-    ('2003/04/13 07:11:35.855', '2003', '04', '13', '07', '11', '35',
-    '04/13/02', '19:11:35', '62916', '62917', '62918', '62919', '62920', '62921', '62922'),
-    ('2003/04/13 07:11:38.213', '2003', '04', '13', '07', '11', '38',
-    '04/13/02', '19:11:38', '64200', '64201', '64202', '64203', '64204', '64205', '64206'),
-    ('2003/04/13 07:11:40.571', '2003', '04', '13', '07', '11', '40',
-    '04/13/02', '19:11:40', '65484', '65485', '65486', '65487', '65488', '65489', '65490')
-]
 
 # Expected tuples for data in file 20040505.flort4.log
 EXPECTED_20040505_flort4 = [
@@ -348,8 +176,6 @@ FILE6 = '20061220.flort6.log'
 FILE7 = '20071225.flort7.log'
 FILE8 = '20080401.flort8.log'
 
-EXPECTED_FILE2 = EXPECTED_20020215_flort2
-EXPECTED_FILE3 = EXPECTED_20030413_flort3
 EXPECTED_FILE4 = EXPECTED_20040505_flort4
 EXPECTED_FILE5 = EXPECTED_20050406_flort5
 RECORDS_FILE6 = 300      # number of records expected
@@ -362,82 +188,22 @@ class FlortDjDclParserUnitTestCase(ParserUnitTestCase):
     """
     flort_dj_dcl Parser unit test suite
     """
-    def create_rec_parser(self, file_handle, new_state=None):
-        """
-        This function creates a FlortDjDcl parser for recovered data.
-        """
-        parser = FlortDjDclRecoveredParser(self.rec_config,
-            file_handle, new_state, self.rec_state_callback,
-            self.rec_pub_callback, self.rec_exception_callback)
-        return parser
-
-    def create_tel_parser(self, file_handle, new_state=None):
-        """
-        This function creates a FlortDjDcl parser for telemetered data.
-        """
-        parser = FlortDjDclTelemeteredParser(self.tel_config,
-            file_handle, new_state, self.rec_state_callback,
-            self.tel_pub_callback, self.tel_exception_callback)
-        return parser
-
     def open_file(self, filename):
-        file = open(os.path.join(RESOURCE_PATH, filename), mode='r')
-        return file
-
-    def rec_state_callback(self, state, file_ingested):
-        """ Call back method to watch what comes in via the position callback """
-        self.rec_state_callback_value = state
-        self.rec_file_ingested_value = file_ingested
-
-    def tel_state_callback(self, state, file_ingested):
-        """ Call back method to watch what comes in via the position callback """
-        self.tel_state_callback_value = state
-        self.tel_file_ingested_value = file_ingested
-
-    def rec_pub_callback(self, pub):
-        """ Call back method to watch what comes in via the publish callback """
-        self.rec_publish_callback_value = pub
-
-    def tel_pub_callback(self, pub):
-        """ Call back method to watch what comes in via the publish callback """
-        self.tel_publish_callback_value = pub
-
-    def rec_exception_callback(self, exception):
-        """ Call back method to watch what comes in via the exception callback """
-        self.rec_exception_callback_value = exception
-        self.rec_exceptions_detected += 1
-
-    def tel_exception_callback(self, exception):
-        """ Call back method to watch what comes in via the exception callback """
-        self.tel_exception_callback_value = exception
-        self.tel_exceptions_detected += 1
+        my_file = open(os.path.join(RESOURCE_PATH, filename), mode='r')
+        return my_file
 
     def setUp(self):
         ParserUnitTestCase.setUp(self)
 
         self.rec_config = {
             DataSetDriverConfigKeys.PARTICLE_MODULE: MODULE_NAME,
-            DataSetDriverConfigKeys.PARTICLE_CLASS: None
+            DataSetDriverConfigKeys.PARTICLE_CLASS: 'FlortDjDclRecoveredInstrumentDataParticle'
         }
 
         self.tel_config = {
             DataSetDriverConfigKeys.PARTICLE_MODULE: MODULE_NAME,
-            DataSetDriverConfigKeys.PARTICLE_CLASS: None
+            DataSetDriverConfigKeys.PARTICLE_CLASS: 'FlortDjDclTelemeteredInstrumentDataParticle'
         }
-
-        self.rec_state_callback_value = None
-        self.rec_file_ingested_value = False
-        self.rec_publish_callback_value = None
-        self.rec_exception_callback_value = None
-        self.rec_exceptions_detected = 0
-
-        self.tel_state_callback_value = None
-        self.tel_file_ingested_value = False
-        self.tel_publish_callback_value = None
-        self.tel_exception_callback_value = None
-        self.tel_exceptions_detected = 0
-
-        self.maxDiff = None
 
     def test_big_giant_input(self):
         """
@@ -446,28 +212,26 @@ class FlortDjDclParserUnitTestCase(ParserUnitTestCase):
         integration and qualification testing.
         """
         log.debug('===== START TEST BIG GIANT INPUT RECOVERED =====')
-        in_file = self.open_file(FILE6)
-        parser = self.create_rec_parser(in_file)
+        with self.open_file(FILE6) as in_file:
+            parser = FlortDjDclParser(self.rec_config, in_file, self.exception_callback)
 
-        # In a single read, get all particles in this file.
-        number_expected_results = RECORDS_FILE6
-        result = parser.get_records(number_expected_results)
-        self.assertEqual(len(result), number_expected_results)
+            # In a single read, get all particles in this file.
+            number_expected_results = RECORDS_FILE6
+            result = parser.get_records(number_expected_results)
+            self.assertEqual(len(result), number_expected_results)
 
-        in_file.close()
-        self.assertEqual(self.rec_exception_callback_value, None)
+            self.assertEqual(self.exception_callback_value, [])
 
         log.debug('===== START TEST BIG GIANT INPUT TELEMETERED =====')
-        in_file = self.open_file(FILE7)
-        parser = self.create_tel_parser(in_file)
+        with self.open_file(FILE7) as in_file:
+            parser = FlortDjDclParser(self.tel_config, in_file, self.exception_callback)
 
-        # In a single read, get all particles in this file.
-        number_expected_results = RECORDS_FILE7
-        result = parser.get_records(number_expected_results)
-        self.assertEqual(len(result), number_expected_results)
+            # In a single read, get all particles in this file.
+            number_expected_results = RECORDS_FILE7
+            result = parser.get_records(number_expected_results)
+            self.assertEqual(len(result), number_expected_results)
 
-        in_file.close()
-        self.assertEqual(self.tel_exception_callback_value, None)
+            self.assertEqual(self.exception_callback_value, [])
 
         log.debug('===== END TEST BIG GIANT INPUT =====')
         
@@ -477,38 +241,39 @@ class FlortDjDclParserUnitTestCase(ParserUnitTestCase):
         Verify that the results are those we expected.
         """
         log.debug('===== START TEST GET MANY RECOVERED =====')
-        in_file = self.open_file(FILE5)
-        parser = self.create_rec_parser(in_file)
 
-        # Generate a list of expected result particles.
-        expected_particle = []
-        for expected in EXPECTED_FILE5:
-            particle = FlortDjDclRecoveredInstrumentDataParticle(expected)
-            expected_particle.append(particle)
+        with self.open_file(FILE5) as in_file:
+            parser = FlortDjDclParser(self.rec_config, in_file, self.exception_callback)
 
-        # In a single read, get all particles for this file.
-        result = parser.get_records(len(expected_particle))
-        self.assertEqual(result, expected_particle)
+            # Generate a list of expected result particles.
+            expected_particle = []
+            for expected in EXPECTED_FILE5:
+                particle = FlortDjDclRecoveredInstrumentDataParticle(expected)
+                particle.generate_dict()
+                expected_particle.append(particle)
 
-        self.assertEqual(self.rec_exception_callback_value, None)
-        in_file.close()
+            # In a single read, get all particles for this file.
+            result = parser.get_records(len(expected_particle))
+            self.assertEqual(result, expected_particle)
+
+            self.assertEqual(self.exception_callback_value, [])
 
         log.debug('===== START TEST GET MANY TELEMETERED =====')
-        in_file = self.open_file(FILE4)
-        parser = self.create_tel_parser(in_file)
+        with self.open_file(FILE4) as in_file:
+            parser = FlortDjDclParser(self.tel_config, in_file, self.exception_callback)
 
-        # Generate a list of expected result particles.
-        expected_particle = []
-        for expected in EXPECTED_FILE4:
-            particle = FlortDjDclTelemeteredInstrumentDataParticle(expected)
-            expected_particle.append(particle)
+            # Generate a list of expected result particles.
+            expected_particle = []
+            for expected in EXPECTED_FILE4:
+                particle = FlortDjDclTelemeteredInstrumentDataParticle(expected)
+                particle.generate_dict()
+                expected_particle.append(particle)
 
-        # In a single read, get all particles for this file.
-        result = parser.get_records(len(expected_particle))
-        self.assertEqual(result, expected_particle)
+            # In a single read, get all particles for this file.
+            result = parser.get_records(len(expected_particle))
+            self.assertEqual(result, expected_particle)
 
-        self.assertEqual(self.tel_exception_callback_value, None)
-        in_file.close()
+            self.assertEqual(self.exception_callback_value, [])
 
         log.debug('===== END TEST GET MANY =====')
 
@@ -519,225 +284,55 @@ class FlortDjDclParserUnitTestCase(ParserUnitTestCase):
         and the correct number of exceptions are detected.
         """
         log.debug('===== START TEST INVALID SENSOR DATA RECOVERED =====')
-        in_file = self.open_file(FILE8)
-        parser = self.create_rec_parser(in_file)
+        with self.open_file(FILE8) as in_file:
+            parser = FlortDjDclParser(self.rec_config, in_file, self.exception_callback)
 
-        # Try to get records and verify that none are returned.
-        result = parser.get_records(1)
-        self.assertEqual(result, [])
-        self.assertEqual(self.rec_exceptions_detected, EXCEPTIONS_FILE8)
-
-        in_file.close()
+            # Try to get records and verify that none are returned.
+            result = parser.get_records(1)
+            self.assertEqual(result, [])
+            self.assertEqual(len(self.exception_callback_value), EXCEPTIONS_FILE8)
 
         log.debug('===== START TEST INVALID SENSOR DATA TELEMETERED =====')
-        in_file = self.open_file(FILE8)
-        parser = self.create_tel_parser(in_file)
 
-        # Try to get records and verify that none are returned.
-        result = parser.get_records(1)
-        self.assertEqual(result, [])
-        self.assertEqual(self.tel_exceptions_detected, EXCEPTIONS_FILE8)
+        self.exception_callback_value = []  # reset exceptions
 
-        in_file.close()
+        with self.open_file(FILE8) as in_file:
+            parser = FlortDjDclParser(self.tel_config, in_file, self.exception_callback)
+
+            # Try to get records and verify that none are returned.
+            result = parser.get_records(1)
+            self.assertEqual(result, [])
+            self.assertEqual(len(self.exception_callback_value), EXCEPTIONS_FILE8)
 
         log.debug('===== END TEST INVALID SENSOR DATA =====')
         
-    def test_mid_state_start(self):
-        """
-        Test starting a parser with a state in the middle of processing.
-        """
-        log.debug('===== START TEST MID-STATE START RECOVERED =====')
-
-        in_file = self.open_file(FILE3)
-
-        # Start at the beginning of record 27 (of 52 total)
-        initial_state = {
-            FlortStateKey.POSITION: 2579
-        }
-
-        parser = self.create_rec_parser(in_file, new_state=initial_state)
-
-        # Generate a list of expected result particles.
-        expected_particle = []
-        for expected in EXPECTED_FILE3[-26: ]:
-            particle = FlortDjDclRecoveredInstrumentDataParticle(expected)
-            expected_particle.append(particle)
-
-        # In a single read, get all particles for this file.
-        result = parser.get_records(len(expected_particle))
-        self.assertEqual(result, expected_particle)
-
-        self.assertEqual(self.rec_exception_callback_value, None)
-        in_file.close()
-        
-        log.debug('===== START TEST MID-STATE START TELEMETERED =====')
-
-        in_file = self.open_file(FILE2)
-
-        # Start at the beginning of record 11 (of 30 total).
-        initial_state = {
-            FlortStateKey.POSITION: 1017
-        }
-
-        parser = self.create_tel_parser(in_file, new_state=initial_state)
-
-        # Generate a list of expected result particles.
-        expected_particle = []
-        for expected in EXPECTED_FILE2[-20: ]:
-            particle = FlortDjDclTelemeteredInstrumentDataParticle(expected)
-            expected_particle.append(particle)
-
-        # In a single read, get all particles for this file.
-        result = parser.get_records(len(expected_particle))
-        self.assertEqual(result, expected_particle)
-
-        self.assertEqual(self.tel_exception_callback_value, None)
-        in_file.close()
-
-        log.debug('===== END TEST MID-STATE START =====')
-
     def test_no_sensor_data(self):
         """
         Read a file containing no sensor data records
         and verify that no particles are produced.
         """
         log.debug('===== START TEST NO SENSOR DATA RECOVERED =====')
-        in_file = self.open_file(FILE1)
-        parser = self.create_rec_parser(in_file)
+        with self.open_file(FILE1) as in_file:
+            parser = FlortDjDclParser(self.rec_config, in_file, self.exception_callback)
 
-        # Try to get a record and verify that none are produced.
-        result = parser.get_records(1)
-        self.assertEqual(result, [])
+            # Try to get a record and verify that none are produced.
+            result = parser.get_records(1)
+            self.assertEqual(result, [])
 
-        self.assertEqual(self.rec_exception_callback_value, None)
-        in_file.close()
+            self.assertEqual(self.exception_callback_value, [])
 
         log.debug('===== START TEST NO SENSOR DATA TELEMETERED =====')
-        in_file = self.open_file(FILE1)
-        parser = self.create_tel_parser(in_file)
+        with self.open_file(FILE1) as in_file:
+            parser = FlortDjDclParser(self.tel_config, in_file, self.exception_callback)
 
-        # Try to get a record and verify that none are produced.
-        result = parser.get_records(1)
-        self.assertEqual(result, [])
+            # Try to get a record and verify that none are produced.
+            result = parser.get_records(1)
+            self.assertEqual(result, [])
 
-        self.assertEqual(self.tel_exception_callback_value, None)
-        in_file.close()
+            self.assertEqual(self.exception_callback_value, [])
 
         log.debug('===== END TEST NO SENSOR DATA =====')
         
-    def test_set_state(self):
-        """
-        This test verifies that the state can be changed after starting.
-        Some particles are read and then the parser state is modified to
-        skip ahead or back.
-        """
-        log.debug('===== START TEST SET STATE RECOVERED =====')
-
-        in_file = self.open_file(FILE4)
-        parser = self.create_rec_parser(in_file)
-
-        # Read and verify 5 particles (of the 25).
-        for expected in EXPECTED_FILE4[ : 5]:
-
-            # Generate expected particle
-            expected_particle = FlortDjDclRecoveredInstrumentDataParticle(expected)
-
-            # Get record and verify.
-            result = parser.get_records(1)
-            self.assertEqual(result, [expected_particle])
-
-        # Skip ahead in the file so that we get the last 10 particles.
-        new_state = {
-            FlortStateKey.POSITION: 2118
-        }
-
-        # Set the state.
-        parser.set_state(new_state)
-
-        # Read and verify the last 10 particles.
-        for expected in EXPECTED_FILE4[-10: ]:
-
-            # Generate expected particle
-            expected_particle = FlortDjDclRecoveredInstrumentDataParticle(expected)
-
-            # Get record and verify.
-            result = parser.get_records(1)
-            self.assertEqual(result, [expected_particle])
-
-        log.debug('===== START TEST SET STATE TELEMETERED =====')
-
-        in_file = self.open_file(FILE5)
-        parser = self.create_tel_parser(in_file)
-
-        # Read and verify 20 particles (of the 24).
-        for expected in EXPECTED_FILE5[ : 20]:
-
-            # Generate expected particle
-            expected_particle = FlortDjDclTelemeteredInstrumentDataParticle(expected)
-
-            # Get record and verify.
-            result = parser.get_records(1)
-            self.assertEqual(result, [expected_particle])
-
-        # Skip back in the file so that we get the last 17 particles.
-        new_state = {
-            FlortStateKey.POSITION: 992,
-        }
-
-        # Set the state.
-        parser.set_state(new_state)
-
-        # Read and verify the last 17 particles.
-        for expected in EXPECTED_FILE5[-17: ]:
-
-            # Generate expected particle
-            expected_particle = FlortDjDclTelemeteredInstrumentDataParticle(expected)
-
-            # Get record and verify.
-            result = parser.get_records(1)
-            self.assertEqual(result, [expected_particle])
-
-        log.debug('===== END TEST SET STATE =====')
-
-    def test_simple(self):
-        """
-        Read data from a file and pull out data particles
-        one at a time. Verify that the results are those we expected.
-        """
-        log.debug('===== START TEST SIMPLE RECOVERED =====')
-        in_file = self.open_file(FILE2)
-        parser = self.create_rec_parser(in_file)
-
-        for expected in EXPECTED_FILE2:
-
-            # Generate expected particle
-            expected_particle = FlortDjDclRecoveredInstrumentDataParticle(expected)
-
-            # Get record and verify.
-            result = parser.get_records(1)
-            self.assertEqual(result, [expected_particle])
-
-        self.assertEqual(self.rec_exception_callback_value, None)
-        in_file.close()
-
-        log.debug('===== START TEST SIMPLE TELEMETERED =====')
-        in_file = self.open_file(FILE3)
-        parser = self.create_tel_parser(in_file)
-
-        for expected in EXPECTED_FILE3:
-
-            # Generate expected particle
-            expected_particle = FlortDjDclTelemeteredInstrumentDataParticle(expected)
-
-            # Get record and verify.
-            result = parser.get_records(1)
-            self.assertEqual(result, [expected_particle])
-
-        self.assertEqual(self.tel_exception_callback_value, None)
-        in_file.close()
-
-        log.debug('===== END TEST SIMPLE =====')
-
     def test_many_with_yml(self):
         """
         Read a file and verify that all records can be read.
@@ -748,29 +343,27 @@ class FlortDjDclParserUnitTestCase(ParserUnitTestCase):
 
         num_particles = 30
 
-        in_file = self.open_file(FILE2)
-        parser = self.create_rec_parser(in_file)
+        with self.open_file(FILE2) as in_file:
+            parser = FlortDjDclParser(self.rec_config, in_file, self.exception_callback)
 
-        particles = parser.get_records(num_particles)
+            particles = parser.get_records(num_particles)
 
-        log.debug("Num particles: %d", len(particles))
+            log.debug("Num particles: %d", len(particles))
 
-        self.assert_particles(particles, "rec_20020215.flort2.yml", RESOURCE_PATH)
-        self.assertEquals(self.exception_callback_value, [])
-        in_file.close()
+            self.assert_particles(particles, "rec_20020215.flort2.yml", RESOURCE_PATH)
+            self.assertEquals(self.exception_callback_value, [])
 
         log.debug('===== START TEST MANY WITH YML TELEMETERED =====')
 
-        in_file = self.open_file(FILE2)
-        parser = self.create_tel_parser(in_file)
+        with self.open_file(FILE2) as in_file:
+            parser = FlortDjDclParser(self.tel_config, in_file, self.exception_callback)
 
-        particles = parser.get_records(num_particles)
+            particles = parser.get_records(num_particles)
 
-        log.debug("Num particles: %d", len(particles))
+            log.debug("Num particles: %d", len(particles))
 
-        self.assert_particles(particles, "tel_20020215.flort2.yml", RESOURCE_PATH)
-        self.assertEquals(self.exception_callback_value, [])
-        in_file.close()
+            self.assert_particles(particles, "tel_20020215.flort2.yml", RESOURCE_PATH)
+            self.assertEquals(self.exception_callback_value, [])
 
         log.debug('===== END TEST MANY WITH YML =====')
 
@@ -780,15 +373,13 @@ class FlortDjDclParserUnitTestCase(ParserUnitTestCase):
         The test file is a trimmed down copy of a recovered file from a real deployment
         """
 
-        in_file = self.open_file('20151023.flort.log')
+        with self.open_file('20151023.flort.log') as in_file:
+            parser = FlortDjDclParser(self.rec_config, in_file, self.exception_callback)
 
-        parser = self.create_rec_parser(in_file)
+            particles = parser.get_records(5)
 
-        particles = parser.get_records(5)
+            log.debug("Num particles: %d", len(particles))
 
-        log.debug("Num particles: %d", len(particles))
-
-        self.assertEquals(len(particles), 3)
-        self.assertEquals(self.exception_callback_value, [])
-        in_file.close()
+            self.assertEquals(len(particles), 3)
+            self.assertEquals(self.exception_callback_value, [])
 
