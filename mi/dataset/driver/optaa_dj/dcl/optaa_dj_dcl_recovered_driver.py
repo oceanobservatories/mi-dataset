@@ -4,17 +4,18 @@
 # Copyright 2014 Raytheon Co.
 ##
 
-__author__ = "mworden"
-
 import os
 
 from mi.core.log import get_logger
 from mi.logging import config
 
-from mi.dataset.parser.optaa_dj_dcl import OptaaDjDclRecoveredParser
+from mi.dataset.parser.optaa_dj_dcl import OptaaDjDclParser
 from mi.dataset.dataset_driver import DataSetDriver
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 from mi.core.versioning import version
+
+__author__ = "mworden"
+
 
 class OptaaDjDclRecoveredDriver:
     def __init__(self, sourceFilePath, particleDataHdlrObj, parser_config):
@@ -25,18 +26,13 @@ class OptaaDjDclRecoveredDriver:
     def process(self):
         log = get_logger()
 
-        with open(self._sourceFilePath, "r") as file_handle:
+        with open(self._sourceFilePath, "rb") as file_handle:
             def exception_callback(exception):
                 log.debug("Exception: %s", exception)
                 self._particleDataHdlrObj.setParticleDataCaptureFailure()
 
-            parser = OptaaDjDclRecoveredParser(self._parser_config,
-                                               file_handle,
-                                               None,
-                                               lambda state, ingested: None,
-                                               lambda data: None,
-                                               exception_callback,
-                                               self._sourceFilePath)
+            parser = OptaaDjDclParser(self._parser_config,
+                                      file_handle, exception_callback, self._sourceFilePath, False)
 
             driver = DataSetDriver(parser, self._particleDataHdlrObj)
 
@@ -45,7 +41,7 @@ class OptaaDjDclRecoveredDriver:
         return self._particleDataHdlrObj
 
 
-@version("15.6.0")
+@version("15.7.0")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     config.add_configuration(os.path.join(basePythonCodePath, 'res', 'config', 'mi-logging.yml'))
 
