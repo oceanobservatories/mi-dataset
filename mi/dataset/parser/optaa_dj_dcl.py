@@ -52,7 +52,6 @@ SIZE_CHECKSUM = 2                    # number of bytes for checksum in the input
 SIZE_PAD = 1                         # number of bytes for trailing pad in the input
 MARKER_SIZE = 4  # 4 bytes are used for the packet marker
 START_MARKER = b'\xFF\x00\xFF\x00'        # all packets start with 0xFF00FF00
-TIME_OFFSET = 26  # location of Time in Milliseconds since power up in packet
 
 DATE = r'(\d{4})(\d{2})(\d{2})'      # Date: YYYYMMDD
 TIME = r'(\d{2})(\d{2})(\d{2})'      # Time: HHMMSS
@@ -319,8 +318,7 @@ class OptaaDjDclParser(SimpleParser):
                 # first check that the packet passes the checksum
                 expected_checksum = struct.unpack_from('>H', packet_buffer, packet_length)[0]
 
-                actual_checksum = reduce(lambda x, y: x + y,
-                                         map(ord, packet_buffer[: -(SIZE_CHECKSUM + SIZE_PAD)])) & 0xFFFF
+                actual_checksum = sum(bytearray(packet_buffer[:-(SIZE_CHECKSUM + SIZE_PAD)])) & 0xFFFF
 
                 if actual_checksum == expected_checksum:
 
