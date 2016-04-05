@@ -12,7 +12,6 @@ from nose.plugins.attrib import attr
 
 from mi.core.exceptions import SampleException
 from mi.core.log import get_logger
-log = get_logger()
 
 from mi.idk.config import Config
 
@@ -25,6 +24,7 @@ from mi.dataset.parser.adcps_jln_stc import AdcpsJlnStcParser, \
     AdcpsJlnStcMetadataRecoveredDataParticle, \
     AdcpsJlnStcParticleClassKey
 
+log = get_logger()
 
 RESOURCE_PATH = os.path.join(Config().base_dir(), 'mi',
                              'dataset', 'driver', 'adcps_jln',
@@ -64,12 +64,9 @@ class AdcpsJlnStcParserUnitTestCase(ParserUnitTestCase):
         Read test data and pull out multiple data particles at one time.
         Assert that the results are those we expected.
         """
-        with open(os.path.join(RESOURCE_PATH, 'adcpt_20130929_091817.DAT')) as file_handle:
+        with open(os.path.join(RESOURCE_PATH, 'adcpt_20130929_091817.DAT'), 'rb') as file_handle:
             parser = AdcpsJlnStcParser(self._telem_config,
-                                       None,
                                        file_handle,
-                                       lambda state, ingested: None,
-                                       lambda data: None,
                                        self.exception_callback)
 
             result = parser.get_records(6)
@@ -78,12 +75,9 @@ class AdcpsJlnStcParserUnitTestCase(ParserUnitTestCase):
 
             self.assertEquals(len(self.exception_callback_value), 0)
 
-        with open(os.path.join(RESOURCE_PATH, 'adcpt_20130929_091817.DAT')) as file_handle:
+        with open(os.path.join(RESOURCE_PATH, 'adcpt_20130929_091817.DAT'), 'rb') as file_handle:
             parser = AdcpsJlnStcParser(self._recov_config,
-                                       None,
                                        file_handle,
-                                       lambda state, ingested: None,
-                                       lambda data: None,
                                        self.exception_callback)
 
             result = parser.get_records(6)
@@ -98,12 +92,10 @@ class AdcpsJlnStcParserUnitTestCase(ParserUnitTestCase):
         """
         # Bad checksum
         # If checksum is bad, skip the record and continue parsing.
-        with open(os.path.join(RESOURCE_PATH, 'adcps_jln_stc.bad_checksum.DAT'), 'r') as file_handle:
+        with open(os.path.join(RESOURCE_PATH, 'adcps_jln_stc.bad_checksum.DAT'), 'rb') as file_handle:
 
             parser = AdcpsJlnStcParser(self._telem_config,
-                                       None, file_handle,
-                                       lambda state, ingested: None,
-                                       lambda data: None,
+                                       file_handle,
                                        self.exception_callback)
 
             result = parser.get_records(10)
@@ -118,12 +110,9 @@ class AdcpsJlnStcParserUnitTestCase(ParserUnitTestCase):
 
         # Incorrect number of bytes
         # If numbytes is incorrect, skip the record and continue parsing.
-        with open(os.path.join(RESOURCE_PATH, 'adcps_jln_stc.bad_num_bytes.DAT'), 'r') as file_handle:
+        with open(os.path.join(RESOURCE_PATH, 'adcps_jln_stc.bad_num_bytes.DAT'), 'rb') as file_handle:
             parser = AdcpsJlnStcParser(self._telem_config,
-                                       None,
                                        file_handle,
-                                       lambda state, ingested: None,
-                                       lambda data: None,
                                        self.exception_callback)
             result = parser.get_records(10)
 
@@ -139,13 +128,10 @@ class AdcpsJlnStcParserUnitTestCase(ParserUnitTestCase):
         """
         # Bad checksum
         # If checksum is bad, skip the record and continue parsing.
-        with open(os.path.join(RESOURCE_PATH, 'adcps_jln_stc.bad_checksum.DAT'), 'r') as file_handle:
+        with open(os.path.join(RESOURCE_PATH, 'adcps_jln_stc.bad_checksum.DAT'), 'rb') as file_handle:
 
             parser = AdcpsJlnStcParser(self._recov_config,
-                                       None,
                                        file_handle,
-                                       lambda state, ingested: None,
-                                       lambda data: None,
                                        self.exception_callback)
 
             result = parser.get_records(10)
@@ -160,12 +146,9 @@ class AdcpsJlnStcParserUnitTestCase(ParserUnitTestCase):
 
         # Incorrect number of bytes
         # If numbytes is incorrect, skip the record and continue parsing.
-        with open(os.path.join(RESOURCE_PATH, 'adcps_jln_stc.bad_num_bytes.DAT'), 'r') as file_handle:
+        with open(os.path.join(RESOURCE_PATH, 'adcps_jln_stc.bad_num_bytes.DAT'), 'rb') as file_handle:
             parser = AdcpsJlnStcParser(self._recov_config,
-                                       None,
                                        file_handle,
-                                       lambda state, ingested: None,
-                                       lambda data: None,
                                        self.exception_callback)
             result = parser.get_records(10)
 
@@ -178,11 +161,9 @@ class AdcpsJlnStcParserUnitTestCase(ParserUnitTestCase):
     def test_receive_fail_telem(self):
         # ReceiveFailure
         # If record marked with 'ReceiveFailure', skip the record and continue parsing.
-        with open(os.path.join(RESOURCE_PATH, 'adcps_jln_stc.bad_rx_failure.DAT'), 'r') as file_handle:
+        with open(os.path.join(RESOURCE_PATH, 'adcps_jln_stc.bad_rx_failure.DAT'), 'rb') as file_handle:
             parser = AdcpsJlnStcParser(self._telem_config,
-                                       None, file_handle,
-                                       lambda state, ingested: None,
-                                       lambda data: None,
+                                       file_handle,
                                        self.exception_callback)
 
             result = parser.get_records(10)
@@ -191,14 +172,12 @@ class AdcpsJlnStcParserUnitTestCase(ParserUnitTestCase):
 
             self.assertEquals(len(self.exception_callback_value), 0)
 
-    def test_receive_fail_telem(self):
+    def test_receive_fail_recov(self):
         # ReceiveFailure
         # If record marked with 'ReceiveFailure', skip the record and continue parsing.
-        with open(os.path.join(RESOURCE_PATH, 'adcps_jln_stc.bad_rx_failure.DAT'), 'r') as file_handle:
+        with open(os.path.join(RESOURCE_PATH, 'adcps_jln_stc.bad_rx_failure.DAT'), 'rb') as file_handle:
             parser = AdcpsJlnStcParser(self._recov_config,
-                                       None, file_handle,
-                                       lambda state, ingested: None,
-                                       lambda data: None,
+                                       file_handle,
                                        self.exception_callback)
 
             result = parser.get_records(10)
@@ -209,11 +188,9 @@ class AdcpsJlnStcParserUnitTestCase(ParserUnitTestCase):
 
     def test_real_file(self):
 
-        with open(os.path.join(RESOURCE_PATH, 'adcpt_20140504_015742.DAT'), 'r') as file_handle:
+        with open(os.path.join(RESOURCE_PATH, 'adcpt_20140504_015742.DAT'), 'rb') as file_handle:
             parser = AdcpsJlnStcParser(self._telem_config,
-                                       None, file_handle,
-                                       lambda state, ingested: None,
-                                       lambda data: None,
+                                       file_handle,
                                        self.exception_callback)
 
             result = parser.get_records(1000)
@@ -222,11 +199,9 @@ class AdcpsJlnStcParserUnitTestCase(ParserUnitTestCase):
 
             self.assertEquals(len(self.exception_callback_value), 0)
 
-        with open(os.path.join(RESOURCE_PATH, 'adcpt_20140504_015742.DAT'), 'r') as file_handle:
+        with open(os.path.join(RESOURCE_PATH, 'adcpt_20140504_015742.DAT'), 'rb') as file_handle:
             parser = AdcpsJlnStcParser(self._recov_config,
-                                       None, file_handle,
-                                       lambda state, ingested: None,
-                                       lambda data: None,
+                                       file_handle,
                                        self.exception_callback)
 
             result = parser.get_records(1000)
@@ -240,12 +215,9 @@ class AdcpsJlnStcParserUnitTestCase(ParserUnitTestCase):
         Read test data and pull out multiple data particles at one time.
         Assert that the results are those we expected.
         """
-        with open(os.path.join(RESOURCE_PATH, 'adcpt_20140613_105345.DAT')) as file_handle:
+        with open(os.path.join(RESOURCE_PATH, 'adcpt_20140613_105345.DAT'), 'rb') as file_handle:
             parser = AdcpsJlnStcParser(self._telem_config,
-                                       None,
                                        file_handle,
-                                       lambda state, ingested: None,
-                                       lambda data: None,
                                        self.exception_callback)
 
             result = parser.get_records(100)
@@ -259,12 +231,9 @@ class AdcpsJlnStcParserUnitTestCase(ParserUnitTestCase):
         Read test data and pull out multiple data particles at one time.
         Assert that the results are those we expected.
         """
-        with open(os.path.join(RESOURCE_PATH, 'adcpt_20140707_200310.DAT')) as file_handle:
+        with open(os.path.join(RESOURCE_PATH, 'adcpt_20140707_200310.DAT'), 'rb') as file_handle:
             parser = AdcpsJlnStcParser(self._telem_config,
-                                       None,
                                        file_handle,
-                                       lambda state, ingested: None,
-                                       lambda data: None,
                                        self.exception_callback)
 
             result = parser.get_records(100)
