@@ -10,54 +10,53 @@ Release notes:
 Initial Release
 """
 
-__author__ = 'Maria Lutz'
-__license__ = 'Apache 2.0'
-
-import copy
 import re
 import ntplib
 import struct
 import time
 import calendar
+import datetime as dt
 
 from mi.core.log import get_logger
-log = get_logger()
 
 from mi.core.common import BaseEnum
 from mi.core.instrument.data_particle import DataParticle
 from mi.core.exceptions import SampleException, \
-    DatasetParserException,\
     RecoverableSampleException, \
     UnexpectedDataException, \
     ConfigurationException
 
-from mi.dataset.dataset_parser import BufferLoadingParser, DataSetDriverConfigKeys
-from mi.dataset.parser import utilities
+from mi.dataset.dataset_parser import SimpleParser, DataSetDriverConfigKeys
+from mi.dataset.parser.common_regexes import END_OF_LINE_REGEX
+
+log = get_logger()
+
+__author__ = 'Maria Lutz'
+__license__ = 'Apache 2.0'
+
 
 # *** Defining regexes for this parser ***
 HEADER_REGEX = r'#UIMM Status.+DateTime: (\d{8}\s\d{6}).+#ID=(\d+).+#SN=(\d+).+#Volts=(\d+\.\d{2}).+' \
-               '#Records=(\d+).+#Length=(\d+).+#Events=(\d+).+UIMM Data\r\n'
+               '#Records=(\d+).+#Length=(\d+).+#Events=(\d+).+#Begin UIMM Data' + END_OF_LINE_REGEX
+
 HEADER_MATCHER = re.compile(HEADER_REGEX, re.DOTALL)
 
-FOOTER_REGEX = r'#End UIMM Data, (\d+) samples written\r\n'
-FOOTER_MATCHER = re.compile(FOOTER_REGEX)
+FOOTER_REGEX = r'#End UIMM Data, (\d+) samples written.+'
+FOOTER_MATCHER = re.compile(FOOTER_REGEX, re.DOTALL)
 
 HEADER_FOOTER_REGEX = r'#UIMM Status.+DateTime: (\d{8}\s\d{6}).+#ID=(\d+).+#SN=(\d+).+#Volts=(\d+\.\d{2})' \
-    '.+#Records=(\d+).+#Length=(\d+).+#Events=(\d+).+UIMM Data\r\n#End UIMM Data, (\d+) samples written\r\n'
+    '.+#Records=(\d+).+#Length=(\d+).+#Events=(\d+).+'  \
+                      '#End UIMM Data, (\d+) samples written.+'
 HEADER_FOOTER_MATCHER = re.compile(HEADER_FOOTER_REGEX, re.DOTALL)
 
-DATA_REGEX = r'(Record\[\d+\]:)([\x00-\xFF]+?)\r\n(Record|#End U)'
-DATA_MATCHER = re.compile(DATA_REGEX)
+DATA_REGEX = r'(Record\[\d+\]:).*?(\x6e\x7f.+?)' + END_OF_LINE_REGEX + '(?=Record|#End U)'
+DATA_MATCHER = re.compile(DATA_REGEX, re.DOTALL)
 
-DATA_REGEX_B = r'(Record\[\d+\]:).*?(\x6e\x7f[\x00-\xFF]+)\r\n'
-DATA_MATCHER_B = re.compile(DATA_REGEX_B, re.DOTALL)
-
-RX_FAILURE_REGEX = r'Record\[\d+\]:ReceiveFailure\r\n'
+RX_FAILURE_REGEX = r'Record\[\d+\]:ReceiveFailure' + END_OF_LINE_REGEX
 RX_FAILURE_MATCHER = re.compile(RX_FAILURE_REGEX)
 
-HEADER_BYTES = 200
-FOOTER_BYTES = 43
-MIN_DATA_BYTES = 36
+HEADER_BYTES = 200  # nominal number of bytes at beginning of file to look for Header
+FOOTER_BYTES = 43   # Nominal number of bytes from end of file to look for Footer.
 
 
 class AdcpsJlnStcParticleClassKey (BaseEnum):
@@ -102,14 +101,11 @@ class AdcpsJlnStcInstrumentParserDataParticleKey(BaseEnum):
     ADCPS_JLN_VEL_EAST = 'water_velocity_east'
 
 
-class StateKey(BaseEnum):
-    POSITION = 'position'  # holds the file position
-
-
 class AdcpsJlnStcInstrumentDataParticle(DataParticle):
     """
     Base class for parsing data from the adcps_jln_stc instrument data set
     """
+    ntp_epoch = dt.datetime(1900, 1, 1)
 
     def _build_parsed_values(self):
         """
@@ -118,32 +114,38 @@ class AdcpsJlnStcInstrumentDataParticle(DataParticle):
         with the appropriate tag.
         @throws SampleException If there is a problem with sample creation
         """
-        match = DATA_MATCHER_B.search(self.raw_data)
-        if not match:
-            raise RecoverableSampleException("AdcpsJlnStcInstrumentParserDataParticle: No regex match of \
-                                  parsed sample data %r", self.raw_data)
-        try:
-            record_str = match.group(1).strip('Record\[').strip('\]:')
 
-            fields = struct.unpack('<HHIBBBdHhhHIBBB', match.group(2)[0:34])
+        try:
+            record_str = self.raw_data.group(1).strip('Record\[').strip('\]:')
+
+            fields = struct.unpack_from('<HHIBBBHBBBBBBHhhHIBBB', self.raw_data.group(2))
 
             # ID field should always be 7F6E
             if fields[0] != int('0x7F6E', 16):
                 raise ValueError('ID field does not equal 7F6E.')
 
             num_bytes = fields[1]
-            if len(match.group(2)) - 2 != num_bytes:
+            if len(self.raw_data.group(2)) - 2 != num_bytes:
                 raise ValueError('num bytes %d does not match data length %d'
-                                 % (num_bytes, len(match.group(2)) - 2))
+                                 % (num_bytes, len(self.raw_data.group(2)) - 2))
 
-            nbins = fields[14]
-            if len(match.group(2)) < (36 + (nbins * 8)):
+            nbins = fields[20]
+            if len(self.raw_data.group(2)) < (36 + (nbins * 8)):
                 raise ValueError('Number of bins %d does not fit in data length %d'
-                                 % (nbins, len(match.group(0))))
-            date_fields = struct.unpack('HBBBBBB', match.group(2)[11:19])
+                                 % (nbins, len(self.raw_data.group(0))))
+
+            dts = dt.datetime(fields[6],
+                              fields[7],
+                              fields[8],
+                              fields[9],
+                              fields[10],
+                              fields[11])
+
+            rtc_time = (dts - self.ntp_epoch).total_seconds() + fields[12] / 100.0
+            self.set_internal_timestamp(rtc_time)
 
             velocity_data = struct.unpack_from('<%dh' % (nbins * 4),
-                                               match.group(2), 34)
+                                               self.raw_data.group(2), 34)
 
             adcps_jln_vel_east = velocity_data[:nbins]
             adcps_jln_vel_north = velocity_data[nbins:nbins*2]
@@ -151,28 +153,28 @@ class AdcpsJlnStcInstrumentDataParticle(DataParticle):
             adcps_jln_vel_error = velocity_data[nbins*3:]
 
         except (ValueError, TypeError, IndexError) as ex:
-            raise RecoverableSampleException("Error (%s) while decoding parameters in data: %r"
-                                             % (ex, (match.group(0))))
+            raise SampleException("Error (%s) while decoding parameters in data: %r"
+                                  % (ex, (self.raw_data.group(0))))
 
         result = [self._encode_value(AdcpsJlnStcInstrumentParserDataParticleKey.ADCPS_JLN_RECORD, record_str, int),
                   self._encode_value(AdcpsJlnStcInstrumentParserDataParticleKey.ADCPS_JLN_NUMBER, fields[2], int),
                   self._encode_value(AdcpsJlnStcInstrumentParserDataParticleKey.ADCPS_JLN_UNIT_ID, fields[3], int),
                   self._encode_value(AdcpsJlnStcInstrumentParserDataParticleKey.ADCPS_JLN_FW_VERS, fields[4], int),
                   self._encode_value(AdcpsJlnStcInstrumentParserDataParticleKey.ADCPS_JLN_FW_REV, fields[5], int),
-                  self._encode_value(AdcpsJlnStcInstrumentParserDataParticleKey.ADCPS_JLN_YEAR, date_fields[0], int),
-                  self._encode_value(AdcpsJlnStcInstrumentParserDataParticleKey.ADCPS_JLN_MONTH, date_fields[1], int),
-                  self._encode_value(AdcpsJlnStcInstrumentParserDataParticleKey.ADCPS_JLN_DAY, date_fields[2], int),
-                  self._encode_value(AdcpsJlnStcInstrumentParserDataParticleKey.ADCPS_JLN_HOUR, date_fields[3], int),
-                  self._encode_value(AdcpsJlnStcInstrumentParserDataParticleKey.ADCPS_JLN_MINUTE, date_fields[4], int),
-                  self._encode_value(AdcpsJlnStcInstrumentParserDataParticleKey.ADCPS_JLN_SECOND, date_fields[5], int),
-                  self._encode_value(AdcpsJlnStcInstrumentParserDataParticleKey.ADCPS_JLN_HSEC, date_fields[6], int),
-                  self._encode_value(AdcpsJlnStcInstrumentParserDataParticleKey.ADCPS_JLN_HEADING, fields[7], int),
-                  self._encode_value(AdcpsJlnStcInstrumentParserDataParticleKey.ADCPS_JLN_PITCH, fields[8], int),
-                  self._encode_value(AdcpsJlnStcInstrumentParserDataParticleKey.ADCPS_JLN_ROLL, fields[9], int),
-                  self._encode_value(AdcpsJlnStcInstrumentParserDataParticleKey.ADCPS_JLN_TEMP, fields[10], int),
-                  self._encode_value(AdcpsJlnStcInstrumentParserDataParticleKey.ADCPS_JLN_PRESSURE, fields[11], int),
-                  self._encode_value(AdcpsJlnStcInstrumentParserDataParticleKey.ADCPS_JLN_STARTBIN, fields[13], int),
-                  self._encode_value(AdcpsJlnStcInstrumentParserDataParticleKey.ADCPS_JLN_BINS, fields[14], int),
+                  self._encode_value(AdcpsJlnStcInstrumentParserDataParticleKey.ADCPS_JLN_YEAR, fields[6], int),
+                  self._encode_value(AdcpsJlnStcInstrumentParserDataParticleKey.ADCPS_JLN_MONTH, fields[7], int),
+                  self._encode_value(AdcpsJlnStcInstrumentParserDataParticleKey.ADCPS_JLN_DAY, fields[8], int),
+                  self._encode_value(AdcpsJlnStcInstrumentParserDataParticleKey.ADCPS_JLN_HOUR, fields[9], int),
+                  self._encode_value(AdcpsJlnStcInstrumentParserDataParticleKey.ADCPS_JLN_MINUTE, fields[10], int),
+                  self._encode_value(AdcpsJlnStcInstrumentParserDataParticleKey.ADCPS_JLN_SECOND, fields[11], int),
+                  self._encode_value(AdcpsJlnStcInstrumentParserDataParticleKey.ADCPS_JLN_HSEC, fields[12], int),
+                  self._encode_value(AdcpsJlnStcInstrumentParserDataParticleKey.ADCPS_JLN_HEADING, fields[13], int),
+                  self._encode_value(AdcpsJlnStcInstrumentParserDataParticleKey.ADCPS_JLN_PITCH, fields[14], int),
+                  self._encode_value(AdcpsJlnStcInstrumentParserDataParticleKey.ADCPS_JLN_ROLL, fields[15], int),
+                  self._encode_value(AdcpsJlnStcInstrumentParserDataParticleKey.ADCPS_JLN_TEMP, fields[16], int),
+                  self._encode_value(AdcpsJlnStcInstrumentParserDataParticleKey.ADCPS_JLN_PRESSURE, fields[17], int),
+                  self._encode_value(AdcpsJlnStcInstrumentParserDataParticleKey.ADCPS_JLN_STARTBIN, fields[19], int),
+                  self._encode_value(AdcpsJlnStcInstrumentParserDataParticleKey.ADCPS_JLN_BINS, fields[20], int),
                   self._encode_value(AdcpsJlnStcInstrumentParserDataParticleKey.ADCPS_JLN_VEL_ERROR,
                                      adcps_jln_vel_error, list),
                   self._encode_value(AdcpsJlnStcInstrumentParserDataParticleKey.ADCPS_JLN_VEL_UP,
@@ -184,25 +186,15 @@ class AdcpsJlnStcInstrumentDataParticle(DataParticle):
 
         return result
 
-    @staticmethod
-    def unpack_date(data):
-        fields = struct.unpack('HBBBBBB', data)
-        zulu_ts = "%04d-%02d-%02dT%02d:%02d:%02d.%02dZ" % (
-            fields[0], fields[1], fields[2], fields[3],
-            fields[4], fields[5], fields[6])
-        return zulu_ts
 
-
-class AdcpsJlnStcInstrumentTelemeteredDataParticle(
-    AdcpsJlnStcInstrumentDataParticle):
+class AdcpsJlnStcInstrumentTelemeteredDataParticle(AdcpsJlnStcInstrumentDataParticle):
     """
     Class for parsing data from the adcps_jln_stc instrument telemetered data set
     """
     _data_particle_type = DataParticleType.ADCPS_JLN_INS_TELEMETERED
 
 
-class AdcpsJlnStcInstrumentRecoveredDataParticle(
-    AdcpsJlnStcInstrumentDataParticle):
+class AdcpsJlnStcInstrumentRecoveredDataParticle(AdcpsJlnStcInstrumentDataParticle):
     """
     Class for parsing data from the adcps_jln_stc instrument recovered data set
     """
@@ -256,25 +248,15 @@ class AdcpsJlnStcMetadataRecoveredDataParticle(AdcpsJlnStcMetadataDataParticle):
     _data_particle_type = DataParticleType.ADCPS_JLN_META_RECOVERED
 
 
-class AdcpsJlnStcParser(BufferLoadingParser):
+class AdcpsJlnStcParser(SimpleParser):
 
     def __init__(self,
                  config,
-                 state,
                  stream_handle,
-                 state_callback,
-                 publish_callback,
                  exception_callback):
-
-        self._saved_header = None
-        self._read_state = {StateKey.POSITION: 0}
 
         super(AdcpsJlnStcParser, self).__init__(config,
                                                 stream_handle,
-                                                state,
-                                                self.sieve_function,
-                                                state_callback,
-                                                publish_callback,
                                                 exception_callback)
 
         try:
@@ -290,84 +272,22 @@ class AdcpsJlnStcParser(BufferLoadingParser):
             log.warn(message)
             raise ConfigurationException(message)
 
-        if state:
-            self.set_state(state)
-            if state[StateKey.POSITION] == 0:
-                self._parse_header()
-        else:
-            self._parse_header()
+    @staticmethod
+    def compare_checksum(raw_bytes):
 
-    def set_state(self, state_obj):
-        """
-        Set the value of the state object for this parser
-        @param state_obj The object to set the state to.
-        @throws DatasetParserException if there is a bad state structure
-        """
-        if not isinstance(state_obj, dict):
-            raise DatasetParserException("Invalid state structure")
-        if not (StateKey.POSITION in state_obj):
-            raise DatasetParserException("Invalid state keys")
-        self._chunker.clean_all_chunks()
-        self._record_buffer = []
-        self._saved_header = None
-        self._state = state_obj
-        self._read_state = state_obj
-        self._stream_handle.seek(state_obj[StateKey.POSITION])
+        rcv_checksum = struct.unpack('<H', raw_bytes[-2:])[0]
 
-    def sieve_function(self, raw_data):
-        """
-        Sort through the raw data to identify new blocks of data that need processing.
-        @param raw_data The raw data to search
-        @retval list of matched start,end index found in raw_data
-        """
-        return_list = []
-        st_idx = 0
-        while st_idx < len(raw_data):
-            # Find a match, then advance
-            fail_match = RX_FAILURE_MATCHER.match(raw_data[st_idx:])
-            match = DATA_MATCHER.match(raw_data[st_idx:])
-            if fail_match:
-                # found a marked receive failure match, still add this to the chunks so it is not non-data
-                end_packet_idx = fail_match.end(0) + st_idx
-                return_list.append((fail_match.start(0) + st_idx, end_packet_idx))
-                st_idx = end_packet_idx
-            elif match:
-                # found a real record match
-                end_packet_idx = match.end(0) - 6 + st_idx  # string "Record" or "#End U" is length 6
-                if end_packet_idx < len(raw_data):
-                    # Record "ReceiveFailure" and checksum are checked in parse_chunks
-                    return_list.append((match.start(0) + st_idx, end_packet_idx))
-                st_idx = end_packet_idx
-            else:
-                st_idx += 1
-        return return_list
+        calc_checksum = sum(bytearray(raw_bytes[:-2])) & 0xFFFF
 
-    def compare_checksum(self, raw_bytes):
-
-        rcv_chksum = struct.unpack('<H', raw_bytes[-2:])
-        calc_chksum = self.calc_checksum(raw_bytes[:-2])
-
-        if rcv_chksum[0] == calc_chksum:
+        if rcv_checksum == calc_checksum:
             return True
         return False
-
-    def calc_checksum(self, raw_bytes):
-        n_bytes = len(raw_bytes)
-        # unpack raw bytes into unsigned chars
-        unpack_str = '<'
-        for i in range(0, n_bytes):
-            unpack_str = unpack_str + 'B'
-        fields = struct.unpack(unpack_str, raw_bytes)
-        sum_fields = sum(fields)
-        # since we are summing as unsigned short, limit range to 0 to 65535
-        while sum_fields > 65535:
-            sum_fields -= 65536
-        return sum_fields
 
     def _parse_header(self):
         """
         Parse required parameters from the header and the footer.
         """
+
         # read the first bytes from the file
         header = self._stream_handle.read(HEADER_BYTES)
         if len(header) < HEADER_BYTES:
@@ -380,8 +300,9 @@ class AdcpsJlnStcParser(BufferLoadingParser):
         footer_match = FOOTER_MATCHER.search(footer)
 
         # parse the header to get the timestamp
-        if footer_match and HEADER_MATCHER.search(header):
-            header_match = HEADER_MATCHER.search(header)
+        header_match = HEADER_MATCHER.search(header)
+
+        if footer_match and header_match:
             self._stream_handle.seek(len(header_match.group(0)))
             timestamp_struct = time.strptime(header_match.group(1), "%Y%m%d %H%M%S")
             timestamp_s = calendar.timegm(timestamp_struct)
@@ -389,98 +310,68 @@ class AdcpsJlnStcParser(BufferLoadingParser):
 
             header_footer = header_match.group(0) + footer_match.group(0)
 
-            sample = self._extract_sample(self._metadata_class, HEADER_FOOTER_MATCHER,
-                                          header_footer, self._timestamp)
+            particle = self._extract_sample(self._metadata_class, None,
+                                            header_footer, self._timestamp)
 
-            if sample:
-                # increment by the length of the matched header and save the header
-                self._increment_state(len(header_match.group(0)))
-                self._saved_header = (sample, copy.copy(self._read_state))
+            self._record_buffer.append(particle)
+
         else:
             log.warn("File header or footer does not match header regex")
 
-    def _increment_state(self, increment):
+    def parse_file(self):
         """
-        Increment the parser position by the given increment in bytes.
-        This indicates what has been read from the file, not what has
-        been published.
-        @ param increment number of bytes to increment parser position
+        Parse through the file, pulling single lines and comparing to the established patterns,
+        generating particles for data lines
         """
-        self._read_state[StateKey.POSITION] += increment
 
-    def parse_chunks(self):
-        """
-        Parse out any pending data chunks in the chunker. If
-        it is a valid data piece, build a particle, update the position and
-        timestamp. Go until the chunker has no more valid data.
-        @retval a list of tuples with sample particles encountered in this
-            parsing, plus the state. An empty list of nothing was parsed.
-        """
-        result_particles = []
+        self._parse_header()
 
-        # header gets read in initialization, but need to send it back from parse_chunks
-        if self._saved_header:
-            result_particles.append(self._saved_header)
-            self._saved_header = None
+        input_buffer = self._stream_handle.read()  # read the remainder of the file in a buffer
+        position = 0  # initialize buffer index
 
-        (nd_timestamp, non_data, non_start, non_end) = self._chunker.get_next_non_data_with_index(clean=False)
-        (timestamp, chunk, start, end) = self._chunker.get_next_data_with_index(clean=True)
-        self.handle_non_data(non_data, non_end, start)
+        while position < len(input_buffer):
 
-        while chunk is not None:
-            match_rx_failure = RX_FAILURE_MATCHER.match(chunk)
-            # ignore marked failure records
-            if not match_rx_failure:
-                data_match = DATA_MATCHER_B.match(chunk)
-                if data_match:
+            # check if this is a data failure - ignore
+            fail_match = RX_FAILURE_MATCHER.match(input_buffer[position:])
+            if fail_match:
+                position += fail_match.end(0)
+                continue
 
-                    if len(data_match.group(2)) >= MIN_DATA_BYTES and self.compare_checksum(data_match.group(2)):
-                        # pull out the date string from the data
-                        date_str = self._instrument_class.unpack_date(data_match.group(2)[11:19])
+            data_finder_match = DATA_MATCHER.search(input_buffer[position:])
+            if data_finder_match is not None:
 
-                        unix_time = utilities.zulu_timestamp_to_utc_time(date_str)
+                if data_finder_match.start(0) != 0:  # must have been garbage between records
+                    message = "Found un-expected non-data in byte %r after the header" % input_buffer[position:]
+                    log.warn(message)
+                    self._exception_callback(UnexpectedDataException(message))
 
-                        self._timestamp = ntplib.system_to_ntp_time(unix_time)
+                position += data_finder_match.end(0)
+                data_packet = data_finder_match.group(2)  # grab the data portion to validate checksum
 
-                        # round to ensure the timestamps match
-                        self._timestamp = round(self._timestamp * 100) / 100
+                if self.compare_checksum(data_packet):
 
-                        # particle-ize the data block received, return the record
-                        # set timestamp here, converted to ntp64. pull out timestamp for this record
-                        sample = self._extract_sample(self._instrument_class, DATA_MATCHER_B, chunk, self._timestamp)
+                    # If this is a valid sensor data record,
+                    # use the extracted fields to generate a particle.
 
-                        if sample:
-                            # create particle
-                            log.trace("Extracting sample chunk %r with read_state: %r", chunk, self._read_state)
-                            self._increment_state(len(chunk))
-                            result_particles.append((sample, copy.copy(self._read_state)))
-                    else:
-                        if len(data_match.group(2)) < MIN_DATA_BYTES:
-                            log.debug("Found record with not enough bytes %r", data_match.group(0))
-                            self._exception_callback(SampleException("Found record with not enough bytes %r"
-                                                                     % data_match.group(0)))
-                        else:
-                            log.debug("Found record whose checksum doesn't match 0x%r", data_match.group(0))
-                            self._exception_callback(SampleException("Found record whose checksum doesn't match %r"
-                                                                     % data_match.group(0)))
+                    particle = self._extract_sample(self._instrument_class,
+                                                    None,
+                                                    data_finder_match,
+                                                    None)
+
+                    self._record_buffer.append(particle)
+                else:
+                    log.warn("Found record whose checksum doesn't match 0x%r", data_finder_match.group(0))
+                    self._exception_callback(SampleException("Found record whose checksum doesn't match %r"
+                                                             % data_finder_match.group(0)))
+
             else:
-                log.info("Found RecieveFailure record, ignoring")
+                footer_match = FOOTER_MATCHER.match(input_buffer[position:])
+                if footer_match:
+                    position += footer_match.end(0)
 
-            (nd_timestamp, non_data, non_start, non_end) = self._chunker.get_next_non_data_with_index(clean=False)
-            (timestamp, chunk, start, end) = self._chunker.get_next_data_with_index(clean=True)
-            self.handle_non_data(non_data, non_end, start)
+                else:  # we found some garbage
+                    message = "Found un-expected non-data in byte %r after the header" % input_buffer[position:]
+                    log.warn(message)
+                    self._exception_callback(UnexpectedDataException(message))
+                    break  # give up
 
-        return result_particles
-
-    def handle_non_data(self, non_data, non_end, start):
-        """
-        Handle any non-data that is found in the file
-        """
-        # rx failure matches are expected non data, otherwise it is an error
-        if non_data is not None and non_end <= start:
-            # this non-data is an error, send an UnexpectedDataException and increment the state
-            self._increment_state(len(non_data))
-            log.debug("Found %d bytes of unexpected non-data" % len(non_data))
-            # if non-data is a fatal error, directly call the exception, if it is not use the _exception_callback
-            self._exception_callback(UnexpectedDataException("Found %d bytes of un-expected non-data %r"
-                                                             % (len(non_data), non_data)))
