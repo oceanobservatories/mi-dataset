@@ -26,13 +26,9 @@ Release notes:
 Initial Release
 """
 
-__author__ = 'Ronald Ronquillo'
-__license__ = 'Apache 2.0'
-
 import re
 
 from mi.core.log import get_logger
-log = get_logger()
 from mi.core.common import BaseEnum
 
 from mi.dataset.parser.dcl_file_common import DclInstrumentDataParticle, \
@@ -40,6 +36,11 @@ from mi.dataset.parser.dcl_file_common import DclInstrumentDataParticle, \
     START_METADATA, END_METADATA
 
 from mi.dataset.parser.common_regexes import END_OF_LINE_REGEX, FLOAT_REGEX, ANY_CHARS_REGEX
+
+log = get_logger()
+
+__author__ = 'Ronald Ronquillo'
+__license__ = 'Apache 2.0'
 
 
 # Basic patterns
@@ -145,8 +146,13 @@ class MetbkADclParser(DclFileCommonParser):
     """
     This is the entry point for the Metbk_a_dcl parser.
     """
-    def __init__(self, *args, **kwargs):
+    def __init__(self,
+                 config,
+                 stream_handle,
+                 exception_callback):
 
-        super(MetbkADclParser, self).__init__(SENSOR_DATA_MATCHER,
-                                              METADATA_MATCHER,
-                                              *args, **kwargs)
+        super(MetbkADclParser, self).__init__(config,
+                                              stream_handle,
+                                              exception_callback,
+                                              SENSOR_DATA_MATCHER,
+                                              METADATA_MATCHER)

@@ -51,6 +51,7 @@ A_CHAR = r'(A)'
 COMMA = ','
 SHARP = '#'
 CHAR_M = ' *M'
+EXTRA_CR = '\s*?'                 # account for random <CR> found in some live files.
 
 # Timestamp at the start of each record: YYYY/MM/DD HH:MM:SS.mmm
 # Metadata fields:  [text] more text
@@ -84,10 +85,10 @@ SENSOR_DATA_PATTERN += UINT + COMMA         # raw signal beta
 SENSOR_DATA_PATTERN += FLOAT + COMMA        # raw signal cdom
 SENSOR_DATA_PATTERN += FLOAT + COMMA        # raw signal cdom
 
-SENSOR_DATA_PATTERN_AIR = SENSOR_DATA_PATTERN + A_CHAR + END_OF_LINE_REGEX
+SENSOR_DATA_PATTERN_AIR = SENSOR_DATA_PATTERN + A_CHAR + EXTRA_CR + END_OF_LINE_REGEX
 SENSOR_DATA_MATCHER_AIR = re.compile(SENSOR_DATA_PATTERN_AIR)
 
-SENSOR_DATA_PATTERN_WATER = SENSOR_DATA_PATTERN + W_CHAR + END_OF_LINE_REGEX
+SENSOR_DATA_PATTERN_WATER = SENSOR_DATA_PATTERN + W_CHAR + EXTRA_CR + END_OF_LINE_REGEX
 SENSOR_DATA_MATCHER_WATER = re.compile(SENSOR_DATA_PATTERN_WATER)
 
 
@@ -220,8 +221,13 @@ class Pco2aADclParser(DclFileCommonParser):
     This is the entry point for the parser.
     """
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self,
+                 config,
+                 stream_handle,
+                 exception_callback):
 
-        super(Pco2aADclParser, self).__init__(None,
-                                              METADATA_MATCHER,
-                                             *args, **kwargs)
+        super(Pco2aADclParser, self).__init__(config,
+                                              stream_handle,
+                                              exception_callback,
+                                              None,
+                                              METADATA_MATCHER)

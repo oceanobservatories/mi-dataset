@@ -34,7 +34,7 @@ Files used for testing:
 import os
 from nose.plugins.attrib import attr
 
-from mi.core.log import get_logger; log = get_logger()
+from mi.core.log import get_logger
 
 from mi.dataset.test.test_parser import ParserUnitTestCase
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
@@ -45,6 +45,7 @@ from mi.dataset.driver.metbk_a.dcl.metbk_dcl_a_driver import MODULE_NAME, \
 
 from mi.dataset.test.test_parser import BASE_RESOURCE_PATH
 
+log = get_logger()
 RESOURCE_PATH = os.path.join(BASE_RESOURCE_PATH, 'metbk_a', 'dcl', 'resource')
 
 FILE_4_1430 = '20140805.metbk2.log'
@@ -85,14 +86,12 @@ class MetbkADclParserUnitTestCase(ParserUnitTestCase):
             {DataSetDriverConfigKeys.PARTICLE_MODULE: MODULE_NAME,
              DataSetDriverConfigKeys.PARTICLE_CLASS: particle_class},
             file_handle,
-            lambda state, ingested: None,
-            self.publish_callback,
             self.exception_callback)
         return parser
 
     def open_file(self, filename):
-        file = open(os.path.join(RESOURCE_PATH, filename), mode='r')
-        return file
+        my_file = open(os.path.join(RESOURCE_PATH, filename), mode='r')
+        return my_file
 
     def setUp(self):
         ParserUnitTestCase.setUp(self)

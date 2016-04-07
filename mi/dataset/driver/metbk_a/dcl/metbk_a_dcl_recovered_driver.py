@@ -10,7 +10,7 @@ from mi.dataset.driver.metbk_a.dcl.metbk_dcl_a_driver import process, \
 from mi.core.versioning import version
 
 
-@version("15.6.0")
+@version("15.6.1")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     process(sourceFilePath, particleDataHdlrObj, RECOVERED_PARTICLE_CLASS)
 

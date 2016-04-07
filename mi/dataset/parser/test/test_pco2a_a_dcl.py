@@ -20,8 +20,6 @@ import os
 from nose.plugins.attrib import attr
 
 from mi.core.log import get_logger
-log = get_logger()
-
 from mi.core.exceptions import UnexpectedDataException
 
 from mi.dataset.test.test_parser import ParserUnitTestCase
@@ -32,6 +30,9 @@ from mi.dataset.driver.pco2a_a.dcl.pco2a_a_dcl_driver import \
     MODULE_NAME, RECOVERED_PARTICLE_CLASSES, TELEMETERED_PARTICLE_CLASSES
 
 from mi.dataset.test.test_parser import BASE_RESOURCE_PATH
+
+log = get_logger()
+
 RESOURCE_PATH = os.path.join(BASE_RESOURCE_PATH, 'pco2a_a', 'dcl', 'resource')
 
 FILE = '20140217.pco2a.log'
@@ -54,18 +55,16 @@ class Pco2aADclParserUnitTestCase(ParserUnitTestCase):
         This function creates a Pco2aADcl parser.
         """
         parser = Pco2aADclParser(
-            {DataSetDriverConfigKeys.PARTICLE_MODULE: MODULE_NAME,
-             DataSetDriverConfigKeys.PARTICLE_CLASS: None,
-            DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT: particle_classes},
-            file_handle,
-            lambda state, ingested: None,
-            self.publish_callback,
-            self.exception_callback)
+                {DataSetDriverConfigKeys.PARTICLE_MODULE: MODULE_NAME,
+                 DataSetDriverConfigKeys.PARTICLE_CLASS: None,
+                 DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT: particle_classes},
+                file_handle,
+                self.exception_callback)
         return parser
 
     def open_file(self, filename):
-        file = open(os.path.join(RESOURCE_PATH, filename), mode='r')
-        return file
+        my_file = open(os.path.join(RESOURCE_PATH, filename), mode='r')
+        return my_file
 
     def setUp(self):
         ParserUnitTestCase.setUp(self)
@@ -184,11 +183,11 @@ class Pco2aADclParserUnitTestCase(ParserUnitTestCase):
         # Line 59: line has space instead of comma separator.
         # Line 61: current_a2d: missing field
         # Line 63: irga_source_temperature: field doubled
-        # Line 65: record ends with space then line feed
+        # Line 65: record ends with space then line feed  -- NO LONGER AN ERROR, bug_9989
         # Line 67: line is just a line feed
         # Line 69: suspect timestamp, followed by all hex ascii chars
         # Line 71: line has a tab instead of a comma separator.
-        # Line 73: line has tab before line feed.
+        # Line 73: line has tab before line feed.  -- NO LONGER AN ERROR, bug_9989
 
         log.debug('===== START TEST failure verify_parser =====')
         in_file = self.open_file(FILE_FAILURE)
@@ -202,7 +201,7 @@ class Pco2aADclParserUnitTestCase(ParserUnitTestCase):
             self.assert_(isinstance(self.exception_callback_value[i], UnexpectedDataException))
 
         # bad records
-        self.assertEqual(len(self.exception_callback_value), 37)
+        self.assertEqual(len(self.exception_callback_value), 35)
 
         in_file.close()
         log.debug('===== END TEST failure verify_parser =====')
@@ -228,7 +227,7 @@ class Pco2aADclParserUnitTestCase(ParserUnitTestCase):
             self.assert_(isinstance(self.exception_callback_value[i], UnexpectedDataException))
 
         # bad records
-        self.assertEqual(len(self.exception_callback_value), 37)
+        self.assertEqual(len(self.exception_callback_value), 35)
 
         in_file.close()
         log.debug('===== END TEST failure verify_parser RECOVERED =====')
@@ -243,6 +242,21 @@ class Pco2aADclParserUnitTestCase(ParserUnitTestCase):
 
         result = parser.get_records(10)
         self.assertEqual(len(result), 4)
+
+        self.assertListEqual(self.exception_callback_value, [])
+
+        in_file.close()
+
+    def test_bug_9989(self):
+        """
+        Test to verify the parser will accept records ending in <CR><CR><LF>
+        These were found in files on the OMC
+        """
+        in_file = self.open_file('20150302.pco2a.log')
+        parser = self.create_parser(RECOVERED_PARTICLE_CLASSES, in_file)
+
+        result = parser.get_records(500)
+        self.assertEqual(len(result), 432)
 
         self.assertListEqual(self.exception_callback_value, [])
 

@@ -14,14 +14,13 @@ from mi.dataset.parser.pco2a_a_dcl import Pco2aADclParser
 from mi.dataset.dataset_driver import DataSetDriver
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 
-log = get_logger()
-
 from mi.dataset.parser.pco2a_a_dcl import Pco2aADclParticleClassKey, \
     Pco2aADclTelemeteredInstrumentDataParticleAir, \
     Pco2aADclTelemeteredInstrumentDataParticleWater, \
     Pco2aADclRecoveredInstrumentDataParticleAir, \
     Pco2aADclRecoveredInstrumentDataParticleWater
 
+log = get_logger()
 
 MODULE_NAME = 'mi.dataset.parser.pco2a_a_dcl'
 
@@ -44,8 +43,6 @@ def process(source_file_path, particle_data_hdlr_obj, particle_classes):
              DataSetDriverConfigKeys.PARTICLE_CLASS: None,
              DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT: particle_classes},
             stream_handle,
-            lambda state, ingested: None,
-            lambda data: log.trace("Found data: %s", data),
             lambda ex: particle_data_hdlr_obj.setParticleDataCaptureFailure()
         )
         driver = DataSetDriver(parser, particle_data_hdlr_obj)

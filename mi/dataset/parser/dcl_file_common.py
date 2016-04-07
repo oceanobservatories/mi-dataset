@@ -10,16 +10,14 @@ Release notes:
 initial release
 """
 
-import calendar
 import re
-from functools import partial
 
 from mi.core.log import get_logger
-from mi.core.instrument.chunker import StringChunker
+
 from mi.core.instrument.data_particle import DataParticle
 from mi.core.exceptions import UnexpectedDataException, InstrumentParameterException
 
-from mi.dataset.dataset_parser import BufferLoadingParser, DataSetDriverConfigKeys
+from mi.dataset.dataset_parser import SimpleParser, DataSetDriverConfigKeys
 from mi.dataset.parser.common_regexes import END_OF_LINE_REGEX, SPACE_REGEX, \
     ANY_CHARS_REGEX, DATE_YYYY_MM_DD_REGEX, TIME_HR_MIN_SEC_MSEC_REGEX
 
@@ -92,7 +90,7 @@ class DclInstrumentDataParticle(DataParticle):
                 for name, group, function in self.instrument_particle_map]
 
 
-class DclFileCommonParser(BufferLoadingParser):
+class DclFileCommonParser(SimpleParser):
     """
     Parser for dcl data.
     In addition to the standard constructor parameters,
@@ -100,16 +98,11 @@ class DclFileCommonParser(BufferLoadingParser):
     and metadata_matcher
     """
 
-    def __init__(self,
-                 sensor_data_matcher,
-                 metadata_matcher,
-                 config,
+    def __init__(self, config,
                  stream_handle,
-                 *args, **kwargs):
-
-        # Default the position within the file to the beginning.
-        self.input_file = stream_handle
-        record_matcher = kwargs.get('record_matcher', RECORD_MATCHER)
+                 exception_callback,
+                 sensor_data_matcher,
+                 metadata_matcher):
 
         # Accommodate for any parser not using the PARTICLE_CLASSES_DICT in config
         # Ensure a data matcher is passed as a parameter or defined in the particle class
@@ -124,46 +117,22 @@ class DclFileCommonParser(BufferLoadingParser):
             raise InstrumentParameterException("data matcher required")
         self.metadata_matcher = metadata_matcher
 
-        # No fancy sieve function needed for this parser.
-        # File is ASCII with records separated by newlines.
         super(DclFileCommonParser, self).__init__(
             config,
             stream_handle,
-            None,
-            partial(StringChunker.regex_sieve_function,
-                    regex_list=[record_matcher]),
-            *args, **kwargs)
+            exception_callback)
 
-    def handle_non_data(self, non_data, non_end, start):
+    def parse_file(self):
         """
-        Handle any non-data that is found in the file
+        This method reads the file and parses the data within, and at
+        the end of this method self._record_buffer will be filled with all the particles in the file.
         """
-        # Handle non-data here.
-        # Increment the position within the file.
-        # Use the _exception_callback.
-        if non_data is not None and non_end <= start:
-            self._exception_callback(UnexpectedDataException(
-                "Found %d bytes of un-expected non-data %s" %
-                (len(non_data), non_data)))
-
-    def parse_chunks(self):
-        """
-        Parse out any pending data chunks in the chunker.
-        If it is valid data, build a particle.
-        Go until the chunker has no more valid data.
-        @retval a list of tuples with sample particles encountered in this
-            parsing, plus the state.
-        """
-        result_particles = []
-        nd_timestamp, non_data, non_start, non_end = self._chunker.get_next_non_data_with_index(clean=False)
-        timestamp, chunk, start, end = self._chunker.get_next_data_with_index(clean=True)
-        self.handle_non_data(non_data, non_end, start)
 
         # If not set from config & no InstrumentParameterException error from constructor
         if self.particle_classes is None:
             self.particle_classes = (self._particle_class,)
 
-        while chunk:
+        for line in self._stream_handle:
 
             for particle_class in self.particle_classes:
                 if hasattr(particle_class, "data_matcher"):
@@ -171,7 +140,7 @@ class DclFileCommonParser(BufferLoadingParser):
 
                 # If this is a valid sensor data record,
                 # use the extracted fields to generate a particle.
-                sensor_match = self.sensor_data_matcher.match(chunk)
+                sensor_match = self.sensor_data_matcher.match(line)
                 if sensor_match is not None:
                     break
 
@@ -180,22 +149,15 @@ class DclFileCommonParser(BufferLoadingParser):
                                                 None,
                                                 sensor_match.groups(),
                                                 None)
-                if particle is not None:
-                    result_particles.append((particle, None))
+                self._record_buffer.append(particle)
 
             # It's not a sensor data record, see if it's a metadata record.
             else:
 
                 # If it's a valid metadata record, ignore it.
                 # Otherwise generate warning for unknown data.
-                meta_match = self.metadata_matcher.match(chunk)
+                meta_match = self.metadata_matcher.match(line)
                 if meta_match is None:
-                    error_message = 'Unknown data found in chunk %s' % chunk
+                    error_message = 'Unknown data found in chunk %s' % line
                     log.warn(error_message)
                     self._exception_callback(UnexpectedDataException(error_message))
-
-            nd_timestamp, non_data, non_start, non_end = self._chunker.get_next_non_data_with_index(clean=False)
-            timestamp, chunk, start, end = self._chunker.get_next_data_with_index(clean=True)
-            self.handle_non_data(non_data, non_end, start)
-
-        return result_particles
