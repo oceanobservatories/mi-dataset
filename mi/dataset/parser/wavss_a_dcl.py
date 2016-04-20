@@ -5,18 +5,12 @@
 @brief A parser for the wavss series a instrument through a DCL
 """
 
-__author__ = 'Emily Hahn'
-__license__ = 'Apache 2.0'
-
 
 import re
 import numpy as np
-from datetime import datetime
-import time
 
 from mi.core.common import BaseEnum
 from mi.core.log import get_logger
-log = get_logger()
 from mi.core.instrument.data_particle import DataParticle
 from mi.core.exceptions import SampleException, RecoverableSampleException
 
@@ -24,9 +18,12 @@ from mi.dataset.dataset_parser import SimpleParser
 
 from mi.dataset.parser.common_regexes import INT_REGEX
 from mi.dataset.parser.utilities import dcl_controller_timestamp_to_utc_time
+log = get_logger()
 
+__author__ = 'Emily Hahn'
+__license__ = 'Apache 2.0'
 
-FLOAT_REGEX = r'[+-]?\d+.\d+[Ee]?[+-]?\d*'  # includes scientific notation
+FLOAT_REGEX = r'(?:[+-]?\d*\.\d*(?:[Ee][+-]?\d+)?|[+-]?[nN][aA][nN])'  # includes scientific notation & Nans
 FLOAT_GROUP_REGEX = r'(' + FLOAT_REGEX + ')'
 INT_GROUP_REGEX = r'(' + INT_REGEX + ')'
 END_OF_LINE_REGEX = r'(?:\r\n|\n)?'  # end of file might be missing terminator so make optional
@@ -105,7 +102,7 @@ TSPFB_REGEX = (DCL_TIMESTAMP_REGEX + ' \$TSPFB,' +
                INT_GROUP_REGEX + ',' +        # number of directional bands
                FLOAT_GROUP_REGEX + ',' +      # directional initial frequency
                FLOAT_GROUP_REGEX + ',' +      # directional frequency spacing
-               r'([+\-0-9.Ee,NnAaNn]+)' +     # match a varying number of comma separated floats or NaNs
+               '((?:' + FLOAT_REGEX + ',)*' + FLOAT_REGEX + ')' +  # match a varying number of comma separated floats
                END_OF_SAMPLE_REGEX)
 TSPFB_MATCHER = re.compile(TSPFB_REGEX)
 
@@ -153,6 +150,7 @@ BANDS_PARTICLE_MAP = [
 ]
 
 NUMBER_COUNT_GROUP = 5  # number of bands and time samples
+
 
 # the arrays are not defined in groups, so make keys instead of maps
 class ArrayParticleKeys(BaseEnum):
@@ -425,7 +423,7 @@ class WavssADclFourierDataParticle(WavssADclCommonDataParticle):
 
         # reshape the fourier array to 4 x number_bands-2, size of array is checked in wavss parser
         np_flt_array = np.vstack(flt_array)
-        flt_array = np_flt_array.reshape((number_bands -2), 4)
+        flt_array = np_flt_array.reshape((number_bands - 2), 4)
         # convert each array back to a list for json since it will not recognize numpy arrays
         list_flt_array = []
         for i in range(0, len(flt_array)):
@@ -496,7 +494,7 @@ class WavssADclParser(SimpleParser):
 
                 if num_csv != (12 + 3*num_bands):
                     self.recov_exception("TSPMA does not contain 12 + 3*%d comma separated values, has %d" %
-                                        (num_bands, num_csv))
+                                         (num_bands, num_csv))
 
                 else:
                     self.extract_particle(self.mean_directional_particle_class, tspma_match)
@@ -507,7 +505,7 @@ class WavssADclParser(SimpleParser):
 
                 if num_csv != (10 + num_bands):
                     self.recov_exception("TSPNA does not contain 10 + %d comma separated values, has %d" %
-                                        (num_bands, num_csv))
+                                         (num_bands, num_csv))
 
                 else:
                     self.extract_particle(self.non_directional_particle_class, tspna_match)
@@ -518,7 +516,7 @@ class WavssADclParser(SimpleParser):
 
                 if num_csv != (11 + 3*num_time):
                     self.recov_exception("TSPHA doesn't contain 11 + 3*%d comma separated values, has %d" %
-                                        (num_time, num_csv))
+                                         (num_time, num_csv))
 
                 else:
                     self.extract_particle(self.motion_particle_class, tspha_match)
@@ -529,7 +527,7 @@ class WavssADclParser(SimpleParser):
 
                 if num_csv != (13 + 4*(num_bands - 2)):
                     self.recov_exception("TSPFB doesn't contain 13 + 4*(%d - 2) comma separated values, has %d" %
-                                        (num_bands, num_csv))
+                                         (num_bands, num_csv))
 
                 else:
                     self.extract_particle(self.fourier_particle_class, tspfb_match)
@@ -539,7 +537,7 @@ class WavssADclParser(SimpleParser):
                 tspsa_match = TSPSA_MATCHER.match(line)
 
                 if not (log_match or tspsa_match):
-                    raise SampleException("Wavss encountered unexpected data line '%s'" % line)
+                    self.recov_exception("Wavss encountered unexpected data line '%s'" % line)
 
             # read the next line in the file
             line = self._stream_handle.readline()
