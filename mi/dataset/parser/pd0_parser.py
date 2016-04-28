@@ -32,6 +32,14 @@ class ChecksumException(PD0ParsingException):
     pass
 
 
+class BadHeaderException(PD0ParsingException):
+    pass
+
+
+class BadOffsetException(PD0ParsingException):
+    pass
+
+
 class BlockId(object):
     FIXED_DATA = 0
     VARIABLE_DATA = 128
@@ -131,13 +139,10 @@ class AdcpPd0Record(object):
 
     def _validate(self):
         self._process_header()
+        self._validate_offset_data()
         self._validate_checksum()
 
     def _validate_checksum(self):
-        if len(self.data) < self.header.num_bytes + 2:
-            raise InsufficientDataException(
-                'Insufficient data in PD0 record (expected %d bytes, found %d)' %
-                (self.header.num_bytes + 2, len(self.data)))
 
         calculated_checksum = sum(bytearray(self.data[:-2])) & 65535
         self.stored_checksum = struct.unpack_from('<H', self.data, self.header.num_bytes)[0]
@@ -145,6 +150,16 @@ class AdcpPd0Record(object):
         if calculated_checksum != self.stored_checksum:
             raise ChecksumException('Checksum failure in PD0 data (expected %d, calculated %d' %
                                       (self.stored_checksum, calculated_checksum))
+
+    def _validate_offset_data(self):
+        self.offsets = struct.unpack_from('<%dH' % self.header.num_data_types, self.data, 6)
+        valid_block_ids = BlockId.__dict__.values()
+        for offset in self.offsets:
+            if offset > len(self.data) - 2:
+                raise BadOffsetException
+            block_id = struct.unpack_from('<H', self.data, offset)[0]
+            if block_id not in valid_block_ids:
+                raise UnhandledBlockException('Found unhandled data type id: %d' % block_id)
 
     def _process(self, glider):
         self._validate()
@@ -166,6 +181,14 @@ class AdcpPd0Record(object):
         )
         self.header = self._unpack_from_format('header', header_format, 0)
         self.data = self.data[:self.header.num_bytes + 2]
+
+        if len(self.data) < self.header.num_bytes + 2:
+            raise InsufficientDataException(
+                'Insufficient data in PD0 record (expected %d bytes, found %d)' %
+                (self.header.num_bytes + 2, len(self.data)))
+
+        if not(5 < self.header.num_data_types < 10):
+            raise BadHeaderException
 
     def _parse_offset_data(self):
         self.offsets = struct.unpack_from('<%dH' % self.header.num_data_types, self.data, 6)

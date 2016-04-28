@@ -18,7 +18,7 @@ import os
 from mi.core.log import get_logger
 log = get_logger()
 
-from mi.core.exceptions import RecoverableSampleException
+from mi.core.exceptions import RecoverableSampleException, UnexpectedDataException
 
 from mi.idk.config import Config
 from mi.dataset.test.test_parser import ParserUnitTestCase

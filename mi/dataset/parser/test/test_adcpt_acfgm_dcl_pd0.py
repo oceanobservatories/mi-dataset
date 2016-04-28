@@ -139,7 +139,6 @@ class AdcptAcfgmPd0DclParserUnitTestCase(ParserUnitTestCase):
 
             #try to get a particle, should get none
             parser.get_records(1)
-            log.debug('Exceptions : %s', self.exception_callback_value)
             self.assert_(isinstance(self.exception_callback_value[0], RecoverableSampleException))
 
     def test_live_data(self):
@@ -150,7 +149,7 @@ class AdcptAcfgmPd0DclParserUnitTestCase(ParserUnitTestCase):
         ]
         for filename in os.listdir(RESOURCE_PATH):
             if filename.endswith('.log'):
-                log.info('Testing file: %s', filename)
+                log.debug('Testing file: %s', filename)
                 with open(os.path.join(RESOURCE_PATH, filename), 'rb') as fh:
 
                     parser = AdcptAcfgmDclPd0Parser(self.config_telem,

@@ -18,7 +18,9 @@ from mi.core.exceptions import UnexpectedDataException
 from mi.core.instrument.data_particle import DataParticle, DataParticleKey
 from mi.core.log import get_logger
 from mi.dataset.dataset_parser import SimpleParser, DataSetDriverConfigKeys
-from mi.dataset.parser.pd0_parser import AdcpPd0Record, PD0ParsingException
+from mi.dataset.parser.pd0_parser import AdcpPd0Record, \
+    PD0ParsingException, BadHeaderException, \
+    BadOffsetException, ChecksumException, UnhandledBlockException
 
 __author__ = 'Jeff Roy'
 __license__ = 'Apache 2.0'
@@ -229,7 +231,7 @@ class Pd0Base(DataParticle):
     ntp_epoch = dt.datetime(1900, 1, 1)
 
     def __init__(self, *args, **kwargs):
-        if not 'preferred_timestamp' in kwargs:
+        if 'preferred_timestamp' not in kwargs:
             kwargs['preferred_timestamp'] = DataParticleKey.INTERNAL_TIMESTAMP
         super(Pd0Base, self).__init__(*args, **kwargs)
         record = self.raw_data
@@ -706,9 +708,12 @@ class AdcpPd0Parser(SimpleParser):
                             if self._changed(bt_config):
                                 self._record_buffer.append(bt_config)
 
+                    except (BadOffsetException, UnhandledBlockException, BadHeaderException):
+                        self._stream_handle.seek(position + 2)
+
                     except PD0ParsingException:
                         # seek to just past this header match
-                        # self._stream_handle.seek(position + 2)
+                        self._stream_handle.seek(position + 2)
                         self._exception_callback(RecoverableSampleException("Exception parsing PD0"))
 
                 else:  # reached EOF
@@ -716,9 +721,11 @@ class AdcpPd0Parser(SimpleParser):
                     self._exception_callback(UnexpectedDataException("Found incomplete ensemble at end of file"))
 
             else:  # did not get header ID bytes
-                log.warn('did not find header ID bytes')
-                self._exception_callback(RecoverableSampleException(
-                    "Did not find Header ID bytes where expected, trying next 2 bytes"))
+                # if we do not find the header ID bytes go to next bytes and try again
+                # we are not logging anything or passing an exception back to reduce
+                # log noise.
+                pass
 
             position = self._stream_handle.tell()  # set the new file position
             header_id_bytes = self._stream_handle.read(2)  # read the next two bytes of the file
+

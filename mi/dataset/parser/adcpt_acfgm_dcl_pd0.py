@@ -105,7 +105,6 @@ class AdcptAcfgmDclPd0Parser(Parser):
                     except InsufficientDataException:
                         continue
                     except PD0ParsingException as e:
-                        log.exception(e)
                         self._exception_callback(RecoverableSampleException('Unable to parse PD0: %s' % e))
 
         # provide an indication that the file was parsed

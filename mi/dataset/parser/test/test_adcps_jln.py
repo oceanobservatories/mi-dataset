@@ -10,20 +10,21 @@ Due to the nature of the records in PD0 files, (large binary records with hundre
 this code verifies select items in the parsed data particle
 """
 import copy
-import pprint
 
 from nose.plugins.attrib import attr
 import yaml
 import numpy
 import os
+from collections import Counter
 
 from mi.core.log import get_logger
-log = get_logger()
+from mi.core.exceptions import UnexpectedDataException
 
 from mi.idk.config import Config
 from mi.dataset.test.test_parser import ParserUnitTestCase
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
-from mi.dataset.parser.adcp_pd0 import AdcpPd0Parser
+from mi.dataset.parser.adcp_pd0 import AdcpPd0Parser, AdcpDataParticleType
+log = get_logger()
 
 RESOURCE_PATH = os.path.join(Config().base_dir(), 'mi', 'dataset',
                              'driver', 'adcps_jln', 'stc', 'resource')
@@ -204,6 +205,25 @@ class AdcpsJlnParserUnitTestCase(ParserUnitTestCase):
 
             self.assert_particles(particles, 'ADCP_CCE1T_20.yml', RESOURCE_PATH)
             self.assertEqual(self.exception_callback_value, [])
+
+    def test_bug_10136(self):
+        """
+        Ensure that bad ensembles are skipped and all valid ensembles are returned.
+        """
+        with open(os.path.join(RESOURCE_PATH, 'SN_18596_Recovered_Data_RDI_000.000'), 'rb') as stream_handle:
+
+            parser = AdcpPd0Parser(self.config, stream_handle, self.exception_callback)
+
+            particles = parser.get_records(40000)
+
+            particle_counter = Counter()
+
+            for particle in particles:
+                particle_counter[particle._data_particle_type] += 1
+
+            self.assertEqual(particle_counter[AdcpDataParticleType.VELOCITY_EARTH], 13913)
+
+            self.assertTrue(len(self.exception_callback_value) > 0)
 
 
 def convert_yml(input_file):
