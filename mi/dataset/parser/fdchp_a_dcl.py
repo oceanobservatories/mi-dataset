@@ -192,9 +192,16 @@ class FdchpADclParser(SimpleParser):
             if data_match:
                 # found a data line
                 dcl_timestamp = data_match.group(1)
-                fields = line[START_N_CHARS:].split(',')
+
+                # Note Bug #10002 found early deployments created data missing commas
+                # between some fields.  Replace commas with space and then split to
+                # correctly parse files from deployments with either firmware
+
+                fields_set = line[START_N_CHARS:].replace(',', ' ')
+                fields = fields_set.split()
+
                 if len(fields) != N_FIELDS:
-                    msg = 'Expected %d fields but recieved %d' % (N_FIELDS, len(fields))
+                    msg = 'Expected %d fields but received %d' % (N_FIELDS, len(fields))
                     log.warn(msg)
                     self._exception_callback(SampleException(msg))
                 else:

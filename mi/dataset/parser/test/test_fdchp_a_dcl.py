@@ -106,6 +106,7 @@ class FdchpADclParserUnitTestCase(ParserUnitTestCase):
         Test that a file with missing data values is parsed correctly
         The first line is missing a value, but still has a comma separating for the right number of values
         The second line is missing a value, so it does not have the right number of values to be parsed
+        Neither line should produce a partcle
         """
         with open(os.path.join(RESOURCE_PATH, 'missing_vals.fdchp.log'), 'r') as file_handle:
             parser = FdchpADclParser(file_handle, self.exception_callback, is_telemetered=True)
@@ -113,10 +114,10 @@ class FdchpADclParserUnitTestCase(ParserUnitTestCase):
             particles = parser.get_records(2)
 
             # 1st particle is returned but has encoding error due to missing value
-            self.assert_particles(particles, "missing_vals_telem.yml", RESOURCE_PATH)
+            self.assertEqual(len(particles), 0)
 
             self.assertEqual(len(self.exception_callback_value), 2)
-            self.assertIsInstance(self.exception_callback_value[0], SampleEncodingException)
+            self.assertIsInstance(self.exception_callback_value[0], SampleException)
             self.assertIsInstance(self.exception_callback_value[1], SampleException)
 
     def test_logs_ignored(self):
@@ -143,5 +144,21 @@ class FdchpADclParserUnitTestCase(ParserUnitTestCase):
 
             particles = parser.get_records(3)
             self.assertEquals(len(particles), 3)
+
+            self.assertEqual(self.exception_callback_value, [])
+
+    def test_bug_10002(self):
+        """
+        Redmine Ticket 10002 found files from early deployments had incorrect firmware
+        that was omitting commas between some paramaters.  Still get 66 parameters but some
+        only separated by space.
+        Verify we get particles from files from early deployments
+        """
+        with open(os.path.join(RESOURCE_PATH, '20140912.fdchp.log'), 'r') as file_handle:
+            parser = FdchpADclParser(file_handle, self.exception_callback, is_telemetered=True)
+
+            particles = parser.get_records(30)
+
+            self.assertEquals(len(particles), 23)
 
             self.assertEqual(self.exception_callback_value, [])
