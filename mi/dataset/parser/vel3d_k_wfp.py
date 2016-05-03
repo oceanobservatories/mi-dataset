@@ -10,9 +10,6 @@ Release notes:
 Initial Release
 """
 
-__author__ = 'Steve Myerson (Raytheon)'
-__license__ = 'Apache 2.0'
-
 #
 # The VEL3D_K_WFP input file is a binary file.
 # The file header is a 4 byte field which is the total size of all the data records.
@@ -30,7 +27,6 @@ import re
 import struct
 
 from mi.core.log import get_logger
-log = get_logger()
 
 from mi.core.common import BaseEnum
 from mi.core.instrument.data_particle import DataParticle, DataParticleKey
@@ -40,6 +36,11 @@ from mi.core.exceptions import \
     UnexpectedDataException
 
 from mi.dataset.dataset_parser import SimpleParser
+
+log = get_logger()
+
+__author__ = 'Steve Myerson (Raytheon)'
+__license__ = 'Apache 2.0'
 
 FILE_HEADER_RECORD_SIZE = 4  # bytes
 
@@ -77,50 +78,51 @@ DATA_HEADER_CHECKSUM_LENGTH = (DATA_HEADER_SIZE / 2) - 1  # sum of 16-bit values
 # is added to the end of the list.
 #
 DATA_PAYLOAD_FORMAT = '<2bIh6B2HhIH2h7H7h2H2bI3h6b'
-INSTRUMENT_PARTICLE_KEYS = \
+INSTRUMENT_PARTICLE_MAP = \
     [
-        'vel3d_k_version',
-        None,                      # offsetOfData not included in particle
-        'vel3d_k_serial',
-        'vel3d_k_configuration',
-        'date_time_array',         # year, month, day, hour, minute, seconds
-        'vel3d_k_micro_second',
-        'vel3d_k_speed_sound',
-        'vel3d_k_temp_c',
-        'vel3d_k_pressure',
-        'vel3d_k_heading',
-        'vel3d_k_pitch',
-        'vel3d_k_roll',
-        'vel3d_k_error',
-        'vel3d_k_status',
-        'vel3d_k_beams_coordinate',
-        'vel3d_k_cell_size',
-        'vel3d_k_blanking',
-        'vel3d_k_velocity_range',
-        'vel3d_k_battery_voltage',
-        'vel3d_k_mag_x',
-        'vel3d_k_mag_y',
-        'vel3d_k_mag_z',
-        'vel3d_k_acc_x',
-        'vel3d_k_acc_y',
-        'vel3d_k_acc_z',
-        'vel3d_k_ambiguity',
-        'vel3d_k_data_set_description',
-        'vel3d_k_transmit_energy',
-        'vel3d_k_v_scale',
-        'vel3d_k_power_level',
-        None,                      # unused not included in particle
-        'vel3d_k_vel0',
-        'vel3d_k_vel1',
-        'vel3d_k_vel2',
-        'vel3d_k_amp0',
-        'vel3d_k_amp1',
-        'vel3d_k_amp2',
-        'vel3d_k_corr0',
-        'vel3d_k_corr1',
-        'vel3d_k_corr2',
-        'vel3d_k_id'
+        ('vel3d_k_version', 'b'),
+        (None, 'B'),                    # offsetOfData not included in particle
+        ('vel3d_k_serial', 'I'),
+        ('vel3d_k_configuration', 'H'),
+        ('date_time_array',      '6B'),   # year, month, day, hour, minute, seconds
+        ('vel3d_k_micro_second', 'H'),
+        ('vel3d_k_speed_sound', 'H'),
+        ('vel3d_k_temp_c', 'H'),
+        ('vel3d_k_pressure',  'I'),
+        ('vel3d_k_heading', 'H'),
+        ('vel3d_k_pitch', 'h'),
+        ('vel3d_k_roll', 'h'),
+        ('vel3d_k_error', 'H'),
+        ('vel3d_k_status', 'H'),
+        ('vel3d_k_beams_coordinate', 'H'),
+        ('vel3d_k_cell_size', 'H'),
+        ('vel3d_k_blanking', 'H'),
+        ('vel3d_k_velocity_range', 'H'),
+        ('vel3d_k_battery_voltage', 'H'),
+        ('vel3d_k_mag_x', 'h'),
+        ('vel3d_k_mag_y', 'h'),
+        ('vel3d_k_mag_z', 'h'),
+        ('vel3d_k_acc_x', 'h'),
+        ('vel3d_k_acc_y', 'h'),
+        ('vel3d_k_acc_z', 'h'),
+        ('vel3d_k_ambiguity', 'H'),
+        ('vel3d_k_data_set_description', 'H'),
+        ('vel3d_k_transmit_energy', 'H'),
+        ('vel3d_k_v_scale', 'b'),
+        ('vel3d_k_power_level', 'b'),
+        (None,   'l'),             # unused not included in particle
+        ('vel3d_k_vel0', 'h'),
+        ('vel3d_k_vel1', 'h'),
+        ('vel3d_k_vel2', 'h'),
+        ('vel3d_k_amp0', 'B'),
+        ('vel3d_k_amp1', 'B'),
+        ('vel3d_k_amp2', 'B'),
+        ('vel3d_k_corr0', 'B'),
+        ('vel3d_k_corr1', 'B'),
+        ('vel3d_k_corr2', 'B'),
+        ('vel3d_k_id', '')   # this parameter is from the header and not unpacked as part of payload
     ]
+
 
 DATE_TIME_ARRAY = 'date_time_array'    # This one needs to be special-cased
 DATE_TIME_SIZE = 6                     # 6 bytes for the output date time field
@@ -172,8 +174,7 @@ class Vel3dKWfpInstrumentParticle(DataParticle):
         #
         data_array = []
         field = 0
-        for x in range(0, len(INSTRUMENT_PARTICLE_KEYS)):
-            key = INSTRUMENT_PARTICLE_KEYS[x]
+        for key, code in INSTRUMENT_PARTICLE_MAP:
             if key is not None:
                 if key == DATE_TIME_ARRAY:
                     time_array = self.raw_data[field: field + DATE_TIME_SIZE]
@@ -271,8 +272,8 @@ class Vel3dKWfpParser(SimpleParser):
         """
         This function calculates a 16-bit unsigned sum of 16-bit data.
         Parameters:
-          input_buffer - Buffer containing the values to be summed
-          values - Number of 16-bit values to sum
+          @param input_buffer - Buffer containing the values to be summed
+          @param values - Number of 16-bit values to sum
         Returns:
           Calculated checksum
         """
@@ -293,11 +294,20 @@ class Vel3dKWfpParser(SimpleParser):
         This function reports an error condition by issuing a warning
         and raising an exception.
         Parameters:
-          exception - type of exception to raise
-          error_message - accompanying text
+          @param exception - type of exception to raise
+          @param error_message - accompanying text
         """
         log.warn(error_message)
         self._exception_callback(exception(error_message))
+
+    @staticmethod
+    def build_payload_format():
+
+        format_string = '<'
+        for key, code in INSTRUMENT_PARTICLE_MAP:
+            format_string += code
+
+        return format_string
 
     def parse_file(self):
 
@@ -305,6 +315,8 @@ class Vel3dKWfpParser(SimpleParser):
         # Check for end of file.
         # If not reached, parse the Time record.
         # 2 = from end of file
+
+        payload_format = self.build_payload_format()
 
         self._stream_handle.seek(0 - TIME_RECORD_SIZE, 2)
         time_record = self._stream_handle.read(TIME_RECORD_SIZE)
@@ -381,7 +393,7 @@ class Vel3dKWfpParser(SimpleParser):
                 ntp_time = ntplib.system_to_ntp_time(record_time)
 
                 if header_id == DATA_HEADER_ID_BURST_DATA or header_id == DATA_HEADER_ID_CP_DATA:
-                    data_fields = struct.unpack(DATA_PAYLOAD_FORMAT, payload)
+                    data_fields = struct.unpack(payload_format, payload)
                     particle_fields = data_fields + (header_id,)
                     particle_type = Vel3dKWfpInstrumentParticle
                     record_count += 1
@@ -404,6 +416,4 @@ class Vel3dKWfpParser(SimpleParser):
         # end of while
 
         return
-
-
 

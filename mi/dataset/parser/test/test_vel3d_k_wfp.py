@@ -14,7 +14,6 @@ from nose.plugins.attrib import attr
 from StringIO import StringIO
 
 from mi.core.log import get_logger
-log = get_logger()
 
 from mi.core.exceptions import SampleException, RecoverableSampleException
 from mi.idk.config import Config
@@ -27,6 +26,8 @@ from mi.dataset.parser.vel3d_k_wfp import \
     Vel3dKWfpInstrumentParticle, \
     Vel3dKWfpMetadataParticle, \
     Vel3dKWfpStringParticle
+
+log = get_logger()
 
 RESOURCE_PATH = os.path.join(Config().base_dir(), 'mi', 'dataset', 'driver',
                              'vel3d_k', 'wfp', 'resource')
