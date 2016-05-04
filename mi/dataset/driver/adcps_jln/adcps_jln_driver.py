@@ -14,7 +14,7 @@ from mi.dataset.parser.adcp_pd0 import AdcpPd0Parser
 from mi.core.versioning import version
 
 
-@version("0.1.0")
+@version("0.2.0")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
 
     from mi.logging import config

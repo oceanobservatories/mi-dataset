@@ -6,8 +6,6 @@
 # Copyright 2014 Raytheon Co.
 ##
 
-__author__ = "Jeff Roy"
-
 import os
 
 from mi.logging import config
@@ -15,9 +13,10 @@ from mi.logging import config
 from mi.dataset.driver.adcpt_acfgm.dcl.pd0.adcpt_acfgm_dcl_pd0_driver_common import AdcptAcfgmDclPd0Driver
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 from mi.core.versioning import version
+__author__ = "Jeff Roy"
 
 
-@version("15.6.0")
+@version("15.7.0")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
 
     config.add_configuration(os.path.join(basePythonCodePath, 'res', 'config', 'mi-logging.yml'))
