@@ -72,12 +72,11 @@ DATA_HEADER_ID_STRING = 0xA0
 DATA_HEADER_CHECKSUM_LENGTH = (DATA_HEADER_SIZE / 2) - 1  # sum of 16-bit values
 
 #
-# Keys to be used when generating instrument particles.
+# Keys and unpack formats to be used when generating instrument particles.
 # They are listed in order corresponding to the data record payload.
 # Note that the ID field, extracted from the data record header,
 # is added to the end of the list.
 #
-DATA_PAYLOAD_FORMAT = '<2bIh6B2HhIH2h7H7h2H2bI3h6b'
 INSTRUMENT_PARTICLE_MAP = \
     [
         ('vel3d_k_version', 'b'),

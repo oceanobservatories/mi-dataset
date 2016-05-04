@@ -4,10 +4,7 @@
 #
 # Copyright 2014 Raytheon Co.
 ##
-__author__ = 'kustert'
-
 import os
-import sys
 
 from mi.logging import config
 from mi.core.log import get_logger
@@ -15,8 +12,10 @@ from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 from mi.dataset.dataset_driver import DataSetDriver, ParticleDataHandler
 from mi.dataset.parser.vel3d_k_wfp import Vel3dKWfpParser
 from mi.core.versioning import version
+__author__ = 'kustert'
 
-@version("0.1.0")
+
+@version("0.2.0")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
 
     config.add_configuration(os.path.join(basePythonCodePath, 'res', 'config', 'mi-logging.yml'))
