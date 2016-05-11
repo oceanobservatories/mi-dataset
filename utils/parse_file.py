@@ -192,12 +192,7 @@ def find_driver(driver_string):
     raise Exception('Unable to locate driver: %r', driver_string)
 
 
-@click.command()
-@click.option('--fmt', type=click.Choice(['csv', 'json', 'pd-pickle', 'xr-pickle']), default='csv')
-@click.option('--out', type=click.Path(exists=False), default=None)
-@click.argument('driver', nargs=1)
-@click.argument('files', nargs=-1, type=click.Path(exists=True))
-def main(driver, files, fmt, out):
+def run(driver, files, fmt, out):
     monkey_patch_particles()
     log.error('Importing driver: %s', driver)
     module = find_driver(driver)
@@ -208,6 +203,15 @@ def main(driver, files, fmt, out):
             module.parse(base_path, file_path, particle_handler)
 
     particle_handler.write()
+
+
+@click.command()
+@click.option('--fmt', type=click.Choice(['csv', 'json', 'pd-pickle', 'xr-pickle']), default='csv')
+@click.option('--out', type=click.Path(exists=False), default=None)
+@click.argument('driver', nargs=1)
+@click.argument('files', nargs=-1, type=click.Path(exists=True))
+def main(driver, files, fmt, out):
+    run(driver, files, fmt, out)
 
 
 if __name__ == '__main__':
