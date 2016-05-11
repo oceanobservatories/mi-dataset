@@ -16,7 +16,7 @@ from mi.dataset.parser.adcpa_n_auv import AdcpaNAuvParser
 from mi.core.versioning import version
 
 
-@version("15.6.0")
+@version("15.7.0")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     """
     This is the method called by Uframe
