@@ -4,21 +4,21 @@
 # Copyright 2014 Raytheon Co.
 ##
 
-__author__ = "Nick Almonte"
-
 import os
 
 from mi.logging import config
 
-from mi.dataset.driver.phsen_abcdef.dcl.driver_common import Phsen_abcdef_dcl_Driver
+from mi.dataset.driver.phsen_abcdef.dcl.driver_common import PhsenAbcdefDclDriver
 
 from mi.dataset.parser.phsen_abcdef_dcl import PhsenAbcdefDclMetadataRecoveredDataParticle
 from mi.dataset.parser.phsen_abcdef_dcl import PhsenAbcdefDclInstrumentRecoveredDataParticle
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 from mi.core.versioning import version
 
+__author__ = "Nick Almonte"
 
-@version('0.0.1')
+
+@version('0.0.2')
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
 
     config.add_configuration(os.path.join(basePythonCodePath, 'res', 'config', 'mi-logging.yml'))
@@ -32,6 +32,6 @@ def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
         }
     }
 
-    driver = Phsen_abcdef_dcl_Driver(sourceFilePath, particleDataHdlrObj, parser_config)
+    driver = PhsenAbcdefDclDriver(sourceFilePath, particleDataHdlrObj, parser_config)
 
     return driver.process()

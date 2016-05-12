@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 """
 @package mi.dataset.parser.test
 @file marine-integrations/mi/dataset/parser/test/test_phsen_abcdef_dcl.py
@@ -8,59 +6,52 @@
 """
 
 import os
-import numpy
-import yaml
-
 
 from nose.plugins.attrib import attr
 
 from mi.core.log import get_logger
-log = get_logger()
 
-from mi.core.exceptions import RecoverableSampleException
 from mi.dataset.test.test_parser import ParserUnitTestCase
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
-#from mi.dataset.driver.phsen_abcdef.dcl.driver import DataTypeKey
 from mi.core.common import BaseEnum
 from mi.dataset.parser.phsen_abcdef_dcl import PhsenAbcdefDclParser, PhsenAbcdefDclMetadataRecoveredDataParticle, \
     PhsenAbcdefDclInstrumentRecoveredDataParticle
-from mi.dataset.parser.phsen_abcdef_dcl import PhsenAbcdefDclMetadataTelemeteredDataParticle, PhsenAbcdefDclInstrumentTelemeteredDataParticle
-from mi.core.exceptions import SampleException
+from mi.dataset.parser.phsen_abcdef_dcl import PhsenAbcdefDclMetadataTelemeteredDataParticle, \
+    PhsenAbcdefDclInstrumentTelemeteredDataParticle
 from mi.idk.config import Config
-from mi.core.unit_test import MiUnitTest
-from mi.idk.result_set import ResultSet
+log = get_logger()
 
 RESOURCE_PATH = os.path.join(Config().base_dir(), 'mi', 'dataset', 'driver', 'phsen_abcdef', 'dcl', 'resource')
 
-## INPUT LOG FILES, TELEMETERED AND RECOVERED
-##
-## CE01ISSM-D00001-dcl35-phsen2 20140424.phsen2.log
-## 10 Instrument records, file from the IDD
-##
-## phsen_dcl_large.log
-## 10 Instrument records, 2 Control (metadata) records - 1 without bsttery_voltage, 1 with battery_voltage
-##
-## phsen_dcl_bad_checksum.log :
-## 1 Instrument record, 1 Control (metadata) record, both records have a bad checksum
-##
-## phsen_dcl_co2_type.log
-## 1 Instrument record, record_type is C02
-##
-## phsen_dcl_withBatteryAndWithoutBattery.log
-## 2 Control (metadata) records
-## 1 record without bsttery_voltage, 1 record with battery_voltage
-##
-## phsen_dcl_startOfDay.log
-## 1 partial Instrument record (it is clipped at the beginning of the record due to the start of the day)
-##
-## phsen_dcl_endOfDay.log
-## 1 partial Instrument record (it is clipped before the end of the record due to the end of the day)
-##
-## phsen_dcl_noData.log
-## No instrument or control data, all lines with bracketed DCL entered data
-##
-## phsen_dcl_startOfDay_plusOneGoodRecord.log
-## starts with a start-of-day clipped/partial record, then ends with a complete instrument record
+# INPUT LOG FILES, TELEMETERED AND RECOVERED
+#
+# CE01ISSM-D00001-dcl35-phsen2 20140424.phsen2.log
+# 10 Instrument records, file from the IDD
+#
+# phsen_dcl_large.log
+# 10 Instrument records, 2 Control (metadata) records - 1 without battery_voltage, 1 with battery_voltage
+#
+# phsen_dcl_bad_checksum.log :
+# 1 Instrument record, 1 Control (metadata) record, both records have a bad checksum
+#
+# phsen_dcl_co2_type.log
+# 1 Instrument record, record_type is C02
+#
+# phsen_dcl_withBatteryAndWithoutBattery.log
+# 2 Control (metadata) records
+# 1 record without battery_voltage, 1 record with battery_voltage
+#
+# phsen_dcl_startOfDay.log
+# 1 partial Instrument record (it is clipped at the beginning of the record due to the start of the day)
+#
+# phsen_dcl_endOfDay.log
+# 1 partial Instrument record (it is clipped before the end of the record due to the end of the day)
+#
+# phsen_dcl_noData.log
+# No instrument or control data, all lines with bracketed DCL entered data
+#
+# phsen_dcl_startOfDay_plusOneGoodRecord.log
+# starts with a start-of-day clipped/partial record, then ends with a complete instrument record
 
 INPUT_LOG_FILE_01 = 'CE01ISSM-D00001-dcl35-phsen2_20140424.phsen2.log'
 INPUT_LOG_FILE_02 = 'phsen_dcl_large.log'
@@ -90,8 +81,8 @@ INPUT_LOG_FILE_09_YML_RECOVERED = 'phsen_dcl_startOfDay_plusOneGoodRecord-RECOVE
 
 class DataTypeKey(BaseEnum):
 
-    PHSEN_ABCDEF_DCL_RECOVERED = 'phsen_abcedf_dcl_recovered'
-    PHSEN_ABCDEF_DCL_TELEMETERED = 'phsen_abcedf_dcl_telemetered'
+    PHSEN_ABCDEF_DCL_RECOVERED = 'phsen_abcdef_dcl_recovered'
+    PHSEN_ABCDEF_DCL_TELEMETERED = 'phsen_abcdef_dcl_telemetered'
 
 
 @attr('UNIT', group='mi')
@@ -99,45 +90,23 @@ class PhsenAbcdefDclParserUnitTestCase(ParserUnitTestCase):
     """
     phsen_abcdef_dcl Parser unit test suite
     """
-    def create_rec_parser(self, file_handle, new_state=None):
+    def create_rec_parser(self, file_handle):
         """
         This function creates a PhsenAbcdefDcl parser for recovered data.
         """
         return PhsenAbcdefDclParser(self.config.get(DataTypeKey.PHSEN_ABCDEF_DCL_RECOVERED),
-                                    None, file_handle,
-                                    self.rec_state_callback, self.rec_pub_callback,
-                                    self.rec_exception_callback)
+                                    file_handle, self.rec_exception_callback)
 
-    def create_tel_parser(self, file_handle, new_state=None):
+    def create_tel_parser(self, file_handle):
         """
         This function creates a PhsenAbcdefDcl parser for telemetered data.
         """
         return PhsenAbcdefDclParser(self.config.get(DataTypeKey.PHSEN_ABCDEF_DCL_TELEMETERED),
-                                    None, file_handle,
-                                    self.tel_state_callback, self.tel_pub_callback,
-                                    self.tel_exception_callback)
+                                    file_handle, self.tel_exception_callback)
 
     def open_file(self, filename):
 
         return open(os.path.join(RESOURCE_PATH, filename), mode='r')
-
-    def rec_state_callback(self, state, file_ingested):
-        """ Call back method to watch what comes in via the position callback """
-        self.rec_state_callback_value = state
-        self.rec_file_ingested_value = file_ingested
-
-    def tel_state_callback(self, state, file_ingested):
-        """ Call back method to watch what comes in via the position callback """
-        self.tel_state_callback_value = state
-        self.tel_file_ingested_value = file_ingested
-
-    def rec_pub_callback(self, pub):
-        """ Call back method to watch what comes in via the publish callback """
-        self.rec_publish_callback_value = pub
-
-    def tel_pub_callback(self, pub):
-        """ Call back method to watch what comes in via the publish callback """
-        self.tel_publish_callback_value = pub
 
     def rec_exception_callback(self, exception):
         """ Call back method to watch what comes in via the exception callback """
@@ -190,9 +159,9 @@ class PhsenAbcdefDclParserUnitTestCase(ParserUnitTestCase):
         """
 
         fid = open(os.path.join(RESOURCE_PATH, INPUT_LOG_FILE_02), 'r')
-        #self.stream_handle = fid
+        # self.stream_handle = fid
 
-        ## Create YML for data
+        # Create YML for data
         parser = self.create_tel_parser(fid)
         particles = parser.get_records(12)
         self.particle_to_yml(particles, 'phsen_dcl_large-TELEMETERED.yml')
@@ -203,7 +172,7 @@ class PhsenAbcdefDclParserUnitTestCase(ParserUnitTestCase):
         """
         This is added as a testing helper, not actually as part of the parser tests. Since the same particles
         will be used for the driver test it is helpful to write them to .yml in the same form they need in the
-        results.yml fids here.
+        results.yml files here.
         """
         # open write append, if you want to start from scratch manually delete this fid
         fid = open(os.path.join(RESOURCE_PATH, filename), mode)
@@ -229,15 +198,12 @@ class PhsenAbcdefDclParserUnitTestCase(ParserUnitTestCase):
                     fid.write('    %s: %s\n' % (val.get('value_id'), val.get('value')))
         fid.close()
 
-########################################################################################################################
-########################################################################################################################
-
     def test_bad_checksum_recovered(self):
         """
         Verifies the 2 particles (1 instrument, 1 control) from a log file where both particle
         data sets have a bad checksum
         """
-         ## BAD CHECKSUM (2 particles)
+        # BAD CHECKSUM (2 particles)
         input_file = INPUT_LOG_FILE_03
         expected_particles = 2
         expected_exceptions = 0
@@ -256,7 +222,7 @@ class PhsenAbcdefDclParserUnitTestCase(ParserUnitTestCase):
         Verifies the 2 particles (1 instrument, 1 control) from a log file where both particle
         data sets have a bad checksum
         """
-         ## BAD CHECKSUM (2 particles)
+        # BAD CHECKSUM (2 particles)
         input_file = INPUT_LOG_FILE_03
         expected_particles = 2
         expected_exceptions = 0
@@ -275,7 +241,7 @@ class PhsenAbcdefDclParserUnitTestCase(ParserUnitTestCase):
         Verifies that no particles are created from a log file that includes data from a log file that includes C02
         instrument data
         """
-        ## No Data (0 particles)
+        # No Data (0 particles)
         input_file = INPUT_LOG_FILE_04
         expected_particles = 0
         expected_exceptions = 1
@@ -293,7 +259,7 @@ class PhsenAbcdefDclParserUnitTestCase(ParserUnitTestCase):
         Verifies that no particles are created from a log file that includes data from a log file that includes C02
         instrument data
         """
-        ## No Data (0 particles)
+        # No Data (0 particles)
         input_file = INPUT_LOG_FILE_04
         expected_particles = 0
         expected_exceptions = 1
@@ -310,7 +276,7 @@ class PhsenAbcdefDclParserUnitTestCase(ParserUnitTestCase):
         """
         Verifies that no particles are created from a log file that includes no data
         """
-         ## No Data (0 particles)
+        # No Data (0 particles)
         input_file = INPUT_LOG_FILE_08
         expected_particles = 0
         total_records = expected_particles + 1
@@ -326,7 +292,7 @@ class PhsenAbcdefDclParserUnitTestCase(ParserUnitTestCase):
         """
         Verifies that no particles are created from a log file that includes no data
         """
-         ## No Data (0 particles)
+        # No Data (0 particles)
         input_file = INPUT_LOG_FILE_08
         expected_particles = 0
         total_records = expected_particles + 1
@@ -343,7 +309,7 @@ class PhsenAbcdefDclParserUnitTestCase(ParserUnitTestCase):
         Verifies that no particles are created from a log file that includes incomplete log data for a single instrument
         data record to span multiple files, when the record is being written out as the day changes
         """
-        ## No Data (0 particles)
+        # No Data (0 particles)
         input_file = INPUT_LOG_FILE_07
         expected_particles = 0
         expected_exceptions = 1
@@ -361,7 +327,7 @@ class PhsenAbcdefDclParserUnitTestCase(ParserUnitTestCase):
         Verifies that no particles are created from a log file that includes incomplete log data for a single instrument
         data record to span multiple files, when the record is being written out as the day changes
         """
-        ## No Data (0 particles)
+        # No Data (0 particles)
         input_file = INPUT_LOG_FILE_07
         expected_particles = 0
         expected_exceptions = 1
@@ -379,7 +345,7 @@ class PhsenAbcdefDclParserUnitTestCase(ParserUnitTestCase):
         Verifies that no particles are created from a log file that includes incomplete log data for a single instrument
         data record to span multiple files, when the record is being written out as the day changes
         """
-        ## No Data (0 particles)
+        # No Data (0 particles)
         input_file = INPUT_LOG_FILE_06
         expected_particles = 0
         expected_exceptions = 1
@@ -397,7 +363,7 @@ class PhsenAbcdefDclParserUnitTestCase(ParserUnitTestCase):
         Verifies that no particles are created from a log file that includes incomplete log data for a single instrument
         data record to span multiple files, when the record is being written out as the day changes
         """
-        ## No Data (0 particles)
+        # No Data (0 particles)
         input_file = INPUT_LOG_FILE_06
         expected_particles = 0
         expected_exceptions = 1
@@ -412,10 +378,10 @@ class PhsenAbcdefDclParserUnitTestCase(ParserUnitTestCase):
 
     def test_phsen_dcl_startOfDay_plusOneGoodRecord_telemetered(self):
         """
-        Verifies that 1 insturment particle is produced despite incomplete (start of day) data at the top of the
+        Verifies that 1 instrument particle is produced despite incomplete (start of day) data at the top of the
         log file
         """
-         ## incomplete start of day data and good data (1 metadata particles)
+        # incomplete start of day data and good data (1 metadata particles)
         input_file = INPUT_LOG_FILE_09
         expected_particles = 1
         expected_exceptions = 1
@@ -431,10 +397,10 @@ class PhsenAbcdefDclParserUnitTestCase(ParserUnitTestCase):
 
     def test_phsen_dcl_startOfDay_plusOneGoodRecord_recovered(self):
         """
-        Verifies that 1 insturment particle is produced despite incomplete (start of day) data at the top of the
+        Verifies that 1 instrument particle is produced despite incomplete (start of day) data at the top of the
         log file
         """
-         ## incomplete start of day data and good data (1 metadata particles)
+        # incomplete start of day data and good data (1 metadata particles)
         input_file = INPUT_LOG_FILE_09
         expected_particles = 1
         expected_exceptions = 1
@@ -452,7 +418,7 @@ class PhsenAbcdefDclParserUnitTestCase(ParserUnitTestCase):
         """
         Verifies the 2 metadata particles (2 control), one with battery data and one without battery data
         """
-         ## Battery & No Battery (2 metadata particles)
+        # Battery & No Battery (2 metadata particles)
         input_file = INPUT_LOG_FILE_05
         expected_particles = 2
         expected_exceptions = 0
@@ -470,7 +436,7 @@ class PhsenAbcdefDclParserUnitTestCase(ParserUnitTestCase):
         """
         Verifies the 2 metadata particles (2 control), one with battery data and one without battery data
         """
-         ## Battery & No Battery (2 metadata particles)
+        # Battery & No Battery (2 metadata particles)
         input_file = INPUT_LOG_FILE_05
         expected_particles = 2
         expected_exceptions = 0
@@ -488,7 +454,7 @@ class PhsenAbcdefDclParserUnitTestCase(ParserUnitTestCase):
         """
         Verifies the 10 instrument particles and 2 metadata (control) particles
         """
-        ## 10 instrument, 2 metadata (control)
+        # 10 instrument, 2 metadata (control)
         input_file = INPUT_LOG_FILE_02
         expected_particles = 12
         expected_exceptions = 0
@@ -506,7 +472,7 @@ class PhsenAbcdefDclParserUnitTestCase(ParserUnitTestCase):
         """
         Verifies the 10 instrument particles and 2 metadata (control) particles
         """
-        ## 10 instrument, 2 metadata (control)
+        # 10 instrument, 2 metadata (control)
         input_file = INPUT_LOG_FILE_02
         expected_particles = 12
         expected_exceptions = 0
@@ -524,7 +490,7 @@ class PhsenAbcdefDclParserUnitTestCase(ParserUnitTestCase):
         """
         Verifies the 10 instrument particles from the log file included with the PHSEN DCL IDD
         """
-        ## 10 instrument records
+        # 10 instrument records
         input_file = INPUT_LOG_FILE_01
         expected_particles = 10
         expected_exceptions = 0
@@ -542,7 +508,7 @@ class PhsenAbcdefDclParserUnitTestCase(ParserUnitTestCase):
         """
         Verifies the 10 instrument particles from the log file included with the PHSEN DCL IDD
         """
-        ## 10 instrument records
+        # 10 instrument records
         input_file = INPUT_LOG_FILE_01
         expected_particles = 10
         expected_exceptions = 0
