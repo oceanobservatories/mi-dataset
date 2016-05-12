@@ -37,11 +37,11 @@ Files used for testing:
   See metadata in file for a list of the errors.
 """
 
-import unittest
+
 import os
 from nose.plugins.attrib import attr
 
-from mi.core.log import get_logger ; log = get_logger()
+from mi.core.log import get_logger
 
 from mi.dataset.test.test_parser import ParserUnitTestCase
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
@@ -50,12 +50,13 @@ from mi.dataset.parser.spkir_abj_dcl import \
     SpkirAbjDclRecoveredParser, \
     SpkirAbjDclTelemeteredParser, \
     SpkirAbjDclRecoveredInstrumentDataParticle, \
-    SpkirAbjDclTelemeteredInstrumentDataParticle, \
-    SpkirStateKey
+    SpkirAbjDclTelemeteredInstrumentDataParticle
 
 from mi.idk.config import Config
+log = get_logger()
+
 RESOURCE_PATH = os.path.join(Config().base_dir(), 'mi', 'dataset', 'driver',
-                 'spkir_abj', 'dcl', 'resource')
+                             'spkir_abj', 'dcl', 'resource')
 
 # Expected tuples for data in file 20010101.spkir1.log
 # This file has no sensor data records and should not produce any particles.
@@ -228,7 +229,7 @@ EXPECTED_20040305_spkir4 = [
         'SATDI3', '0203', '0000085.71', 14042,
         [3067833770, 3067833771, 3067833772, 3067833773, 3067833774, 3067833775, 3067833776],
         46810, 46810, 46810, 180, 1),
-   ('2004/03/05 07:15:29.343', '2004', '03', '05', '07', '15', '29',
+    ('2004/03/05 07:15:29.343', '2004', '03', '05', '07', '15', '29',
         'SATDI3', '0203', '0000094.29', 18723,
         [3374617147, 3374617148, 3374617149, 3374617150, 3374617151, 3374617152, 3374617153],
         51491, 51491, 51491, 198, 1),
@@ -258,7 +259,7 @@ EXPECTED_20050403_spkir5 = [
         5957, 5957, 5957, 23, 1),
     ('2005/04/03 09:13:40.502', '2005', '04', '03', '09', '13', '40',
         'SATDI4', '2004', '0000021.82', -20854,
-        [780903142, 780903143, 780903144, 780903145, 780903146, 780903147, 780903148],        11914, 11914, 11914, 46, 1),
+        [780903142, 780903143, 780903144, 780903145, 780903146, 780903147, 780903148], 11914, 11914, 11914, 46, 1),
     ('2005/04/03 09:14:48.397', '2005', '04', '03', '09', '14', '48',
         'SATDI4', '2004', '0000032.73', -14897,
         [1171354713, 1171354714, 1171354715, 1171354716, 1171354717, 1171354718, 1171354719],
@@ -319,45 +320,27 @@ MODULE_NAME = 'mi.dataset.parser.spkir_abj_dcl'
 @attr('UNIT', group='mi')
 class SpkirAbjDclParserUnitTestCase(ParserUnitTestCase):
     
-    def create_rec_parser(self, file_handle, new_state=None):
+    def create_rec_parser(self, file_handle):
         """
         This function creates a SpkirAbjDcl parser for recovered data.
         """
         parser = SpkirAbjDclRecoveredParser(self.rec_config,
-            file_handle, new_state, self.rec_state_callback,
-            self.rec_pub_callback, self.rec_exception_callback)
+                                            file_handle,
+                                            self.rec_exception_callback)
         return parser
 
-    def create_tel_parser(self, file_handle, new_state=None):
+    def create_tel_parser(self, file_handle):
         """
         This function creates a SpkirAbjDcl parser for telemetered data.
         """
         parser = SpkirAbjDclTelemeteredParser(self.tel_config,
-            file_handle, new_state, self.rec_state_callback,
-            self.tel_pub_callback, self.tel_exception_callback)
+                                              file_handle,
+                                              self.tel_exception_callback)
         return parser
 
     def open_file(self, filename):
-        file = open(os.path.join(RESOURCE_PATH, filename), mode='r')
-        return file
-
-    def rec_state_callback(self, state, file_ingested):
-        """ Call back method to watch what comes in via the position callback """
-        self.rec_state_callback_value = state
-        self.rec_file_ingested_value = file_ingested
-
-    def tel_state_callback(self, state, file_ingested):
-        """ Call back method to watch what comes in via the position callback """
-        self.tel_state_callback_value = state
-        self.tel_file_ingested_value = file_ingested
-
-    def rec_pub_callback(self, pub):
-        """ Call back method to watch what comes in via the publish callback """
-        self.rec_publish_callback_value = pub
-
-    def tel_pub_callback(self, pub):
-        """ Call back method to watch what comes in via the publish callback """
-        self.tel_publish_callback_value = pub
+        fid = open(os.path.join(RESOURCE_PATH, filename), mode='rb')
+        return fid
 
     def rec_exception_callback(self, exception):
         """ Call back method to watch what comes in via the exception callback """
@@ -496,60 +479,6 @@ class SpkirAbjDclParserUnitTestCase(ParserUnitTestCase):
 
         log.debug('===== END TEST INVALID SENSOR DATA =====')
         
-    def test_mid_state_start(self):
-        """
-        Test starting a parser with a state in the middle of processing.
-        """
-        log.debug('===== START TEST MID-STATE START RECOVERED =====')
-
-        in_file = self.open_file(FILE3)
-
-        # Start at the beginning of the record 10 (of 16 total).
-        initial_state = {
-            SpkirStateKey.POSITION: 1376
-        }
-
-        parser = self.create_rec_parser(in_file, new_state=initial_state)
-
-        # Generate a list of expected result particles.
-        expected_particle = []
-        for expected in EXPECTED_FILE3[-7: ]:
-            particle = SpkirAbjDclRecoveredInstrumentDataParticle(expected)
-            expected_particle.append(particle)
-
-        # In a single read, get all particles for this file.
-        result = parser.get_records(len(expected_particle))
-        self.assertEqual(result, expected_particle)
-
-        self.assertEqual(self.rec_exception_callback_value, None)
-        in_file.close()
-
-        log.debug('===== START TEST MID-STATE START TELEMETERED =====')
-
-        in_file = self.open_file(FILE2)
-
-        # Start at the beginning of the record 6 (of 13 total).
-        initial_state = {
-            SpkirStateKey.POSITION: 731
-        }
-
-        parser = self.create_tel_parser(in_file, new_state=initial_state)
-
-        # Generate a list of expected result particles.
-        expected_particle = []
-        for expected in EXPECTED_FILE2[-8: ]:
-            particle = SpkirAbjDclTelemeteredInstrumentDataParticle(expected)
-            expected_particle.append(particle)
-
-        # In a single read, get all particles for this file.
-        result = parser.get_records(len(expected_particle))
-        self.assertEqual(result, expected_particle)
-
-        self.assertEqual(self.tel_exception_callback_value, None)
-        in_file.close()
-
-        log.debug('===== END TEST MID-STATE START =====')
-
     def test_no_sensor_data(self):
         """
         Read a file containing no sensor data records
@@ -579,80 +508,6 @@ class SpkirAbjDclParserUnitTestCase(ParserUnitTestCase):
 
         log.debug('===== END TEST SENSOR DATA =====')
         
-    def test_set_state(self):
-        """
-        This test verifies that the state can be changed after starting.
-        Some particles are read and then the parser state is modified to
-        skip ahead or back.
-        """
-        log.debug('===== START TEST SET STATE RECOVERED =====')
-
-        in_file = self.open_file(FILE4)
-        parser = self.create_rec_parser(in_file)
-
-        # Read and verify 5 particles (of the 15).
-        for expected in EXPECTED_FILE4[ : 5]:
-
-            # Generate expected particle
-            expected_particle = SpkirAbjDclRecoveredInstrumentDataParticle(expected)
-
-            # Get record and verify.
-            result = parser.get_records(1)
-            self.assertEqual(result, [expected_particle])
-
-        # Skip ahead in the file so that we get the last 4 particles.
-        new_state = {
-            SpkirStateKey.POSITION: 1854
-        }
-
-        # Set the state.
-        parser.set_state(new_state)
-
-        # Read and verify the last 4 particles.
-        for expected in EXPECTED_FILE4[-4: ]:
-
-            # Generate expected particle
-            expected_particle = SpkirAbjDclRecoveredInstrumentDataParticle(expected)
-
-            # Get record and verify.
-            result = parser.get_records(1)
-            self.assertEqual(result, [expected_particle])
-
-        log.debug('===== START TEST SET STATE TELEMETERED =====')
-
-        in_file = self.open_file(FILE5)
-        parser = self.create_tel_parser(in_file)
-
-        # Read and verify 8 particles (of the 12).
-        for expected in EXPECTED_FILE5[ : 8]:
-
-            # Generate expected particle
-            expected_particle = SpkirAbjDclTelemeteredInstrumentDataParticle(expected)
-
-            # Get record and verify.
-            result = parser.get_records(1)
-            self.assertEqual(result, [expected_particle])
-
-        # Skip back in the file so that we get the last 8 particles.
-        new_state = {
-            SpkirStateKey.POSITION: 956,
-        }
-
-        # Set the state.
-        parser.set_state(new_state)
-
-        # Read and verify the last 8 particles.
-        for expected in EXPECTED_FILE5[-8: ]:
-
-            # Generate expected particle
-            expected_particle = SpkirAbjDclTelemeteredInstrumentDataParticle(expected)
-
-            # Get record and verify.
-            result = parser.get_records(1)
-            self.assertEqual(result, [expected_particle])
-
-        log.debug('===== END TEST SET STATE =====')
-
     def test_simple(self):
         """
         Read data from a file and pull out data particles
