@@ -7,6 +7,9 @@ setup(
     url="http://github.com/oceanobservatories/mi-dataset",
     license="BSD",
     packages=find_packages(),
+    package_data={
+        '': ['*.yml'],
+    },
     install_requires=[
         "pyyaml",
         "numpy",
