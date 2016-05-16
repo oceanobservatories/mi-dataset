@@ -4,8 +4,6 @@
 # Copyright 2014 Raytheon Co.
 ##
 
-__author__ = "mworden"
-
 import os
 
 from mi.core.log import get_logger
@@ -15,6 +13,8 @@ from mi.dataset.parser.spkir_abj_dcl import SpkirAbjDclTelemeteredParser
 from mi.dataset.dataset_driver import DataSetDriver
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 from mi.core.versioning import version
+
+__author__ = "mworden"
 
 
 class SpkirAbjDclTelemeteredDriver:
@@ -33,9 +33,6 @@ class SpkirAbjDclTelemeteredDriver:
 
             parser = SpkirAbjDclTelemeteredParser(self._parser_config,
                                                   file_handle,
-                                                  None,
-                                                  lambda state, ingested: None,
-                                                  lambda data: None,
                                                   exception_callback)
 
             driver = DataSetDriver(parser, self._particleDataHdlrObj)
@@ -45,7 +42,7 @@ class SpkirAbjDclTelemeteredDriver:
         return self._particleDataHdlrObj
 
 
-@version("15.6.0")
+@version("15.6.1")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     config.add_configuration(os.path.join(basePythonCodePath, 'res', 'config', 'mi-logging.yml'))
 

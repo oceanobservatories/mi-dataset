@@ -28,21 +28,12 @@ Release notes:
 Initial Release
 """
 
-__author__ = 'Steve Myerson'
-__license__ = 'Apache 2.0'
-
-import copy
-from functools import partial
 import re
 import struct
 
-from mi.core.instrument.chunker import \
-    StringChunker
+from mi.core.log import get_logger
 
-from mi.core.log import get_logger; log = get_logger()
-
-from mi.dataset.dataset_parser import \
-    BufferLoadingParser
+from mi.dataset.dataset_parser import SimpleParser
 
 from mi.dataset.parser.common_regexes import \
     DATE_YYYY_MM_DD_REGEX, \
@@ -52,14 +43,18 @@ from mi.dataset.parser.utilities import \
     dcl_controller_timestamp_to_ntp_time
 
 from mi.core.common import BaseEnum
-from mi.core.exceptions import \
-    DatasetParserException, \
-    UnexpectedDataException
+from mi.core.exceptions import UnexpectedDataException
 
 from mi.core.instrument.data_particle import \
     DataParticle, \
     DataParticleKey, \
     DataParticleValue
+
+log = get_logger()
+
+__author__ = 'Steve Myerson'
+__license__ = 'Apache 2.0'
+
 
 # Basic patterns
 ANY_CHARS = r'.*'                   # Any characters excluding a newline
@@ -77,36 +72,38 @@ END_METADATA = r'\]'
 
 # Metadata record:
 #   Timestamp [Text]MoreText newline
-METADATA_REGEX = TIMESTAMP + SPACE  # date and time
-METADATA_REGEX += START_METADATA    # Metadata record starts with '['
-METADATA_REGEX += ANY_CHARS         # followed by text
-METADATA_REGEX += END_METADATA      # followed by ']'
-METADATA_REGEX += ANY_CHARS         # followed by more text
-METADATA_REGEX += r'\n'             # Metadata record ends with a line-feed
+METADATA_REGEX = START_GROUP         # group a single metadata record
+METADATA_REGEX += TIMESTAMP + SPACE  # date and time
+METADATA_REGEX += START_METADATA     # Metadata record starts with '['
+METADATA_REGEX += ANY_CHARS          # followed by text
+METADATA_REGEX += END_METADATA       # followed by ']'
+METADATA_REGEX += ANY_CHARS          # followed by more text
+METADATA_REGEX += r'\n'              # Metadata record ends with a line-feed
+METADATA_REGEX += END_GROUP + '+'    # match multiple metadata records together
 METADATA_MATCHER = re.compile(METADATA_REGEX)
 
 # Sensor data record:
 #   Timestamp SATDI<id><ascii data><binary data> newline
 SENSOR_DATA_REGEX = TIMESTAMP + SPACE   # date and time
 SENSOR_DATA_REGEX += START_GROUP        # Group data fields (for checksum calc)
-SENSOR_DATA_REGEX += r'(SATDI\d)'       #   ASCII SATDI id
-SENSOR_DATA_REGEX += r'(\d{4})'         #   ASCII serial number
-SENSOR_DATA_REGEX += r'(\d{7}\.\d{2})'  #   ASCII timer
-SENSOR_DATA_REGEX += BINARY_SHORT       #   2-byte signed sample delay
-SENSOR_DATA_REGEX += START_GROUP        #   Group all the channel ADC counts
-SENSOR_DATA_REGEX += BINARY_LONG        #     4-byte unsigned Channel 1 ADC count
-SENSOR_DATA_REGEX += BINARY_LONG        #     4-byte unsigned Channel 2 ADC count
-SENSOR_DATA_REGEX += BINARY_LONG        #     4-byte unsigned Channel 3 ADC count
-SENSOR_DATA_REGEX += BINARY_LONG        #     4-byte unsigned Channel 4 ADC count
-SENSOR_DATA_REGEX += BINARY_LONG        #     4-byte unsigned Channel 5 ADC count
-SENSOR_DATA_REGEX += BINARY_LONG        #     4-byte unsigned Channel 6 ADC count
-SENSOR_DATA_REGEX += BINARY_LONG        #     4-byte unsigned Channel 7 ADC count
-SENSOR_DATA_REGEX += END_GROUP          #   End of channel ADC counts group
-SENSOR_DATA_REGEX += BINARY_SHORT       #   2-byte unsigned Supply Voltage
-SENSOR_DATA_REGEX += BINARY_SHORT       #   2-byte unsigned Analog Voltage
-SENSOR_DATA_REGEX += BINARY_SHORT       #   2-byte unsigned Internal Temperature
-SENSOR_DATA_REGEX += BINARY_BYTE        #   1-byte unsigned Frame Count
-SENSOR_DATA_REGEX += BINARY_BYTE        #   1-byte unsigned Checksum
+SENSOR_DATA_REGEX += r'(SATDI\d)'       # ASCII SATDI id
+SENSOR_DATA_REGEX += r'(\d{4})'         # ASCII serial number
+SENSOR_DATA_REGEX += r'(\d{7}\.\d{2})'  # ASCII timer
+SENSOR_DATA_REGEX += BINARY_SHORT       # 2-byte signed sample delay
+SENSOR_DATA_REGEX += START_GROUP        # Group all the channel ADC counts
+SENSOR_DATA_REGEX += BINARY_LONG        # 4-byte unsigned Channel 1 ADC count
+SENSOR_DATA_REGEX += BINARY_LONG        # 4-byte unsigned Channel 2 ADC count
+SENSOR_DATA_REGEX += BINARY_LONG        # 4-byte unsigned Channel 3 ADC count
+SENSOR_DATA_REGEX += BINARY_LONG        # 4-byte unsigned Channel 4 ADC count
+SENSOR_DATA_REGEX += BINARY_LONG        # 4-byte unsigned Channel 5 ADC count
+SENSOR_DATA_REGEX += BINARY_LONG        # 4-byte unsigned Channel 6 ADC count
+SENSOR_DATA_REGEX += BINARY_LONG        # 4-byte unsigned Channel 7 ADC count
+SENSOR_DATA_REGEX += END_GROUP          # End of channel ADC counts group
+SENSOR_DATA_REGEX += BINARY_SHORT       # 2-byte unsigned Supply Voltage
+SENSOR_DATA_REGEX += BINARY_SHORT       # 2-byte unsigned Analog Voltage
+SENSOR_DATA_REGEX += BINARY_SHORT       # 2-byte unsigned Internal Temperature
+SENSOR_DATA_REGEX += BINARY_BYTE        # 1-byte unsigned Frame Count
+SENSOR_DATA_REGEX += BINARY_BYTE        # 1-byte unsigned Checksum
 SENSOR_DATA_REGEX += END_GROUP          # End of all the data group
 SENSOR_DATA_REGEX += r'\r\n'            # Sensor data record ends with CR-LF
 SENSOR_DATA_MATCHER = re.compile(SENSOR_DATA_REGEX)
@@ -178,10 +175,6 @@ class SpkirDataParticleType(BaseEnum):
     TEL_INSTRUMENT_PARTICLE = 'spkir_abj_dcl_instrument'
 
 
-class SpkirStateKey(BaseEnum):
-    POSITION = 'position'            # position within the input file
-    
-    
 class SpkirAbjDclInstrumentDataParticle(DataParticle):
     """
     Class for generating the Spkir instrument particle.
@@ -195,11 +188,11 @@ class SpkirAbjDclInstrumentDataParticle(DataParticle):
                  new_sequence=None):
 
         super(SpkirAbjDclInstrumentDataParticle, self).__init__(raw_data,
-                                                          port_timestamp,
-                                                          internal_timestamp,
-                                                          preferred_timestamp,
-                                                          quality_flag,
-                                                          new_sequence)
+                                                                port_timestamp,
+                                                                internal_timestamp,
+                                                                preferred_timestamp,
+                                                                quality_flag,
+                                                                new_sequence)
 
         # The particle timestamp is the DCL Controller timestamp.
         # Convert the DCL controller timestamp string to NTP time (in seconds and microseconds).
@@ -218,7 +211,7 @@ class SpkirAbjDclInstrumentDataParticle(DataParticle):
         # an index into raw_data, and a function to use for data conversion.
 
         return [self._encode_value(name, self.raw_data[group], function)
-            for name, group, function in INSTRUMENT_PARTICLE_MAP]
+                for name, group, function in INSTRUMENT_PARTICLE_MAP]
 
 
 class SpkirAbjDclRecoveredInstrumentDataParticle(SpkirAbjDclInstrumentDataParticle):
@@ -235,7 +228,7 @@ class SpkirAbjDclTelemeteredInstrumentDataParticle(SpkirAbjDclInstrumentDataPart
     _data_particle_type = SpkirDataParticleType.TEL_INSTRUMENT_PARTICLE
 
 
-class SpkirAbjDclParser(BufferLoadingParser):
+class SpkirAbjDclParser(SimpleParser):
 
     """
     Parser for Spkir_abj_dcl data.
@@ -245,54 +238,18 @@ class SpkirAbjDclParser(BufferLoadingParser):
     def __init__(self,
                  config,
                  stream_handle,
-                 state,
-                 state_callback,
-                 publish_callback,
                  exception_callback,
                  particle_class):
 
         super(SpkirAbjDclParser, self).__init__(config,
-                                          stream_handle,
-                                          state,
-                                          partial(StringChunker.regex_sieve_function,
-                                                  regex_list=[METADATA_MATCHER,
-                                                              SENSOR_DATA_MATCHER]),
-                                          state_callback,
-                                          publish_callback,
-                                          exception_callback)
+                                                stream_handle,
+                                                exception_callback)
 
         # Default the position within the file to the beginning.
 
-        self._read_state = {SpkirStateKey.POSITION: 0}
-        self.input_file = stream_handle
         self.particle_class = particle_class
 
-        # If there's an existing state, update to it.
-
-        if state is not None:
-            self.set_state(state)
-
-    def handle_non_data(self, non_data, non_end, start):
-        """
-        Handle any non-data that is found in the file
-        """
-        # Handle non-data here.
-        # Increment the position within the file.
-        # Use the _exception_callback.
-        if non_data is not None and non_end <= start:
-            self._increment_position(len(non_data))
-            self._exception_callback(UnexpectedDataException(
-                "Found %d bytes of un-expected non-data %s" %
-                (len(non_data), non_data)))
-
-    def _increment_position(self, bytes_read):
-        """
-        Increment the position within the file.
-        @param bytes_read The number of bytes just read
-        """
-        self._read_state[SpkirStateKey.POSITION] += bytes_read
-
-    def parse_chunks(self):
+    def parse_file(self):
         """
         Parse out any pending data chunks in the chunker.
         If it is valid data, build a particle.
@@ -300,104 +257,85 @@ class SpkirAbjDclParser(BufferLoadingParser):
         @retval a list of tuples with sample particles encountered in this
             parsing, plus the state.
         """
-        result_particles = []
-        (nd_timestamp, non_data, non_start, non_end) = self._chunker.get_next_non_data_with_index(clean=False)
-        (timestamp, chunk, start, end) = self._chunker.get_next_data_with_index(clean=True)
-        self.handle_non_data(non_data, non_end, start)
 
-        while chunk is not None:
-            self._increment_position(len(chunk))
+        data = self._stream_handle.read()
+        position = 0  # keep track of where we are in the file
 
-            # If this is a valid sensor data record,
-            # use the extracted fields to generate a particle.
+        matches = SENSOR_DATA_MATCHER.finditer(data)
 
-            sensor_match = SENSOR_DATA_MATCHER.match(chunk)
-            if sensor_match is not None:
+        for sensor_match in matches:
 
-                # Got a sensor data match.
-                # The separated fields will go into the particle data.
+            start = sensor_match.start()
 
-                groups = sensor_match.groups()
-
-                # See if the checksum is correct.
-                # Checksum is the modulo 256 sum of all data bytes.
-                # If calculated checksum is zero, the record checksum is valid.
-
-                buffer_to_be_checksummed = groups[SENSOR_GROUP_CHECKSUM_SECTION]
-                checksum = reduce(lambda x, y: x + y,
-                                  map(ord, buffer_to_be_checksummed)) % 256
-
-                if checksum == 0:
-                    checksum_status = CHECKSUM_PASSED
+            #  check to see if we skipped over any data
+            if start != position:
+                skipped_data = data[position:start]
+                meta_match = METADATA_MATCHER.match(skipped_data)
+                if meta_match.group(0) == skipped_data:
+                    pass  # ignore all metadata records
                 else:
-                    checksum_status = CHECKSUM_FAILED
+                    error_message = 'Unknown data found in line %s' % skipped_data
+                    log.warn(error_message)
+                    self._exception_callback(UnexpectedDataException(error_message))
 
-                # Create a tuple containing all the data to be used when
-                # creating the particle.
-                # The order of the particle data matches the PARTICLE_GROUPS.
+            position = sensor_match.end()  # increment the position
 
-                particle_data = (
-                    groups[SENSOR_GROUP_TIMESTAMP],
-                    groups[SENSOR_GROUP_YEAR],
-                    groups[SENSOR_GROUP_MONTH],
-                    groups[SENSOR_GROUP_DAY],
-                    groups[SENSOR_GROUP_HOUR],
-                    groups[SENSOR_GROUP_MINUTE],
-                    groups[SENSOR_GROUP_SECOND],
-                    groups[SENSOR_GROUP_ID],
-                    groups[SENSOR_GROUP_SERIAL],
-                    groups[SENSOR_GROUP_TIMER],
-                    struct.unpack('>h', groups[SENSOR_GROUP_DELAY])[0],
-                    list(struct.unpack('>7I', groups[SENSOR_GROUP_ADC_COUNTS])),
-                    struct.unpack('>H', groups[SENSOR_GROUP_SUPPLY_VOLTAGE])[0],
-                    struct.unpack('>H', groups[SENSOR_GROUP_ANALOG_VOLTAGE])[0],
-                    struct.unpack('>H', groups[SENSOR_GROUP_TEMPERATURE])[0],
-                    struct.unpack('>B', groups[SENSOR_GROUP_FRAME_COUNT])[0],
-                    checksum_status
-                )
+            groups = sensor_match.groups()
 
-                particle = self._extract_sample(self.particle_class,
-                                                None,
-                                                particle_data,
-                                                None)
-                if particle is not None:
-                    result_particles.append((particle, copy.copy(self._read_state)))
+            # See if the checksum is correct.
+            # Checksum is the modulo 256 sum of all data bytes.
+            # If calculated checksum is zero, the record checksum is valid.
+
+            buffer_checksum = groups[SENSOR_GROUP_CHECKSUM_SECTION]
+            checksum = reduce(lambda x, y: x + y,
+                              map(ord, buffer_checksum)) % 256
+
+            if checksum == 0:
+                checksum_status = CHECKSUM_PASSED
+            else:
+                checksum_status = CHECKSUM_FAILED
+
+            # Create a tuple containing all the data to be used when
+            # creating the particle.
+            # The order of the particle data matches the PARTICLE_GROUPS.
+
+            particle_data = (
+                groups[SENSOR_GROUP_TIMESTAMP],
+                groups[SENSOR_GROUP_YEAR],
+                groups[SENSOR_GROUP_MONTH],
+                groups[SENSOR_GROUP_DAY],
+                groups[SENSOR_GROUP_HOUR],
+                groups[SENSOR_GROUP_MINUTE],
+                groups[SENSOR_GROUP_SECOND],
+                groups[SENSOR_GROUP_ID],
+                groups[SENSOR_GROUP_SERIAL],
+                groups[SENSOR_GROUP_TIMER],
+                struct.unpack('>h', groups[SENSOR_GROUP_DELAY])[0],
+                list(struct.unpack('>7I', groups[SENSOR_GROUP_ADC_COUNTS])),
+                struct.unpack('>H', groups[SENSOR_GROUP_SUPPLY_VOLTAGE])[0],
+                struct.unpack('>H', groups[SENSOR_GROUP_ANALOG_VOLTAGE])[0],
+                struct.unpack('>H', groups[SENSOR_GROUP_TEMPERATURE])[0],
+                struct.unpack('>B', groups[SENSOR_GROUP_FRAME_COUNT])[0],
+                checksum_status
+            )
+
+            particle = self._extract_sample(self.particle_class,
+                                            None,
+                                            particle_data,
+                                            None)
+
+            self._record_buffer.append(particle)
 
             # It's not a sensor data record, see if it's a metadata record.
             # If not a valid metadata record, generate warning.
             # Valid Metadata records produce no particles and are silently ignored.
 
-            else:
-                meta_match = METADATA_MATCHER.match(chunk)
-                if meta_match is None:
-                    error_message = 'Unknown data found in chunk %s' % chunk
-                    log.warn(error_message)
-                    self._exception_callback(UnexpectedDataException(error_message))
-
-            (nd_timestamp, non_data, non_start, non_end) = self._chunker.get_next_non_data_with_index(clean=False)
-            (timestamp, chunk, start, end) = self._chunker.get_next_data_with_index(clean=True)
-            self.handle_non_data(non_data, non_end, start)
-
-        return result_particles
-
-    def set_state(self, state_obj):
-        """
-        Set the value of the state object for this parser
-        @param state_obj The object to set the state to.
-        @throws DatasetParserException if there is a bad state structure
-        """
-        if not isinstance(state_obj, dict):
-            raise DatasetParserException("Invalid state structure")
-
-        if not (SpkirStateKey.POSITION in state_obj):
-            raise DatasetParserException('%s missing in state keys' %
-                                         SpkirStateKey.POSITION)
-
-        self._record_buffer = []
-        self._state = state_obj
-        self._read_state = state_obj
-
-        self.input_file.seek(state_obj[SpkirStateKey.POSITION])
+            # else:
+            #     meta_match = METADATA_MATCHER.match(line)
+            #     if meta_match is None:
+            #         error_message = 'Unknown data found in line %s' % line
+            #         log.warn(error_message)
+            #         self._exception_callback(UnexpectedDataException(error_message))
 
 
 class SpkirAbjDclRecoveredParser(SpkirAbjDclParser):
@@ -407,18 +345,12 @@ class SpkirAbjDclRecoveredParser(SpkirAbjDclParser):
     def __init__(self,
                  config,
                  stream_handle,
-                 state,
-                 state_callback,
-                 publish_callback,
                  exception_callback):
 
         super(SpkirAbjDclRecoveredParser, self).__init__(config,
-                                          stream_handle,
-                                          state,
-                                          state_callback,
-                                          publish_callback,
-                                          exception_callback,
-                                          SpkirAbjDclRecoveredInstrumentDataParticle)
+                                                         stream_handle,
+                                                         exception_callback,
+                                                         SpkirAbjDclRecoveredInstrumentDataParticle)
 
 
 class SpkirAbjDclTelemeteredParser(SpkirAbjDclParser):
@@ -428,15 +360,9 @@ class SpkirAbjDclTelemeteredParser(SpkirAbjDclParser):
     def __init__(self,
                  config,
                  stream_handle,
-                 state,
-                 state_callback,
-                 publish_callback,
                  exception_callback):
 
         super(SpkirAbjDclTelemeteredParser, self).__init__(config,
-                                          stream_handle,
-                                          state,
-                                          state_callback,
-                                          publish_callback,
-                                          exception_callback,
-                                          SpkirAbjDclTelemeteredInstrumentDataParticle)
+                                                           stream_handle,
+                                                           exception_callback,
+                                                           SpkirAbjDclTelemeteredInstrumentDataParticle)
