@@ -4,14 +4,14 @@
 # Copyright 2014 Raytheon Co.
 ##
 
-__author__ = "Nick Almonte"
-
 from mi.core.log import get_logger
 from mi.dataset.dataset_driver import DataSetDriver
 from mi.dataset.parser.phsen_abcdef_dcl import PhsenAbcdefDclParser
 
+__author__ = "Nick Almonte"
 
-class Phsen_abcdef_dcl_Driver:
+
+class PhsenAbcdefDclDriver:
 
     def __init__(self, sourceFilePath, particleDataHdlrObj, parser_config):
         
@@ -23,17 +23,15 @@ class Phsen_abcdef_dcl_Driver:
         
         log = get_logger()
 
-        with open(self._sourceFilePath,"rb") as file_handle:
+        with open(self._sourceFilePath, "rU") as file_handle:
 
             def exception_callback(exception):
                 log.debug("Exception: %s", exception)
                 self._particleDataHdlrObj.setParticleDataCaptureFailure()
                     
             parser = PhsenAbcdefDclParser(self._parser_config,
-                                           None, file_handle,
-                                           lambda state, ingested: None,
-                                           lambda data: None,
-                                           exception_callback)
+                                          file_handle,
+                                          exception_callback)
     
             driver = DataSetDriver(parser, self._particleDataHdlrObj)
 
