@@ -10,33 +10,30 @@ Release notes:
 initial release
 """
 
-__author__ = 'Emily Hahn'
-__license__ = 'Apache 2.0'
 
-import copy
 import ntplib
 import struct
 import binascii
-from datetime import datetime
-import time
 
 from mi.core.log import get_logger
-log = get_logger()
 
 from mi.core.common import BaseEnum
 from mi.core.instrument.data_particle import DataParticle
 from mi.core.exceptions import \
     SampleException, \
-    DatasetParserException, \
     UnexpectedDataException, \
     ConfigurationException
 
-from mi.dataset.dataset_parser import BufferLoadingParser
+from mi.dataset.dataset_parser import SimpleParser
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 from mi.dataset.parser import utilities
+log = get_logger()
 
-ACCEL_ID = b'\xcb'
-RATE_ID = b'\xcf'
+__author__ = 'Emily Hahn'
+__license__ = 'Apache 2.0'
+
+ACCEL_ID = b'\xCB'
+RATE_ID = b'\xCF'
 ACCEL_BYTES = 43
 RATE_BYTES = 31
 
@@ -52,7 +49,7 @@ class StateKey(BaseEnum):
 
 
 class MopakParticleClassType(BaseEnum):
-    ACCEL_PARTCICLE_CLASS = 'accel_particle_class'
+    ACCEL_PARTICLE_CLASS = 'accel_particle_class'
     RATE_PARTICLE_CLASS = 'rate_particle_class'
 
 
@@ -106,7 +103,6 @@ class MopakODclAccelAbstractDataParticle(DataParticle):
                   self._encode_value(MopakODclAccelParserDataParticleKey.MOPAK_MAGZ, fields[8], float),
                   self._encode_value(MopakODclAccelParserDataParticleKey.MOPAK_TIMER, fields[9], int)]
 
-        log.trace('MopakODclAccelParserDataParticle: particle=%s', result)
         return result
 
 
@@ -163,7 +159,6 @@ class MopakODclRateParserDataAbstractParticle(DataParticle):
                   self._encode_value(MopakODclRateParserDataParticleKey.MOPAK_ANG_RATEZ, fields[5], float),
                   self._encode_value(MopakODclRateParserDataParticleKey.MOPAK_TIMER, fields[6], int)]
 
-        log.trace('MopakOStcRateParserDataParticle: particle=%s', result)
         return result
 
 
@@ -183,22 +178,18 @@ class MopakODclRateParserRecoveredDataParticle(MopakODclRateParserDataAbstractPa
     _data_particle_type = MopakDataParticleType.RATE_RECOV
 
 
-class MopakODclParser(BufferLoadingParser):
+class MopakODclParser(SimpleParser):
     
     def __init__(self,
                  config,
-                 state,
                  stream_handle,
                  filename,
-                 state_callback,
-                 publish_callback,
-                 exception_callback,
-                 *args, **kwargs):
+                 exception_callback):
 
         self.timer_diff = None
 
-        self._read_state = {StateKey.POSITION: 0, StateKey.TIMER_ROLLOVER: 0, StateKey.TIMER_START: None}
-        # convert the date / time string from the file name to a starting time in seconds UTC
+        self._timer_start = None
+        self._timer_rollover = 0
 
         self._start_time_utc = utilities.formatted_timestamp_utc_time(filename[:15],
                                                                       "%Y%m%d_%H%M%S")
@@ -206,88 +197,16 @@ class MopakODclParser(BufferLoadingParser):
         try:
             # Get the particle classes to publish from the configuration
             particle_classes_dict = config.get(DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT)
-            self._accel_particle_class = particle_classes_dict.get(MopakParticleClassType.ACCEL_PARTCICLE_CLASS)
+            self._accel_particle_class = particle_classes_dict.get(MopakParticleClassType.ACCEL_PARTICLE_CLASS)
             self._rate_particle_class = particle_classes_dict.get(MopakParticleClassType.RATE_PARTICLE_CLASS)
 
-        except Exception as e:
+        except Exception:
             log.error('Parser configuration missing or incorrect')
             raise ConfigurationException
 
         super(MopakODclParser, self).__init__(config,
                                               stream_handle,
-                                              state,
-                                              self.sieve_function,
-                                              state_callback,
-                                              publish_callback,
                                               exception_callback)
-
-        if state:
-            self.set_state(state)
-
-    def sieve_function(self, raw_data):
-        """
-        Sort through the raw data to identify new blocks of data that need processing.
-        This is needed instead of a regex because blocks are identified by position
-        in this binary file.
-        """
-        data_index = 0
-        return_list = []
-        raw_data_len = len(raw_data)
-
-        while data_index < raw_data_len:
-            # check if this is a status or data sample message
-            if raw_data[data_index] == ACCEL_ID:
-                if (data_index + ACCEL_BYTES) <= raw_data_len:
-                    # start of accel record
-                    if self.compare_checksum(raw_data[data_index:data_index+ACCEL_BYTES]):
-                        return_list.append((data_index, data_index + ACCEL_BYTES))
-                        data_index += ACCEL_BYTES
-                    else:
-                        log.debug('checking accel for ID in 0x%s since checksums didnt match',
-                                  binascii.hexlify(raw_data[data_index:data_index+ACCEL_BYTES]))
-                        another_accel = raw_data[data_index+1:data_index+ACCEL_BYTES].find(ACCEL_ID)
-                        another_rate = raw_data[data_index+1:data_index+ACCEL_BYTES].find(RATE_ID)
-                        if another_accel == -1 and another_rate == -1:
-                            # no other possible starts in here, add to chunk so we know this is processed
-                            return_list.append((data_index, data_index + ACCEL_BYTES))
-                            data_index += ACCEL_BYTES
-                        elif another_accel != -1:
-                            data_index += (another_accel + 1)
-                        elif another_rate != -1:
-                            data_index += (another_rate + 1)
-                else:
-                    # not enough bytes for accel yet, jump to end
-                    data_index = raw_data_len
-            elif raw_data[data_index] == RATE_ID:
-                if (data_index + RATE_BYTES) <= raw_data_len:
-                    # start of rate record
-                    if self.compare_checksum(raw_data[data_index:data_index+RATE_BYTES]):
-                        return_list.append((data_index, data_index + RATE_BYTES))
-                        data_index += RATE_BYTES
-                    else:
-                        log.debug('checking rate for ID in 0x%s since checksums didnt match',
-                                  binascii.hexlify(raw_data[data_index:data_index+RATE_BYTES]))
-                        another_accel = raw_data[data_index+1:data_index+RATE_BYTES].find(ACCEL_ID)
-                        another_rate = raw_data[data_index+1:data_index+RATE_BYTES].find(RATE_ID)
-                        if another_accel == -1 and another_rate == -1:
-                            # no other possible starts in here, add to chunk so we know this is processed
-                            return_list.append((data_index, data_index + RATE_BYTES))
-                            data_index += RATE_BYTES
-                        elif another_accel != -1:
-                            data_index += (another_accel + 1)
-                        elif another_rate != -1:
-                            data_index += (another_rate + 1)
-                else:
-                    # not enough bytes for rate yet, jump to end
-                    data_index = raw_data_len
-            else:
-                data_index += 1
-
-            remain_bytes = raw_data_len - data_index
-            # if the remaining bytes are less than the data rate bytes we're done
-            if remain_bytes < RATE_BYTES:
-                break
-        return return_list
 
     def compare_checksum(self, raw_bytes):
         rcv_chksum = struct.unpack('>H', raw_bytes[-2:])
@@ -297,12 +216,13 @@ class MopakODclParser(BufferLoadingParser):
         log.debug('checksum received %d does not match calculated %d', rcv_chksum[0], calc_chksum)
         return False
 
-    def calc_checksum(self, raw_bytes):
+    @staticmethod
+    def calc_checksum(raw_bytes):
         n_bytes = len(raw_bytes)
         # unpack raw bytes into unsigned chars
         unpack_str = '>'
         for i in range(0, n_bytes):
-            unpack_str = unpack_str + 'B'
+            unpack_str += 'B'
         fields = struct.unpack(unpack_str, raw_bytes)
         sum_fields = sum(fields)
         # since we are summing as unsigned short, limit range to 0 to 65535
@@ -310,109 +230,20 @@ class MopakODclParser(BufferLoadingParser):
             sum_fields -= 65536
         return sum_fields
 
-    def set_state(self, state_obj):
+    def timer_to_timestamp(self, timer):
         """
-        Set the value of the state object for this parser
-        @param state_obj The object to set the state to. 
-        @throws DatasetParserException if there is a bad state structure
+        convert a timer value to a ntp formatted timestamp
+        :param timer Timer value from data record.
         """
-        if not isinstance(state_obj, dict):
-            raise DatasetParserException("Invalid state structure")
-        if not (StateKey.POSITION in state_obj) or \
-           not (StateKey.TIMER_ROLLOVER in state_obj) or \
-           not (StateKey.TIMER_START in state_obj):
-            raise DatasetParserException("Invalid state keys: %s" % state_obj)
-        self._record_buffer = []
-        self._chunker.clean_all_chunks()
-        self._state = state_obj
-        self._read_state = state_obj
-        self._stream_handle.seek(state_obj[StateKey.POSITION])
-
-    def _increment_state(self, increment):
-        """
-        Update the parser state
-        """
-        self._read_state[StateKey.POSITION] += increment
-
-    def parse_chunks(self):
-        """
-        Parse out any pending data chunks in the chunker. If
-        it is a valid data piece, build a particle, update the position.
-        Go until the chunker has no more valid data.
-        If the timer rolls over account for this in the state, and raise an
-        exception if the timer is reset in the middle.
-        @retval a list of tuples with sample particles encountered in this
-            parsing, plus the state. An empty list of nothing was parsed.
-        """
-        result_particles = []
-        (nd_timestamp, non_data, non_start, non_end) = self._chunker.get_next_non_data_with_index(clean=False)
-        (timestamp, chunk, start, end) = self._chunker.get_next_data_with_index(clean=True)
-        self.handle_non_data(non_data, non_end, start)
-
-        last_timer = 0
-
-        while chunk is not None:
-            sample = None
-            fields = None
-            if chunk[0] == ACCEL_ID:
-                if self.compare_checksum(chunk[:ACCEL_BYTES]):
-                    # particle-ize the data block received, return the record
-                    fields = struct.unpack('>I', chunk[37:41])
-                else:
-                    log.info("Ignoring accel record whose checksum doesn't match")
-            elif chunk[0] == RATE_ID and self.compare_checksum(chunk[:RATE_BYTES]):
-                if self.compare_checksum(chunk[:RATE_BYTES]):
-                    # particle-ize the data block received, return the record
-                    fields = struct.unpack('>I', chunk[25:29])
-                else:
-                    log.info("Ignoring rate record whose checksum doesn't match")
-
-            if fields:
-                timer = int(fields[0])
-                # store the first timer value so we can subtract it to zero out the count at the
-                # start of the file
-                if self._read_state[StateKey.TIMER_START] is None:
-                    self._read_state[StateKey.TIMER_START] = timer
-                # keep track of the timer rolling over or being reset
-                if timer < last_timer:
-                    # check that the timer was not reset instead of rolling over, there should be
-                    # a large difference between the times, give it a little leeway with the 2.1
-                    # this is unlikely to happen in the first place, but there is still a risk of
-                    # rolling over on the second sample and not having timer_diff calculated yet,
-                    # or rolling in the last sample of the file within the fudge factor
-                    if self.timer_diff and (last_timer - timer) < (MAX_TIMER - self.timer_diff*TIMER_DIFF_FACTOR):
-                        # timer was reset before it got to the end
-                        log.warn('Timer was reset, time of particles unknown')
-                        raise SampleException('Timer was reset, time of particle now unknown')
-                    log.info("Timer has rolled")
-                    self._read_state[StateKey.TIMER_ROLLOVER] += 1
-                timestamp = self.timer_to_timestamp(int(fields[0]))
-                # use the timer diff to determine if the timer has been reset instead of rolling over
-                # at the end
-                if last_timer != 0 and self.timer_diff is None:
-                    # get an idea of interval used in this file
-                    self.timer_diff = timer - last_timer
-                last_timer = timer
-
-                if chunk[0] == ACCEL_ID:
-
-                    sample = self._extract_sample(self._accel_particle_class, None, chunk, timestamp)
-                    # increment state
-                    self._increment_state(ACCEL_BYTES)
-
-                elif chunk[0] == RATE_ID:
-                    sample = self._extract_sample(self._rate_particle_class, None, chunk, timestamp)
-                    # increment state
-                    self._increment_state(RATE_BYTES)
-
-                if sample:
-                    result_particles.append((sample, copy.copy(self._read_state)))
-
-            (nd_timestamp, non_data, non_start, non_end) = self._chunker.get_next_non_data_with_index(clean=False)
-            (timestamp, chunk, start, end) = self._chunker.get_next_data_with_index(clean=True)
-            self.handle_non_data(non_data, non_end, start)
-
-        return result_particles
+        # if the timer has rolled over, multiply by the maximum value for timer so the time keeps increasing
+        rollover_offset = self._timer_rollover * MAX_TIMER
+        # make sure the timer starts at 0 for the file by subtracting the first timer
+        # divide timer by 62500 to go from counts to seconds
+        offset_secs = float(timer + rollover_offset - self._timer_start)/TIMER_TO_SECONDS
+        # add in the utc start time
+        time_secs = float(self._start_time_utc) + offset_secs
+        # convert to ntp64
+        return float(ntplib.system_to_ntp_time(time_secs))
 
     def handle_non_data(self, non_data, non_end, start):
         """
@@ -428,21 +259,87 @@ class MopakODclParser(BufferLoadingParser):
             # rather than raising the error here
             non_data_len = len(non_data)
             log.error("Found %d bytes of unexpected non-data:0x%s", non_data_len, binascii.hexlify(non_data))
-            self._increment_state(non_data_len)
             self._exception_callback(UnexpectedDataException("Found %d bytes of un-expected non-data:0x%s" %
                                                              (non_data_len, binascii.hexlify(non_data))))
 
-    def timer_to_timestamp(self, timer):
-        """
-        convert a timer value to a ntp formatted timestamp
-        """
-        # if the timer has rolled over, multiply by the maximum value for timer so the time keeps increasing
-        rollover_offset = self._read_state[StateKey.TIMER_ROLLOVER] * MAX_TIMER
-        # make sure the timer starts at 0 for the file by subtracting the first timer
-        # divide timer by 62500 to go from counts to seconds
-        offset_secs = float(timer + rollover_offset - self._read_state[StateKey.TIMER_START])/TIMER_TO_SECONDS
-        # add in the utc start time
-        time_secs = float(self._start_time_utc) + offset_secs
-        # convert to ntp64
-        return float(ntplib.system_to_ntp_time(time_secs))
+    def parse_file(self):
 
+        position = 0
+        last_timer = 0
+        bad_data = False
+        record_type = self._stream_handle.read(1)
+
+        while record_type:  # will be None when EOF is found
+            self._stream_handle.seek(position)  # reset file position to beginning of record
+            particle = None
+            fields = None
+            if record_type == ACCEL_ID:
+                data = self._stream_handle.read(ACCEL_BYTES)
+                if self.compare_checksum(data):
+                    particle = self._extract_sample(self._accel_particle_class, None, data, None)
+                    fields = struct.unpack('>I', data[37:41])
+                    position += ACCEL_BYTES
+                else:
+                    position += 1
+                    log.error("Found accel record whose checksum doesn't match at byte :0x%s", position)
+                    self._exception_callback(SampleException(
+                        "Found accel record whose checksum doesn't match at byte :0x%s" % position))
+                    bad_data = True
+            elif record_type == RATE_ID:
+                data = self._stream_handle.read(RATE_BYTES)
+                if self.compare_checksum(data):
+                    # particle-ize the data block received, return the record
+                    particle = self._extract_sample(self._rate_particle_class, None, data, None)
+                    fields = struct.unpack('>I', data[25:29])
+                    position += RATE_BYTES
+                else:
+                    position += 1
+                    log.error("Found rate record whose checksum doesn't match at byte :0x%s", position)
+                    self._exception_callback(SampleException(
+                        "Found rate record whose checksum doesn't match at byte :0x%s" % position))
+                    bad_data = True
+            else:
+                position += 1
+                if not bad_data:  # only need to send this exception once per bad data block
+                    log.error("Found unexpected non-data at byte :0x%s", position)
+                    self._exception_callback(SampleException("Found unexpected non-data at byte :0x%s" % position))
+                    bad_data = True
+
+            # compute timestamp
+            if fields:  # will be None if ID or checksum validation failed.
+                timer = int(fields[0])
+                # store the first timer value so we can subtract it to zero out the count at the
+                # start of the file
+                if self._timer_start is None:
+                    self._timer_start = timer
+                # keep track of the timer rolling over or being reset
+                if timer < last_timer:
+                    # check that the timer was not reset instead of rolling over, there should be
+                    # a large difference between the times, give it a little leeway with the 2.1
+                    # this is unlikely to happen in the first place, but there is still a risk of
+                    # rolling over on the second sample and not having timer_diff calculated yet,
+                    # or rolling in the last sample of the file within the fudge factor
+                    if self.timer_diff and (last_timer - timer) < (MAX_TIMER - self.timer_diff*TIMER_DIFF_FACTOR):
+                        # timer was reset before it got to the end
+                        log.warn('Timer was reset, time of particles unknown')
+                        # TODO exception callback?
+                        raise SampleException('Timer was reset, time of particle now unknown')
+                    log.info("Timer has rolled")
+                    self._timer_rollover += 1
+
+                timestamp = self.timer_to_timestamp(timer)
+
+                if particle:
+                    particle.set_internal_timestamp(timestamp)
+                    self._record_buffer.append(particle)
+                    bad_data = False
+
+                # use the timer diff to determine if the timer has been reset instead of rolling over
+                # at the end
+                if last_timer != 0 and self.timer_diff is None:
+                    # get an idea of interval used in this file
+                    self.timer_diff = timer - last_timer
+                last_timer = timer
+
+            self._stream_handle.seek(position)
+            record_type = self._stream_handle.read(1)

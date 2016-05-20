@@ -12,7 +12,7 @@ from mi.dataset.dataset_driver import DataSetDriver
 
 class MopakDriver:
     
-    def __init__ (self, sourceFilePath, particleDataHdlrObj, parser_config):
+    def __init__(self, sourceFilePath, particleDataHdlrObj, parser_config):
 
        self._sourceFilePath = sourceFilePath
        self._particleDataHdlrObj = particleDataHdlrObj
@@ -30,9 +30,8 @@ class MopakDriver:
         filename = pathList[len(pathList) - 1]
 
         with open(self._sourceFilePath, 'rb') as stream_handle:
-            parser = MopakODclParser(self._parser_config, None, stream_handle,
-                                        filename, lambda state, ingested: None,
-                                        lambda data: None, exception_callback)
+            parser = MopakODclParser(self._parser_config, stream_handle,
+                                     filename,  exception_callback)
 
             driver = DataSetDriver(parser, self._particleDataHdlrObj)
             driver.processFileStream()    
