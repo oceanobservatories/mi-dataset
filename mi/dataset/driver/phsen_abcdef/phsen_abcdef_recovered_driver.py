@@ -12,14 +12,14 @@ Initial Release
 """
 
 from mi.core.log import get_logger
-log = get_logger()
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 from mi.dataset.dataset_driver import SimpleDatasetDriver
 from mi.dataset.parser.phsen_abcdef import PhsenRecoveredParser
 from mi.core.versioning import version
+log = get_logger()
 
 
-@version("15.6.0")
+@version("15.7.0")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     """
     This is the method called by Uframe
