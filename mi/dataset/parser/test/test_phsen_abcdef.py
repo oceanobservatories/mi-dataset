@@ -5,19 +5,20 @@
 @brief Test code for a Phsen_abcdef data parser
 """
 
-__author__ = 'Joe Padula'
-__license__ = 'Apache 2.0'
-
 import os
 from nose.plugins.attrib import attr
 
 from mi.core.log import get_logger
-log = get_logger()
 
 from mi.dataset.test.test_parser import ParserUnitTestCase, BASE_RESOURCE_PATH
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 from mi.dataset.parser.phsen_abcdef import PhsenRecoveredParser
 from mi.core.exceptions import SampleException
+
+log = get_logger()
+
+__author__ = 'Joe Padula'
+__license__ = 'Apache 2.0'
 
 RESOURCE_PATH = os.path.join(BASE_RESOURCE_PATH, 'phsen_abcdef', 'resource')
 
@@ -171,19 +172,6 @@ class PhsenRecoveredParserUnitTestCase(ParserUnitTestCase):
 
         stream_handle.close()
 
-    def test_space_begin(self):
-        """
-        Test that we handle record that begin with a space
-        """
-        stream_handle = open(os.path.join(RESOURCE_PATH, 'SAMI_P0080_180713_space_begin.txt'))
-        parser = PhsenRecoveredParser(self.config, stream_handle, self.exception_callback)
-
-        parser.get_records(1)
-
-        self.assert_(isinstance(self.exception_callback_value[0], SampleException))
-
-        stream_handle.close()
-
     def test_no_data_tag(self):
         """
         Test that we do not create a particle if the file does not contain the ':Data' tag
@@ -208,3 +196,19 @@ class PhsenRecoveredParserUnitTestCase(ParserUnitTestCase):
         self.assertEquals(self.exception_callback_value, [])
 
         stream_handle.close()
+
+    def test_bug_3608(self):
+        """
+        Read test data and pull out data particles one at a time.
+        Assert that the results are those we expected.
+        """
+
+        stream_handle = open(os.path.join(RESOURCE_PATH,
+                                          'SAMI_P0080_160614_2.txt'))
+
+        parser = PhsenRecoveredParser(self.config, stream_handle, self.exception_callback)
+
+        particles = parser.get_records(5000)
+
+        self.assertEqual(len(particles), 323)
+        self.assertTrue(len(self.exception_callback_value) > 0)
