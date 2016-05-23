@@ -194,7 +194,7 @@ def find_driver(driver_string):
 
 def run(driver, files, fmt, out):
     monkey_patch_particles()
-    log.error('Importing driver: %s', driver)
+    log.info('Importing driver: %s', driver)
     module = find_driver(driver)
     particle_handler = ParticleHandler(output_path=out, formatter=fmt)
     for file_path in files:

@@ -1,30 +1,22 @@
-__author__ = 'wordenm'
-
 import os
 
 from mi.logging import config
 from mi.core.log import get_logger
-log = get_logger()
-
 from mi.core.exceptions import NotImplementedException
 
-class ParticleDataHandler(object):
-    """
-    This class is a stub class.  The real class is a Java class.
-    This script is expected to be used via JEP (Java Embedded Python).
-    This stub class is needed for driver level testing without uFrame.
-    """
 
+__author__ = 'wordenm'
+log = get_logger()
+
+
+class ParticleDataHandler(object):
     def __init__(self):
         self._samples = {}
         self._failure = False
 
     def addParticleSample(self, sample_type, sample):
         log.debug("Sample type: %s, Sample data: %s", sample_type, sample)
-        if sample_type not in self._samples.keys():
-            self._samples[sample_type] = [sample, ]
-        else:
-            self._samples[sample_type].append(sample)
+        self._samples.setdefault(sample_type, []).append(sample)
 
     def setParticleDataCaptureFailure(self):
         log.debug("Particle data capture failed")
@@ -58,7 +50,7 @@ class DataSetDriver(object):
                     break
 
                 for record in records:
-                    self._particleDataHdlrObj.addParticleSample(record.type(), record.generate())
+                    self._particleDataHdlrObj.addParticleSample(record.data_particle_type(), record.generate())
             except Exception as e:
                 log.error(e)
                 self._particleDataHdlrObj.setParticleDataCaptureFailure()

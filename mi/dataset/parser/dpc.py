@@ -110,6 +110,10 @@ class DeepProfilerParticle(DataParticle):
 
     __metaclass__ = METACLASS
 
+    def __init__(self, *args, **kwargs):
+        super(DeepProfilerParticle, self).__init__(*args, **kwargs)
+        self._data_particle_type = self._find_particle_type()
+
     def _find_particle_type(self):
         if len(self.raw_data) != 3:
             raise SampleException('Invalid sample, does not contain the correct record size')
@@ -124,8 +128,6 @@ class DeepProfilerParticle(DataParticle):
             raise SampleException('Invalid sample, unable to determine particle type')
 
     def _build_parsed_values(self):
-        self._data_particle_type = self._find_particle_type()
-        log.debug('Data particle type = %s', self._data_particle_type)
         try:
             seconds, microseconds, data = self.raw_data
             self.set_internal_timestamp(ntplib.system_to_ntp_time(seconds) + microseconds/1e6)
