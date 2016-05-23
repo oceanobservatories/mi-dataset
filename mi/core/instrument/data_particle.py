@@ -125,13 +125,12 @@ class DataParticle(object):
                           arg.contents[DataParticleKey.INTERNAL_TIMESTAMP])
             return False
 
-    @classmethod
-    def type(cls):
+    def type(self):
         """
         return the data particle type
         @return: data particle type
         """
-        return cls._data_particle_type
+        return self._data_particle_type
 
     def set_internal_timestamp(self, timestamp=None, unix_time=None):
         """
