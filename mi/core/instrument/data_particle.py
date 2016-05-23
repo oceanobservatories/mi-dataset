@@ -125,14 +125,6 @@ class DataParticle(object):
                           arg.contents[DataParticleKey.INTERNAL_TIMESTAMP])
             return False
 
-    @classmethod
-    def type(cls):
-        """
-        return the data particle type
-        @return: data particle type
-        """
-        return cls._data_particle_type
-
     def set_internal_timestamp(self, timestamp=None, unix_time=None):
         """
         Set the internal timestamp
@@ -177,13 +169,12 @@ class DataParticle(object):
         else:
             raise NotImplementedException("Value %s not available in particle!", id)
 
-
     def data_particle_type(self):
         """
         Return the data particle type (aka stream name)
         @raise: NotImplementedException if _data_particle_type is not set
         """
-        if(self._data_particle_type == None):
+        if self._data_particle_type is None:
             raise NotImplementedException("_data_particle_type not initialized")
 
         return self._data_particle_type

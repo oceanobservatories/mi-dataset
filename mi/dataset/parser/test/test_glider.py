@@ -236,7 +236,7 @@ class GliderParserUnitTestCase(ParserUnitTestCase):
 
     def assert_type(self, records, particle_class):
         for particle in records:
-            str_of_type = particle.type()
+            str_of_type = particle.data_particle_type()
             self.assertEqual(particle_class._data_particle_type, str_of_type)
 
 
