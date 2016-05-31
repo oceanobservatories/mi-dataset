@@ -9,58 +9,43 @@ Release notes:
 initial release
 """
 
-__author__ = 'Mark Worden'
-__license__ = 'Apache 2.0'
-
 import numpy
 
 from mi.core.log import get_logger
-log = get_logger()
 from mi.core.common import BaseEnum
 from mi.core.instrument.data_particle import DataParticle
 from mi.dataset.parser.common_regexes import INT_REGEX, FLOAT_REGEX, MULTIPLE_TAB_REGEX, END_OF_LINE_REGEX
 from mi.dataset.parser.cspp_base import CsppParser, Y_OR_N_REGEX, CsppMetadataDataParticle, MetadataRawDataKey, \
     encode_y_or_n
+log = get_logger()
+
+__author__ = 'Mark Worden'
+__license__ = 'Apache 2.0'
 
 
 # A regular expression for special characters that could exist in a data record preceding the model
 SPECIAL_CHARS_REGEX = r'(?:[\?][%])?'
 
 # A regular expression that should match a dosta_abcdjm data record
-DATA_REGEX = r'(' + FLOAT_REGEX + ')' + MULTIPLE_TAB_REGEX   # Profiler Timestamp
-DATA_REGEX += '(' + FLOAT_REGEX + ')' + MULTIPLE_TAB_REGEX   # Depth
-DATA_REGEX += '(' + Y_OR_N_REGEX + ')' + MULTIPLE_TAB_REGEX  # Suspect Timestamp
-DATA_REGEX += SPECIAL_CHARS_REGEX + '(' + INT_REGEX + ')' + MULTIPLE_TAB_REGEX  # Model Number
-DATA_REGEX += '(' + INT_REGEX + ')' + MULTIPLE_TAB_REGEX    # Serial Number
-DATA_REGEX += '(' + FLOAT_REGEX + ')' + MULTIPLE_TAB_REGEX  # oxygen content
-DATA_REGEX += '(' + FLOAT_REGEX + ')' + MULTIPLE_TAB_REGEX  # ambient temperature
-DATA_REGEX += '(' + FLOAT_REGEX + ')' + MULTIPLE_TAB_REGEX  # calibrated phase
-DATA_REGEX += '(' + FLOAT_REGEX + ')' + MULTIPLE_TAB_REGEX  # temperature compensated phase
-DATA_REGEX += '(' + FLOAT_REGEX + ')' + MULTIPLE_TAB_REGEX  # phase measurement with blue excitation
-DATA_REGEX += '(' + FLOAT_REGEX + ')' + MULTIPLE_TAB_REGEX  # phase measurement with red excitation
-DATA_REGEX += '(' + FLOAT_REGEX + ')' + MULTIPLE_TAB_REGEX  # amplitude measurement with blue excitation
-DATA_REGEX += '(' + FLOAT_REGEX + ')' + MULTIPLE_TAB_REGEX  # amplitude measurement with red excitation
-DATA_REGEX += '(' + FLOAT_REGEX + ')' + END_OF_LINE_REGEX   # raw temperature, voltage from thermistor
-
-
-class DataMatchesGroupNumber(BaseEnum):
-    """
-    An enum for group match indices for a data record only chunk.
-    """
-    PROFILER_TIMESTAMP = 1
-    PRESSURE = 2
-    SUSPECT_TIMESTAMP = 3
-    MODEL = 4
-    SERIAL_NUMBER = 5
-    ESTIMATED_OXYGEN_CONCENTRATION = 6
-    OPTODE_TEMPERATURE = 7
-    CALIBRATED_PHASE = 8
-    TEMP_COMPENSATED_PHASE = 9
-    BLUE_PHASE = 10
-    RED_PHASE = 11
-    BLUE_AMPLITUDE = 12
-    RED_AMPLITUDE = 13
-    RAW_TEMPERATURE = 14
+# NOTE the group names must match the string literals in the ParticleKey below
+# strings used here instead of enumerated constants for readability
+DATA_REGEX = r'(?P<profiler_timestamp>' + FLOAT_REGEX + ')' + MULTIPLE_TAB_REGEX   # Profiler Timestamp
+DATA_REGEX += '(?P<pressure_depth>' + FLOAT_REGEX + ')' + MULTIPLE_TAB_REGEX   # Depth
+DATA_REGEX += '(?P<suspect_timestamp>' + Y_OR_N_REGEX + ')' + MULTIPLE_TAB_REGEX  # Suspect Timestamp
+DATA_REGEX += SPECIAL_CHARS_REGEX + '(?P<product_number>' + INT_REGEX + ')' + MULTIPLE_TAB_REGEX  # Model Number
+DATA_REGEX += '(?P<serial_number>' + INT_REGEX + ')' + MULTIPLE_TAB_REGEX    # Serial Number
+DATA_REGEX += '(?P<estimated_oxygen_concentration>' + FLOAT_REGEX + ')' + MULTIPLE_TAB_REGEX  # oxygen content
+# relative air saturation
+# Note: relative air saturation is missing in some early deployments.  If not present match group will be None.
+DATA_REGEX += '(?:(?P<estimated_oxygen_saturation>' + FLOAT_REGEX + ')' + MULTIPLE_TAB_REGEX + ')?'
+DATA_REGEX += '(?P<optode_temperature>' + FLOAT_REGEX + ')' + MULTIPLE_TAB_REGEX  # ambient temperature
+DATA_REGEX += '(?P<calibrated_phase>' + FLOAT_REGEX + ')' + MULTIPLE_TAB_REGEX  # calibrated phase
+DATA_REGEX += '(?P<temp_compensated_phase>' + FLOAT_REGEX + ')' + MULTIPLE_TAB_REGEX  # temperature compensated phase
+DATA_REGEX += '(?P<blue_phase>' + FLOAT_REGEX + ')' + MULTIPLE_TAB_REGEX  # phase with blue excitation
+DATA_REGEX += '(?P<red_phase>' + FLOAT_REGEX + ')' + MULTIPLE_TAB_REGEX  # phase with red excitation
+DATA_REGEX += '(?P<blue_amplitude>' + FLOAT_REGEX + ')' + MULTIPLE_TAB_REGEX  # amplitude with blue excitation
+DATA_REGEX += '(?P<red_amplitude>' + FLOAT_REGEX + ')' + MULTIPLE_TAB_REGEX  # amplitude with red excitation
+DATA_REGEX += '(?P<raw_temperature>' + FLOAT_REGEX + ')' + END_OF_LINE_REGEX   # raw temperature, voltage
 
 
 class DataParticleType(BaseEnum):
@@ -83,6 +68,7 @@ class DostaAbcdjmCsppParserDataParticleKey(BaseEnum):
     PRESSURE = 'pressure_depth'
     SUSPECT_TIMESTAMP = 'suspect_timestamp'
     ESTIMATED_OXYGEN_CONCENTRATION = 'estimated_oxygen_concentration'
+    ESTIMATED_OXYGEN_SATURATION = 'estimated_oxygen_saturation'
     OPTODE_TEMPERATURE = 'optode_temperature'
     CALIBRATED_PHASE = 'calibrated_phase'
     TEMP_COMPENSATED_PHASE = 'temp_compensated_phase'
@@ -93,27 +79,33 @@ class DostaAbcdjmCsppParserDataParticleKey(BaseEnum):
     RAW_TEMPERATURE = 'raw_temperature'
 
 
+def float_or_none(float_val):
+    if float_val is None:
+        return None
+    return float(float_val)
+
+
 # A group of non common metadata particle encoding rules used to simplify encoding using a loop
 NON_COMMON_METADATA_PARTICLE_ENCODING_RULES = [
-    (DostaAbcdjmCsppParserDataParticleKey.PRODUCT_NUMBER, DataMatchesGroupNumber.MODEL, int),
-    (DostaAbcdjmCsppParserDataParticleKey.SERIAL_NUMBER, DataMatchesGroupNumber.SERIAL_NUMBER, str)
+    (DostaAbcdjmCsppParserDataParticleKey.PRODUCT_NUMBER, int),
+    (DostaAbcdjmCsppParserDataParticleKey.SERIAL_NUMBER, str)
 ]
 
 # A group of instrument data particle encoding rules used to simplify encoding using a loop
 INSTRUMENT_PARTICLE_ENCODING_RULES = [
-    (DostaAbcdjmCsppParserDataParticleKey.PROFILER_TIMESTAMP, DataMatchesGroupNumber.PROFILER_TIMESTAMP, numpy.float),
-    (DostaAbcdjmCsppParserDataParticleKey.PRESSURE, DataMatchesGroupNumber.PRESSURE, float),
-    (DostaAbcdjmCsppParserDataParticleKey.SUSPECT_TIMESTAMP, DataMatchesGroupNumber.SUSPECT_TIMESTAMP, encode_y_or_n),
-    (DostaAbcdjmCsppParserDataParticleKey.ESTIMATED_OXYGEN_CONCENTRATION,
-     DataMatchesGroupNumber.ESTIMATED_OXYGEN_CONCENTRATION, float),
-    (DostaAbcdjmCsppParserDataParticleKey.OPTODE_TEMPERATURE, DataMatchesGroupNumber.OPTODE_TEMPERATURE, float),
-    (DostaAbcdjmCsppParserDataParticleKey.CALIBRATED_PHASE, DataMatchesGroupNumber.CALIBRATED_PHASE, float),
-    (DostaAbcdjmCsppParserDataParticleKey.TEMP_COMPENSATED_PHASE, DataMatchesGroupNumber.TEMP_COMPENSATED_PHASE, float),
-    (DostaAbcdjmCsppParserDataParticleKey.BLUE_PHASE, DataMatchesGroupNumber.BLUE_PHASE, float),
-    (DostaAbcdjmCsppParserDataParticleKey.RED_PHASE, DataMatchesGroupNumber.RED_PHASE, float),
-    (DostaAbcdjmCsppParserDataParticleKey.BLUE_AMPLITUDE, DataMatchesGroupNumber.BLUE_AMPLITUDE, float),
-    (DostaAbcdjmCsppParserDataParticleKey.RED_AMPLITUDE, DataMatchesGroupNumber.RED_AMPLITUDE, float),
-    (DostaAbcdjmCsppParserDataParticleKey.RAW_TEMPERATURE, DataMatchesGroupNumber.RAW_TEMPERATURE, float),
+    (DostaAbcdjmCsppParserDataParticleKey.PROFILER_TIMESTAMP, numpy.float),
+    (DostaAbcdjmCsppParserDataParticleKey.PRESSURE, float),
+    (DostaAbcdjmCsppParserDataParticleKey.SUSPECT_TIMESTAMP, encode_y_or_n),
+    (DostaAbcdjmCsppParserDataParticleKey.ESTIMATED_OXYGEN_CONCENTRATION, float),
+    (DostaAbcdjmCsppParserDataParticleKey.ESTIMATED_OXYGEN_SATURATION, float_or_none),
+    (DostaAbcdjmCsppParserDataParticleKey.OPTODE_TEMPERATURE, float),
+    (DostaAbcdjmCsppParserDataParticleKey.CALIBRATED_PHASE, float),
+    (DostaAbcdjmCsppParserDataParticleKey.TEMP_COMPENSATED_PHASE, float),
+    (DostaAbcdjmCsppParserDataParticleKey.BLUE_PHASE, float),
+    (DostaAbcdjmCsppParserDataParticleKey.RED_PHASE, float),
+    (DostaAbcdjmCsppParserDataParticleKey.BLUE_AMPLITUDE, float),
+    (DostaAbcdjmCsppParserDataParticleKey.RED_AMPLITUDE, float),
+    (DostaAbcdjmCsppParserDataParticleKey.RAW_TEMPERATURE, float),
 ]
 
 
@@ -135,12 +127,12 @@ class DostaAbcdjmCsppMetadataDataParticle(CsppMetadataDataParticle):
         data_match = self.raw_data[MetadataRawDataKey.DATA_MATCH]
 
         # Process each of the non common metadata particle parameters
-        for (name, index, encoding) in NON_COMMON_METADATA_PARTICLE_ENCODING_RULES:
-            results.append(self._encode_value(name, data_match.group(index), encoding))
+        for (name, encoding) in NON_COMMON_METADATA_PARTICLE_ENCODING_RULES:
+            results.append(self._encode_value(name, data_match.group(name), encoding))
 
         # Set the internal timestamp
         internal_timestamp_unix = numpy.float(data_match.group(
-            DataMatchesGroupNumber.PROFILER_TIMESTAMP))
+            DostaAbcdjmCsppParserDataParticleKey.PROFILER_TIMESTAMP))
         self.set_internal_timestamp(unix_time=internal_timestamp_unix)
 
         return results
@@ -177,12 +169,12 @@ class DostaAbcdjmCsppInstrumentDataParticle(DataParticle):
         results = []
 
         # Process each of the instrument particle parameters
-        for (name, index, encoding) in INSTRUMENT_PARTICLE_ENCODING_RULES:
-            results.append(self._encode_value(name, self.raw_data.group(index), encoding))
+        for (name, encoding) in INSTRUMENT_PARTICLE_ENCODING_RULES:
+            results.append(self._encode_value(name, self.raw_data.group(name), encoding))
 
         # # Set the internal timestamp
         internal_timestamp_unix = numpy.float(self.raw_data.group(
-            DataMatchesGroupNumber.PROFILER_TIMESTAMP))
+            DostaAbcdjmCsppParserDataParticleKey.PROFILER_TIMESTAMP))
         self.set_internal_timestamp(unix_time=internal_timestamp_unix)
 
         return results
