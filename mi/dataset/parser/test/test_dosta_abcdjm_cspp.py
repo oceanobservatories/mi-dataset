@@ -189,3 +189,26 @@ class DostaAbcdjmCsppParserUnitTestCase(ParserUnitTestCase):
             self.assert_particles(particles, 'linux.yml', RESOURCE_PATH)
 
             self.assertEqual(self.exception_callback_value, [])
+
+    def test_air_saturation_preset(self):
+        """
+        Ensure that input files containing the air saturation field are parsed correctly.
+        Redmine #10238 Identified additional parameter enabled after first deployment
+        """
+        with open(os.path.join(RESOURCE_PATH, 'ucspp_32260420_PPB_OPT.txt'), 'rU') as stream_handle:
+
+            parser = DostaAbcdjmCsppParser(self.config_recovered, stream_handle, self.exception_callback)
+
+            # get the metadata particle and first 2 instrument particles and verify values.
+            particles = parser.get_records(3)
+
+            self.assertTrue(len(particles) == 3)
+            self.assertEqual(self.exception_callback_value, [])
+
+            self.assert_particles(particles, 'ucspp_32260420_PPB_OPT.yml', RESOURCE_PATH)
+
+            # get remaining particles and verify parsed without error.
+            particles = parser.get_records(100)
+
+            self.assertTrue(len(particles) == 93)
+            self.assertEqual(self.exception_callback_value, [])

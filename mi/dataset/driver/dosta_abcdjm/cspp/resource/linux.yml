@@ -23,6 +23,7 @@ data:
     pressure_depth:        22.634000
     suspect_timestamp: 1
     estimated_oxygen_concentration:       234.656000
+    estimated_oxygen_saturation: !!null
     optode_temperature:         9.091000
     calibrated_phase:        36.930000
     temp_compensated_phase:        36.930000
@@ -39,6 +40,7 @@ data:
     pressure_depth:        22.634000
     suspect_timestamp: 0
     estimated_oxygen_concentration:       233.463000
+    estimated_oxygen_saturation: !!null
     optode_temperature:         9.087000
     calibrated_phase:        36.996000
     temp_compensated_phase:        36.996000
@@ -55,6 +57,7 @@ data:
     pressure_depth:        22.634000
     suspect_timestamp: 0
     estimated_oxygen_concentration:       233.331000
+    estimated_oxygen_saturation: !!null
     optode_temperature:         9.086000
     calibrated_phase:        37.003000
     temp_compensated_phase:        37.003000
@@ -71,6 +74,7 @@ data:
     pressure_depth:        22.634000
     suspect_timestamp: 0
     estimated_oxygen_concentration:       232.887000
+    estimated_oxygen_saturation: !!null
     optode_temperature:         9.088000
     calibrated_phase:        37.026000
     temp_compensated_phase:        37.026000
@@ -87,6 +91,7 @@ data:
     pressure_depth:        22.634000
     suspect_timestamp: 0
     estimated_oxygen_concentration:       232.418000
+    estimated_oxygen_saturation: !!null
     optode_temperature:         9.091000
     calibrated_phase:        37.050000
     temp_compensated_phase:        37.050000
@@ -103,6 +108,7 @@ data:
     pressure_depth:        22.634000
     suspect_timestamp: 0
     estimated_oxygen_concentration:       231.857000
+    estimated_oxygen_saturation: !!null
     optode_temperature:         9.091000
     calibrated_phase:        37.080000
     temp_compensated_phase:        37.080000
@@ -119,6 +125,7 @@ data:
     pressure_depth:        22.634000
     suspect_timestamp: 0
     estimated_oxygen_concentration:       231.387000
+    estimated_oxygen_saturation: !!null
     optode_temperature:         9.094000
     calibrated_phase:        37.103000
     temp_compensated_phase:        37.103000
@@ -135,6 +142,7 @@ data:
     pressure_depth:        22.634000
     suspect_timestamp: 0
     estimated_oxygen_concentration:       230.955000
+    estimated_oxygen_saturation: !!null
     optode_temperature:         9.091000
     calibrated_phase:        37.129000
     temp_compensated_phase:        37.129000
@@ -151,6 +159,7 @@ data:
     pressure_depth:        22.634000
     suspect_timestamp: 0
     estimated_oxygen_concentration:       230.514000
+    estimated_oxygen_saturation: !!null
     optode_temperature:         9.088000
     calibrated_phase:        37.154000
     temp_compensated_phase:        37.154000
@@ -167,6 +176,7 @@ data:
     pressure_depth:        22.634000
     suspect_timestamp: 0
     estimated_oxygen_concentration:       230.112000
+    estimated_oxygen_saturation: !!null
     optode_temperature:         9.089000
     calibrated_phase:        37.176000
     temp_compensated_phase:        37.176000
@@ -183,6 +193,7 @@ data:
     pressure_depth:        22.634000
     suspect_timestamp: 0
     estimated_oxygen_concentration:       229.760000
+    estimated_oxygen_saturation: !!null
     optode_temperature:         9.091000
     calibrated_phase:        37.194000
     temp_compensated_phase:        37.194000
@@ -199,6 +210,7 @@ data:
     pressure_depth:        22.634000
     suspect_timestamp: 0
     estimated_oxygen_concentration:       229.458000
+    estimated_oxygen_saturation: !!null
     optode_temperature:         9.090000
     calibrated_phase:        37.210000
     temp_compensated_phase:        37.210000
@@ -215,6 +227,7 @@ data:
     pressure_depth:        22.634000
     suspect_timestamp: 0
     estimated_oxygen_concentration:       229.188000
+    estimated_oxygen_saturation: !!null
     optode_temperature:         9.088000
     calibrated_phase:        37.226000
     temp_compensated_phase:        37.226000
@@ -231,6 +244,7 @@ data:
     pressure_depth:        22.634000
     suspect_timestamp: 0
     estimated_oxygen_concentration:       228.937000
+    estimated_oxygen_saturation: !!null
     optode_temperature:         9.088000
     calibrated_phase:        37.240000
     temp_compensated_phase:        37.240000
@@ -247,6 +261,7 @@ data:
     pressure_depth:        22.634000
     suspect_timestamp: 1
     estimated_oxygen_concentration:       228.818000
+    estimated_oxygen_saturation: !!null
     optode_temperature:         9.082000
     calibrated_phase:        37.250000
     temp_compensated_phase:        37.250000
@@ -263,6 +278,7 @@ data:
     pressure_depth:        22.634000
     suspect_timestamp: 0
     estimated_oxygen_concentration:       228.546000
+    estimated_oxygen_saturation: !!null
     optode_temperature:         9.085000
     calibrated_phase:        37.263000
     temp_compensated_phase:        37.263000
@@ -279,6 +295,7 @@ data:
     pressure_depth:        22.634000
     suspect_timestamp: 0
     estimated_oxygen_concentration:       228.347000
+    estimated_oxygen_saturation: !!null
     optode_temperature:         9.089000
     calibrated_phase:        37.272000
     temp_compensated_phase:        37.272000
@@ -295,6 +312,7 @@ data:
     pressure_depth:        22.634000
     suspect_timestamp: 0
     estimated_oxygen_concentration:       228.162000
+    estimated_oxygen_saturation: !!null
     optode_temperature:         9.084000
     calibrated_phase:        37.285000
     temp_compensated_phase:        37.285000
@@ -311,6 +329,7 @@ data:
     pressure_depth:        22.634000
     suspect_timestamp: 1
     estimated_oxygen_concentration:       227.985000
+    estimated_oxygen_saturation: !!null
     optode_temperature:         9.082000
     calibrated_phase:        37.295000
     temp_compensated_phase:        37.295000
