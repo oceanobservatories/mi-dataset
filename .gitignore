@@ -47,3 +47,5 @@ couchdb.stdout
 erl_crash.dump
 *.prof
 mavs4_menu_hex.txt
+.coverage
+.cache
