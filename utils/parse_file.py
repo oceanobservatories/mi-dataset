@@ -55,9 +55,7 @@ def monkey_patch_particles():
     import mi.core.instrument.data_particle
 
     def _generate(self, sorted=False):
-        if not self._dict:
-            self._dict = self.generate_dict()
-        return self._dict
+        return self.generate_dict()
 
     mi.core.instrument.data_particle.DataParticle.generate = _generate
 
