@@ -282,7 +282,7 @@ class CsppParser(SimpleParser):
         if data_particle:
 
             if not self._metadata_extracted:
-                # Once the first data particle is read, all available header lines will 
+                # Once the first data particle is read, all available header lines will
                 # have been read and inserted into the header state dictionary.
                 # Only the source file is required to create a metadata particle.
 
@@ -293,8 +293,8 @@ class CsppParser(SimpleParser):
                                                               data_match),
                                                              None)
                     if metadata_particle:
-                        # We're going to insert the metadata particle so that it is 
-                        # the first in the list and set the position to 0, as it cannot 
+                        # We're going to insert the metadata particle so that it is
+                        # the first in the list and set the position to 0, as it cannot
                         # have the same position as the non-metadata particle
                         result_particles.insert(0, metadata_particle)
                     else:
@@ -349,8 +349,8 @@ class CsppParser(SimpleParser):
         # otherwise data is unexpected
         elif not TIMESTAMP_LINE_MATCHER.match(line) and not \
                 (self._ignore_matcher is not None and self._ignore_matcher.match(line)):
-            # Unexpected data was found 
-            log.warn('got unrecognized row %s', line)
+            # Unexpected data was found
+            log.warn('got unrecognized row %r', line)
             self._exception_callback(RecoverableSampleException("Found an invalid line: %s" % line))
 
     def parse_file(self):
