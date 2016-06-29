@@ -3,8 +3,8 @@
 """
 @file ion/core/unit_test.py
 @author Bill French
-@brief Base test class for all MI tests.  Provides two base classes, 
-One for pyon tests and one for stand alone MI tests. 
+@brief Base test class for all MI tests.  Provides two base classes,
+One for pyon tests and one for stand alone MI tests.
 
 We have the stand alone test case for tests that don't require or can't
 integrate with the common ION test case.
@@ -14,12 +14,9 @@ integrate with the common ION test case.
 from mi.core.log import get_logger
 log = get_logger()
 
-from mi.logging import config
-config.add_configuration('res/config/mi-logging.yml')
-
 
 import unittest
-import json 
+import json
 
 from mi.core.instrument.data_particle import DataParticle
 from mi.core.instrument.data_particle import DataParticleKey
@@ -29,7 +26,7 @@ from mi.idk.exceptions import IDKException
 
 class MiUnitTest(unittest.TestCase):
     """
-    Base class for non-ion tests.  Use only if needed to avoid ion 
+    Base class for non-ion tests.  Use only if needed to avoid ion
     test common code.
     """
     def shortDescription(self):

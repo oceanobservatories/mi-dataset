@@ -52,6 +52,8 @@ class DataSetDriver(object):
                 for record in records:
                     self._particleDataHdlrObj.addParticleSample(record.data_particle_type(), record.generate())
             except Exception as e:
+                import traceback
+                traceback.print_exc()
                 log.error(e)
                 self._particleDataHdlrObj.setParticleDataCaptureFailure()
                 break
