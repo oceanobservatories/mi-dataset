@@ -1004,10 +1004,10 @@ REC_LOG_FILE_SIMPLE = 'rec_vel3d_l_2.dat'
 REC_YAML_FILE_SIMPLE = 'rec_vel3d_l_2.yml'
 
 REC_LOG_FILE_1 = 'A0000001.DAT'
-REC_YAML_FILE_1 = 'A0000001.yml'
+REC_JSON_FILE_1 = 'A0000001.json'
 
 REC_LOG_FILE_2 = 'A0000001_PAPA14.dat'
-REC_YAML_FILE_2 = 'A0000001_PAPA14.yml'
+REC_JSON_FILE_2 = 'A0000001_PAPA14.json'
 
 # END NEW STUFF DEFS
 
@@ -1108,7 +1108,7 @@ class Vel3dLWfpParserUnitTestCase(ParserUnitTestCase):
         # The following are for the multiple block file.
         self.rec_expected_particle_2_10_1_1 = Vel3dLWfpInstrumentRecoveredParticle(
             REC_EXPECTED_FIELDS_RECORD_2_10_1_1, internal_timestamp=3218922123.0)
-        
+
         self.rec_expected_particle_2_10_1_2 = Vel3dLWfpInstrumentRecoveredParticle(
             REC_EXPECTED_FIELDS_RECORD_2_10_1_2, internal_timestamp=3221690584.0)
 
@@ -1260,28 +1260,28 @@ class Vel3dLWfpParserUnitTestCase(ParserUnitTestCase):
         self.tel_expected_particle_2_10_2_meta = Vel3dLWfpSioMuleMetadataParticle(
             TEL_EXPECTED_FIELDS_RECORD_2_10_2_META, internal_timestamp=3583891131.0)
 
-        self.tel_expected_particle_sio_ps_wa_wa_2_1 = Vel3dLWfpSioMuleMetadataParticle(
+        self.tel_expected_particle_sio_ps_wa_wa_2_1 = Vel3dLWfpInstrumentParticle(
             TEL_EXPECTED_FIELDS_SIO_PS_WA_WA_2_1, internal_timestamp=3571355045.0)
 
-        self.tel_expected_particle_sio_ps_wa_wa_2_2 = Vel3dLWfpSioMuleMetadataParticle(
+        self.tel_expected_particle_sio_ps_wa_wa_2_2 = Vel3dLWfpInstrumentParticle(
             TEL_EXPECTED_FIELDS_SIO_PS_WA_WA_2_2, internal_timestamp=3574123506.0)
 
-        self.tel_expected_particle_sio_ps_wa_wa_2_3 = Vel3dLWfpSioMuleMetadataParticle(
+        self.tel_expected_particle_sio_ps_wa_wa_2_3 = Vel3dLWfpInstrumentParticle(
             TEL_EXPECTED_FIELDS_SIO_PS_WA_WA_2_3, internal_timestamp=3576805567.0)
 
         self.tel_expected_particle_sio_ps_wa_wa_2_meta = Vel3dLWfpSioMuleMetadataParticle(
             TEL_EXPECTED_FIELDS_SIO_PS_WA_WA_2_META, internal_timestamp=3583891131.0)
 
-        self.tel_expected_particle_sio_ps_wa_wa_3_1 = Vel3dLWfpSioMuleMetadataParticle(
+        self.tel_expected_particle_sio_ps_wa_wa_3_1 = Vel3dLWfpInstrumentParticle(
             TEL_EXPECTED_FIELDS_SIO_PS_WA_WA_3_1, internal_timestamp=3579574028.0)
 
-        self.tel_expected_particle_sio_ps_wa_wa_3_2 = Vel3dLWfpSioMuleMetadataParticle(
+        self.tel_expected_particle_sio_ps_wa_wa_3_2 = Vel3dLWfpInstrumentParticle(
             TEL_EXPECTED_FIELDS_SIO_PS_WA_WA_3_2, internal_timestamp=3582256089.0)
 
-        self.tel_expected_particle_sio_ps_wa_wa_3_3 = Vel3dLWfpSioMuleMetadataParticle(
+        self.tel_expected_particle_sio_ps_wa_wa_3_3 = Vel3dLWfpInstrumentParticle(
             TEL_EXPECTED_FIELDS_SIO_PS_WA_WA_3_3, internal_timestamp=3585024550.0)
 
-        self.tel_expected_particle_sio_ps_wa_wa_3_4 = Vel3dLWfpSioMuleMetadataParticle(
+        self.tel_expected_particle_sio_ps_wa_wa_3_4 = Vel3dLWfpInstrumentParticle(
             TEL_EXPECTED_FIELDS_SIO_PS_WA_WA_3_4, internal_timestamp=3587793011.0)
 
         self.tel_expected_particle_sio_ps_wa_wa_3_meta = Vel3dLWfpSioMuleMetadataParticle(
@@ -1330,7 +1330,7 @@ class Vel3dLWfpParserUnitTestCase(ParserUnitTestCase):
                  'Vel3dLWfpSioMuleMetadataParticle']
         }
 
-        # Define test data particles and their associated timestamps which will be 
+        # Define test data particles and their associated timestamps which will be
         # compared with returned results
 
         self.rec_file_ingested_value = None
@@ -1585,7 +1585,7 @@ class Vel3dLWfpParserUnitTestCase(ParserUnitTestCase):
 
         # In a single read, get all particles in this file.
         result = parser.get_records(15000)
-        self.assert_particles(result, REC_YAML_FILE_1, RESOURCE_PATH)
+        self.assert_particles(result, REC_JSON_FILE_1, RESOURCE_PATH)
 
         in_file.close()
         self.assertListEqual(self.exception_callback_value, [])
@@ -1603,7 +1603,7 @@ class Vel3dLWfpParserUnitTestCase(ParserUnitTestCase):
 
         # In a single read, get all particles in this file.
         result = parser.get_records(25000)
-        self.assert_particles(result, REC_YAML_FILE_2, RESOURCE_PATH)
+        self.assert_particles(result, REC_JSON_FILE_2, RESOURCE_PATH)
 
         in_file.close()
         self.assertListEqual(self.exception_callback_value, [])
@@ -1694,7 +1694,7 @@ class Vel3dLWfpParserUnitTestCase(ParserUnitTestCase):
         # In a single read, get all particles in this file.
         result = parser.get_records(100000)
 
-        self.particle_to_yml(result, REC_YAML_FILE_2)
+        self.particle_to_yml(result, REC_JSON_FILE_2)
 
     def create_tel_yml_file(self):
         """
