@@ -29,11 +29,11 @@ class Parad_k_stc_imodemParserUnitTestCase(ParserUnitTestCase):
     """
     Parad_k_stc_imodem Parser unit test suite
     """
-    
+
     TEST_DATA_SHORT = "\x00\x01\x00\x00\x00\x00\x00\x00\x00\x01\x00\x01\x00\x00\x00\x00R\x9d\xab\xa2R\x9d\xac\x19R\x9d\xac" \
         "\x1d\x00\x00\x00\x00A:6\xe3\x00\x00\x00\x00\x00\x00\x00\x00\x01\x03\x00h\x00NR\x9d\xac!C\t\xf2\xf7A9A!\x00\x00\x00" \
         "\x00\x00\x00\x00\x00\x00\xf2\x00c\x00OR\x9d\xac&C\xbc\x9f\xa7A7'\xbb\x00\x00\x00\x00\x00\x00\x00\x00\x00\xc2\x00^" \
-        "\x00OR\x9d\xac*C\xc5\xad\x08A6\xd5\xd0\x00\x00\x00\x00\x00\x00\x00\x00\x00\xb4\x00n\x00O" 
+        "\x00OR\x9d\xac*C\xc5\xad\x08A6\xd5\xd0\x00\x00\x00\x00\x00\x00\x00\x00\x00\xb4\x00n\x00O"
 
     TEST_DATA = "\x00\x01\x00\x00\x00\x00\x00\x00\x00\x01\x00\x01\x00\x00\x00\x00R\x9d\xab\xa2R\x9d\xac\x19R\x9d\xac\x1d\x00" \
         "\x00\x00\x00A:6\xe3\x00\x00\x00\x00\x00\x00\x00\x00\x01\x03\x00h\x00NR\x9d\xac!C\t\xf2\xf7A9A!\x00\x00\x00\x00" \
@@ -101,12 +101,12 @@ class Parad_k_stc_imodemParserUnitTestCase(ParserUnitTestCase):
         self.publish_callback_value = pub
 
     def setUp(self):
-        
+
         ParserUnitTestCase.setUp(self)
         self.config = {
-            DataSetDriverConfigKeys.PARTICLE_MODULE: 
+            DataSetDriverConfigKeys.PARTICLE_MODULE:
                 'mi.dataset.parser.parad_k_stc_imodem',
-            DataSetDriverConfigKeys.PARTICLE_CLASS: 
+            DataSetDriverConfigKeys.PARTICLE_CLASS:
                 ['Parad_k_stc_imodem_statusParserDataParticle',
                  'Parad_k_stc_imodem_startParserDataParticle',
                  'Parad_k_stc_imodem_engineeringParserDataParticle']
@@ -121,7 +121,7 @@ class Parad_k_stc_imodemParserUnitTestCase(ParserUnitTestCase):
 
         self.start_state = {StateKey.POSITION: 0}
 
-        # Define test data particles and their associated timestamps which will be 
+        # Define test data particles and their associated timestamps which will be
         # compared with returned results
 
         self.timestamp1_eng = self.timestamp_to_ntp('R\x9d\xac\x1d')
@@ -258,7 +258,7 @@ class Parad_k_stc_imodemParserUnitTestCase(ParserUnitTestCase):
         fields = struct.unpack('>I', hex_timestamp)
         timestamp = int(fields[0])
         return ntplib.system_to_ntp_time(timestamp)
-    
+
     def assert_result(self, result, position, particle, ingested):
         self.assertEqual(result, [particle])
         self.assertEqual(self.file_ingested, ingested)
@@ -299,7 +299,8 @@ class Parad_k_stc_imodemParserUnitTestCase(ParserUnitTestCase):
 
         # start with the start time record
         result = self.parser.get_records(4)
-        self.assertEqual(result, [self.particle_a_eng, self.particle_b_eng, self.particle_c_eng, self.particle_d_eng])
+        self.assertEqual(result, [self.particle_a_eng_rec, self.particle_b_eng_rec,
+                                  self.particle_c_eng_rec, self.particle_d_eng_rec])
         self.assertEqual(self.parser._state[StateKey.POSITION], 128)
         self.assertEqual(self.state_callback_value[StateKey.POSITION], 128)
         self.assertEqual(self.publish_callback_value[0], self.particle_a_eng_rec)
@@ -402,7 +403,7 @@ class Parad_k_stc_imodemParserUnitTestCase(ParserUnitTestCase):
 
     def test_set_state(self):
         """
-        Test changing to a new state after initializing the parser and 
+        Test changing to a new state after initializing the parser and
         reading data, as if new data has been found and the state has
         changed
         """

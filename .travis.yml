@@ -5,7 +5,9 @@ python:
 # command to install dependencies
 install: "pip install -r requirements.txt"
 # command to run tests
-script: nosetests -a UNIT
+script:
+  - nosetests --processes=2 --process-timeout=360 mi/dataset/parser
+  - nosetests --processes=2 --process-timeout=360 mi/dataset/driver
 
 notifications:
   slack: ooi-dev:e6WpBt9NHHw1YJjRKuYHkhYr

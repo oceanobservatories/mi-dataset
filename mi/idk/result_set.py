@@ -74,6 +74,7 @@ data:
 __author__ = 'Bill French'
 __license__ = 'Apache 2.0'
 
+import json
 import yaml
 import numpy
 
@@ -103,7 +104,13 @@ class ResultSet(object):
         """
         log.debug("read result file: %s" % result_file_path)
         stream = file(result_file_path, 'r')
-        result_set = yaml.load(stream)
+
+        if result_file_path.endswith('.yml') or result_file_path.endswith('.yaml'):
+            result_set = yaml.load(stream)
+        elif result_file_path.endswith('json'):
+            result_set = json.load(stream)
+        else:
+            result_set = {}
 
         # confirm the yml has a 'header' section
         self._result_set_header = result_set.get("header")
@@ -414,7 +421,7 @@ class ResultSet(object):
         if isinstance(particle, dict):
             return particle
 
-        return particle.generate_dict()
+        return json.loads(particle.generate())
 
     @staticmethod
     def _perform_round(value, round_factor):

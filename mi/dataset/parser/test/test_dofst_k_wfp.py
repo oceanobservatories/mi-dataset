@@ -20,7 +20,6 @@ from mi.core.exceptions import SampleException
 from mi.idk.config import Config
 
 from mi.dataset.test.test_parser import ParserUnitTestCase
-from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 from mi.dataset.parser.dofst_k_wfp import DofstKWfpParser
 from mi.dataset.parser.dofst_k_wfp_particles import DofstKWfpRecoveredDataParticle
 from mi.dataset.parser.dofst_k_wfp_particles import DofstKWfpTelemeteredDataParticle
@@ -116,28 +115,50 @@ class DofstKWfpParserUnitTestCase(ParserUnitTestCase):
         time_increment_270 = float(end_time - start_time) / 270.0
 
         self.start_timestamp = self.calc_timestamp(start_time, time_increment_3, 0)
-        self.particle_meta = DofstKWfpTelemeteredDataParticle((b"\x52\x4e\x75\x82\x52\x4e\x76\x9a", 3.0),
-                                                              internal_timestamp=self.start_timestamp)
         self.start_timestamp_long = self.calc_timestamp(start_time, time_increment_270, 0)
-        self.particle_meta_long = DofstKWfpTelemeteredDataParticle((b"\x52\x4e\x75\x82\x52\x4e\x76\x9a", 270.0),
-                                                                   internal_timestamp=self.start_timestamp_long)
-
-        self.particle_a = DofstKWfpRecoveredDataParticle(b"\x00\x1a\x88\x03\xe3\x3b\x00\x03\xeb\x0a\xc8",
-                                                         internal_timestamp=self.start_timestamp)
-        self.particle_a_long = DofstKWfpRecoveredDataParticle(b"\x00\x1a\x88\x03\xe3\x3b\x00\x03\xeb\x0a\xc8",
-                                                              internal_timestamp=self.start_timestamp_long)
         self.timestamp_2 = self.calc_timestamp(start_time, time_increment_3, 1)
-        self.particle_b = DofstKWfpRecoveredDataParticle(b"\x00\x1a\x8c\x03\xe2\xc0\x00\x03\xeb\x0a\x81",
-                                                         internal_timestamp=self.timestamp_2)
         self.timestamp_2_long = self.calc_timestamp(start_time, time_increment_270, 1)
-        self.particle_b_long = DofstKWfpRecoveredDataParticle(b"\x00\x1a\x8c\x03\xe2\xc0\x00\x03\xeb\x0a\x81",
-                                                              internal_timestamp=self.timestamp_2_long)
         timestamp_3 = self.calc_timestamp(start_time, time_increment_3, 2)
-        self.particle_c = DofstKWfpRecoveredDataParticle(b"\x00\x1a\x90\x03\xe1\x5b\x00\x03\xeb\x0a\x65",
-                                                         internal_timestamp=timestamp_3)
         timestamp_last = self.calc_timestamp(start_time, time_increment_270, 269)
-        self.particle_last = DofstKWfpRecoveredDataParticle(b"\x00\x1a\x8f\x03\xe5\x91\x00\x03\xeb\x0bS",
-                                                            internal_timestamp=timestamp_last)
+
+        RMP = DofstKWfpRecoveredMetadataParticle
+        RDP = DofstKWfpRecoveredDataParticle
+        TMP = DofstKWfpTelemeteredMetadataParticle
+        TDP = DofstKWfpTelemeteredDataParticle
+
+        self.recov_particle_meta = RMP((b"\x52\x4e\x75\x82\x52\x4e\x76\x9a", 3.0),
+                                       internal_timestamp=self.start_timestamp)
+        self.recov_particle_meta_long = RMP((b"\x52\x4e\x75\x82\x52\x4e\x76\x9a", 270.0),
+                                            internal_timestamp=self.start_timestamp_long)
+        self.recov_particle_a = RDP(b"\x00\x1a\x88\x03\xe3\x3b\x00\x03\xeb\x0a\xc8",
+                                    internal_timestamp=self.start_timestamp)
+        self.recov_particle_a_long = RDP(b"\x00\x1a\x88\x03\xe3\x3b\x00\x03\xeb\x0a\xc8",
+                                         internal_timestamp=self.start_timestamp_long)
+        self.recov_particle_b = RDP(b"\x00\x1a\x8c\x03\xe2\xc0\x00\x03\xeb\x0a\x81",
+                                    internal_timestamp=self.timestamp_2)
+        self.recov_particle_b_long = RDP(b"\x00\x1a\x8c\x03\xe2\xc0\x00\x03\xeb\x0a\x81",
+                                         internal_timestamp=self.timestamp_2_long)
+        self.recov_particle_c = RDP(b"\x00\x1a\x90\x03\xe1\x5b\x00\x03\xeb\x0a\x65",
+                                    internal_timestamp=timestamp_3)
+        self.recov_particle_last = RDP(b"\x00\x1a\x8f\x03\xe5\x91\x00\x03\xeb\x0bS",
+                                       internal_timestamp=timestamp_last)
+
+        self.telem_particle_meta = TMP((b"\x52\x4e\x75\x82\x52\x4e\x76\x9a", 3.0),
+                                       internal_timestamp=self.start_timestamp)
+        self.telem_particle_meta_long = TMP((b"\x52\x4e\x75\x82\x52\x4e\x76\x9a", 270.0),
+                                            internal_timestamp=self.start_timestamp_long)
+        self.telem_particle_a = TDP(b"\x00\x1a\x88\x03\xe3\x3b\x00\x03\xeb\x0a\xc8",
+                                    internal_timestamp=self.start_timestamp)
+        self.telem_particle_a_long = TDP(b"\x00\x1a\x88\x03\xe3\x3b\x00\x03\xeb\x0a\xc8",
+                                         internal_timestamp=self.start_timestamp_long)
+        self.telem_particle_b = TDP(b"\x00\x1a\x8c\x03\xe2\xc0\x00\x03\xeb\x0a\x81",
+                                    internal_timestamp=self.timestamp_2)
+        self.telem_particle_b_long = TDP(b"\x00\x1a\x8c\x03\xe2\xc0\x00\x03\xeb\x0a\x81",
+                                         internal_timestamp=self.timestamp_2_long)
+        self.telem_particle_c = TDP(b"\x00\x1a\x90\x03\xe1\x5b\x00\x03\xeb\x0a\x65",
+                                    internal_timestamp=timestamp_3)
+        self.telem_particle_last = TDP(b"\x00\x1a\x8f\x03\xe5\x91\x00\x03\xeb\x0bS",
+                                       internal_timestamp=timestamp_last)
 
         self.file_ingested_value = None
         self.state_callback_value = None
@@ -181,13 +202,13 @@ class DofstKWfpParserUnitTestCase(ParserUnitTestCase):
 
         # next get records
         recovered_result = recovered_parser.get_records(1)
-        self.assert_result(recovered_result, 0, self.particle_meta, False, 0, True)
+        self.assert_result(recovered_result, 0, self.recov_particle_meta, False, 0, True)
         recovered_result = self.parser.get_records(1)
-        self.assert_result(recovered_result, 11, self.particle_a, False, 1, True)
+        self.assert_result(recovered_result, 11, self.recov_particle_a, False, 1, True)
         recovered_result = self.parser.get_records(1)
-        self.assert_result(recovered_result, 22, self.particle_b, False, 2, True)
+        self.assert_result(recovered_result, 22, self.recov_particle_b, False, 2, True)
         recovered_result = self.parser.get_records(1)
-        self.assert_result(recovered_result, 33, self.particle_c, True, 3, True)
+        self.assert_result(recovered_result, 33, self.recov_particle_c, True, 3, True)
 
         # no data left, dont move the position
         recovered_result = recovered_parser.get_records(1)
@@ -195,7 +216,7 @@ class DofstKWfpParserUnitTestCase(ParserUnitTestCase):
         self.assertEqual(recovered_parser._state[StateKey.POSITION], 33)
         self.assertEqual(self.state_callback_value[StateKey.POSITION], 33)
         self.assert_(isinstance(self.publish_callback_value, list))
-        self.assertEqual(self.publish_callback_value[0], self.particle_c)
+        self.assertEqual(self.publish_callback_value[0], self.recov_particle_c)
 
         #**********************************************
         # Test the "telemetered" version of the parser
@@ -208,13 +229,13 @@ class DofstKWfpParserUnitTestCase(ParserUnitTestCase):
 
         # next get records
         telemetered_result = telemetered_parser.get_records(1)
-        self.assert_result(telemetered_result, 0, self.particle_meta, False, 0, True)
+        self.assert_result(telemetered_result, 0, self.telem_particle_meta, False, 0, True)
         telemetered_result = self.parser.get_records(1)
-        self.assert_result(telemetered_result, 11, self.particle_a, False, 1, True)
+        self.assert_result(telemetered_result, 11, self.telem_particle_a, False, 1, True)
         telemetered_result = self.parser.get_records(1)
-        self.assert_result(telemetered_result, 22, self.particle_b, False, 2, True)
+        self.assert_result(telemetered_result, 22, self.telem_particle_b, False, 2, True)
         telemetered_result = self.parser.get_records(1)
-        self.assert_result(telemetered_result, 33, self.particle_c, True, 3, True)
+        self.assert_result(telemetered_result, 33, self.telem_particle_c, True, 3, True)
 
         # no data left, dont move the position
         telemetered_result = telemetered_parser.get_records(1)
@@ -222,7 +243,7 @@ class DofstKWfpParserUnitTestCase(ParserUnitTestCase):
         self.assertEqual(telemetered_parser._state[StateKey.POSITION], 33)
         self.assertEqual(self.state_callback_value[StateKey.POSITION], 33)
         self.assert_(isinstance(self.publish_callback_value, list))
-        self.assertEqual(self.publish_callback_value[0], self.particle_c)
+        self.assertEqual(self.publish_callback_value[0], self.telem_particle_c)
 
     def test_simple_pad(self):
         """
@@ -242,14 +263,14 @@ class DofstKWfpParserUnitTestCase(ParserUnitTestCase):
 
         # next get records
         recovered_result = recovered_parser.get_records(1)
-        self.assert_result(recovered_result, 0, self.particle_meta, False, 0, True)
+        self.assert_result(recovered_result, 0, self.recov_particle_meta, False, 0, True)
 
         recovered_result = self.parser.get_records(1)
-        self.assert_result(recovered_result, 11, self.particle_a, False, 1, True)
+        self.assert_result(recovered_result, 11, self.recov_particle_a, False, 1, True)
         recovered_result = self.parser.get_records(1)
-        self.assert_result(recovered_result, 22, self.particle_b, False, 2, True)
+        self.assert_result(recovered_result, 22, self.recov_particle_b, False, 2, True)
         recovered_result = self.parser.get_records(1)
-        self.assert_result(recovered_result, 33, self.particle_c, True, 3, True)
+        self.assert_result(recovered_result, 33, self.recov_particle_c, True, 3, True)
 
         # no data left, dont move the position
         recovered_result = recovered_parser.get_records(1)
@@ -257,7 +278,7 @@ class DofstKWfpParserUnitTestCase(ParserUnitTestCase):
         self.assertEqual(recovered_parser._state[StateKey.POSITION], 33)
         self.assertEqual(self.state_callback_value[StateKey.POSITION], 33)
         self.assert_(isinstance(self.publish_callback_value, list))
-        self.assertEqual(self.publish_callback_value[0], self.particle_c)
+        self.assertEqual(self.publish_callback_value[0], self.recov_particle_c)
 
         #**********************************************
         # Test the "telemetered" version of the parser
@@ -270,13 +291,13 @@ class DofstKWfpParserUnitTestCase(ParserUnitTestCase):
 
         # next get records
         telemetered_result = telemetered_parser.get_records(1)
-        self.assert_result(telemetered_result, 0, self.particle_meta, False, 0, True)
+        self.assert_result(telemetered_result, 0, self.telem_particle_meta, False, 0, True)
         telemetered_result = self.parser.get_records(1)
-        self.assert_result(telemetered_result, 11, self.particle_a, False, 1, True)
+        self.assert_result(telemetered_result, 11, self.telem_particle_a, False, 1, True)
         telemetered_result = self.parser.get_records(1)
-        self.assert_result(telemetered_result, 22, self.particle_b, False, 2, True)
+        self.assert_result(telemetered_result, 22, self.telem_particle_b, False, 2, True)
         telemetered_result = self.parser.get_records(1)
-        self.assert_result(telemetered_result, 33, self.particle_c, True, 3, True)
+        self.assert_result(telemetered_result, 33, self.telem_particle_c, True, 3, True)
 
         # no data left, dont move the position
         telemetered_result = telemetered_parser.get_records(1)
@@ -284,7 +305,7 @@ class DofstKWfpParserUnitTestCase(ParserUnitTestCase):
         self.assertEqual(telemetered_parser._state[StateKey.POSITION], 33)
         self.assertEqual(self.state_callback_value[StateKey.POSITION], 33)
         self.assert_(isinstance(self.publish_callback_value, list))
-        self.assertEqual(self.publish_callback_value[0], self.particle_c)
+        self.assertEqual(self.publish_callback_value[0], self.telem_particle_c)
 
     def test_get_many(self):
         """
@@ -304,14 +325,14 @@ class DofstKWfpParserUnitTestCase(ParserUnitTestCase):
         # NOTE - while we ask for 4 records, the metadata is a special case
         # the number of records read is actually 3. See the IDD for details.
         recovered_result = recovered_parser.get_records(4)
-        self.assertEqual(recovered_result, [self.particle_meta, self.particle_a,
-                                            self.particle_b, self.particle_c])
+        self.assertEqual(recovered_result, [self.recov_particle_meta, self.recov_particle_a,
+                                            self.recov_particle_b, self.recov_particle_c])
         self.assertEqual(recovered_parser._state[StateKey.POSITION], 33)
         self.assertEqual(self.state_callback_value[StateKey.POSITION], 33)
-        self.assertEqual(self.publish_callback_value[0], self.particle_meta)
-        self.assertEqual(self.publish_callback_value[1], self.particle_a)
-        self.assertEqual(self.publish_callback_value[2], self.particle_b)
-        self.assertEqual(self.publish_callback_value[3], self.particle_c)
+        self.assertEqual(self.publish_callback_value[0], self.recov_particle_meta)
+        self.assertEqual(self.publish_callback_value[1], self.recov_particle_a)
+        self.assertEqual(self.publish_callback_value[2], self.recov_particle_b)
+        self.assertEqual(self.publish_callback_value[3], self.recov_particle_c)
         self.assertEqual(self.file_ingested_value, True)
         self.assertEqual(recovered_parser._state[StateKey.RECORDS_READ], 3)
         self.assertEqual(self.state_callback_value[StateKey.RECORDS_READ], 3)
@@ -328,14 +349,14 @@ class DofstKWfpParserUnitTestCase(ParserUnitTestCase):
         self.parser = telemetered_parser
         # next get records
         telemetered_result = telemetered_parser.get_records(4)
-        self.assertEqual(telemetered_result, [self.particle_meta, self.particle_a,
-                                              self.particle_b, self.particle_c])
+        self.assertEqual(telemetered_result, [self.telem_particle_meta, self.telem_particle_a,
+                                              self.telem_particle_b, self.telem_particle_c])
         self.assertEqual(telemetered_parser._state[StateKey.POSITION], 33)
         self.assertEqual(self.state_callback_value[StateKey.POSITION], 33)
-        self.assertEqual(self.publish_callback_value[0], self.particle_meta)
-        self.assertEqual(self.publish_callback_value[1], self.particle_a)
-        self.assertEqual(self.publish_callback_value[2], self.particle_b)
-        self.assertEqual(self.publish_callback_value[3], self.particle_c)
+        self.assertEqual(self.publish_callback_value[0], self.telem_particle_meta)
+        self.assertEqual(self.publish_callback_value[1], self.telem_particle_a)
+        self.assertEqual(self.publish_callback_value[2], self.telem_particle_b)
+        self.assertEqual(self.publish_callback_value[3], self.telem_particle_c)
         self.assertEqual(self.file_ingested_value, True)
         self.assertEqual(telemetered_parser._state[StateKey.RECORDS_READ], 3)
         self.assertEqual(self.state_callback_value[StateKey.RECORDS_READ], 3)
@@ -359,15 +380,15 @@ class DofstKWfpParserUnitTestCase(ParserUnitTestCase):
         self.parser = recovered_parser
         # next get records
         recovered_result = self.parser.get_records(271)
-        self.assertEqual(recovered_result[0], self.particle_meta_long)
-        self.assertEqual(recovered_result[1], self.particle_a_long)
-        self.assertEqual(recovered_result[2], self.particle_b_long)
-        self.assertEqual(recovered_result[-1], self.particle_last)
+        self.assertEqual(recovered_result[0], self.recov_particle_meta_long)
+        self.assertEqual(recovered_result[1], self.recov_particle_a_long)
+        self.assertEqual(recovered_result[2], self.recov_particle_b_long)
+        self.assertEqual(recovered_result[-1], self.recov_particle_last)
         self.assertEqual(recovered_parser._state[StateKey.POSITION], 2970)
         self.assertEqual(recovered_parser._state[StateKey.RECORDS_READ], 270)
         self.assertEqual(self.state_callback_value[StateKey.POSITION], 2970)
         self.assertEqual(self.state_callback_value[StateKey.RECORDS_READ], 270)
-        self.assertEqual(self.publish_callback_value[-1], self.particle_last)
+        self.assertEqual(self.publish_callback_value[-1], self.recov_particle_last)
         #**********************************************
         # Test the "telemetered" version of the parser
         #**********************************************
@@ -377,15 +398,15 @@ class DofstKWfpParserUnitTestCase(ParserUnitTestCase):
         self.parser = telemetered_parser
         # next get records
         telemetered_result = self.parser.get_records(271)
-        self.assertEqual(telemetered_result[0], self.particle_meta_long)
-        self.assertEqual(telemetered_result[1], self.particle_a_long)
-        self.assertEqual(telemetered_result[2], self.particle_b_long)
-        self.assertEqual(telemetered_result[-1], self.particle_last)
+        self.assertEqual(telemetered_result[0], self.telem_particle_meta_long)
+        self.assertEqual(telemetered_result[1], self.telem_particle_a_long)
+        self.assertEqual(telemetered_result[2], self.telem_particle_b_long)
+        self.assertEqual(telemetered_result[-1], self.telem_particle_last)
         self.assertEqual(telemetered_parser._state[StateKey.POSITION], 2970)
         self.assertEqual(telemetered_parser._state[StateKey.RECORDS_READ], 270)
         self.assertEqual(self.state_callback_value[StateKey.POSITION], 2970)
         self.assertEqual(self.state_callback_value[StateKey.RECORDS_READ], 270)
-        self.assertEqual(self.publish_callback_value[-1], self.particle_last)
+        self.assertEqual(self.publish_callback_value[-1], self.telem_particle_last)
 
     def test_bad_time_data(self):
         """
