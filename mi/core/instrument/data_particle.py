@@ -103,7 +103,7 @@ class DataParticle(object):
             self.contents[DataParticleKey.NEW_SEQUENCE] = new_sequence
 
         self.raw_data = raw_data
-        self._dict = None
+        self._values = None
 
     def __eq__(self, arg):
         """
@@ -111,19 +111,46 @@ class DataParticle(object):
         data, timestamp, they are the same enough for this particle
         """
         allowed_diff = .000001
-        if ((self.raw_data == arg.raw_data) and \
-            (abs(self.contents[DataParticleKey.INTERNAL_TIMESTAMP] - \
-                 arg.contents[DataParticleKey.INTERNAL_TIMESTAMP]) <= allowed_diff)):
-            return True
-        else:
-            if self.raw_data != arg.raw_data:
-                log.debug('Raw data does not match')
-            elif abs(self.contents[DataParticleKey.INTERNAL_TIMESTAMP] - \
-                     arg.contents[DataParticleKey.INTERNAL_TIMESTAMP]) > allowed_diff:
-                log.debug('Timestamp %s does not match %s',
-                          self.contents[DataParticleKey.INTERNAL_TIMESTAMP],
-                          arg.contents[DataParticleKey.INTERNAL_TIMESTAMP])
+        if self._data_particle_type != arg._data_particle_type:
+            log.debug('Data particle type does not match: %s %s', self._data_particle_type, arg._data_particle_type)
             return False
+
+        if self.raw_data != arg.raw_data:
+            log.debug('Raw data does not match')
+            return False
+
+        t1 = self.contents[DataParticleKey.INTERNAL_TIMESTAMP]
+        t2 = arg.contents[DataParticleKey.INTERNAL_TIMESTAMP]
+        tdiff = abs(t1 - t2)
+        if tdiff > allowed_diff:
+            log.debug('Timestamp %s does not match %s', t1, t2)
+            return False
+
+        generated1 = json.loads(self.generate())
+        generated2 = json.loads(arg.generate())
+        missing, differing = self._compare(generated1, generated2, ignore_keys=[DataParticleKey.DRIVER_TIMESTAMP,
+                                                                                DataParticleKey.PREFERRED_TIMESTAMP])
+        if missing:
+            log.error('Key mismatch between particle dictionaries: %r', missing)
+            return False
+
+        if differing:
+            log.error('Value mismatch between particle dictionaries: %r', differing)
+
+        return True
+
+    @staticmethod
+    def _compare(d1, d2, ignore_keys=None):
+        ignore_keys = ignore_keys if ignore_keys else []
+        missing = set(d1).symmetric_difference(d2)
+        differing = {}
+        for k in d1:
+            if k in ignore_keys or k in missing:
+                continue
+            if d1[k] != d2[k]:
+                differing[k] = (d1[k], d2[k])
+
+        return missing, differing
 
     def set_internal_timestamp(self, timestamp=None, unix_time=None):
         """
@@ -132,10 +159,10 @@ class DataParticle(object):
         @param unit_time: Unix time as returned from time.time()
         @raise InstrumentParameterException if timestamp or unix_time not supplied
         """
-        if(timestamp == None and unix_time == None):
+        if timestamp is None and unix_time is None:
             raise InstrumentParameterException("timestamp or unix_time required")
 
-        if(unix_time != None):
+        if unix_time is not None:
             timestamp = ntplib.system_to_ntp_time(unix_time)
 
         # Do we want this to happen here or in down stream processes?
@@ -201,13 +228,13 @@ class DataParticle(object):
 
         # build response structure
         self._encoding_errors = []
-        values = self._build_parsed_values()
+        if self._values is None:
+            self._values = self._build_parsed_values()
         result = self._build_base_structure()
         result[DataParticleKey.STREAM_NAME] = self.data_particle_type()
-        result[DataParticleKey.VALUES] = values
+        result[DataParticleKey.VALUES] = self._values
 
         #log.debug("Serialize result: %s", result)
-        self._dict = result
         return result
 
     def generate(self, sorted=False):
@@ -223,9 +250,7 @@ class DataParticle(object):
            and driver timestamp
         @throws InstrumentDriverException If there is a problem with the inputs
         """
-        if not self._dict:
-            self.generate_dict()
-        json_result = json.dumps(self._dict, sort_keys=sorted)
+        json_result = json.dumps(self.generate_dict(), sort_keys=sorted)
         return json_result
 
     def _build_parsed_values(self):
@@ -238,7 +263,6 @@ class DataParticle(object):
         @raises SampleException when parsed values can not be properly returned
         """
         raise SampleException("Parsed values block not overridden")
-
 
     def _build_base_structure(self):
         """
@@ -262,7 +286,7 @@ class DataParticle(object):
         @param timestamp An NTP4 formatted timestamp (64bit)
         @return True if timestamp is okay or None, False otherwise
         """
-        if timestamp == None:
+        if timestamp is None:
             return True
         if not isinstance(timestamp, float):
             return False
@@ -282,7 +306,7 @@ class DataParticle(object):
         @throws SampleException When there is a problem with the preferred
             timestamp in the sample.
         """
-        if self.contents[DataParticleKey.PREFERRED_TIMESTAMP] == None:
+        if self.contents[DataParticleKey.PREFERRED_TIMESTAMP] is None:
             raise SampleException("Missing preferred timestamp, %s, in particle" %
                                   self.contents[DataParticleKey.PREFERRED_TIMESTAMP])
 
@@ -337,11 +361,11 @@ class RawDataParticle(DataParticle):
         """
 
         port_agent_packet = self.raw_data
-        if(not isinstance(port_agent_packet, dict)):
+        if not isinstance(port_agent_packet, dict):
             raise SampleException("raw data not a dictionary")
 
         for param in ["raw", "length", "type", "checksum"]:
-             if(not param in port_agent_packet.keys()):
+             if not param in port_agent_packet.keys():
                   raise SampleException("raw data not a complete port agent packet. missing %s" % param)
 
 

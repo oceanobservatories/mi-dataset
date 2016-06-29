@@ -48,7 +48,7 @@ class DofstKWfpDataParticle(DataParticle):
         @throws SampleException If there is a problem with sample creation
         """
         if len(self.raw_data) != DATA_RECORD_BYTES:
-            raise SampleException("DofstKWfpDataParticle: Received unexpected number of bytes %d" % len(self.raw_data))
+            raise SampleException("DofstKWfpDataParticle: Received unexpected number of bytes %d" % len(self.raw_data[0]))
         fields = struct.unpack('>H', self.raw_data[9:11])
 
         result = [self._encode_value(DofstKWfpDataParticleKey.DOFST_K_OXYGEN, fields[0], int)]
