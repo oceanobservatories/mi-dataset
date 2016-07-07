@@ -135,3 +135,17 @@ class DostaAbcdjmSioParserUnitTestCase(ParserUnitTestCase):
 
             # confirm no exceptions occurred
             self.assertEqual(self.exception_callback_value, [])
+
+    def test_10603(self):
+        """
+        Read test data from the file and pull out telemetered data particles.
+        Assert that the results are those we expected.
+        """
+        with open(os.path.join(RESOURCE_PATH, 'node25p1_46.dosta_1237201.dat')) as stream_handle:
+            parser = DostaAbcdjmSioParser(self.config_telem, stream_handle, self.exception_callback)
+
+            particles = parser.get_records(700)
+
+            self.assertEqual(len(particles), 45)
+            self.assertEqual(self.exception_callback_value, [])
+

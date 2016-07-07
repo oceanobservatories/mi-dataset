@@ -49,16 +49,16 @@ class DostaAbcdjmSioMetadataDataParticleKey(BaseEnum):
 # The key for the metadata particle class
 METADATA_PARTICLE_CLASS_KEY = 'metadata_particle_class'
 # The key for the data particle class
-DATA_PARTICLE_CLASS_KEY = 'data_particle_class'   
+DATA_PARTICLE_CLASS_KEY = 'data_particle_class'
 
-# regex to match the dosta data, header ID 0xff112511, 2 integers for product and serial number,
+# regex to match the dosta data, random bytes, 2 integers for product (4831) and serial number,
 # followed by 10 floating point numbers all separated by tabs
 
 FLOAT_REGEX_NON_CAPTURE = r'[+-]?[0-9]*\.[0-9]+'
 FLOAT_TAB_REGEX = FLOAT_REGEX_NON_CAPTURE + '\t'
 
-DATA_REGEX = '\xff\x11\x25\x11'
-DATA_REGEX += '(\d+)\t'  # product number
+DATA_REGEX = b'[x00-xFF]*'   # Any number of random hex values
+DATA_REGEX += '(4831)\t'  # product number
 DATA_REGEX += '(\d+)\t'  # serial number
 DATA_REGEX += '(' + FLOAT_TAB_REGEX + ')'  # oxygen content
 DATA_REGEX += '(' + FLOAT_TAB_REGEX + ')'  # relative air saturation
@@ -133,13 +133,13 @@ class DostaAbcdjmSioDataParticle(DataParticle):
     @staticmethod
     def encode_int_16(hex_str):
         return int(hex_str, 16)
-    
+
 
 class DostaAbcdjmSioMetadataDataParticle(DataParticle):
     """
     Class for parsing data from the DOSTA series a,b,c,d,j,m instrument
     """
-    
+
     def __init__(self, raw_data,
                  port_timestamp=None,
                  internal_timestamp=None,
@@ -152,7 +152,7 @@ class DostaAbcdjmSioMetadataDataParticle(DataParticle):
                                                                  preferred_timestamp,
                                                                  quality_flag,
                                                                  new_sequence)
-        
+
         # raw data is a tuple, first item contains timestamp string as hex ascii
         posix_time = int(self.raw_data[0], 16)
         self.set_internal_timestamp(unix_time=float(posix_time))
@@ -184,7 +184,7 @@ class DostaAbcdjmSioTelemeteredDataParticle(DostaAbcdjmSioDataParticle):
 
     _data_particle_type = DataParticleType.SAMPLE_TELEMETERED
 
-    
+
 class DostaAbcdjmSioRecoveredMetadataDataParticle(DostaAbcdjmSioMetadataDataParticle):
     """
     Class for building a DostadParser recovered instrument data particle
@@ -200,7 +200,7 @@ class DostaAbcdjmSioTelemeteredMetadataDataParticle(DostaAbcdjmSioMetadataDataPa
 
     _data_particle_type = DataParticleType.METADATA_TELEMETERED
 
-    
+
 class DostaAbcdjmSioParser(SioParser):
     def __init__(self,
                  config,
@@ -256,7 +256,7 @@ class DostaAbcdjmSioParser(SioParser):
 
                     # create the dosta data particle
                     # prepend the timestamp from sio mule header to the dosta raw data ,
-                    # which is stored in header_match.group(3)                    
+                    # which is stored in header_match.group(3)
                     sample = self._extract_sample(self._data_particle_class, None,
                                                   (header_match.group(3), data_match),
                                                   None)
