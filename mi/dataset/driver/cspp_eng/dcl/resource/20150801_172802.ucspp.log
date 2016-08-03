@@ -1,0 +1,28 @@
+2015/08/01 17:30:17.338 sent: +++
+2015/08/01 17:30:17.381 rcvd: user:1>
+2015/08/01 17:30:17.382 sent: ATR2
+2015/08/01 17:30:26.993 rcvd: Response Not Received
+2015/08/01 17:30:26.994 sent: ATR2
+2015/08/01 17:30:36.598 rcvd: Response Not Received
+2015/08/01 17:30:36.601 sent: ATR2
+2015/08/01 17:30:46.195 rcvd: Response Not Received
+2015/08/01 17:30:46.197 sent: ATR2
+2015/08/01 17:30:55.793 rcvd: Response Not Received
+2015/08/01 17:30:55.794 sent: ATR2
+2015/08/01 17:31:00.047 rcvd: Range 1 to 2 : 536.1 m 
+2015/08/01 17:31:00.049 sent: AT$V2
+2015/08/01 17:31:07.650 rcvd: Response Not Received
+2015/08/01 17:31:07.652 sent: AT$V2
+2015/08/01 17:31:15.245 rcvd: Response Not Received
+2015/08/01 17:31:15.248 sent: ATD2
+2015/08/01 17:31:22.850 rcvd: Response Not Received
+2015/08/01 17:31:22.852 sent: ATD2
+2015/08/01 17:31:30.446 rcvd: Response Not Received
+2015/08/01 17:31:30.449 sent: ATD2
+2015/08/01 17:31:38.042 rcvd: Response Not Received
+2015/08/01 17:31:38.044 sent: +++
+2015/08/01 17:31:38.050 rcvd: user:11>
+2015/08/01 17:31:38.052 sent: ATH
+2015/08/01 17:31:38.118 rcvd: Error
+2015/08/01 17:31:38.120 sent: ATH
+2015/08/01 17:31:38.139 rcvd: Off Line

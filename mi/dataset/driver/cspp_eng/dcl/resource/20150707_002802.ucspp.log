@@ -1,0 +1,20 @@
+2015/07/07 00:30:16.392 sent: +++
+2015/07/07 00:30:16.457 rcvd: user:1>
+2015/07/07 00:30:16.459 sent: ATR2
+2015/07/07 00:30:26.069 rcvd: Response Not Received
+2015/07/07 00:30:26.071 sent: ATR2
+2015/07/07 00:30:35.675 rcvd: Response Not Received
+2015/07/07 00:30:35.676 sent: ATR2
+2015/07/07 00:30:45.272 rcvd: Response Not Received
+2015/07/07 00:30:45.274 sent: ATR2
+2015/07/07 00:30:54.869 rcvd: Response Not Received
+2015/07/07 00:30:54.871 sent: ATR2
+2015/07/07 00:31:04.475 rcvd: Response Not Received
+2015/07/07 00:31:04.477 sent: ATR2
+2015/07/07 00:31:14.072 rcvd: Response Not Received
+2015/07/07 00:31:14.074 sent: +++
+2015/07/07 00:31:14.079 rcvd: user:7>
+2015/07/07 00:31:14.080 sent: ATH
+2015/07/07 00:31:14.148 rcvd: Error
+2015/07/07 00:31:14.150 sent: ATH
+2015/07/07 00:31:14.168 rcvd: Off Line
