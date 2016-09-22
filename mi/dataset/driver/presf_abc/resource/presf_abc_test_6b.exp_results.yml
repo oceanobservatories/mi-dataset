@@ -1,0 +1,12 @@
+header:
+  particle_object: 'MULTIPLE'
+  particle_type: 'MULTIPLE'
+
+data:
+  - _index: 1
+    particle_object: PresfAbcRecoveredTideDataParticle
+    particle_type: presf_abc_tide_measurement_recovered
+    internal_timestamp: 481912200
+    tm_start_time: 481912200
+    tm_pressure_count: 3631057
+    tm_temperature_count: 15454

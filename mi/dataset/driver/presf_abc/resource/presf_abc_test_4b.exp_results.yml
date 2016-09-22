@@ -1,0 +1,62 @@
+header:
+  particle_object: 'MULTIPLE'
+  particle_type: 'MULTIPLE'
+
+data:
+  - _index: 1
+    particle_object: PresfAbcRecoveredTideDataParticle
+    particle_type: presf_abc_tide_measurement_recovered
+    internal_timestamp: 450572122
+    tm_start_time: 450572122
+    tm_pressure_count: 171330
+    tm_temperature_count: 28876
+  - _index: 2
+    particle_object: PresfAbcRecoveredTideDataParticle
+    particle_type: presf_abc_tide_measurement_recovered
+    internal_timestamp: 450572182
+    tm_start_time: 450572182
+    tm_pressure_count: 171330
+    tm_temperature_count: 27633
+  - _index: 3
+    particle_object: PresfAbcRecoveredWaveDataParticle
+    particle_type: presf_abc_wave_burst_recovered
+    internal_timestamp: 450572244
+    wm_start_time: 450572244
+    wm_ptcn_count: 43735600
+    wm_pressure_count: [8441431, 8441428, 8441433, 8441432]
+  - _index: 4
+    particle_object: PresfAbcRecoveredTideDataParticle
+    particle_type: presf_abc_tide_measurement_recovered
+    internal_timestamp: 450572242
+    tm_start_time: 450572242
+    tm_pressure_count: 169508
+    tm_temperature_count: 26025
+  - _index: 5
+    particle_object: PresfAbcRecoveredTideDataParticle
+    particle_type: presf_abc_tide_measurement_recovered
+    internal_timestamp: 468713075
+    tm_start_time: 468713075
+    tm_pressure_count: 183864
+    tm_temperature_count: 17260
+  - _index: 6
+    particle_object: PresfAbcRecoveredTideDataParticle
+    particle_type: presf_abc_tide_measurement_recovered
+    internal_timestamp: 468716675
+    tm_start_time: 468716675
+    tm_pressure_count: 184164
+    tm_temperature_count: 16188
+  - _index: 7
+    particle_object: PresfAbcRecoveredTideDataParticle
+    particle_type: presf_abc_tide_measurement_recovered
+    internal_timestamp: 468720275
+    tm_start_time: 468720275
+    tm_pressure_count: 184521
+    tm_temperature_count: 15810
+  - _index: 8
+    particle_object: PresfAbcRecoveredWaveDataParticle
+    particle_type: presf_abc_wave_burst_recovered
+    internal_timestamp: 468734677
+    wm_start_time: 468734677
+    wm_ptcn_count: 43702948
+    wm_pressure_count: [8441719, 8441715, 8441718, 8441715,
+8441720, 8441718, 8441715, 8441714]
