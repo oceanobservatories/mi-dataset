@@ -1,0 +1,19 @@
+header:
+  particle_object: 'MULTIPLE'
+  particle_type: 'MULTIPLE'
+
+data:
+  - _index: 1
+    particle_object: PresfAbcRecoveredTideDataParticle
+    particle_type: presf_abc_tide_measurement_recovered
+    internal_timestamp: 481912200
+    tm_start_time: 481912200
+    tm_pressure_count: 3631057
+    tm_temperature_count: 15454
+  - _index: 2
+    particle_object: PresfAbcRecoveredWaveDataParticle
+    particle_type: presf_abc_wave_burst_recovered
+    internal_timestamp: 481933802
+    wm_start_time: 481933802
+    wm_ptcn_count: 43983684
+    wm_pressure_count: [9076879, 9076881]
