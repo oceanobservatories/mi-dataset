@@ -4,6 +4,9 @@ __author__ = 'mworden'
 # A regex used to match any characters
 ANY_CHARS_REGEX = r'.*'
 
+# A regex used to match any characters
+ANY_NON_SPACE_CHARS_REGEX = r'([^\s]*)'
+
 # A regex used to match a single space
 SPACE_REGEX = ' '
 
@@ -12,6 +15,9 @@ END_OF_LINE_REGEX = r'(?:\r\n|\n)'
 
 # A regex used to match a float value
 FLOAT_REGEX = r'(?:[+-]?[0-9]|[1-9][0-9])+\.[0-9]+'
+
+# A regex used to match a value in scientific notation
+SCIENTIFIC_REGEX = r'([+-]?[0-9]\.[0-9]+)e([+-][0-9][0-9])'
 
 # A regex used to match an int value
 INT_REGEX = r'[+-]?[0-9]+'
