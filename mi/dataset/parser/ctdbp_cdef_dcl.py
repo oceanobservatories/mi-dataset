@@ -28,13 +28,9 @@ ctdbp_cdef_dcl_cp.py
 Initial Release
 """
 
-__author__ = 'Jeff Roy'
-__license__ = 'Apache 2.0'
-
 import re
 
 from mi.core.log import get_logger
-log = get_logger()
 from mi.core.common import BaseEnum
 from mi.core.instrument.data_particle import \
     DataParticle, \
@@ -53,7 +49,13 @@ from mi.dataset.parser.common_regexes import \
     FLOAT_REGEX, \
     ONE_OR_MORE_WHITESPACE_REGEX, \
     TIME_HR_MIN_SEC_MSEC_REGEX, \
-    DATE_YYYY_MM_DD_REGEX
+    DATE_YYYY_MM_DD_REGEX, \
+    END_OF_LINE_REGEX
+
+__author__ = 'Jeff Roy'
+__license__ = 'Apache 2.0'
+log = get_logger()
+
 
 # Basic patterns
 COMMA = ','                          # simple comma
@@ -80,7 +82,8 @@ START_METADATA = r'\['                                                   # metad
 END_METADATA = r'\]'
 
 # LOGGER IDENTIFICATION, such as [ctdbp1:DLOGP3]:
-LOGGER_ID_PATTERN = START_METADATA                                   # Metadata record starts with '['
+# NOTE: Fall 2016 deployments to Coastal Endurance configured without Logger identification output
+LOGGER_ID_PATTERN = START_METADATA                           # Metadata record starts with '['
 LOGGER_ID_PATTERN += ANY_CHARS_REGEX                                 # followed by text
 LOGGER_ID_PATTERN += END_METADATA                                    # followed by ']'
 LOGGER_ID_PATTERN += COLON                                           # an immediate colon
@@ -89,8 +92,8 @@ LOGGER_ID_PATTERN += ZERO_OR_MORE_WHITESPACE_REGEX                   # and maybe
 # Metadata record:
 #   Timestamp [Text]MoreText newline
 METADATA_PATTERN = TIMESTAMP + ONE_OR_MORE_WHITESPACE_REGEX          # dcl controller timestamp
-METADATA_PATTERN += LOGGER_ID_PATTERN                                 # Metadata record starts with '['
-METADATA_PATTERN += ANY_CHARS_REGEX                                  # followed by more text
+METADATA_PATTERN += LOGGER_ID_PATTERN                                # Metadata record starts with '['
+METADATA_PATTERN += '\D+' + ANY_CHARS_REGEX                          # followed by more text
 METADATA_MATCHER = re.compile(METADATA_PATTERN)
 
 # match a single line uncorrected instrument record
@@ -104,18 +107,20 @@ UNCORR_REGEX += FLOAT_REGEX + COMMA + ONE_OR_MORE_WHITESPACE_REGEX          # so
 UNCORR_REGEX += DATE_TIME_STR + COMMA + ONE_OR_MORE_WHITESPACE_REGEX        # named group = time_string
 UNCORR_REGEX += FLOAT_REGEX + COMMA + ONE_OR_MORE_WHITESPACE_REGEX          # sigma t (omitted)
 UNCORR_REGEX += FLOAT_REGEX + COMMA + ONE_OR_MORE_WHITESPACE_REGEX          # sigma v (omitted)
-UNCORR_REGEX += FLOAT_REGEX + ONE_OR_MORE_WHITESPACE_REGEX                  # sigma I (omitted)
+UNCORR_REGEX += FLOAT_REGEX + ZERO_OR_MORE_WHITESPACE_REGEX                 # sigma I (omitted)
+UNCORR_REGEX += END_OF_LINE_REGEX
 UNCORR_MATCHER = re.compile(UNCORR_REGEX)
 
 # match a single line corrected instrument record from Endurance
 ENDURANCE_CORR_REGEX = TIMESTAMP + ONE_OR_MORE_WHITESPACE_REGEX             # dcl timestamp, named group = timestamp
-ENDURANCE_CORR_REGEX += '(?:' + HASH + '|' + LOGGER_ID_PATTERN + ')'        # a logger id or a hash, non-captured group
+ENDURANCE_CORR_REGEX += '(?:' + HASH + '|' + LOGGER_ID_PATTERN + ')?'        # a logger id or a hash, non-captured group
 ENDURANCE_CORR_REGEX += ZERO_OR_MORE_WHITESPACE_REGEX
 ENDURANCE_CORR_REGEX += TEMP_REGEX + COMMA + ONE_OR_MORE_WHITESPACE_REGEX           # named group = temp
 ENDURANCE_CORR_REGEX += CONDUCTIVITY_REGEX + COMMA + ONE_OR_MORE_WHITESPACE_REGEX   # named group = conductivity
 ENDURANCE_CORR_REGEX += PRESSURE_REGEX + COMMA + ONE_OR_MORE_WHITESPACE_REGEX       # named group = pressure
 ENDURANCE_CORR_REGEX += FLOAT_REGEX + COMMA + ONE_OR_MORE_WHITESPACE_REGEX          # optode oxygen (omitted)
-ENDURANCE_CORR_REGEX += DATE_TIME_STR + ONE_OR_MORE_WHITESPACE_REGEX                # named group = time_string
+ENDURANCE_CORR_REGEX += DATE_TIME_STR + ZERO_OR_MORE_WHITESPACE_REGEX               # named group = time_string
+ENDURANCE_CORR_REGEX += END_OF_LINE_REGEX
 ENDURANCE_CORR_MATCHER = re.compile(ENDURANCE_CORR_REGEX)
 
 # match a single line instrument record from Pioneer
@@ -124,7 +129,8 @@ PIONEER_REGEX += ONE_OR_MORE_WHITESPACE_REGEX
 PIONEER_REGEX += TEMP_REGEX + COMMA + ONE_OR_MORE_WHITESPACE_REGEX           # named group = temp
 PIONEER_REGEX += CONDUCTIVITY_REGEX + COMMA + ONE_OR_MORE_WHITESPACE_REGEX   # named group = conductivity
 PIONEER_REGEX += PRESSURE_REGEX + COMMA + ONE_OR_MORE_WHITESPACE_REGEX       # named group = pressure
-PIONEER_REGEX += DATE_TIME_STR + ONE_OR_MORE_WHITESPACE_REGEX                # named group = time_string
+PIONEER_REGEX += DATE_TIME_STR + ZERO_OR_MORE_WHITESPACE_REGEX               # named group = time_string
+PIONEER_REGEX += END_OF_LINE_REGEX
 PIONEER_MATCHER = re.compile(PIONEER_REGEX)
 
 # This table is used in the generation of the data particle.
@@ -166,13 +172,13 @@ class CtdbpCdefDclDataParticle(DataParticle):
         # The particle timestamp is the DCL Controller timestamp.
         utc_time = dcl_controller_timestamp_to_utc_time(self.raw_data.group('dcl_controller_timestamp'))
         self.set_internal_timestamp(unix_time=utc_time)
-    
+
     def _build_parsed_values(self):
         """
         Take something in the data format and turn it into
         an array of dictionaries defining the data in the particle
         with the appropriate tag.
-        """       
+        """
 
         return [self._encode_value(name, self.raw_data.group(name), function)
                 for name, function in DATA_PARTICLE_MAP]
@@ -214,7 +220,7 @@ class CtdbpCdefDclParser(SimpleParser):
         Parse through the file, pulling single lines and comparing to the established patterns,
         generating particles for data lines
         """
-        
+
         for line in self._stream_handle:
             # first check for a match against the uncorrected pattern
             match = UNCORR_MATCHER.match(line)
@@ -237,7 +243,7 @@ class CtdbpCdefDclParser(SimpleParser):
                 # NOTE: Need to check for the metadata line last, since the corrected Endurance
                 # record also has the [*] pattern
                 test_meta = METADATA_MATCHER.match(line)
-                
+
                 if test_meta is None:
                     # something in the data didn't match a required regex, so raise an exception and press on.
                     message = "Error while decoding parameters in data: [%s]" % line
