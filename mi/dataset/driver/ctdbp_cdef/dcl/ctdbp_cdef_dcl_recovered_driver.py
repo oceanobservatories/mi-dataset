@@ -17,7 +17,7 @@ from mi.core.versioning import version
 
 MODULE_NAME = 'mi.dataset.parser.ctdbp_cdef_dcl'
 
-@version("15.6.0")
+@version("15.7.0")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     """
     This is the method called by Uframe

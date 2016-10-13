@@ -18,11 +18,11 @@ from mi.core.exceptions import \
     RecoverableSampleException
 
 from mi.core.log import get_logger
-log = get_logger()
 
 from mi.dataset.test.test_parser import ParserUnitTestCase
 
 from mi.dataset.parser.ctdbp_cdef_dcl import CtdbpCdefDclParser
+log = get_logger()
 
 RESOURCE_PATH = os.path.join(Config().base_dir(), 'mi',
                              'dataset', 'driver', 'ctdbp_cdef',
@@ -64,9 +64,9 @@ class CtdbpCdefDclParserUnitTestCase(ParserUnitTestCase):
             parser = CtdbpCdefDclParser(False,
                                         file_handle,
                                         self.exception_callback)
-        
+
             particles = parser.get_records(1)
-        
+
         # Make sure we obtained 1 particle
         self.assertTrue(len(particles) == 1)
         self.assert_particles(particles, '20140918.ctdbp_1rec_uncorr_r.yml', RESOURCE_PATH)
@@ -378,4 +378,21 @@ class CtdbpCdefDclParserUnitTestCase(ParserUnitTestCase):
             self.assertEquals(len(particles), num_expected_particles)
 
         log.debug('===== END TEST NO PARTICLES =====')
+
+    def test_bug_11367(self):
+        """
+        Read data from a file and pull out data particles
+        one at a time. Verify that the results are those we expected.
+        """
+        # test along the telemetered path, current config
+        with open(os.path.join(RESOURCE_PATH, '20161005.ctdbp2.log'), 'rU') as file_handle:
+            parser = CtdbpCdefDclParser(True,
+                                        file_handle,
+                                        self.exception_callback)
+
+            particles = parser.get_records(25)
+
+            # Make sure we obtained 1 particle
+            self.assertTrue(len(particles) == 24)
+            self.assertEquals(len(self.exception_callback_value), 0)
 
