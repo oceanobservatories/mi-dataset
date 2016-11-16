@@ -1,6 +1,6 @@
 header:
   particle_object: CtdbpPRecoveredDataParticle
-  particle_type: ctdbp_p_instrument_recovered
+  particle_type: ctdbp_cdef_instrument_recovered
 
 data:
   - _index: 1

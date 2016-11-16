@@ -49,7 +49,7 @@ EMPTY_MATCHER = re.compile(END_OF_LINE_REGEX)
 # It is used by build_parsed_values.  Named groups in regex must match.
 CTDBP_DATA_PARTICLE_MAP = ['temperature', 'conductivity', 'pressure', 'pressure_temp', 'ctd_time']
 DOSTA_DATA_PARTICLE_MAP = ['oxy_calphase', 'oxy_temp', 'ctd_time']
-FLORD_DATA_PARTICLE_MAP = ['flord_chlorophyll_a_number', 'flord_optical_backscatter_number', 'ctd_time']
+FLORD_DATA_PARTICLE_MAP = ['raw_signal_chl', 'raw_signal_beta', 'ctd_time']
 
 # Regex for instrument recovered data from the CTCBP-P.
 # Each data record is in the following format:
@@ -72,15 +72,15 @@ CTDBP_P_DATA_REGEX += r'(?P<pressure>' + ASCII_HEX_CHAR_REGEX + '{6})'
 CTDBP_P_DATA_REGEX += r'(?P<pressure_temp>' + ASCII_HEX_CHAR_REGEX + '{4})'
 CTDBP_P_DATA_REGEX += r'(?P<oxy_calphase>' + ASCII_HEX_CHAR_REGEX + '{4})'
 CTDBP_P_DATA_REGEX += r'(?P<oxy_temp>' + ASCII_HEX_CHAR_REGEX + '{4})'
-CTDBP_P_DATA_REGEX += r'(?P<flord_chlorophyll_a_number>' + ASCII_HEX_CHAR_REGEX + '{4})'
-CTDBP_P_DATA_REGEX += r'(?P<flord_optical_backscatter_number>' + ASCII_HEX_CHAR_REGEX + '{4})'
+CTDBP_P_DATA_REGEX += r'(?P<raw_signal_chl>' + ASCII_HEX_CHAR_REGEX + '{4})'
+CTDBP_P_DATA_REGEX += r'(?P<raw_signal_beta>' + ASCII_HEX_CHAR_REGEX + '{4})'
 CTDBP_P_DATA_REGEX += r'(?P<ctd_time>' + ASCII_HEX_CHAR_REGEX + '{8})'
 CTDBP_P_DATA_REGEX += END_OF_LINE_REGEX
 CTDBP_P_DATA_MATCHER = re.compile(CTDBP_P_DATA_REGEX, re.VERBOSE)
 
 
 class DataParticleType(BaseEnum):
-    CTDBP_RECOVERED = 'ctdbp_p_instrument_recovered'
+    CTDBP_RECOVERED = 'ctdbp_cdef_instrument_recovered'  # Reusing cdef stream. It should be renamed.
     DOSTA_RECOVERED = 'dosta_abcdjm_ctdbp_p_instrument_recovered'
     FLORD_RECOVERED = 'flord_g_ctdbp_p_instrument_recovered'
 
