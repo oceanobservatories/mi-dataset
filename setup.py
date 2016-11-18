@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="mi-dataset",
-    version="0.1.2",
+    version="0.2.0",
     description="Contains marine integrations dataset drivers and parsers",
     url="http://github.com/oceanobservatories/mi-dataset",
     license="BSD",
