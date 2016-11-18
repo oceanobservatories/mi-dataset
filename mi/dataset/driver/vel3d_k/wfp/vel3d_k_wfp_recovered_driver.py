@@ -18,7 +18,7 @@ __author__ = 'kustert'
 @version("0.2.0")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
 
-    config.add_configuration(os.path.join(basePythonCodePath, 'res', 'config', 'mi-logging.yml'))
+    config.add_configuration(os.path.join(basePythonCodePath, 'mi-logging.yml'))
 
     log = get_logger()
 

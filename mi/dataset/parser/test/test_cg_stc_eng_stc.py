@@ -8,26 +8,21 @@
 """
 import os
 import re
+
 import ntplib
-
 from nose.plugins.attrib import attr
-
-from mi.core.log import get_logger
 
 from mi.core.exceptions import SampleException
 from mi.core.instrument.data_particle import DataParticleKey
-
-from mi.dataset.test.test_parser import ParserUnitTestCase
+from mi.core.log import get_logger
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 from mi.dataset.parser.cg_stc_eng_stc import CgStcEngStcParser, CgStcEngStcParserDataParticle
 from mi.dataset.parser.cg_stc_eng_stc import CgStcEngStcParserDataParticleKey
+from mi.dataset.test.test_parser import ParserUnitTestCase
+from mi.dataset.driver.cg_stc_eng.stc.resource import RESOURCE_PATH
 
-from mi.idk.config import Config
 
 log = get_logger()
-RESOURCE_PATH = os.path.join(Config().base_dir(), 'mi',
-                             'dataset', 'driver', 'cg_stc_eng',
-                             'stc', 'resource')
 
 
 @attr('UNIT', group='mi')

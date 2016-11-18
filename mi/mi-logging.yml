@@ -38,6 +38,6 @@ root:
 
 loggers:
   mi:
-    level: WARN
+    level: INFO
   ooi:
     level: INFO

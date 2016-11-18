@@ -12,23 +12,18 @@ from nose.plugins.attrib import attr
 
 from mi.core.exceptions import SampleException
 from mi.core.log import get_logger
-
-from mi.idk.config import Config
-
-from mi.dataset.test.test_parser import ParserUnitTestCase
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
+from mi.dataset.driver.adcps_jln.stc.resource import RESOURCE_PATH
 from mi.dataset.parser.adcps_jln_stc import AdcpsJlnStcParser, \
     AdcpsJlnStcInstrumentTelemeteredDataParticle, \
     AdcpsJlnStcInstrumentRecoveredDataParticle, \
     AdcpsJlnStcMetadataTelemeteredDataParticle, \
     AdcpsJlnStcMetadataRecoveredDataParticle, \
     AdcpsJlnStcParticleClassKey
+from mi.dataset.test.test_parser import ParserUnitTestCase
+
 
 log = get_logger()
-
-RESOURCE_PATH = os.path.join(Config().base_dir(), 'mi',
-                             'dataset', 'driver', 'adcps_jln',
-                             'stc', 'resource')
 
 
 @attr('UNIT', group='mi')

@@ -26,7 +26,7 @@ def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     @param sourceFilePath - source file from Java
     @param particleDataHdlrObj - particle data handler object from Java
     """
-    config.add_configuration(os.path.join(basePythonCodePath, 'res', 'config', 'mi-logging.yml'))
+    config.add_configuration(os.path.join(basePythonCodePath, 'mi-logging.yml'))
 
     parser_config = {
         DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.glider',

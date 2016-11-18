@@ -8,19 +8,17 @@
 
 """
 
-from nose.plugins.attrib import attr
 import os
 
-from mi.core.log import get_logger
-log = get_logger()
+from nose.plugins.attrib import attr
 
-from mi.idk.config import Config
-from mi.dataset.test.test_parser import ParserUnitTestCase
-from mi.dataset.parser.dosta_ln_auv import DostaLnAuvParser
 from mi.core.exceptions import RecoverableSampleException, SampleEncodingException
+from mi.core.log import get_logger
+from mi.dataset.driver.dosta_ln.auv.resource import RESOURCE_PATH
+from mi.dataset.parser.dosta_ln_auv import DostaLnAuvParser
+from mi.dataset.test.test_parser import ParserUnitTestCase
 
-RESOURCE_PATH = os.path.join(Config().base_dir(), 'mi', 'dataset',
-                             'driver', 'dosta_ln', 'auv', 'resource')
+log = get_logger()
 
 
 @attr('UNIT', group='mi')

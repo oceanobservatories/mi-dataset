@@ -7,24 +7,18 @@
 @brief Test code for a wfp_eng_wfp_sio data parser
 """
 
-from nose.plugins.attrib import attr
-
 import os
 
-from mi.core.log import get_logger
-log = get_logger()
-from mi.idk.config import Config
+from nose.plugins.attrib import attr
 
 from mi.core.exceptions import UnexpectedDataException
-from mi.dataset.test.test_parser import ParserUnitTestCase
+from mi.core.log import get_logger
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
+from mi.dataset.driver.WFP_ENG.wfp_sio.resource import RESOURCE_PATH
 from mi.dataset.parser.wfp_eng_wfp_sio import WfpEngWfpSioParser
+from mi.dataset.test.test_parser import ParserUnitTestCase
 
-RESOURCE_PATH = os.path.join(Config().base_dir(), 'mi', 'dataset', 'driver', 'WFP_ENG', 'wfp_sio', 'resource')
-
-
-# The list of generated tests are the suggested tests, but there may
-# be other tests needed to fully test your parser
+log = get_logger()
 
 
 @attr('UNIT', group='mi')

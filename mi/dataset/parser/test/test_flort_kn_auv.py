@@ -11,18 +11,16 @@ the error checking was not done.  See adcpa_n_auv and dosta_ln_auv
 for more complete testing of the AuvCommonParser
 """
 
-from nose.plugins.attrib import attr
 import os
 
+from nose.plugins.attrib import attr
+
 from mi.core.log import get_logger
-log = get_logger()
-
-from mi.idk.config import Config
-from mi.dataset.test.test_parser import ParserUnitTestCase
+from mi.dataset.driver.flort_kn.auv.resource import RESOURCE_PATH
 from mi.dataset.parser.flort_kn_auv import FlortKnAuvParser
+from mi.dataset.test.test_parser import ParserUnitTestCase
 
-RESOURCE_PATH = os.path.join(Config().base_dir(), 'mi', 'dataset',
-                             'driver', 'flort_kn', 'auv', 'resource')
+log = get_logger()
 
 
 @attr('UNIT', group='mi')

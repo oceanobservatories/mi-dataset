@@ -9,19 +9,17 @@ import os
 
 from nose.plugins.attrib import attr
 
-from mi.core.log import get_logger
-
-from mi.dataset.test.test_parser import ParserUnitTestCase
-from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 from mi.core.common import BaseEnum
-from mi.dataset.parser.phsen_abcdef_dcl import PhsenAbcdefDclParser, PhsenAbcdefDclMetadataRecoveredDataParticle, \
-    PhsenAbcdefDclInstrumentRecoveredDataParticle
+from mi.core.log import get_logger
+from mi.dataset.dataset_parser import DataSetDriverConfigKeys
+from mi.dataset.driver.phsen_abcdef.dcl.resource import RESOURCE_PATH
 from mi.dataset.parser.phsen_abcdef_dcl import PhsenAbcdefDclMetadataTelemeteredDataParticle, \
     PhsenAbcdefDclInstrumentTelemeteredDataParticle
-from mi.idk.config import Config
-log = get_logger()
+from mi.dataset.parser.phsen_abcdef_dcl import PhsenAbcdefDclParser, PhsenAbcdefDclMetadataRecoveredDataParticle, \
+    PhsenAbcdefDclInstrumentRecoveredDataParticle
+from mi.dataset.test.test_parser import ParserUnitTestCase
 
-RESOURCE_PATH = os.path.join(Config().base_dir(), 'mi', 'dataset', 'driver', 'phsen_abcdef', 'dcl', 'resource')
+log = get_logger()
 
 # INPUT LOG FILES, TELEMETERED AND RECOVERED
 #

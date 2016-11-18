@@ -12,19 +12,17 @@ Testing is limited to code specific to the derived classes of auv_eng_auv
 
 """
 
-from nose.plugins.attrib import attr
 import os
 
-from mi.core.log import get_logger
-log = get_logger()
+from nose.plugins.attrib import attr
 
-from mi.idk.config import Config
-from mi.dataset.test.test_parser import ParserUnitTestCase
-from mi.dataset.parser.auv_eng_auv import AuvEngAuvParser
 from mi.core.exceptions import RecoverableSampleException
+from mi.core.log import get_logger
+from mi.dataset.driver.auv_eng.auv.resource import RESOURCE_PATH
+from mi.dataset.parser.auv_eng_auv import AuvEngAuvParser
+from mi.dataset.test.test_parser import ParserUnitTestCase
 
-RESOURCE_PATH = os.path.join(Config().base_dir(), 'mi', 'dataset',
-                             'driver', 'auv_eng', 'auv', 'resource')
+log = get_logger()
 
 
 @attr('UNIT', group='mi')

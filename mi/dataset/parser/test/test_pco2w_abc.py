@@ -8,22 +8,17 @@ __author__ = 'mworden'
 @brief Test code for the pco2w_abc parser
 """
 
-from mi.logging import log
 import os
+
 from nose.plugins.attrib import attr
 
-from mi.dataset.test.test_parser import ParserUnitTestCase
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
-
+from mi.dataset.driver.pco2w_abc.resource import RESOURCE_PATH
 from mi.dataset.parser.pco2w_abc import Pco2wAbcParser, Pco2wAbcParticleClassKey
 from mi.dataset.parser.pco2w_abc_particles import Pco2wAbcMetadataDataParticle, Pco2wAbcPowerDataParticle, \
     Pco2wAbcInstrumentDataParticle, Pco2wAbcInstrumentBlankDataParticle
-
-
-from mi.idk.config import Config
-
-RESOURCE_PATH = os.path.join(Config().base_dir(),
-                             'mi', 'dataset', 'driver', 'pco2w_abc', 'resource')
+from mi.dataset.test.test_parser import ParserUnitTestCase
+from mi.logging import log
 
 
 @attr('UNIT', group='mi')

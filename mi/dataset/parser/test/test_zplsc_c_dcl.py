@@ -8,18 +8,16 @@
 """
 
 import os
+
 from nose.plugins.attrib import attr
 
 from mi.core.log import get_logger
-log = get_logger()
+from mi.dataset.dataset_parser import DataSetDriverConfigKeys
+from mi.dataset.driver.zplsc_c.dcl.resource import RESOURCE_PATH
 from mi.dataset.parser.zplsc_c_dcl import ZplscCDclParser
 from mi.dataset.test.test_parser import ParserUnitTestCase
-from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 
-
-from mi.idk.config import Config
-RESOURCE_PATH = os.path.join(Config().base_dir(), 'mi', 'dataset', 'driver',
-                             'zplsc_c', 'dcl', 'resource')
+log = get_logger()
 
 MODULE_NAME = 'mi.dataset.parser.zplsc_c_dcl'
 CLASS_NAME = 'ZplscCInstrumentDataParticle'

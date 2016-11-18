@@ -12,20 +12,14 @@ import os
 
 from nose.plugins.attrib import attr
 
-from mi.idk.config import Config
-
-from mi.core.log import get_logger
 from mi.core.exceptions import RecoverableSampleException
-
+from mi.core.log import get_logger
+from mi.dataset.driver.cspp_eng.dcl.resource import RESOURCE_PATH
+from mi.dataset.parser.cspp_eng_dcl import CsppEngDclParser
 from mi.dataset.test.test_parser import ParserUnitTestCase
 
-from mi.dataset.parser.cspp_eng_dcl import CsppEngDclParser
+
 log = get_logger()
-
-RESOURCE_PATH = os.path.join(Config().base_dir(), 'mi',
-                             'dataset', 'driver', 'cspp_eng',
-                             'dcl', 'resource')
-
 MODULE_NAME = 'mi.dataset.parser.cspp_eng_dcl'
 
 

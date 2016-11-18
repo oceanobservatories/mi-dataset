@@ -12,22 +12,13 @@ import os
 
 from nose.plugins.attrib import attr
 
-from mi.idk.config import Config
-
-from mi.core.exceptions import \
-    RecoverableSampleException
-
+from mi.core.exceptions import RecoverableSampleException
 from mi.core.log import get_logger
-
+from mi.dataset.driver.dosta_abcdjm.ctdbp.dcl.resource import RESOURCE_PATH
+from mi.dataset.parser.dosta_abcdjm_ctdbp_dcl import DostaAbcdjmCtdbpDclParser
 from mi.dataset.test.test_parser import ParserUnitTestCase
 
-from mi.dataset.parser.dosta_abcdjm_ctdbp_dcl import DostaAbcdjmCtdbpDclParser
-
 log = get_logger()
-RESOURCE_PATH = os.path.join(Config().base_dir(), 'mi',
-                             'dataset', 'driver', 'dosta_abcdjm',
-                             'ctdbp', 'dcl', 'resource')
-
 MODULE_NAME = 'mi.dataset.parser.ctdbp_cdef_dcl_ce'
 
 

@@ -29,17 +29,18 @@ Files used for testing:
 """
 
 import os
+
 from nose.plugins.attrib import attr
-from mi.core.log import get_logger
+
 from mi.core.exceptions import DatasetParserException, RecoverableSampleException
-from mi.dataset.test.test_parser import ParserUnitTestCase
+from mi.core.log import get_logger
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
+from mi.dataset.driver.optaa_dj.dcl.resource import RESOURCE_PATH
 from mi.dataset.parser.optaa_dj_dcl import OptaaDjDclParser
-from mi.idk.config import Config
+from mi.dataset.test.test_parser import ParserUnitTestCase
+
 log = get_logger()
 
-RESOURCE_PATH = os.path.join(Config().base_dir(), 'mi', 'dataset', 'driver',
-                             'optaa_dj', 'dcl', 'resource')
 
 MODULE_NAME = 'mi.dataset.parser.optaa_dj_dcl'
 

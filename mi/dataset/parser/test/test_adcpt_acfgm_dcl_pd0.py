@@ -8,22 +8,18 @@
 """
 import copy
 import os
+from datetime import datetime
 
 import yaml
-from datetime import datetime
 from nose.plugins.attrib import attr
 
-from mi.core.log import get_logger
 from mi.core.exceptions import RecoverableSampleException
-from mi.idk.config import Config
-from mi.dataset.test.test_parser import ParserUnitTestCase
-from mi.dataset.dataset_parser import DataSetDriverConfigKeys
+from mi.core.log import get_logger
+from mi.dataset.driver.adcpt_acfgm.dcl.pd0.resource import RESOURCE_PATH
 from mi.dataset.parser.adcpt_acfgm_dcl_pd0 import AdcptAcfgmDclPd0Parser
-
+from mi.dataset.test.test_parser import ParserUnitTestCase
 
 log = get_logger()
-RESOURCE_PATH = os.path.join(Config().base_dir(), 'mi', 'dataset', 'driver',
-                             'adcpt_acfgm', 'dcl', 'pd0', 'resource')
 
 
 @attr('UNIT', group='mi')

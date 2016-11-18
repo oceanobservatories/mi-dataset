@@ -23,7 +23,7 @@ from mi.core.versioning import version
 @version("0.0.1")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     
-    config.add_configuration(os.path.join(basePythonCodePath, 'res', 'config', 'mi-logging.yml'))
+    config.add_configuration(os.path.join(basePythonCodePath, 'mi-logging.yml'))
 
     parser_config = {
         DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.driver.WFP_ENG.STC_IMODEM',

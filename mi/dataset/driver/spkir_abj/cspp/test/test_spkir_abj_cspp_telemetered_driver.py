@@ -15,7 +15,7 @@ __author__ = 'mworden'
 from mi.core.log import get_logger
 log = get_logger()
 
-from mi.idk.config import Config
+from mi import MI_BASE_PATH
 
 import unittest
 import os
@@ -39,7 +39,7 @@ class DriverTest(unittest.TestCase):
 
         particle_data_hdlr_obj = ParticleDataHandler()
 
-        particle_data_hdlr_obj = parse(Config().base_dir(), sourceFilePath, particle_data_hdlr_obj)
+        particle_data_hdlr_obj = parse(MI_BASE_PATH, sourceFilePath, particle_data_hdlr_obj)
 
         for sample in particle_data_hdlr_obj._samples:
             print sample

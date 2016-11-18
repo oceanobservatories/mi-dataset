@@ -7,7 +7,7 @@ The purpose is to provide a quick way to assess a driver & parsers compatibility
 with data files
 """
 
-from mi.idk.config import Config
+from mi import MI_BASE_PATH
 from mi.dataset.dataset_driver import ParticleDataHandler
 
 import os
@@ -60,7 +60,7 @@ def parse_file(driver_path, file_path, output_dir=None):
 
     particle_data_hdlr_obj = ParticleDataHandler()
 
-    driver_module.parse(Config().base_dir(), file_path, particle_data_hdlr_obj)
+    driver_module.parse(MI_BASE_PATH, file_path, particle_data_hdlr_obj)
 
     stream_output = particle_data_hdlr_obj._samples
 

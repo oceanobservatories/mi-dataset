@@ -7,23 +7,18 @@
 @brief Test code for a flord_l_wfp_sio data parser
 """
 import os
-import ntplib, struct
-from datetime import datetime
+
 from nose.plugins.attrib import attr
 
+from mi.core.exceptions import UnexpectedDataException
 from mi.core.log import get_logger
+from mi.dataset.dataset_parser import DataSetDriverConfigKeys
+from mi.dataset.driver.flord_l_wfp.sio.resource import RESOURCE_PATH
+from mi.dataset.parser.flord_l_wfp_sio import FlordLWfpSioParser
+from mi.dataset.test.test_parser import ParserUnitTestCase
+
 log = get_logger()
 
-from mi.core.exceptions import UnexpectedDataException
-from mi.dataset.test.test_parser import ParserUnitTestCase
-from mi.dataset.dataset_parser import DataSetDriverConfigKeys, DataParticleKey
-from mi.dataset.parser.flord_l_wfp_sio import FlordLWfpSioParser
-
-from mi.idk.config import Config
-
-RESOURCE_PATH = os.path.join(Config().base_dir(), 'mi',
-                             'dataset', 'driver', 'flord_l_wfp',
-                             'sio', 'resource')
 
 @attr('UNIT', group='mi')
 class FlordLWfpSioParserUnitTestCase(ParserUnitTestCase):

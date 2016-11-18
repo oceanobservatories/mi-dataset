@@ -12,19 +12,17 @@ for complete testing of AuvCommonParser
 
 """
 
-from nose.plugins.attrib import attr
 import os
 
-from mi.core.log import get_logger
-log = get_logger()
+from nose.plugins.attrib import attr
 
-from mi.idk.config import Config
 from mi.core.exceptions import SampleEncodingException
-from mi.dataset.test.test_parser import ParserUnitTestCase
+from mi.core.log import get_logger
+from mi.dataset.driver.nutnr_n.auv.resource import RESOURCE_PATH
 from mi.dataset.parser.nutnr_n_auv import NutnrNAuvParser
+from mi.dataset.test.test_parser import ParserUnitTestCase
 
-RESOURCE_PATH = os.path.join(Config().base_dir(), 'mi', 'dataset',
-                             'driver', 'nutnr_n', 'auv', 'resource')
+log = get_logger()
 
 
 @attr('UNIT', group='mi')

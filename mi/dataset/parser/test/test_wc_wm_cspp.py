@@ -15,18 +15,13 @@ import os
 
 from nose.plugins.attrib import attr
 
-from mi.core.log import get_logger
-from mi.idk.config import Config
-
-from mi.dataset.test.test_parser import ParserUnitTestCase
-from mi.dataset.dataset_parser import DataSetDriverConfigKeys
-
 from mi.core.exceptions import RecoverableSampleException
-
+from mi.core.log import get_logger
+from mi.dataset.dataset_parser import DataSetDriverConfigKeys
+from mi.dataset.driver.wc_wm.cspp.resource import RESOURCE_PATH
 from mi.dataset.parser.cspp_base import \
     METADATA_PARTICLE_CLASS_KEY, \
     DATA_PARTICLE_CLASS_KEY
-
 from mi.dataset.parser.wc_wm_cspp import \
     WcWmCsppParser, \
     WcWmEngRecoveredDataParticle, \
@@ -34,10 +29,9 @@ from mi.dataset.parser.wc_wm_cspp import \
     WcWmMetadataRecoveredDataParticle, \
     WcWmMetadataTelemeteredDataParticle, \
     WcWmDataTypeKey
+from mi.dataset.test.test_parser import ParserUnitTestCase
 
 log = get_logger()
-
-RESOURCE_PATH = os.path.join(Config().base_dir(), 'mi', 'dataset', 'driver', 'wc_wm', 'cspp', 'resource')
 
 
 @attr('UNIT', group='mi')

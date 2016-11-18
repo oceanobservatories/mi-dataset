@@ -14,16 +14,12 @@ import yaml
 from nose.plugins.attrib import attr
 
 from mi.core.log import get_logger
+from mi.dataset.dataset_parser import DataSetDriverConfigKeys
+from mi.dataset.driver.adcpa_n.resource import RESOURCE_PATH
+from mi.dataset.parser.adcp_pd0 import AdcpPd0Parser
+from mi.dataset.test.test_parser import ParserUnitTestCase
 
 log = get_logger()
-
-from mi.idk.config import Config
-from mi.dataset.test.test_parser import ParserUnitTestCase
-from mi.dataset.dataset_parser import DataSetDriverConfigKeys
-from mi.dataset.parser.adcp_pd0 import AdcpPd0Parser
-
-RESOURCE_PATH = os.path.join(Config().base_dir(), 'mi', 'dataset',
-                             'driver', 'adcpa_n', 'resource')
 
 
 @attr('UNIT', group='mi')

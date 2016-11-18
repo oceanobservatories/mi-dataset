@@ -37,26 +37,22 @@ Files used for testing:
   See metadata in file for a list of the errors.
 """
 
-
 import os
+
 from nose.plugins.attrib import attr
 
 from mi.core.log import get_logger
-
-from mi.dataset.test.test_parser import ParserUnitTestCase
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
-
+from mi.dataset.driver.spkir_abj.dcl.resource import RESOURCE_PATH
 from mi.dataset.parser.spkir_abj_dcl import \
     SpkirAbjDclRecoveredParser, \
     SpkirAbjDclTelemeteredParser, \
     SpkirAbjDclRecoveredInstrumentDataParticle, \
     SpkirAbjDclTelemeteredInstrumentDataParticle
+from mi.dataset.test.test_parser import ParserUnitTestCase
 
-from mi.idk.config import Config
 log = get_logger()
 
-RESOURCE_PATH = os.path.join(Config().base_dir(), 'mi', 'dataset', 'driver',
-                             'spkir_abj', 'dcl', 'resource')
 
 # Expected tuples for data in file 20010101.spkir1.log
 # This file has no sensor data records and should not produce any particles.

@@ -1,17 +1,16 @@
-#!/home/jpadula/uframes/ooi/uframe-1.0/python/bin/python
+#!/usr/bin/env python
+import os
+import unittest
+
+from mi import MI_BASE_PATH
+from mi.core.log import get_logger
+from mi.dataset.dataset_driver import ParticleDataHandler
+from mi.dataset.driver.adcps_jln.sio.adcps_jln_sio_telemetered_driver import parse
+from mi.dataset.driver.adcps_jln.sio.resource import RESOURCE_PATH
 
 __author__ = 'Joe Padula'
 
-from mi.core.log import get_logger
 log = get_logger()
-
-from mi.idk.config import Config
-
-import unittest
-import os
-from mi.dataset.driver.adcps_jln.sio.adcps_jln_sio_telemetered_driver import parse
-
-from mi.dataset.dataset_driver import ParticleDataHandler
 
 
 class SampleTest(unittest.TestCase):
@@ -24,13 +23,11 @@ class SampleTest(unittest.TestCase):
 
     def test_one(self):
 
-        sourceFilePath = os.path.join('mi', 'dataset', 'driver',
-                                      'adcps_jln', 'sio', 'resource',
-                                      'node59p1_2.adcps.dat')
+        sourceFilePath = os.path.join(RESOURCE_PATH, 'node59p1_2.adcps.dat')
 
         particle_data_hdlr_obj = ParticleDataHandler()
 
-        particle_data_hdlr_obj = parse(Config().base_dir(), sourceFilePath, particle_data_hdlr_obj)
+        particle_data_hdlr_obj = parse(MI_BASE_PATH, sourceFilePath, particle_data_hdlr_obj)
 
         log.debug("SAMPLES: %s", particle_data_hdlr_obj._samples)
         log.debug("FAILURE: %s", particle_data_hdlr_obj._failure)

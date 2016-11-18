@@ -11,18 +11,14 @@ import os
 
 from nose.plugins.attrib import attr
 
-from mi.core.log import get_logger
-from mi.idk.config import Config
-
 from mi.core.exceptions import SampleException
-
-from mi.dataset.test.test_parser import ParserUnitTestCase
+from mi.core.log import get_logger
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
+from mi.dataset.driver.optaa_ac.mmp_cds.resource import RESOURCE_PATH
 from mi.dataset.parser.mmp_cds_base import MmpCdsParser
-log = get_logger()
+from mi.dataset.test.test_parser import ParserUnitTestCase
 
-# Resource path for ctdpf ckl mmp cds
-RESOURCE_PATH = os.path.join(Config().base_dir(), 'mi', 'dataset', 'driver', 'optaa_ac', 'mmp_cds', 'resource')
+log = get_logger()
 
 
 @attr('UNIT', group='mi')

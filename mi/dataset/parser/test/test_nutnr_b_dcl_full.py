@@ -8,17 +8,14 @@
 """
 
 import os
+
 from nose.plugins.attrib import attr
 
 from mi.core.log import get_logger
-log = get_logger()
-
-from mi.dataset.test.test_parser import ParserUnitTestCase
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
-
+from mi.dataset.driver.nutnr_b.dcl_full.resource import RESOURCE_PATH
 from mi.dataset.parser.nutnr_b_dcl_full import NutnrBDclFullRecoveredParser, \
     NutnrBDclFullTelemeteredParser
-
 from mi.dataset.parser.nutnr_b_particles import \
     NutnrBDclFullRecoveredInstrumentDataParticle, \
     NutnrBDclDarkFullRecoveredInstrumentDataParticle, \
@@ -26,10 +23,10 @@ from mi.dataset.parser.nutnr_b_particles import \
     NutnrBDclDarkFullTelemeteredInstrumentDataParticle, \
     NutnrBDclFullRecoveredMetadataDataParticle,  \
     NutnrBDclFullTelemeteredMetadataDataParticle
+from mi.dataset.test.test_parser import ParserUnitTestCase
 
-from mi.idk.config import Config
+log = get_logger()
 
-RESOURCE_PATH = os.path.join(Config().base_dir(), 'mi', 'dataset', 'driver', 'nutnr_b', 'dcl_full', 'resource')
 
 MODULE_NAME = 'mi.dataset.parser.nutnr_b_particles'
 

@@ -10,21 +10,16 @@ Files used for testing:
 
 """
 
-
 import os
+
 from nose.plugins.attrib import attr
 
-from mi.idk.config import Config
-
 from mi.core.log import get_logger
-log = get_logger()
-
-from mi.dataset.test.test_parser import ParserUnitTestCase
+from mi.dataset.driver.dosta_abcdjm.ctdbp.resource import RESOURCE_PATH
 from mi.dataset.parser.dosta_abcdjm_ctdbp import DostaAbcdjmCtdbpParser
+from mi.dataset.test.test_parser import ParserUnitTestCase
 
-RESOURCE_PATH = os.path.join(Config().base_dir(), 'mi',
-                             'dataset', 'driver', 'dosta_abcdjm', 'ctdbp', 'resource')
-
+log = get_logger()
 MODULE_NAME = 'mi.dataset.parser.dosta_abcdjm_ctdbp'
 
 

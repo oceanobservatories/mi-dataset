@@ -11,23 +11,20 @@ import os
 
 from nose.plugins.attrib import attr
 
+from mi.core.exceptions import RecoverableSampleException
 from mi.core.log import get_logger
-from mi.dataset.test.test_parser import ParserUnitTestCase
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
+from mi.dataset.driver.flort_dj.cspp.resource import RESOURCE_PATH
 from mi.dataset.parser.cspp_base import METADATA_PARTICLE_CLASS_KEY, DATA_PARTICLE_CLASS_KEY
 from mi.dataset.parser.flort_dj_cspp import \
     FlortDjCsppParser, \
     FlortDjCsppMetadataRecoveredDataParticle, \
     FlortDjCsppInstrumentRecoveredDataParticle, FlortDjCsppMetadataTelemeteredDataParticle, \
     FlortDjCsppInstrumentTelemeteredDataParticle
+from mi.dataset.test.test_parser import ParserUnitTestCase
 
-from mi.core.exceptions import RecoverableSampleException
-
-from mi.idk.config import Config
 
 log = get_logger()
-
-RESOURCE_PATH = os.path.join(Config().base_dir(), 'mi', 'dataset', 'driver', 'flort_dj', 'cspp', 'resource')
 
 TEST_RECOVERED = 'first_data_recovered.yml'
 

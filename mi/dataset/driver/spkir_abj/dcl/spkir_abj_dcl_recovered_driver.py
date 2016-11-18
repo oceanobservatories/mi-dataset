@@ -44,7 +44,7 @@ class SpkirAbjDclRecoveredDriver:
 
 @version("15.6.1")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
-    config.add_configuration(os.path.join(basePythonCodePath, 'res', 'config', 'mi-logging.yml'))
+    config.add_configuration(os.path.join(basePythonCodePath, 'mi-logging.yml'))
 
     parser_config = {
         DataSetDriverConfigKeys.PARTICLE_MODULE: "mi.dataset.parser.spkir_abj_dcl",

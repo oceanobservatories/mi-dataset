@@ -8,20 +8,21 @@
 """
 import os
 import struct
-import ntplib
 from StringIO import StringIO
 
+import ntplib
 from nose.plugins.attrib import attr
 
 from mi.core.log import get_logger
-log = get_logger()
-from mi.idk.config import Config
-
-from mi.dataset.test.test_parser import ParserUnitTestCase
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
-from mi.dataset.parser.ctdpf_ckl_wfp_sio import CtdpfCklWfpSioParser
+from mi.dataset.driver.ctdpf_ckl.wfp_sio.resource import RESOURCE_PATH
 from mi.dataset.parser.ctdpf_ckl_wfp_sio import CtdpfCklWfpSioDataParticle,\
     CtdpfCklWfpSioMetadataParticle
+from mi.dataset.parser.ctdpf_ckl_wfp_sio import CtdpfCklWfpSioParser
+from mi.dataset.test.test_parser import ParserUnitTestCase
+
+log = get_logger()
+
 
 # Data stream which contains a decimation factor
 TEST_DATA_wdf = b'\x01\x57\x43\x31\x32\x33\x36\x38\x32\x30\x5f' + \
@@ -124,10 +125,6 @@ EXPECTED_TIME_STAMP_ndf = (1380873602, 1380873882, 3.0, 0)
 EXPECTED_VALUES_1 = (6792, 254779, 1003)
 EXPECTED_VALUES_2 = (6796, 254656, 1003)
 EXPECTED_VALUES_3 = (6800, 254299, 1003)
-
-RESOURCE_PATH = os.path.join(Config().base_dir(), 'mi',
-                             'dataset', 'driver', 'ctdpf_ckl',
-                             'wfp_sio', 'resource')
 
 
 @attr('UNIT', group='mi')

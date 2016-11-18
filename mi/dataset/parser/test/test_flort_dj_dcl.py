@@ -39,25 +39,20 @@ Files used for testing:
 """
 
 import os
+
 from nose.plugins.attrib import attr
 
 from mi.core.log import get_logger
-
-from mi.dataset.test.test_parser import ParserUnitTestCase
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
-
+from mi.dataset.driver.flort_dj.dcl.resource import RESOURCE_PATH
 from mi.dataset.parser.flort_dj_dcl import \
     FlortDjDclParser, \
     FlortDjDclRecoveredInstrumentDataParticle, \
     FlortDjDclTelemeteredInstrumentDataParticle
+from mi.dataset.test.test_parser import ParserUnitTestCase
 
-from mi.idk.config import Config
 
 log = get_logger()
-
-RESOURCE_PATH = os.path.join(Config().base_dir(), 'mi', 'dataset', 'driver',
-                             'flort_dj', 'dcl', 'resource')
-
 MODULE_NAME = 'mi.dataset.parser.flort_dj_dcl'
 
 

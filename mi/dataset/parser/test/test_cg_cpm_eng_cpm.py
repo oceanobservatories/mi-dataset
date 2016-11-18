@@ -11,20 +11,14 @@ import pprint
 
 from nose.plugins.attrib import attr
 
-from mi.core.log import get_logger
 from mi.core.exceptions import SampleException
-
-from mi.dataset.test.test_parser import ParserUnitTestCase
+from mi.core.log import get_logger
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
+from mi.dataset.driver.cg_cpm_eng.cpm.resource import RESOURCE_PATH
 from mi.dataset.parser.cg_cpm_eng_cpm import CgCpmEngCpmParser
-
-from mi.idk.config import Config
+from mi.dataset.test.test_parser import ParserUnitTestCase
 
 log = get_logger()
-
-RESOURCE_PATH = os.path.join(Config().base_dir(), 'mi',
-                             'dataset', 'driver', 'cg_cpm_eng',
-                             'cpm', 'resource')
 
 
 @attr('UNIT', group='mi')

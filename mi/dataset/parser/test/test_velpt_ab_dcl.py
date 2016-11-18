@@ -9,25 +9,21 @@
 
 __author__ = 'Chris Goodrich'
 
-from mi.logging import log
-import re
 import os
+import re
+
 from nose.plugins.attrib import attr
+
 from mi.core.exceptions import ConfigurationException
-
-from mi.dataset.test.test_parser import ParserUnitTestCase
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
-
+from mi.dataset.driver.velpt_ab.dcl.resource import RESOURCE_PATH
+from mi.dataset.parser.common_regexes import FLOAT_REGEX, END_OF_LINE_REGEX
 from mi.dataset.parser.velpt_ab_dcl import VelptAbDclParser, VelptAbDclParticleClassKey
 from mi.dataset.parser.velpt_ab_dcl_particles import VelptAbDclInstrumentDataParticle,\
     VelptAbDclDiagnosticsHeaderParticle, VelptAbDclDiagnosticsDataParticle, VelptAbDclInstrumentDataParticleRecovered,\
     VelptAbDclDiagnosticsHeaderParticleRecovered, VelptAbDclDiagnosticsDataParticleRecovered
-from mi.dataset.parser.common_regexes import FLOAT_REGEX, END_OF_LINE_REGEX
-
-from mi.idk.config import Config
-
-RESOURCE_PATH = os.path.join(Config().base_dir(),
-                             'mi', 'dataset', 'driver', 'velpt_ab', 'dcl', 'resource')
+from mi.dataset.test.test_parser import ParserUnitTestCase
+from mi.logging import log
 
 
 @attr('UNIT', group='mi')

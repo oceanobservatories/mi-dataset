@@ -8,30 +8,24 @@
 """
 import os
 import struct
-import ntplib
 from StringIO import StringIO
 
-
+import ntplib
 from nose.plugins.attrib import attr
 
-from mi.core.log import get_logger
-log = get_logger()
 from mi.core.exceptions import SampleException
-from mi.idk.config import Config
-
-from mi.dataset.test.test_parser import ParserUnitTestCase
+from mi.core.log import get_logger
+from mi.dataset.dataset_parser import DataSetDriverConfigKeys
+from mi.dataset.driver.dofst_k.wfp.resource import RESOURCE_PATH
 from mi.dataset.parser.dofst_k_wfp import DofstKWfpParser
 from mi.dataset.parser.dofst_k_wfp_particles import DofstKWfpRecoveredDataParticle
-from mi.dataset.parser.dofst_k_wfp_particles import DofstKWfpTelemeteredDataParticle
 from mi.dataset.parser.dofst_k_wfp_particles import DofstKWfpRecoveredMetadataParticle
+from mi.dataset.parser.dofst_k_wfp_particles import DofstKWfpTelemeteredDataParticle
 from mi.dataset.parser.dofst_k_wfp_particles import DofstKWfpTelemeteredMetadataParticle
 from mi.dataset.parser.wfp_c_file_common import StateKey
-from mi.dataset.dataset_parser import DataSetDriverConfigKeys
+from mi.dataset.test.test_parser import ParserUnitTestCase
 
-
-RESOURCE_PATH = os.path.join(Config().base_dir(), 'mi',
-                             'dataset', 'driver', 'dofst_k',
-                             'wfp', 'resource')
+log = get_logger()
 
 
 @attr('UNIT', group='mi')

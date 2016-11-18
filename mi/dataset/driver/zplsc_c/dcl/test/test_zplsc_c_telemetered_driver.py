@@ -5,7 +5,7 @@ __author__ = 'rronquillo'
 import os
 import unittest
 
-from mi.idk.config import Config
+from mi import MI_BASE_PATH
 from mi.logging import log
 from mi.dataset.driver.zplsc_c.dcl.zplsc_c_dcl_telemetered_driver import parse
 from mi.dataset.dataset_driver import ParticleDataHandler
@@ -18,7 +18,7 @@ class DriverTest(unittest.TestCase):
 
     def test_one(self):
 
-        particle_data_hdlr_obj = parse(Config().base_dir(), self.sourceFilePath,
+        particle_data_hdlr_obj = parse(MI_BASE_PATH, self.sourceFilePath,
                                        ParticleDataHandler())
 
         log.info("SAMPLES: %s", particle_data_hdlr_obj._samples)

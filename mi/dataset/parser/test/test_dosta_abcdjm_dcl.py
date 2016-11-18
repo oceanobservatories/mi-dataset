@@ -52,27 +52,21 @@ Files used for testing:
   15. extra floating point number in sensor data
 """
 
-
 import os
+
 from nose.plugins.attrib import attr
 
+from mi.core.exceptions import UnexpectedDataException
 from mi.core.log import get_logger
-log = get_logger()
-
-from mi.dataset.test.test_parser import ParserUnitTestCase
-
+from mi.dataset.driver.dosta_abcdjm.dcl.resource import RESOURCE_PATH
 from mi.dataset.parser.dosta_abcdjm_dcl import \
     DostaAbcdjmDclRecoveredParser, \
     DostaAbcdjmDclTelemeteredParser, \
     DostaAbcdjmDclRecoveredInstrumentDataParticle, \
     DostaAbcdjmDclTelemeteredInstrumentDataParticle
+from mi.dataset.test.test_parser import ParserUnitTestCase
 
-from mi.core.exceptions import UnexpectedDataException
-
-from mi.idk.config import Config
-
-RESOURCE_PATH = os.path.join(Config().base_dir(), 'mi', 'dataset', 'driver',
-                             'dosta_abcdjm', 'dcl', 'resource')
+log = get_logger()
 
 
 # Expected tuples for data in file 20010121.dosta1.log

@@ -6,31 +6,25 @@
 @author Emily Hahn
 @brief Test code for a Wfp_eng__stc_imodem data parser
 """
-import ntplib
-import struct
-from StringIO import StringIO
+
+import os
 
 from nose.plugins.attrib import attr
 
-from mi.core.log import get_logger
-log = get_logger()
-
 from mi.core.exceptions import SampleException
-from mi.dataset.test.test_parser import ParserUnitTestCase
+from mi.core.log import get_logger
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
-from mi.dataset.parser.WFP_E_file_common import StateKey
+from mi.dataset.driver.WFP_ENG.STC_IMODEM.resource import RESOURCE_PATH
 from mi.dataset.parser.wfp_eng__stc_imodem import WfpEngStcImodemParser
-from mi.dataset.parser.wfp_eng__stc_imodem_particles import WfpEngStcImodemStartRecoveredDataParticle
-from mi.dataset.parser.wfp_eng__stc_imodem_particles import WfpEngStcImodemStatusRecoveredDataParticle
 from mi.dataset.parser.wfp_eng__stc_imodem_particles import WfpEngStcImodemEngineeringRecoveredDataParticle
-from mi.dataset.parser.wfp_eng__stc_imodem_particles import WfpEngStcImodemStartTelemeteredDataParticle
-from mi.dataset.parser.wfp_eng__stc_imodem_particles import WfpEngStcImodemStatusTelemeteredDataParticle
 from mi.dataset.parser.wfp_eng__stc_imodem_particles import WfpEngStcImodemEngineeringTelemeteredDataParticle
+from mi.dataset.parser.wfp_eng__stc_imodem_particles import WfpEngStcImodemStartRecoveredDataParticle
+from mi.dataset.parser.wfp_eng__stc_imodem_particles import WfpEngStcImodemStartTelemeteredDataParticle
+from mi.dataset.parser.wfp_eng__stc_imodem_particles import WfpEngStcImodemStatusRecoveredDataParticle
+from mi.dataset.parser.wfp_eng__stc_imodem_particles import WfpEngStcImodemStatusTelemeteredDataParticle
+from mi.dataset.test.test_parser import ParserUnitTestCase
 
-import os
-from mi.idk.config import Config
-
-RESOURCE_PATH = os.path.join(Config().base_dir(), 'mi', 'dataset', 'driver', 'WFP_ENG', 'STC_IMODEM', 'resource')
+log = get_logger()
 
 
 @attr('UNIT', group='mi')

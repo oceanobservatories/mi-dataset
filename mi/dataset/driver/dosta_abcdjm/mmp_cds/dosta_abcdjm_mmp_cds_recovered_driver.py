@@ -22,7 +22,7 @@ __author__ = 'Joe Padula'
 @version("0.0.2")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     
-    config.add_configuration(os.path.join(basePythonCodePath, 'res', 'config', 'mi-logging.yml'))
+    config.add_configuration(os.path.join(basePythonCodePath, 'mi-logging.yml'))
 
     parser_config = {
         DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.dosta_abcdjm_mmp_cds',

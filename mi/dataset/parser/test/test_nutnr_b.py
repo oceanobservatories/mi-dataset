@@ -8,19 +8,16 @@
 """
 
 import os
+
 from nose.plugins.attrib import attr
 
 from mi.core.log import get_logger
-log = get_logger()
-
-from mi.dataset.test.test_parser import ParserUnitTestCase
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
+from mi.dataset.driver.nutnr_b.resource import RESOURCE_PATH
 from mi.dataset.parser.nutnr_b import NutnrBParser
+from mi.dataset.test.test_parser import ParserUnitTestCase
 
-from mi.idk.config import Config
-
-RESOURCE_PATH = os.path.join(Config().base_dir(), 'mi', 'dataset', 'driver',
-                             'nutnr_b', 'resource')
+log = get_logger()
 
 
 # Add a mixin here if needed

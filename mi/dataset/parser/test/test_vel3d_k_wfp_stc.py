@@ -7,24 +7,24 @@
 @brief Test code for a vel3d_k_wfp_stc data parser
 """
 
-import ntplib
 import os
-
-from nose.plugins.attrib import attr
 from StringIO import StringIO
+
+import ntplib
+from nose.plugins.attrib import attr
 
 from mi.core.exceptions import SampleException
 from mi.core.log import get_logger
-log = get_logger()
-
-from mi.idk.config import Config
-
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
+from mi.dataset.driver.vel3d_k.wfp_stc.resource import RESOURCE_PATH
 from mi.dataset.parser.vel3d_k_wfp_stc import \
     Vel3dKWfpStcParser, \
     Vel3dKWfpStcMetadataParticle, \
     Vel3dKWfpStcInstrumentParticle
 from mi.dataset.test.test_parser import ParserUnitTestCase
+
+log = get_logger()
+
 
 FLAG_RECORD_SIZE = 26 
 VELOCITY_RECORD_SIZE = 24  # fixed only for test data - variable in real life
@@ -102,9 +102,6 @@ VELOCITY_2_GROUPS = (113, 8, 29, 16, 4, 37, 2244, 3007, 862,
 TIME_1_GROUPS = (1380470402, 1380470683, 1)
 TIME_2_GROUPS = (1380470402, 1380470683, 2)
 TIME_8_GROUPS = (1380470402, 1380470683, 8)
-
-RESOURCE_PATH = os.path.join(Config().base_dir(), 'mi', 'dataset', 'driver',
-                             'vel3d_k', 'wfp_stc', 'resource')
 
 
 @attr('UNIT', group='mi')

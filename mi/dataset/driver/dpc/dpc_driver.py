@@ -16,7 +16,7 @@ log = get_logger()
 
 @version("15.6.0")
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
-    config.add_configuration(os.path.join(basePythonCodePath, 'res', 'config', 'mi-logging.yml'))
+    config.add_configuration(os.path.join(basePythonCodePath, 'mi-logging.yml'))
     with open(sourceFilePath, "r") as stream_handle:
 
         def exception_callback(exception):

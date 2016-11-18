@@ -10,24 +10,21 @@ Due to the nature of the records in PD0 files, (large binary records with hundre
 this code verifies select items in the parsed data particle
 """
 import copy
-
-from nose.plugins.attrib import attr
-import yaml
-import numpy
 import os
 from collections import Counter
 
+import numpy
+import yaml
+from nose.plugins.attrib import attr
+
 from mi.core.log import get_logger
-from mi.core.exceptions import UnexpectedDataException
-
-from mi.idk.config import Config
-from mi.dataset.test.test_parser import ParserUnitTestCase
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
+from mi.dataset.driver.adcps_jln.stc.resource import RESOURCE_PATH
 from mi.dataset.parser.adcp_pd0 import AdcpPd0Parser, AdcpDataParticleType
-log = get_logger()
+from mi.dataset.test.test_parser import ParserUnitTestCase
 
-RESOURCE_PATH = os.path.join(Config().base_dir(), 'mi', 'dataset',
-                             'driver', 'adcps_jln', 'stc', 'resource')
+
+log = get_logger()
 
 
 @attr('UNIT', group='mi')

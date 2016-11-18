@@ -10,25 +10,22 @@ import os
 
 from nose.plugins.attrib import attr
 
-from mi.core.log import get_logger
-log = get_logger()
 from mi.core.exceptions import SampleException
-from mi.idk.config import Config
-
-from mi.dataset.test.test_parser import ParserUnitTestCase
+from mi.core.log import get_logger
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
+from mi.dataset.driver.ctdpf_ckl.wfp.resource import RESOURCE_PATH
 from mi.dataset.parser.ctdpf_ckl_wfp import CtdpfCklWfpParser, \
     METADATA_PARTICLE_CLASS_KEY, \
     DATA_PARTICLE_CLASS_KEY
 from mi.dataset.parser.ctdpf_ckl_wfp_particles import CtdpfCklWfpRecoveredDataParticle
-from mi.dataset.parser.ctdpf_ckl_wfp_particles import CtdpfCklWfpTelemeteredDataParticle
 from mi.dataset.parser.ctdpf_ckl_wfp_particles import CtdpfCklWfpRecoveredMetadataParticle
+from mi.dataset.parser.ctdpf_ckl_wfp_particles import CtdpfCklWfpTelemeteredDataParticle
 from mi.dataset.parser.ctdpf_ckl_wfp_particles import CtdpfCklWfpTelemeteredMetadataParticle
+from mi.dataset.test.test_parser import ParserUnitTestCase
 
 
-RESOURCE_PATH = os.path.join(Config().base_dir(), 'mi',
-                             'dataset', 'driver', 'ctdpf_ckl',
-                             'wfp', 'resource')
+log = get_logger()
+
 
 @attr('UNIT', group='mi')
 class CtdpfCklWfpParserUnitTestCase(ParserUnitTestCase):

@@ -7,25 +7,22 @@
 @brief Test code for a dosta_ln_wfp data parser
 """
 
-from nose.plugins.attrib import attr
-
-from StringIO import StringIO
-import yaml
-import numpy
 import os
 
-from mi.core.log import get_logger ; log = get_logger()
-from mi.idk.config import Config
-from mi.core.exceptions import SampleException
+import numpy
+import yaml
+from nose.plugins.attrib import attr
 
-from mi.dataset.test.test_parser import ParserUnitTestCase
+from mi.core.exceptions import SampleException
+from mi.core.log import get_logger
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
+from mi.dataset.driver.dosta_ln.wfp_sio.resource import RESOURCE_PATH
 from mi.dataset.parser.WFP_E_file_common import HEADER_BYTES, StateKey
 from mi.dataset.parser.dosta_ln_wfp import DostaLnWfpParser, WFP_E_GLOBAL_RECOVERED_ENG_DATA_SAMPLE_BYTES, \
     DostaLnWfpInstrumentParserDataParticleKey
+from mi.dataset.test.test_parser import ParserUnitTestCase
 
-RESOURCE_PATH = os.path.join(Config().base_dir(), 'mi', 'dataset', 'driver', 'dosta_ln', 'wfp_sio', 'resource')
-
+log = get_logger()
 
 
 @attr('UNIT', group='mi')

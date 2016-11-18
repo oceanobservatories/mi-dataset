@@ -12,27 +12,17 @@ import os
 
 from nose.plugins.attrib import attr
 
-from mi.idk.config import Config
-
 from mi.core.exceptions import \
     RecoverableSampleException
-
 from mi.core.log import get_logger
-
+from mi.dataset.driver.ctdbp_cdef.dcl.resource import RESOURCE_PATH
+from mi.dataset.parser.ctdbp_cdef_dcl import CtdbpCdefDclParser
 from mi.dataset.test.test_parser import ParserUnitTestCase
 
-from mi.dataset.parser.ctdbp_cdef_dcl import CtdbpCdefDclParser
+
 log = get_logger()
-
-RESOURCE_PATH = os.path.join(Config().base_dir(), 'mi',
-                             'dataset', 'driver', 'ctdbp_cdef',
-                             'dcl', 'resource')
-
 MODULE_NAME = 'mi.dataset.parser.ctdbp_cdef_dcl'
 
-
-# The list of generated tests are the suggested tests, but there may
-# be other tests needed to fully test your parser
 
 @attr('UNIT', group='mi')
 class CtdbpCdefDclParserUnitTestCase(ParserUnitTestCase):

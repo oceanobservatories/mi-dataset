@@ -7,17 +7,14 @@
 @brief Test code for the dataset parser base classes and common structures for
 testing parsers.
 """
+
 import os
 
 from mi.core.exceptions import DatasetParserException
 from mi.core.unit_test import MiUnitTest
 from mi.idk.result_set import ResultSet
+from mi.dataset.driver import RESOURCE_PATH as BASE_RESOURCE_PATH
 
-import os
-from mi.idk.config import Config
-from mi.idk.result_set import ResultSet
-
-BASE_RESOURCE_PATH = os.path.join(Config().base_dir(), 'mi', 'dataset', 'driver')
 
 # Shared parser unit test suite
 class ParserUnitTestCase(MiUnitTest):

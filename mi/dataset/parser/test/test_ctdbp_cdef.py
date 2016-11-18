@@ -19,22 +19,18 @@ no_sensor_data.log
 
 """
 
-
 import os
+
 from nose.plugins.attrib import attr
 
-from mi.idk.config import Config
-
 from mi.core.log import get_logger
-log = get_logger()
-
-from mi.dataset.test.test_parser import ParserUnitTestCase
+from mi.dataset.driver.ctdbp_cdef.resource import RESOURCE_PATH
 from mi.dataset.parser.ctdbp_cdef import CtdbpCdefParser
+from mi.dataset.test.test_parser import ParserUnitTestCase
 
-RESOURCE_PATH = os.path.join(Config().base_dir(), 'mi',
-                             'dataset', 'driver', 'ctdbp_cdef', 'resource')
 
 MODULE_NAME = 'mi.dataset.parser.ctdbp_cdef'
+log = get_logger()
 
 
 @attr('UNIT', group='mi')

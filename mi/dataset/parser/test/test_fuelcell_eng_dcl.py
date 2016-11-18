@@ -12,24 +12,19 @@ initial release
 
 __author__ = 'cgoodrich'
 
-from mi.logging import log
 import os
-from nose.plugins.attrib import attr
-from mi.core.exceptions import ConfigurationException
 
-from mi.dataset.test.test_parser import ParserUnitTestCase
+from nose.plugins.attrib import attr
+
+from mi.core.exceptions import ConfigurationException
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
+from mi.dataset.driver.fuelcell_eng.dcl.resource import RESOURCE_PATH
+from mi.dataset.parser.fuelcell_eng_dcl import FuelCellEngDclParser
 from mi.dataset.parser.fuelcell_eng_dcl import FuelCellEngDclParticleClassKey,\
     FuelCellEngDclDataParticleRecovered,\
     FuelCellEngDclDataParticleTelemetered
-
-
-from mi.dataset.parser.fuelcell_eng_dcl import FuelCellEngDclParser
-
-from mi.idk.config import Config
-
-RESOURCE_PATH = os.path.join(Config().base_dir(),
-                             'mi', 'dataset', 'driver', 'fuelcell_eng', 'dcl', 'resource')
+from mi.dataset.test.test_parser import ParserUnitTestCase
+from mi.logging import log
 
 
 @attr('UNIT', group='mi')

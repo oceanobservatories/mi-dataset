@@ -7,27 +7,18 @@
 @brief Test code for a flord_l_wfp data parser (which uses the GlobalWfpEFileParser)
 """
 
-from nose.plugins.attrib import attr
-
-import yaml
-import numpy
 import os
 
-from mi.core.log import get_logger
-log = get_logger()
+from nose.plugins.attrib import attr
 
-from mi.idk.config import Config
 from mi.core.exceptions import SampleException
-
-from mi.dataset.test.test_parser import ParserUnitTestCase
+from mi.core.log import get_logger
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
-from mi.dataset.parser.WFP_E_file_common import StateKey
-from mi.dataset.parser.flord_l_wfp import FlordLWfpInstrumentParserDataParticleKey
-
+from mi.dataset.driver.flord_l_wfp.resource import RESOURCE_PATH
 from mi.dataset.parser.global_wfp_e_file_parser import GlobalWfpEFileParser
+from mi.dataset.test.test_parser import ParserUnitTestCase
 
-RESOURCE_PATH = os.path.join(Config().base_dir(), 'mi', 'dataset', 'driver',
-                             'flord_l_wfp', 'resource')
+log = get_logger()
 
 
 @attr('UNIT', group='mi')

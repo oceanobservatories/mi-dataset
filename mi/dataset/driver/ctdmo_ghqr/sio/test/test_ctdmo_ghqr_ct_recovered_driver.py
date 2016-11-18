@@ -4,7 +4,7 @@ __author__ = 'mworden'
 from mi.core.log import get_logger
 log = get_logger()
 
-from mi.idk.config import Config
+from mi import MI_BASE_PATH
 
 import unittest
 import os
@@ -26,7 +26,7 @@ class SampleTest(unittest.TestCase):
                                       'resource','SBE37-IM_20141231_2014_12_31.hex')
         particle_data_hdlr_obj = ParticleDataHandler()
 
-        particle_data_hdlr_obj = parse(Config().base_dir(),
+        particle_data_hdlr_obj = parse(MI_BASE_PATH,
                                        sourceFilePath,
                                        particle_data_hdlr_obj)
 

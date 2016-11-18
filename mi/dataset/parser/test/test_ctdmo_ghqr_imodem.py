@@ -11,23 +11,20 @@ import os
 
 from nose.plugins.attrib import attr
 
-from mi.core.log import get_logger
-log = get_logger()
 from mi.core.exceptions import ConfigurationException, UnexpectedDataException
-
-from mi.dataset.test.test_parser import ParserUnitTestCase
+from mi.core.log import get_logger
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
+from mi.dataset.driver.ctdmo_ghqr.imodem.resource import RESOURCE_PATH
 from mi.dataset.parser.ctdmo_ghqr_imodem import CtdmoGhqrImodemParser, \
     CtdmoGhqrImodemParticleClassKey, \
     CtdmoGhqrImodemMetadataTelemeteredDataParticle, \
     CtdmoGhqrImodemMetadataRecoveredDataParticle, \
     CtdmoGhqrImodemInstrumentTelemeteredDataParticle, \
     CtdmoGhqrImodemInstrumentRecoveredDataParticle
+from mi.dataset.test.test_parser import ParserUnitTestCase
 
-from mi.idk.config import Config
-RESOURCE_PATH = os.path.join(Config().base_dir(), 'mi',
-                             'dataset', 'driver', 'ctdmo_ghqr',
-                             'imodem', 'resource')
+log = get_logger()
+
 
 @attr('UNIT', group='mi')
 class CtdmoGhqrImodemParserUnitTestCase(ParserUnitTestCase):

@@ -11,22 +11,15 @@ import os
 
 from nose.plugins.attrib import attr
 
-from mi.core.log import get_logger
-from mi.idk.config import Config
-
 from mi.core.exceptions import SampleException
-
-from mi.dataset.test.test_parser import ParserUnitTestCase
+from mi.core.log import get_logger
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
+from mi.dataset.driver.vel3d_a.mmp_cds.resource import RESOURCE_PATH
 from mi.dataset.parser.mmp_cds_base import MmpCdsParser
+from mi.dataset.test.test_parser import ParserUnitTestCase
+
 log = get_logger()
 
-# Resource path for acmpf ckl mmp cds
-RESOURCE_PATH = os.path.join(Config().base_dir(), 'mi', 'dataset', 'driver', 'vel3d_a', 'mmp_cds', 'resource')
-
-
-# The list of generated tests are the suggested tests, but there may
-# be other tests needed to fully test your parser
 
 @attr('UNIT', group='mi')
 class Vel3dAMmpCdsParserUnitTestCase(ParserUnitTestCase):

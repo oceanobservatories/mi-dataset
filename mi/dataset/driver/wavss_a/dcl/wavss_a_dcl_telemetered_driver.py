@@ -60,7 +60,7 @@ def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     @param particleDataHdlrObj: particle data handler object from Java
     @return: processed particle data handler object
     """
-    config.add_configuration(os.path.join(basePythonCodePath, 'res', 'config', 'mi-logging.yml'))
+    config.add_configuration(os.path.join(basePythonCodePath, 'mi-logging.yml'))
     # no parser config required
     parser_config = {}
     driver = WavssADclTelemeteredDriver(sourceFilePath, particleDataHdlrObj, parser_config)

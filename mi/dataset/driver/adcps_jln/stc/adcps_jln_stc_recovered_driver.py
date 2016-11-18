@@ -21,7 +21,7 @@ from mi.core.versioning import version
 def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
 
     from mi.logging import config
-    config.add_configuration(os.path.join(basePythonCodePath, 'res', 'config', 'mi-logging.yml'))
+    config.add_configuration(os.path.join(basePythonCodePath, 'mi-logging.yml'))
     log = get_logger()
 
     config = {

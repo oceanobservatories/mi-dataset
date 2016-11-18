@@ -7,30 +7,25 @@
 @brief Test code for a vel3d_k_wfp data parser
 """
 
-import ntplib
 import os
-
-from nose.plugins.attrib import attr
 from StringIO import StringIO
 
-from mi.core.log import get_logger
+import ntplib
+from nose.plugins.attrib import attr
 
 from mi.core.exceptions import SampleException, RecoverableSampleException
-from mi.idk.config import Config
-
-from mi.dataset.test.test_parser import ParserUnitTestCase
+from mi.core.log import get_logger
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
-
+from mi.dataset.driver.vel3d_k.wfp.resource import RESOURCE_PATH
 from mi.dataset.parser.vel3d_k_wfp import \
     Vel3dKWfpParser, \
     Vel3dKWfpInstrumentParticle, \
     Vel3dKWfpMetadataParticle, \
     Vel3dKWfpStringParticle
+from mi.dataset.test.test_parser import ParserUnitTestCase
 
 log = get_logger()
 
-RESOURCE_PATH = os.path.join(Config().base_dir(), 'mi', 'dataset', 'driver',
-                             'vel3d_k', 'wfp', 'resource')
 
 FILE_HEADER_SIZE = 4
 DATA_RECORD_SIZE = 90
