@@ -6,16 +6,18 @@
 @author Emily Hahn, Mike Nicoletti, Maria Lutz
 @brief A common parser for the E file type of the wire following profiler
 """
-__author__ = 'Emily Hahn, Mike Nicoletti, Maria Lutz'
-__license__ = 'Apache 2.0'
 
 import re
 
 from mi.core.log import get_logger
-log = get_logger()
 from mi.core.exceptions import SampleException, NotImplementedException, DatasetParserException
 from mi.core.common import BaseEnum
 from mi.dataset.dataset_parser import BufferLoadingParser
+
+__author__ = 'Emily Hahn, Mike Nicoletti, Maria Lutz'
+__license__ = 'Apache 2.0'
+
+log = get_logger()
 
 # This regex will be used to match the flags for one of the two bit patterns:
 #  0001 0000 0000 0000 0001 0001 0000 0000  (regex: \x00\x01\x00{7}\x01\x00\x01\x00{4})
@@ -40,9 +42,11 @@ WFP_E_COASTAL_FLAGS_HEADER_REGEX = b'(\x00\x01\x00{7}\x01\x00\x01\x00{4})([\x00-
 WFP_E_COASTAL_FLAGS_HEADER_MATCHER = re.compile(WFP_E_COASTAL_FLAGS_HEADER_REGEX)
 
 # This regex will be used to match the flags for the global wfp_sio e engineering record:
-# 0001 0000 0000 0001 0000 0000 0000 0001 (regex: \x00\x01\x00{5}\x01\x00{7}\x01)
+# 0001 0000 0000 000P 0000 0000 0000 0001 (regex: \x00\x01\x00{5}[\x01|\x04|\x0c]\x00{7}\x01 - P is x01, x04, or x0c)
+# The 2 bytes at position 6 used to be a boolean indicating the port being used, now it is
+#   either 4 or 12, indicating the port the that data is coming from.  The regex is backward compatible.
 # followed by 8 bytes of variable timestamp data (regex: [\x00-\xff]{8})
-WFP_E_GLOBAL_FLAGS_HEADER_REGEX = b'(\x00\x01\x00{5}\x01\x00{7}\x01)([\x00-\xff]{8})'
+WFP_E_GLOBAL_FLAGS_HEADER_REGEX = b'(\x00\x01\x00{5}[\x01|\x04|\x0c]\x00{7}\x01)([\x00-\xff]{8})'
 WFP_E_GLOBAL_FLAGS_HEADER_MATCHER = re.compile(WFP_E_GLOBAL_FLAGS_HEADER_REGEX)
 
 # Includes indicator/timestamp and the data consists of variable 26 bytes
@@ -99,6 +103,8 @@ class WfpEFileParser(BufferLoadingParser):
         Sort through the raw data to identify new blocks of data that need processing.
         This is needed instead of a regex because blocks are identified by position
         in this binary file.
+
+        :param raw_data: Unprocessed data from the instrument to be parsed.
         """
         data_index = 0
         return_list = []
@@ -126,6 +132,8 @@ class WfpEFileParser(BufferLoadingParser):
     def set_state(self, state_obj):
         """
         initialize the state
+
+        :param state_obj: The state to set.
         """
         log.trace("Attempting to set state to: %s", state_obj)
         if not isinstance(state_obj, dict):
@@ -165,6 +173,8 @@ class WfpEFileParser(BufferLoadingParser):
         determine if this is a engineering or data record and parse
         FLORT and PARAD can copy paste this and insert their own data particle class
         needs extending for WFP_ENG
+
+        :param record: Record to be parsed.
         """
         raise NotImplementedException("parse_record must be implemented")
 
@@ -188,4 +198,3 @@ class WfpEFileParser(BufferLoadingParser):
             self._chunker.get_next_non_data(clean=True)
 
         return result_particles
-
