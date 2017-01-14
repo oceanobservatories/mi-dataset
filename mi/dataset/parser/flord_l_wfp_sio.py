@@ -10,15 +10,11 @@ Release notes:
 Initial Release
 """
 
-__author__ = 'Maria Lutz'
-__license__ = 'Apache 2.0'
-
 import re
 import struct
 import ntplib
 
 from mi.core.log import get_logger
-log = get_logger()
 from mi.core.common import BaseEnum
 from mi.core.instrument.data_particle import DataParticle
 from mi.core.exceptions import UnexpectedDataException
@@ -26,21 +22,29 @@ from mi.dataset.parser.sio_mule_common import SioParser, SIO_HEADER_MATCHER
 from mi.dataset.parser.WFP_E_file_common import HEADER_BYTES, STATUS_BYTES, \
     STATUS_BYTES_AUGMENTED, STATUS_START_MATCHER
 
+__author__ = 'Maria Lutz'
+__license__ = 'Apache 2.0'
+
 # E header regex for global sites
-E_HEADER_REGEX = b'(\x00\x01\x00{5,5}\x01\x00{7,7}\x01)([\x00-\xff]{8,8})'
+E_HEADER_REGEX = b'(\x00\x01\x00{5,5}[\x01|\x04|\x0c]\x00{7,7}\x01)([\x00-\xff]{8,8})'
 E_HEADER_MATCHER = re.compile(E_HEADER_REGEX)
 
 E_GLOBAL_SAMPLE_BYTES = 30
 
+log = get_logger()
+
+
 class DataParticleType(BaseEnum):
     SAMPLE = 'flord_l_wfp_instrument'
+
 
 class FlordLWfpSioDataParticleKey(BaseEnum):
     # params collected for the flord_l_wfp_instrument stream
     RAW_SIGNAL_CHL = 'raw_signal_chl'
-    RAW_SIGNAL_BETA = 'raw_signal_beta' # corresponds to 'ntu' from E file
+    RAW_SIGNAL_BETA = 'raw_signal_beta'  # corresponds to 'ntu' from E file
     RAW_INTERNAL_TEMP = 'raw_internal_temp'
     WFP_TIMESTAMP = 'wfp_timestamp'
+
 
 class FlordLWfpSioDataParticle(DataParticle):
 
@@ -66,6 +70,7 @@ class FlordLWfpSioDataParticle(DataParticle):
 
         return result
 
+
 class FlordLWfpSioParser(SioParser):
 
     def __init__(self,
@@ -73,8 +78,8 @@ class FlordLWfpSioParser(SioParser):
                  stream_handle,
                  exception_callback):
         super(FlordLWfpSioParser, self).__init__(config,
-                                                     stream_handle,
-                                                     exception_callback)
+                                                 stream_handle,
+                                                 exception_callback)
 
         self._result_particles = []
 
@@ -107,7 +112,7 @@ class FlordLWfpSioParser(SioParser):
 
         (timestamp, chunk) = self._chunker.get_next_data()
 
-        while (chunk is not None):
+        while chunk is not None:
             # Parse/match the SIO header
             sio_header_match = SIO_HEADER_MATCHER.match(chunk)
             end_of_header = sio_header_match.end(0)
@@ -131,7 +136,7 @@ class FlordLWfpSioParser(SioParser):
                     self._exception_callback(UnexpectedDataException(
                         message))
 
-            else: # no e header match
+            else:  # no e header match
                 message = "Found unexpected data."
                 log.warn(message)
                 self._exception_callback(UnexpectedDataException(message))
@@ -143,6 +148,8 @@ class FlordLWfpSioParser(SioParser):
     def we_split_function(self, raw_data):
         """
         Sort through the raw data to identify new blocks of data that need processing.
+
+        :param raw_data: Unprocessed data from the instrument to be parsed.
         """
         form_list = []
 
@@ -156,16 +163,14 @@ class FlordLWfpSioParser(SioParser):
         """
         parse_end_point = len(raw_data)
         while parse_end_point > 0:
-
             # look for a status message at postulated message header position
 
-            header_start = STATUS_BYTES_AUGMENTED
             # look for an augmented status
             if STATUS_START_MATCHER.match(raw_data[parse_end_point-STATUS_BYTES_AUGMENTED:parse_end_point]):
                 # A hit for the status message at the augmented offset
                 # NOTE, we don't need the status messages and only deliver a stream of
                 # samples to build_parsed_values
-                parse_end_point = parse_end_point-STATUS_BYTES_AUGMENTED
+                parse_end_point -= STATUS_BYTES_AUGMENTED
 
                 # check if this is an unaugmented status
             elif STATUS_START_MATCHER.match(raw_data[parse_end_point-STATUS_BYTES:parse_end_point]):
@@ -176,7 +181,7 @@ class FlordLWfpSioParser(SioParser):
                 # assume if not a stat that hit above, we have a sample. Mis-parsing will result
                 # in extra bytes at the end and a sample exception.
                 form_list.append((parse_end_point-E_GLOBAL_SAMPLE_BYTES, parse_end_point))
-                parse_end_point = parse_end_point-E_GLOBAL_SAMPLE_BYTES
+                parse_end_point -= E_GLOBAL_SAMPLE_BYTES
 
             # if the remaining bytes are less than data sample bytes, all we might have left is a status sample
             if parse_end_point != 0 and parse_end_point < STATUS_BYTES \
@@ -191,10 +196,3 @@ class FlordLWfpSioParser(SioParser):
         return_list = form_list[::-1]
         log.debug("returning we sieve/split list %s", return_list)
         return return_list
-
- 
-    
-
-    
-    
-   

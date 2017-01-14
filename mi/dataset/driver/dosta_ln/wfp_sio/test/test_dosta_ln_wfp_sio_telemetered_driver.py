@@ -5,11 +5,10 @@ from mi.dataset.driver.flord_l_wfp.sio.resource import RESOURCE_PATH
 
 import unittest
 import os
-from mi.dataset.driver.WFP_ENG.wfp_sio.wfp_eng_wfp_sio_telemetered_driver import parse
-
+from mi.dataset.driver.dosta_ln.wfp_sio.dosta_ln_wfp_sio_telemetered_driver import parse
 from mi.dataset.dataset_driver import ParticleDataHandler
 
-__author__ = 'mworden'
+__author__ = 'mworden, rgelinas'
 
 log = get_logger()
 
