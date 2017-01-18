@@ -17,11 +17,11 @@ from mi.dataset.parser.mmp_cds_base import MmpCdsParser
 from mi.core.versioning import version
 
 
-@version("0.0.2")
-def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
+@version("0.0.3")
+def parse(unused, sourceFilePath, particleDataHdlrObj):
     """
     This is the method called by Uframe
-    :param basePythonCodePath This is the file system location of mi-dataset
+    :param unused
     :param sourceFilePath This is the full path and filename of the file to be parsed
     :param particleDataHdlrObj Java Object to consume the output of the parser
     :return particleDataHdlrObj
@@ -30,7 +30,7 @@ def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     with open(sourceFilePath, 'rb') as stream_handle:
 
         # create and instance of the concrete driver class defined below
-        driver = CtdpfCklMmpCdsRecoveredDriver(basePythonCodePath, stream_handle, particleDataHdlrObj)
+        driver = CtdpfCklMmpCdsRecoveredDriver(unused, stream_handle, particleDataHdlrObj)
         driver.processFileStream()
 
     return particleDataHdlrObj
@@ -52,5 +52,3 @@ class CtdpfCklMmpCdsRecoveredDriver(SimpleDatasetDriver):
         parser = MmpCdsParser(parser_config, stream_handle, self._exception_callback)
 
         return parser
-
-

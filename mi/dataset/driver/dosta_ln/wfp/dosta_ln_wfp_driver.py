@@ -19,8 +19,9 @@ from mi.dataset.dataset_driver import DataSetDriver
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 from mi.core.versioning import version
 
-@version("15.6.0")
-def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
+
+@version("15.6.1")
+def parse(unused, sourceFilePath, particleDataHdlrObj):
 
     log = get_logger()
 

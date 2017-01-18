@@ -16,14 +16,11 @@ from mi.dataset.parser.adcps_jln_stc import AdcpsJlnStcParser, \
     AdcpsJlnStcParticleClassKey
 from mi.core.versioning import version
 
+log = get_logger()
 
-@version("0.0.4")
-def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
 
-    from mi.logging import config
-    config.add_configuration(os.path.join(basePythonCodePath, 'mi-logging.yml'))
-    log = get_logger()
-
+@version("0.0.5")
+def parse(unused, sourceFilePath, particleDataHdlrObj):
     config = {
         DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.adcps_jln_stc',
         DataSetDriverConfigKeys.PARTICLE_CLASS: None,

@@ -48,10 +48,8 @@ class Pco2wAbcDriver:
         return self._particleDataHdlrObj
 
 
-@version("15.6.0")
-def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
-    config.add_configuration(os.path.join(basePythonCodePath, 'mi-logging.yml'))
-
+@version("15.6.1")
+def parse(unused, sourceFilePath, particleDataHdlrObj):
     parser_config = {
         DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.pco2w_abc_particles',
         DataSetDriverConfigKeys.PARTICLE_CLASS: None,
@@ -60,7 +58,7 @@ def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
             Pco2wAbcParticleClassKey.POWER_PARTICLE_CLASS: Pco2wAbcPowerDataParticle,
             Pco2wAbcParticleClassKey.INSTRUMENT_PARTICLE_CLASS: Pco2wAbcInstrumentDataParticle,
             Pco2wAbcParticleClassKey.INSTRUMENT_BLANK_PARTICLE_CLASS: Pco2wAbcInstrumentBlankDataParticle,
-            }
+        }
     }
 
     driver = Pco2wAbcDriver(sourceFilePath, particleDataHdlrObj, parser_config)

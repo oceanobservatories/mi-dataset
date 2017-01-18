@@ -12,14 +12,12 @@ from mi.logging import config
 from mi.dataset.driver.moas.gl.adcpa.adcpa_driver_common import AdcpaDriver
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 from mi.core.versioning import version
+
 __author__ = "Jeff Roy"
 
 
-@version("0.2.0")
-def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
-
-    config.add_configuration(os.path.join(basePythonCodePath, 'mi-logging.yml'))
-
+@version("0.2.1")
+def parse(unused, sourceFilePath, particleDataHdlrObj):
     parser_config = {
         DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT: {
             'velocity': 'VelocityGlider',

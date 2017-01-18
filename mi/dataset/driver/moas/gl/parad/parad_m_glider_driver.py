@@ -14,10 +14,9 @@ from mi.dataset.parser.glider import GliderParser
 
 
 class ParadMDriver:
-
-    def __init__(self, base_python_code_path, source_file_path, particle_data_handler_object, config):
+    def __init__(self, unused, source_file_path, particle_data_handler_object, config):
         
-        self._basePythonCodePath = base_python_code_path
+        self._unused = unused
         self._sourceFilePath = source_file_path
         self._particleDataHdlrObj = particle_data_handler_object
         self._config = config

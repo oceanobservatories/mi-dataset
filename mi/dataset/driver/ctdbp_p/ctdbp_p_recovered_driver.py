@@ -24,11 +24,11 @@ CTDBP_RECOV_CONFIG = {
 }
 
 
-@version("15.6.0")
-def parse(base_python_code_path, source_file_path, particle_data_hdlr_obj):
+@version("15.6.1")
+def parse(unused, source_file_path, particle_data_hdlr_obj):
     """
     This is the method called by Uframe
-    :param base_python_code_path  This is the file system location of mi-dataset
+    :param unused
     :param source_file_path  This is the full path and filename of the file to be parsed
     :param particle_data_hdlr_obj  Consumes the output of the parser
     :return particle_data_hdlr_obj
@@ -37,7 +37,7 @@ def parse(base_python_code_path, source_file_path, particle_data_hdlr_obj):
     with open(source_file_path, 'rU') as stream_handle:
 
         # create an instance of the concrete driver class defined below
-        driver = CtdbpPRecoveredDriver(base_python_code_path, stream_handle, particle_data_hdlr_obj)
+        driver = CtdbpPRecoveredDriver(unused, stream_handle, particle_data_hdlr_obj)
         driver.processFileStream()
 
     return particle_data_hdlr_obj

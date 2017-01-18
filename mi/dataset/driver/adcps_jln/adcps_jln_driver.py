@@ -13,14 +13,11 @@ from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 from mi.dataset.parser.adcp_pd0 import AdcpPd0Parser
 from mi.core.versioning import version
 
+log = get_logger()
 
-@version("0.2.0")
-def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
 
-    from mi.logging import config
-    config.add_configuration(os.path.join(basePythonCodePath, 'mi-logging.yml'))
-    log = get_logger()
-
+@version("0.2.1")
+def parse(unused, sourceFilePath, particleDataHdlrObj):
     config = {
         DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT: {
             'velocity': 'VelocityEarth',

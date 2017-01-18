@@ -17,11 +17,11 @@ from mi.dataset.parser.camhd_a import CamhdAParser
 from mi.core.versioning import version
 
 
-@version("15.6.0")
-def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
+@version("15.6.1")
+def parse(unused, sourceFilePath, particleDataHdlrObj):
     """
     This is the method called by Uframe
-    :param basePythonCodePath This is the file system location of mi-dataset
+    :param unused
     :param sourceFilePath This is the full path and filename of the file to be parsed
     :param particleDataHdlrObj Java Object to consume the output of the parser
     :return particleDataHdlrObj
@@ -29,7 +29,7 @@ def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
 
     with open(sourceFilePath, 'rb') as stream_handle:
 
-        CamhdATelemeteredDriver(basePythonCodePath, stream_handle,
+        CamhdATelemeteredDriver(unused, stream_handle,
                                 particleDataHdlrObj).processFileStream()
 
     return particleDataHdlrObj
@@ -40,9 +40,9 @@ class CamhdATelemeteredDriver(SimpleDatasetDriver):
     The camhd_a driver class extends the SimpleDatasetDriver.
     """
 
-    def __init__(self, basePythonCodePath, stream_handle, particleDataHdlrObj):
+    def __init__(self, unused, stream_handle, particleDataHdlrObj):
 
-        super(CamhdATelemeteredDriver, self).__init__(basePythonCodePath, stream_handle, particleDataHdlrObj)
+        super(CamhdATelemeteredDriver, self).__init__(unused, stream_handle, particleDataHdlrObj)
 
     def _build_parser(self, stream_handle):
 

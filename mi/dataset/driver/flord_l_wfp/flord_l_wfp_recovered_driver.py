@@ -16,14 +16,11 @@ from mi.dataset.dataset_driver import DataSetDriver
 from mi.dataset.parser.global_wfp_e_file_parser import GlobalWfpEFileParser
 from mi.core.versioning import version
 
+log = get_logger()
 
-@version("15.6.0")
-def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
 
-    config.add_configuration(os.path.join(basePythonCodePath, 'mi-logging.yml'))
-
-    log = get_logger()
-
+@version("15.6.1")
+def parse(unused, sourceFilePath, particleDataHdlrObj):
     parser_config = {
         DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.flord_l_wfp',
         DataSetDriverConfigKeys.PARTICLE_CLASS: 'FlordLWfpInstrumentParserDataParticle'

@@ -16,7 +16,7 @@ __author__ = 'Emily Hahn'
 __license__ = 'Apache 2.0'
 
 
-@version("15.7.0")
+@version("15.7.1")
 class WavssADclTelemeteredDriver:
 
     def __init__(self, sourceFilePath, particleDataHdlrObj, parser_config):
@@ -52,15 +52,15 @@ class WavssADclTelemeteredDriver:
         return self._particleDataHdlrObj
 
 
-def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
+def parse(unused, sourceFilePath, particleDataHdlrObj):
     """
     Initialize the parser configuration and build the driver
-    @param basePythonCodePath: python code path from Java
+    @param unused: python code path from Java
     @param sourceFilePath: source file from Java
     @param particleDataHdlrObj: particle data handler object from Java
     @return: processed particle data handler object
     """
-    config.add_configuration(os.path.join(basePythonCodePath, 'mi-logging.yml'))
+
     # no parser config required
     parser_config = {}
     driver = WavssADclTelemeteredDriver(sourceFilePath, particleDataHdlrObj, parser_config)

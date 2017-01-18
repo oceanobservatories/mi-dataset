@@ -6,21 +6,15 @@
 # Copyright 2014 Raytheon Co.
 ##
 
-import os
-
-from mi.logging import config
-
-from mi.dataset.driver.adcpt_acfgm.dcl.pd0.adcpt_acfgm_dcl_pd0_driver_common import AdcptAcfgmDclPd0Driver
-from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 from mi.core.versioning import version
+from mi.dataset.dataset_parser import DataSetDriverConfigKeys
+from mi.dataset.driver.adcpt_acfgm.dcl.pd0.adcpt_acfgm_dcl_pd0_driver_common import AdcptAcfgmDclPd0Driver
+
 __author__ = "Jeff Roy"
 
 
-@version("15.7.0")
-def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
-
-    config.add_configuration(os.path.join(basePythonCodePath, 'mi-logging.yml'))
-
+@version("15.7.1")
+def parse(unused, sourceFilePath, particleDataHdlrObj):
     parser_config = {
         DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT: {
             'velocity': 'Velocity',

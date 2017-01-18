@@ -13,16 +13,12 @@ from mi.dataset.driver.moas.gl.parad.parad_m_glider_driver import ParadMDriver
 from mi.core.versioning import version
 
 
-@version("15.6.0")
-def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
-    
-
-    config.add_configuration(os.path.join(basePythonCodePath, 'mi-logging.yml'))
-    
+@version("15.6.1")
+def parse(unused, sourceFilePath, particleDataHdlrObj):
     parser_config = {
         DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.glider',
         DataSetDriverConfigKeys.PARTICLE_CLASS: 'ParadRecoveredDataParticle',
     }
-    
-    driver = ParadMDriver(basePythonCodePath, sourceFilePath, particleDataHdlrObj, parser_config)
+
+    driver = ParadMDriver(unused, sourceFilePath, particleDataHdlrObj, parser_config)
     return driver.process()

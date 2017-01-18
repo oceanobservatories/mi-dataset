@@ -17,7 +17,7 @@ from mi.core.versioning import version
 __author__ = "mworden"
 
 
-@version("0.0.2")
+@version("0.0.3")
 class FlortDjDclTelemeteredDriver:
     def __init__(self, sourceFilePath, particleDataHdlrObj, parser_config):
         self._sourceFilePath = sourceFilePath
@@ -41,9 +41,7 @@ class FlortDjDclTelemeteredDriver:
         return self._particleDataHdlrObj
 
 
-def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
-    config.add_configuration(os.path.join(basePythonCodePath, 'mi-logging.yml'))
-
+def parse(unused, sourceFilePath, particleDataHdlrObj):
     parser_config = {
         DataSetDriverConfigKeys.PARTICLE_MODULE: "mi.dataset.parser.flort_dj_dcl",
         DataSetDriverConfigKeys.PARTICLE_CLASS: 'FlortDjDclTelemeteredInstrumentDataParticle'

@@ -42,10 +42,8 @@ class SpkirAbjDclTelemeteredDriver:
         return self._particleDataHdlrObj
 
 
-@version("15.6.1")
-def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
-    config.add_configuration(os.path.join(basePythonCodePath, 'mi-logging.yml'))
-
+@version("15.6.2")
+def parse(unused, sourceFilePath, particleDataHdlrObj):
     parser_config = {
         DataSetDriverConfigKeys.PARTICLE_MODULE: "mi.dataset.parser.spkir_abj_dcl",
         DataSetDriverConfigKeys.PARTICLE_CLASS: None

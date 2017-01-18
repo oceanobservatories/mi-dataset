@@ -13,8 +13,8 @@ from mi.dataset.driver.pco2a_a.dcl.pco2a_a_dcl_driver import process, \
 from mi.core.versioning import version
 
 
-@version("15.6.1")
-def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
+@version("15.6.2")
+def parse(unused, sourceFilePath, particleDataHdlrObj):
     process(sourceFilePath, particleDataHdlrObj, RECOVERED_PARTICLE_CLASSES)
 
     return particleDataHdlrObj

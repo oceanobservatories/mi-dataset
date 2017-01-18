@@ -21,11 +21,8 @@ from mi.dataset.parser.pco2w_abc_particles import Pco2wAbcDclMetadataRecoveredDa
 from mi.core.versioning import version
 
 
-@version("15.6.0")
-def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
-
-    config.add_configuration(os.path.join(basePythonCodePath, 'mi-logging.yml'))
-
+@version("15.6.1")
+def parse(unused, sourceFilePath, particleDataHdlrObj):
     parser_config = {
         DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.pco2w_abc_particles',
         DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT: {
@@ -33,7 +30,7 @@ def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
             Pco2wAbcParticleClassKey.POWER_PARTICLE_CLASS: Pco2wAbcDclPowerRecoveredDataParticle,
             Pco2wAbcParticleClassKey.INSTRUMENT_PARTICLE_CLASS: Pco2wAbcDclInstrumentRecoveredDataParticle,
             Pco2wAbcParticleClassKey.INSTRUMENT_BLANK_PARTICLE_CLASS:
-            Pco2wAbcDclInstrumentBlankRecoveredDataParticle,
+                Pco2wAbcDclInstrumentBlankRecoveredDataParticle,
         }
     }
 

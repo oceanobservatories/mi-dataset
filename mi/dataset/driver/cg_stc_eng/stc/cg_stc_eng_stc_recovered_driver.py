@@ -5,24 +5,18 @@
 # Copyright 2014 Raytheon Co.
 ##
 
-import os
-
-from mi.logging import config
-
+from mi.core.versioning import version
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 from mi.dataset.driver.cg_stc_eng.stc.cg_stc_eng_stc_common_driver import CgStcEngDriver
-from mi.core.versioning import version
 
-@version("0.0.2")
-def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
 
-    config.add_configuration(os.path.join(basePythonCodePath, 'mi-logging.yml'))
-
+@version("0.0.3")
+def parse(unused, sourceFilePath, particleDataHdlrObj):
     parser_config = {
         DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.cg_stc_eng_stc',
         DataSetDriverConfigKeys.PARTICLE_CLASS: 'CgStcEngStcParserRecoveredDataParticle'
     }
-    
+
     driver = CgStcEngDriver(sourceFilePath, particleDataHdlrObj, parser_config)
-    
+
     return driver.process()

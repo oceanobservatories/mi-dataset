@@ -16,11 +16,12 @@ from mi.dataset.dataset_driver import SimpleDatasetDriver
 from mi.dataset.parser.sio_eng_sio import SioEngSioParser
 from mi.core.versioning import version
 
-@version("15.6.0")
-def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
+
+@version("15.6.1")
+def parse(unused, sourceFilePath, particleDataHdlrObj):
     """
     This is the method called by Uframe
-    :param basePythonCodePath This is the file system location of mi-dataset
+    :param unused
     :param sourceFilePath This is the full path and filename of the file to be parsed
     :param particleDataHdlrObj Java Object to consume the output of the parser
     :return particleDataHdlrObj
@@ -29,7 +30,7 @@ def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     with open(sourceFilePath, 'rb') as stream_handle:
 
         # create and instance of the concrete driver class defined below
-        driver = SioEngSioRecoveredDriver(basePythonCodePath, stream_handle, particleDataHdlrObj)
+        driver = SioEngSioRecoveredDriver(unused, stream_handle, particleDataHdlrObj)
         driver.processFileStream()
 
     return particleDataHdlrObj

@@ -18,11 +18,8 @@ from mi.core.versioning import version
 __author__ = "Nick Almonte"
 
 
-@version('0.0.2')
-def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
-
-    config.add_configuration(os.path.join(basePythonCodePath, 'mi-logging.yml'))
-
+@version('0.0.3')
+def parse(unused, sourceFilePath, particleDataHdlrObj):
     parser_config = {
         DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.driver.phsen_abcdef.dcl',
         DataSetDriverConfigKeys.PARTICLE_CLASS: None,

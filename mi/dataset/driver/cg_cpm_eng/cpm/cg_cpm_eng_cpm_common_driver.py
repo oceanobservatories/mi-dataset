@@ -10,8 +10,8 @@ from mi.core.log import get_logger
 from mi.dataset.parser.cg_cpm_eng_cpm import CgCpmEngCpmParser
 from mi.dataset.dataset_driver import DataSetDriver
 
-class CgCpmEngCpmDriver:
 
+class CgCpmEngCpmDriver:
     def __init__ (self, sourceFilePath, particleDataHdlrObj, parser_config):
         self._sourceFilePath = sourceFilePath
         self._particleDataHdlrObj = particleDataHdlrObj

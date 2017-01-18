@@ -12,16 +12,14 @@ from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 from mi.dataset.dataset_driver import DataSetDriver, ParticleDataHandler
 from mi.dataset.parser.vel3d_k_wfp import Vel3dKWfpParser
 from mi.core.versioning import version
+
 __author__ = 'kustert'
 
+log = get_logger()
 
-@version("0.2.0")
-def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
 
-    config.add_configuration(os.path.join(basePythonCodePath, 'mi-logging.yml'))
-
-    log = get_logger()
-
+@version("0.2.1")
+def parse(unused, sourceFilePath, particleDataHdlrObj):
     parser_config = {
         DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.vel3d_k_wfp',
         DataSetDriverConfigKeys.PARTICLE_CLASS: ['Vel3dKWfpMetadataParticle',

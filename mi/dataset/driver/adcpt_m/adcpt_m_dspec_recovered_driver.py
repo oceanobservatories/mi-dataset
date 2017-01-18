@@ -11,19 +11,17 @@ Release notes:
 Initial Release
 """
 
-from mi.core.log import get_logger
-
-from mi.dataset.dataset_parser import DataSetDriverConfigKeys
-from mi.dataset.dataset_driver import SimpleDatasetDriver
-from mi.dataset.parser.adcpt_m_dspec import AdcptMDspecParser
 from mi.core.versioning import version
+from mi.dataset.dataset_driver import SimpleDatasetDriver
+from mi.dataset.dataset_parser import DataSetDriverConfigKeys
+from mi.dataset.parser.adcpt_m_dspec import AdcptMDspecParser
 
 
-@version("15.6.0")
-def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
+@version("15.6.1")
+def parse(unused, sourceFilePath, particleDataHdlrObj):
     """
     This is the method called by Uframe
-    :param basePythonCodePath This is the file system location of mi-dataset
+    :param unused
     :param sourceFilePath This is the full path and filename of the file to be parsed
     :param particleDataHdlrObj Java Object to consume the output of the parser
     :return particleDataHdlrObj
@@ -32,7 +30,7 @@ def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     with open(sourceFilePath, 'r') as stream_handle:
 
         # create an instance of the concrete driver class defined below
-        driver = AdcptMDspecRecoveredDriver(basePythonCodePath, stream_handle, particleDataHdlrObj)
+        driver = AdcptMDspecRecoveredDriver(unused, stream_handle, particleDataHdlrObj)
         driver.processFileStream()
 
     return particleDataHdlrObj

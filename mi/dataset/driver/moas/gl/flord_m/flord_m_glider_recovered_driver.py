@@ -15,16 +15,12 @@ from mi.dataset.driver.moas.gl.flord_m.flord_m_glider_driver import FlordMDriver
 from mi.core.versioning import version
 
 
-@version("15.6.0")
-def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
-
-
-    config.add_configuration(os.path.join(basePythonCodePath, 'mi-logging.yml'))
-
+@version("15.6.1")
+def parse(unused, sourceFilePath, particleDataHdlrObj):
     parser_config = {
         DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.glider',
         DataSetDriverConfigKeys.PARTICLE_CLASS: 'FlordRecoveredDataParticle',
     }
 
-    driver = FlordMDriver(basePythonCodePath, sourceFilePath, particleDataHdlrObj, parser_config)
+    driver = FlordMDriver(unused, sourceFilePath, particleDataHdlrObj, parser_config)
     return driver.process()

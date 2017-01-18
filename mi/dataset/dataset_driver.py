@@ -63,10 +63,7 @@ class SimpleDatasetDriver(DataSetDriver):
     the _build_parser method
     """
 
-    def __init__(self, basePythonCodePath, stream_handle, particleDataHdlrObj):
-
-        #configure the mi logger
-        config.add_configuration(os.path.join(basePythonCodePath, 'mi-logging.yml'))
+    def __init__(self, unused, stream_handle, particleDataHdlrObj):
         parser = self._build_parser(stream_handle)
 
         super(SimpleDatasetDriver, self).__init__(parser, particleDataHdlrObj)

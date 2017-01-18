@@ -21,11 +21,11 @@ from mi.dataset.parser.velpt_ab_dcl_particles import VelptAbDclDiagnosticsDataPa
 from mi.core.versioning import version
 
 
-@version("15.7.0")
-def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
+@version("15.7.1")
+def parse(unused, sourceFilePath, particleDataHdlrObj):
     """
     This is the method called by Uframe
-    :param basePythonCodePath This is the file system location of mi-dataset
+    :param unused
     :param sourceFilePath This is the full path and filename of the file to be parsed
     :param particleDataHdlrObj Java Object to consume the output of the parser
     :return particleDataHdlrObj
@@ -34,7 +34,7 @@ def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     with open(sourceFilePath, 'rb') as stream_handle:
 
         # create and instance of the concrete driver class defined below
-        driver = VelptAbDclRecoveredDriver(basePythonCodePath, stream_handle, particleDataHdlrObj)
+        driver = VelptAbDclRecoveredDriver(unused, stream_handle, particleDataHdlrObj)
         driver.processFileStream()
 
     return particleDataHdlrObj

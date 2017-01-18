@@ -41,10 +41,8 @@ class OptaaDjDclRecoveredDriver:
         return self._particleDataHdlrObj
 
 
-@version("15.7.0")
-def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
-    config.add_configuration(os.path.join(basePythonCodePath, 'mi-logging.yml'))
-
+@version("15.7.1")
+def parse(unused, sourceFilePath, particleDataHdlrObj):
     parser_config = {
         DataSetDriverConfigKeys.PARTICLE_MODULE: "mi.dataset.parser.optaa_dj_dcl",
         DataSetDriverConfigKeys.PARTICLE_CLASS: None

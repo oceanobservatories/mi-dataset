@@ -23,11 +23,11 @@ from mi.dataset.parser.parad_j_cspp import \
 from mi.core.versioning import version
 
 
-@version("0.0.2")
-def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
+@version("0.0.3")
+def parse(unused, sourceFilePath, particleDataHdlrObj):
     """
     This is the method called by Uframe
-    :param basePythonCodePath This is the file system location of mi-dataset
+    :param unused
     :param sourceFilePath This is the full path and filename of the file to be parsed
     :param particleDataHdlrObj Java Object to consume the output of the parser
     :return particleDataHdlrObj
@@ -36,7 +36,7 @@ def parse(basePythonCodePath, sourceFilePath, particleDataHdlrObj):
     with open(sourceFilePath, 'rU') as stream_handle:
 
         # create an instance of the concrete driver class defined below
-        driver = ParadJCsppTelemeteredDriver(basePythonCodePath, stream_handle, particleDataHdlrObj)
+        driver = ParadJCsppTelemeteredDriver(unused, stream_handle, particleDataHdlrObj)
 
         driver.processFileStream()
 
