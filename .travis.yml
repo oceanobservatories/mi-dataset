@@ -4,13 +4,13 @@ python:
   - "2.7"
 # command to install dependencies
 install:
+  - pip install -U pip
   - pip install -r requirements.txt
   - pip install codecov
 
 # command to run tests
 script:
-  - nosetests --processes=2 --process-timeout=360 --with-coverage --cover-package=mi mi/dataset/parser
-  - nosetests --processes=2 --process-timeout=360 mi/dataset/driver
+  - nosetests --processes=2 --process-timeout=360 --with-coverage --cover-package=mi mi
 
 notifications:
   slack: ooi-dev:e6WpBt9NHHw1YJjRKuYHkhYr
