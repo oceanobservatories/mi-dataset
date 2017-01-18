@@ -15,7 +15,8 @@ setup(
         "numpy",
         "msgpack-python",
         "ntplib",
-        "matplotlib",
-        "nose"
+        "pandas",
+        "xarray",
+        "click",
     ]
 )
