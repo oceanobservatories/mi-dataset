@@ -14,7 +14,7 @@ from mi.core.versioning import version
 
 
 @version("15.6.2")
-def parse(unused, sourceFilePath, particleDataHdlrObj):
-    process(sourceFilePath, particleDataHdlrObj, RECOVERED_PARTICLE_CLASSES)
+def parse(unused, source_file_path, particle_data_handler):
+    process(source_file_path, particle_data_handler, RECOVERED_PARTICLE_CLASSES)
 
-    return particleDataHdlrObj
+    return particle_data_handler

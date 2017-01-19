@@ -12,15 +12,15 @@ __author__ = 'Rene Gelinas'
 
 
 @version("1.0.1")
-def parse(unused, source_file_path, particle_data_hdlr_obj):
+def parse(unused, source_file_path, particle_data_handler):
     """
     This is the method called by Uframe
     :param unused
     :param source_file_path This is the full path and filename of the file to
     be parsed
-    :param particle_data_hdlr_obj Java Object to consume the output of the
+    :param particle_data_handler Java Object to consume the output of the
     parser
-    :return particleDataHdlrObj
+    :return particle_data_handler
     """
 
     with open(source_file_path, 'rU') as stream_handle:
@@ -28,10 +28,10 @@ def parse(unused, source_file_path, particle_data_hdlr_obj):
         # create and instance of the concrete driver class defined below
         driver = PresfAbcRecoveredDriver(unused,
                                          stream_handle,
-                                         particle_data_hdlr_obj)
+                                         particle_data_handler)
         driver.processFileStream()
 
-    return particle_data_hdlr_obj
+    return particle_data_handler
 
 
 class PresfAbcRecoveredDriver(SimpleDatasetDriver):

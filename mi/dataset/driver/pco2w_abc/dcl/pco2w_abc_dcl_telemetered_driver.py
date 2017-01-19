@@ -22,7 +22,7 @@ from mi.core.versioning import version
 
 
 @version("15.6.1")
-def parse(unused, sourceFilePath, particleDataHdlrObj):
+def parse(unused, source_file_path, particle_data_handler):
     parser_config = {
         DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.pco2w_abc_particles',
         DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT: {
@@ -34,6 +34,6 @@ def parse(unused, sourceFilePath, particleDataHdlrObj):
         }
     }
 
-    driver = Pco2wAbcDclDriver(sourceFilePath, particleDataHdlrObj, parser_config)
+    driver = Pco2wAbcDclDriver(source_file_path, particle_data_handler, parser_config)
 
     return driver.process()

@@ -31,15 +31,15 @@ class DataSetDriver(object):
     which is called directly from uFrame
     """
 
-    def __init__(self, parser, particleDataHdlrObj):
+    def __init__(self, parser, particle_data_handler):
 
         self._parser = parser
-        self._particleDataHdlrObj = particleDataHdlrObj
+        self._particle_data_handler = particle_data_handler
 
     def processFileStream(self):
         """
         Method to extract records from a parser's get_records method
-        and pass them to the Java particleDataHdlrObj passed in from uFrame
+        and pass them to the Java particle_data_handler passed in from uFrame
         """
         while True:
             try:
@@ -50,10 +50,10 @@ class DataSetDriver(object):
                     break
 
                 for record in records:
-                    self._particleDataHdlrObj.addParticleSample(record.data_particle_type(), record.generate())
+                    self._particle_data_handler.addParticleSample(record.data_particle_type(), record.generate())
             except Exception as e:
                 log.error(e)
-                self._particleDataHdlrObj.setParticleDataCaptureFailure()
+                self._particle_data_handler.setParticleDataCaptureFailure()
                 break
 
 
@@ -63,15 +63,15 @@ class SimpleDatasetDriver(DataSetDriver):
     the _build_parser method
     """
 
-    def __init__(self, unused, stream_handle, particleDataHdlrObj):
+    def __init__(self, unused, stream_handle, particle_data_handler):
         parser = self._build_parser(stream_handle)
 
-        super(SimpleDatasetDriver, self).__init__(parser, particleDataHdlrObj)
+        super(SimpleDatasetDriver, self).__init__(parser, particle_data_handler)
 
     def _build_parser(self, stream_handle):
         """
         abstract method that must be provided by derived classes to build a parser
-        :param stream_handle: an open fid created from the sourceFilePath passed in from edex
+        :param stream_handle: an open fid created from the source_file_path passed in from edex
         :return: A properly configured parser object
         """
 
@@ -80,11 +80,11 @@ class SimpleDatasetDriver(DataSetDriver):
     def _exception_callback(self, exception):
         """
         A common exception callback method that can be used by _build_parser methods to
-        map any exceptions coming from the parser back to the edex particleDataHdlrObj
+        map any exceptions coming from the parser back to the edex particle_data_handler
         :param exception: any exception from the parser
         :return: None
         """
 
         log.debug("ERROR: %r", exception)
-        self._particleDataHdlrObj.setParticleDataCaptureFailure()
+        self._particle_data_handler.setParticleDataCaptureFailure()
 

@@ -20,7 +20,7 @@ log = get_logger()
 
 
 @version("0.0.6")
-def parse(unused, sourceFilePath, particleDataHdlrObj):
+def parse(unused, source_file_path, particle_data_handler):
     config = {
         DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.adcps_jln_stc',
         DataSetDriverConfigKeys.PARTICLE_CLASS: None,
@@ -35,14 +35,14 @@ def parse(unused, sourceFilePath, particleDataHdlrObj):
 
     def exception_callback(exception):
         log.debug("ERROR: %r", exception)
-        particleDataHdlrObj.setParticleDataCaptureFailure()
+        particle_data_handler.setParticleDataCaptureFailure()
 
-    with open(sourceFilePath, 'rb') as file_handle:
+    with open(source_file_path, 'rb') as file_handle:
         parser = AdcpsJlnStcParser(config,
                                    file_handle,
                                    exception_callback)
 
-        driver = DataSetDriver(parser, particleDataHdlrObj)
+        driver = DataSetDriver(parser, particle_data_handler)
         driver.processFileStream()
 
-    return particleDataHdlrObj
+    return particle_data_handler

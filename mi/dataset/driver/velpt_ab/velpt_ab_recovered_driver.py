@@ -20,22 +20,22 @@ from mi.core.versioning import version
 
 
 @version("15.7.1")
-def parse(unused, sourceFilePath, particleDataHdlrObj):
+def parse(unused, source_file_path, particle_data_handler):
     """
     This is the method called by Uframe
     :param unused
-    :param sourceFilePath This is the full path and filename of the file to be parsed
-    :param particleDataHdlrObj Java Object to consume the output of the parser
-    :return particleDataHdlrObj
+    :param source_file_path This is the full path and filename of the file to be parsed
+    :param particle_data_handler Java Object to consume the output of the parser
+    :return particle_data_handler
     """
 
-    with open(sourceFilePath, 'rb') as stream_handle:
+    with open(source_file_path, 'rb') as stream_handle:
 
         # create and instance of the concrete driver class defined below
-        driver = VelptAbRecoveredDriver(unused, stream_handle, particleDataHdlrObj)
+        driver = VelptAbRecoveredDriver(unused, stream_handle, particle_data_handler)
         driver.processFileStream()
 
-    return particleDataHdlrObj
+    return particle_data_handler
 
 
 class VelptAbRecoveredDriver(SimpleDatasetDriver):

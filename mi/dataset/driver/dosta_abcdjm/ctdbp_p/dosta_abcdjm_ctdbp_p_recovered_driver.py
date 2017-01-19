@@ -25,22 +25,22 @@ DOSTA_RECOV_CONFIG = {
 
 
 @version("15.6.1")
-def parse(unused, source_file_path, particle_data_hdlr_obj):
+def parse(unused, source_file_path, particle_data_handler):
     """
     This is the method called by Uframe
     :param unused
     :param source_file_path  This is the full path and filename of the file to be parsed
-    :param particle_data_hdlr_obj  Consumes the output of the parser
-    :return particle_data_hdlr_obj
+    :param particle_data_handler  Consumes the output of the parser
+    :return particle_data_handler
     """
 
     with open(source_file_path, 'rU') as stream_handle:
 
         # create an instance of the concrete driver class defined below
-        driver = DostaAbcdjmCtdbpPRecoveredDriver(unused, stream_handle, particle_data_hdlr_obj)
+        driver = DostaAbcdjmCtdbpPRecoveredDriver(unused, stream_handle, particle_data_handler)
         driver.processFileStream()
 
-    return particle_data_hdlr_obj
+    return particle_data_handler
 
 
 class DostaAbcdjmCtdbpPRecoveredDriver(SimpleDatasetDriver):

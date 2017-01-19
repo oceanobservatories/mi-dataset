@@ -16,16 +16,16 @@ log = get_logger()
 
 
 @version("15.6.1")
-def parse(unused, sourceFilePath, particleDataHdlrObj):
+def parse(unused, source_file_path, particle_data_handler):
 
-    with open(sourceFilePath, "r") as stream_handle:
+    with open(source_file_path, "r") as stream_handle:
 
         def exception_callback(exception):
                 log.debug("Exception: %s", exception)
-                particleDataHdlrObj.setParticleDataCaptureFailure()
+                particle_data_handler.setParticleDataCaptureFailure()
 
         parser = DeepProfilerParser({}, stream_handle, exception_callback)
-        driver = DataSetDriver(parser, particleDataHdlrObj)
+        driver = DataSetDriver(parser, particle_data_handler)
         driver.processFileStream()
 
-    return particleDataHdlrObj
+    return particle_data_handler

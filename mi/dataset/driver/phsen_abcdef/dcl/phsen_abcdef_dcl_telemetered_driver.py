@@ -21,7 +21,7 @@ __author__ = "Nick Almonte"
 
 
 @version("0.0.3")
-def parse(unused, sourceFilePath, particleDataHdlrObj):
+def parse(unused, source_file_path, particle_data_handler):
     parser_config = {
         DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.driver.phsen_abcdef.dcl',
         DataSetDriverConfigKeys.PARTICLE_CLASS: None,
@@ -31,6 +31,6 @@ def parse(unused, sourceFilePath, particleDataHdlrObj):
         }
     }
 
-    driver = PhsenAbcdefDclDriver(sourceFilePath, particleDataHdlrObj, parser_config)
+    driver = PhsenAbcdefDclDriver(source_file_path, particle_data_handler, parser_config)
 
     return driver.process()

@@ -15,7 +15,7 @@ from mi.dataset.parser.mopak_o_dcl import \
 
 
 @version("0.0.4")
-def parse(unused, sourceFilePath, particleDataHdlrObj):
+def parse(unused, source_file_path, particle_data_handler):
     parser_config = {
         DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.mopak_o_dcl',
         DataSetDriverConfigKeys.PARTICLE_CLASS: None,
@@ -27,6 +27,6 @@ def parse(unused, sourceFilePath, particleDataHdlrObj):
              MopakParticleClassType.RATE_PARTICLE_CLASS: MopakODclRateParserRecoveredDataParticle}
     }
 
-    driver = MopakDriver(sourceFilePath, particleDataHdlrObj, parser_config)
+    driver = MopakDriver(source_file_path, particle_data_handler, parser_config)
 
     return driver.process()

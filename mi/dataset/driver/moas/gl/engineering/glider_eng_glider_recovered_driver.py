@@ -19,12 +19,12 @@ __author__ = "ehahn"
 
 
 @version("15.7.1")
-def parse(unused, sourceFilePath, particleDataHdlrObj):
+def parse(unused, source_file_path, particle_data_handler):
     """
     Initialize the parser configuration and build the driver
     @param unused - python code path from Java
-    @param sourceFilePath - source file from Java
-    @param particleDataHdlrObj - particle data handler object from Java
+    @param source_file_path - source file from Java
+    @param particle_data_handler - particle data handler object from Java
     """
 
     parser_config = {
@@ -37,6 +37,6 @@ def parse(unused, sourceFilePath, particleDataHdlrObj):
         }
     }
 
-    driver = GliderEngineeringDriver(sourceFilePath, particleDataHdlrObj, parser_config)
+    driver = GliderEngineeringDriver(source_file_path, particle_data_handler, parser_config)
 
     return driver.process()

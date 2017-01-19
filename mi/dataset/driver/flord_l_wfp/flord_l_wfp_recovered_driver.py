@@ -20,7 +20,7 @@ log = get_logger()
 
 
 @version("15.6.1")
-def parse(unused, sourceFilePath, particleDataHdlrObj):
+def parse(unused, source_file_path, particle_data_handler):
     parser_config = {
         DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.flord_l_wfp',
         DataSetDriverConfigKeys.PARTICLE_CLASS: 'FlordLWfpInstrumentParserDataParticle'
@@ -28,16 +28,16 @@ def parse(unused, sourceFilePath, particleDataHdlrObj):
 
     def exception_callback(exception):
         log.debug("ERROR: %r", exception)
-        particleDataHdlrObj.setParticleDataCaptureFailure()
+        particle_data_handler.setParticleDataCaptureFailure()
 
-    with open(sourceFilePath, 'r') as stream_handle:
+    with open(source_file_path, 'r') as stream_handle:
         parser = GlobalWfpEFileParser(parser_config, None,
                                       stream_handle,
                                       lambda state, ingested: None,
                                       lambda data: log.trace("Found data: %s", data),
                                       exception_callback)
 
-        driver = DataSetDriver(parser, particleDataHdlrObj)
+        driver = DataSetDriver(parser, particle_data_handler)
         driver.processFileStream()
 
-    return particleDataHdlrObj
+    return particle_data_handler

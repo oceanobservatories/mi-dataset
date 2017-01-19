@@ -14,25 +14,25 @@ from mi.dataset.parser.adcp_pd0 import AdcpPd0Parser
 
 
 class AdcpaDriver:
-    def __init__(self, sourceFilePath, particleDataHdlrObj, parser_config):
+    def __init__(self, source_file_path, particle_data_handler, parser_config):
 
-        self._sourceFilePath = sourceFilePath
-        self._particleDataHdlrObj = particleDataHdlrObj
+        self._source_file_path = source_file_path
+        self._particle_data_handler = particle_data_handler
         self._parser_config = parser_config
 
     def process(self):
 
-        with open(self._sourceFilePath, "rb") as file_handle:
+        with open(self._source_file_path, "rb") as file_handle:
 
             def exception_callback(exception):
                 log.debug("Exception: %s", exception)
-                self._particleDataHdlrObj.setParticleDataCaptureFailure()
+                self._particle_data_handler.setParticleDataCaptureFailure()
 
             parser = AdcpPd0Parser(self._parser_config, file_handle, exception_callback)
 
-            driver = DataSetDriver(parser, self._particleDataHdlrObj)
+            driver = DataSetDriver(parser, self._particle_data_handler)
 
             driver.processFileStream()
 
-        return self._particleDataHdlrObj
+        return self._particle_data_handler
 

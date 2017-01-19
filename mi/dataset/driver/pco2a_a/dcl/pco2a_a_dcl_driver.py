@@ -35,7 +35,7 @@ RECOVERED_PARTICLE_CLASSES = {
 }
 
 
-def process(source_file_path, particle_data_hdlr_obj, particle_classes):
+def process(source_file_path, particle_data_handler, particle_classes):
 
     with open(source_file_path, "r") as stream_handle:
         parser = Pco2aADclParser(
@@ -43,7 +43,7 @@ def process(source_file_path, particle_data_hdlr_obj, particle_classes):
              DataSetDriverConfigKeys.PARTICLE_CLASS: None,
              DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT: particle_classes},
             stream_handle,
-            lambda ex: particle_data_hdlr_obj.setParticleDataCaptureFailure()
+            lambda ex: particle_data_handler.setParticleDataCaptureFailure()
         )
-        driver = DataSetDriver(parser, particle_data_hdlr_obj)
+        driver = DataSetDriver(parser, particle_data_handler)
         driver.processFileStream()

@@ -21,15 +21,15 @@ from mi.core.versioning import version
 
 
 @version("15.6.1")
-def parse(unused, sourceFilePath, particleDataHdlrObj):
+def parse(unused, source_file_path, particle_data_handler):
 
     log = get_logger()
 
-    with open(sourceFilePath, "r") as stream_handle:
+    with open(source_file_path, "r") as stream_handle:
 
         def exception_callback(exception):
                 log.debug("Exception: %s", exception)
-                particleDataHdlrObj.setParticleDataCaptureFailure()
+                particle_data_handler.setParticleDataCaptureFailure()
 
         parser = DostaLnWfpParser(
             {DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.dosta_ln_wfp',
@@ -40,7 +40,7 @@ def parse(unused, sourceFilePath, particleDataHdlrObj):
              lambda data: None,
              exception_callback
         )
-        driver = DataSetDriver(parser, particleDataHdlrObj)
+        driver = DataSetDriver(parser, particle_data_handler)
         driver.processFileStream()
-    return particleDataHdlrObj
+    return particle_data_handler
 

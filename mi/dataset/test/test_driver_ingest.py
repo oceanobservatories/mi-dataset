@@ -7,16 +7,14 @@ The purpose is to provide a quick way to assess a driver & parsers compatibility
 with data files
 """
 
-from mi import MI_BASE_PATH
-from mi.dataset.dataset_driver import ParticleDataHandler
-
-import os
 import json
+import os
 
 from mi.core.log import get_logger
-log = get_logger()
+from mi.dataset.dataset_driver import ParticleDataHandler
 
 __author__ = 'jroy'
+log = get_logger()
 
 
 def parse_file(driver_path, file_path, output_dir=None):
@@ -58,13 +56,13 @@ def parse_file(driver_path, file_path, output_dir=None):
     else:
         output_path = os.path.join(dir_path, output_file)
 
-    particle_data_hdlr_obj = ParticleDataHandler()
+    particle_data_handler = ParticleDataHandler()
 
-    driver_module.parse(MI_BASE_PATH, file_path, particle_data_hdlr_obj)
+    driver_module.parse(None, file_path, particle_data_handler)
 
-    stream_output = particle_data_hdlr_obj._samples
+    stream_output = particle_data_handler._samples
 
-    errors = particle_data_hdlr_obj._failure
+    errors = particle_data_handler._failure
     if errors:
         log.debug('Errors during ingest test')
 

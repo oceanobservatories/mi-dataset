@@ -15,12 +15,12 @@ from mi.dataset.driver.adcpt_acfgm.dcl.pd8.adcpt_acfgm_dcl_pd8_driver_common imp
 
 
 @version("15.6.1")
-def parse(unused, sourceFilePath, particleDataHdlrObj):
+def parse(unused, source_file_path, particle_data_handler):
     parser_config = {
         DataSetDriverConfigKeys.PARTICLE_MODULE: MODULE_NAME,
         DataSetDriverConfigKeys.PARTICLE_CLASS: ADCPT_ACFGM_DCL_PD8_RECOVERED_PARTICLE_CLASS,
     }
 
-    driver = AdcptAcfgmDclPd8Driver(sourceFilePath, particleDataHdlrObj, parser_config)
+    driver = AdcptAcfgmDclPd8Driver(source_file_path, particle_data_handler, parser_config)
 
     return driver.process()

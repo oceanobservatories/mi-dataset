@@ -20,34 +20,34 @@ __author__ = "mworden"
 
 @version("0.0.3")
 class FlortDjDclRecoveredDriver:
-    def __init__(self, sourceFilePath, particleDataHdlrObj, parser_config):
-        self._sourceFilePath = sourceFilePath
-        self._particleDataHdlrObj = particleDataHdlrObj
+    def __init__(self, source_file_path, particle_data_handler, parser_config):
+        self._source_file_path = source_file_path
+        self._particle_data_handler = particle_data_handler
         self._parser_config = parser_config
 
     def process(self):
         log = get_logger()
 
-        with open(self._sourceFilePath, "r") as file_handle:
+        with open(self._source_file_path, "r") as file_handle:
             def exception_callback(exception):
                 log.debug("Exception: %s", exception)
-                self._particleDataHdlrObj.setParticleDataCaptureFailure()
+                self._particle_data_handler.setParticleDataCaptureFailure()
 
             parser = FlortDjDclParser(self._parser_config, file_handle, exception_callback)
 
-            driver = DataSetDriver(parser, self._particleDataHdlrObj)
+            driver = DataSetDriver(parser, self._particle_data_handler)
 
             driver.processFileStream()
 
-        return self._particleDataHdlrObj
+        return self._particle_data_handler
 
 
-def parse(unused, sourceFilePath, particleDataHdlrObj):
+def parse(unused, source_file_path, particle_data_handler):
     parser_config = {
         DataSetDriverConfigKeys.PARTICLE_MODULE: "mi.dataset.parser.flort_dj_dcl",
         DataSetDriverConfigKeys.PARTICLE_CLASS: 'FlortDjDclRecoveredInstrumentDataParticle'
     }
 
-    driver = FlortDjDclRecoveredDriver(sourceFilePath, particleDataHdlrObj, parser_config)
+    driver = FlortDjDclRecoveredDriver(source_file_path, particle_data_handler, parser_config)
 
     return driver.process()
