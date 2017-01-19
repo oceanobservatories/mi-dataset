@@ -16,19 +16,19 @@ log = get_logger()
 
 
 class AdcptAcfgmDclPd0Driver:
-    def __init__(self, sourceFilePath, particleDataHdlrObj, parser_config):
+    def __init__(self, source_file_path, particle_data_handler, parser_config):
 
-        self._sourceFilePath = sourceFilePath
-        self._particleDataHdlrObj = particleDataHdlrObj
+        self._source_file_path = source_file_path
+        self._particle_data_handler = particle_data_handler
         self._parser_config = parser_config
 
     def process(self):
 
-        with open(self._sourceFilePath, "r") as file_handle:
+        with open(self._source_file_path, "r") as file_handle:
 
             def exception_callback(exception):
                 log.debug("Exception: %s", exception)
-                self._particleDataHdlrObj.setParticleDataCaptureFailure()
+                self._particle_data_handler.setParticleDataCaptureFailure()
 
             parser = AdcptAcfgmDclPd0Parser(self._parser_config,
                                             file_handle,
@@ -36,8 +36,8 @@ class AdcptAcfgmDclPd0Driver:
                                             lambda state, ingested: None,
                                             lambda data: None)
 
-            driver = DataSetDriver(parser, self._particleDataHdlrObj)
+            driver = DataSetDriver(parser, self._particle_data_handler)
 
             driver.processFileStream()
 
-        return self._particleDataHdlrObj
+        return self._particle_data_handler

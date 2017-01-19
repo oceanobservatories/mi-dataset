@@ -11,12 +11,12 @@ from mi.dataset.driver.cg_cpm_eng.cpm.cg_cpm_eng_cpm_common_driver import CgCpmE
 
 
 @version("15.7.1")
-def parse(unused, sourceFilePath, particleDataHdlrObj):
+def parse(unused, source_file_path, particle_data_handler):
     parser_config = {
         DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.cg_cpm_eng_cpm',
         DataSetDriverConfigKeys.PARTICLE_CLASS: 'CgCpmEngCpmRecoveredDataParticle'
     }
 
-    driver = CgCpmEngCpmDriver(sourceFilePath, particleDataHdlrObj, parser_config)
+    driver = CgCpmEngCpmDriver(source_file_path, particle_data_handler, parser_config)
 
     return driver.process()

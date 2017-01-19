@@ -12,16 +12,16 @@ from mi.dataset.parser.glider import GliderEngineeringParser
 
 class GliderEngineeringDriver:
 
-    def __init__(self, sourceFilePath, particleDataHdlrObj, parser_config):
+    def __init__(self, source_file_path, particle_data_handler, parser_config):
         """
         Initialize glider engineering driver
-        @param sourceFilePath - source file from Java
-        @param particleDataHdlrObj - particle data handler object from Java
+        @param source_file_path - source file from Java
+        @param particle_data_handler - particle data handler object from Java
         @param parser_config - parser configuration dictionary
         """
 
-        self._source_file_path = sourceFilePath
-        self._particle_data_hdlr_obj = particleDataHdlrObj
+        self._source_file_path = source_file_path
+        self._particle_data_handler = particle_data_handler
         self._parser_config = parser_config
 
     def process(self):
@@ -33,7 +33,7 @@ class GliderEngineeringDriver:
         with open(self._source_file_path, "rb") as file_handle:
             def exception_callback(exception):
                 log.debug("Exception %s", exception)
-                self._particle_data_hdlr_obj.setParticleDataCaptureFailure()
+                self._particle_data_handler.setParticleDataCaptureFailure()
 
             # essentially comment out the state and data callbacks by inserting
             # lambda with None functions, so it doesn't complain about not being
@@ -43,9 +43,9 @@ class GliderEngineeringDriver:
                                              exception_callback)
 
             # instantiate the driver
-            driver = DataSetDriver(parser, self._particle_data_hdlr_obj)
+            driver = DataSetDriver(parser, self._particle_data_handler)
             # start the driver processing the file
             driver.processFileStream()
 
-        return self._particle_data_hdlr_obj
+        return self._particle_data_handler
 

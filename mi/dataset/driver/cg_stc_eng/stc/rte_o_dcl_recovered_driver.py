@@ -12,12 +12,12 @@ __author__ = "jpadula"
 
 
 @version("0.0.4")
-def parse(unused, sourceFilePath, particleDataHdlrObj):
+def parse(unused, source_file_path, particle_data_handler):
     parser_config = {
         DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.rte_o_dcl',
         DataSetDriverConfigKeys.PARTICLE_CLASS: 'RteODclParserRecoveredDataParticle'
     }
 
-    driver = RteODclDriver(sourceFilePath, particleDataHdlrObj, parser_config)
+    driver = RteODclDriver(source_file_path, particle_data_handler, parser_config)
 
     return driver.process()

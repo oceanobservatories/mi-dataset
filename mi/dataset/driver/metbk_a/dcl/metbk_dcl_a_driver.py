@@ -18,14 +18,14 @@ RECOVERED_PARTICLE_CLASS = 'MetbkADclRecoveredInstrumentDataParticle'
 TELEMETERED_PARTICLE_CLASS = 'MetbkADclTelemeteredInstrumentDataParticle'
 
 
-def process(source_file_path, particle_data_hdlr_obj, particle_class):
+def process(source_file_path, particle_data_handler, particle_class):
 
     with open(source_file_path, "r") as stream_handle:
         parser = MetbkADclParser(
             {DataSetDriverConfigKeys.PARTICLE_MODULE: MODULE_NAME,
              DataSetDriverConfigKeys.PARTICLE_CLASS: particle_class},
             stream_handle,
-            lambda ex: particle_data_hdlr_obj.setParticleDataCaptureFailure()
+            lambda ex: particle_data_handler.setParticleDataCaptureFailure()
         )
-        driver = DataSetDriver(parser, particle_data_hdlr_obj)
+        driver = DataSetDriver(parser, particle_data_handler)
         driver.processFileStream()

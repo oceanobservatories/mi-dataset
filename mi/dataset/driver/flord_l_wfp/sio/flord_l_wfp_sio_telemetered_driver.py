@@ -14,14 +14,14 @@ from mi.core.versioning import version
 
 
 @version("15.6.1")
-def parse(unused, sourceFilePath, particleDataHdlrObj):
+def parse(unused, source_file_path, particle_data_handler):
 
-    with open(sourceFilePath, 'rb') as stream_handle:
+    with open(source_file_path, 'rb') as stream_handle:
 
-        driver = FlordLWfpSioTelemeteredDriver(unused, stream_handle, particleDataHdlrObj)
+        driver = FlordLWfpSioTelemeteredDriver(unused, stream_handle, particle_data_handler)
         driver.processFileStream()
 
-    return particleDataHdlrObj
+    return particle_data_handler
 
 
 class FlordLWfpSioTelemeteredDriver(SimpleDatasetDriver):

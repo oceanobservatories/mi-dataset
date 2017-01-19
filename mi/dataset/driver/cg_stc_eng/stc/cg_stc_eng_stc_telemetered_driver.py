@@ -11,12 +11,12 @@ from mi.dataset.driver.cg_stc_eng.stc.cg_stc_eng_stc_common_driver import CgStcE
 
 
 @version("0.0.3")
-def parse(unused, sourceFilePath, particleDataHdlrObj):
+def parse(unused, source_file_path, particle_data_handler):
     parser_config = {
         DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.cg_stc_eng_stc',
         DataSetDriverConfigKeys.PARTICLE_CLASS: 'CgStcEngStcParserDataParticle'
     }
 
-    driver = CgStcEngDriver(sourceFilePath, particleDataHdlrObj, parser_config)
+    driver = CgStcEngDriver(source_file_path, particle_data_handler, parser_config)
 
     return driver.process()

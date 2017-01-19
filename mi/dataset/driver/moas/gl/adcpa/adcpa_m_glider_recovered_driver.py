@@ -17,7 +17,7 @@ __author__ = "Jeff Roy"
 
 
 @version("0.2.1")
-def parse(unused, sourceFilePath, particleDataHdlrObj):
+def parse(unused, source_file_path, particle_data_handler):
     parser_config = {
         DataSetDriverConfigKeys.PARTICLE_CLASSES_DICT: {
             'velocity': 'VelocityGlider',
@@ -28,6 +28,6 @@ def parse(unused, sourceFilePath, particleDataHdlrObj):
         }
     }
 
-    driver = AdcpaDriver(sourceFilePath, particleDataHdlrObj, parser_config)
+    driver = AdcpaDriver(source_file_path, particle_data_handler, parser_config)
 
     return driver.process()

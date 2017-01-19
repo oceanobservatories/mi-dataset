@@ -15,7 +15,7 @@ log = get_logger()
 
 
 @version("0.0.4")
-def parse(unused, sourceFilePath, particleDataHdlrObj):
+def parse(unused, source_file_path, particle_data_handler):
     parser_config = {
         DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.parad_k_stc_imodem',
         DataSetDriverConfigKeys.PARTICLE_CLASS: 'Parad_k_stc_imodemDataParticle'
@@ -23,9 +23,9 @@ def parse(unused, sourceFilePath, particleDataHdlrObj):
 
     def exception_callback(exception):
         log.debug("ERROR: %r", exception)
-        particleDataHdlrObj.setParticleDataCaptureFailure()
+        particle_data_handler.setParticleDataCaptureFailure()
 
-    with open(sourceFilePath, 'rb') as stream_handle:
+    with open(source_file_path, 'rb') as stream_handle:
         parser = Parad_k_stc_imodemParser(parser_config,
                                           None,
                                           stream_handle,
@@ -33,8 +33,8 @@ def parse(unused, sourceFilePath, particleDataHdlrObj):
                                           lambda data: None,
                                           exception_callback)
 
-        driver = DataSetDriver(parser, particleDataHdlrObj)
+        driver = DataSetDriver(parser, particle_data_handler)
 
         driver.processFileStream()
 
-    return particleDataHdlrObj
+    return particle_data_handler

@@ -15,7 +15,7 @@ from mi.dataset.parser.wfp_eng__stc_imodem_particles import WfpEngStcImodemStatu
 
 
 @version("0.0.2")
-def parse(unused, sourceFilePath, particleDataHdlrObj):
+def parse(unused, source_file_path, particle_data_handler):
     parser_config = {
         DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.driver.WFP_ENG.STC_IMODEM',
         DataSetDriverConfigKeys.PARTICLE_CLASS: None,
@@ -26,6 +26,6 @@ def parse(unused, sourceFilePath, particleDataHdlrObj):
         }
     }
 
-    driver = WfpEngStcImodemDriver(sourceFilePath, particleDataHdlrObj, parser_config)
+    driver = WfpEngStcImodemDriver(source_file_path, particle_data_handler, parser_config)
 
     return driver.process()
