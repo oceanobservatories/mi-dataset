@@ -14,7 +14,14 @@ from nose.plugins.attrib import attr
 from mi.core.exceptions import ConfigurationException
 from mi.core.log import get_logger
 
-from mi.dataset.test.test_parser import ParserUnitTestCase, BASE_RESOURCE_PATH
+from mi.dataset.test.test_parser import ParserUnitTestCase
+from mi.dataset.driver.moas.gl.ctdgv.resource import RESOURCE_PATH as CTDGV_RESOURCE_PATH
+from mi.dataset.driver.moas.gl.dosta.resource import RESOURCE_PATH as DOSTA_RESOURCE_PATH
+from mi.dataset.driver.moas.gl.engineering.resource import RESOURCE_PATH as ENG_RESOURCE_PATH
+from mi.dataset.driver.moas.gl.flord_m.resource import RESOURCE_PATH as FLORD_M_RESOURCE_PATH
+from mi.dataset.driver.moas.gl.flort_m.resource import RESOURCE_PATH as FLORT_M_RESOURCE_PATH
+from mi.dataset.driver.moas.gl.flort_o.resource import RESOURCE_PATH as FLORT_O_RESOURCE_PATH
+from mi.dataset.driver.moas.gl.parad.resource import RESOURCE_PATH as PARAD_RESOURCE_PATH
 from mi.dataset.dataset_parser import DataSetDriverConfigKeys
 from mi.dataset.parser.glider import GliderParser, GliderEngineeringParser
 from mi.dataset.parser.glider import CtdgvRecoveredDataParticle, CtdgvTelemeteredDataParticle, CtdgvParticleKey
@@ -23,6 +30,7 @@ from mi.dataset.parser.glider import DostaRecoveredDataParticle, DostaRecoveredP
 from mi.dataset.parser.glider import FlordRecoveredDataParticle, FlordTelemeteredDataParticle, FlordParticleKey
 from mi.dataset.parser.glider import FlortRecoveredDataParticle, FlortRecoveredParticleKey
 from mi.dataset.parser.glider import FlortTelemeteredDataParticle, FlortTelemeteredParticleKey
+from mi.dataset.parser.glider import FlortODataParticle, FlortODataParticleKey
 from mi.dataset.parser.glider import ParadRecoveredDataParticle, ParadRecoveredParticleKey
 from mi.dataset.parser.glider import ParadTelemeteredDataParticle, ParadTelemeteredParticleKey
 from mi.dataset.parser.glider import EngineeringTelemeteredParticleKey
@@ -131,6 +139,24 @@ c_air_pump c_ballast_pumped c_battpos c_battroll c_bsipar_on c_de_oil_vol c_dvl_
 enum cc in rad sec cc sec sec rad sec rad sec lat lon bool m bool bool enum volts m m/s bool bool bool bool timestamp m bool bool m/s m/s m/s sec m/s sec sec sec cc joules cc/sec volts volts in in/sec rad rad/sec bool bool nodim nodim nodim s bool bool bool amp-hrs nodim amp-hrs amp nodim nodim m m/s m/s m/s enum m/s bool enum m nodim nodim nodim nodim cc volts nodim nodim nodim nodim nodim nodim nodim Mbytes Mbytes m m s sec sec m m sec m m m m m m m m sec rad m/s m/s rad/sec cc volts volts cc/sec bytes m m m enum rad lat lon lat lon lat lon rad nodim bool m m m/s enum lat lat nodim byte byte byte byte nodim byte m m rad/sec rad rad-sec rad/sec rad m/s m/s nodim nodim bool enum nodim bool nodim nodim enum bool bool bool bool bool bool bool bool bool bool sec lat bool volts volts bool % nodim mins mins lon bytes bytes m/s m/s timestamp nodim rad joules rad sec timestamp bar volts volts volts m bool rad s bool bool nodim timestamp enum bytes m/s bool bool nodim nodim nodim nodim nodim nodim sec bool uT ms ms ms uT % % % bar volts cc bool enum enum enum s kjoules km nodim days inHg degC bool c m/s m/s m/s S/m m/s m/s m bar degC m/s m/s enum m m lat lon sec bool ue/m^2sec volts volts degc timestamp bool timestamp m sec m m m mm/s mm/s bool mm/s mm/s bool mm/s mm/s mm/s mm/s mm/s mm/s bool nodim nodim bool deg deg deg nodim m ppt m/s degc timestamp m sec m m m mm/s mm/s bool mm/s mm/s bool mm/s mm/s mm/s mm/s mm/s mm/s bool nodim nodim nodim nodim nodim ppb nodim nodim ug/l bool nodim timestamp mbytes mbytes bytes bytes bytes sec timestamp bool bytes bool nodim nodim nodim timestamp secs nodim bool enum s/m bar degc nodim nodim seconds 1 1 1 1 1 ug/L 1
 1 4 4 4 4 4 4 4 4 4 4 4 8 8 1 4 1 1 1 4 4 4 1 1 1 1 8 4 1 1 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 1 1 4 4 4 4 1 1 1 4 4 4 4 4 4 4 4 4 4 1 4 1 1 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 1 4 8 8 8 8 8 8 4 4 1 4 4 4 1 8 8 4 1 1 1 1 4 1 4 4 4 4 4 4 4 4 4 4 4 1 1 4 1 4 4 1 1 1 1 1 1 1 1 1 1 1 4 8 1 4 4 1 4 4 4 4 8 4 4 4 4 8 4 4 4 4 4 8 4 4 4 4 4 1 4 4 1 1 4 8 1 4 4 1 1 4 4 4 4 4 4 4 1 4 4 4 4 4 4 4 4 4 4 4 1 1 1 1 4 4 4 4 4 4 4 1 4 4 4 4 4 4 4 4 4 4 4 4 1 4 4 8 8 4 1 4 4 4 4 8 1 8 4 4 4 4 4 4 4 1 4 4 1 4 4 4 4 4 4 1 4 4 1 4 4 4 4 4 4 4 4 8 4 4 4 4 4 4 4 1 4 4 1 4 4 4 4 4 4 1 4 4 4 4 4 4 4 4 4 1 4 8 4 4 4 4 4 4 8 1 4 1 4 4 4 8 4 4 1 1 4 4 4 4 4 4 4 4 4 4 4 4 4 """
 
+HEADER6 = """dbd_label: DBD_ASC(dinkum_binary_data_ascii)file
+encoding_ver: 2
+num_ascii_tags: 14
+all_sensors: 0
+filename: gi_528-2015-228-3-0
+the8x3_filename: 00540000
+filename_extension: sbd
+filename_label: gi_528-2015-228-3-0-sbd(00540000)
+mission_name: INI0.MI
+fileopen_time: Mon_Aug_17_14:45:23_2015
+sensors_per_cycle: 40
+num_label_lines: 3
+num_segments: 1
+segment_filename_0: gi_528-2015-228-3-0
+c_battpos c_wpt_lat c_wpt_lon m_battpos m_coulomb_amphr_total m_coulomb_current m_depth m_de_oil_vol m_gps_lat m_gps_lon m_lat m_leakdetect_voltage m_leakdetect_voltage_forward m_lon m_pitch m_present_secs_into_mission m_present_time m_speed m_water_vx m_water_vy x_low_power_status sci_bb3slo_b470_sig sci_bb3slo_b532_sig sci_bb3slo_b660_sig sci_bb3slo_temp sci_bsipar_par sci_flbbcd_bb_sig sci_flbbcd_cdom_sig sci_flbbcd_chlor_sig sci_m_present_secs_into_mission sci_m_present_time sci_oxy4_oxygen sci_oxy4_saturation sci_oxy4_temp sci_suna_nitrate_mg sci_suna_nitrate_um sci_suna_record_offset sci_water_cond sci_water_pressure sci_water_temp
+in lat lon in amp-hrs amp m cc lat lon lat volts volts lon rad sec timestamp m/s m/s m/s nodim nodim nodim nodim nodim ue/m^2sec nodim nodim nodim sec timestamp um % degc mg/l umol/l bytes s/m bar degc
+4 8 8 4 4 4 4 4 8 8 8 4 4 8 4 4 8 4 4 4 4 4 4 4 4 4 4 4 4 4 8 4 4 4 4 4 4 4 4 4 """
+
 FLORD_RECORD = """
 NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN 153.928 1329849722.92795 NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN 664.424 0.401911 10.572 10.25 NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN 700 139 0.000281336 460 72 2.0352 695 114 0.8349 NaN 560 1000.1 NaN NaN NaN NaN NaN 153.928 1329849722.92795 NaN NaN NaN 266.42 93.49 9.48 NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN 1000.1 700 139 0.000281 695 114 0.8349 560
 NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN 154.944 1329849723.94394 NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN 645.569 0.390792 10.572 10.25 NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN 892 NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN 700 133 0.000262988 460 73 2.12 695 115 0.847 NaN 559 1000.1 NaN NaN NaN NaN NaN 154.944 1329849723.94394 NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN 1000.1 700 133 0.000263 695 115 0.847 559"""
@@ -150,6 +176,10 @@ ENGSCI_BAD_LAT_RECORD = """
 FLORT_RECORD = """
 NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN 153.928 1329849722.92795 NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN 664.424 0.401911 10.572 10.25 NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN 700 139 0.000281336 460 72 2.0352 695 114 0.8349 NaN 560 NaN NaN NaN NaN NaN NaN 153.928 1329849722.92795 NaN NaN NaN 266.42 93.49 9.48 NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN
 NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN 154.944 1329849723.94394 NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN 645.569 0.390792 10.572 10.25 NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN 892 NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN 700 133 0.000262988 460 73 2.12 695 115 0.847 NaN 559 NaN NaN NaN NaN NaN NaN 154.944 1329849723.94394 NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN """
+
+FLORT_O_RECORD = """
+NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN 1783.96 1439822650.9566 NaN NaN NaN NaN 70 101 169 550 77399.4 4004 134 2903 1783.96 1439822650.9566 261.501 93.736 10.508 0.0795487 5.67933 0 -2e-05 0 11.1774
+NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN 221.447 1439822869.44687 NaN NaN NaN NaN 148 217 4047 556 738528000 280 60 95 221.447 1439822869.44687 NaN NaN NaN NaN NaN NaN NaN NaN NaN """
 
 EMPTY_RECORD = """
 NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN """
@@ -250,8 +280,6 @@ class CtdgvTelemeteredGliderTest(GliderParserUnitTestCase):
         DataSetDriverConfigKeys.PARTICLE_CLASS: 'CtdgvTelemeteredDataParticle'
     }
 
-    resource_path = os.path.join(BASE_RESOURCE_PATH, 'moas', 'gl', 'ctdgv', 'resource')
-
     def test_ctdgv_telemetered_particle(self):
         """
         Verify we publish particles as expected.  Ensure particle is published and
@@ -284,45 +312,45 @@ class CtdgvTelemeteredGliderTest(GliderParserUnitTestCase):
         """
         Test with a yml file with a single record
         """
-        with open(os.path.join(self.resource_path, 'single_ctdgv_record.mrg'), 'rU') as file_handle:
+        with open(os.path.join(CTDGV_RESOURCE_PATH, 'single_ctdgv_record.mrg'), 'rU') as file_handle:
             parser = GliderParser(self.config, file_handle, self.exception_callback)
             record = parser.get_records(1)
-            self.assert_particles(record, 'single_ctdgv_record.mrg.result.yml', self.resource_path)
+            self.assert_particles(record, 'single_ctdgv_record.mrg.result.yml', CTDGV_RESOURCE_PATH)
             self.assertEquals(self.exception_callback_value, [])
 
     def test_multiple_yml(self):
         """
         Test with a yml file with multiple records
         """
-        with open(os.path.join(self.resource_path, 'multiple_ctdgv_record.mrg'), 'rU') as file_handle:
+        with open(os.path.join(CTDGV_RESOURCE_PATH, 'multiple_ctdgv_record.mrg'), 'rU') as file_handle:
             parser = GliderParser(self.config, file_handle, self.exception_callback)
             record = parser.get_records(4)
-            self.assert_particles(record, 'multiple_ctdgv_record.mrg.result.yml', self.resource_path)
+            self.assert_particles(record, 'multiple_ctdgv_record.mrg.result.yml', CTDGV_RESOURCE_PATH)
             self.assertEquals(self.exception_callback_value, [])
 
     def test_real(self):
         """
         Test with several real files and confirm no exceptions occur
         """
-        with open(os.path.join(self.resource_path, 'unit_363_2013_199_0_0.mrg'), 'rU') as file_handle:
+        with open(os.path.join(CTDGV_RESOURCE_PATH, 'unit_363_2013_199_0_0.mrg'), 'rU') as file_handle:
             parser = GliderParser(self.config, file_handle, self.exception_callback)
             records = parser.get_records(1107)
             self.assert_(len(records) > 0)
             self.assertEquals(self.exception_callback_value, [])
 
-        with open(os.path.join(self.resource_path, 'unit_363_2013_199_5_0.mrg'), 'rU') as file_handle:
+        with open(os.path.join(CTDGV_RESOURCE_PATH, 'unit_363_2013_199_5_0.mrg'), 'rU') as file_handle:
             parser = GliderParser(self.config, file_handle, self.exception_callback)
             records = parser.get_records(108)
             self.assert_(len(records) > 0)
             self.assertEquals(self.exception_callback_value, [])
 
-        with open(os.path.join(self.resource_path, 'unit_363_2013_245_6_6.mrg'), 'rU') as file_handle:
+        with open(os.path.join(CTDGV_RESOURCE_PATH, 'unit_363_2013_245_6_6.mrg'), 'rU') as file_handle:
             parser = GliderParser(self.config, file_handle, self.exception_callback)
             records = parser.get_records(240)
             self.assert_(len(records) > 0)
             self.assertEquals(self.exception_callback_value, [])
 
-        with open(os.path.join(self.resource_path, 'unit_364_2013_192_1_0.mrg'), 'rU') as file_handle:
+        with open(os.path.join(CTDGV_RESOURCE_PATH, 'unit_364_2013_192_1_0.mrg'), 'rU') as file_handle:
             parser = GliderParser(self.config, file_handle, self.exception_callback)
             records = parser.get_records(4)
             self.assert_(len(records) > 0)
@@ -378,8 +406,6 @@ class DOSTATelemeteredGliderTest(GliderParserUnitTestCase):
         DataSetDriverConfigKeys.PARTICLE_CLASS: 'DostaTelemeteredDataParticle'
     }
 
-    resource_path = os.path.join(BASE_RESOURCE_PATH, 'moas', 'gl', 'dosta', 'resource')
-
     def test_dosta_telemetered_particle(self):
         """
         Verify we publish particles as expected.  Ensure particle is published and
@@ -401,17 +427,18 @@ class DOSTATelemeteredGliderTest(GliderParserUnitTestCase):
         """
         Test with a yml file with a multiple records
         """
-        with open(os.path.join(self.resource_path, 'multiple_dosta_record.mrg'), 'rU') as file_handle:
+
+        with open(os.path.join(DOSTA_RESOURCE_PATH, 'multiple_dosta_record.mrg'), 'rU') as file_handle:
             parser = GliderParser(self.config, file_handle, self.exception_callback)
             record = parser.get_records(4)
-            self.assert_particles(record, 'multiple_dosta_record.mrg.result.yml', self.resource_path)
+            self.assert_particles(record, 'multiple_dosta_record.mrg.result.yml', DOSTA_RESOURCE_PATH)
             self.assertEquals(self.exception_callback_value, [])
 
     def test_real(self):
         """
         Test with a real file and confirm no exceptions occur
         """
-        with open(os.path.join(self.resource_path, 'unit_363_2013_245_6_6.mrg'), 'rU') as file_handle:
+        with open(os.path.join(DOSTA_RESOURCE_PATH, 'unit_363_2013_245_6_6.mrg'), 'rU') as file_handle:
             parser = GliderParser(self.config, file_handle, self.exception_callback)
             records = parser.get_records(240)
             self.assert_(len(records) > 0)
@@ -456,8 +483,6 @@ class FLORTTelemeteredGliderTest(GliderParserUnitTestCase):
         DataSetDriverConfigKeys.PARTICLE_CLASS: 'FlortTelemeteredDataParticle'
     }
 
-    resource_path = os.path.join(BASE_RESOURCE_PATH, 'moas', 'gl', 'flort_m', 'resource')
-
     def test_flort_telemetered_particle(self):
         """
         Verify we publish particles as expected.  Ensure particle is published and
@@ -481,10 +506,10 @@ class FLORTTelemeteredGliderTest(GliderParserUnitTestCase):
         """
         Test with a yml file with multiple records
         """
-        with open(os.path.join(self.resource_path, 'multiple_glider_record.mrg'), 'rU') as file_handle:
+        with open(os.path.join(FLORT_M_RESOURCE_PATH, 'multiple_glider_record.mrg'), 'rU') as file_handle:
             parser = GliderParser(self.config, file_handle, self.exception_callback)
             record = parser.get_records(4)
-            self.assert_particles(record, 'multiple_flort_record.mrg.result.yml', self.resource_path)
+            self.assert_particles(record, 'multiple_flort_record.mrg.result.yml', FLORT_M_RESOURCE_PATH)
             self.assertEquals(self.exception_callback_value, [])
 
 
@@ -519,6 +544,86 @@ class FLORTRecoveredGliderTest(GliderParserUnitTestCase):
 
 
 @attr('UNIT', group='mi')
+class FlortOTelemeteredGliderTest(GliderParserUnitTestCase):
+    """
+    Test cases for FLORT-O glider data.
+    """
+    config = {
+        DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.glider',
+        DataSetDriverConfigKeys.PARTICLE_CLASS: 'FlortODataParticle'
+    }
+
+    def test_flort_o_telemetered_particle(self):
+        """
+        Verify we publish particles as expected.  Ensure particle is published and
+        that state is returned.
+        """
+        self.set_data(HEADER6, FLORT_O_RECORD)
+        self.parser = GliderParser(self.config, self.test_data, self.exception_callback)
+
+        record_1 = {FlortODataParticleKey.SCI_BB3SLO_B470_SIG: 70,
+                    FlortODataParticleKey.SCI_BB3SLO_B532_SIG: 101,
+                    FlortODataParticleKey.SCI_BB3SLO_B660_SIG: 169}
+        record_2 = {FlortODataParticleKey.SCI_BB3SLO_B470_SIG: 148,
+                    FlortODataParticleKey.SCI_BB3SLO_B532_SIG: 217,
+                    FlortODataParticleKey.SCI_BB3SLO_B660_SIG: 4047}
+
+        self.assert_generate_particle(FlortODataParticle, record_1)
+        self.assert_generate_particle(FlortODataParticle, record_2)
+        self.assert_no_more_data()
+
+    def test_merged_data(self):
+        """
+        Test with a FLORT-O merged telemetered data file.
+        """
+        with open(os.path.join(FLORT_O_RESOURCE_PATH, 'merged_flort_o_telemetered_data.mrg'), 'rU') as file_handle:
+            parser = GliderParser(self.config, file_handle, self.exception_callback)
+            record = parser.get_records(5)
+            self.assert_particles(record, 'merged_flort_o_telemetered_data.mrg.result.yml', FLORT_O_RESOURCE_PATH)
+            self.assertEquals(self.exception_callback_value, [])
+
+
+@attr('UNIT', group='mi')
+class FlortORecoveredGliderTest(GliderParserUnitTestCase):
+    """
+    Test cases for recovered FLORT-O glider data.
+    """
+    config = {
+        DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.glider',
+        DataSetDriverConfigKeys.PARTICLE_CLASS: 'FlortODataParticle'
+    }
+
+    def test_flort_o_recovered_particle(self):
+        """
+        Verify we publish particles as expected.  Ensure particle is published and
+        that state is returned.
+        """
+        self.set_data(HEADER6, FLORT_O_RECORD)
+        self.parser = GliderParser(self.config, self.test_data, self.exception_callback)
+
+        record_1 = {FlortODataParticleKey.SCI_BB3SLO_B470_SIG: 70,
+                    FlortODataParticleKey.SCI_BB3SLO_B532_SIG: 101,
+                    FlortODataParticleKey.SCI_BB3SLO_B660_SIG: 169}
+        record_2 = {FlortODataParticleKey.SCI_BB3SLO_B470_SIG: 148,
+                    FlortODataParticleKey.SCI_BB3SLO_B532_SIG: 217,
+                    FlortODataParticleKey.SCI_BB3SLO_B660_SIG: 4047}
+
+        self.assert_generate_particle(FlortODataParticle, record_1)
+        self.assert_generate_particle(FlortODataParticle, record_2)
+        self.assert_no_more_data()
+
+    def test_merged_data(self):
+        """
+        Test with a FLORT-O merged recovered data file.
+        """
+        with open(os.path.join(FLORT_O_RESOURCE_PATH, 'merged_flort_o_recovered_data.mrg'), 'rU') as file_handle:
+            parser = GliderParser(self.config, file_handle, self.exception_callback)
+            record = parser.get_records(5)
+            self.assert_particles(record, 'merged_flort_o_recovered_data.mrg.result.yml', FLORT_O_RESOURCE_PATH)
+            self.assertEquals(self.exception_callback_value, [])
+
+
+@attr('UNIT', group='mi')
 class PARADTelemeteredGliderTest(GliderParserUnitTestCase):
     """
     Test cases for parad glider data
@@ -527,8 +632,6 @@ class PARADTelemeteredGliderTest(GliderParserUnitTestCase):
         DataSetDriverConfigKeys.PARTICLE_MODULE: 'mi.dataset.parser.glider',
         DataSetDriverConfigKeys.PARTICLE_CLASS: 'ParadTelemeteredDataParticle'
     }
-
-    resource_path = os.path.join(BASE_RESOURCE_PATH, 'moas', 'gl', 'parad', 'resource')
 
     def test_parad_telemetered_particle(self):
         """
@@ -552,10 +655,10 @@ class PARADTelemeteredGliderTest(GliderParserUnitTestCase):
         """
         Test with a yml file with multiple records
         """
-        with open(os.path.join(self.resource_path, 'multiple_glider_record.mrg'), 'rU') as file_handle:
+        with open(os.path.join(PARAD_RESOURCE_PATH, 'multiple_glider_record.mrg'), 'rU') as file_handle:
             parser = GliderParser(self.config, file_handle, self.exception_callback)
             record = parser.get_records(4)
-            self.assert_particles(record, 'multiple_parad_record.mrg.result.yml', self.resource_path)
+            self.assert_particles(record, 'multiple_parad_record.mrg.result.yml', PARAD_RESOURCE_PATH)
             self.assertEquals(self.exception_callback_value, [])
 
 
@@ -599,8 +702,6 @@ class FLORDTelemeteredGliderTest(GliderParserUnitTestCase):
         DataSetDriverConfigKeys.PARTICLE_CLASS: 'FlordTelemeteredDataParticle'
     }
 
-    resource_path = os.path.join(BASE_RESOURCE_PATH, 'moas', 'gl', 'flord_m', 'resource')
-
     def test_flord_telemetered_particle(self):
         """
         Verify we publish particles as expected.  Ensure particle is published and
@@ -622,17 +723,17 @@ class FLORDTelemeteredGliderTest(GliderParserUnitTestCase):
         """
         Test with a yml file with a single record
         """
-        with open(os.path.join(self.resource_path, 'multiple_flord_record.mrg'), 'rU') as file_handle:
+        with open(os.path.join(FLORD_M_RESOURCE_PATH, 'multiple_flord_record.mrg'), 'rU') as file_handle:
             parser = GliderParser(self.config, file_handle, self.exception_callback)
             record = parser.get_records(4)
-            self.assert_particles(record, 'multiple_flord_record.mrg.result.yml', self.resource_path)
+            self.assert_particles(record, 'multiple_flord_record.mrg.result.yml', FLORD_M_RESOURCE_PATH)
             self.assertEquals(self.exception_callback_value, [])
 
     def test_real(self):
         """
         Test with a real file and confirm no exceptions occur
         """
-        with open(os.path.join(self.resource_path, 'unit_363_2013_245_6_6.mrg'), 'rU') as file_handle:
+        with open(os.path.join(FLORD_M_RESOURCE_PATH, 'unit_363_2013_245_6_6.mrg'), 'rU') as file_handle:
             parser = GliderParser(self.config, file_handle, self.exception_callback)
             records = parser.get_records(240)
             self.assert_(len(records) > 0)
@@ -792,8 +893,6 @@ class ENGRecoveredGliderTest(GliderParserUnitTestCase):
         }
     }
 
-    resource_path = os.path.join(BASE_RESOURCE_PATH, 'moas', 'gl', 'engineering', 'resource')
-
     def test_eng_recovered_particle(self):
         """
         Verify we publish particles as expected.  Ensure particle is published and
@@ -836,18 +935,18 @@ class ENGRecoveredGliderTest(GliderParserUnitTestCase):
         """
         Test with a yml file with a multiple records
         """
-        with open(os.path.join(self.resource_path, 'multiple_glider_record-engDataOnly.mrg'), 'rU') as file_handle:
+        with open(os.path.join(ENG_RESOURCE_PATH, 'multiple_glider_record-engDataOnly.mrg'), 'rU') as file_handle:
             parser = GliderEngineeringParser(self.config, file_handle, self.exception_callback)
             particles = parser.get_records(13)
             self.assert_particles(particles, 'multiple_glider_record_recovered-engDataOnly.mrg.result.yml',
-                                  self.resource_path)
+                                  ENG_RESOURCE_PATH)
             self.assertEquals(self.exception_callback_value, [])
 
     def test_real(self):
         """
         Test a real file and confirm no exceptions occur
         """
-        with open(os.path.join(self.resource_path, 'unit_363_2013_245_6_6.mrg'), 'rU') as file_handle:
+        with open(os.path.join(ENG_RESOURCE_PATH, 'unit_363_2013_245_6_6.mrg'), 'rU') as file_handle:
             parser = GliderEngineeringParser(self.config, file_handle, self.exception_callback)
             records = parser.get_records(240)
             self.assert_(len(records) > 3)
@@ -857,7 +956,7 @@ class ENGRecoveredGliderTest(GliderParserUnitTestCase):
         """
         Test to check handling of inf fill values in real file
         """
-        with open(os.path.join(self.resource_path, 'cp_388_2014_280_0_245.full.mrg'), 'rU') as file_handle:
+        with open(os.path.join(ENG_RESOURCE_PATH, 'cp_388_2014_280_0_245.full.mrg'), 'rU') as file_handle:
             parser = GliderEngineeringParser(self.config, file_handle, self.exception_callback)
             particles = parser.get_records(32000)
 
@@ -865,14 +964,14 @@ class ENGRecoveredGliderTest(GliderParserUnitTestCase):
                 data_dict = particle.generate_dict()
 
             # self.assert_particles(particles, 'multiple_glider_record_recovered-engDataOnly.mrg.result.yml',
-            #                       self.resource_path)
+            #                       ENG_RESOURCE_PATH)
             self.assertEquals(self.exception_callback_value, [])
 
     def test_for_69_file(self):
         """
         Test a real file and confirm no exceptions occur with file containing 69696969 fill values
         """
-        with open(os.path.join(self.resource_path, 'cp_388_2016_012_0_0.mrg'), 'rU') as file_handle:
+        with open(os.path.join(ENG_RESOURCE_PATH, 'cp_388_2016_012_0_0.mrg'), 'rU') as file_handle:
             parser = GliderEngineeringParser(self.config, file_handle, self.exception_callback)
             records = parser.get_records(2000)
             self.assert_(len(records) > 3)
@@ -905,7 +1004,7 @@ class ENGRecoveredGliderTest(GliderParserUnitTestCase):
         """
         Test a real file and confirm no exceptions occur when nan is used instead of NaN
         """
-        with open(os.path.join(self.resource_path, 'cp_388_2016_012_1_0.mrg'), 'rU') as file_handle:
+        with open(os.path.join(ENG_RESOURCE_PATH, 'cp_388_2016_012_1_0.mrg'), 'rU') as file_handle:
             parser = GliderEngineeringParser(self.config, file_handle, self.exception_callback)
             records = parser.get_records(2000)
             self.assert_(len(records) > 3)

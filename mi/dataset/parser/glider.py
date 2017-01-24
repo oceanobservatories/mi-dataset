@@ -19,7 +19,7 @@ from mi.dataset.dataset_parser import SimpleParser, DataSetDriverConfigKeys
 # start the logger
 log = get_logger()
 
-__author__ = 'Stuart Pearce, Chris Wingard, Nick Almonte'
+__author__ = 'Stuart Pearce, Chris Wingard, Nick Almonte, Rene Gelinas'
 __license__ = 'Apache 2.0'
 
 
@@ -34,6 +34,7 @@ class DataParticleType(BaseEnum):
     FLORD_M_GLIDER_INSTRUMENT_RECOVERED = 'flord_m_glider_instrument_recovered'
     FLORT_M_GLIDER_INSTRUMENT = 'flort_m_glider_instrument'
     FLORT_M_GLIDER_RECOVERED = 'flort_m_glider_recovered'
+    FLORT_O_GLIDER_DATA = 'flort_o_glider_data'
     PARAD_M_GLIDER_INSTRUMENT = 'parad_m_glider_instrument'
     PARAD_M_GLIDER_RECOVERED = 'parad_m_glider_recovered'
     GLIDER_ENG_TELEMETERED = 'glider_eng_telemetered'
@@ -142,7 +143,7 @@ class CtdgvTelemeteredDataParticle(GliderParticle):
         Extracts CTDGV data from the glider data dictionary initialized with
         the particle class and puts the data into a CTDGV Telemetered Data Particle.
 
-        @returns result a list of dictionaries of particle data
+        @returns A list of dictionaries of particle data
         @throws SampleException if the data is not a glider data dictionary
         """
         return self._parsed_values(CtdgvParticleKey.list())
@@ -157,7 +158,7 @@ class CtdgvRecoveredDataParticle(GliderParticle):
         Extracts CTDGV data from the glider data dictionary initialized with
         the particle class and puts the data into a CTDGV Recovered Data Particle.
 
-        @returns result a list of dictionaries of particle data
+        @returns A list of dictionaries of particle data
         @throws SampleException if the data is not a glider data dictionary
         """
         return self._parsed_values(CtdgvParticleKey.list())
@@ -193,7 +194,7 @@ class DostaTelemeteredDataParticle(GliderParticle):
         Takes a GliderParser object and extracts DOSTA data from the
         data dictionary and puts the data into a DOSTA Data Particle.
 
-        @returns result a list of dictionaries of particle data
+        @returns A list of dictionaries of particle data
         @throws SampleException if the data is not a glider data dictionary
         """
         return self._parsed_values(DostaTelemeteredParticleKey.list())
@@ -208,7 +209,7 @@ class DostaRecoveredDataParticle(GliderParticle):
         Takes a GliderParser object and extracts DOSTA data from the
         data dictionary and puts the data into a DOSTA Data Particle.
 
-        @returns result a list of dictionaries of particle data
+        @returns A list of dictionaries of particle data
         @throws SampleException if the data is not a glider data dictionary
         """
         return self._parsed_values(DostaRecoveredParticleKey.list())
@@ -235,7 +236,7 @@ class FlordTelemeteredDataParticle(GliderParticle):
         Takes a GliderParser object and extracts FLORD data from the
         data dictionary and puts the data into a FLORD Telemetered Data Particle.
 
-        @returns result a list of dictionaries of particle data
+        @returns A list of dictionaries of particle data
         @throws SampleException if the data is not a glider data dictionary
         """
         return self._parsed_values(FlordParticleKey.list())
@@ -250,7 +251,7 @@ class FlordRecoveredDataParticle(GliderParticle):
         Takes a GliderParser object and extracts FLORD data from the
         data dictionary and puts the data into a FLORD Recovered Data Particle.
 
-        @returns result a list of dictionaries of particle data
+        @returns A list of dictionaries of particle data
         @throws SampleException if the data is not a glider data dictionary
         """
         return self._parsed_values(FlordParticleKey.list())
@@ -287,7 +288,7 @@ class FlortTelemeteredDataParticle(GliderParticle):
         Takes a GliderParser object and extracts FLORT data from the
         data dictionary and puts the data into a FLORT Data Particle.
 
-        @returns result a list of dictionaries of particle data
+        @returns A list of dictionaries of particle data
         @throws SampleException if the data is not a glider data dictionary
         """
         return self._parsed_values(FlortTelemeteredParticleKey.list())
@@ -302,10 +303,32 @@ class FlortRecoveredDataParticle(GliderParticle):
         Takes a GliderParser object and extracts FLORT data from the
         data dictionary and puts the data into a FLORT Data Particle.
 
-        @returns result a list of dictionaries of particle data
+        @returns A list of dictionaries of particle data
         @throws SampleException if the data is not a glider data dictionary
         """
         return self._parsed_values(FlortRecoveredParticleKey.list())
+
+
+class FlortODataParticleKey(GliderParticleKey):
+    # science data made available via telemetry
+    SCI_BB3SLO_B470_SIG = 'sci_bb3slo_b470_sig'
+    SCI_BB3SLO_B532_SIG = 'sci_bb3slo_b532_sig'
+    SCI_BB3SLO_B660_SIG = 'sci_bb3slo_b660_sig'
+
+
+class FlortODataParticle(GliderParticle):
+    _data_particle_type = DataParticleType.FLORT_O_GLIDER_DATA
+    science_parameters = FlortODataParticleKey.science_parameter_list()
+
+    def _build_parsed_values(self):
+        """
+        Takes a GliderParser object and extracts FLORT data from the
+        data dictionary and puts the data into a FLORT Data Particle.
+
+        @returns A list of dictionaries of particle data
+        @throws SampleException if the data is not a glider data dictionary
+        """
+        return self._parsed_values(FlortODataParticleKey.list())
 
 
 class ParadTelemeteredParticleKey(GliderParticleKey):
@@ -330,7 +353,7 @@ class ParadTelemeteredDataParticle(GliderParticle):
         Takes a GliderParser object and extracts PARAD data from the
         data dictionary and puts the data into a PARAD Data Particle.
 
-        @returns result a list of dictionaries of particle data
+        @returns A list of dictionaries of particle data
         @throws SampleException if the data is not a glider data dictionary
         """
         return self._parsed_values(ParadTelemeteredParticleKey.list())
@@ -345,7 +368,7 @@ class ParadRecoveredDataParticle(GliderParticle):
         Takes a GliderParser object and extracts PARAD data from the
         data dictionary and puts the data into a PARAD Data Particle.
 
-        @returns result a list of dictionaries of particle data
+        @returns A list of dictionaries of particle data
         @throws SampleException if the data is not a glider data dictionary
         """
         return self._parsed_values(ParadRecoveredParticleKey.list())
@@ -700,7 +723,7 @@ class GpsPositionDataParticle(GliderParticle):
         Takes a GliderParser object and extracts engineering data from the
         data dictionary and puts the data into a engineering Data Particle.
 
-        @returns result a list of dictionaries of particle data
+        @returns A list of dictionaries of particle data
         @throws SampleException if the data is not a glider data dictionary
         """
         # need to exclude sci times
@@ -720,7 +743,7 @@ class EngineeringTelemeteredDataParticle(GliderParticle):
         Takes a GliderParser object and extracts engineering data from the
         data dictionary and puts the data into a engineering Data Particle.
 
-        @returns result a list of dictionaries of particle data
+        @returns A list of dictionaries of particle data
         @throws SampleException if the data is not a glider data dictionary
         """
         # need to exclude sci times
@@ -734,7 +757,7 @@ class EngineeringMetadataCommonDataParticle(DataParticle):
         Takes a GliderParser object and extracts engineering metadata from the
         header and puts the data into a Data Particle.
 
-        @returns result a list of dictionaries of particle data
+        @returns A list of dictionaries of particle data
         @throws SampleException if the data is not a glider data dictionary
         """
         results = []
@@ -764,7 +787,7 @@ class EngineeringScienceTelemeteredDataParticle(GliderParticle):
         Takes a GliderParser object and extracts engineering data from the
         data dictionary and puts the data into a engineering Data Particle.
 
-        @returns result a list of dictionaries of particle data
+        @returns A list of dictionaries of particle data
         @throws SampleException if the data is not a glider data dictionary
         """
         # need to exclude m times
@@ -784,7 +807,7 @@ class EngineeringRecoveredDataParticle(GliderParticle):
         Takes a GliderParser object and extracts engineering data from the
         data dictionary and puts the data into a engineering Data Particle.
 
-        @returns result a list of dictionaries of particle data
+        @returns A list of dictionaries of particle data
         @throws SampleException if the data is not a glider data dictionary
         """
         # need to exclude sci times
@@ -804,7 +827,7 @@ class EngineeringScienceRecoveredDataParticle(GliderParticle):
         Takes a GliderParser object and extracts engineering data from the
         data dictionary and puts the data into a engineering Data Particle.
 
-        @returns result a list of dictionaries of particle data
+        @returns A list of dictionaries of particle data
         @throws SampleException if the data is not a glider data dictionary
         """
         # need to exclude m times
@@ -827,7 +850,7 @@ class NutnrMDataParticle(GliderParticle):
         Takes a GliderParser object and extracts FLORT data from the
         data dictionary and puts the data into a FLORT Data Particle.
 
-        @returns result a list of dictionaries of particle data
+        @returns A list of dictionaries of particle data
         @throws SampleException if the data is not a glider data dictionary
         """
         return self._parsed_values(NutnrMParticleKey.list())
