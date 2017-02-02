@@ -2,6 +2,10 @@ NEXT RELEASE
 
 * Cleanup for pending merge with mi-instrument
 
+Added the following drivers:
+
+* mi/dataset/driver/camds/camds_abc_driver.py
+
 Version 0.2.0
 
 Added the following drivers:
