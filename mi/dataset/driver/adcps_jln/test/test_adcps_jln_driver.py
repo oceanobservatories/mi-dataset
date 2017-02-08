@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
-
 import os
 import unittest
+from nose.plugins.attrib import attr
 
 from mi.core.log import get_logger
 from mi.dataset.dataset_driver import ParticleDataHandler
@@ -14,12 +14,11 @@ __author__ = 'Joe Padula'
 log = get_logger()
 
 
+@attr('UNIT', group='mi')
 class SampleTest(unittest.TestCase):
-
     def test_one(self):
 
         source_file_path = os.path.join(RESOURCE_PATH, 'ADCP_data_20130702.000')
-
         particle_data_handler = ParticleDataHandler()
 
         particle_data_handler = parse(None, source_file_path, particle_data_handler)

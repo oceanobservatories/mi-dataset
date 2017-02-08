@@ -2,6 +2,7 @@
 
 import os
 import unittest
+from nose.plugins.attrib import attr
 
 from mi.logging import log
 from mi.dataset.driver.zplsc_c.dcl.zplsc_c_dcl_telemetered_driver import parse
@@ -11,6 +12,7 @@ from mi.dataset.dataset_driver import ParticleDataHandler
 __author__ = 'rronquillo'
 
 
+@attr('UNIT', group='mi')
 class DriverTest(unittest.TestCase):
 
     source_file_path = os.path.join(RESOURCE_PATH, '20150407.zplsc.log')
@@ -18,7 +20,7 @@ class DriverTest(unittest.TestCase):
     def test_one(self):
 
         particle_data_handler = parse(None, self.source_file_path,
-                                       ParticleDataHandler())
+                                      ParticleDataHandler())
 
         log.info("SAMPLES: %s", particle_data_handler._samples)
         log.info("FAILURE: %s", particle_data_handler._failure)

@@ -2,6 +2,7 @@
 
 import os
 import unittest
+from nose.plugins.attrib import attr
 
 from mi.core.log import get_logger
 from mi.dataset.dataset_driver import ParticleDataHandler
@@ -13,6 +14,7 @@ __author__ = 'mworden'
 log = get_logger()
 
 
+@attr('UNIT', group='mi')
 class DriverTest(unittest.TestCase):
 
     def test_one(self):

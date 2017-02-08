@@ -1,10 +1,11 @@
+#!/usr/bin/env python
 
 from mi.core.log import get_logger
 
-
-import re
 import unittest
 import os
+from nose.plugins.attrib import attr
+
 from mi.dataset.driver.phsen_abcdef.imodem.phsen_abcdef_imodem_recovered_driver import parse
 from mi.dataset.driver.phsen_abcdef.imodem.resource import RESOURCE_PATH
 
@@ -14,6 +15,7 @@ __author__ = 'Joe Padula'
 log = get_logger()
 
 
+@attr('UNIT', group='mi')
 class SampleTest(unittest.TestCase):
 
     def test_one(self):

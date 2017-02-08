@@ -6,13 +6,12 @@
 @author Chris Goodrich
 @brief Sample test for test_fuelcell_eng_dcl_telemetered_driver
 
-Release notes:
-
-Initial Release
+Release notes: Initial Release
 """
 
 import os
 import unittest
+from nose.plugins.attrib import attr
 
 from mi.core.log import get_logger
 from mi.dataset.dataset_driver import ParticleDataHandler
@@ -22,6 +21,7 @@ from mi.dataset.driver.fuelcell_eng.dcl.resource import RESOURCE_PATH
 log = get_logger()
 
 
+@attr('UNIT', group='mi')
 class SampleTest(unittest.TestCase):
 
     def test_one(self):
